@@ -83,7 +83,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>4.5.3-${project.version}</version>
+      <version>4.5.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -163,7 +163,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2021.3-${project.version}</version>
+      <version>2021.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -173,12 +173,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.3.2-${project.version}</version>
+      <version>2.4.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.17-${project.version}</version>
+      <version>0.3.18-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -193,7 +193,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>fftw-platform</artifactId>
-      <version>3.3.9-${project.version}</version>
+      <version>3.3.10-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -203,7 +203,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.9.6-${project.version}</version>
+      <version>3.10.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -218,12 +218,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.19.0-${project.version}</version>
+      <version>0.21.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>12.0.1-${project.version}</version>
+      <version>13.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -238,7 +238,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.81.1-${project.version}</version>
+      <version>1.82.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -278,7 +278,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>pytorch-platform</artifactId>
-      <version>1.9.0-${project.version}</version>
+      <version>1.9.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -303,12 +303,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>0.6.1-${project.version}</version>
+      <version>0.7.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.10.0-${project.version}</version>
+      <version>2.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -323,7 +323,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.8.2-${project.version}</version>
+      <version>1.9.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -71,10 +71,17 @@ export TVM_LIBRARY_PATH=`pwd`
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
+sedinplace '/numpy/d' python/setup.py
+sedinplace '/scipy/d' python/setup.py
 
 # https://github.com/apache/tvm/pull/6717
+# https://github.com/apache/tvm/pull/9138
+# https://github.com/apache/tvm/pull/8682
 sedinplace 's/(lanes, \/\*Scalable=\*\/false)/::getFixed(lanes)/g' src/target/llvm/codegen_llvm.cc
+sedinplace 's/llvm::Intrinsic::getName(id, {})/llvm::Intrinsic::getBaseName(id).str()/g' src/target/llvm/codegen_llvm.cc
+sedinplace 's/::F_None/::OF_None/g' src/target/llvm/llvm_module.cc
 
+# https://github.com/apache/tvm/pull/6738
 # https://github.com/apache/tvm/pull/6752
 patch -Np1 < ../../../tvm.patch
 
@@ -86,20 +93,21 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-12.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-13.dylib
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.10/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -118,7 +126,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH --upgrade setuptools
 
 case $PLATFORM in
     linux-x86_64)

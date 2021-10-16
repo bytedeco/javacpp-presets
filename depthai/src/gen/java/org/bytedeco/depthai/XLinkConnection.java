@@ -35,6 +35,7 @@ public class XLinkConnection extends Pointer {
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString BytePointer arg0);
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String arg0, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/);
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String arg0);
+    public static native @ByVal DeviceInfo bootBootloader(@Const @ByRef DeviceInfo devInfo);
 
     public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @Cast("std::uint8_t*") @StdVector BytePointer mvcmdBinary, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/) { super((Pointer)null); allocate(deviceDesc, mvcmdBinary, expectedState); }
     private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @Cast("std::uint8_t*") @StdVector BytePointer mvcmdBinary, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/);

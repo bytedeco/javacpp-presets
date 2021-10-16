@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 12.0.1  http://llvm.org/
+ * LLVM 13.0.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>Factorial</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Factorial</exec.mainClass>
     </properties>
@@ -50,7 +50,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>12.0.1-1.5.6</version>
+            <version>13.0.0-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

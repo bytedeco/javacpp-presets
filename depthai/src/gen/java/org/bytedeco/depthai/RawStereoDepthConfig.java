@@ -36,7 +36,280 @@ public class RawStereoDepthConfig extends RawBuffer {
         return new RawStereoDepthConfig((Pointer)this).offsetAddress(i);
     }
 
-    public native @ByRef StereoDepthConfigData config(); public native RawStereoDepthConfig config(StereoDepthConfigData setter);
+
+    public static class AlgorithmControl extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public AlgorithmControl() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public AlgorithmControl(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public AlgorithmControl(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public AlgorithmControl position(long position) {
+            return (AlgorithmControl)super.position(position);
+        }
+        @Override public AlgorithmControl getPointer(long i) {
+            return new AlgorithmControl((Pointer)this).offsetAddress(i);
+        }
+    
+        /**
+         * Computes and combines disparities in both L-R and R-L directions, and combine them.
+         * For better occlusion handling
+         */
+        public native @Cast("bool") boolean enableLeftRightCheck(); public native AlgorithmControl enableLeftRightCheck(boolean setter);
+        /**
+         * Computes disparity with sub-pixel interpolation (5 fractional bits), suitable for long range
+         */
+        public native @Cast("bool") boolean enableSubpixel(); public native AlgorithmControl enableSubpixel(boolean setter);
+
+        /**
+         * Left-right check threshold for left-right, right-left disparity map combine, 0..128
+         * Used only when left-right check mode is enabled.
+         * Defines the maximum difference between the confidence of pixels from left-right and right-left confidence maps
+         */
+        public native @Cast("std::int32_t") int leftRightCheckThreshold(); public native AlgorithmControl leftRightCheckThreshold(int setter);
+
+        /**
+         * Number of fractional bits for subpixel mode.
+         * Valid values: 3,4,5.
+         * Defines the number of fractional disparities: 2^x.
+         * Median filter postprocessing is supported only for 3 fractional bits.
+         */
+        public native @Cast("std::int32_t") int subpixelFractionalBits(); public native AlgorithmControl subpixelFractionalBits(int setter);
+    }
+
+    /**
+     * Controls the flow of stereo algorithm: left-right check, subpixel etc.
+     */
+    public native @ByRef AlgorithmControl algorithmControl(); public native RawStereoDepthConfig algorithmControl(AlgorithmControl setter);
+
+    public static class PostProcessing extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public PostProcessing() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PostProcessing(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public PostProcessing(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public PostProcessing position(long position) {
+            return (PostProcessing)super.position(position);
+        }
+        @Override public PostProcessing getPointer(long i) {
+            return new PostProcessing((Pointer)this).offsetAddress(i);
+        }
+    
+        /**
+         * Set kernel size for disparity/depth median filtering, or disable
+         */
+        public native MedianFilter median(); public native PostProcessing median(MedianFilter setter);
+
+        /**
+         * Sigma value for bilateral filter. 0 means disabled
+         * A larger value of the parameter means that farther colors within the pixel neighborhood will be mixed together.
+         */
+        public native @Cast("std::int16_t") short bilateralSigmaValue(); public native PostProcessing bilateralSigmaValue(short setter);
+    }
+
+    /**
+     * Controls the postprocessing of disparity and/or depth map.
+     */
+    public native @ByRef PostProcessing postProcessing(); public native RawStereoDepthConfig postProcessing(PostProcessing setter);
+
+    public static class CensusTransform extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public CensusTransform() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public CensusTransform(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public CensusTransform(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public CensusTransform position(long position) {
+            return (CensusTransform)super.position(position);
+        }
+        @Override public CensusTransform getPointer(long i) {
+            return new CensusTransform((Pointer)this).offsetAddress(i);
+        }
+    
+        /**
+         * Census transform kernel size possible values.
+         */
+        public enum KernelSize { AUTO(-1), KERNEL_5x5(0), KERNEL_7x7(1), KERNEL_7x9(2);
+
+            public final int value;
+            private KernelSize(int v) { this.value = v; }
+            private KernelSize(KernelSize e) { this.value = e.value; }
+            public KernelSize intern() { for (KernelSize e : values()) if (e.value == value) return e; return this; }
+            @Override public String toString() { return intern().name(); }
+        }
+
+        /**
+         * Census transform kernel size.
+         */
+        public native KernelSize kernelSize(); public native CensusTransform kernelSize(KernelSize setter);
+
+        /**
+         * Census transform mask, default: auto, mask is set based on resolution and kernel size.
+         * Disabled for 400p input resolution.
+         * Enabled for 720p.
+         * 0XA82415 for 5x5 census transform kernel.
+         * 0XAA02A8154055 for 7x7 census transform kernel.
+         * 0X2AA00AA805540155 for 7x9 census transform kernel.
+         * Empirical values.
+         */
+        public native @Cast("uint64_t") long kernelMask(); public native CensusTransform kernelMask(long setter);
+
+        /**
+         * If enabled, each pixel in the window is compared with the mean window value instead of the central pixel.
+         */
+        public native @Cast("bool") boolean enableMeanMode(); public native CensusTransform enableMeanMode(boolean setter);
+
+        /**
+         * Census transform comparation treshold value.
+         */
+        public native @Cast("uint32_t") int threshold(); public native CensusTransform threshold(int setter);
+    }
+
+    /**
+     * Census transform settings.
+     */
+    public native @ByRef CensusTransform censusTransform(); public native RawStereoDepthConfig censusTransform(CensusTransform setter);
+
+    public static class CostMatching extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public CostMatching() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public CostMatching(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public CostMatching(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public CostMatching position(long position) {
+            return (CostMatching)super.position(position);
+        }
+        @Override public CostMatching getPointer(long i) {
+            return new CostMatching((Pointer)this).offsetAddress(i);
+        }
+    
+        /**
+         * Disparity search range: 64 or 96 pixels are supported by the HW.
+         */
+        public enum DisparityWidth { DISPARITY_64(0), DISPARITY_96(1);
+
+            public final int value;
+            private DisparityWidth(int v) { this.value = v; }
+            private DisparityWidth(DisparityWidth e) { this.value = e.value; }
+            public DisparityWidth intern() { for (DisparityWidth e : values()) if (e.value == value) return e; return this; }
+            @Override public String toString() { return intern().name(); }
+        }
+
+        /**
+         * Disparity search range, default 96 pixels.
+         */
+        public native DisparityWidth disparityWidth(); public native CostMatching disparityWidth(DisparityWidth setter);
+
+        /**
+         * Disparity companding using sparse matching.
+         * Matching pixel by pixel for N disparities.
+         * Matching every 2nd pixel for M disparitites.
+         * Matching every 4th pixel for T disparities.
+         * In case of 96 disparities: N=48, M=32, T=16.
+         * This way the search range is extended to 176 disparities, by sparse matching.
+         * Note: when enabling this flag only depth map will be affected, disparity map is not.
+         */
+        public native @Cast("bool") boolean enableCompanding(); public native CostMatching enableCompanding(boolean setter);
+
+        /**
+         * Used only for debug purposes, SW postprocessing handled only invalid value of 0 properly.
+         */
+        public native @Cast("uint8_t") byte invalidDisparityValue(); public native CostMatching invalidDisparityValue(byte setter);
+
+        /**
+         * Disparities with confidence value under this threshold are accepted.
+         * Higher confidence threshold means disparities with less confidence are accepted too.
+         */
+        public native @Cast("uint8_t") byte confidenceThreshold(); public native CostMatching confidenceThreshold(byte setter);
+
+        /**
+         * The linear equation applied for computing the cost is:
+         * COMB_COST = α*AD + β*(CTC<<3).
+         * CLAMP(COMB_COST >> 5, threshold).
+         * Where AD is the Absolute Difference between 2 pixels values.
+         * CTC is the Census Transform Cost between 2 pixels, based on Hamming distance (xor).
+         * The α and β parameters are subject to fine fine tuning by the user.
+         */
+        public static class LinearEquationParameters extends Pointer {
+            static { Loader.load(); }
+            /** Default native constructor. */
+            public LinearEquationParameters() { super((Pointer)null); allocate(); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public LinearEquationParameters(long size) { super((Pointer)null); allocateArray(size); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public LinearEquationParameters(Pointer p) { super(p); }
+            private native void allocate();
+            private native void allocateArray(long size);
+            @Override public LinearEquationParameters position(long position) {
+                return (LinearEquationParameters)super.position(position);
+            }
+            @Override public LinearEquationParameters getPointer(long i) {
+                return new LinearEquationParameters((Pointer)this).offsetAddress(i);
+            }
+        
+            public native @Cast("uint8_t") byte alpha(); public native LinearEquationParameters alpha(byte setter);
+            public native @Cast("uint8_t") byte beta(); public native LinearEquationParameters beta(byte setter);
+            public native @Cast("uint8_t") byte threshold(); public native LinearEquationParameters threshold(byte setter);
+        }
+
+        /**
+         * Cost calculation linear equation parameters.
+         */
+        public native @ByRef LinearEquationParameters linearEquationParameters(); public native CostMatching linearEquationParameters(LinearEquationParameters setter);
+    }
+
+    /**
+     * Cost matching settings.
+     */
+    public native @ByRef CostMatching costMatching(); public native RawStereoDepthConfig costMatching(CostMatching setter);
+
+    public static class CostAggregation extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public CostAggregation() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public CostAggregation(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public CostAggregation(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public CostAggregation position(long position) {
+            return (CostAggregation)super.position(position);
+        }
+        @Override public CostAggregation getPointer(long i) {
+            return new CostAggregation((Pointer)this).offsetAddress(i);
+        }
+    
+        
+
+        
+
+        // TBD
+        public native @Cast("uint8_t") byte divisionFactor(); public native CostAggregation divisionFactor(byte setter);
+
+        public native @ByRef @Cast("tl::optional<std::array<uint16_t,256> >*") Pointer horizontalPenaltyCosts(); public native CostAggregation horizontalPenaltyCosts(Pointer setter);
+
+        public native @ByRef @Cast("tl::optional<std::array<uint16_t,256> >*") Pointer verticalPenaltyCosts(); public native CostAggregation verticalPenaltyCosts(Pointer setter);
+    }
+
+    /**
+     * Cost aggregation settings.
+     */
+    public native @ByRef CostAggregation costAggregation(); public native RawStereoDepthConfig costAggregation(CostAggregation setter);
 
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);

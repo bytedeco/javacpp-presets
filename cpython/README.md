@@ -14,7 +14,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CPython 3.9.6  https://www.python.org/
+ * CPython 3.10.0  https://www.python.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/cpython/apidocs/
 
-&lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.  
+&lowast; Call `Py_Initialize(cachePackages())` instead of just `Py_Initialize()`.  
 &lowast; To satisfy OpenSSL, we might need to set the `SSL_CERT_FILE` environment variable to the full path of `cacert.pem` extracted by default under `~/.javacpp/cache/`.
 
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cpython</groupId>
     <artifactId>simple</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
     </properties>
@@ -54,7 +54,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.9.6-1.5.6</version>
+            <version>3.10.0-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -71,17 +71,15 @@ import static org.bytedeco.cpython.global.python.*;
 
 public class Simple {
     public static void main(String[] args) throws Exception {
-        Py_AddPath(cachePackages());
-
         Pointer program = Py_DecodeLocale(Simple.class.getSimpleName(), null);
         if (program == null) {
-            System.err.println("Fatal error: cannot get class name");
+            System.err.println("Fatal error: cannot decode class name");
             System.exit(1);
         }
         Py_SetProgramName(program);  /* optional but recommended */
-        Py_Initialize();
-        PyRun_SimpleStringFlags("from time import time,ctime\n"
-                              + "print('Today is', ctime(time()))\n", null);
+        Py_Initialize(cachePackages());
+        PyRun_SimpleString("from time import time,ctime\n"
+                         + "print('Today is', ctime(time()))\n");
         if (Py_FinalizeEx() < 0) {
             System.exit(120);
         }

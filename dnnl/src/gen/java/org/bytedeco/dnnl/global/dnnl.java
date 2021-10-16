@@ -655,10 +655,120 @@ public static final int
     dnnl_BA16a32b4a = 382,
     dnnl_BA16a48b4a = 383,
     dnnl_BA16a64b4a = 384,
+    dnnl_ABcd8a2b = 385,
+    dnnl_aBdeC16c16b2c = 386,
+    dnnl_aBdeC16c16b4c = 387,
+    dnnl_aBdefC16c16b2c = 388,
+    dnnl_AcB16b16a2b = 389,
+    dnnl_AcB16b16a4b = 390,
+    dnnl_AcdB16b16a2b = 391,
+    dnnl_AcdB16b16a4b = 392,
+    dnnl_AcdeB16b16a2b = 393,
+    dnnl_aBdefC16c16b4c = 394,
+    dnnl_AcdeB16b16a4b = 395,
+    dnnl_AcB16b32a2b = 396,
+    dnnl_AcB16b32a4b = 397,
+    dnnl_AcB16b48a2b = 398,
+    dnnl_AcB16b48a4b = 399,
+    dnnl_AcB16b64a2b = 400,
+    dnnl_AcB16b64a4b = 401,
+    dnnl_aBdC16c16b2c = 402,
+    dnnl_aBdC16c16b4c = 403,
+    dnnl_aBdC16c32b2c = 404,
+    dnnl_aBdC16c32b4c = 405,
+    dnnl_aBdC16c48b2c = 406,
+    dnnl_aBdC16c48b4c = 407,
+    dnnl_aBdC16c64b2c = 408,
+    dnnl_aBdC16c64b4c = 409,
+    dnnl_AcdB16b32a2b = 410,
+    dnnl_AcdB16b32a4b = 411,
+    dnnl_AcdB16b48a2b = 412,
+    dnnl_AcdB16b48a4b = 413,
+    dnnl_AcdB16b64a2b = 414,
+    dnnl_AcdB16b64a4b = 415,
+    dnnl_aBdeC16c32b2c = 416,
+    dnnl_aBdeC16c32b4c = 417,
+    dnnl_aBdeC16c48b2c = 418,
+    dnnl_aBdeC16c48b4c = 419,
+    dnnl_aBdeC16c64b2c = 420,
+    dnnl_aBdeC16c64b4c = 421,
+    dnnl_AcdeB16b32a2b = 422,
+    dnnl_AcdeB16b32a4b = 423,
+    dnnl_AcdeB16b48a2b = 424,
+    dnnl_AcdeB16b48a4b = 425,
+    dnnl_AcdeB16b64a2b = 426,
+    dnnl_AcdeB16b64a4b = 427,
+    dnnl_aBdefC16c32b2c = 428,
+    dnnl_aBdefC16c32b4c = 429,
+    dnnl_aBdefC16c48b2c = 430,
+    dnnl_aBdefC16c48b4c = 431,
+    dnnl_aBdefC16c64b2c = 432,
+    dnnl_aBdefC16c64b4c = 433,
+    dnnl_decbA16a = 434,
+    dnnl_ABc4a2b = 435,
+    dnnl_ABc8a2b = 436,
+    dnnl_aBCd8b2c = 437,
+    dnnl_ABcde4a2b = 438,
+    dnnl_ABcde8a2b = 439,
+    dnnl_ABcde40a16b = 440,
+    dnnl_ABcde40a32b = 441,
+    dnnl_aBCde8b2c = 442,
+    dnnl_ABcde4a8b8a2b = 443,
+    dnnl_ABcd4a8b8a2b = 444,
+    dnnl_ABc4a8b8a2b = 445,
+    dnnl_aBCdef4b8c8b2c = 446,
+    dnnl_aBCde4b8c8b2c = 447,
+    dnnl_aBCd4b8c8b2c = 448,
+    dnnl_BAcde4b8a8b2a = 449,
+    dnnl_BAcd4b8a8b2a = 450,
+    dnnl_BAc4b8a8b2a = 451,
+    dnnl_aCBdef4c8b8c2b = 452,
+    dnnl_aCBde4c8b8c2b = 453,
+    dnnl_aCBd4c8b8c2b = 454,
+    dnnl_aBCdef8b2c = 455,
+    dnnl_AB32a16b = 456,
+    dnnl_AB32a32b = 457,
+    dnnl_BA4b8a8b2a = 458,
+    dnnl_BA4b8a8b4a = 459,
+    dnnl_aBC32b16c = 460,
+    dnnl_aBC32b32c = 461,
+    dnnl_aCB4c8b8c2b = 462,
+    dnnl_aCB4c8b8c4b = 463,
+    dnnl_ABcd4a2b = 464,
+    dnnl_ABc2b8a16b4a = 465,
+    dnnl_ABcd2b8a16b4a = 466,
+    dnnl_ABcde2b8a16b4a = 467,
+    dnnl_ABc2a8b16a4b = 468,
+    dnnl_ABc2a8b16a2b = 469,
+    dnnl_ABc2b32a8b = 470,
+    dnnl_ABcd2a8b16a4b = 471,
+    dnnl_ABcd2a8b16a2b = 472,
+    dnnl_aCBd2c8b16c2b = 473,
+    dnnl_ABcd2b32a8b = 474,
+    dnnl_aBCd2c8b16c2b = 475,
+    dnnl_ABcde2a8b16a4b = 476,
+    dnnl_ABcde2a8b16a2b = 477,
+    dnnl_aCBde2c8b16c2b = 478,
+    dnnl_ABcde2b32a8b = 479,
+    dnnl_aBC2b8c16b2c = 480,
+    dnnl_aBCd2b8c16b2c = 481,
+    dnnl_aBCde2b8c16b2c = 482,
+    dnnl_aBCdef2b8c16b2c = 483,
+    dnnl_BAcde2b8a16b4a = 484,
+    dnnl_BAcd2b8a16b4a = 485,
+    dnnl_BAc2b8a16b4a = 486,
+    dnnl_BAcde2b8a16b2a = 487,
+    dnnl_BAcd2b8a16b2a = 488,
+    dnnl_BAc2b8a16b2a = 489,
+    dnnl_aBCde2c8b16c2b = 490,
+    dnnl_aBCdef2c8b16c2b = 491,
+    dnnl_aCBdef2c8b16c2b = 492,
+    dnnl_aBCd2b8c16b4c = 493,
+    dnnl_aBCde2b8c16b4c = 494,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 385,
+    dnnl_format_tag_last = 495,
 
     // Aliases
 
@@ -1167,7 +1277,100 @@ public static final int
     dnnl_OIdhw16i64o4i = dnnl_ABcde16b64a4b,
     dnnl_OIdhw16i32o2i = dnnl_ABcde16b32a2b,
     dnnl_OIdhw16i48o2i = dnnl_ABcde16b48a2b,
-    dnnl_OIdhw16i64o2i = dnnl_ABcde16b64a2b;
+    dnnl_OIdhw16i64o2i = dnnl_ABcde16b64a2b,
+    dnnl_OwI16i16o2i = dnnl_AcB16b16a2b,
+    dnnl_OwI16i16o4i = dnnl_AcB16b16a4b,
+    dnnl_OhwI16i16o2i = dnnl_AcdB16b16a2b,
+    dnnl_OhwI16i16o4i = dnnl_AcdB16b16a4b,
+    dnnl_OdhwI16i16o2i = dnnl_AcdeB16b16a2b,
+    dnnl_OdhwI16i16o4i = dnnl_AcdeB16b16a4b,
+    dnnl_gOwI16i16o2i = dnnl_aBdC16c16b2c,
+    dnnl_gOwI16i16o4i = dnnl_aBdC16c16b4c,
+    dnnl_gOhwI16i16o2i = dnnl_aBdeC16c16b2c,
+    dnnl_gOhwI16i16o4i = dnnl_aBdeC16c16b4c,
+    dnnl_gOdhwI16i16o2i = dnnl_aBdefC16c16b2c,
+    dnnl_gOdhwI16i16o4i = dnnl_aBdefC16c16b4c,
+    dnnl_OwI16i32o2i = dnnl_AcB16b32a2b,
+    dnnl_OwI16i32o4i = dnnl_AcB16b32a4b,
+    dnnl_OwI16i48o2i = dnnl_AcB16b48a2b,
+    dnnl_OwI16i48o4i = dnnl_AcB16b48a4b,
+    dnnl_OwI16i64o2i = dnnl_AcB16b64a2b,
+    dnnl_OwI16i64o4i = dnnl_AcB16b64a4b,
+    dnnl_gOwI16i32o2i = dnnl_aBdC16c32b2c,
+    dnnl_gOwI16i32o4i = dnnl_aBdC16c32b4c,
+    dnnl_gOwI16i48o2i = dnnl_aBdC16c48b2c,
+    dnnl_gOwI16i48o4i = dnnl_aBdC16c48b4c,
+    dnnl_gOwI16i64o2i = dnnl_aBdC16c64b2c,
+    dnnl_gOwI16i64o4i = dnnl_aBdC16c64b4c,
+    dnnl_OhwI16i32o2i = dnnl_AcdB16b32a2b,
+    dnnl_OhwI16i32o4i = dnnl_AcdB16b32a4b,
+    dnnl_OhwI16i48o2i = dnnl_AcdB16b48a2b,
+    dnnl_OhwI16i48o4i = dnnl_AcdB16b48a4b,
+    dnnl_OhwI16i64o2i = dnnl_AcdB16b64a2b,
+    dnnl_OhwI16i64o4i = dnnl_AcdB16b64a4b,
+    dnnl_gOhwI16i32o2i = dnnl_aBdeC16c32b2c,
+    dnnl_gOhwI16i32o4i = dnnl_aBdeC16c32b4c,
+    dnnl_gOhwI16i48o2i = dnnl_aBdeC16c48b2c,
+    dnnl_gOhwI16i48o4i = dnnl_aBdeC16c48b4c,
+    dnnl_gOhwI16i64o2i = dnnl_aBdeC16c64b2c,
+    dnnl_gOhwI16i64o4i = dnnl_aBdeC16c64b4c,
+    dnnl_OdhwI16i32o2i = dnnl_AcdeB16b32a2b,
+    dnnl_OdhwI16i32o4i = dnnl_AcdeB16b32a4b,
+    dnnl_OdhwI16i48o2i = dnnl_AcdeB16b48a2b,
+    dnnl_OdhwI16i48o4i = dnnl_AcdeB16b48a4b,
+    dnnl_OdhwI16i64o2i = dnnl_AcdeB16b64a2b,
+    dnnl_OdhwI16i64o4i = dnnl_AcdeB16b64a4b,
+    dnnl_gOdhwI16i32o2i = dnnl_aBdefC16c32b2c,
+    dnnl_gOdhwI16i32o4i = dnnl_aBdefC16c32b4c,
+    dnnl_gOdhwI16i48o2i = dnnl_aBdefC16c48b2c,
+    dnnl_gOdhwI16i48o4i = dnnl_aBdefC16c48b4c,
+    dnnl_gOdhwI16i64o2i = dnnl_aBdefC16c64b2c,
+    dnnl_gOdhwI16i64o4i = dnnl_aBdefC16c64b4c,
+    dnnl_hwioG16g = dnnl_decbA16a,
+    dnnl_NCdhw40n16c = dnnl_ABcde40a16b,
+    dnnl_NCw40n16c = dnnl_ABc40a16b,
+    dnnl_NChw40n16c = dnnl_ABcd40a16b,
+    dnnl_NCw40n32c = dnnl_ABc40a32b,
+    dnnl_NChw40n32c = dnnl_ABcd40a32b,
+    dnnl_NCdhw40n32c = dnnl_ABcde40a32b,
+    dnnl_OIdhw4o8i8o2i = dnnl_ABcde4a8b8a2b,
+    dnnl_OIhw4o8i8o2i = dnnl_ABcd4a8b8a2b,
+    dnnl_OIw4o8i8o2i = dnnl_ABc4a8b8a2b,
+    dnnl_gOIdhw4o8i8o2i = dnnl_aBCdef4b8c8b2c,
+    dnnl_gOIhw4o8i8o2i = dnnl_aBCde4b8c8b2c,
+    dnnl_gOIw4o8i8o2i = dnnl_aBCd4b8c8b2c,
+    dnnl_IOdhw4i8o8i2o = dnnl_BAcde4b8a8b2a,
+    dnnl_IOhw4i8o8i2o = dnnl_BAcd4b8a8b2a,
+    dnnl_IOw4i8o8i2o = dnnl_BAc4b8a8b2a,
+    dnnl_gIOdhw4i8o8i2o = dnnl_aCBdef4c8b8c2b,
+    dnnl_gIOhw4i8o8i2o = dnnl_aCBde4c8b8c2b,
+    dnnl_gIOw4i8o8i2o = dnnl_aCBd4c8b8c2b,
+    dnnl_NCw2c32n8c = dnnl_ABc2b32a8b,
+    dnnl_NChw2c32n8c = dnnl_ABcd2b32a8b,
+    dnnl_NCdhw2c32n8c = dnnl_ABcde2b32a8b,
+    dnnl_OIw2i8o16i4o = dnnl_ABc2b8a16b4a,
+    dnnl_OIhw2i8o16i4o = dnnl_ABcd2b8a16b4a,
+    dnnl_OIdhw2i8o16i4o = dnnl_ABcde2b8a16b4a,
+    dnnl_OIw2o8i16o4i = dnnl_ABc2a8b16a4b,
+    dnnl_OIw2o8i16o2i = dnnl_ABc2a8b16a2b,
+    dnnl_IOw2i8o16i4o = dnnl_BAc2b8a16b4a,
+    dnnl_IOw2i8o16i2o = dnnl_BAc2b8a16b2a,
+    dnnl_OIhw2o8i16o4i = dnnl_ABcd2a8b16a4b,
+    dnnl_OIhw2o8i16o2i = dnnl_ABcd2a8b16a2b,
+    dnnl_IOhw2i8o16i4o = dnnl_BAcd2b8a16b4a,
+    dnnl_IOhw2i8o16i2o = dnnl_BAcd2b8a16b2a,
+    dnnl_OIdhw2o8i16o4i = dnnl_ABcde2a8b16a4b,
+    dnnl_OIdhw2o8i16o2i = dnnl_ABcde2a8b16a2b,
+    dnnl_IOdhw2i8o16i4o = dnnl_BAcde2b8a16b4a,
+    dnnl_IOdhw2i8o16i2o = dnnl_BAcde2b8a16b2a,
+    dnnl_gOIw2o8i16o2i = dnnl_aBCd2b8c16b2c,
+    dnnl_gIOw2i8o16i2o = dnnl_aCBd2c8b16c2b,
+    dnnl_gIOhw2i8o16i2o = dnnl_aBCde2c8b16c2b,
+    dnnl_gIOdhw2i8o16i2o = dnnl_aBCdef2c8b16c2b,
+    dnnl_gOIhw2o8i16o2i = dnnl_aBCde2b8c16b2c,
+    dnnl_gOIdhw2o8i16o2i = dnnl_aBCdef2b8c16b2c,
+    dnnl_gOIw2o8i16o4i = dnnl_aBCd2b8c16b4c,
+    dnnl_gOIhw2o8i16o4i = dnnl_aBCde2b8c16b4c;
 
 /** \} dnnl_api_memory
  <p>
@@ -1755,7 +1958,19 @@ public static final int
  *  \addtogroup dnnl_api_attributes
  *  \{
  <p>
- *  Scratchpad mode */
+ *  Floating-point math mode */
+/** enum dnnl_fpmath_mode_t */
+public static final int
+    /** Default behavior, no downconversions allowed */
+    dnnl_fpmath_mode_strict = 0,
+    /** Implicit f32->bf16 conversions allowed */
+    dnnl_fpmath_mode_bf16 = 1,
+    /** Implicit f32->f16 conversions allowed */
+    dnnl_fpmath_mode_f16 = 2,
+    /** Implicit f32->f16 or f32->bf16 conversions allowed */
+    dnnl_fpmath_mode_any = 3;
+
+/** Scratchpad mode */
 /** enum dnnl_scratchpad_mode_t */
 public static final int
     /** The library manages the scratchpad allocation according to the policy
@@ -2386,7 +2601,7 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // #endif
 
 // When defined, primitive cache stores runtime objects.
-/* #undef DNNL_USE_RT_OBJECTS_IN_PRIMITIVE_CACHE */
+// #define DNNL_USE_RT_OBJECTS_IN_PRIMITIVE_CACHE
 
 // When defined, DPCPP is supported.
 /* #undef DNNL_WITH_SYCL */
@@ -2397,6 +2612,31 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // When defined, SYCL CUDA backend is used.
 /* #undef DNNL_SYCL_CUDA */
 
+// List of configurating build controls
+// Workload controls
+public static final int BUILD_TRAINING = 1;
+public static final int BUILD_INFERENCE = 0;
+// Primitive controls
+public static final int BUILD_PRIMITIVE_ALL = 1;
+public static final int BUILD_BATCH_NORMALIZATION = 0;
+public static final int BUILD_BINARY = 0;
+public static final int BUILD_CONCAT = 0;
+public static final int BUILD_CONVOLUTION = 0;
+public static final int BUILD_DECONVOLUTION = 0;
+public static final int BUILD_ELTWISE = 0;
+public static final int BUILD_INNER_PRODUCT = 0;
+public static final int BUILD_LAYER_NORMALIZATION = 0;
+public static final int BUILD_LRN = 0;
+public static final int BUILD_MATMUL = 0;
+public static final int BUILD_POOLING = 0;
+public static final int BUILD_PRELU = 0;
+public static final int BUILD_REDUCTION = 0;
+public static final int BUILD_REORDER = 0;
+public static final int BUILD_RESAMPLING = 0;
+public static final int BUILD_RNN = 0;
+public static final int BUILD_SHUFFLE = 0;
+public static final int BUILD_SOFTMAX = 0;
+public static final int BUILD_SUM = 0;
 // #endif
 
 
@@ -2427,10 +2667,10 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 public static final int DNNL_VERSION_MAJOR = 2;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 3;
+public static final int DNNL_VERSION_MINOR = 4;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 2;
+public static final int DNNL_VERSION_PATCH = 1;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -2814,6 +3054,36 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_clone(
 
 ///
 public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_destroy(dnnl_primitive_attr attr);
+
+/** Returns the floating-point math mode primitive attribute.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param mode Output FP math mode.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_fpmath_mode(
+        @Const dnnl_primitive_attr attr, @Cast("dnnl_fpmath_mode_t*") IntPointer mode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_fpmath_mode(
+        @Const dnnl_primitive_attr attr, @Cast("dnnl_fpmath_mode_t*") IntBuffer mode);
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_fpmath_mode(
+        @Const dnnl_primitive_attr attr, @Cast("dnnl_fpmath_mode_t*") int[] mode);
+
+/** Sets the floating-point math mode primitive attributes.
+ * 
+ *  @param attr Primitive attributes.
+ *  @param mode FP math mode. The possible values are:
+ *      #dnnl_fpmath_mode_strict (default),
+ *      #dnnl_fpmath_mode_bf16,
+ *      #dnnl_fpmath_mode_f16,
+ *      #dnnl_fpmath_mode_any.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_fpmath_mode(
+        dnnl_primitive_attr attr, @Cast("dnnl_fpmath_mode_t") int mode);
 
 /** Returns the primitive attributes scratchpad mode.
  * 
@@ -3199,8 +3469,8 @@ public static native @Cast("dnnl_primitive_kind_t") int dnnl_post_ops_get_kind(
  *  integer-based computations when the result and previous activations have
  *  different logical scaling factors.
  * 
- *  In the simplest case when the accumulation is the only post-op, the
- *  computations would be:
+ *  In the simplest case where the accumulation is the only post-op, the
+ *  computations will be:
  * 
  *      dst[:] <- scale * dst[:] + op(...) // instead of dst[:] <- op(...)
  * 
@@ -3234,15 +3504,15 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum(
  *  integer-based computations when the result and previous activations have
  *  different logical scaling factors.
  * 
- *  In the simplest case when the accumulation is the only post-op, the
- *  computations would be:
+ *  In the simplest case where the accumulation is the only post-op, the
+ *  computations will be:
  * 
  *      dst[:] <- scale * dst[:] + op(...) // instead of dst[:] <- op(...)
  * 
  *  If \p data_type is specified, original dst tensor will be reinterpreted
  *  as a tensor with provided data type. Since it is reinterpretation,
- *  data_type and dst data type should have same size.
- *  As a result, computations would be:
+ *  data_type and dst data type should have the same size.
+ *  As a result, computations will be:
  * 
  *      dst[:] <- scale * as_data_type(dst[:]) + op(...)
  *                                         // instead of dst[:] <- op(...)
@@ -3257,8 +3527,52 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum(
  *      otherwise. */
 
 ///
+///
+///
+///
+///
+///
+///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum_v2(
         dnnl_post_ops post_ops, float scale, @Cast("dnnl_data_type_t") int data_type);
+
+/** Appends an accumulation v3 (sum) to post-ops. Prior to accumulating the
+ *  result, a zero point is subtracted from the previous value and is
+ *  multiplied by the scale.
+ * 
+ *  The kind of this post-op is #dnnl_sum.
+ * 
+ *  This feature may improve performance for cases like dequantize the
+ *  asymmetrically quantized sum's src1 tensor to f32 domain before performing
+ *  the sum operation by subtracting the \p zero_point before the scaling.
+ * 
+ *  In the simplest case where accumulation is the only post-op, the
+ *  computations will be:
+ * 
+ *      dst[:] <- scale * (dst[:] - zero_point) + op(...)
+ *                                              // instead of dst[:] <- op(...)
+ * 
+ *  If \p data_type is specified, original dst tensor will be reinterpreted
+ *  as a tensor with provided data type. Since it is reinterpretation,
+ *  data_type and dst data type should have the same size.
+ *  As a result, computations will be:
+ * 
+ *      dst[:] <- scale * (as_data_type(dst[:]) - zero_point) + op(...)
+ *                                         // instead of dst[:] <- op(...)
+ *  \note
+ *      This post-op executes in-place and does not change the
+ *      destination layout.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param scale Accumulation scaling factor.
+ *  @param zero_point Single scalar int32_t value of zero point.
+ *  @param data_type Accumulation data_type.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_sum_v3(dnnl_post_ops post_ops,
+        float scale, int zero_point, @Cast("dnnl_data_type_t") int data_type);
 
 /** Returns the parameters of an accumulation (sum) post-op.
  * 
@@ -3289,10 +3603,6 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum(
  *      otherwise. */
 
 ///
-///
-///
-///
-///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
         @Const dnnl_post_ops post_ops, int index, FloatPointer scale,
         @Cast("dnnl_data_type_t*") IntPointer data_type);
@@ -3302,6 +3612,32 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v2(
         @Const dnnl_post_ops post_ops, int index, float[] scale,
         @Cast("dnnl_data_type_t*") int[] data_type);
+
+/** Returns the parameters of an accumulation (sum) post-op with
+ *  zero point and data type parameter.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param index Index of the sum post-op.
+ *  @param scale Output accumulation scaling factor.
+ *  @param zero_point Zero point.
+ *  @param data_type Data type for accumulation.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+///
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v3(
+        @Const dnnl_post_ops post_ops, int index, FloatPointer scale,
+        IntPointer zero_point, @Cast("dnnl_data_type_t*") IntPointer data_type);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v3(
+        @Const dnnl_post_ops post_ops, int index, FloatBuffer scale,
+        IntBuffer zero_point, @Cast("dnnl_data_type_t*") IntBuffer data_type);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_sum_v3(
+        @Const dnnl_post_ops post_ops, int index, float[] scale,
+        int[] zero_point, @Cast("dnnl_data_type_t*") int[] data_type);
 
 /** Appends an elementwise post-op.
  * 
@@ -3573,6 +3909,10 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_binary(dnnl
 
 ///
 ///
+///
+///
+///
+///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
         @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") IntPointer alg_kind,
         @Cast("const dnnl_memory_desc_t**") PointerPointer src1_desc);
@@ -3585,6 +3925,55 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_binary(
         @Const dnnl_post_ops post_ops, int index, @Cast("dnnl_alg_kind_t*") int[] alg_kind,
         @Const @ByPtrPtr dnnl_memory_desc_t src1_desc);
+
+/** Appends a prelu forward post-op.
+ * 
+ *  The kind of this post-op is #dnnl::primitive::kind::prelu.
+ * 
+ *  The post-op can be defined as:
+ * 
+ *       dst[:] <- prelu(dst[:], weights[:])
+ *       prelu:
+ *       dst[:] <- dst[:] if dst[:] > 0
+ *       dst[:] <- dst[:] * weights[:] if dst[:] <= 0
+ * 
+ * 
+ *  \note
+ *      The order of dimensions does not depend on how elements are laid
+ *      out in memory. For example:
+ *      - for a 2D CNN activations tensor the order is always (n, c)
+ *      - for a 4D CNN activations tensor the order is always (n, c, h, w)
+ *      - for a 5D CNN weights tensor the order is always
+ *         (g, oc, ic, kh, kw)
+ * 
+ *     Prelu weights tensor is passed in runtime execution phase. Prelu
+ *     weights tensor data type is implicitly assumed as f32 using plain
+ *     layout (a, ab, acb, acdb, acdeb)
+ <p>
+ *  @param mask Defines the correspondence between the output tensor
+ *      dimensions and the prelu weights tensor. The set i-th bit indicates
+ *      that a dedicated weights value is used for each index along that
+ *      dimension. Set the mask to 0 to use a common weights value
+ *      for the whole output tensor. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_prelu(
+        dnnl_post_ops post_ops, int mask);
+
+/** Returns the parameters of a prelu post-op.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param index Index of the preu post-op.
+ *  @param mask Mask of the prelu post-op. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_prelu(
+        @Const dnnl_post_ops post_ops, int index, IntPointer mask);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_prelu(
+        @Const dnnl_post_ops post_ops, int index, IntBuffer mask);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_prelu(
+        @Const dnnl_post_ops post_ops, int index, int[] mask);
 
 /** \} dnnl_api_attributes
  <p>
@@ -6783,10 +7172,41 @@ public static native @Cast("dnnl_status_t") int dnnl_get_primitive_cache_capacit
  *      success. */
 
 ///
-///
 public static native @Cast("dnnl_status_t") int dnnl_set_primitive_cache_capacity(int _capacity);
 
 /** \} dnnl_api_primitive_cache
+ <p>
+ *  \addtogroup dnnl_api_mathmode
+ *  \{
+ <p>
+ *  Returns the floating-point math mode that will be used by default
+ *  for all subsequently created primitives.
+ * 
+ *  @param mode Output FP math mode.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_get_default_fpmath_mode(@Cast("dnnl_fpmath_mode_t*") IntPointer mode);
+public static native @Cast("dnnl_status_t") int dnnl_get_default_fpmath_mode(@Cast("dnnl_fpmath_mode_t*") IntBuffer mode);
+public static native @Cast("dnnl_status_t") int dnnl_get_default_fpmath_mode(@Cast("dnnl_fpmath_mode_t*") int[] mode);
+
+/** Sets the floating-point math mode that will be used by default
+ *  for all subsequently created primitives.
+ * 
+ *  @param mode FP math mode. The possible values are:
+ *      #dnnl_fpmath_mode_strict,
+ *      #dnnl_fpmath_mode_bf16,
+ *      #dnnl_fpmath_mode_f16,
+ *      #dnnl_fpmath_mode_any.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_set_default_fpmath_mode(@Cast("dnnl_fpmath_mode_t") int mode);
+
+/** \} dnnl_api_mathmode
  <p>
  *  \addtogroup dnnl_api_service
  *  \{
@@ -7354,7 +7774,32 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
  * 
  *  \{
  <p>
- *  Scratchpad mode */
+ *  Floating-point math mode */
+@Namespace("dnnl") public enum fpmath_mode {
+    /** Default behavior, no downconversions allowed */
+    strict(dnnl_fpmath_mode_strict),
+    /** Implicit f32->bf16 conversions allowed */
+    bf16(dnnl_fpmath_mode_bf16),
+    /** Implicit f32->f16 conversions allowed */
+    f16(dnnl_fpmath_mode_f16),
+    /** Implicit f32->f16 or f32->bf16 conversions allowed */
+    any(dnnl_fpmath_mode_any);
+
+    public final int value;
+    private fpmath_mode(int v) { this.value = v; }
+    private fpmath_mode(fpmath_mode e) { this.value = e.value; }
+    public fpmath_mode intern() { for (fpmath_mode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/** Converts an fpmath mode enum value from C++ API to C API type.
+ * 
+ *  @param mode C++ API fpmath mode enum value.
+ *  @return Corresponding C API fpmath mode enum value. */
+@Namespace("dnnl") public static native @Cast("dnnl_fpmath_mode_t") int convert_to_c(fpmath_mode mode);
+@Namespace("dnnl") public static native @Cast("dnnl_fpmath_mode_t") int convert_to_c(@Cast("dnnl::fpmath_mode") int mode);
+
+/** Scratchpad mode */
 @Namespace("dnnl") public enum scratchpad_mode {
     /** The library manages the scratchpad allocation according to the policy
      *  specified by the {@code DNNL_ENABLE_CONCURRENT_EXEC}
@@ -7391,7 +7836,6 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
  *  @param mode C++ API scratchpad mode enum value.
  *  @return Corresponding C API scratchpad mode enum value. */
 @Namespace("dnnl") public static native @Cast("dnnl_scratchpad_mode_t") int convert_to_c(scratchpad_mode mode);
-@Namespace("dnnl") public static native @Cast("dnnl_scratchpad_mode_t") int convert_to_c(@Cast("dnnl::scratchpad_mode") int mode);
 
 /** Propagation kind. */
 @Namespace("dnnl") public enum prop_kind {
@@ -8222,6 +8666,13 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 /** \copydoc dnnl_version() */
 @Namespace("dnnl") public static native @Cast("const dnnl::version_t*") dnnl_version_t version();
+
+/** \copydoc dnnl_get_default_fpmath_mode() */
+@Namespace("dnnl") public static native fpmath_mode get_default_fpmath_mode();
+
+/** \copydoc dnnl_set_default_fpmath_mode() */
+@Namespace("dnnl") public static native status set_default_fpmath_mode(fpmath_mode mode);
+@Namespace("dnnl") public static native @Cast("dnnl::status") int set_default_fpmath_mode(@Cast("dnnl::fpmath_mode") int mode);
 
 /** \copydoc dnnl_set_jit_dump() */
 @Namespace("dnnl") public static native status set_jit_dump(int enable);

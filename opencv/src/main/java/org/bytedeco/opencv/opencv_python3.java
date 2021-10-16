@@ -35,7 +35,7 @@ import org.bytedeco.opencv.presets.*;
 /**
  * This is only a placeholder to facilitate loading the {@code opencv_python3} module with JavaCPP.
  * <p>
- * Call {@code Py_AddPath(opencv_python3.cachePackages())} before calling {@code Py_Initialize()}.
+ * Call {@code PySys_SetPath(opencv_python3.cachePackages())} after calling {@code Py_Initialize()}.
  *
  * @author Samuel Audet
  */
@@ -68,9 +68,9 @@ import org.bytedeco.opencv.presets.*;
         @Platform(preload = {"opencv_cuda@.4.5", "opencv_cudaarithm@.4.5", "opencv_cudafilters@.4.5", "opencv_cudaimgproc@.4.5",
                              "opencv_cudacodec@.4.5", "opencv_cudaobjdetect@.4.5", "opencv_cudabgsegm@.4.5", "opencv_cudastereo@.4.5",
                              "opencv_cudaoptflow@.4.5", "opencv_cudawarping@.4.5", "opencv_cudalegacy@.4.5"}),
-        @Platform(value = "windows", preload = {"opencv_cuda453", "opencv_cudaarithm453", "opencv_cudafilters453", "opencv_cudaimgproc453",
-                             "opencv_cudacodec453", "opencv_cudaobjdetect453", "opencv_cudabgsegm453", "opencv_cudastereo453",
-                             "opencv_cudaoptflow453", "opencv_cudawarping453", "opencv_cudalegacy453"}),
+        @Platform(value = "windows", preload = {"opencv_cuda454", "opencv_cudaarithm454", "opencv_cudafilters454", "opencv_cudaimgproc454",
+                             "opencv_cudacodec454", "opencv_cudaobjdetect454", "opencv_cudabgsegm454", "opencv_cudastereo454",
+                             "opencv_cudaoptflow454", "opencv_cudawarping454", "opencv_cudalegacy454"}),
     }
 )
 public class opencv_python3 {

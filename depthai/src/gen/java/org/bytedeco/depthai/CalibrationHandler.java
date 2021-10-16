@@ -198,9 +198,12 @@ public class CalibrationHandler extends Pointer {
      *  Get the Fov of the camera
      *
      * @param cameraId of the camera of which we are fetching fov.
+     * @param useSpec Disabling this bool will calculate the fov based on intrinsics (focal length, image width), instead of getting it from the camera specs
      * @return field of view of the camera with given cameraId.
      */
+    public native float getFov(CameraBoardSocket cameraId, @Cast("bool") boolean useSpec/*=true*/);
     public native float getFov(CameraBoardSocket cameraId);
+    public native float getFov(@Cast("dai::CameraBoardSocket") int cameraId, @Cast("bool") boolean useSpec/*=true*/);
     public native float getFov(@Cast("dai::CameraBoardSocket") int cameraId);
 
     /**
@@ -213,8 +216,8 @@ public class CalibrationHandler extends Pointer {
     public native @Cast("uint8_t") byte getLensPosition(@Cast("dai::CameraBoardSocket") int cameraId);
 
     /**
-     * Get the Camera Extrinsics object between two cameras from the data loaded if there is a linked connection
-     *  between any two cameras then there relative rotation and translation is returned by this function.
+     * Get the Camera Extrinsics object between two cameras from the calibration data if there is a linked connection
+     *  between any two cameras then the relative rotation and translation (in centimeters) is returned by this function.
      *
      * @param srcCamera Camera Id of the camera which will be considerd as origin.
      * @param dstCamera  Camera Id of the destination camera to which we are fetching the rotation and translation from the SrcCamera
@@ -234,6 +237,36 @@ public class CalibrationHandler extends Pointer {
     public native @ByVal FloatVectorVector getCameraExtrinsics(CameraBoardSocket srcCamera, CameraBoardSocket dstCamera);
     public native @ByVal FloatVectorVector getCameraExtrinsics(@Cast("dai::CameraBoardSocket") int srcCamera, @Cast("dai::CameraBoardSocket") int dstCamera, @Cast("bool") boolean useSpecTranslation/*=false*/);
     public native @ByVal FloatVectorVector getCameraExtrinsics(@Cast("dai::CameraBoardSocket") int srcCamera, @Cast("dai::CameraBoardSocket") int dstCamera);
+
+    /**
+     * Get the Camera translation vector between two cameras from the calibration data.
+     *
+     * @param srcCamera Camera Id of the camera which will be considerd as origin.
+     * @param dstCamera  Camera Id of the destination camera to which we are fetching the translation vector from the SrcCamera
+     * @param useSpecTranslation Disabling this bool uses the translation information from the calibration data (not the board design data)
+     * @return a translation vector like [x, y, z] in centimeters
+     */
+    public native @StdVector FloatPointer getCameraTranslationVector(CameraBoardSocket srcCamera, CameraBoardSocket dstCamera, @Cast("bool") boolean useSpecTranslation/*=true*/);
+    public native @StdVector FloatPointer getCameraTranslationVector(CameraBoardSocket srcCamera, CameraBoardSocket dstCamera);
+    public native @StdVector FloatBuffer getCameraTranslationVector(@Cast("dai::CameraBoardSocket") int srcCamera, @Cast("dai::CameraBoardSocket") int dstCamera, @Cast("bool") boolean useSpecTranslation/*=true*/);
+    public native @StdVector FloatBuffer getCameraTranslationVector(@Cast("dai::CameraBoardSocket") int srcCamera, @Cast("dai::CameraBoardSocket") int dstCamera);
+
+    /**
+     * Get the baseline distance between two specified cameras. By default it will get the baseline between CameraBoardSocket.RIGHT
+     * and CameraBoardSocket.LEFT.
+     *
+     * @param cam1 First camera
+     * @param cam2 Second camera
+     * @param useSpecTranslation Enabling this bool uses the translation information from the board design data (not the calibration data)
+     * @return baseline distance in centimeters
+     */
+    public native float getBaselineDistance(CameraBoardSocket cam1/*=dai::CameraBoardSocket::RIGHT*/,
+                                  CameraBoardSocket cam2/*=dai::CameraBoardSocket::LEFT*/,
+                                  @Cast("bool") boolean useSpecTranslation/*=true*/);
+    public native float getBaselineDistance();
+    public native float getBaselineDistance(@Cast("dai::CameraBoardSocket") int cam1/*=dai::CameraBoardSocket::RIGHT*/,
+                                  @Cast("dai::CameraBoardSocket") int cam2/*=dai::CameraBoardSocket::LEFT*/,
+                                  @Cast("bool") boolean useSpecTranslation/*=true*/);
 
     /**
      * Get the Camera To Imu Extrinsics object

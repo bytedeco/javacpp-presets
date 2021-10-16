@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.8.2
+ONNXRUNTIME=1.9.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -64,19 +64,24 @@ if [[ -n "$ARCH_FLAGS" ]]; then
     cd ../onnxruntime
 fi
 
+sedinplace 's/cmake_minimum_required(VERSION 3...)/cmake_minimum_required(VERSION 3.16)/g' cmake/CMakeLists.txt
+sedinplace '/CMP0104/d' cmake/CMakeLists.txt
+
 # allow cross compilation for linux-arm64
 sedinplace 's/if (args.arm or args.arm64):/if (False):/g' tools/ci_build/build.py
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
-sedinplace "s/default='Visual Studio 15 2017'/default='Ninja'/g" tools/ci_build/build.py
+sedinplace '/--Werror/d' cmake/CMakeLists.txt
+sedinplace "s/return 'ON'/return 'OFF'/g" tools/ci_build/build.py
+sedinplace "s/default='Visual Studio 1. 201.'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers.cmake
 sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/onnxruntime_providers.cmake
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.3.2)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.4.1)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -126,7 +131,7 @@ which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 cp -r include/* ../include
 cp -r orttraining/orttraining/models/runner/training_runner.h ../include
 cp -r orttraining/orttraining/models/runner/training_util.h ../include
-sedinplace '/#include "core\/framework\/provider_options.h"/,/};/d' ../include/onnxruntime/core/providers/cuda/cuda_provider_factory.h
+#sedinplace '/#include "core\/framework\/provider_options.h"/,/};/d' ../include/onnxruntime/core/providers/cuda/cuda_provider_factory.h
 sedinplace '/struct ProviderInfo_OpenVINO {/,/};/d' ../include/onnxruntime/core/providers/openvino/openvino_provider_factory.h
 cp -r java/src/main/java/* ../java
 cp -a ../build/Release/lib* ../lib || true

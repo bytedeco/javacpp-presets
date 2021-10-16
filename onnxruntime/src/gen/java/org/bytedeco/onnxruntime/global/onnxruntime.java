@@ -28,13 +28,18 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+/** \file onnxruntime_c_api.h
+  <p>
+  \brief ONNX Runtime C API.
+*/
+
 // #pragma once
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <string.h>
 
 // This value is used in structures passed to ORT so that a newer version of ORT will still work with them
-public static final int ORT_API_VERSION = 8;
+public static final int ORT_API_VERSION = 9;
 
 // #ifdef __cplusplus
 // #endif
@@ -151,6 +156,29 @@ public static final int
   ONNX_TYPE_OPAQUE = 4,
   ONNX_TYPE_SPARSETENSOR = 5;
 
+// These types are synced with internal
+// SparseFormatFlags
+/** enum OrtSparseFormat */
+public static final int
+  ORT_SPARSE_UNDEFINED = 0,
+  ORT_SPARSE_COO = 0x1,
+  ORT_SPARSE_CSRC = 0x2,
+  ORT_SPARSE_BLOCK_SPARSE = 0x4;
+
+// Enum allows to query sparse tensor indices
+public enum OrtSparseIndicesFormat {
+  ORT_SPARSE_COO_INDICES(0),
+  ORT_SPARSE_CSR_INNER_INDICES(1),
+  ORT_SPARSE_CSR_OUTER_INDICES(2),
+  ORT_SPARSE_BLOCK_SPARSE_INDICES(3);
+
+    public final int value;
+    private OrtSparseIndicesFormat(int v) { this.value = v; }
+    private OrtSparseIndicesFormat(OrtSparseIndicesFormat e) { this.value = e.value; }
+    public OrtSparseIndicesFormat intern() { for (OrtSparseIndicesFormat e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
 /** enum OrtLoggingLevel */
 public static final int
   ORT_LOGGING_LEVEL_VERBOSE = 0,
@@ -231,6 +259,9 @@ public static final int
 // Targeting ../OrtPrepackedWeightsContainer.java
 
 
+// Targeting ../OrtTensorRTProviderOptionsV2.java
+
+
 
 // #ifdef _WIN32
 // #else
@@ -251,6 +282,7 @@ public static final int
 //   _Success_(return == 0) _Check_return_ _Ret_maybenull_ OrtStatusPtr ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION
 
 // #define ORT_CLASS_RELEASE(X) void(ORT_API_CALL * Release##X)(_Frees_ptr_opt_ Ort##X * input)
+// #define ORT_CLASS_RELEASE2(X) void(ORT_API_CALL * Release##X)(_Frees_ptr_opt_ Ort##X##V2 * input)
 // Targeting ../OrtAllocator.java
 
 
@@ -353,6 +385,14 @@ public static final int
 // Targeting ../OrtCustomOp.java
 
 
+
+/*
+ * This is the old way to add the CUDA provider to the session, please use SessionOptionsAppendExecutionProvider_CUDA above to access the latest functionality
+ * This function always exists, but will only succeed if Onnxruntime was built with CUDA support and the CUDA provider shared library exists
+ * 
+ * \param device_id cuda device id, starts from zero.
+*/
+public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppendExecutionProvider_CUDA( OrtSessionOptions options, int device_id);
 
 // #ifdef __cplusplus
 // #endif
@@ -578,25 +618,6 @@ public static final int
  * @param use_arena zero: false. non-zero: true.
  */
 public static native @Cast("OrtStatusPtr") OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( OrtSessionOptions options, int use_arena);
-
-// #ifdef __cplusplus
-// #endif
-
-
-// Parsed from onnxruntime/core/providers/cuda/cuda_provider_factory.h
-
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-// #include "onnxruntime_c_api.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/**
- * @param device_id cuda device id, starts from zero.
- */
-public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppendExecutionProvider_CUDA( OrtSessionOptions options, int device_id);
 
 // #ifdef __cplusplus
 // #endif

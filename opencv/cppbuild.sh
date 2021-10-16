@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.5.3
+OPENCV_VERSION=4.5.4
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -40,17 +40,18 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
+export PYTHON2_EXECUTABLE=$(which python2)
 export PYTHON3_EXECUTABLE=
 export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
-    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -59,7 +60,7 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python39.lib"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python310.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
     export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
@@ -106,7 +107,7 @@ sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPy
 sedinplace 's/PythonLibs "${_version_major_minor}.${_version_patch}" EXACT/PythonLibs/g' cmake/OpenCVDetectPython.cmake
 sedinplace '/if(PYTHONINTERP_FOUND)/a\
     if(" ${_python_version_major}" STREQUAL " 3")\
-      set(PYTHON_VERSION_STRING "3.9")\
+      set(PYTHON_VERSION_STRING "3.10")\
       set(PYTHON_VERSION_MAJOR "3")\
       set(PYTHON_VERSION_MINOR "8")\
     endif()\
@@ -372,7 +373,7 @@ case $PLATFORM in
         ;;
     macosx-*)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
-        sedinplace '/HAVE_GCD/d' CMakeLists.txt
+        sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
         # remove spurious "lib" lib
         sedinplace '/if.*(HAVE_CUDA)/a\
             list(REMOVE_ITEM CUDA_LIBRARIES lib)\

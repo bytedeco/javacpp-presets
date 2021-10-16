@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch-platform-gpu</artifactId>
-  <version>1.9.0-${project.parent.version}</version>
+  <version>1.9.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for PyTorch</name>
 
   <properties>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.17-${project.parent.version}</version>
+      <version>0.3.18-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

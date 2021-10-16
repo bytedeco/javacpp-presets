@@ -29,6 +29,10 @@ public class Device extends DeviceBase {
         private native void allocate(@Const @ByRef Pipeline pipeline);
         public Device(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, usb2Mode); }
         private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode);
+        public Device(@Const @ByRef Pipeline pipeline, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(pipeline, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef Pipeline pipeline, UsbSpeed maxUsbSpeed);
+        public Device(@Const @ByRef Pipeline pipeline, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(pipeline, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("dai::UsbSpeed") int maxUsbSpeed);
         public Device(@Const @ByRef Pipeline pipeline, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
         private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("const char*") BytePointer pathToCmd);
         public Device(@Const @ByRef Pipeline pipeline, String pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
@@ -37,6 +41,10 @@ public class Device extends DeviceBase {
         private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo);
         public Device(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, devInfo, usb2Mode); }
         private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode);
+        public Device(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(pipeline, devInfo, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+        public Device(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(pipeline, devInfo, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
         public Device(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
         private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd);
         public Device(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, String pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
@@ -47,6 +55,10 @@ public class Device extends DeviceBase {
         private native void allocate(@Cast("dai::OpenVINO::Version") int version);
         public Device(@Cast("dai::OpenVINO::Version") int version, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(version, usb2Mode); }
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("bool") boolean usb2Mode);
+        public Device(@Cast("dai::OpenVINO::Version") int version, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(version, maxUsbSpeed); }
+        private native void allocate(@Cast("dai::OpenVINO::Version") int version, UsbSpeed maxUsbSpeed);
+        public Device(@Cast("dai::OpenVINO::Version") int version, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(version, maxUsbSpeed); }
+        private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("dai::UsbSpeed") int maxUsbSpeed);
         public Device(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") BytePointer pathToCmd);
         public Device(@Cast("dai::OpenVINO::Version") int version, String pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
@@ -55,10 +67,18 @@ public class Device extends DeviceBase {
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo);
         public Device(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(version, devInfo, usb2Mode); }
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode);
+        public Device(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(version, devInfo, maxUsbSpeed); }
+        private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+        public Device(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(version, devInfo, maxUsbSpeed); }
+        private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
         public Device(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd);
         public Device(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, String pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
         private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, String pathToCmd);
+        public Device(@ByVal Config config) { super((Pointer)null); allocate(config); }
+        private native void allocate(@ByVal Config config);
+        public Device(@ByVal Config config, @Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(config, devInfo); }
+        private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Device(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -86,6 +106,12 @@ public class Device extends DeviceBase {
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
      * @param pipeline Pipeline to be executed on the device
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+
+    /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * @param pipeline Pipeline to be executed on the device
      * @param pathToCmd Path to custom device firmware
      */
 
@@ -112,6 +138,13 @@ public class Device extends DeviceBase {
      * Connects to device specified by devInfo.
      * @param pipeline Pipeline to be executed on the device
      * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+
+    /**
+     * Connects to device specified by devInfo.
+     * @param pipeline Pipeline to be executed on the device
+     * @param devInfo DeviceInfo which specifies which device to connect to
      * @param pathToCmd Path to custom device firmware
      */
 
@@ -119,7 +152,7 @@ public class Device extends DeviceBase {
      * Connects to device specified by devInfo.
      * @param pipeline Pipeline to be executed on the device
      * @param devInfo DeviceInfo which specifies which device to connect to
-     * @param usb2Mode Path to custom device firmware
+     * @param pathToCmd Path to custom device firmware
      */
 
     /**

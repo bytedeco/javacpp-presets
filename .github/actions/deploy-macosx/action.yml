@@ -7,7 +7,7 @@ runs:
       run: |
         cd $HOME
 
-        export MACOSX_DEPLOYMENT_TARGET=10.13
+        export MACOSX_DEPLOYMENT_TARGET=10.15
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
         if [[ "$CI_DEPLOY_PLATFORM" == "macosx-arm64" ]]; then
@@ -15,7 +15,7 @@ runs:
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           brew uninstall --force gcc
@@ -40,7 +40,7 @@ runs:
         fi
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
-        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/opt/sdl/lib/libSDL-1.2.0.dylib
+        sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
 
         python3 -m pip install gdown || python3 -m pip install gdown
@@ -53,9 +53,9 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17960/m_onemkl_p_2021.3.0.517_offline.dmg
-          hdiutil mount m_onemkl_p_2021.3.0.517_offline.dmg
-          sudo /Volumes/m_onemkl_p_2021.3.0.517_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18227/m_onemkl_p_2021.4.0.637_offline.dmg
+          hdiutil mount m_onemkl_p_2021.4.0.637_offline.dmg
+          sudo /Volumes/m_onemkl_p_2021.4.0.637_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
         fi
 
         GRADLE_TASK=publishToMavenLocal

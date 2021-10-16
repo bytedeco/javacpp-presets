@@ -96,13 +96,6 @@ public class StereoDepthProperties extends Pointer {
     }
 
     /**
-     * Calibration data byte array
-     */
-    public native @Cast("std::uint8_t*") @StdVector BytePointer calibration(); public native StereoDepthProperties calibration(BytePointer setter);
-
-    public native @ByRef EepromData calibrationData(); public native StereoDepthProperties calibrationData(EepromData setter);
-
-    /**
      * Set the disparity/depth alignment to the perspective of a rectified output, or center it
      */
     public native DepthAlign depthAlign(); public native StereoDepthProperties depthAlign(DepthAlign setter);
@@ -113,24 +106,12 @@ public class StereoDepthProperties extends Pointer {
     public native CameraBoardSocket depthAlignCamera(); public native StereoDepthProperties depthAlignCamera(CameraBoardSocket setter);
 
     public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
-    /**
-     * Computes and combines disparities in both L-R and R-L directions, and combine them.
-     * For better occlusion handling
-     */
-    public native @Cast("bool") boolean enableLeftRightCheck(); public native StereoDepthProperties enableLeftRightCheck(boolean setter);
-    /**
-     * Computes disparity with sub-pixel interpolation (5 fractional bits), suitable for long range
-     */
-    public native @Cast("bool") boolean enableSubpixel(); public native StereoDepthProperties enableSubpixel(boolean setter);
+
     /**
      * Disparity range increased from 96 to 192, combined from full resolution and downscaled images.
      * Suitable for short range objects
      */
     public native @Cast("bool") boolean enableExtendedDisparity(); public native StereoDepthProperties enableExtendedDisparity(boolean setter);
-    /**
-     * Mirror rectified frames: true to have disparity/depth normal (non-mirrored)
-     */
-    public native @Cast("bool") boolean rectifyMirrorFrame(); public native StereoDepthProperties rectifyMirrorFrame(boolean setter);
     /**
      * Fill color for missing data at frame edges: grayscale 0..255, or -1 to replicate pixels
      */
@@ -161,4 +142,16 @@ public class StereoDepthProperties extends Pointer {
      * instead of intrinsics + extrinsic matrices
      */
     public native @ByRef RectificationMesh mesh(); public native StereoDepthProperties mesh(RectificationMesh setter);
+
+    /**
+     * Whether to enable switching stereo modes at runtime or not.
+     * E.g. standard to subpixel, standard+LR-check to subpixel + LR-check.
+     * Note: It will allocate resources for worst cases scenario,
+     * should be enabled only if dynamic mode switch is required.
+     * Default value: false.
+     */
+    public native @Cast("bool") boolean enableRuntimeStereoModeSwitch(); public native StereoDepthProperties enableRuntimeStereoModeSwitch(boolean setter);
+
+    /** Num frames in output pool */
+    public native int numFramesPool(); public native StereoDepthProperties numFramesPool(int setter);
 }

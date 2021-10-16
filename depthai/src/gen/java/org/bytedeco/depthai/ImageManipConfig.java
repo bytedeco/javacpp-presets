@@ -43,6 +43,8 @@ public class ImageManipConfig extends Buffer {
         return new ImageManipConfig((Pointer)this).offsetAddress(i);
     }
 
+    // Alias
+
     /** Construct ImageManipConfig message */
     public ImageManipConfig() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -58,6 +60,12 @@ public class ImageManipConfig extends Buffer {
      * @param ymax Bottom right Y coordinate of rectangle
      */
     public native void setCropRect(float xmin, float ymin, float xmax, float ymax);
+
+    /**
+     * Specifies crop with rectangle with normalized values (0..1)
+     * @param coordinates Coordinate of rectangle
+     */
+    public native void setCropRect(@ByVal @Cast("std::tuple<float,float,float,float>*") Pointer coordinates);
 
     /**
      * Specifies crop with rotated rectangle. Optionally as non normalized coordinates
@@ -128,6 +136,12 @@ public class ImageManipConfig extends Buffer {
     public native void setResize(int w, int h);
 
     /**
+     * Specifies output image size. After crop stage the image will be streched to fit.
+     * @param size Size in pixels
+     */
+    public native void setResize(@ByVal @Cast("std::tuple<int,int>*") Pointer size);
+
+    /**
      * Specifies output image size. After crop stage the image will be resized by preserving aspect ration.
      * Optionally background can be specified.
      *
@@ -139,6 +153,18 @@ public class ImageManipConfig extends Buffer {
      */
     public native void setResizeThumbnail(int w, int h, int bgRed/*=0*/, int bgGreen/*=0*/, int bgBlue/*=0*/);
     public native void setResizeThumbnail(int w, int h);
+
+    /**
+     * Specifies output image size. After crop stage the image will be resized by preserving aspect ration.
+     * Optionally background can be specified.
+     *
+     * @param size Size in pixels
+     * @param bgRed Red component
+     * @param bgGreen Green component
+     * @param bgBlue Blue component
+     */
+    public native void setResizeThumbnail(@ByVal @Cast("std::tuple<int,int>*") Pointer size, int bgRed/*=0*/, int bgGreen/*=0*/, int bgBlue/*=0*/);
+    public native void setResizeThumbnail(@ByVal @Cast("std::tuple<int,int>*") Pointer size);
 
     /**
      * Specify output frame type.
@@ -200,6 +226,21 @@ public class ImageManipConfig extends Buffer {
      * @return Output image height
      */
     public native int getResizeHeight();
+
+    /**
+     * @return Crop configuration
+     */
+    public native @ByVal @Cast("dai::ImageManipConfig::CropConfig*") RawImageManipConfig.CropConfig getCropConfig();
+
+    /**
+     * @return Resize configuration
+     */
+    public native @ByVal @Cast("dai::ImageManipConfig::ResizeConfig*") RawImageManipConfig.ResizeConfig getResizeConfig();
+
+    /**
+     * @return Format configuration
+     */
+    public native @ByVal @Cast("dai::ImageManipConfig::FormatConfig*") RawImageManipConfig.FormatConfig getFormatConfig();
 
     /**
      * @return True if resize thumbnail mode is set, false otherwise

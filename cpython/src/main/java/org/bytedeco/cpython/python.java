@@ -41,11 +41,11 @@ import org.bytedeco.javacpp.annotation.Properties;
     inherit = org.bytedeco.cpython.presets.python.class,
     value = {
         @Platform(
-            executable = "python3.9"
+            executable = "python3.10"
         ),
         @Platform(
             value = "macosx",
-            executable = "python3.9"
+            executable = "python3.10"
         ),
         @Platform(
             value = "windows",

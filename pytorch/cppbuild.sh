@@ -19,7 +19,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.9.0
+PYTORCH_VERSION=1.9.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -57,14 +57,14 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -116,6 +116,7 @@ sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 
 # work around some compiler bugs
+sedinplace 's/!defined(__INTEL_COMPILER))/!defined(__INTEL_COMPILER) \&\& (__GNUC__ < 11))/g' third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h
 sedinplace 's/using ExpandingArrayDouble/public: using ExpandingArrayDouble/g' ./torch/csrc/api/include/torch/nn/options/pooling.h
 sedinplace 's/typedef c10::variant/public: typedef c10::variant/g' ./torch/csrc/api/include/torch/nn/options/upsampling.h
 sedinplace 's/std::copysign/copysignf/g' aten/src/ATen/native/cuda/*.cu

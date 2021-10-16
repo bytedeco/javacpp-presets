@@ -40,6 +40,10 @@ public class OpenVINO extends Pointer {
     /** enum dai::OpenVINO::Version */
     public static final int VERSION_2020_3 = 0, VERSION_2020_4 = 1, VERSION_2021_1 = 2, VERSION_2021_2 = 3, VERSION_2021_3 = 4, VERSION_2021_4 = 5;
 
+    /** Main OpenVINO version */
+    @MemberGetter public static native @Cast("const dai::OpenVINO::Version") int DEFAULT_VERSION();
+    public static final int DEFAULT_VERSION = DEFAULT_VERSION();
+
     /**
      * @return Supported versions
      */

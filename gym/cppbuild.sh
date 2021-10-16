@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GYM_VERSION=0.19.0
-download https://github.com/openai/gym/archive/$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
+GYM_VERSION=0.21.0
+download https://github.com/openai/gym/archive/v$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -47,15 +47,16 @@ cd gym-$GYM_VERSION
 
 # Remove Pillow since not an actual requirement
 sedinplace "s/'Pillow<=7.2.0',//g" setup.py
+sedinplace '/numpy/d' setup.py
 
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.9/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

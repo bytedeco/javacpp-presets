@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 OPENSSL=openssl-1.1.1k
-CPYTHON_VERSION=3.9.6
+CPYTHON_VERSION=3.10.0
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -140,7 +140,7 @@ case $PLATFORM in
     windows-x86)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
-        cmd.exe //c 'build.bat -p x86'
+        cmd.exe //c 'build.bat -p x86 -vv'
         cp win32/python*.exe win32/python*.dll ../../bin/
         cp win32/python*.lib ../../libs/
         cp win32/*.dll win32/*.pyd ../../lib/
@@ -153,7 +153,7 @@ case $PLATFORM in
     windows-x86_64)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
-        cmd.exe //c 'build.bat -p x64'
+        cmd.exe //c 'build.bat -p x64 -vv'
         cp amd64/python*.exe amd64/python*.dll ../../bin/
         cp amd64/python*.lib ../../libs/
         cp amd64/*.dll amd64/*.pyd ../../lib/

@@ -170,7 +170,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.3  https://opencv.org/releases.html
+ * OpenCV 4.5.4  https://opencv.org/releases.html
  * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
@@ -188,20 +188,20 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.3.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.17  http://www.openblas.net/
+ * DNNL 2.4.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.18  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
- * FFTW 3.3.9  http://www.fftw.org/download.html
+ * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.9.x  https://www.python.org/downloads/
+ * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.21.x  https://github.com/numpy/numpy
  * SciPy 1.7.x  https://github.com/scipy/scipy
- * Gym 0.19.x  https://github.com/openai/gym
- * LLVM 12.0.x  http://llvm.org/releases/download.html
+ * Gym 0.21.x  https://github.com/openai/gym
+ * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.81.x  http://www.leptonica.org/download.html
+ * Leptonica 1.82.x  http://www.leptonica.org/download.html
  * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
@@ -220,7 +220,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.11.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.8.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.9.x  https://github.com/microsoft/onnxruntime
  * TVM 0.7.0  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

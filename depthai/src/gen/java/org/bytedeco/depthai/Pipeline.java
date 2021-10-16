@@ -46,8 +46,6 @@ public class Pipeline extends Pointer {
     /** Clone the pipeline (Creates a copy) */
     public native @ByVal Pipeline clone();
 
-    /** Default Pipeline openvino version */
-
     /**
      * @return Global properties of current pipeline
      */
@@ -59,9 +57,9 @@ public class Pipeline extends Pointer {
     public native @ByVal PipelineSchema getPipelineSchema();
 
     // void loadAssets(AssetManager& assetManager);
-    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector BytePointer assetStorage, @Cast("dai::OpenVINO::Version*") @ByRef IntPointer version);
-    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector ByteBuffer assetStorage, @Cast("dai::OpenVINO::Version*") @ByRef IntBuffer version);
-    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector byte[] assetStorage, @Cast("dai::OpenVINO::Version*") @ByRef int[] version);
+    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector BytePointer assetStorage);
+    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector ByteBuffer assetStorage);
+    public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector byte[] assetStorage);
 
     /**
      * Adds a node to pipeline.
@@ -146,8 +144,11 @@ public class Pipeline extends Pointer {
      */
     public native @ByVal CalibrationHandler getCalibrationData();
 
-    /** Get required OpenVINO version to run this pipeline */
+    /** Get possible OpenVINO version to run this pipeline */
     public native @Cast("dai::OpenVINO::Version") int getOpenVINOVersion();
+
+    /** Get required OpenVINO version to run this pipeline. Can be none */
+    public native @ByVal VersionOptional getRequiredOpenVINOVersion();
 
     /** Set a camera IQ (Image Quality) tuning blob, used for all cameras */
     public native void setCameraTuningBlobPath(@StdString BytePointer path);
@@ -159,4 +160,10 @@ public class Pipeline extends Pointer {
      * device defaults - configured per protocol, currently 64*1024 for both USB and Ethernet.
      */
     public native void setXLinkChunkSize(int sizeBytes);
+
+    /** Checks whether a given OpenVINO version is compatible with the pipeline */
+    public native @Cast("bool") boolean isOpenVINOVersionCompatible(@Cast("dai::OpenVINO::Version") int version);
+
+    /** Get device configuration needed for this pipeline */
+    public native @ByVal DeviceBase.Config getDeviceConfig();
 }
