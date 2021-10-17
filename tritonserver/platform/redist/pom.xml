@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver-platform-redist</artifactId>
-  <version>2.12-${project.parent.version}</version>
+  <version>2.14-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for Tritonserver</name>
 
   <properties>

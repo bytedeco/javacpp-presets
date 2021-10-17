@@ -22,7 +22,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Tritonserver 2.12  https://github.com/triton-inference-server/server
+ * Tritonserver 2.14  https://github.com/triton-inference-server/server
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -43,16 +43,16 @@ Here is a example of Tritonserver ported to Java from the `simple.cc` sample fil
 This sample intends to show how to call JAVA based Triton API to execute inference requests.
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, simply execute on the command line:
 ```bash
- $ mvn exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/tritonserver_21.07_source/server-2.12.0/docs/examples/model_repository/models"
+ $ mvn exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/tritonserver_21.09_source/server-2.14.0/docs/examples/model_repository/models"
 ```
 
 ### Steps to run this sample
 
 **1, Get the source code of Tritonserver to set the model repository up:**
 ```bash
- $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.12.0.tar.gz
- $ tar czvf v2.12.0.tar.gz
- $ cd server-2.12.0/docs/examples/model_repository
+ $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.14.0.tar.gz
+ $ tar czvf v2.14.0.tar.gz
+ $ cd server-2.14.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
 ```
@@ -60,10 +60,10 @@ Now, this models directory will be our model repository.
 
 **2, Start the Docker container to run the sample (Note: 1, now we are under the "model_repository" dir as above):**
 ```bash
- $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.07-py3 bash
+ $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.09-py3 bash
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets/tritonserver/samples
- $ mvn exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/tritonserver_21.07_source/server-2.12.0/docs/examples/model_repository/models"
+ $ mvn exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/tritonserver_21.09_source/server-2.14.0/docs/examples/model_repository/models"
 ```
 
 This sample is the JAVA implementation of [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api) 
