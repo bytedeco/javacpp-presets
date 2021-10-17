@@ -63,7 +63,12 @@ Now, this models directory will be our model repository.
  $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.09-py3 bash
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets/tritonserver/samples
- $ mvn exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/tritonserver_21.09_source/server-2.14.0/docs/examples/model_repository/models"
+ $ wget https://dlcdn.apache.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz
+ $ tar zxvf apache-maven-3.8.3-bin.tar.gz
+ $ export PATH=/opt/tritonserver/apache-maven-3.8.2/bin:$PATH
+ $ apt update
+ $ apt install -y openjdk-11-jdk
+ $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
 This sample is the JAVA implementation of [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api) 
