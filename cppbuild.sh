@@ -30,6 +30,9 @@ case $KERNEL in
         ;;
 esac
 case $ARCH in
+    arm64)
+        ARCH=arm64
+        ;;
     arm*)
         ARCH=arm
         ;;
