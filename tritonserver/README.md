@@ -51,7 +51,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 **1, Get the source code of Tritonserver to set the model repository up:**
 ```bash
  $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.14.0.tar.gz
- $ tar czvf v2.14.0.tar.gz
+ $ tar zxvf v2.14.0.tar.gz
  $ cd server-2.14.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
