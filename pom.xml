@@ -630,6 +630,7 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
+        <module>leapmotion</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
