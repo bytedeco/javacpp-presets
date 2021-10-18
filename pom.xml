@@ -617,8 +617,8 @@
         <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
-	<module>tensorrt</module>
-	<module>tritonserver</module>
+        <module>tensorrt</module>
+        <module>tritonserver</module>
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
@@ -1368,8 +1368,8 @@
         <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
-	<module>tensorrt</module>
-        <module>tritonserver</module>		
+        <module>tensorrt</module>
+        <module>tritonserver</module>
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
@@ -1594,7 +1594,7 @@
         <module>pytorch</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
-	<module>tensorrt</module>
+        <module>tensorrt</module>
         <module>ale</module>
         <module>onnx</module>
         <module>onnxruntime</module>
