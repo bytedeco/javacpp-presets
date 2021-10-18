@@ -21,7 +21,7 @@ case $PLATFORM in
         fi
         ;;
     windows-x86_64)
-        echo "Windows are not supported yet"
+        echo "Windows is not supported yet"
         exit 1
         ;;
     *)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Samuel Audet
+ * Copyright (C) 2021 Jack He, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -50,30 +50,17 @@ import org.bytedeco.tensorrt.presets.nvparsers;
     value = {
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
-            compiler = "cpp11",
             include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
             exclude = {"<cudaGL.h>", "<cuda_gl_interop.h>"},
-            link = "tritonserver"
-        ),
-        @Platform(
-            value = "linux-arm64",
-            includepath = {"/opt/tritonserver/include/triton/core/"},
-            linkpath = {"/opt/tritonserver/lib/"}
-        ),
-        @Platform(
-            value = "linux-ppc64le",
-            includepath = {"/opt/tritonserver/include/triton/core/"},
-            linkpath = {"/opt/tritonserver/lib/"}
-        ),
-        @Platform(
-            value = "linux-x86_64",
+            link = "tritonserver",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
         @Platform(
             value = "windows-x86_64",
-            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/"
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/include/triton/core/",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/lib/",
+            preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/bin/"
         )
     },
     target = "org.bytedeco.tritonserver.tritonserver",
@@ -119,10 +106,9 @@ public class tritonserver implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.putFirst(new Info().enumerate(false))
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("boolean[]", "BoolPointer"))
-               .put(new Info("TRITONSERVER_EXPORT").cppTypes().annotations())
-               .put(new Info("TRITONSERVER_DECLSPEC").cppTypes().annotations())
-               .put(new Info("TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC").cppTypes().annotations())
-               .put(new Info("TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
+               .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
+                             "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
+                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
         ;
     }
 }
