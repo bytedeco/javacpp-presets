@@ -58,6 +58,7 @@
     <module>../tensorflow/platform</module>
     <module>../tensorflow-lite/platform</module>
     <module>../tensorrt/platform</module>
+    <module>../tritonserver/platform</module>
     <module>../ale/platform</module>
     <module>../depthai/platform</module>
     <module>../onnx/platform</module>
@@ -293,6 +294,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
       <version>8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>tritonserver-platform</artifactId>
+      <version>2.14-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
