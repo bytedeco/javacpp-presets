@@ -62,13 +62,13 @@ Now, this `models` directory will be our model repository.
  2. Start the Docker container to run the sample (assuming we are under the `models` directory created above):
 ```bash
  $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.09-py3 bash
- $ git clone https://github.com/bytedeco/javacpp-presets.git
- $ cd javacpp-presets/tritonserver/samples
+ $ apt update
+ $ apt install -y openjdk-11-jdk
  $ wget https://dlcdn.apache.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz
  $ tar zxvf apache-maven-3.8.3-bin.tar.gz
  $ export PATH=/opt/tritonserver/apache-maven-3.8.2/bin:$PATH
- $ apt update
- $ apt install -y openjdk-11-jdk
+ $ git clone https://github.com/bytedeco/javacpp-presets.git
+ $ cd javacpp-presets/tritonserver/samples
  $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
