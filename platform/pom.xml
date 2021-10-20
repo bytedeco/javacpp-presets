@@ -70,6 +70,7 @@
     <module>../skia/platform</module>
     <module>../cpu_features/platform</module>
     <module>../modsecurity/platform</module>
+    <module>../lz4/platform</module>
     <module>../systems/platform</module>
   </modules>
 
@@ -354,6 +355,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>modsecurity-platform</artifactId>
       <version>3.0.5-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>lz4-platform</artifactId>
+      <version>1.9.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
