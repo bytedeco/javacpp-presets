@@ -630,6 +630,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1296,6 +1297,7 @@
         <module>liquidfun</module>
         <module>skia</module>
         <module>cpu_features</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1381,6 +1383,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1461,6 +1464,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1523,6 +1527,7 @@
         <module>ale</module>
         <module>liquidfun</module>
         <module>cpu_features</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1602,6 +1607,7 @@
         <module>liquidfun</module>
         <module>qt</module>
         <module>cpu_features</module>
+        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
