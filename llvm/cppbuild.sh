@@ -87,12 +87,6 @@ case $PLATFORM in
         make -C $LLVM_BUILD install > /dev/null
         cp $INSTALL_PATH/lib/LLVMPolly.so $INSTALL_PATH/lib/libLLVMPolly.so
         ;;
-    macosx-x86_64)
-        $CMAKE -S ../llvm -B $LLVM_BUILD -DLLVM_CCACHE_BUILD=ON -DCMAKE_CXX_FLAGS='-arch x86_64' -DCMAKE_C_FLAGS='-arch x86_64' -DCMAKE_EXE_LINKER_FLAGS='-arch x86_64 -Wl,-rpath,@loader_path/' -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PROJECTS="$PROJECTS"
-        make -C $LLVM_BUILD -j $MAKEJ
-        make -C $LLVM_BUILD install > /dev/null
-        cp $INSTALL_PATH/lib/LLVMPolly.so $INSTALL_PATH/lib/libLLVMPolly.so
-        ;;
     macosx-arm64)
         mkdir -p ../tblgen
         cd ../tblgen
@@ -101,6 +95,12 @@ case $PLATFORM in
         TBLGEN=`pwd`
         cd ../build
         $CMAKE -S ../llvm -B $LLVM_BUILD -DLLVM_CCACHE_BUILD=ON -DCMAKE_CXX_FLAGS='-arch arm64' -DCMAKE_C_FLAGS='-arch arm64' -DCMAKE_EXE_LINKER_FLAGS='-arch arm64 -Wl,-rpath,@loader_path/' -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DLLVM_TABLEGEN="$TBLGEN/bin/llvm-tblgen" -DCLANG_TABLEGEN="$TBLGEN/bin/clang-tblgen" -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PROJECTS="$PROJECTS"
+        make -C $LLVM_BUILD -j $MAKEJ
+        make -C $LLVM_BUILD install > /dev/null
+        cp $INSTALL_PATH/lib/LLVMPolly.so $INSTALL_PATH/lib/libLLVMPolly.so
+        ;;
+    macosx-x86_64)
+        $CMAKE -S ../llvm -B $LLVM_BUILD -DLLVM_CCACHE_BUILD=ON -DCMAKE_CXX_FLAGS='-arch x86_64' -DCMAKE_C_FLAGS='-arch x86_64' -DCMAKE_EXE_LINKER_FLAGS='-arch x86_64 -Wl,-rpath,@loader_path/' -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=all -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PROJECTS="$PROJECTS"
         make -C $LLVM_BUILD -j $MAKEJ
         make -C $LLVM_BUILD install > /dev/null
         cp $INSTALL_PATH/lib/LLVMPolly.so $INSTALL_PATH/lib/libLLVMPolly.so
