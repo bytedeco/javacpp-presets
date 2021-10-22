@@ -1,4 +1,5 @@
 
+ * Introduce `macosx-arm64` builds to presets for LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
  * Add presets for Triton Inference Server 2.14 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
  * Add presets for the NvToolsExt (NVTX) module of CUDA ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Increase the amount of function pointers available for callbacks in presets for Qt ([pull #1080](https://github.com/bytedeco/javacpp-presets/pull/1080))
