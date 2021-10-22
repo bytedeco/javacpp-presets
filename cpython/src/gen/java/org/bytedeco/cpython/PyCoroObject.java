@@ -33,8 +33,6 @@ public class PyCoroObject extends Pointer {
     public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject setter);
     /* Note: gi_frame can be NULL if the generator is "finished" */
     public native PyFrameObject cr_frame(); public native PyCoroObject cr_frame(PyFrameObject setter);
-    /* True if generator is being executed. */
-    public native @Cast("char") byte cr_running(); public native PyCoroObject cr_running(byte setter);
     /* The code object backing the generator */
     public native PyObject cr_code(); public native PyCoroObject cr_code(PyObject setter);
     /* List of weak reference. */

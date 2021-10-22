@@ -79,13 +79,13 @@ public class post_ops extends dnnl_post_ops_handle {
      *  activations have different logical scaling factors.
      * 
      *  In the simplest case when the accumulation is the only post-op,
-     *  the computations would be {@code dst[:] := scale * dst[:] + op(...)}
+     *  the computations will be {@code dst[:] := scale * dst[:] + op(...)}
      *  instead of {@code dst[:] := op(...)}.
      * 
      *  If \p data_type is specified, the original dst tensor will be
      *  reinterpreted as a tensor with the provided data type. Because it is a
      *  reinterpretation, data_type and dst data type should have the same size.
-     *  As a result, computations would be {@code dst[:] <- scale *
+     *  As a result, computations will be {@code dst[:] <- scale *
      *  as_data_type(dst[:]) + op(...)} instead of {@code dst[:] <- op(...)}.
      * 
      *  \note
@@ -96,9 +96,49 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param data_type Data type. */
     
     ///
+    ///
+    ///
+    ///
+    ///
+    ///
     public native void append_sum(float scale/*=1.f*/,
                 memory.data_type data_type/*=dnnl::memory::data_type::undef*/);
     public native void append_sum();
+
+    /** Appends an accumulation (sum) post-op. Prior to accumulating the
+     *  result, the previous value will be will be reduced by zero point
+     *  \p zero_point and multiplied by a scaling factor \p scale.
+     * 
+     *  The kind of this post-op is #dnnl::primitive::kind::sum.
+     * 
+     *  This feature may improve performance for cases like dequantize the
+     *  asymmetrically quantized sum's src1 tensor to f32 domain before
+     *  performing the sum operation by subtracting \p zero_point before the
+     *  scaling.
+     * 
+     *  In the simplest case when the accumulation is the only post-op,
+     *  the computations will be {@code dst[:] := scale * (dst[:] - zero_point) +
+     *  op(...)} instead of {@code dst[:] := op(...)}.
+     * 
+     *  If \p data_type is specified, the original dst tensor will be
+     *  reinterpreted as a tensor with the provided data type. Because it is a
+     *  reinterpretation, data_type and dst data type should have the same size.
+     *  As a result, computations will be {@code dst[:] <- scale *
+     *  (as_data_type(dst[:]) - zero_point) + op(...)} instead of
+     *  {@code dst[:] <- op(...)}.
+     * 
+     *  \note
+     *      This post-op executes in-place and does not change the
+     *      destination layout.
+     * 
+     *  @param scale Scaling factor.
+     *  @param zero_point Zero point.
+     *  @param data_type Data type. */
+    
+    ///
+    public native void append_sum(float scale, int zero_point,
+                memory.data_type data_type/*=dnnl::memory::data_type::undef*/);
+    public native void append_sum(float scale, int zero_point);
 
     /** Returns the parameters of an accumulation (sum) post-op.
      * 
@@ -117,14 +157,29 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param data_type Data type of the sum post-op. */
     
     ///
-    ///
-    ///
     public native void get_params_sum(
                 int index, @ByRef FloatPointer scale, memory.data_type data_type);
     public native void get_params_sum(
                 int index, @ByRef FloatBuffer scale, memory.data_type data_type);
     public native void get_params_sum(
                 int index, @ByRef float[] scale, memory.data_type data_type);
+
+    /** Returns the parameters of an accumulation (sum) post-op.
+     * 
+     *  @param index Index of the sum post-op.
+     *  @param scale Scaling factor of the sum post-op.
+     *  @param zero_point Single scalar int32_t value of zeropoint.
+     *  @param data_type Data type of the sum post-op. */
+    
+    ///
+    ///
+    ///
+    public native void get_params_sum(int index, @ByRef FloatPointer scale, @ByRef IntPointer zero_point,
+                memory.data_type data_type);
+    public native void get_params_sum(int index, @ByRef FloatBuffer scale, @ByRef IntBuffer zero_point,
+                memory.data_type data_type);
+    public native void get_params_sum(int index, @ByRef float[] scale, @ByRef int[] zero_point,
+                memory.data_type data_type);
 
     /** Appends an elementwise post-op.
      * 
@@ -340,10 +395,85 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param index Index of the binary post-op.
      *  @param aalgorithm Output binary algorithm kind.
      *  @param src1_desc Output memory descriptor of a second operand. */
+    
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
     public native void get_params_binary(
                 int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef memory.desc src1_desc);
     public native void get_params_binary(
                 int index, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm, @ByRef memory.desc src1_desc);
     public native void get_params_binary(
                 int index, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm, @ByRef memory.desc src1_desc);
+
+    /** Appends a prelu forward post-op.
+     * 
+     *  The kind of this post-op is #dnnl::primitive::kind::prelu.
+     * 
+     *  The post-op can be defined as:
+     * 
+     *       dst[:] <- prelu(dst[:], weights[:])
+     *       prelu:
+     *       dst[:] <- dst[:] if dst[:] > 0
+     *       dst[:] <- dst[:] * weights[:] if dst[:] <= 0
+     * 
+     * 
+     *  Example usage:
+     *  <pre>{@code
+     *      int mb = 32, oc = 32,
+     *          oh = 14, ow = 14; // convolution output params
+     *      // unique weights per output channel
+     *      vector<float> weights = { ... };
+     *      int oc_dim = 1; // mb_dim = 0, channel_dim = 1, height_dim = 2, ...
+     * 
+     *      // construct a convolution descriptor
+     *      dnnl::convolution::desc conv_d;
+     * 
+     *      dnnl::primitive_attr attr;
+     *      attr.append_prelu(1 << oc_dim);
+     * 
+     *      dnnl::primitive_desc conv_pd(conv_d, attr, engine);
+     *      memory prelu_weights({{1}, dt::f32, {1}}, eng, weights.data());
+     * 
+     *      std::unordered_map<int, memory> conv_args;
+     * 
+     *      conv_args.insert(
+     *       {DNNL_ARG_ATTR_MULTIPLE_POST_OP(0) | DNNL_ARG_WEIGHTS, prelu_weights})
+
+     *  @note
+     *      The order of dimensions does not depend on how elements are laid
+     *      out in memory. For example:
+     *      - for a 2D CNN activations tensor the order is always (n, c)
+     *      - for a 4D CNN activations tensor the order is always (n, c, h, w)
+     *      - for a 5D CNN weights tensor the order is always
+     *         (g, oc, ic, kh, kw)
+     * 
+     *     Prelu weights tensor is passed in runtime execution phase. Prelu
+     *     weights tensor data type is implicitly assumed as f32 using plain
+     *     layout (a, ab, acb, acdb, acdeb)
+
+     *  @param mask Defines the correspondence between the output tensor
+     *      dimensions and the prelu weights tensor. The set i-th bit indicates
+     *      that a dedicated weights value is used for each index along that
+     *      dimension. Set the mask to 0 to use a common weights value
+     *      for the whole output tensor. */
+    
+    ///
+    public native void append_prelu(int mask);
+
+    /** Returns the parameters of a prelu post-op.
+     * 
+     *  @param index Index of the prelu post-op.
+     *  @param maks Weights mask of prelu post-op. */
+    public native void get_params_prelu(int index, @ByRef IntPointer mask);
+    public native void get_params_prelu(int index, @ByRef IntBuffer mask);
+    public native void get_params_prelu(int index, @ByRef int[] mask);
 }

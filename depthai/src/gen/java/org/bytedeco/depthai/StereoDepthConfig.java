@@ -82,4 +82,36 @@ public class StereoDepthConfig extends Buffer {
      * Get threshold for left-right check combine
      */
     public native int getLeftRightCheckThreshold();
+
+    /**
+     * Computes and combines disparities in both L-R and R-L directions, and combine them.
+     *
+     * For better occlusion handling, discarding invalid disparity values
+     */
+    public native void setLeftRightCheck(@Cast("bool") boolean enable);
+
+    /**
+     * Computes disparity with sub-pixel interpolation (5 fractional bits).
+     *
+     * Suitable for long range. Currently incompatible with extended disparity
+     */
+    public native void setSubpixel(@Cast("bool") boolean enable);
+
+    /**
+     * Useful for normalization of the disparity map.
+     * @return Maximum disparity value that the node can return
+     */
+    public native float getMaxDisparity();
+
+    /**
+     * Set explicit configuration.
+     * @param config Explicit configuration
+     */
+    public native void set(@ByVal RawStereoDepthConfig config);
+
+    /**
+     * Retrieve configuration data for StereoDepth.
+     * @return config for stereo depth algorithm
+     */
+    public native @ByVal RawStereoDepthConfig get();
 }

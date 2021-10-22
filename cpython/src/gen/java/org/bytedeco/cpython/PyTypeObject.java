@@ -11,6 +11,8 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
+// If this structure is modified, Doc/includes/typestruct.h should be updated
+// as well.
 @Name("_typeobject") @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyTypeObject extends Pointer {
     static { Loader.load(); }
@@ -88,6 +90,7 @@ public class PyTypeObject extends Pointer {
     public native PyMethodDef tp_methods(); public native PyTypeObject tp_methods(PyMethodDef setter);
     public native PyMemberDef tp_members(); public native PyTypeObject tp_members(PyMemberDef setter);
     public native PyGetSetDef tp_getset(); public native PyTypeObject tp_getset(PyGetSetDef setter);
+    // Strong reference on a heap type, borrowed reference on a static type
     public native @Cast("_typeobject*") PyTypeObject tp_base(); public native PyTypeObject tp_base(PyTypeObject setter);
     public native PyObject tp_dict(); public native PyTypeObject tp_dict(PyObject setter);
     public native descrgetfunc tp_descr_get(); public native PyTypeObject tp_descr_get(descrgetfunc setter);

@@ -46,6 +46,7 @@ JavaCPP Presets
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
 [![tensorflow-lite](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow-lite/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow-lite)
 [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
+[![tritonserver](https://github.com/bytedeco/javacpp-presets/workflows/tritonserver/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atritonserver)
 [![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)
 [![depthai](https://github.com/bytedeco/javacpp-presets/workflows/depthai/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adepthai)
 [![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)
@@ -169,7 +170,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.3  https://opencv.org/releases.html
+ * OpenCV 4.5.4  https://opencv.org/releases.html
  * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
@@ -187,13 +188,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.3.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.17  http://www.openblas.net/
+ * DNNL 2.4.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.18  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.9.x  https://www.python.org/downloads/
+ * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.21.x  https://github.com/numpy/numpy
  * SciPy 1.7.x  https://github.com/scipy/scipy
  * Gym 0.21.x  https://github.com/openai/gym
@@ -214,8 +215,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.14  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.10.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.11.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.9.x  https://github.com/microsoft/onnxruntime

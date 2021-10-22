@@ -40,4 +40,5 @@ public class SpatialDetectionNetworkProperties extends DetectionNetworkPropertie
 
     public native float detectedBBScaleFactor(); public native SpatialDetectionNetworkProperties detectedBBScaleFactor(float setter);
     public native @ByRef SpatialLocationCalculatorConfigThresholds depthThresholds(); public native SpatialDetectionNetworkProperties depthThresholds(SpatialLocationCalculatorConfigThresholds setter);
+    public native SpatialLocationCalculatorAlgorithm calculationAlgorithm(); public native SpatialDetectionNetworkProperties calculationAlgorithm(SpatialLocationCalculatorAlgorithm setter);
 }

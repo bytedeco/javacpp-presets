@@ -54,6 +54,17 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param attr The C API primitive attributes. */
     
 
+    /** Returns the fpmath mode */
+    
+    ///
+    public native fpmath_mode get_fpmath_mode();
+
+    /** Sets fpmath mode.
+     * 
+     *  @param mode Specified fpmath mode. */
+    public native void set_fpmath_mode(fpmath_mode mode);
+    public native void set_fpmath_mode(@Cast("dnnl::fpmath_mode") int mode);
+
     /** Returns the scratchpad mode. */
     
     ///

@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/barcode.hpp>", link = "opencv_barcode@.4.5"),
         @Platform(value = "ios", preload = "libopencv_barcode"),
-        @Platform(value = "windows", link = "opencv_barcode453")
+        @Platform(value = "windows", link = "opencv_barcode454")
     },
     target = "org.bytedeco.opencv.opencv_barcode",
     global = "org.bytedeco.opencv.global.opencv_barcode"

@@ -77,6 +77,10 @@ public class RawImgFrame extends RawBuffer {
         public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
         @Override public String toString() { return intern().name(); }
     }
+
+    public static native int typeToBpp(Type type);
+    public static native int typeToBpp(@Cast("dai::RawImgFrame::Type") int type);
+
     public static class Specs extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */

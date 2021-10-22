@@ -36,8 +36,7 @@ public class HowtoDeploy {
         String clang = Loader.load(org.bytedeco.llvm.program.clang.class).replace('\\', '/');
         String clangPath = clang.substring(0, clang.lastIndexOf('/'));
 
-        Py_AddPath(org.bytedeco.tvm.presets.tvm.cachePackages());
-        Py_Initialize();
+        Py_Initialize(org.bytedeco.tvm.presets.tvm.cachePackages());
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();

@@ -11,6 +11,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
+// #ifdef Py_TRACE_REFS
+// #endif
+
 // #ifdef Py_REF_DEBUG
 // #endif
 
@@ -53,7 +56,8 @@ public class _Py_Identifier extends Pointer {
         return new _Py_Identifier((Pointer)this).offsetAddress(i);
     }
 
-    public native _Py_Identifier next(); public native _Py_Identifier next(_Py_Identifier setter);
     public native @Cast("const char*") BytePointer string(); public native _Py_Identifier string(BytePointer setter);
-    public native PyObject object(); public native _Py_Identifier object(PyObject setter);
+    // Index in PyInterpreterState.unicode.ids.array. It is process-wide
+    // unique and must be initialized to -1.
+    public native @Cast("Py_ssize_t") long index(); public native _Py_Identifier index(long setter);
 }

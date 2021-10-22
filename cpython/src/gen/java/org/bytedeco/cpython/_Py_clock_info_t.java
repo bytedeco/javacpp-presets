@@ -11,7 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-
 /* Structure used by time.get_clock_info() */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _Py_clock_info_t extends Pointer {

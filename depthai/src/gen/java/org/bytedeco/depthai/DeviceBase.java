@@ -33,6 +33,34 @@ public class DeviceBase extends Pointer {
     /** Default rate at which system information is logged */
     @MemberGetter public static native float DEFAULT_SYSTEM_INFORMATION_LOGGING_RATE_HZ();
     public static final float DEFAULT_SYSTEM_INFORMATION_LOGGING_RATE_HZ = DEFAULT_SYSTEM_INFORMATION_LOGGING_RATE_HZ();
+    /** Default UsbSpeed for device connection */
+    @MemberGetter public static native UsbSpeed DEFAULT_USB_SPEED();
+
+    // Structures
+
+    /**
+     * Device specific configuration
+     */
+    public static class Config extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public Config() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Config(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Config(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public Config position(long position) {
+            return (Config)super.position(position);
+        }
+        @Override public Config getPointer(long i) {
+            return new Config((Pointer)this).offsetAddress(i);
+        }
+    
+        public native @Cast("dai::OpenVINO::Version") int version(); public native Config version(int setter);
+        public native @ByRef PrebootConfig preboot(); public native Config preboot(PrebootConfig setter);
+    }
 
     // static API
 
@@ -76,8 +104,15 @@ public class DeviceBase extends Pointer {
      * @param version Version of OpenVINO which firmware will support
      * @return Firmware binary
      */
-    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode, @Cast("dai::OpenVINO::Version") int version/*=dai::Pipeline::DEFAULT_OPENVINO_VERSION*/);
+    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode, @Cast("dai::OpenVINO::Version") int version/*=dai::OpenVINO::DEFAULT_VERSION*/);
     public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode);
+
+    /**
+     * Gets device firmware binary for a specific configuration
+     * @param config FW with applied configuration
+     * @return Firmware binary
+     */
+    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@ByVal Config config);
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
@@ -93,6 +128,16 @@ public class DeviceBase extends Pointer {
      */
     public DeviceBase(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, usb2Mode); }
     private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode);
+
+    /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * @param pipeline Pipeline to be executed on the device
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@Const @ByRef Pipeline pipeline, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(pipeline, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@Const @ByRef Pipeline pipeline, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(pipeline, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("dai::UsbSpeed") int maxUsbSpeed);
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
@@ -126,6 +171,17 @@ public class DeviceBase extends Pointer {
      */
     public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, devInfo, usb2Mode); }
     private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode);
+
+    /**
+     * Connects to device specified by devInfo.
+     * @param pipeline Pipeline to be executed on the device
+     * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(pipeline, devInfo, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(pipeline, devInfo, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
 
     /**
      * Connects to device specified by devInfo.
@@ -168,6 +224,17 @@ public class DeviceBase extends Pointer {
     private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("bool") boolean usb2Mode);
 
     /**
+     * Connects to device specified by devInfo.
+     * @param version OpenVINO version which the device will be booted with
+     * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(version, maxUsbSpeed); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(version, maxUsbSpeed); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+
+    /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
      * @param version OpenVINO version which the device will be booted with
      * @param pathToCmd Path to custom device firmware
@@ -204,6 +271,17 @@ public class DeviceBase extends Pointer {
      * Connects to device specified by devInfo.
      * @param version OpenVINO version which the device will be booted with
      * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(version, devInfo, maxUsbSpeed); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(version, devInfo, maxUsbSpeed); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+
+    /**
+     * Connects to device specified by devInfo.
+     * @param version OpenVINO version which the device will be booted with
+     * @param devInfo DeviceInfo which specifies which device to connect to
      * @param pathToCmd Path to custom device firmware
      */
     public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
@@ -217,6 +295,21 @@ public class DeviceBase extends Pointer {
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param usb2Mode Path to custom device firmware
      */
+
+    /**
+     * Connects to any available device with custom config.
+     * @param config Device custom configuration to boot with
+     */
+    public DeviceBase(@ByVal Config config) { super((Pointer)null); allocate(config); }
+    private native void allocate(@ByVal Config config);
+
+    /**
+     * Connects to device 'devInfo' with custom config.
+     * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param config Device custom configuration to boot with
+     */
+    public DeviceBase(@ByVal Config config, @Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(config, devInfo); }
+    private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo);
 
     /**
      * Device destructor
@@ -428,5 +521,12 @@ public class DeviceBase extends Pointer {
      */
     public native @Cast("bool") boolean isClosed();
 
+    /**
+     * Returns underlying XLinkConnection
+     */
     public native @SharedPtr XLinkConnection getConnection();
+
+    /**
+     * Returns underlying XLinkConnection
+     */
 }

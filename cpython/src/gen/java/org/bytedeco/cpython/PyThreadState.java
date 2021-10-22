@@ -40,17 +40,17 @@ public class PyThreadState extends Pointer {
     /* Borrowed reference to the current frame (it can be NULL) */
     public native PyFrameObject frame(); public native PyThreadState frame(PyFrameObject setter);
     public native int recursion_depth(); public native PyThreadState recursion_depth(int setter);
-    public native @Cast("char") byte overflowed(); public native PyThreadState overflowed(byte setter); /* The stack has overflowed. Allow 50 more calls
-                        to handle the runtime error. */
-    public native @Cast("char") byte recursion_critical(); public native PyThreadState recursion_critical(byte setter); /* The current calls must not cause
-                                a stack overflow. */
+    public native int recursion_headroom(); public native PyThreadState recursion_headroom(int setter); /* Allow 50 more calls to handle any errors. */
     public native int stackcheck_counter(); public native PyThreadState stackcheck_counter(int setter);
 
     /* 'tracing' keeps track of the execution depth when tracing/profiling.
        This is to prevent the actual trace/profile code from being recorded in
        the trace/profile. */
     public native int tracing(); public native PyThreadState tracing(int setter);
-    public native int use_tracing(); public native PyThreadState use_tracing(int setter);
+
+    /* Pointer to current CFrame in the C stack frame of the currently,
+     * or most recently, executing _PyEval_EvalFrameDefault. */
+    public native CFrame cframe(); public native PyThreadState cframe(CFrame setter);
 
     public native Py_tracefunc c_profilefunc(); public native PyThreadState c_profilefunc(Py_tracefunc setter);
     public native Py_tracefunc c_tracefunc(); public native PyThreadState c_tracefunc(Py_tracefunc setter);
@@ -125,6 +125,8 @@ public class PyThreadState extends Pointer {
 
     /* Unique thread state id. */
     public native @Cast("uint64_t") long id(); public native PyThreadState id(long setter);
+
+    public native @ByRef CFrame root_cframe(); public native PyThreadState root_cframe(CFrame setter);
 
     /* XXX signal handlers should also be here */
 
