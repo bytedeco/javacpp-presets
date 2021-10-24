@@ -64,7 +64,7 @@ public class tvm {
 
     private static File packageFile = null;
 
-    /** Returns {@code Loader.cacheResource("/org/bytedeco/" + Loader.getPlatform() + extension + "/tvm/python/")}. */
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/tvm/" + Loader.getPlatform() + extension + "/python/")}. */
     public static synchronized File cachePackage() throws IOException {
         if (packageFile != null) {
             return packageFile;

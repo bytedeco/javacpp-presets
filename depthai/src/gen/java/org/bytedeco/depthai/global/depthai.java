@@ -994,7 +994,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 /**
  * Available IMU sensors.
  * More details about each sensor can be found in the datasheet:
- * \link https://www.ceva-dsp.com/wp-content/uploads/2019/10/BNO080_085-Datasheet.pdf \endlink
+ *
+ * https://www.ceva-dsp.com/wp-content/uploads/2019/10/BNO080_085-Datasheet.pdf
  */
 @Namespace("dai") public enum IMUSensor {
     /**
