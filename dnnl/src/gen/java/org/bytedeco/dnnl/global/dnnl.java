@@ -2670,7 +2670,7 @@ public static final int DNNL_VERSION_MAJOR = 2;
 public static final int DNNL_VERSION_MINOR = 4;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 1;
+public static final int DNNL_VERSION_PATCH = 2;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
