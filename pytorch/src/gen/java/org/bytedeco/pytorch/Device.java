@@ -80,11 +80,17 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of HIP type. */
   public native @Cast("bool") @NoException(true) boolean is_hip();
 
+  /** Return true if the device is of VE type. */
+  public native @Cast("bool") @NoException(true) boolean is_ve();
+
   /** Return true if the device is of XPU type. */
   public native @Cast("bool") @NoException(true) boolean is_xpu();
 
   /** Return true if the device is of CPU type. */
   public native @Cast("bool") @NoException(true) boolean is_cpu();
+
+  /** Return true if the device supports arbirtary strides. */
+  public native @Cast("bool") @NoException(true) boolean supports_as_strided();
 
   /** Same string as returned from operator<<. */
   public native @StdString BytePointer str();

@@ -38,5 +38,4 @@ public class SGDParamState extends OptimizerCloneableSGDParamState {
   
   
   
-  // NOLINTNEXTLINE(modernize-use-override)
 }

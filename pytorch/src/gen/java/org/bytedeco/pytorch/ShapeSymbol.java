@@ -42,6 +42,8 @@ public class ShapeSymbol extends Pointer {
   public static native @ByVal ShapeSymbol fromStaticSize(@Cast("int64_t") long val);
   public native @Cast("int64_t") long static_size();
 
+  public native @Cast("int64_t") long value();
+
   public static native @ByVal ShapeSymbol newSymbol();
   
 }

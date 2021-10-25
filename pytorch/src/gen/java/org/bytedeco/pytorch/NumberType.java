@@ -27,6 +27,9 @@ public class NumberType extends Type {
     public NumberType(Pointer p) { super(p); }
 
   
+
+  public native @Cast("bool") boolean isSubtypeOfExt(@Const @SharedPtr @ByRef Type rhs, @Cast("std::ostream*") Pointer why_not);
+
   public native @StdString BytePointer str();
   @MemberGetter public static native TypeKind Kind();
   // global singleton

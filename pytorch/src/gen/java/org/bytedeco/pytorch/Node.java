@@ -72,6 +72,9 @@ public class Node extends Pointer {
     public Node(Pointer p) { super(p); }
 
   /** Construct a new {@code Node} with the given {@code next_edges} */
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 
   /** Nodes are neither copyable nor moveable. */
   

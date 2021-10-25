@@ -55,6 +55,11 @@ public class TensorMaybeOwned extends Pointer {
 
   public static native @NoException(true) @Cast({"", "c10::MaybeOwned<at::Tensor>&&"}) @StdMove TensorMaybeOwned owned(@ByRef(true) Tensor t);
 
+  // This is an implementation detail!  You should know what you're doing
+  // if you are testing this.  If you just want to guarantee ownership move
+  // this into a T
+  public native @Cast("bool") boolean unsafeIsBorrowed();
+
   public native @Const @ByRef @Name("operator *") Tensor multiply();
 
   public native @Const @Name("operator ->") Tensor access();

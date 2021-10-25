@@ -15,6 +15,10 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
+
+// GraphExecutor creates specializations of Graphs for different
+// dimensionalitities and types of inputs.
+
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ArgumentInfo extends Pointer {
     static { Loader.load(); }
@@ -35,7 +39,7 @@ public class ArgumentInfo extends Pointer {
 
 
   public native @Cast("bool") boolean defined();
-  public native int device();
+  public native @ByVal Device device();
   // XXX: It is guaranteed that this will return false when called on non-tensor
   // arguments
   public native @Cast("bool") boolean requires_grad();

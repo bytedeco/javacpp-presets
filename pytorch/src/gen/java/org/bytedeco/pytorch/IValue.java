@@ -126,8 +126,8 @@ public class IValue extends Pointer {
    * for consistency, because Python does the same thing. This actually
    * provokes user-visible changes in behavior due to quirks in torch:
    *      [tensor1] == [tensor1] -> True (because container equality will first
-   * compare identity) [tensor1] == [tensor1_copy] -> RuntimeError: bool value
-   * of Tensor is ambiguous
+   * compare identity) [tensor1] == [tensor1_copy] -> RuntimeError:
+   * Boolean value of Tensor with more than one value is ambiguous
    */
   
 
@@ -230,10 +230,13 @@ public class IValue extends Pointer {
   private native void allocate(@StdString BytePointer v);
   public IValue(@StdString String v) { super((Pointer)null); allocate(v); }
   private native void allocate(@StdString String v);
+  public IValue(@ByVal @Cast("c10::string_view*") Pointer v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@ByVal @Cast("c10::string_view*") Pointer v);
   public native @Cast("bool") boolean isString();
   
   public native @StdString BytePointer toStringRef();
   public native @ByVal @Cast("c10::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
+  public native @ByVal @Cast("c10::string_view*") Pointer toStringView();
 
   // DoubleList
   public native @Cast("bool") boolean isDoubleList();
@@ -267,8 +270,6 @@ public class IValue extends Pointer {
   public native @Cast("bool") boolean isGenericDict();
   
   public native @ByVal IValueIValueDict toGenericDict();
-  public IValue(@ByVal @Cast("c10::nullopt_t*") Pointer arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@ByVal @Cast("c10::nullopt_t*") Pointer arg0);
 
   // ClassType
   public native @Cast("bool") boolean isObject();

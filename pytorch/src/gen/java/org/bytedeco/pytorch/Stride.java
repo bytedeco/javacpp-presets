@@ -59,6 +59,8 @@ public class Stride extends Pointer {
 
   
 
+  public native @Cast("bool") boolean isComplete();
+
   public native @ByRef SizeTOptional stride_index_(); public native Stride stride_index_(SizeTOptional setter);
   public native @ByRef BoolOptional contiguous_(); public native Stride contiguous_(BoolOptional setter);
   public native @ByRef SizeTOptional stride_(); public native Stride stride_(SizeTOptional setter);

@@ -31,6 +31,7 @@ public class NoWarn extends Pointer {
         return new NoWarn((Pointer)this).offsetAddress(i);
     }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public NoWarn() { super((Pointer)null); allocate(); }
   private native void allocate();
   public native @SharedPtr TracingState state(); public native NoWarn state(TracingState setter);
