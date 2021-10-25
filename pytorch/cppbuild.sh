@@ -19,7 +19,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.9.1
+PYTORCH_VERSION=1.10.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -112,6 +112,7 @@ case $PLATFORM in
         ;;
 esac
 
+sedinplace '/Werror/d' CMakeLists.txt
 sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
 

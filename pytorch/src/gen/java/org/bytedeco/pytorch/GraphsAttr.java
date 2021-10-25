@@ -22,6 +22,7 @@ public class GraphsAttr extends AttributeValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphsAttr(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public GraphsAttr(@ByVal Symbol name, @ByVal @Cast("torch::jit::GraphsAttr::ConstructorType*") GraphVector value_) { super((Pointer)null); allocate(name, value_); }
   private native void allocate(@ByVal Symbol name, @ByVal @Cast("torch::jit::GraphsAttr::ConstructorType*") GraphVector value_);
   public native @Cast("torch::jit::GraphsAttr::ValueType*") @ByRef GraphVector value();

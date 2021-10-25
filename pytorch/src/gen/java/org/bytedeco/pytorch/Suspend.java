@@ -24,4 +24,6 @@ public class Suspend extends Pointer {
     public Suspend(Pointer p) { super(p); }
 
   public native @NoException(true) @Cast("const char*") BytePointer what();
+
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 }

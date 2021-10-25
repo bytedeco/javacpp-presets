@@ -36,7 +36,7 @@ public class RecordFunctionTLS extends Pointer {
 
   // Thread local vector of callbacks, holds pairs (callbacks, unique_id);
   // must be sorted in increasing handles order
-  public native @ByRef @Cast("at::RecordFunctionCallbacks*") RecordFunctionCallbackHandleVector sorted_tls_callbacks_(); public native RecordFunctionTLS sorted_tls_callbacks_(RecordFunctionCallbackHandleVector setter);
+  public native @StdVector ThreadLocalRecordFunctionCallbacksEntry sorted_tls_callbacks_(); public native RecordFunctionTLS sorted_tls_callbacks_(ThreadLocalRecordFunctionCallbacksEntry setter);
 
   public native @Cast("bool") boolean tls_record_function_enabled_(); public native RecordFunctionTLS tls_record_function_enabled_(boolean setter);
 

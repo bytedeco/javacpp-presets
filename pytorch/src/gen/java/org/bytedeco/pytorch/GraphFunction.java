@@ -22,6 +22,7 @@ public class GraphFunction extends Function {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphFunction(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public GraphFunction(
         @ByVal QualifiedName name,
         @SharedPtr @ByVal Graph graph,

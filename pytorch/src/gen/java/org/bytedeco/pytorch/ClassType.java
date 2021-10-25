@@ -147,7 +147,7 @@ public class ClassType extends NamedType {
   // Add a property named \p name with \p getter and \p setter as its getter and setter.
   public native void addProperty(@StdString BytePointer name, Function getter, Function setter);
   public native void addProperty(@StdString String name, Function getter, Function setter);
-
+  // Get a list of all properties.
   public native @StdVector Property properties();
 
   public native @Cast("bool") boolean hasConstant(@StdString BytePointer name);

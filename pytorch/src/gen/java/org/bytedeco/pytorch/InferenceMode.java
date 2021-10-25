@@ -78,7 +78,4 @@ public class InferenceMode extends Pointer {
   public InferenceMode() { super((Pointer)null); allocate(); }
   private native void allocate();
   public static native @Cast("bool") boolean is_enabled();
-  // _set_enabled() is not user facing and should be only used in
-  // ThreadLocalState.cpp.
-  public static native void _set_enabled(@Cast("bool") boolean enabled);
 }

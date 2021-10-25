@@ -23,5 +23,5 @@ public class OperationCreator extends FunctionPointer {
     public    OperationCreator(Pointer p) { super(p); }
     protected OperationCreator() { allocate(); }
     private native void allocate();
-    public native @ByVal @Cast("torch::jit::Operation*") Pointer call(@Const JitNode arg0);
+    public native @ByVal Operation call(@Const JitNode arg0);
 }

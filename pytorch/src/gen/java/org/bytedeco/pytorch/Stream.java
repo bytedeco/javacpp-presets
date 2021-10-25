@@ -85,10 +85,10 @@ public class Stream extends Pointer {
    *  should use the provided APIs to get a stream.  In particular,
    *  we don't require backends to give any guarantees about non-zero
    *  StreamIds; they are welcome to allocate in whatever way they like. */
-  public Stream(Unsafe arg0, @ByVal Device device, @Cast("c10::StreamId") int id) { super((Pointer)null); allocate(arg0, device, id); }
-  private native void allocate(Unsafe arg0, @ByVal Device device, @Cast("c10::StreamId") int id);
-  public Stream(@Cast("c10::Stream::Unsafe") int arg0, @ByVal Device device, @Cast("c10::StreamId") int id) { super((Pointer)null); allocate(arg0, device, id); }
-  private native void allocate(@Cast("c10::Stream::Unsafe") int arg0, @ByVal Device device, @Cast("c10::StreamId") int id);
+  public Stream(Unsafe arg0, @ByVal Device device, @Cast("c10::StreamId") long id) { super((Pointer)null); allocate(arg0, device, id); }
+  private native void allocate(Unsafe arg0, @ByVal Device device, @Cast("c10::StreamId") long id);
+  public Stream(@Cast("c10::Stream::Unsafe") int arg0, @ByVal Device device, @Cast("c10::StreamId") long id) { super((Pointer)null); allocate(arg0, device, id); }
+  private native void allocate(@Cast("c10::Stream::Unsafe") int arg0, @ByVal Device device, @Cast("c10::StreamId") long id);
 
   /** Construct the default stream of a Device.  The default stream is
    *  NOT the same as the current stream; default stream is a fixed stream
@@ -105,12 +105,20 @@ public class Stream extends Pointer {
   public native @ByVal @NoException(true) Device device();
   public native @NoException(true) DeviceType device_type();
   public native @Cast("c10::DeviceIndex") @NoException(true) byte device_index();
-  public native @Cast("c10::StreamId") @NoException(true) int id();
+  public native @Cast("c10::StreamId") @NoException(true) long id();
 
   // Enqueues a wait instruction in the stream's work queue.
   // This instruction is a no-op unless the event is marked
   // for recording. In that case the stream stops processing
   // until the event is recorded.
+
+  // Return whether all asynchronous work previously enqueued on this stream
+  // has completed running on the device.
+  public native @Cast("bool") boolean query();
+
+  // Wait (by blocking the calling thread) until all asynchronous work enqueued
+  // on this stream has completed running on the device.
+  public native void synchronize();
 
   // The purpose of this function is to more conveniently permit binding
   // of Stream to and from Python.  Without packing, I have to setup a whole

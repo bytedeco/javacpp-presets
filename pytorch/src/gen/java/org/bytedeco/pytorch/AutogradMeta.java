@@ -91,10 +91,11 @@ public class AutogradMeta extends AutogradMetaInterface {
 
   public native @Cast("const torch::autograd::Variable*") @ByRef Tensor grad();
 
-  public native @Cast("const torch::autograd::Variable*") @ByRef Tensor fw_grad(@Cast("uint64_t") long level, @Cast("const torch::autograd::Variable*") @ByRef Tensor self);
+  public native @Cast("const torch::autograd::Variable*") @ByRef Tensor fw_grad(@Cast("uint64_t") long level, @Const @ByRef TensorBase self);
 
-  public native void set_fw_grad(@Cast("const torch::autograd::Variable*") @ByRef Tensor new_grad, @Cast("const torch::autograd::Variable*") @ByRef Tensor self, @Cast("uint64_t") long level, @Cast("bool") boolean is_inplace_op);
+  public native void set_fw_grad(@Const @ByRef TensorBase new_grad, @Const @ByRef TensorBase self, @Cast("uint64_t") long level, @Cast("bool") boolean is_inplace_op);
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public AutogradMeta(TensorImpl self_impl/*=nullptr*/, @Cast("bool") boolean requires_grad/*=false*/, @ByVal(nullValue = "torch::autograd::Edge()") Edge gradient_edge ) { super((Pointer)null); allocate(self_impl, requires_grad, gradient_edge); }
   private native void allocate(TensorImpl self_impl/*=nullptr*/, @Cast("bool") boolean requires_grad/*=false*/, @ByVal(nullValue = "torch::autograd::Edge()") Edge gradient_edge );
   public AutogradMeta( ) { super((Pointer)null); allocate(); }

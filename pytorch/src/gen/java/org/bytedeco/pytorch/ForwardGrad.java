@@ -31,19 +31,19 @@ public class ForwardGrad extends Pointer {
         return new ForwardGrad((Pointer)this).offsetAddress(i);
     }
 
+  public ForwardGrad() { super((Pointer)null); allocate(); }
+  private native void allocate();
 
-    // NOLINTNEXTLINE(modernize-use-equals-default)
-    public ForwardGrad() { super((Pointer)null); allocate(); }
-    private native void allocate();
-
-    // This function must only be called when AutogradMeta or SavedVariable is being
-    // destructed as it ensures that:
-    //   - The only (potential) other references to this ForwardGrad are the
-    //     different level it is registered to
-    //   - No other thread will try to call `set_value` or `value` ever from now on
-    //   - Any of the ForwardADLevel that this ForwardGrad is registered with might
-    //     call `reset` at any point during this function
-    public native void clear();
+  // This function must only be called when AutogradMeta or SavedVariable is
+  // being destructed as it ensures that:
+  //   - The only (potential) other references to this ForwardGrad are the
+  //     different level it is registered to
+  //   - No other thread will try to call `set_value` or `value` ever from now
+  //   on
+  //   - Any of the ForwardADLevel that this ForwardGrad is registered with
+  //   might
+  //     call `reset` at any point during this function
+  public native void clear();
 
     public native void set_value(@Const @ByRef Tensor value, @Cast("uint64_t") long level);
 

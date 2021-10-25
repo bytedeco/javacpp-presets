@@ -47,7 +47,8 @@ public class CompleteArgumentInfoPOD extends Pointer {
   public native @Cast("unsigned") @NoOffset int defined(); public native CompleteArgumentInfoPOD defined(int setter);
   public native @Cast("unsigned") @NoOffset int requires_grad(); public native CompleteArgumentInfoPOD requires_grad(int setter);
   public native @NoOffset int device(); public native CompleteArgumentInfoPOD device(int setter);
-  public native @Cast("uint32_t") int total_dims(); public native CompleteArgumentInfoPOD total_dims(int setter); // all TensorInfoPODs are in CompleteArgumentSpec's
+  public native @Cast("unsigned") @NoOffset int dev_type(); public native CompleteArgumentInfoPOD dev_type(int setter);
+  public native @Cast("unsigned") @NoOffset int total_dims(); public native CompleteArgumentInfoPOD total_dims(int setter); // all TensorInfoPODs are in CompleteArgumentSpec's
                        // tensor_info() array. total_dims is the total number of
                        // dimensions seen so far in all previous members of
                        // tensor_info(), including this tensor 2*total_dims

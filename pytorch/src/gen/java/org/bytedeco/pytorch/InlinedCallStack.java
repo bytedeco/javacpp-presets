@@ -66,6 +66,13 @@ public class InlinedCallStack extends Pointer {
   // Returns the source range of the node
   public native @ByVal SourceRange source_range();
 
+  public native Function function();
+
+  public native void set_function_name(@StdString BytePointer fn_name);
+  public native void set_function_name(@StdString String fn_name);
+
+  public native @StdString BytePointer function_name();
+
   // Return callstack as a vector of [Function, SourceRange] pairs.
   public native @Cast("torch::jit::InlinedCallStackEntry*") @StdVector LongPointer vec();
 

@@ -20,6 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // They is only valid only right after you call getDebugState() and should never
 // be used again once another GraphExecutor function is called.
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GraphExecutorState extends Pointer {
     static { Loader.load(); }

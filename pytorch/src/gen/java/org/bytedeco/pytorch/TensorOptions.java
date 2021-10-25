@@ -164,7 +164,7 @@ private native void allocate(MemoryFormat memory_format);
    * 
    *  TODO: This function encourages bad behavior (assuming CUDA is
    *  the only device that matters).  Get rid of it / rename it. */
-  public native @ByVal @NoException(true) TensorOptions device_index(short device_index);
+  public native @ByVal @NoException(true) TensorOptions device_index(@Cast("c10::DeviceIndex") byte device_index);
 
   /** Return a copy of {@code TensorOptions} with {@code dtype} set to the given one. */
   public native @ByVal @NoException(true) TensorOptions dtype(@ByVal TypeMetaOptional dtype);

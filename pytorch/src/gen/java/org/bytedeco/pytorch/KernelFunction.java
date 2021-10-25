@@ -156,11 +156,23 @@ public class KernelFunction extends Pointer {
    *
    * Example:
    *
-   * > class MyFunctor final {
+   * > class MyFunctor final : public c10::OperatorKernel {
    * >   public:
    * >     Tensor operator()(Tensor a, Tensor b) {...}
    * > };
-   * > KernelFunction func = KernelFunction::makeFromUnboxedFunctor(std::make_unique<MyFunctor>());
+   * > KernelFunction func = KernelFunction::makeFromUnboxedFunctor<MyFunctor>(std::make_unique<MyFunctor>());
+   */
+
+  /**
+   * Create a KernelFunction from a boxed functor.
+   *
+   * Example:
+   *
+   * > class MyFunctor final : public c10::OperatorKernel {
+   * >   public:
+   * >     void operator()(const OperatorHandle&, DispatchKeySet, Stack*) {...}
+   * > };
+   * > KernelFunction func = KernelFunction::makeFromBoxedFunctor(std::make_unique<MyFunctor>());
    */
 
   /**

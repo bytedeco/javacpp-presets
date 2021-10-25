@@ -26,13 +26,16 @@ import static org.bytedeco.pytorch.global.torch.*;
 // Begin non-gflags section: providing equivalent functionality.
 ////////////////////////////////////////////////////////////////////////////////
 
-@Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class C10FlagParser extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public C10FlagParser(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public C10FlagParser() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public C10FlagParser(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public C10FlagParser(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(long size);
     @Override public C10FlagParser position(long position) {
         return (C10FlagParser)super.position(position);
@@ -41,7 +44,5 @@ public class C10FlagParser extends Pointer {
         return new C10FlagParser((Pointer)this).offsetAddress(i);
     }
 
-  public C10FlagParser() { super((Pointer)null); allocate(); }
-  private native void allocate();
   public native @Cast("bool") boolean success();
 }

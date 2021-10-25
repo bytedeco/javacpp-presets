@@ -24,14 +24,16 @@ public class JitNode extends Pointer {
 
   
   
-  // each node but Return/Param
-  // is associated with exactly one place in the node list...
-  // of the graph_
-  // this circular is a doubly-linked list, the Return node is used as the
-  // sentinel for the beginning and end of the list such that the list never has
-  // null pointers next_in_graph[0] is next pointer next_in_graph[1] is prev
-  // pointer using an array to allow the same iterator class for forward and
-  // reverse node lists This list represents a topological sort
+  // Each Node but Return/Param Nodes are associated with exactly one
+  // place in the Node list of the Graph. The Graph itself is a circular
+  // doubly-linked list. The Return Node is used as the sentinel for the
+  // "beginning"/"end" of the list. This means that you can tell when
+  // you've traversed the entire list without means worrying about null
+  // pointers. `next_in_graph[0]` is the pointer to the next Node, while
+  // `next_in_graph[1]` is the pointer to the previous Node. The
+  // linked list is implemented as an array to allow the same iterator
+  // class for forward and reversed Node lists. Taken together, this
+  // list also represents a topological sort of the Nodes in the Graph.
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,cppcoreguidelines-non-private-member-variables-in-classes,modernize-avoid-c-arrays)
   public native JitNode next_in_graph(int i); public native JitNode next_in_graph(int i, JitNode setter);
   @MemberGetter public native @Cast("torch::jit::Node**") PointerPointer next_in_graph();
@@ -78,6 +80,11 @@ public class JitNode extends Pointer {
   // replaces `this` with a new node with the same inputs and outputs
   // but a new node symbol. does not destroy `this`
   public native JitNode replaceWithNewSymbol(@ByVal Symbol new_symbol);
+
+  // Checks if this node is dominated by `dominator` which means that
+  // `dominator` will always be executed before `this` and `dominator`
+  // is in scope of `this.
+  public native @Cast("bool") boolean isDominatedBy(@Const JitNode dominator);
 
   // lots of things like chunk have a single input or single output, so we have
   // a helper to make accessing it easier
@@ -295,7 +302,7 @@ public class JitNode extends Pointer {
   public native @Const @ByRef FunctionSchema schema();
   public native @Const FunctionSchema maybeSchema();
   public native @Const @ByRef Operator getOperator();
-  public native @ByVal @Cast("torch::jit::Operation*") Pointer getOperation();
+  public native @ByVal Operation getOperation();
 
   public native @Const Operator maybeOperator();
 

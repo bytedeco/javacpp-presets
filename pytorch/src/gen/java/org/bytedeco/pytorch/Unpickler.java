@@ -51,7 +51,7 @@ public class Unpickler extends Pointer {
         @ByVal RecordReader read_record,
         @ByVal DeviceOptional device,
         @Cast("bool") boolean use_storage_device/*=false*/,
-        @SharedPtr StorageContext storage_context/*=nullptr*/) { super((Pointer)null); allocate(reader, type_resolver, obj_loader, read_record, device, use_storage_device, storage_context); }
+        @SharedPtr DeserializationStorageContext storage_context/*=nullptr*/) { super((Pointer)null); allocate(reader, type_resolver, obj_loader, read_record, device, use_storage_device, storage_context); }
   private native void allocate(
         @ByVal Reader reader,
         @ByVal @Cast("torch::jit::TypeResolver*") Pointer type_resolver,
@@ -59,7 +59,7 @@ public class Unpickler extends Pointer {
         @ByVal RecordReader read_record,
         @ByVal DeviceOptional device,
         @Cast("bool") boolean use_storage_device/*=false*/,
-        @SharedPtr StorageContext storage_context/*=nullptr*/);
+        @SharedPtr DeserializationStorageContext storage_context/*=nullptr*/);
   public Unpickler(
         @ByVal Reader reader,
         @ByVal @Cast("torch::jit::TypeResolver*") Pointer type_resolver,

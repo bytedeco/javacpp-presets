@@ -16,24 +16,27 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// used in torch.package deserialization
+// Used in torch.package and TorchScript deserialization to coordinate
+// sharing of storages between models.
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class StorageContext extends Pointer {
+public class DeserializationStorageContext extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StorageContext(Pointer p) { super(p); }
+    public DeserializationStorageContext(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public StorageContext(long size) { super((Pointer)null); allocateArray(size); }
+    public DeserializationStorageContext(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public StorageContext position(long position) {
-        return (StorageContext)super.position(position);
+    @Override public DeserializationStorageContext position(long position) {
+        return (DeserializationStorageContext)super.position(position);
     }
-    @Override public StorageContext getPointer(long i) {
-        return new StorageContext((Pointer)this).offsetAddress(i);
+    @Override public DeserializationStorageContext getPointer(long i) {
+        return new DeserializationStorageContext((Pointer)this).offsetAddress(i);
     }
 
-  public StorageContext() { super((Pointer)null); allocate(); }
+  public DeserializationStorageContext() { super((Pointer)null); allocate(); }
   private native void allocate();
+  
+  
 
   public native void addStorage(@StdString BytePointer name, @Cast({"", "c10::Storage&&"}) @StdMove Storage storage);
   public native void addStorage(@StdString String name, @Cast({"", "c10::Storage&&"}) @StdMove Storage storage);

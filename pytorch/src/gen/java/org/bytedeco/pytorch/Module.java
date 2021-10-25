@@ -1346,6 +1346,17 @@ public class Module extends Pointer {
   ///
   ///
   ///
+  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
+        @StdString BytePointer name,
+        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl module);
+  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
+        @StdString String name,
+        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl module);
+  
+  ///
+  ///
+  ///
+  ///
   public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl register_module(
         @StdString BytePointer name,
         @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl module);
@@ -2614,6 +2625,15 @@ public class Module extends Pointer {
   public native @SharedPtr @Name("register_module<torch::nn::LPPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl register_module(
         @StdString String name,
         @ByVal LPPool2dImplModuleHolder module_holder);
+  
+  ///
+  ///
+  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
+        @StdString BytePointer name,
+        @ByVal ReflectionPad3dImplModuleHolder module_holder);
+  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
+        @StdString String name,
+        @ByVal ReflectionPad3dImplModuleHolder module_holder);
   
   ///
   ///

@@ -44,5 +44,4 @@ public class Tree extends Pointer {
         int lineno,
         @Cast("size_t") long expected_subtrees,
         @Cast("bool") boolean allow_more);
-  // NOLINTNEXTLINE(modernize-use-override)
 }

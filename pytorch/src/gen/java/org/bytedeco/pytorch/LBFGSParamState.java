@@ -49,5 +49,4 @@ public class LBFGSParamState extends OptimizerCloneableLBFGSParamState {
   
   
   
-  // NOLINTNEXTLINE(modernize-use-override)
 }

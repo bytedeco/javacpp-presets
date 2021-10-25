@@ -34,4 +34,5 @@ public class ScriptModuleSerializer extends Pointer {
         @Cast("bool") boolean bytecode_format,
         @Cast("bool") boolean save_mobile_debug_info);
   public native void serialize_unified_format(@ByRef JitModule module, @Cast("uint64_t") long script_module_id);
+  public native @ByRef SerializationStorageContext storage_context();
 }

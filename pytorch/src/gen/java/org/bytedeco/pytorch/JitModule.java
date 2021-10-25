@@ -56,6 +56,7 @@ public class JitModule extends JitObject {
 
   public native @Cast("bool") boolean is_optimized();
 
+  public native @ByVal IValue forward(@ByVal IValueVector inputs, @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") IValueIValueMap kwargs);
   public native @ByVal IValue forward(@ByVal IValueVector inputs);
 
   // In script modules, buffers are Tensors attribute that are _not_ registered

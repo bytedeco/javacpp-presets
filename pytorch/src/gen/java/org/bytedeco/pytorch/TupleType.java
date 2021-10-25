@@ -22,11 +22,19 @@ public class TupleType extends NamedType {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TupleType(Pointer p) { super(p); }
 
+
   public static native @SharedPtr TupleType createNamed(@Const @ByRef QualifiedNameOptional name,
         @Const @ByRef StringVector field_names,
-        @Const @ByRef TypeVector types);
+        @Const @ByRef TypeVector field_types,
+        @ByRef IValueVector field_defaults);
+
+  public static native @SharedPtr TupleType createNamed(@Const @ByRef QualifiedNameOptional name,
+        @Const @ByRef StringVector field_names,
+        @Const @ByRef TypeVector field_types);
+
   public static native @SharedPtr TupleType create(
         @ByVal TypeVector types);
+  public static native @SharedPtr TupleType create();
 
   public native @ByVal TypeArrayRef elements();
 

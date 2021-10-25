@@ -16,9 +16,9 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// Each use is represented by this type, see Node::uses()
-// 'user' is the consumer of the value, offset is the index into
-// 'user's input this where the produces will be found.
+// Each use is represented by this type, see 'Node::uses()'
+// 'user' is the consumer of the value, 'offset' is the index into
+// 'user's input this where the producers will be found.
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Use extends Pointer {
     static { Loader.load(); }

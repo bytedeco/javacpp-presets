@@ -127,4 +127,8 @@ public class RecordFunction extends Pointer {
   public native @Cast("bool") boolean needsInputs();
 
   public native @Cast("bool") boolean needsOutputs();
+
+  public native @Cast("int64_t") long debugHandle();
+
+  public native void setDebugHandle(@Cast("int64_t") long debug_handle);
 }

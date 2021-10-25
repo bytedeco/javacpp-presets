@@ -48,7 +48,9 @@ public class Context extends Pointer {
   public static native long versionCUDART();
   public static native @Cast("bool") boolean hasHIP();
   public static native @Cast("bool") boolean hasXLA();
+  public static native @Cast("bool") boolean hasLazy();
   public static native @Cast("bool") boolean hasMLC();
+  public static native @Cast("bool") boolean hasORT();
   // defined in header so that getNonVariableType has ability to inline
   // call_once check. getNonVariableType is called fairly frequently
   public native @Cast("THCState*") Pointer lazyInitCUDA();

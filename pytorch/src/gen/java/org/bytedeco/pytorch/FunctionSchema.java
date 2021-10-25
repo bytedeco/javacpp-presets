@@ -160,8 +160,7 @@ public class FunctionSchema extends Pointer {
   public native @Cast("bool") boolean is_varret();
   public native @Cast("bool") boolean is_mutable();
 
-  public native @ByVal IntOptional argumentIndexWithName(@StdString BytePointer name);
-  public native @ByVal IntOptional argumentIndexWithName(@StdString String name);
+  public native @ByVal IntOptional argumentIndexWithName(@ByVal @Cast("c10::string_view*") Pointer name);
   public native @ByVal FunctionSchema cloneWithName(@StdString BytePointer name, @StdString BytePointer overload_name);
   public native @ByVal FunctionSchema cloneWithName(@StdString String name, @StdString String overload_name);
   public native @ByVal FunctionSchema cloneWithArguments(@StdVector Argument new_arguments);

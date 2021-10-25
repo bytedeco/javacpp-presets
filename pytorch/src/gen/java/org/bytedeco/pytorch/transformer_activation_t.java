@@ -15,7 +15,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@NoOffset @Name("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@NoOffset @Name("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<at::Tensor(const at::Tensor&)> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class transformer_activation_t extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -32,5 +32,8 @@ public class transformer_activation_t extends Pointer {
     public @ByRef kGELU get1() { return get1(this); }
     @Namespace @Name("c10::get<1>") public static native @ByRef kGELU get1(@ByRef transformer_activation_t container);
     @ValueSetter public native transformer_activation_t put(@ByRef kGELU value);
+    public @Cast("std::function<at::Tensor(const at::Tensor&)>*") @ByRef Pointer get2() { return get2(this); }
+    @Namespace @Name("c10::get<2>") public static native @Cast("std::function<at::Tensor(const at::Tensor&)>*") @ByRef Pointer get2(@ByRef transformer_activation_t container);
+    @ValueSetter public native transformer_activation_t put(@Cast("std::function<at::Tensor(const at::Tensor&)>*") @ByRef Pointer value);
 }
 

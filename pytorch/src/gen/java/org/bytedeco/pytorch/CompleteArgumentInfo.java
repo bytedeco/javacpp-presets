@@ -29,7 +29,7 @@ public class CompleteArgumentInfo extends Pointer {
   public native ScalarType type();
   public native @Cast("bool") boolean defined();
   public native @Cast("bool") boolean requires_grad();
-  public native int device();
+  public native @ByVal Device device();
   public native int ndimension();
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes();
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();

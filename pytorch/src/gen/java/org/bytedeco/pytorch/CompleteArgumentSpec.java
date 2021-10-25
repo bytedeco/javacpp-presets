@@ -22,6 +22,7 @@ public class CompleteArgumentSpec extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompleteArgumentSpec(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public CompleteArgumentSpec(@Cast("bool") boolean with_grad, @ByVal IValueArrayRef inputs) { super((Pointer)null); allocate(with_grad, inputs); }
   private native void allocate(@Cast("bool") boolean with_grad, @ByVal IValueArrayRef inputs);
 

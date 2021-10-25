@@ -36,13 +36,13 @@ public class ThreadLocalState extends Pointer {
 
   // Saves the thread local variables' values and
   // returns them as a ThreadLocalState
-  // keep_grad_mode - whether grad mode has to be preserved
-  //  (e.g. not preserved when passing from forward pass into
-  //   the autograd engine, autograd engine takes care of grad mode)
-  public ThreadLocalState(@Cast("bool") boolean keep_grad_mode/*=true*/) { super((Pointer)null); allocate(keep_grad_mode); }
-  private native void allocate(@Cast("bool") boolean keep_grad_mode/*=true*/);
   public ThreadLocalState() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  // set_grad_mode - force the value of the grad mode TLS in
+  //  the current state object. This is used for example in the
+  //  autograd engine.
+  public native void set_grad_mode(@Cast("bool") boolean enabled);
 
   // Sets thread local variables in the current thread,
   // according to the thread boundary specified

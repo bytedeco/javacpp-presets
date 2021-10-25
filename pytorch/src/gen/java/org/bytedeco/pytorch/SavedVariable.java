@@ -35,12 +35,12 @@ public class SavedVariable extends Pointer {
 
   public SavedVariable() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public SavedVariable(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_view/*=false*/) { super((Pointer)null); allocate(variable, is_output, is_inplace_view); }
-  private native void allocate(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_view/*=false*/);
+  public SavedVariable(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_on_view/*=false*/) { super((Pointer)null); allocate(variable, is_output, is_inplace_on_view); }
+  private native void allocate(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_on_view/*=false*/);
   public SavedVariable(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output) { super((Pointer)null); allocate(variable, is_output); }
   private native void allocate(@Cast("const torch::autograd::Variable*") @ByRef Tensor variable, @Cast("bool") boolean is_output);
-  public SavedVariable(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_view/*=false*/) { super((Pointer)null); allocate(variable, is_output, is_inplace_view); }
-  private native void allocate(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_view/*=false*/);
+  public SavedVariable(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_on_view/*=false*/) { super((Pointer)null); allocate(variable, is_output, is_inplace_on_view); }
+  private native void allocate(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output, @Cast("bool") boolean is_inplace_on_view/*=false*/);
   public SavedVariable(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output) { super((Pointer)null); allocate(variable, is_output); }
   private native void allocate(@Const @ByRef TensorOptional variable, @Cast("bool") boolean is_output);
   public SavedVariable(@ByRef(true) SavedVariable arg0) { super((Pointer)null); allocate(arg0); }
@@ -53,7 +53,7 @@ public class SavedVariable extends Pointer {
   public native @ByVal @Cast("torch::autograd::Variable*") Tensor unpack(@SharedPtr Node saved_for/*=nullptr*/);
   public native @ByVal @Cast("torch::autograd::Variable*") Tensor unpack();
 
-  public native void reset_data();
+  public native void register_hooks(@UniquePtr SavedVariableHooks hooks);
 
-  public native void reset_grad_function();
+  public native void reset_data();
 }

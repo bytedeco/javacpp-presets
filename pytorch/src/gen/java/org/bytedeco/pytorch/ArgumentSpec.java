@@ -22,6 +22,7 @@ public class ArgumentSpec extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArgumentSpec(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public ArgumentSpec(@Cast("size_t") long num_flat_tensor_inputs, @Cast("size_t") long num_flat_optional_inputs) { super((Pointer)null); allocate(num_flat_tensor_inputs, num_flat_optional_inputs); }
   private native void allocate(@Cast("size_t") long num_flat_tensor_inputs, @Cast("size_t") long num_flat_optional_inputs);
 

@@ -86,6 +86,8 @@ public class Scalar extends Pointer {
   public native @ByVal BFloat16 toBFloat16();
 
   // also support scalar.to<int64_t>();
+  // Deleted for unsupported types, but specialized below for supported types
+  
 
 // #undef DEFINE_ACCESSOR
   public native @Cast("bool") boolean isFloatingPoint();

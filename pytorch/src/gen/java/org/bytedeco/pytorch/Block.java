@@ -52,6 +52,7 @@ public class Block extends Pointer {
 
   public native JitNode appendNode(JitNode n);
   public native JitNode prependNode(JitNode n);
+
   // clone all inputs, nodes, and outputs from src and append them
   // to the inputs, nodes, and outputs of this block
   // value_map is used whenever a node in src references a free variable

@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // Note: because Method/Module are exposed to python these
 // classes use python method naming conventions
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Method extends Pointer {
+public class Method extends IMethod {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Method(Pointer p) { super(p); }

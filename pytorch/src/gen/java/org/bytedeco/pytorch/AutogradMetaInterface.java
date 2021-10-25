@@ -28,10 +28,10 @@ public class AutogradMetaInterface extends Pointer {
   public native @Cast("bool") boolean requires_grad();
   public native @ByRef Tensor mutable_grad();
   public native @Const @ByRef Tensor grad();
-  public native @Const @ByRef Tensor fw_grad(@Cast("uint64_t") long level, @Const @ByRef Tensor self);
+  public native @Const @ByRef Tensor fw_grad(@Cast("uint64_t") long level, @Const @ByRef TensorBase self);
   public native void set_fw_grad(
-        @Const @ByRef Tensor new_grad,
-        @Const @ByRef Tensor self,
+        @Const @ByRef TensorBase new_grad,
+        @Const @ByRef TensorBase self,
         @Cast("uint64_t") long level,
         @Cast("bool") boolean is_inplace_op);
 }

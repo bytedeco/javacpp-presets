@@ -74,7 +74,25 @@ public class Value extends Pointer {
   //          %4 = g(%3)
   //          %5 = inplace_(%3)
   //          %6 = h(%5, %5)
+  // XXX: does not check scoping legality, consider using
+  // replaceAllUsesDominatedByNodeWith
   public native void replaceAllUsesAfterNodeWith(@Const JitNode node, Value newValue);
+
+  // Replaces all uses of this value with 'newValue' that are dominated by
+  // 'node'. Given:
+  // x = op(...).
+  // if cond:
+  //    z = foo(..)
+  //    bar(x)
+  // else:
+  //    print(x)
+  // x.replaceAllUsesDominatedByNodeWith(foo, z) would replace bar(x)
+  // but not print(x) because print is not dominated by foo.
+  // replaceAllUsesAfterNode does not check domination, so in this example
+  // it would produce invalid IR.
+  public native void replaceAllUsesDominatedByNodeWith(
+        @Const JitNode node,
+        Value newValue);
 
   public native Value copyMetadata(Value from);
 

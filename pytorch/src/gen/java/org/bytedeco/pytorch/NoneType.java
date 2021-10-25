@@ -25,6 +25,7 @@ public class NoneType extends Type {
   
   public native @StdString BytePointer str();
   public native @Cast("bool") boolean isSubtypeOfExt(@Const @SharedPtr @ByRef Type rhs, @Cast("std::ostream*") Pointer why_not);
+
   @MemberGetter public static native TypeKind Kind();
   // global singleton
   public static native @SharedPtr NoneType get();
