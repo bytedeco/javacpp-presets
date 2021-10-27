@@ -34,6 +34,7 @@ runs:
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
           echo Installing an older less buggy version of GCC
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-10.1-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-10.2.0-5-any.pkg.tar.zst
@@ -48,6 +49,7 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-10.1-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-10.2.0-5-any.pkg.tar.zst
