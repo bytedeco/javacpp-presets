@@ -592,6 +592,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1290,6 +1291,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1359,6 +1361,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1475,6 +1478,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1557,6 +1561,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1622,6 +1627,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
