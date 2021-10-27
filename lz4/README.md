@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.arrow</groupId>
+    <groupId>org.bytedeco.lz4</groupId>
     <artifactId>lz4-frame-compression-example</artifactId>
     <version>1.5.7-SNAPSHOT</version>
     <properties>
