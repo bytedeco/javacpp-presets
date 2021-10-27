@@ -592,6 +592,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -631,7 +632,6 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1291,6 +1291,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1313,7 +1314,6 @@
         <module>liquidfun</module>
         <module>skia</module>
         <module>cpu_features</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1361,6 +1361,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1400,7 +1401,6 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1478,6 +1478,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1514,7 +1515,6 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>modsecurity</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1561,6 +1561,7 @@
         <module>flandmark</module>
         <module>arrow</module>
         <module>hdf5</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1578,7 +1579,6 @@
         <module>ale</module>
         <module>liquidfun</module>
         <module>cpu_features</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1627,6 +1627,7 @@
         <module>arrow</module>
         <module>hdf5</module>
         <module>hyperscan</module>
+        <module>lz4</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
         <module>dnnl</module>
@@ -1659,7 +1660,6 @@
         <module>liquidfun</module>
         <module>qt</module>
         <module>cpu_features</module>
-        <module>lz4</module>
         <module>systems</module>
       </modules>
       <properties>

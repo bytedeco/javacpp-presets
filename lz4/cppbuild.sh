@@ -30,12 +30,22 @@ case $PLATFORM in
         PREFIX=$INSTALL_PATH make install
         ;;
     windows-x86)
-        make -j $MAKEJ
-        PREFIX=$INSTALL_PATH make install
+        cd build/cmake
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF .
+        ninja -j $MAKEJ
+        ninja install
+        cd ../..
         ;;
     windows-x86_64)
-        make -j $MAKEJ
-        PREFIX=$INSTALL_PATH make install
+        cd build/cmake
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF .
+        ninja -j $MAKEJ
+        ninja install
+        cd ../..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
