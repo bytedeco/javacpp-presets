@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>",
                "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
-               "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
+               "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
     compiler = "cpp14", link = {"LLVM-13", "LTO@.13", "Remarks@.13"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
@@ -119,6 +119,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOrcOpaqueIndirectStubsManager").pointerTypes("LLVMOrcIndirectStubsManagerRef"))
                .put(new Info("LLVMOrcOpaqueLazyCallThroughManager").pointerTypes("LLVMOrcLazyCallThroughManagerRef"))
                .put(new Info("LLVMOrcOpaqueDumpObjects").pointerTypes("LLVMOrcDumpObjectsRef"))
+               .put(new Info("LLVMOpaquePassBuilderOptions").pointerTypes("LLVMPassBuilderOptionsRef"))
 
                .put(new Info("LLVMContextRef").valueTypes("LLVMContextRef").pointerTypes("@ByPtrPtr LLVMContextRef", "@Cast(\"LLVMContextRef*\") PointerPointer"))
                .put(new Info("LLVMModuleRef").valueTypes("LLVMModuleRef").pointerTypes("@ByPtrPtr LLVMModuleRef", "@Cast(\"LLVMModuleRef*\") PointerPointer"))
@@ -182,6 +183,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOrcIndirectStubsManagerRef").valueTypes("LLVMOrcIndirectStubsManagerRef").pointerTypes("@ByPtrPtr LLVMOrcIndirectStubsManagerRef", "@Cast(\"LLVMOrcIndirectStubsManagerRef*\") PointerPointer"))
                .put(new Info("LLVMOrcLazyCallThroughManagerRef").valueTypes("LLVMOrcLazyCallThroughManagerRef").pointerTypes("@ByPtrPtr LLVMOrcLazyCallThroughManagerRef", "@Cast(\"LLVMOrcLazyCallThroughManagerRef*\") PointerPointer"))
                .put(new Info("LLVMOrcDumpObjectsRef").valueTypes("LLVMOrcDumpObjectsRef").pointerTypes("@ByPtrPtr LLVMOrcDumpObjectsRef", "@Cast(\"LLVMOrcDumpObjectsRef*\") PointerPointer"))
+               .put(new Info("LLVMPassBuilderOptionsRef").valueTypes("LLVMPassBuilderOptionsRef").pointerTypes("@ByPtrPtr LLVMPassBuilderOptionsRef", "@Cast(\"LLVMPassBuilderOptionsRef*\") PointerPointer"))
 
                .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
                .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())

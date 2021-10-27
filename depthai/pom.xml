@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>depthai</artifactId>
-  <version>2.11.0-${project.parent.version}</version>
+  <version>2.11.1-${project.parent.version}</version>
   <name>JavaCPP Presets for DepthAI</name>
 
   <dependencies>

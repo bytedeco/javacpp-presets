@@ -11519,6 +11519,104 @@ public static native void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 // #endif
 
 
+// Parsed from <llvm-c/Transforms/PassBuilder.h>
+
+/*===-- llvm-c/Transform/PassBuilder.h - PassBuilder for LLVM C ---*- C -*-===*\
+|*                                                                            *|
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
+|* Exceptions.                                                                *|
+|* See https://llvm.org/LICENSE.txt for license information.                  *|
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This header contains the LLVM-C interface into the new pass manager        *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_C_TRANSFORMS_PASSBUILDER_H
+// #define LLVM_C_TRANSFORMS_PASSBUILDER_H
+
+// #include "llvm-c/Error.h"
+// #include "llvm-c/TargetMachine.h"
+// #include "llvm-c/Types.h"
+// Targeting ../LLVM/LLVMPassBuilderOptionsRef.java
+
+
+
+/**
+ * Construct and run a set of passes over a module
+ *
+ * This function takes a string with the passes that should be used. The format
+ * of this string is the same as opt's -passes argument for the new pass
+ * manager. Individual passes may be specified, separated by commas. Full
+ * pipelines may also be invoked using {@code default<O3>} and friends. See opt for
+ * full reference of the Passes format.
+ */
+public static native LLVMErrorRef LLVMRunPasses(LLVMModuleRef M, @Cast("const char*") BytePointer Passes,
+                           LLVMTargetMachineRef TM,
+                           LLVMPassBuilderOptionsRef Options);
+public static native LLVMErrorRef LLVMRunPasses(LLVMModuleRef M, String Passes,
+                           LLVMTargetMachineRef TM,
+                           LLVMPassBuilderOptionsRef Options);
+
+/**
+ * Create a new set of options for a PassBuilder
+ *
+ * Ownership of the returned instance is given to the client, and they are
+ * responsible for it. The client should call LLVMDisposePassBuilderOptions
+ * to free the pass builder options.
+ */
+public static native LLVMPassBuilderOptionsRef LLVMCreatePassBuilderOptions();
+
+/**
+ * Toggle adding the VerifierPass for the PassBuilder, ensuring all functions
+ * inside the module is valid.
+ */
+public static native void LLVMPassBuilderOptionsSetVerifyEach(LLVMPassBuilderOptionsRef Options,
+                                         @Cast("LLVMBool") int VerifyEach);
+
+/**
+ * Toggle debug logging when running the PassBuilder
+ */
+public static native void LLVMPassBuilderOptionsSetDebugLogging(LLVMPassBuilderOptionsRef Options,
+                                           @Cast("LLVMBool") int DebugLogging);
+
+public static native void LLVMPassBuilderOptionsSetLoopInterleaving(
+    LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int LoopInterleaving);
+
+public static native void LLVMPassBuilderOptionsSetLoopVectorization(
+    LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int LoopVectorization);
+
+public static native void LLVMPassBuilderOptionsSetSLPVectorization(
+    LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int SLPVectorization);
+
+public static native void LLVMPassBuilderOptionsSetLoopUnrolling(LLVMPassBuilderOptionsRef Options,
+                                            @Cast("LLVMBool") int LoopUnrolling);
+
+public static native void LLVMPassBuilderOptionsSetForgetAllSCEVInLoopUnroll(
+    LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int ForgetAllSCEVInLoopUnroll);
+
+public static native void LLVMPassBuilderOptionsSetLicmMssaOptCap(LLVMPassBuilderOptionsRef Options,
+                                             @Cast("unsigned") int LicmMssaOptCap);
+
+public static native void LLVMPassBuilderOptionsSetLicmMssaNoAccForPromotionCap(
+    LLVMPassBuilderOptionsRef Options, @Cast("unsigned") int LicmMssaNoAccForPromotionCap);
+
+public static native void LLVMPassBuilderOptionsSetCallGraphProfile(
+    LLVMPassBuilderOptionsRef Options, @Cast("LLVMBool") int CallGraphProfile);
+
+public static native void LLVMPassBuilderOptionsSetMergeFunctions(LLVMPassBuilderOptionsRef Options,
+                                             @Cast("LLVMBool") int MergeFunctions);
+
+/**
+ * Dispose of a heap-allocated PassBuilderOptions instance
+ */
+public static native void LLVMDisposePassBuilderOptions(LLVMPassBuilderOptionsRef Options);
+
+// #endif // LLVM_C_TRANSFORMS_PASSBUILDER_H
+
+
 // Parsed from <polly/LinkAllPasses.h>
 
 //===- polly/LinkAllPasses.h ----------- Reference All Passes ---*- C++ -*-===//
