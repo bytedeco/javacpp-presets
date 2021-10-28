@@ -22,12 +22,15 @@ Java API documentation is available here:
 
 &lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system, unless the `-redist` artifacts listed below are in the class path.
 
+warning,mkl-dnn is not actively maintained anymore.instead repo moved to dnnl.refer to (Issue #1095)for discussion.
 
 Sample Usage
 ------------
 Here is a simple example of MKL-DNN ported to Java from this C++ source file:
 
 * https://github.com/intel/mkl-dnn/blob/v0.16/examples/simple_net_int8.cpp
+
+Note the java sample given here may not work.as it is unmaintained 
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleNetInt8.java` source files below, simply execute on the command line:
 ```bash
