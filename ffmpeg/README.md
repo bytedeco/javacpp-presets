@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FFmpeg 4.4  http://ffmpeg.org/
+ * FFmpeg 4.4.1  http://ffmpeg.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ffmpeg</groupId>
     <artifactId>readfewframe</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ReadFewFrame</exec.mainClass>
     </properties>
@@ -46,14 +46,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>4.4-1.5.6</version>
+            <version>4.4.1-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional GPL builds with (almost) everything enabled -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform-gpl</artifactId>
-            <version>4.4-1.5.6</version>
+            <version>4.4.1-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
