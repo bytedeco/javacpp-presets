@@ -268,7 +268,7 @@ public class CpuCnnInferenceInt8 {
     }
 
     public static void main(String[] args) throws Exception {
-        try {
+        try (PointerScope scope = new PointerScope()) {
             simple_net_int8();
             System.out.println("Simple-net-int8 example passed!");
         } catch (Exception e) {

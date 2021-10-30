@@ -185,7 +185,7 @@ public class SimpleNetInt8 {
     }
 
     public static void main(String[] args) throws Exception {
-        try {
+        try (PointerScope scope = new PointerScope()) {
             /* Notes:
              * On convolution creating: check for Intel(R) MKL dependency execution.
              * output: warning if not found. */
