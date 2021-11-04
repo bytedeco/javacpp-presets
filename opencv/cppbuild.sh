@@ -371,14 +371,24 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.so ../lib
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
-    macosx-*)
+    macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
-        # remove spurious "lib" lib
-        sedinplace '/if.*(HAVE_CUDA)/a\
-            list(REMOVE_ITEM CUDA_LIBRARIES lib)\
-            ' CMakeLists.txt cmake/OpenCVModule.cmake cmake/OpenCVDetectCUDA.cmake
-        CC="clang" CXX="clang++" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
+        make -j $MAKEJ
+        make install/strip
+        cp ../share/java/opencv4/libopencv_java.dylib ../lib
+        sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
+        ;;
+    macosx-x86_64)
+        # also use pthreads on Mac for increased usability and more consistent behavior with Linux
+        sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
+        CC="clang -arch x86_64" CXX="clang++ -arch x86_64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
