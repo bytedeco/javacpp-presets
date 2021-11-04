@@ -65,4 +65,7 @@ public class SparseUnionBuilder extends BasicUnionBuilder {
    *  The corresponding child builder must be appended to independently after this method
    *  is called, and all other child builders must have null or empty value appended. */
   public native @ByVal Status Append(byte next_type);
+
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
 }

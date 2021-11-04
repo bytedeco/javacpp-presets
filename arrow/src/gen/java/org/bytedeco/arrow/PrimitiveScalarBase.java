@@ -20,6 +20,7 @@ public class PrimitiveScalarBase extends Scalar {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PrimitiveScalarBase(Pointer p) { super(p); }
 
+  /** \brief Get a mutable pointer to the value of this scalar. May be null. */
   public native Pointer mutable_data();
-  public native @Const Pointer data();
+  /** \brief Get an immutable view of the value of this scalar as bytes. */
 }

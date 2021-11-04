@@ -45,43 +45,59 @@ public class QuantileOptions extends FunctionOptions {
       @Override public String toString() { return intern().name(); }
   }
 
-  public QuantileOptions(double q/*=0.5*/, Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
-  private native void allocate(double q/*=0.5*/, Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+  public QuantileOptions(double q/*=0.5*/, Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
+  private native void allocate(double q/*=0.5*/, Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public QuantileOptions(double q/*=0.5*/, @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
-  private native void allocate(double q/*=0.5*/, @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+  public QuantileOptions(double q/*=0.5*/, @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
+  private native void allocate(double q/*=0.5*/, @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
 
   public QuantileOptions(@StdVector DoublePointer q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector DoublePointer q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions(@StdVector DoublePointer q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector DoublePointer q);
   public QuantileOptions(@StdVector DoubleBuffer q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector DoubleBuffer q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions(@StdVector DoubleBuffer q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector DoubleBuffer q);
   public QuantileOptions(@StdVector double[] q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector double[] q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions(@StdVector double[] q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector double[] q);
   public QuantileOptions(@StdVector DoublePointer q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector DoublePointer q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions(@StdVector DoubleBuffer q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector DoubleBuffer q,
-                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             Interpolation interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public QuantileOptions(@StdVector double[] q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/) { super((Pointer)null); allocate(q, interpolation); }
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, interpolation, skip_nulls, min_count); }
   private native void allocate(@StdVector double[] q,
-                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/);
+                             @Cast("arrow::compute::QuantileOptions::Interpolation") int interpolation/*=arrow::compute::QuantileOptions::LINEAR*/,
+                             @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
 
   @MemberGetter public static native byte kTypeName(int i);
   @MemberGetter public static native String kTypeName();
@@ -90,4 +106,9 @@ public class QuantileOptions extends FunctionOptions {
   /** quantile must be between 0 and 1 inclusive */
   public native @StdVector DoublePointer q(); public native QuantileOptions q(DoublePointer setter);
   public native Interpolation interpolation(); public native QuantileOptions interpolation(Interpolation setter);
+  /** If true (the default), null values are ignored. Otherwise, if any value is null,
+   *  emit null. */
+  public native @Cast("bool") boolean skip_nulls(); public native QuantileOptions skip_nulls(boolean setter);
+  /** If less than this many non-null values are observed, emit null. */
+  public native @Cast("uint32_t") int min_count(); public native QuantileOptions min_count(int setter);
 }

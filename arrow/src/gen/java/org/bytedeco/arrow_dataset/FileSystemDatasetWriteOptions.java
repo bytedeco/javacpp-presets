@@ -53,6 +53,20 @@ public class FileSystemDatasetWriteOptions extends Pointer {
    *  {i} will be replaced by an auto incremented integer. */
   public native @StdString String basename_template(); public native FileSystemDatasetWriteOptions basename_template(String setter);
 
+  /** If greater than 0 then this will limit the maximum number of files that can be left
+   *  open. If an attempt is made to open too many files then the least recently used file
+   *  will be closed.  If this setting is set too low you may end up fragmenting your data
+   *  into many small files. */
+  public native @Cast("uint32_t") int max_open_files(); public native FileSystemDatasetWriteOptions max_open_files(int setter);
+
+  /** If greater than 0 then this will limit how many rows are placed in any single file.
+   *  Otherwise there will be no limit and one file will be created in each output
+   *  directory unless files need to be closed to respect max_open_files */
+  public native @Cast("uint64_t") long max_rows_per_file(); public native FileSystemDatasetWriteOptions max_rows_per_file(long setter);
+
+  /** Controls what happens if an output directory already exists. */
+  public native ExistingDataBehavior existing_data_behavior(); public native FileSystemDatasetWriteOptions existing_data_behavior(ExistingDataBehavior setter);
+
   /** Callback to be invoked against all FileWriters before
    *  they are finalized with FileWriter::Finish(). */
   public native @ByRef FileWriterVisitor writer_pre_finish(); public native FileSystemDatasetWriteOptions writer_pre_finish(FileWriterVisitor setter);

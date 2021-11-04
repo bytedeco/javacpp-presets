@@ -80,8 +80,7 @@ public class RecordBatch extends Pointer {
   /** \brief Determine if two record batches are approximately equal */
   public native @Cast("bool") boolean ApproxEquals(@Const @ByRef RecordBatch other);
 
-  // \return the table's schema
-  /** @return true if batches are equal */
+  /** @return the record batch's schema */
   public native @Const @SharedPtr @ByRef Schema schema();
 
   /** \brief Retrieve all columns at once */
@@ -128,12 +127,18 @@ public class RecordBatch extends Pointer {
    *  @param i [in] field index, which will be boundschecked
    *  @param field_name [in] name of field to be added
    *  @param column [in] column to be added */
+  
+  ///
   public native @ByVal RecordBatchResult AddColumn(
         int i, @StdString String field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
   public native @ByVal RecordBatchResult AddColumn(
         int i, @StdString BytePointer field_name, @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array column);
 
-  /** \brief Replace a column in the table, producing a new Table */
+  /** \brief Replace a column in the record batch, producing a new RecordBatch
+   * 
+   *  @param i [in] field index, does boundscheck
+   *  @param field [in] field to be replaced
+   *  @param column [in] column to be replaced */
   
   ///
   public native @ByVal RecordBatchResult SetColumn(

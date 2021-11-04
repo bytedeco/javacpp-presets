@@ -12,7 +12,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief Base type class for (fixed-size) decimal data */
+/** \}
+ <p>
+ *  \addtogroup numeric-datatypes
+ * 
+ *  \{
+ <p>
+ *  \brief Base type class for (fixed-size) decimal data */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DecimalType extends FixedSizeBinaryType {
     static { Loader.load(); }

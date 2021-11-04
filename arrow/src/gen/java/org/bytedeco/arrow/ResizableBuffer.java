@@ -28,7 +28,7 @@ public class ResizableBuffer extends MutableBuffer {
    * 
    *  @param new_size The new size for the buffer.
    *  @param shrink_to_fit Whether to shrink the capacity if new size < current size */
-  public native @ByVal Status Resize(@Cast("const int64_t") long new_size, @Cast("bool") boolean shrink_to_fit/*=true*/);
+  public native @ByVal Status Resize(@Cast("const int64_t") long new_size, @Cast("bool") boolean shrink_to_fit);
   public native @ByVal Status Resize(@Cast("const int64_t") long new_size);
 
   /** Ensure that buffer has enough memory allocated to fit the indicated

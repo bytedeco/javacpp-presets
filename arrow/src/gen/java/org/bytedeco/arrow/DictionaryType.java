@@ -12,12 +12,14 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+/** \} */
+
 // ----------------------------------------------------------------------
 // Dictionary type (for representing categorical or dictionary-encoded
 // in memory)
 
 /** \brief Dictionary-encoded value type with data-dependent
- *  dictionary. Indices are represented by any integer types. */
+/** dictionary. Indices are represented by any integer types. */
 @Namespace("arrow") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class DictionaryType extends FixedWidthType {
     static { Loader.load(); }

@@ -53,14 +53,11 @@ public class arrow_flight extends org.bytedeco.arrow.presets.arrow_flight {
 // #include <utility>
 
 // #include "arrow/status.h"
+// #include "arrow/util/aligned_storage.h"
 // #include "arrow/util/compare.h"
 // Targeting ../../arrow_flight/EnsureResult.java
 
 
-
-// #if __cplusplus >= 201703L
-// #else
-// #endif
 
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString String msg);
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString BytePointer msg);

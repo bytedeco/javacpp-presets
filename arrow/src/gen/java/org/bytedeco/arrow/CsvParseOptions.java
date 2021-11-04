@@ -49,6 +49,8 @@ public class CsvParseOptions extends Pointer {
   /** Whether empty lines are ignored.  If false, an empty line represents
    *  a single empty value (assuming a one-column CSV file). */
   public native @Cast("bool") boolean ignore_empty_lines(); public native CsvParseOptions ignore_empty_lines(boolean setter);
+  /** A handler function for rows which do not have the correct number of columns */
+  public native @ByRef @Cast("arrow::csv::InvalidRowHandler*") Pointer invalid_row_handler(); public native CsvParseOptions invalid_row_handler(Pointer setter);
 
   /** Create parsing options with default values */
   public static native @ByVal CsvParseOptions Defaults();

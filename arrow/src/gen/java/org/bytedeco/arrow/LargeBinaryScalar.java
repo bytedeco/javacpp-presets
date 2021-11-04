@@ -18,9 +18,10 @@ public class LargeBinaryScalar extends BaseBinaryScalar {
 
   
     
-    
-      public LargeBinaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
-      private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+      
+      
+        public LargeBinaryScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type); }
+        private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LargeBinaryScalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */

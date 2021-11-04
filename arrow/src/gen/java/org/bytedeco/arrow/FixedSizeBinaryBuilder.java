@@ -47,11 +47,21 @@ public class FixedSizeBinaryBuilder extends ArrayBuilder {
                         @Cast("const uint8_t*") byte[] valid_bytes/*=nullptr*/);
   public native @ByVal Status AppendValues(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long length);
 
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") BytePointer data, @Cast("int64_t") long length, @Cast("const uint8_t*") BytePointer validity,
+                        @Cast("int64_t") long bitmap_offset);
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") ByteBuffer data, @Cast("int64_t") long length, @Cast("const uint8_t*") ByteBuffer validity,
+                        @Cast("int64_t") long bitmap_offset);
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") byte[] data, @Cast("int64_t") long length, @Cast("const uint8_t*") byte[] validity,
+                        @Cast("int64_t") long bitmap_offset);
+
   public native @ByVal Status AppendNull();
   public native @ByVal Status AppendNulls(@Cast("int64_t") long length);
 
   public native @ByVal Status AppendEmptyValue();
   public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
+
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
 
   public native void UnsafeAppend(@Cast("const uint8_t*") BytePointer value);
   public native void UnsafeAppend(@Cast("const uint8_t*") ByteBuffer value);

@@ -60,7 +60,28 @@ public class Scalar extends Pointer {
 
   public native @Cast("size_t") long hash();
 
+  
+  ///
+  ///
   public native @StdString String ToString();
+
+  /** \brief Perform cheap validation checks
+   * 
+   *  This is O(k) where k is the number of descendents.
+   * 
+   *  @return Status */
+  
+  ///
+  ///
+  public native @ByVal Status Validate();
+
+  /** \brief Perform extensive data validation checks
+   * 
+   *  This is potentially O(k*n) where k is the number of descendents and n
+   *  is the length of descendents (if list scalars are involved).
+   * 
+   *  @return Status */
+  public native @ByVal Status ValidateFull();
 
   // TODO(bkietz) add compute::CastOptions
   public native @ByVal ScalarResult CastTo(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType to);

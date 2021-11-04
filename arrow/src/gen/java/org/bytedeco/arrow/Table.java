@@ -84,7 +84,7 @@ public class Table extends Pointer {
         @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray array);
 
   /** \brief Return the table schema */
-  public native @SharedPtr @ByVal Schema schema();
+  public native @Const @SharedPtr @ByRef Schema schema();
 
   /** \brief Return a column by index */
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::ChunkedArray>"}) ChunkedArray column(int i);

@@ -12,8 +12,12 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
+/** \brief A Scalar value for DictionaryType
+ * 
+ *  {@code is_valid} denotes the validity of the {@code index}, regardless of
+ *  the corresponding value in the {@code dictionary}. */
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
-public class DictionaryScalar extends Scalar {
+public class DictionaryScalar extends PrimitiveScalarBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DictionaryScalar(Pointer p) { super(p); }
@@ -31,4 +35,6 @@ public class DictionaryScalar extends Scalar {
                                                   @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array dict);
 
   public native @ByVal ScalarResult GetEncodedValue();
+
+  public native Pointer mutable_data();
 }

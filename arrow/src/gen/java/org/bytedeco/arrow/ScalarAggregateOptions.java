@@ -20,7 +20,7 @@ import static org.bytedeco.arrow.global.arrow.*;
  <p>
  *  \brief Control general scalar aggregate kernel behavior
  * 
- *  By default, null values are ignored */
+ *  By default, null values are ignored (skip_nulls = true). */
 @Namespace("arrow::compute") @NoOffset @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class ScalarAggregateOptions extends FunctionOptions {
     static { Loader.load(); }
@@ -44,6 +44,9 @@ public class ScalarAggregateOptions extends FunctionOptions {
   @MemberGetter public static native String kTypeName();
   public static native @ByVal ScalarAggregateOptions Defaults();
 
+  /** If true (the default), null values are ignored. Otherwise, if any value is null,
+   *  emit null. */
   public native @Cast("bool") boolean skip_nulls(); public native ScalarAggregateOptions skip_nulls(boolean setter);
+  /** If less than this many non-null values are observed, emit null. */
   public native @Cast("uint32_t") int min_count(); public native ScalarAggregateOptions min_count(int setter);
 }

@@ -52,11 +52,11 @@ public class ConvertOptions extends Pointer {
   
   ///
   public native @Cast("bool") boolean strings_can_be_null(); public native ConvertOptions strings_can_be_null(boolean setter);
-  /** Whether string / binary columns can have quoted null values.
+
+  /** Whether quoted values can be null.
    * 
-   *  If true *and* {@code strings_can_be_null} is true, then quoted strings in
-   *  "null_values" are also considered null for string columns.  Otherwise,
-   *  quoted strings are never considered null. */
+   *  If true, then strings in "null_values" are also considered null when they
+   *  appear quoted in the CSV file. Otherwise, quoted values are never considered null. */
   
   ///
   public native @Cast("bool") boolean quoted_strings_can_be_null(); public native ConvertOptions quoted_strings_can_be_null(boolean setter);
@@ -69,6 +69,9 @@ public class ConvertOptions extends Pointer {
    *  This setting is ignored for non-inferred columns (those in {@code column_types}). */
   public native @Cast("bool") boolean auto_dict_encode(); public native ConvertOptions auto_dict_encode(boolean setter);
   public native int auto_dict_max_cardinality(); public native ConvertOptions auto_dict_max_cardinality(int setter);
+
+  /** Decimal point character for floating-point and decimal data */
+  public native @Cast("char") byte decimal_point(); public native ConvertOptions decimal_point(byte setter);
 
   // XXX Should we have a separate FilterOptions?
 

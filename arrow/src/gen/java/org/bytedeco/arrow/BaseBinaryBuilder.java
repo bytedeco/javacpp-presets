@@ -106,6 +106,9 @@ public class BaseBinaryBuilder extends ArrayBuilder {
                         @Cast("const uint8_t*") byte[] valid_bytes/*=nullptr*/);
   public native @ByVal Status AppendValues(@Cast("const char**") @ByPtrPtr byte[] values, @Cast("int64_t") long length);
 
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
+
   public native void Reset();
 
   public native @ByVal Status ValidateOverflow(@Cast("int64_t") long new_bytes);

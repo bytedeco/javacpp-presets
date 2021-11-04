@@ -64,6 +64,9 @@ public class StructBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
+
   public native void Reset();
 
   public native ArrayBuilder field_builder(int i);

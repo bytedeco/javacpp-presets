@@ -55,12 +55,12 @@ public class FileSystem extends Pointer {
    *  If it doesn't exist, see {@code FileSelector::allow_not_found}. */
   public native @ByVal FileInfoVectorResult GetFileInfo(@Const @ByRef FileSelector select);
 
-  /** EXPERIMENTAL: async version of GetFileInfo */
+  /** Async version of GetFileInfo */
   
   ///
   public native @ByVal FileInfoVectorFuture GetFileInfoAsync(@Const @ByRef StringVector paths);
 
-  /** EXPERIMENTAL: streaming async version of GetFileInfo
+  /** Streaming async version of GetFileInfo
    * 
    *  The returned generator is not async-reentrant, i.e. you need to wait for
    *  the returned future to complete before calling the generator again. */
@@ -157,21 +157,21 @@ public class FileSystem extends Pointer {
   public native @ByVal RandomAccessFileResult OpenInputFile(
         @Const @ByRef FileInfo info);
 
-  /** EXPERIMENTAL: async version of OpenInputStream */
+  /** Async version of OpenInputStream */
   public native @ByVal InputStreamFuture OpenInputStreamAsync(
         @StdString String path);
   public native @ByVal InputStreamFuture OpenInputStreamAsync(
         @StdString BytePointer path);
-  /** EXPERIMENTAL: async version of OpenInputStream */
+  /** Async version of OpenInputStream */
   public native @ByVal InputStreamFuture OpenInputStreamAsync(
         @Const @ByRef FileInfo info);
 
-  /** EXPERIMENTAL: async version of OpenInputFile */
+  /** Async version of OpenInputFile */
   public native @ByVal RandomAccessFileFuture OpenInputFileAsync(
         @StdString String path);
   public native @ByVal RandomAccessFileFuture OpenInputFileAsync(
         @StdString BytePointer path);
-  /** EXPERIMENTAL: async version of OpenInputFile */
+  /** Async version of OpenInputFile */
   
   ///
   public native @ByVal RandomAccessFileFuture OpenInputFileAsync(
@@ -194,10 +194,10 @@ public class FileSystem extends Pointer {
   /** Open an output stream for appending.
    * 
    *  If the target doesn't exist, a new empty file is created. */
-  public native @ByVal OutputStreamResult OpenAppendStream(
+  public native @Deprecated @ByVal OutputStreamResult OpenAppendStream(
         @StdString String path,
         @SharedPtr @Cast({"const arrow::KeyValueMetadata*", "std::shared_ptr<const arrow::KeyValueMetadata>"}) KeyValueMetadata metadata);
-  public native @ByVal OutputStreamResult OpenAppendStream(
+  public native @Deprecated @ByVal OutputStreamResult OpenAppendStream(
         @StdString BytePointer path,
         @SharedPtr @Cast({"const arrow::KeyValueMetadata*", "std::shared_ptr<const arrow::KeyValueMetadata>"}) KeyValueMetadata metadata);
   public native @ByVal OutputStreamResult OpenAppendStream(@StdString String path);

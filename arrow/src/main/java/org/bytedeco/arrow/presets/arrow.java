@@ -77,6 +77,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "arrow/util/cancel.h",
                 "arrow/util/task_group.h",
                 "arrow/util/thread_pool.h",
+                "arrow/util/async_util.h",
                 "arrow/util/async_generator.h",
 //                "arrow/util/value_parsing.h",
                 "arrow/type.h",
@@ -169,7 +170,8 @@ public class arrow implements InfoMapper {
                .put(new Info("__cplusplus_cli", "ARROW_EXTRA_ERROR_CONTEXT").define(false))
                .put(new Info("ARROW_NORETURN", "ARROW_MUST_USE_RESULT", "NULLPTR", "ARROW_EXPORT", "ARROW_FORCE_INLINE",
                              "ARROW_MEMORY_POOL_DEFAULT", "ARROW_BYTE_SWAP64", "ARROW_BYTE_SWAP32", "ARROW_MUST_USE_TYPE",
-                             "ARROW_NOINLINE", "ARROW_POPCOUNT64", "ARROW_POPCOUNT32").cppTypes().annotations())
+                             "ARROW_NOINLINE", "ARROW_POPCOUNT64", "ARROW_POPCOUNT32", "ARROW_RESTRICT",
+                             "ARROW_SUPPRESS_DEPRECATION_WARNING", "ARROW_UNSUPPRESS_DEPRECATION_WARNING").cppTypes().annotations())
                .put(new Info("ARROW_BITNESS", "ARROW_LITTLE_ENDIAN").translate(false))
 
                .put(new Info("ARROW_DEPRECATED").cppText("#define ARROW_DEPRECATED(...) deprecated").cppTypes())
@@ -184,6 +186,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::detail::CTypeImpl", "arrow::detail::IntegerTypeImpl", "arrow::internal::IsOneOf", "arrow::util::internal::non_null_filler", "arrow::TypeTraits",
                              "arrow::detail::CTypeImpl<DERIVED,BASE,TYPE_ID,C_TYPE>::type_id", "arrow::detail::Empty", "arrow::detail::is_future", "arrow::util::detail::all",
                              "arrow::util::detail::delete_copy_constructor", "arrow::internal::max_size_traits", "arrow::internal::max_size", "arrow::GetPhysicalType",
+                             "arrow::BasicDecimal128::LittleEndianArrayTag", "arrow::BasicDecimal256::LittleEndianArrayTag",
                              "arrow::Decimal128::ToRealConversion", "arrow::Decimal256::ToRealConversion", "arrow::internal::FnOnce", "arrow::compute::internal::Grouper",
                              "arrow::internal::Empty", "arrow::FutureToSync", "arrow::AsyncGenerator", "arrow::ipc::RecordBatchFileReader::GetRecordBatchGenerator",
                              "arrow::compute::Kernel::InitAll", "arrow::compute::Expression::Call::ComputeHash").skip())
@@ -194,6 +197,7 @@ public class arrow implements InfoMapper {
                .put(new Info("std::array<uint8_t,16>").pointerTypes("Byte16Array").define())
                .put(new Info("std::array<uint8_t,32>").pointerTypes("Byte32Array").define())
                .put(new Info("std::array<uint64_t,4>").pointerTypes("Long4Array").define())
+               .put(new Info("std::array<uint64_t,2>").pointerTypes("Long2Array").define())
                .put(new Info("std::pair<arrow::Decimal128,arrow::Decimal128>").pointerTypes("Decimal128Pair").define())
                .put(new Info("std::pair<arrow::Decimal256,arrow::Decimal256>").pointerTypes("Decimal256Pair").define())
                .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringPair").define())
@@ -252,6 +256,7 @@ public class arrow implements InfoMapper {
                              "arrow::NumericArray<arrow::Date64Type>::value_type",
                              "arrow::NumericArray<arrow::Time64Type>::value_type",
                              "arrow::NumericArray<arrow::DayTimeIntervalType>::value_type",
+                             "arrow::NumericArray<arrow::MonthDayNanoIntervalType>::value_type",
                              "arrow::NumericArray<arrow::DurationType>::value_type",
                              "arrow::NumericArray<arrow::TimestampType>::value_type",
                              "arrow::BaseListArray<arrow::LargeListType>::offset_type",
@@ -262,7 +267,8 @@ public class arrow implements InfoMapper {
                              "arrow::NumericBuilder<arrow::UInt64Type>::value_type").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("arrow::NumericBuilder<arrow::Int64Type>::ArrayType",
                              "arrow::NumericBuilder<arrow::UInt64Type>::ArrayType",
-                             "arrow::NumericBuilder<arrow::DayTimeIntervalType>::ArrayType").cast().valueTypes("LongPointer", "LongBuffer", "long[]"))
+                             "arrow::NumericBuilder<arrow::DayTimeIntervalType>::ArrayType",
+                             "arrow::NumericBuilder<arrow::MonthDayNanoIntervalType>::ArrayType").cast().valueTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("arrow::NumericArray<arrow::HalfFloatType>::value_type", 
                              "arrow::NumericScalar<arrow::HalfFloatType>::ValueType",
                              "arrow::NumericBuilder<arrow::HalfFloatType>::value_type",
@@ -284,6 +290,8 @@ public class arrow implements InfoMapper {
 
                .put(new Info("arrow::DayTimeIntervalArray::TypeClass::DayMilliseconds",
                              "arrow::TemporalScalar<arrow::DayTimeIntervalType>::ValueType").pointerTypes("DayTimeIntervalType.DayMilliseconds"))
+               .put(new Info("arrow::MonthDayNanoIntervalArray::TypeClass::MonthDayNanos",
+                             "arrow::TemporalScalar<arrow::MonthDayNanoIntervalType>::ValueType").pointerTypes("MonthDayNanoIntervalType.MonthDayNanos"))
 
                .put(new Info("arrow::BaseListType", "arrow::BaseBinaryType", "arrow::BaseListScalar", "arrow::NestedType", "arrow::NumberType",
                              "arrow::Date64Scalar", "arrow::DayTimeIntervalScalar", "arrow::FixedSizeListScalar", "arrow::Int64Scalar", "arrow::UInt64Scalar",
@@ -296,6 +304,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::DateScalar<arrow::Date32Type>").pointerTypes("BaseDate32Scalar").define())
                .put(new Info("arrow::DateScalar<arrow::Date64Type>").pointerTypes("BaseDate64Scalar").define())
                .put(new Info("arrow::IntervalScalar<arrow::DayTimeIntervalType>").pointerTypes("BaseDayTimeIntervalScalar").define())
+               .put(new Info("arrow::IntervalScalar<arrow::MonthDayNanoIntervalType>").pointerTypes("BaseMonthDayNanoIntervalScalar").define())
                .put(new Info("arrow::IntervalScalar<arrow::MonthIntervalType>").pointerTypes("BaseMonthIntervalScalar").define())
 //               .put(new Info("arrow::NumericScalar<arrow::Date32Type>").pointerTypes("BaseDate32Scalar").define())
 //               .put(new Info("arrow::NumericScalar<arrow::Date64Type>").pointerTypes("BaseDate64Scalar").define())
@@ -314,6 +323,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::TemporalScalar<arrow::Date64Type>").pointerTypes("BaseBaseDate64Scalar").define())
                .put(new Info("arrow::TemporalScalar<arrow::DurationType>").pointerTypes("BaseDurationScalar").define())
                .put(new Info("arrow::TemporalScalar<arrow::DayTimeIntervalType>").pointerTypes("BaseBaseDayTimeIntervalScalar").define())
+               .put(new Info("arrow::TemporalScalar<arrow::MonthDayNanoIntervalType>").pointerTypes("BaseMonthDayNanoIntervalScalar").define())
                .put(new Info("arrow::TemporalScalar<arrow::MonthIntervalType>").pointerTypes("BaseBaseMonthIntervalType").define())
                .put(new Info("arrow::TemporalScalar<arrow::TimestampType>").pointerTypes("BaseTimestampScalar").define())
                .put(new Info("arrow::TemporalScalar<arrow::Time32Type>").pointerTypes("BaseBaseTime32Scalar").define())
@@ -437,7 +447,7 @@ public class arrow implements InfoMapper {
                              "arrow::Future<>::ThenOnComplete",
                              "arrow::Future<>::PassthruOnFailure").skip())
                .put(new Info("arrow::Result<bool>").pointerTypes("BoolResult").define())
-               .put(new Info("arrow::Result<int>").pointerTypes("IntResult").define())
+               .put(new Info("arrow::Result<int>", "arrow::Result<int32_t>").pointerTypes("IntResult").define())
                .put(new Info("arrow::Future<int64_t>",
                              "arrow::Future<arrow::Future<int64_t>::ValueType>").pointerTypes("LongFuture").define())
                .put(new Info("arrow::Future<int64_t>::internal::Empty",
@@ -687,6 +697,8 @@ public class arrow implements InfoMapper {
                              "std::enable_shared_from_this<arrow::ipc::RecordBatchFileReader>",
                              "std::enable_shared_from_this<arrow::internal::TaskGroup>",
                              "std::function<std::unique_ptr<arrow::detail::ReadaheadPromise>()>",
+                             "std::function<arrow::Result<arrow::Future<> >()>",
+                             "std::function<arrow::csv::InvalidRowResult(const arrow::csv::InvalidRow&)>", "arrow::csv::InvalidRowHandler",
                              "arrow::BooleanArray::IteratorType",
                              "arrow::NumericArray<arrow::Int8Type>::IteratorType",
                              "arrow::NumericArray<arrow::UInt8Type>::IteratorType",
@@ -825,6 +837,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::internal::PrimitiveScalar",
                              "arrow::internal::PrimitiveScalar<arrow::DurationType>",
                              "arrow::internal::PrimitiveScalar<arrow::DayTimeIntervalType>",
+                             "arrow::internal::PrimitiveScalar<arrow::MonthDayNanoIntervalType>",
                              "arrow::internal::PrimitiveScalar<arrow::Time32Type>",
                              "arrow::internal::PrimitiveScalar<arrow::Time64Type>",
                              "arrow::internal::PrimitiveScalar<arrow::TimestampType>",
@@ -874,6 +887,7 @@ public class arrow implements InfoMapper {
                .put(new Info("arrow::NumericBuilder<arrow::FloatType>").pointerTypes("FloatBuilder").define())
                .put(new Info("arrow::NumericBuilder<arrow::DoubleType>").pointerTypes("DoubleBuilder").define())
                .put(new Info("arrow::NumericBuilder<arrow::DayTimeIntervalType>").pointerTypes("DayTimeIntervalBuilder").define())
+               .put(new Info("arrow::NumericBuilder<arrow::MonthDayNanoIntervalType>").pointerTypes("MonthDayNanoIntervalBuilder").define())
 
                .put(new Info("arrow::io::internal::SharedLockGuard<arrow::io::internal::SharedExclusiveChecker>").pointerTypes("SharedExclusiveCheckerSharedLockGuard").define())
                .put(new Info("arrow::io::internal::ExclusiveLockGuard<arrow::io::internal::SharedExclusiveChecker>").pointerTypes("SharedExclusiveCheckerExclusiveLockGuard").define())

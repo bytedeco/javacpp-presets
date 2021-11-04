@@ -56,5 +56,8 @@ public class DenseUnionBuilder extends BasicUnionBuilder {
    *  is called. */
   public native @ByVal Status Append(byte next_type);
 
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
+
   public native @ByVal Status FinishInternal(@SharedPtr ArrayData out);
 }

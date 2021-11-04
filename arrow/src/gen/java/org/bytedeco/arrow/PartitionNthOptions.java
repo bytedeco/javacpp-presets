@@ -19,8 +19,16 @@ public class PartitionNthOptions extends FunctionOptions {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PartitionNthOptions(Pointer p) { super(p); }
 
+  public PartitionNthOptions(@Cast("int64_t") long pivot,
+                                 NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(pivot, null_placement); }
+  private native void allocate(@Cast("int64_t") long pivot,
+                                 NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   public PartitionNthOptions(@Cast("int64_t") long pivot) { super((Pointer)null); allocate(pivot); }
   private native void allocate(@Cast("int64_t") long pivot);
+  public PartitionNthOptions(@Cast("int64_t") long pivot,
+                                 @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(pivot, null_placement); }
+  private native void allocate(@Cast("int64_t") long pivot,
+                                 @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   public PartitionNthOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
   @MemberGetter public static native byte kTypeName(int i);
@@ -28,4 +36,6 @@ public class PartitionNthOptions extends FunctionOptions {
 
   /** The index into the equivalent sorted array of the partition pivot element. */
   public native @Cast("int64_t") long pivot(); public native PartitionNthOptions pivot(long setter);
+  /** Whether nulls and NaNs are partitioned at the start or at the end */
+  public native NullPlacement null_placement(); public native PartitionNthOptions null_placement(NullPlacement setter);
 }

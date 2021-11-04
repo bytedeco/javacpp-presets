@@ -146,7 +146,7 @@ public class Datum extends Pointer {
    *  @return nullptr if no schema */
   
   ///
-  public native @SharedPtr @ByVal Schema schema();
+  public native @Const @SharedPtr @ByRef Schema schema();
 
   /** \brief The value length of the variant, if any
    * 

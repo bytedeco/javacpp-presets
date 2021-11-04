@@ -31,4 +31,5 @@ public class FunctionOptionsType extends Pointer {
   public native @ByVal BufferResult Serialize(@Const @ByRef FunctionOptions arg0);
   public native @ByVal FunctionOptionsResult Deserialize(
         @Const @ByRef ArrowBuffer buffer);
+  public native @UniquePtr FunctionOptions Copy(@Const @ByRef FunctionOptions arg0);
 }

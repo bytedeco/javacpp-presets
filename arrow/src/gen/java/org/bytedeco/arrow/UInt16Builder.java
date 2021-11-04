@@ -65,6 +65,19 @@ public class UInt16Builder extends ArrayBuilder {
   /** \brief Append a sequence of elements in one shot
    *  @param values [in] a contiguous C array of values
    *  @param length [in] the number of values to append
+   *  @param bitmap [in] a validity bitmap to copy (may be null)
+   *  @param bitmap_offset [in] an offset into the validity bitmap
+   *  @return Status */
+  public native @ByVal Status AppendValues(@Cast("const arrow::NumericBuilder<arrow::UInt16Type>::value_type*") ShortPointer values, @Cast("int64_t") long length, @Cast("const uint8_t*") BytePointer bitmap,
+                        @Cast("int64_t") long bitmap_offset);
+  public native @ByVal Status AppendValues(@Cast("const arrow::NumericBuilder<arrow::UInt16Type>::value_type*") ShortBuffer values, @Cast("int64_t") long length, @Cast("const uint8_t*") ByteBuffer bitmap,
+                        @Cast("int64_t") long bitmap_offset);
+  public native @ByVal Status AppendValues(@Cast("const arrow::NumericBuilder<arrow::UInt16Type>::value_type*") short[] values, @Cast("int64_t") long length, @Cast("const uint8_t*") byte[] bitmap,
+                        @Cast("int64_t") long bitmap_offset);
+
+  /** \brief Append a sequence of elements in one shot
+   *  @param values [in] a contiguous C array of values
+   *  @param length [in] the number of values to append
    *  @param is_valid [in] an std::vector<bool> indicating valid (1) or null
    *  (0). Equal in length to values
    *  @return Status */
@@ -116,6 +129,11 @@ public class UInt16Builder extends ArrayBuilder {
    *  @return Status */
 
   // Same as above, with a pointer type ValidIter
+
+  
+  ///
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
 
   /** Append a single scalar under the assumption that the underlying Buffer is
    *  large enough.

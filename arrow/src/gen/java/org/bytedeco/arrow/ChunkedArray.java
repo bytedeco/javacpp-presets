@@ -121,9 +121,12 @@ public class ChunkedArray extends Pointer {
    *  there are zero chunks */
   public native @ByVal ChunkedArrayResult View(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
 
+  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();
+
+  /** \brief Return a Scalar containing the value of this array at index */
   
   ///
-  public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();
+  public native @ByVal ScalarResult GetScalar(@Cast("int64_t") long index);
 
   /** \brief Determine if two chunked arrays are equal.
    * 

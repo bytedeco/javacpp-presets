@@ -40,19 +40,17 @@ public class UnionArray extends Array {
 
   public native @Cast("const arrow::UnionArray::type_code_t*") BytePointer raw_type_codes();
 
+  /** The logical type code of the value at index. */
+  public native @Cast("arrow::UnionArray::type_code_t") byte type_code(@Cast("int64_t") long i);
+
   /** The physical child id containing value at index. */
   public native int child_id(@Cast("int64_t") long i);
 
   public native @Const UnionType union_type();
 
-  public native UnionMode.type mode();
-
-  // Return the given field as an individual array.
-  // For sparse unions, the returned array has its offset, length and null
-  // count adjusted.
   
   ///
-  public native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array child(int pos);
+  public native UnionMode.type mode();
 
   /** \brief Return the given field as an individual array.
    * 

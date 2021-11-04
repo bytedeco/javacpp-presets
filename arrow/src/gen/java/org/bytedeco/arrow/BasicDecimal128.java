@@ -31,12 +31,38 @@ public class BasicDecimal128 extends Pointer {
         return new BasicDecimal128((Pointer)this).offsetAddress(i);
     }
 
-  @MemberGetter public static native int bit_width();
-  public static final int bit_width = bit_width();
+  @MemberGetter public static native int kBitWidth();
+  public static final int kBitWidth = kBitWidth();
+  @MemberGetter public static native int kMaxPrecision();
+  public static final int kMaxPrecision = kMaxPrecision();
+  @MemberGetter public static native int kMaxScale();
+  public static final int kMaxScale = kMaxScale();
+
+  // A constructor tag to introduce a little-endian encoded array
 
   /** \brief Create a BasicDecimal128 from the two's complement representation. */
+// #if ARROW_LITTLE_ENDIAN
+// #else
+  
+  ///
   public BasicDecimal128(@Cast("int64_t") long high, @Cast("uint64_t") long low) { super((Pointer)null); allocate(high, low); }
   @NoException(true) private native void allocate(@Cast("int64_t") long high, @Cast("uint64_t") long low);
+// #endif
+
+  /** \brief Create a BasicDecimal256 from the two's complement representation.
+   * 
+   *  Input array is assumed to be in native endianness. */
+// #if ARROW_LITTLE_ENDIAN
+// #else
+  
+  ///
+  public BasicDecimal128(@Const @ByRef Long2Array array) { super((Pointer)null); allocate(array); }
+  @NoException(true) private native void allocate(@Const @ByRef Long2Array array);
+// #endif
+
+  /** \brief Create a BasicDecimal128 from the two's complement representation.
+   * 
+   *  Input array is assumed to be in little endianness, with native endian elements. */
 
   /** \brief Empty constructor creates a BasicDecimal128 with a value of 0. */
   public BasicDecimal128() { super((Pointer)null); allocate(); }
@@ -106,7 +132,31 @@ public class BasicDecimal128 extends Pointer {
   public native @Cast("const int64_t") long high_bits();
 
   /** \brief Get the low bits of the two's complement representation of the number. */
+  
+  ///
   public native @Cast("const uint64_t") long low_bits();
+
+  /** \brief Get the bits of the two's complement representation of the number.
+   * 
+   *  The 2 elements are in native endian order. The bits within each uint64_t element
+   *  are in native endian order. For example, on a little endian machine,
+   *  BasicDecimal128(123).native_endian_array() = {123, 0};
+   *  but on a big endian machine,
+   *  BasicDecimal128(123).native_endian_array() = {0, 123}; */
+  
+  ///
+  public native @ByVal Long2Array native_endian_array();
+
+  /** \brief Get the bits of the two's complement representation of the number.
+   * 
+   *  The 2 elements are in little endian order. However, the bits within each
+   *  uint64_t element are in native endian order.
+   *  For example, BasicDecimal128(123).little_endian_array() = {123, 0}; */
+  public native @ByVal Long2Array little_endian_array();
+
+  public native @Cast("const uint8_t*") BytePointer native_endian_bytes();
+
+  public native @Cast("uint8_t*") BytePointer mutable_native_endian_bytes();
 
   /** \brief Return the raw bytes of the value in native-endian byte order. */
   public native @ByVal Byte16Array ToBytes();
@@ -120,6 +170,8 @@ public class BasicDecimal128 extends Pointer {
 
   /** \brief Scale multiplier for given scale value. */
   public static native @Const @ByRef BasicDecimal128 GetScaleMultiplier(int scale);
+  /** \brief Half-scale multiplier for given scale value. */
+  public static native @Const @ByRef BasicDecimal128 GetHalfScaleMultiplier(int scale);
 
   /** \brief Convert BasicDecimal128 from one scale to another */
   public native DecimalStatus Rescale(int original_scale, int new_scale,
@@ -151,4 +203,9 @@ public class BasicDecimal128 extends Pointer {
 
   /** \brief Get the maximum valid unscaled decimal value. */
   public static native @Const @ByRef BasicDecimal128 GetMaxValue();
+
+  /** \brief Get the maximum decimal value (is not a valid value). */
+  public static native @Const @ByVal BasicDecimal128 GetMaxSentinel();
+  /** \brief Get the minimum decimal value (is not a valid value). */
+  public static native @Const @ByVal BasicDecimal128 GetMinSentinel();
 }

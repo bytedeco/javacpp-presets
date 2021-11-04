@@ -54,6 +54,16 @@ public class FixedSizeListArray extends Array {
   ///
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::Array>"}) Array value_slice(@Cast("int64_t") long i);
 
+  /** \brief Return an Array that is a concatenation of the lists in this array.
+   * 
+   *  Note that it's different from {@code values()} in that it takes into
+   *  consideration null elements (they are skipped, thus copying may be needed). */
+  
+  ///
+  public native @ByVal ArrayResult Flatten(
+        MemoryPool memory_pool/*=arrow::default_memory_pool()*/);
+  public native @ByVal ArrayResult Flatten();
+
   /** \brief Construct FixedSizeListArray from child value array and value_length
    * 
    *  @param values [in] Array containing list values

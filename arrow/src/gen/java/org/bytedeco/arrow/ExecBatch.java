@@ -74,10 +74,12 @@ public class ExecBatch extends Pointer {
   public native @ByRef Expression guarantee(); public native ExecBatch guarantee(Expression setter);
 
   /** The semantic length of the ExecBatch. When the values are all scalars,
-   *  the length should be set to 1, otherwise the length is taken from the
-   *  array values, except when there is a selection vector. When there is a
-   *  selection vector set, the length of the batch is the length of the
-   *  selection.
+   *  the length should be set to 1 for non-aggregate kernels, otherwise the
+   *  length is taken from the array values, except when there is a selection
+   *  vector. When there is a selection vector set, the length of the batch is
+   *  the length of the selection. Aggregate kernels can have an ExecBatch
+   *  formed by projecting just the partition columns from a batch in which
+   *  case, it would have scalar rows with length greater than 1.
    * 
    *  If the array values are of length 0 then the length is 0 regardless of
    *  whether any values are Scalar. In general ExecBatch objects are produced
@@ -96,6 +98,8 @@ public class ExecBatch extends Pointer {
   /** \brief A convenience for returning the ValueDescr objects (types and
    *  shapes) from the batch. */
   public native @ByVal ValueDescrVector GetDescriptors();
+
+  public native @StdString String ToString();
 
   
 }

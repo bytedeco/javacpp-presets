@@ -15,7 +15,7 @@ import static org.bytedeco.arrow.global.parquet.*;
 import static org.bytedeco.arrow.global.arrow_dataset.*;
 
 
-/** \brief Creates a generator that takes in a stream of generators and pulls from each
+/** \brief Create a generator that takes in a stream of generators and pulls from each
  *  one in sequence.
  * 
  *  This generator is async-reentrant but will never pull from source reentrantly and

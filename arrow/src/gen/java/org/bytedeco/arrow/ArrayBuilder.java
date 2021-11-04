@@ -95,14 +95,22 @@ public class ArrayBuilder extends Pointer {
   /** \brief Append a value from a scalar */
   public native @ByVal Status AppendScalar(@Const @ByRef Scalar scalar);
   public native @ByVal Status AppendScalar(@Const @ByRef Scalar scalar, @Cast("int64_t") long n_repeats);
+  
+  ///
   public native @ByVal Status AppendScalars(@Const @ByRef ScalarVector scalars);
+
+  /** \brief Append a range of values from an array.
+   * 
+   *  The given array must be the same type as the builder. */
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                                    @Cast("int64_t") long length);
 
   /** For cases where raw data was memcpy'd into the internal buffers, allows us
    *  to advance the length of the builder. It is your responsibility to use
    *  this function responsibly. */
   
   ///
-  public native @ByVal Status Advance(@Cast("int64_t") long elements);
+  public native @Deprecated @ByVal Status Advance(@Cast("int64_t") long elements);
 
   /** \brief Return result of builder as an internal generic ArrayData
    *  object. Resets builder except for dictionary builder

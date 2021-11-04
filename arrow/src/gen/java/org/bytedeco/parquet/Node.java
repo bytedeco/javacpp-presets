@@ -57,8 +57,6 @@ public class Node extends Pointer {
    *  Thrift. */
   public native int field_id();
 
-  public native @Deprecated int id();
-
   public native @Const Node parent();
 
   public native @SharedPtr ColumnPath path();

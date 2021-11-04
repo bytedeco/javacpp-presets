@@ -45,8 +45,7 @@ public class IpcReadOptions extends Pointer {
   ///
   public native MemoryPool memory_pool(); public native IpcReadOptions memory_pool(MemoryPool setter);
 
-  /** \brief EXPERIMENTAL: Top-level schema fields to include when
-   *  deserializing RecordBatch.
+  /** \brief Top-level schema fields to include when deserializing RecordBatch.
    * 
    *  If empty (the default), return all deserialized fields.
    *  If non-empty, the values are the indices of fields in the top-level schema. */
@@ -59,7 +58,7 @@ public class IpcReadOptions extends Pointer {
   ///
   public native @Cast("bool") boolean use_threads(); public native IpcReadOptions use_threads(boolean setter);
 
-  /** \brief EXPERIMENTAL: Convert incoming data to platform-native endianness
+  /** \brief Whether to convert incoming data to platform-native endianness
    * 
    *  If the endianness of the received schema is not equal to platform-native
    *  endianness, then all buffers with endian-sensitive data will be byte-swapped.

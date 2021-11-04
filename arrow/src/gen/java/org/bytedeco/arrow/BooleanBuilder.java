@@ -78,6 +78,19 @@ public class BooleanBuilder extends ArrayBuilder {
   public native @ByVal Status AppendValues(@Cast("const uint8_t*") byte[] values, @Cast("int64_t") long length);
 
   /** \brief Append a sequence of elements in one shot
+   *  @param values [in] a bitmap of values
+   *  @param length [in] the number of values to append
+   *  @param validity [in] a validity bitmap to copy (may be null)
+   *  @param offset [in] an offset into the values and validity bitmaps
+   *  @return Status */
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") BytePointer values, @Cast("int64_t") long length, @Cast("const uint8_t*") BytePointer validity,
+                        @Cast("int64_t") long offset);
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") ByteBuffer values, @Cast("int64_t") long length, @Cast("const uint8_t*") ByteBuffer validity,
+                        @Cast("int64_t") long offset);
+  public native @ByVal Status AppendValues(@Cast("const uint8_t*") byte[] values, @Cast("int64_t") long length, @Cast("const uint8_t*") byte[] validity,
+                        @Cast("int64_t") long offset);
+
+  /** \brief Append a sequence of elements in one shot
    *  @param values [in] a contiguous C array of values
    *  @param length [in] the number of values to append
    *  @param is_valid [in] an std::vector<bool> indicating valid (1) or null
@@ -137,6 +150,9 @@ public class BooleanBuilder extends ArrayBuilder {
   // Same as above, for a pointer type ValidIter
 
   public native @ByVal Status AppendValues(@Cast("int64_t") long length, @Cast("bool") boolean value);
+
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset,
+                            @Cast("int64_t") long length);
 
   public native @ByVal Status FinishInternal(@SharedPtr ArrayData out);
 

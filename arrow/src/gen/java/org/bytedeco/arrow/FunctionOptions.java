@@ -26,6 +26,7 @@ public class FunctionOptions extends Pointer {
 
   public native @Cast("bool") boolean Equals(@Const @ByRef FunctionOptions other);
   public native @StdString String ToString();
+  public native @UniquePtr FunctionOptions Copy();
   /** \brief Serialize an options struct to a buffer. */
   public native @ByVal BufferResult Serialize();
   /** \brief Deserialize an options struct from a buffer.

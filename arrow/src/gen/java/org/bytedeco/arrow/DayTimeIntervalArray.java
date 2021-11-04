@@ -38,6 +38,15 @@ public class DayTimeIntervalArray extends PrimitiveArray {
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type, @Cast("int64_t") long length,
                          @SharedPtr ArrowBuffer data);
 
+  public DayTimeIntervalArray(@Cast("int64_t") long length, @SharedPtr ArrowBuffer data,
+                         @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
+                         @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/) { super((Pointer)null); allocate(length, data, null_bitmap, null_count, offset); }
+  private native void allocate(@Cast("int64_t") long length, @SharedPtr ArrowBuffer data,
+                         @SharedPtr ArrowBuffer null_bitmap/*=nullptr*/,
+                         @Cast("int64_t") long null_count/*=arrow::kUnknownNullCount*/, @Cast("int64_t") long offset/*=0*/);
+  public DayTimeIntervalArray(@Cast("int64_t") long length, @SharedPtr ArrowBuffer data) { super((Pointer)null); allocate(length, data); }
+  private native void allocate(@Cast("int64_t") long length, @SharedPtr ArrowBuffer data);
+
   public native @ByVal DayTimeIntervalType.DayMilliseconds GetValue(@Cast("int64_t") long i);
   public native @ByVal DayTimeIntervalType.DayMilliseconds Value(@Cast("int64_t") long i);
 

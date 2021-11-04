@@ -65,7 +65,7 @@ public class ApplicationVersion extends Pointer {
   // Returns true if version is strictly less than other_version
   public native @Cast("bool") boolean VersionLt(@Const @ByRef ApplicationVersion other_version);
 
-  // Returns true if version is strictly less than other_version
+  // Returns true if version is strictly equal with other_version
   public native @Cast("bool") boolean VersionEq(@Const @ByRef ApplicationVersion other_version);
 
   // Checks if the Version has the correct statistics for a given column
