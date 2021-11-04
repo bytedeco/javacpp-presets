@@ -39,4 +39,7 @@ public class TimeUnit extends Pointer {
       public type intern() { for (type e : values()) if (e.value == value) return e; return this; }
       @Override public String toString() { return intern().name(); }
   }
+
+  /** Iterate over all valid time units */
+  public static native @StdVector @Cast("arrow::TimeUnit::type*") IntPointer values();
 }

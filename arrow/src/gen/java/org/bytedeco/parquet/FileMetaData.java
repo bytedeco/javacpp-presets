@@ -75,9 +75,16 @@ public class FileMetaData extends Pointer {
    *  @param index [in] of the RowGroup to retrieve.
    * 
    *  @throws ParquetException if the index is out of bound. */
+  
+  ///
   public native @UniquePtr RowGroupMetaData RowGroup(int index);
 
-  /** \brief Return the version of the file. */
+  /** \brief Return the "version" of the file
+   * 
+   *  WARNING: The value returned by this method is unreliable as 1) the Parquet
+   *  file metadata stores the version as a single integer and 2) some producers
+   *  are known to always write a hardcoded value.  Therefore, you cannot use
+   *  this value to know which features are used in the file. */
   public native ParquetVersion.type version();
 
   /** \brief Return the application's user-agent string of the writer. */

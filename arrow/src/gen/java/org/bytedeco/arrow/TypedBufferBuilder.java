@@ -48,9 +48,15 @@ public class TypedBufferBuilder extends Pointer {
 
   public native void UnsafeAppend(@Cast("bool") boolean value);
 
+  /** \brief Append bits from an array of bytes (one value per byte) */
   public native void UnsafeAppend(@Cast("const uint8_t*") BytePointer bytes, @Cast("int64_t") long num_elements);
   public native void UnsafeAppend(@Cast("const uint8_t*") ByteBuffer bytes, @Cast("int64_t") long num_elements);
   public native void UnsafeAppend(@Cast("const uint8_t*") byte[] bytes, @Cast("int64_t") long num_elements);
+
+  /** \brief Append bits from a packed bitmap */
+  public native void UnsafeAppend(@Cast("const uint8_t*") BytePointer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long num_elements);
+  public native void UnsafeAppend(@Cast("const uint8_t*") ByteBuffer bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long num_elements);
+  public native void UnsafeAppend(@Cast("const uint8_t*") byte[] bitmap, @Cast("int64_t") long offset, @Cast("int64_t") long num_elements);
 
   public native void UnsafeAppend(@Cast("const int64_t") long num_copies, @Cast("bool") boolean value);
 

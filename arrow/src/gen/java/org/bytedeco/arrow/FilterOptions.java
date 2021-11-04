@@ -32,9 +32,9 @@ public class FilterOptions extends FunctionOptions {
 
   /** Configure the action taken when a slot of the selection mask is null */
   public enum NullSelectionBehavior {
-    /** the corresponding filtered value will be removed in the output */
+    /** The corresponding filtered value will be removed in the output. */
     DROP(0),
-    /** the corresponding filtered value will be null in the output */
+    /** The corresponding filtered value will be null in the output. */
     EMIT_NULL(1);
 
       public final int value;

@@ -28,15 +28,12 @@ public class DayTimeIntervalType extends IntervalType {
         return new DayTimeIntervalType((Pointer)this).offsetAddress(i);
     }
 
-  public static class DayMilliseconds extends Pointer {
+  @NoOffset public static class DayMilliseconds extends Pointer {
       static { Loader.load(); }
-      /** Default native constructor. */
-      public DayMilliseconds() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(long)}. */
-      public DayMilliseconds(long size) { super((Pointer)null); allocateArray(size); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public DayMilliseconds(Pointer p) { super(p); }
-      private native void allocate();
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public DayMilliseconds(long size) { super((Pointer)null); allocateArray(size); }
       private native void allocateArray(long size);
       @Override public DayMilliseconds position(long position) {
           return (DayMilliseconds)super.position(position);
@@ -47,6 +44,10 @@ public class DayTimeIntervalType extends IntervalType {
   
     public native int days(); public native DayMilliseconds days(int setter);
     public native int milliseconds(); public native DayMilliseconds milliseconds(int setter);
+    public DayMilliseconds() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public DayMilliseconds(int days, int milliseconds) { super((Pointer)null); allocate(days, milliseconds); }
+    private native void allocate(int days, int milliseconds);
     public native @Cast("bool") @Name("operator ==") boolean equals(@ByVal DayMilliseconds other);
     public native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal DayMilliseconds other);
     public native @Cast("bool") @Name("operator <") boolean lessThan(@ByVal DayMilliseconds other);

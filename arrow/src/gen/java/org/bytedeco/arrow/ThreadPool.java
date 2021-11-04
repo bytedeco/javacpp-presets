@@ -64,6 +64,11 @@ public class ThreadPool extends Executor {
   public native @ByVal Status Shutdown(@Cast("bool") boolean _wait/*=true*/);
   public native @ByVal Status Shutdown();
 
+  // Wait for the thread pool to become idle
+  //
+  // This is useful for sequencing tests
+  public native void WaitForIdle();
+
   @Opaque public static class State extends Pointer {
       /** Empty constructor. Calls {@code super((Pointer)null)}. */
       public State() { super((Pointer)null); }

@@ -31,27 +31,35 @@ public class TDigestOptions extends FunctionOptions {
     }
 
   public TDigestOptions(double q/*=0.5*/, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/) { super((Pointer)null); allocate(q, delta, buffer_size); }
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, delta, buffer_size, skip_nulls, min_count); }
   private native void allocate(double q/*=0.5*/, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/);
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/);
   public TDigestOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
   public TDigestOptions(@StdVector DoublePointer q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/) { super((Pointer)null); allocate(q, delta, buffer_size); }
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, delta, buffer_size, skip_nulls, min_count); }
   private native void allocate(@StdVector DoublePointer q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/);
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/);
   public TDigestOptions(@StdVector DoublePointer q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector DoublePointer q);
   public TDigestOptions(@StdVector DoubleBuffer q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/) { super((Pointer)null); allocate(q, delta, buffer_size); }
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, delta, buffer_size, skip_nulls, min_count); }
   private native void allocate(@StdVector DoubleBuffer q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/);
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/);
   public TDigestOptions(@StdVector DoubleBuffer q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector DoubleBuffer q);
   public TDigestOptions(@StdVector double[] q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/) { super((Pointer)null); allocate(q, delta, buffer_size); }
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(q, delta, buffer_size, skip_nulls, min_count); }
   private native void allocate(@StdVector double[] q, @Cast("uint32_t") int delta/*=100*/,
-                            @Cast("uint32_t") int buffer_size/*=500*/);
+                            @Cast("uint32_t") int buffer_size/*=500*/, @Cast("bool") boolean skip_nulls/*=true*/,
+                            @Cast("uint32_t") int min_count/*=0*/);
   public TDigestOptions(@StdVector double[] q) { super((Pointer)null); allocate(q); }
   private native void allocate(@StdVector double[] q);
   @MemberGetter public static native byte kTypeName(int i);
@@ -64,4 +72,9 @@ public class TDigestOptions extends FunctionOptions {
   public native @Cast("uint32_t") int delta(); public native TDigestOptions delta(int setter);
   /** input buffer size, default 500 */
   public native @Cast("uint32_t") int buffer_size(); public native TDigestOptions buffer_size(int setter);
+  /** If true (the default), null values are ignored. Otherwise, if any value is null,
+   *  emit null. */
+  public native @Cast("bool") boolean skip_nulls(); public native TDigestOptions skip_nulls(boolean setter);
+  /** If less than this many non-null values are observed, emit null. */
+  public native @Cast("uint32_t") int min_count(); public native TDigestOptions min_count(int setter);
 }

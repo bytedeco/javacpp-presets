@@ -61,7 +61,7 @@ public class Expression extends Pointer {
     public native @SharedPtr KernelState kernel_state(); public native Call kernel_state(KernelState setter);
     public native @ByRef ValueDescr descr(); public native Call descr(ValueDescr setter);
 
-    public native void ComputeHash();
+    
   }
 
   public native @StdString String ToString();

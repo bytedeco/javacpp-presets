@@ -48,8 +48,7 @@ public class Kernel extends Pointer {
   public native @ByRef @Cast("arrow::compute::KernelInit*") Pointer init(); public native Kernel init(Pointer setter);
 
   /** \brief Create a vector of new KernelState for invocations of this kernel. */
-  public static native @ByVal Status InitAll(KernelContext arg0, @Const @ByRef KernelInitArgs arg1,
-                          KernelStateVector arg2);
+  
 
   /** \brief Indicates whether execution can benefit from parallelization
    *  (splitting large chunks into smaller chunks and using multiple

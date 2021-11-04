@@ -28,8 +28,10 @@ public class Decimal256 extends BasicDecimal256 {
     static { Loader.load(); }
 
   
-    public Decimal256(@Const @ByRef Long4Array little_endian_array) { super((Pointer)null); allocate(little_endian_array); }
-    @NoException(true) private native void allocate(@Const @ByRef Long4Array little_endian_array);
+    
+    ///
+    public Decimal256(@Const @ByRef Long4Array array) { super((Pointer)null); allocate(array); }
+    @NoException(true) private native void allocate(@Const @ByRef Long4Array array);
     public Decimal256() { super((Pointer)null); allocate(); }
     @NoException(true) private native void allocate();
   

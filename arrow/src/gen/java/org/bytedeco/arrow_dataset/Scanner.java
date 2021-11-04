@@ -110,4 +110,6 @@ public class Scanner extends Pointer {
 
   /** \brief Get the options for this scan. */
   public native @SharedPtr ScanOptions options();
+  /** \brief Get the dataset that this scanner will scan */
+  public native @Const @SharedPtr @ByRef Dataset dataset();
 }

@@ -27,12 +27,26 @@ public class BasicDecimal256 extends Pointer {
         return new BasicDecimal256((Pointer)this).offsetAddress(i);
     }
 
-  @MemberGetter public static native int bit_width();
-  public static final int bit_width = bit_width();
+  @MemberGetter public static native int kBitWidth();
+  public static final int kBitWidth = kBitWidth();
+  @MemberGetter public static native int kMaxPrecision();
+  public static final int kMaxPrecision = kMaxPrecision();
+  @MemberGetter public static native int kMaxScale();
+  public static final int kMaxScale = kMaxScale();
 
-  /** \brief Create a BasicDecimal256 from the two's complement representation. */
-  public BasicDecimal256(@Const @ByRef Long4Array little_endian_array) { super((Pointer)null); allocate(little_endian_array); }
-  @NoException(true) private native void allocate(@Const @ByRef Long4Array little_endian_array);
+  // A constructor tag to denote a little-endian encoded array
+
+  /** \brief Create a BasicDecimal256 from the two's complement representation.
+   * 
+   *  Input array is assumed to be in native endianness. */
+  
+  ///
+  public BasicDecimal256(@Const @ByRef Long4Array array) { super((Pointer)null); allocate(array); }
+  @NoException(true) private native void allocate(@Const @ByRef Long4Array array);
+
+  /** \brief Create a BasicDecimal256 from the two's complement representation.
+   * 
+   *  Input array is assumed to be in little endianness, with native endian elements. */
 
   /** \brief Empty constructor creates a BasicDecimal256 with a value of 0. */
   public BasicDecimal256() { super((Pointer)null); allocate(); }
@@ -65,18 +79,38 @@ public class BasicDecimal256 extends Pointer {
   public native @ByRef @Name("operator +=") BasicDecimal256 addPut(@Const @ByRef BasicDecimal256 right);
 
   /** \brief Subtract a number from this one. The result is truncated to 256 bits. */
+  
+  ///
   public native @ByRef @Name("operator -=") BasicDecimal256 subtractPut(@Const @ByRef BasicDecimal256 right);
 
-  /** \brief Get the bits of the two's complement representation of the number. The 4
-   *  elements are in little endian order. The bits within each uint64_t element are in
-   *  native endian order. For example,
-   *  BasicDecimal256(123).little_endian_array() = {123, 0, 0, 0};
-   *  BasicDecimal256(-2).little_endian_array() = {0xFF...FE, 0xFF...FF, 0xFF...FF,
-   *  0xFF...FF}. */
-  public native @Const @ByRef Long4Array little_endian_array();
+  /** \brief Get the bits of the two's complement representation of the number.
+   * 
+   *  The 4 elements are in native endian order. The bits within each uint64_t element
+   *  are in native endian order. For example, on a little endian machine,
+   *    BasicDecimal256(123).native_endian_array() = {123, 0, 0, 0};
+   *    BasicDecimal256(-2).native_endian_array() = {0xFF...FE, 0xFF...FF, 0xFF...FF,
+   *  0xFF...FF}.
+   *  while on a big endian machine,
+   *    BasicDecimal256(123).native_endian_array() = {0, 0, 0, 123};
+   *    BasicDecimal256(-2).native_endian_array() = {0xFF...FF, 0xFF...FF, 0xFF...FF,
+   *  0xFF...FE}. */
+  
+  ///
+  public native @Const @ByRef Long4Array native_endian_array();
+
+  /** \brief Get the bits of the two's complement representation of the number.
+   * 
+   *  The 4 elements are in little endian order. However, the bits within each
+   *  uint64_t element are in native endian order.
+   *  For example, BasicDecimal256(123).little_endian_array() = {123, 0}; */
+  public native @Const @ByVal Long4Array little_endian_array();
+
+  public native @Cast("const uint8_t*") BytePointer native_endian_bytes();
+
+  public native @Cast("uint8_t*") BytePointer mutable_native_endian_bytes();
 
   /** \brief Get the lowest bits of the two's complement representation of the number. */
-  public native @Cast("const uint64_t") long low_bits();
+  public native @Cast("uint64_t") long low_bits();
 
   /** \brief Return the raw bytes of the value in native-endian byte order. */
   public native @ByVal Byte32Array ToBytes();
@@ -86,6 +120,8 @@ public class BasicDecimal256 extends Pointer {
 
   /** \brief Scale multiplier for given scale value. */
   public static native @Const @ByRef BasicDecimal256 GetScaleMultiplier(int scale);
+  /** \brief Half-scale multiplier for given scale value. */
+  public static native @Const @ByRef BasicDecimal256 GetHalfScaleMultiplier(int scale);
 
   /** \brief Convert BasicDecimal256 from one scale to another */
   public native DecimalStatus Rescale(int original_scale, int new_scale,
@@ -137,4 +173,9 @@ public class BasicDecimal256 extends Pointer {
 
   /** \brief In-place division. */
   public native @ByRef @Name("operator /=") BasicDecimal256 dividePut(@Const @ByRef BasicDecimal256 right);
+
+  /** \brief Get the maximum decimal value (is not a valid value). */
+  public static native @Const @ByVal BasicDecimal256 GetMaxSentinel();
+  /** \brief Get the minimum decimal value (is not a valid value). */
+  public static native @Const @ByVal BasicDecimal256 GetMinSentinel();
 }

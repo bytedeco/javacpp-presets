@@ -12,7 +12,17 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** Concrete Array class for numeric data. */
+/** \addtogroup numeric-arrays
+ * 
+ *  \{
+ <p>
+ *  \brief Concrete Array class for numeric data with a corresponding C type
+ * 
+ *  This class is templated on the corresponding DataType subclass for the
+ *  given data, for example NumericArray<Int8Type> or NumericArray<Date32Type>.
+ * 
+ *  Note that convenience aliases are available for all accepted types
+ *  (for example Int8Array for NumericArray<Int8Type>). */
 @Name("arrow::NumericArray<arrow::Int8Type>") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Int8Array extends PrimitiveArray {
     static { Loader.load(); }

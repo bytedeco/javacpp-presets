@@ -34,8 +34,14 @@ public class Decimal128 extends BasicDecimal128 {
     static { Loader.load(); }
 
   
+    
+    ///
     public Decimal128(@Cast("int64_t") long high, @Cast("uint64_t") long low) { super((Pointer)null); allocate(high, low); }
     @NoException(true) private native void allocate(@Cast("int64_t") long high, @Cast("uint64_t") long low);
+    
+    ///
+    public Decimal128(@Const @ByRef Long2Array array) { super((Pointer)null); allocate(array); }
+    @NoException(true) private native void allocate(@Const @ByRef Long2Array array);
     public Decimal128() { super((Pointer)null); allocate(); }
     @NoException(true) private native void allocate();
     public Decimal128(@Cast("const uint8_t*") BytePointer bytes) { super((Pointer)null); allocate(bytes); }

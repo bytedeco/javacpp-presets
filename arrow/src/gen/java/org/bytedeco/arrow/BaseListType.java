@@ -12,7 +12,13 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief Base class for all variable-size list data types */
+/** \}
+ <p>
+ *  \addtogroup nested-datatypes
+ * 
+ *  \{
+ <p>
+ *  \brief Base class for all variable-size list data types */
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseListType extends NestedType {
     static { Loader.load(); }
