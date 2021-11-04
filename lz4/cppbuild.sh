@@ -28,6 +28,8 @@ case $PLATFORM in
     macosx-x86_64)
         make -j $MAKEJ
         PREFIX=$INSTALL_PATH make install
+	# fix library with correct rpath
+        install_name_tool -add_rpath @loader_path/. -id @rpath/liblz4.1.dylib ../lib/liblz4.1.dylib
         ;;
     windows-x86)
         cd build/cmake
