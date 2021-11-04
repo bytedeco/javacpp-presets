@@ -1433,6 +1433,8 @@
         </property>
       </activation>
       <modules>
+        <module>opencv</module>
+        <module>openblas</module>
         <module>llvm</module>
       </modules>
       <properties>
