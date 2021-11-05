@@ -180,6 +180,10 @@ public class FlatBufferModel extends Pointer {
   // reported minimum.
   public native @StdString String GetMinimumRuntime();
 
+  // Return model metadata as a mapping of name & buffer strings.
+  // See Metadata table in TFLite schema.
+  public native @ByVal StringStringMap ReadAllMetadata();
+
   /** Returns true if the model identifier is correct (otherwise false and
    *  reports an error). */
   public native @Cast("bool") boolean CheckModelIdentifier();

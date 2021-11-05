@@ -28,6 +28,5 @@ public class BuiltinOpResolver extends MutableOpResolver {
 
   public BuiltinOpResolver() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public native @ByVal TfLiteDelegatePtrVector GetDelegates(
-        int num_threads);
+  public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
 }

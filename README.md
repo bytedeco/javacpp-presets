@@ -202,9 +202,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Gym 0.21.x  https://github.com/openai/gym
  * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
- * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
+ * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 5.0.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.4.x  https://developer.nvidia.com/cuda-downloads
@@ -215,7 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
  * PyTorch 1.10.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.7.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.14  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment

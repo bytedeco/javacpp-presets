@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBPOSTAL_VERSION=1.1-alpha
+LIBPOSTAL_VERSION=1.1
 download https://github.com/openvenues/libpostal/archive/v$LIBPOSTAL_VERSION.tar.gz libpostal-$LIBPOSTAL_VERSION.tar.gz
 
 mkdir -p $PLATFORM

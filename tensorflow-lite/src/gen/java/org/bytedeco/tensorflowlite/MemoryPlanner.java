@@ -52,4 +52,10 @@ public class MemoryPlanner extends Pointer {
 
   // Returns true if the non-persistent memory is available.
   public native @Cast("bool") boolean HasNonPersistentMemory();
+
+  // Dumps the memory planning information against the specified op node
+  // execution plan (i.e. `execution_plan`) for the purpose of debugging.
+  public native void DumpDebugInfo(@StdVector IntPointer execution_plan);
+  public native void DumpDebugInfo(@StdVector IntBuffer execution_plan);
+  public native void DumpDebugInfo(@StdVector int[] execution_plan);
 }

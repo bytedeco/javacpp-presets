@@ -26,9 +26,15 @@ public class OpResolver extends Pointer {
                                              int version);
   public native @Const TfLiteRegistration FindOp(String op,
                                              int version);
-
   // Returns optional delegates for resolving and handling ops in the flatbuffer
   // model. This may be used in addition to the standard TfLiteRegistration
   // lookup for graph resolution.
+  // WARNING: This API is deprecated, GetDelegateCreators is preferred.
   public native @ByVal TfLiteDelegatePtrVector GetDelegates(int num_threads);
+
+  // Represent a function that creates a TfLite delegate instance.
+  // Returns a vector of delegate creators to create optional delegates for
+  // resolving and handling ops in the flatbuffer model. This may be used in
+  // addition to the standard TfLiteRegistration lookup for graph resolution.
+  public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
 }

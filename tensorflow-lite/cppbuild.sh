@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.6.0
+TENSORFLOW_VERSION=2.7.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -21,6 +21,7 @@ INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
+patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
 
 mkdir -p build
 cd build
@@ -59,11 +60,9 @@ case $PLATFORM in
         ;;
 esac
 
-# revert version for Eigen to work around build failure on Windows
-sedinplace 's/7b35638ddb99a0298c5d3450de506a8e8e0203d3/d10b27fe37736d2944630ecd7557cefa95cf87c9/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/tools/cmake/modules/eigen.cmake
 "$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
-cmake --build . --parallel $MAKEJ
-#cmake --install .
+"$CMAKE" --build . --parallel $MAKEJ
+#"$CMAKE" --install .
 
 # since the build doesn't have an install phase, collect all object files manually
 find -L $(pwd) -iname *.obj -o -iname *.o -not -path "$(pwd)/CMakeFiles/*" > objs

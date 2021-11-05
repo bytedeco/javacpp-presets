@@ -1,61 +1,80 @@
-diff -ruN tesseract-4.1.1/src/api/baseapi.cpp tesseract-4.1.1-android/src/api/baseapi.cpp
---- tesseract-4.1.1/src/api/baseapi.cpp	2019-12-26 23:21:51.000000000 +0900
-+++ tesseract-4.1.1-android/src/api/baseapi.cpp	2019-12-29 07:09:51.811379194 +0900
-@@ -39,6 +39,10 @@
- #include <unistd.h>
- #endif  // _WIN32
- 
-+#include <stdio.h>
-+int fgetpos(FILE* __fp, fpos_t* __pos);
-+int fsetpos(FILE* __fp, const fpos_t* __pos);
-+
- #include <cmath>               // for round, M_PI
- #include <cstdint>             // for int32_t
- #include <cstring>             // for strcmp, strcpy
-diff -ruN tesseract-4.1.1/src/api/Makefile.am tesseract-4.1.1-android/src/api/Makefile.am
---- tesseract-4.1.1/src/api/Makefile.am	2019-12-29 07:09:40.275394645 +0900
-+++ tesseract-4.1.1-android/src/api/Makefile.am	2019-12-29 07:09:51.811379194 +0900
-@@ -80,7 +80,7 @@
- libtesseract_la_LIBADD += ../arch/libtesseract_sse.la
+diff -ruN tesseract-5.0.0-rc1/Makefile.am tesseract-5.0.0-rc1-android/Makefile.am
+--- tesseract-5.0.0-rc1/Makefile.am	2021-11-05 11:05:15.490139095 +0900
++++ tesseract-5.0.0-rc1-android/Makefile.am	2021-11-05 11:01:01.178850425 +0900
+@@ -111,7 +111,7 @@
+ else
+ libtesseract_la_LDFLAGS += $(NOUNDEFINED)
  endif
+-libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_la_LDFLAGS += -avoid-version
  
--libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) $(NOUNDEFINED)
-+libtesseract_la_LDFLAGS += -avoid-version $(NOUNDEFINED)
- 
- bin_PROGRAMS = tesseract
- tesseract_SOURCES = tesseractmain.cpp
-@@ -105,5 +105,5 @@
- libtesseract_la_LDFLAGS += -no-undefined -Wl,--as-needed -lws2_32
+ libtesseract_la_SOURCES = src/api/baseapi.cpp
+ libtesseract_la_SOURCES += src/api/altorenderer.cpp
+@@ -746,7 +746,7 @@
+ tesseract_LDADD += -lws2_32
  endif
  if ADD_RT
 -tesseract_LDADD += -lrt
 +tesseract_LDADD += 
  endif
-diff -ruN tesseract-4.1.1/src/api/Makefile.in tesseract-4.1.1-android/src/api/Makefile.in
---- tesseract-4.1.1/src/api/Makefile.in	2019-12-29 07:09:40.275394645 +0900
-+++ tesseract-4.1.1-android/src/api/Makefile.in	2019-12-29 07:12:16.559185386 +0900
-@@ -92,7 +92,7 @@
- @VISIBILITY_TRUE@am__append_9 = -DTESS_IMPORTS
- @T_WIN_TRUE@am__append_10 = -lws2_32
- @T_WIN_TRUE@am__append_11 = -no-undefined -Wl,--as-needed -lws2_32
--@ADD_RT_TRUE@am__append_12 = -lrt
-+@ADD_RT_TRUE@am__append_12 =
- subdir = src/api
- DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
- 	$(srcdir)/tess_version.h.in $(top_srcdir)/config/depcomp \
-@@ -419,7 +419,7 @@
- 	wordstrboxrenderer.cpp renderer.cpp
+ 
+ # Rules for training tools.
+diff -ruN tesseract-5.0.0-rc1/Makefile.in tesseract-5.0.0-rc1-android/Makefile.in
+--- tesseract-5.0.0-rc1/Makefile.in	2021-11-05 11:05:15.509139117 +0900
++++ tesseract-5.0.0-rc1-android/Makefile.in	2021-11-05 11:01:56.247912934 +0900
+@@ -243,7 +243,7 @@
+ @OPENCL_TRUE@am__append_44 = -I$(top_srcdir)/src/opencl
+ @VISIBILITY_TRUE@am__append_45 = -DTESS_IMPORTS
+ @T_WIN_TRUE@am__append_46 = -lws2_32
+-@ADD_RT_TRUE@am__append_47 = -lrt
++@ADD_RT_TRUE@am__append_47 =
+ @ENABLE_TRAINING_TRUE@am__append_48 = $(EXTRA_PROGRAMS)
+ @DISABLED_LEGACY_ENGINE_TRUE@am__append_49 = -DDISABLED_LEGACY_ENGINE
+ 
+@@ -2185,8 +2185,7 @@
+ lib_LTLIBRARIES = libtesseract.la
  libtesseract_la_LDFLAGS = $(LEPTONICA_LIBS) $(OPENCL_LDFLAGS) \
  	$(libarchive_LIBS) $(libcurl_LIBS) $(TENSORFLOW_LIBS) \
--	-version-info $(GENERIC_LIBRARY_VERSION) $(NOUNDEFINED) \
-+	-avoid-version $(NOUNDEFINED) \
- 	$(am__append_11)
- libtesseract_la_SOURCES = 
- # Dummy C++ source to cause C++ linking.
-diff -ruN tesseract-4.1.1/src/lstm/lstm.cpp tesseract-4.1.1-android/src/lstm/lstm.cpp
---- tesseract-4.1.1/src/lstm/lstm.cpp	2019-12-26 23:21:51.000000000 +0900
-+++ tesseract-4.1.1-android/src/lstm/lstm.cpp	2019-12-29 07:10:04.488362217 +0900
-@@ -33,6 +33,10 @@
+-	$(am__append_4) $(am__append_5) -version-info \
+-	$(GENERIC_LIBRARY_VERSION)
++	$(am__append_4) $(am__append_5) -avoid-version
+ libtesseract_la_SOURCES = src/api/baseapi.cpp src/api/altorenderer.cpp \
+ 	src/api/capi.cpp src/api/hocrrenderer.cpp \
+ 	src/api/lstmboxrenderer.cpp src/api/pdfrenderer.cpp \
+diff -ruN tesseract-5.0.0-rc1/src/api/baseapi.cpp tesseract-5.0.0-rc1-android/src/api/baseapi.cpp
+--- tesseract-5.0.0-rc1/src/api/baseapi.cpp	2021-10-30 05:32:11.000000000 +0900
++++ tesseract-5.0.0-rc1-android/src/api/baseapi.cpp	2021-11-05 11:03:45.115036510 +0900
+@@ -64,6 +64,10 @@
+ #include <tesseract/renderer.h>       // for TessResultRenderer
+ #include <tesseract/resultiterator.h> // for ResultIterator
+ 
++#include <stdio.h>
++int fgetpos(FILE* __fp, fpos_t* __pos);
++int fsetpos(FILE* __fp, const fpos_t* __pos);
++
+ #include <cmath>    // for round, M_PI
+ #include <cstdint>  // for int32_t
+ #include <cstring>  // for strcmp, strcpy
+diff -ruN tesseract-5.0.0-rc1/src/arch/simddetect.cpp tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp
+--- tesseract-5.0.0-rc1/src/arch/simddetect.cpp	2021-10-30 05:32:11.000000000 +0900
++++ tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp	2021-11-05 11:18:31.426042560 +0900
+@@ -211,11 +211,7 @@
+ 
+ #if defined(HAVE_NEON) && !defined(__aarch64__)
+ #  ifdef ANDROID
+-  {
+-    AndroidCpuFamily family = android_getCpuFamily();
+-    if (family == ANDROID_CPU_FAMILY_ARM)
+-      neon_available_ = (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON);
+-  }
++  neon_available_ = false;
+ #  else
+   /* Assume linux */
+   neon_available_ = getauxval(AT_HWCAP) & HWCAP_NEON;
+diff -ruN tesseract-5.0.0-rc1/src/lstm/lstm.cpp tesseract-5.0.0-rc1-android/src/lstm/lstm.cpp
+--- tesseract-5.0.0-rc1/src/lstm/lstm.cpp	2021-10-30 05:32:11.000000000 +0900
++++ tesseract-5.0.0-rc1-android/src/lstm/lstm.cpp	2021-11-05 10:59:57.888778584 +0900
+@@ -37,6 +37,10 @@
  #include "networkscratch.h"
  #include "tprintf.h"
  
@@ -65,13 +84,13 @@ diff -ruN tesseract-4.1.1/src/lstm/lstm.cpp tesseract-4.1.1-android/src/lstm/lst
 +
  // Macros for openmp code if it is available, otherwise empty macros.
  #ifdef _OPENMP
- #define PARALLEL_IF_OPENMP(__num_threads)                                  \
-diff -ruN tesseract-4.1.1/src/lstm/weightmatrix.cpp tesseract-4.1.1-android/src/lstm/weightmatrix.cpp
---- tesseract-4.1.1/src/lstm/weightmatrix.cpp	2019-12-26 23:21:51.000000000 +0900
-+++ tesseract-4.1.1-android/src/lstm/weightmatrix.cpp	2019-12-29 07:10:04.488362217 +0900
+ #  define PARALLEL_IF_OPENMP(__num_threads)                                  \
+diff -ruN tesseract-5.0.0-rc1/src/lstm/weightmatrix.cpp tesseract-5.0.0-rc1-android/src/lstm/weightmatrix.cpp
+--- tesseract-5.0.0-rc1/src/lstm/weightmatrix.cpp	2021-10-30 05:32:11.000000000 +0900
++++ tesseract-5.0.0-rc1-android/src/lstm/weightmatrix.cpp	2021-11-05 10:59:57.888778584 +0900
 @@ -23,6 +23,10 @@
  #include "statistc.h"
- #include "tprintf.h"
+ #include "tprintf.h"    // forTFloat
  
 +#if (defined(_MSC_VER) && _MSC_VER < 1900) || defined(ANDROID)
 +extern double log2(double n);
@@ -80,21 +99,13 @@ diff -ruN tesseract-4.1.1/src/lstm/weightmatrix.cpp tesseract-4.1.1-android/src/
  namespace tesseract {
  
  #if defined(ANDROID)
-diff -ruN tesseract-4.1.1/src/training/fileio.cpp tesseract-4.1.1-android/src/training/fileio.cpp
---- tesseract-4.1.1/src/training/fileio.cpp	2019-12-26 23:21:51.000000000 +0900
-+++ tesseract-4.1.1-android/src/training/fileio.cpp	2019-12-29 07:10:04.487362218 +0900
-@@ -19,7 +19,6 @@
- #include <io.h>
- #endif
- #else
--#include <glob.h>
- #include <unistd.h>
- #endif
- 
-@@ -119,16 +118,7 @@
+diff -ruN tesseract-5.0.0-rc1/src/training/unicharset/fileio.cpp tesseract-5.0.0-rc1-android/src/training/unicharset/fileio.cpp
+--- tesseract-5.0.0-rc1/src/training/unicharset/fileio.cpp	2021-10-30 05:32:11.000000000 +0900
++++ tesseract-5.0.0-rc1-android/src/training/unicharset/fileio.cpp	2021-11-05 11:03:07.307993595 +0900
+@@ -115,16 +115,7 @@
  }
  #else
- bool File::DeleteMatchingFiles(const char* pattern) {
+ bool File::DeleteMatchingFiles(const char *pattern) {
 -  glob_t pglob;
 -  char **paths;
 -  bool all_deleted = true;
@@ -105,7 +116,7 @@ diff -ruN tesseract-4.1.1/src/training/fileio.cpp tesseract-4.1.1-android/src/tr
 -    globfree(&pglob);
 -  }
 -  return all_deleted;
-+    return false;
++  return false
  }
  #endif
  

@@ -1,0 +1,11 @@
+diff -ruN tensorflow-2.7.0/tensorflow/lite/simple_memory_arena_debug_dump.cc tensorflow-2.7.0-patch/tensorflow/lite/simple_memory_arena_debug_dump.cc
+--- tensorflow-2.7.0/tensorflow/lite/simple_memory_arena_debug_dump.cc	2021-11-01 10:31:04.000000000 +0900
++++ tensorflow-2.7.0-patch/tensorflow/lite/simple_memory_arena_debug_dump.cc	2021-11-05 11:49:52.665796297 +0900
+@@ -15,6 +15,7 @@
+ #include <algorithm>
+ #include <cstdio>
+ #include <functional>
++#include <limits>
+ #include <queue>
+ #include <string>
+ #include <vector>
