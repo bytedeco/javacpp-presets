@@ -53,4 +53,9 @@ public class veo implements InfoMapper {
 
     public void map(InfoMap infoMap) {
     }
+
+    public static native String getenv(String name);
+    public static int setenv(String name, String value) { return setenv(name, value, 1); }
+    public static native int setenv(String name, String value, int overwrite);
+    public static native int unsetenv(String name);
 }
