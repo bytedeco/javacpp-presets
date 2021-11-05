@@ -14,6 +14,9 @@ public class tensorflowlite extends org.bytedeco.tensorflowlite.presets.tensorfl
 // Targeting ../StringIntMap.java
 
 
+// Targeting ../StringStringMap.java
+
+
 // Targeting ../TfLiteDelegatePtrVector.java
 
 
@@ -207,7 +210,9 @@ public static final int
   kTfLiteBuiltinConv3dTranspose = 141,
   kTfLiteBuiltinVarHandle = 142,
   kTfLiteBuiltinReadVariable = 143,
-  kTfLiteBuiltinAssignVariable = 144;
+  kTfLiteBuiltinAssignVariable = 144,
+  kTfLiteBuiltinBroadcastArgs = 145,
+  kTfLiteBuiltinRandomStandardNormal = 146;
 
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
@@ -282,7 +287,11 @@ public static final int
 
   // Generally referring to data-writing issues in delegate serialization.
   // See tflite::delegates::Serialization.
-  kTfLiteDelegateDataWriteError = 5;
+  kTfLiteDelegateDataWriteError = 5,
+
+  // Generally referring to data-reading issues in delegate serialization.
+  // See tflite::delegates::Serialization.
+  kTfLiteDelegateDataReadError = 6;
 
 // Types supported by tensor
 /** enum TfLiteType */
@@ -801,6 +810,49 @@ public static native void TfLiteInterpreterOptionsSetUseNNAPI(
 public static native void TfLiteInterpreterOptionsSetEnableDelegateFallback(
     TfLiteInterpreterOptions options, @Cast("bool") boolean enable);
 
+// Set if buffer handle output is allowed.
+//
+/** When using hardware delegation, Interpreter will make the data of output
+ *  tensors available in {@code tensor->data} by default. If the application can
+ *  consume the buffer handle directly (e.g. reading output from OpenGL
+ *  texture), it can set this flag to false, so Interpreter won't copy the
+ *  data from buffer handle to CPU memory. WARNING: This is an experimental
+ *  API and subject to change. */
+public static native void TfLiteSetAllowBufferHandleOutput(
+    @Const TfLiteInterpreter interpreter, @Cast("bool") boolean allow_buffer_handle_output);
+
+/** Allow a delegate to look at the graph and modify the graph to handle
+ *  parts of the graph themselves. After this is called, the graph may
+ *  contain new nodes that replace 1 more nodes.
+ *  'delegate' must outlive the interpreter.
+ *  Use {@code TfLiteInterpreterOptionsAddDelegate} instead of this unless
+ *  absolutely required.
+ *  Returns one of the following three status codes:
+ *  1. kTfLiteOk: Success.
+ *  2. kTfLiteDelegateError: Delegation failed due to an error in the
+ *  delegate. The Interpreter has been restored to its pre-delegation state.
+ *  NOTE: This undoes all delegates previously applied to the Interpreter.
+ *  3. kTfLiteError: Unexpected/runtime failure.
+ *  WARNING: This is an experimental API and subject to change. */
+
+///
+public static native @Cast("TfLiteStatus") int TfLiteInterpreterModifyGraphWithDelegate(
+    @Const TfLiteInterpreter interpreter, TfLiteDelegate delegate);
+
+/** Returns the tensor index corresponding to the input tensor
+ * 
+ *  WARNING: This is an experimental API and subject to change. */
+
+///
+public static native int TfLiteInterpreterGetInputTensorIndex(
+    @Const TfLiteInterpreter interpreter, int input_index);
+
+/** Returns the tensor index corresponding to the output tensor
+ * 
+ *  WARNING: This is an experimental API and subject to change. */
+public static native int TfLiteInterpreterGetOutputTensorIndex(
+    @Const TfLiteInterpreter interpreter, int output_index);
+
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
 
@@ -1304,6 +1356,7 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_CORE_API_OP_RESOLVER_H_
 // #define TENSORFLOW_LITE_CORE_API_OP_RESOLVER_H_
 
+// #include <functional>
 // #include <memory>
 // #include <vector>
 
@@ -1429,6 +1482,42 @@ limitations under the License.
 // #endif  // TENSORFLOW_LITE_CORE_API_VERIFIER_H_
 
 
+// Parsed from tensorflow/lite/experimental/resource/initialization_status.h
+
+/* Copyright 2021 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_LITE_EXPERIMENTAL_RESOURCE_INITIALIZATION_STATUS_H_
+// #define TENSORFLOW_LITE_EXPERIMENTAL_RESOURCE_INITIALIZATION_STATUS_H_
+
+// #include "tensorflow/lite/c/common.h"
+// #include "tensorflow/lite/experimental/resource/resource_base.h"
+// Targeting ../InitializationStatus.java
+
+
+
+/** WARNING: Experimental interface, subject to change. */
+
+@Namespace("tflite::resource") public static native InitializationStatus GetInitializationStatus(@Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap map,
+                                              int subgraph_id);
+
+  // namespace resource
+  // namespace tflite
+
+// #endif  // TENSORFLOW_LITE_EXPERIMENTAL_RESOURCE_INITIALIZATION_STATUS_H_
+
+
 // Parsed from tensorflow/lite/experimental/resource/resource_base.h
 
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
@@ -1496,9 +1585,9 @@ limitations under the License.
 // Targeting ../Allocation.java
 
 
-// Targeting ../MMAPAllocation.java
 
-
+// Note that not all platforms support MMAP-based allocation.
+// Use `IsSupported()` to check.
 // Targeting ../FileCopyAllocation.java
 
 
@@ -1546,6 +1635,49 @@ limitations under the License.
 // #endif  // TENSORFLOW_LITE_STDERR_REPORTER_H_
 
 
+// Parsed from tensorflow/lite/graph_info.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_LITE_GRAPH_INFO_H_
+// #define TENSORFLOW_LITE_GRAPH_INFO_H_
+
+// #include <stddef.h>
+
+// #include <vector>
+
+// #include "tensorflow/lite/c/common.h"
+// Targeting ../GraphInfo.java
+
+
+// Targeting ../NodeSubset.java
+
+
+
+// Partitions a list of node indices `nodes_to_partition` into node sub sets.
+// Each node sub set is in dependency order (i.e. all members of the node sub
+// sets). `node_subsets` is assumed to be empty.
+@Namespace("tflite") public static native @Cast("TfLiteStatus") int PartitionGraphIntoIndependentNodeSubsets(
+    @Const GraphInfo info, @Const TfLiteIntArray nodes_to_partition,
+    @StdVector NodeSubset node_subsets);
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_LITE_GRAPH_INFO_H_
+
+
 // Parsed from tensorflow/lite/memory_planner.h
 
 /* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
@@ -1564,6 +1696,8 @@ limitations under the License.
 ==============================================================================*/
 // #ifndef TENSORFLOW_LITE_MEMORY_PLANNER_H_
 // #define TENSORFLOW_LITE_MEMORY_PLANNER_H_
+
+// #include <vector>
 
 // #include "tensorflow/lite/c/common.h"
 // Targeting ../MemoryPlanner.java
@@ -1784,9 +1918,14 @@ limitations under the License.
 // #include "tensorflow/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/api/profiler.h"
 // #include "tensorflow/lite/core/macros.h"
+// #include "tensorflow/lite/experimental/resource/initialization_status.h"
 // #include "tensorflow/lite/experimental/resource/resource_base.h"
+// #include "tensorflow/lite/graph_info.h"
 // #include "tensorflow/lite/memory_planner.h"
 // #include "tensorflow/lite/util.h"
+// Targeting ../SingleOpModel.java
+
+
 // Targeting ../TestDelegate.java
 
   // Class for friend declarations.
@@ -1907,6 +2046,47 @@ limitations under the License.
 
   // namespace tflite
 // #endif  // TENSORFLOW_LITE_PORTABLE_TYPE_TO_TFLITETYPE_H_
+
+
+// Parsed from tensorflow/lite/signature_runner.h
+
+/* Copyright 2021 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_LITE_CORE_SIGNATURE_RUNNER_H_
+// #define TENSORFLOW_LITE_CORE_SIGNATURE_RUNNER_H_
+
+// #include <cstddef>
+// #include <cstdint>
+// #include <string>
+
+// #include "tensorflow/lite/c/common.h"
+// #include "tensorflow/lite/core/subgraph.h"
+// #include "tensorflow/lite/internal/signature_def.h"
+// Targeting ../SignatureRunnerJNIHelper.java
+
+
+// Targeting ../TensorHandle.java
+
+
+// Targeting ../SignatureRunner.java
+
+
+
+  // namespace tflite
+
+// #endif  // TENSORFLOW_LITE_CORE_SIGNATURE_RUNNER_H_
 
 
 // Parsed from tensorflow/lite/type_to_tflitetype.h
@@ -2058,10 +2238,13 @@ limitations under the License.
 // #include "tensorflow/lite/core/api/error_reporter.h"
 // #include "tensorflow/lite/core/api/profiler.h"
 // #include "tensorflow/lite/core/subgraph.h"
+// #include "tensorflow/lite/experimental/resource/initialization_status.h"
 // #include "tensorflow/lite/experimental/resource/resource_base.h"
 // #include "tensorflow/lite/external_cpu_backend_context.h"
+// #include "tensorflow/lite/internal/signature_def.h"
 // #include "tensorflow/lite/memory_planner.h"
 // #include "tensorflow/lite/portable_type_to_tflitetype.h"
+// #include "tensorflow/lite/signature_runner.h"
 // #include "tensorflow/lite/stderr_reporter.h"
 // #include "tensorflow/lite/string_type.h"
 // #include "tensorflow/lite/type_to_tflitetype.h"
@@ -2075,6 +2258,10 @@ limitations under the License.
 
   // Class for friend declarations.
   // namespace test_utils
+
+// Targeting ../InterpreterWrapper.java
+
+  // Class for friend declarations.
 
 // Targeting ../Interpreter.java
 
@@ -2110,6 +2297,7 @@ limitations under the License.
 
 // #include <stddef.h>
 
+// #include <map>
 // #include <memory>
 // #include <string>
 
@@ -2153,7 +2341,9 @@ limitations under the License.
 // #ifndef TENSORFLOW_LITE_INTERPRETER_BUILDER_H_
 // #define TENSORFLOW_LITE_INTERPRETER_BUILDER_H_
 
+// #include <map>
 // #include <memory>
+// #include <string>
 // #include <vector>
 
 // #include "flatbuffers/flatbuffers.h"  // from @flatbuffers

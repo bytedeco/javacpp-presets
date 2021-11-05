@@ -18,8 +18,8 @@ runs:
 
         echo Removing broken stuff from WSL and MSYS2
         rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
-        rm "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
-        rm "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
+        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
+        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
 
         python -m pip install gdown || python -m pip install gdown
 

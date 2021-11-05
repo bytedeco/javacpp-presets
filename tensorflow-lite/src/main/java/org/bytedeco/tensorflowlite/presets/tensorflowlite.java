@@ -56,15 +56,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/core/api/op_resolver.h",
                 "tensorflow/lite/core/api/profiler.h",
                 "tensorflow/lite/core/api/verifier.h",
+                "tensorflow/lite/experimental/resource/initialization_status.h",
                 "tensorflow/lite/experimental/resource/resource_base.h",
                 "tensorflow/lite/allocation.h",
                 "tensorflow/lite/stderr_reporter.h",
+                "tensorflow/lite/graph_info.h",
                 "tensorflow/lite/memory_planner.h",
                 "tensorflow/lite/util.h",
                 "tensorflow/lite/core/macros.h",
                 "tensorflow/lite/core/subgraph.h",
                 "tensorflow/lite/external_cpu_backend_context.h",
                 "tensorflow/lite/portable_type_to_tflitetype.h",
+                "tensorflow/lite/signature_runner.h",
                 "tensorflow/lite/type_to_tflitetype.h",
                 "tensorflow/lite/string_type.h",
                 "tensorflow/lite/mutable_op_resolver.h",
@@ -86,13 +89,14 @@ public class tensorflowlite implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK").cppTypes().annotations())
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
-               .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError").skip())
-               .put(new Info("tflite::Model", "tflite::OperatorCode").cast().pointerTypes("Pointer"))
+               .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation").skip())
+               .put(new Info("tflite::Model", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
                .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("String", "BytePointer").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<const std::string*>").pointerTypes("StringVector").define())
                .put(new Info("std::map<std::string,uint32_t>").pointerTypes("StringIntMap").define())
+               .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)>").annotations("@UniquePtr(\"TfLiteDelegate,void(*)(TfLiteDelegate*)\")").pointerTypes("TfLiteDelegate"))
                .put(new Info("std::unique_ptr<TfLiteIntArray,tflite::TfLiteIntArrayDeleter>").annotations("@UniquePtr(\"TfLiteIntArray,tflite::TfLiteIntArrayDeleter\")").pointerTypes("TfLiteIntArray"))
                .put(new Info("std::unique_ptr<tflite::Subgraph>").annotations("@UniquePtr").pointerTypes("Subgraph")
