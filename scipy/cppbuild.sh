@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.7.1
+SCIPY_VERSION=1.7.2
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
@@ -89,7 +89,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.21.3 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.21.4 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
@@ -144,12 +144,14 @@ case $PLATFORM in
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done
         ;;
     windows-x86)
+        export CL="-m32"
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
         ;;
     windows-x86_64)
+        export CL="-m64"
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows

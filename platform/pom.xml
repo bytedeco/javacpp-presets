@@ -179,7 +179,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.4.2-${project.version}</version>
+      <version>2.4.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -214,12 +214,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.21.3-${project.version}</version>
+      <version>1.21.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.7.1-${project.version}</version>
+      <version>1.7.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -309,12 +309,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>0.7.2-${project.version}</version>
+      <version>0.7.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.11.1-${project.version}</version>
+      <version>2.12.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

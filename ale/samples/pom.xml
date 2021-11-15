@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.7.2-1.5.7-SNAPSHOT</version>
+            <version>0.7.3-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
