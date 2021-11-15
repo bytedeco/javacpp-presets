@@ -109,6 +109,18 @@ public class StereoDepth extends Node {
     @MemberGetter public native @ByRef Output debugDispLrCheckIt2();
 
     /**
+     * Outputs ImgFrame message that carries extended left-right check first iteration (downscaled frame, before combining with second iteration) disparity map.
+     * Useful for debugging/fine tuning.
+     */
+    @MemberGetter public native @ByRef Output debugExtDispLrCheckIt1();
+
+    /**
+     * Outputs ImgFrame message that carries extended left-right check second iteration (downscaled frame, before combining with first iteration) disparity map.
+     * Useful for debugging/fine tuning.
+     */
+    @MemberGetter public native @ByRef Output debugExtDispLrCheckIt2();
+
+    /**
      * Outputs ImgFrame message that carries cost dump of disparity map.
      * Useful for debugging/fine tuning.
      */

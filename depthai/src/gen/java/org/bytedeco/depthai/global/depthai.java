@@ -1247,6 +1247,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/common/optional.hpp"
 
 @Namespace("dai") public enum TrackerType {
+    /** Kernelized Correlation Filter tracking */
+    SHORT_TERM_KCF(1),
+    /** Short term tracking without using image data */
+    SHORT_TERM_IMAGELESS(3),
     /** Ability to track the objects without accessing image data. */
     ZERO_TERM_IMAGELESS(5),
     /** Tracking using image data too. */

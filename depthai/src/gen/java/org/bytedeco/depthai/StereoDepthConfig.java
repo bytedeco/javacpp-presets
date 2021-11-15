@@ -91,6 +91,12 @@ public class StereoDepthConfig extends Buffer {
     public native void setLeftRightCheck(@Cast("bool") boolean enable);
 
     /**
+     * Disparity range increased from 95 to 190, combined from full resolution and downscaled images.
+     * Suitable for short range objects
+     */
+    public native void setExtendedDisparity(@Cast("bool") boolean enable);
+
+    /**
      * Computes disparity with sub-pixel interpolation (5 fractional bits).
      *
      * Suitable for long range. Currently incompatible with extended disparity
