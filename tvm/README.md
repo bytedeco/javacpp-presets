@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TVM 0.7.0  http://tvm.apache.org/
+ * TVM 0.8.0  http://tvm.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -28,7 +28,7 @@ Sample Usage
 ------------
 Here is a simple example of TVM ported to Java from these source files in Python and C++:
 
- * https://github.com/apache/tvm/tree/v0.7/apps/howto_deploy/
+ * https://github.com/apache/tvm/tree/v0.8/apps/howto_deploy/
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `HowtoDeploy.java` source files below, simply execute on the command line:
 ```bash
@@ -49,14 +49,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform</artifactId>
-            <version>0.7.0-1.5.7-SNAPSHOT</version>
+            <version>0.8.0-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tvm-platform-gpu</artifactId>
-            <version>0.7.0-1.5.7-SNAPSHOT</version>
+            <version>0.8.0-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
@@ -245,16 +245,16 @@ public class HowtoDeploy {
         // Verify(mod_syslib, "addonesys");
     }
 
-    static void DeployGraphRuntime() {
-        System.out.println("Running graph runtime...");
+    static void DeployGraphExecutor() {
+        System.out.println("Running graph executor...");
         // load in the library
-        DLContext ctx = new DLContext().device_type(kDLCPU).device_id(0);
+        DLDevice dev = new DLDevice().device_type(kDLCPU).device_id(0);
         Module mod_factory = Module.LoadFromFile("lib/test_relay_add.so");
-        // create the graph runtime module
+        // create the graph executor module
         TVMValue values = new TVMValue(2);
         IntPointer codes = new IntPointer(2);
         TVMArgsSetter setter = new TVMArgsSetter(values, codes);
-        setter.apply(0, ctx);
+        setter.apply(0, dev);
         TVMRetValue rv = new TVMRetValue();
         mod_factory.GetFunction("default").CallPacked(new TVMArgs(values, codes, 1), rv);
         Module gmod = rv.asModule();
@@ -263,8 +263,8 @@ public class HowtoDeploy {
         PackedFunc run = gmod.GetFunction("run");
 
         // Use the C++ API
-        NDArray x = NDArray.Empty(new long[]{2, 2}, new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1), ctx);
-        NDArray y = NDArray.Empty(new long[]{2, 2}, new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1), ctx);
+        NDArray x = NDArray.Empty(new ShapeTuple(2, 2), new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1), dev);
+        NDArray y = NDArray.Empty(new ShapeTuple(2, 2), new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1), dev);
         FloatPointer xdata = new FloatPointer(x.accessDLTensor().data());
         FloatPointer ydata = new FloatPointer(y.accessDLTensor().data());
 
@@ -299,7 +299,7 @@ public class HowtoDeploy {
 
         PrepareTestLibs();
         DeploySingleOp();
-        DeployGraphRuntime();
+        DeployGraphExecutor();
         System.exit(0);
     }
 }

@@ -17,37 +17,31 @@ import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
-
-/**
- * \brief A custom smart pointer for Object.
- * \tparam T the content data type.
- * @see make_object
- */
-@Name("tvm::runtime::ObjectPtr<tvm::runtime::Object>") @NoOffset @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
-public class ObjectPtr extends Pointer {
+@Name("tvm::runtime::ObjectPtr<tvm::runtime::MapNode>") @NoOffset @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
+public class MapNodePtr extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ObjectPtr(Pointer p) { super(p); }
+    public MapNodePtr(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ObjectPtr(long size) { super((Pointer)null); allocateArray(size); }
+    public MapNodePtr(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public ObjectPtr position(long position) {
-        return (ObjectPtr)super.position(position);
+    @Override public MapNodePtr position(long position) {
+        return (MapNodePtr)super.position(position);
     }
-    @Override public ObjectPtr getPointer(long i) {
-        return new ObjectPtr((Pointer)this).offsetAddress(i);
+    @Override public MapNodePtr getPointer(long i) {
+        return new MapNodePtr((Pointer)this).offsetAddress(i);
     }
 
   /** \brief default constructor */
-  public ObjectPtr() { super((Pointer)null); allocate(); }
+  public MapNodePtr() { super((Pointer)null); allocate(); }
   private native void allocate();
   /** \brief default constructor */  // NOLINT(*)
   /**
    * \brief copy constructor
    * @param other The value to be moved
    */
-  public ObjectPtr(@Const @ByRef ObjectPtr other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@Const @ByRef ObjectPtr other);
+  public MapNodePtr(@Const @ByRef MapNodePtr other) { super((Pointer)null); allocate(other); }
+  private native void allocate(@Const @ByRef MapNodePtr other);
   /**
    * \brief copy constructor
    * @param other The value to be moved
@@ -65,25 +59,25 @@ public class ObjectPtr extends Pointer {
    * \brief Swap this array with another Object
    * @param other The other Object
    */
-  public native void swap(@ByRef ObjectPtr other);
+  public native void swap(@ByRef MapNodePtr other);
   /**
    * @return Get the content of the pointer
    */
-  public native TVMObject get();
+  public native MapNode get();
   /**
    * @return The pointer
    */
-  public native @Name("operator ->") TVMObject access();
+  public native @Name("operator ->") MapNode access();
   /**
    * @return The reference
    */
-  public native @ByRef @Name("operator *") TVMObject multiply();
+  public native @ByRef @Name("operator *") MapNode multiply();
   /**
    * \brief copy assignment
    * @param other The value to be assigned.
    * @return reference to self.
    */
-  public native @ByRef @Name("operator =") ObjectPtr put(@Const @ByRef ObjectPtr other);
+  public native @ByRef @Name("operator =") MapNodePtr put(@Const @ByRef MapNodePtr other);
   /**
    * \brief move assignment
    * @param other The value to be assigned.
@@ -96,9 +90,9 @@ public class ObjectPtr extends Pointer {
   /** @return whether the reference is unique */
   public native @Cast("bool") boolean unique();
   /** @return Whether two ObjectPtr do not equal each other */
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ObjectPtr other);
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef MapNodePtr other);
   /** @return Whether two ObjectPtr equals each other */
-  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef ObjectPtr other);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef MapNodePtr other);
   /** @return Whether the pointer is nullptr */
   /** @return Whether the pointer is not nullptr */
 }
