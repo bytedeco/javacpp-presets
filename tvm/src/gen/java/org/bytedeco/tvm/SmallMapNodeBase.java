@@ -17,22 +17,22 @@ import static org.bytedeco.mkl.global.mkl_rt.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
-@Name("tvm::runtime::InplaceArrayBase<tvm::runtime::ArrayNode,tvm::runtime::ObjectRef>") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
-public class ArrayNodeBase extends Pointer {
+@Name("tvm::runtime::InplaceArrayBase<tvm::runtime::SmallMapNode,tvm::runtime::MapNode::KVType>") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)
+public class SmallMapNodeBase extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public ArrayNodeBase() { super((Pointer)null); allocate(); }
+    public SmallMapNodeBase() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ArrayNodeBase(long size) { super((Pointer)null); allocateArray(size); }
+    public SmallMapNodeBase(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ArrayNodeBase(Pointer p) { super(p); }
+    public SmallMapNodeBase(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public ArrayNodeBase position(long position) {
-        return (ArrayNodeBase)super.position(position);
+    @Override public SmallMapNodeBase position(long position) {
+        return (SmallMapNodeBase)super.position(position);
     }
-    @Override public ArrayNodeBase getPointer(long i) {
-        return new ArrayNodeBase((Pointer)this).offsetAddress(i);
+    @Override public SmallMapNodeBase getPointer(long i) {
+        return new SmallMapNodeBase((Pointer)this).offsetAddress(i);
     }
 
   /**
@@ -46,7 +46,7 @@ public class ArrayNodeBase extends Pointer {
    * @param idx The index of the element.
    * @return Reference to ElemType at the index.
    */
-  public native @ByRef @Name("operator []") ObjectRef get(@Cast("size_t") long idx);
+  public native @Cast("tvm::runtime::MapNode::KVType*") @ByRef @Name("operator []") Pointer get(@Cast("size_t") long idx);
 
   /**
    * \brief Destroy the Inplace Array Base object
