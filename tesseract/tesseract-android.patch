@@ -23,13 +23,13 @@ diff -ruN tesseract-5.0.0-rc1/Makefile.in tesseract-5.0.0-rc1-android/Makefile.i
 --- tesseract-5.0.0-rc1/Makefile.in	2021-11-05 11:05:15.509139117 +0900
 +++ tesseract-5.0.0-rc1-android/Makefile.in	2021-11-05 11:01:56.247912934 +0900
 @@ -243,7 +243,7 @@
- @OPENCL_TRUE@am__append_44 = -I$(top_srcdir)/src/opencl
- @VISIBILITY_TRUE@am__append_45 = -DTESS_IMPORTS
- @T_WIN_TRUE@am__append_46 = -lws2_32
--@ADD_RT_TRUE@am__append_47 = -lrt
-+@ADD_RT_TRUE@am__append_47 =
- @ENABLE_TRAINING_TRUE@am__append_48 = $(EXTRA_PROGRAMS)
- @DISABLED_LEGACY_ENGINE_TRUE@am__append_49 = -DDISABLED_LEGACY_ENGINE
+ @OPENCL_TRUE@am__append_43 = -I$(top_srcdir)/src/opencl
+ @VISIBILITY_TRUE@am__append_44 = -DTESS_IMPORTS
+ @T_WIN_TRUE@am__append_45 = -lws2_32
+-@ADD_RT_TRUE@am__append_46 = -lrt
++@ADD_RT_TRUE@am__append_46 =
+ @ENABLE_TRAINING_TRUE@am__append_47 = $(EXTRA_PROGRAMS)
+ @DISABLED_LEGACY_ENGINE_TRUE@am__append_48 = -DDISABLED_LEGACY_ENGINE
  
 @@ -2185,8 +2185,7 @@
  lib_LTLIBRARIES = libtesseract.la
