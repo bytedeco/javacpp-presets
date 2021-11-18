@@ -61,9 +61,9 @@ public class inner_product_forward extends primitive {
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param src_desc Memory descriptor for src.
-         *  @param weights_desc Memory descriptor for diff weights.
-         *  @param bias_desc Memory descriptor for diff bias.
-         *  @param dst_desc Memory descriptor for diff dst. */
+         *  @param weights_desc Memory descriptor for weights.
+         *  @param bias_desc Memory descriptor for bias.
+         *  @param dst_desc Memory descriptor for dst. */
         
         ///
         ///
@@ -91,7 +91,7 @@ public class inner_product_forward extends primitive {
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
          *  @param src_desc Memory descriptor for src.
-         *  @param weights_desc Memory descriptor for diff weights.
+         *  @param weights_desc Memory descriptor for weights.
          *  @param dst_desc Memory descriptor for dst. */
         public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,

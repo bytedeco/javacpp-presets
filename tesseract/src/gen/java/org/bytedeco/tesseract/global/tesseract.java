@@ -251,7 +251,7 @@ public static final int TESSERACT_VERSION =
    TESSERACT_MINOR_VERSION <<  8 | 
    TESSERACT_MICRO_VERSION);
 
-public static final String TESSERACT_VERSION_STR = "5.0.0-rc1";
+public static final String TESSERACT_VERSION_STR = "5.0.0-rc2";
 
 // clang-format on
 
@@ -524,14 +524,6 @@ public static final int
                                // in any of the above should be set to the
                                // default OEM_TESSERACT_ONLY.
   OEM_COUNT = 4;                    // Number of OEMs
-
-/** enum class tesseract::ThresholdMethod */
-public static final int
-  Otsu = 0,          // Tesseract's legacy Otsu
-  LeptonicaOtsu = 1, // Leptonica's Otsu
-  Sauvola = 2,       // Leptonica's Sauvola
-
-  Max = 3;        // Number of Thresholding methods
 
  // namespace tesseract.
 
