@@ -264,6 +264,14 @@ public class PageIterator extends Pointer {
   public native @Cast("bool") boolean Baseline(@Cast("tesseract::PageIteratorLevel") int level, int[] x1, int[] y1, int[] x2,
                   int[] y2);
 
+  // Returns the attributes of the current row.
+  public native void RowAttributes(FloatPointer row_height, FloatPointer descenders,
+                       FloatPointer ascenders);
+  public native void RowAttributes(FloatBuffer row_height, FloatBuffer descenders,
+                       FloatBuffer ascenders);
+  public native void RowAttributes(float[] row_height, float[] descenders,
+                       float[] ascenders);
+
   /**
    * Returns orientation for the block the iterator points to.
    *   orientation, writing_direction, textline_order: see publictypes.h

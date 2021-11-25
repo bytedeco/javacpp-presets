@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ModSecurity 3.0.5  https://github.com/SpiderLabs/ModSecurity
+ * ModSecurity 3.0.6  https://github.com/SpiderLabs/ModSecurity
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -48,7 +48,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.modsecurity</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ModSecuritySimpleIntervention</exec.mainClass>
     </properties>
@@ -56,7 +56,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>modsecurity-platform</artifactId>
-            <version>3.0.5-1.5.6</version>
+            <version>3.0.6-1.5.7-SNAPSHOT</version>
        </dependency>
     </dependencies>
     <build>

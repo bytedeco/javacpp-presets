@@ -737,6 +737,24 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/filesystem/type_fwd.h"  // IWYU pragma: export
 // #include "arrow/type_fwd.h"             // IWYU pragma: export
 
+/** \brief Controls what happens if files exist in an output directory during a dataset
+ *  write */
+@Namespace("arrow::dataset") public enum ExistingDataBehavior {
+  /** Deletes all files in a directory the first time that directory is encountered */
+  kDeleteMatchingPartitions((byte)(0)),
+  /** Ignores existing files, overwriting any that happen to have the same name as an
+   *  output file */
+  kOverwriteOrIgnore((byte)(1)),
+  /** Returns an error if there are any files or subdirectories in the output directory */
+  kError((byte)(2));
+
+    public final byte value;
+    private ExistingDataBehavior(byte v) { this.value = v; }
+    private ExistingDataBehavior(ExistingDataBehavior e) { this.value = e.value; }
+    public ExistingDataBehavior intern() { for (ExistingDataBehavior e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
   // namespace dataset
   // namespace arrow
 
@@ -1163,24 +1181,6 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/FileWriter.java
 
 
-
-/** \brief Controls what happens if files exist in an output directory during a dataset
- *  write */
-@Namespace("arrow::dataset") public enum ExistingDataBehavior {
-  /** Deletes all files in a directory the first time that directory is encountered */
-  kDeleteMatchingPartitions((byte)(0)),
-  /** Ignores existing files, overwriting any that happen to have the same name as an
-   *  output file */
-  kOverwriteOrIgnore((byte)(1)),
-  /** Returns an error if there are any files or subdirectories in the output directory */
-  kError((byte)(2));
-
-    public final byte value;
-    private ExistingDataBehavior(byte v) { this.value = v; }
-    private ExistingDataBehavior(ExistingDataBehavior e) { this.value = e.value; }
-    public ExistingDataBehavior intern() { for (ExistingDataBehavior e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
 // Targeting ../../arrow_dataset/FileSystemDatasetWriteOptions.java
 
 

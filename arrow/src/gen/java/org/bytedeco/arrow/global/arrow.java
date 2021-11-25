@@ -179,20 +179,20 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 
 public static final int ARROW_VERSION_MAJOR = 6;
 public static final int ARROW_VERSION_MINOR = 0;
-public static final int ARROW_VERSION_PATCH = 0;
+public static final int ARROW_VERSION_PATCH = 1;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-public static final String ARROW_VERSION_STRING = "6.0.0";
+public static final String ARROW_VERSION_STRING = "6.0.1";
 
 public static final String ARROW_SO_VERSION = "600";
-public static final String ARROW_FULL_SO_VERSION = "600.0.0";
+public static final String ARROW_FULL_SO_VERSION = "600.1.0";
 
 public static final String ARROW_CXX_COMPILER_ID = "GNU";
 public static final String ARROW_CXX_COMPILER_VERSION = "11.2.1";
 public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
 
-public static final String ARROW_GIT_ID = "fbe1e523beebb316e37d94c422a18d871f3db270";
-public static final String ARROW_GIT_DESCRIPTION = "1.5.6-26-gfbe1e523be-dirty";
+public static final String ARROW_GIT_ID = "e775221fedf1bfde838026a7fee97af18e90775a";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.6-33-ge775221fed-dirty";
 
 public static final String ARROW_PACKAGE_KIND = "";
 
@@ -383,13 +383,16 @@ public static final String ARROW_PACKAGE_KIND = "";
 // #define ARROW_SUPPRESS_DEPRECATION_WARNING
 //   _Pragma("clang diagnostic push");
 //   _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING _Pragma("clang diagnostic pop")
 // #elif defined(__GNUC__)
 // #define ARROW_SUPPRESS_DEPRECATION_WARNING
 //   _Pragma("GCC diagnostic push");
 //   _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING _Pragma("GCC diagnostic pop")
 // #elif defined(_MSC_VER)
 // #define ARROW_SUPPRESS_DEPRECATION_WARNING
 //   __pragma(warning(push)) __pragma(warning(disable : 4996))
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING __pragma(warning(pop))
 // #else
 // #define ARROW_SUPPRESS_DEPRECATION_WARNING
 // #define ARROW_UNSUPPRESS_DEPRECATION_WARNING

@@ -438,6 +438,13 @@ public class DeviceBase extends Pointer {
     public native @StdVector @Cast("dai::CameraBoardSocket*") IntPointer getConnectedCameras();
 
     /**
+     * Get sensor names for cameras that are connected to the device
+     *
+     * @return Map/dictionary with camera sensor names, indexed by socket
+     */
+    public native @ByVal CameraBoardSocketStringMap getCameraSensorNames();
+
+    /**
      * Retrieves current DDR memory information from device
      *
      * @return Used, remaining and total ddr memory
