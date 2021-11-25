@@ -208,6 +208,7 @@ public class depthai implements InfoMapper {
                .put(new Info("const std::vector<std::pair<std::string,dai::AssetView> >",
                                    "std::vector<std::pair<std::string,dai::AssetView> >").pointerTypes("StringAssetViewPairVector").define())
                .put(new Info("std::unordered_set<dai::Node::Connection>").pointerTypes("ConnectionSet").define())
+               .put(new Info("std::unordered_map<dai::CameraBoardSocket,std::string>").pointerTypes("CameraBoardSocketStringMap").define())
                .put(new Info("std::unordered_map<dai::CameraBoardSocket,dai::CameraInfo>").pointerTypes("CameraBoardSocketCameraInfoMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::unordered_set<dai::Node::Connection> >").pointerTypes("NodeIdConnectionSetMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())

@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.7.2
+SCIPY_VERSION=1.7.3
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 

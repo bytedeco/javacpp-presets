@@ -44,13 +44,23 @@ public class VideoEncoder extends Node {
 
     // Sets default options for a specified size and profile
     /**
+     * Sets a default preset based on specified frame rate and profile
+     * @param fps Frame rate in frames per second
+     * @param profile Encoding profile
+     */
+    public native void setDefaultProfilePreset(float fps, @ByVal VideoEncoderProperties.Profile profile);
+
+    /**
      * Sets a default preset based on specified input size, frame rate and profile
      * @param width Input frame width
      * @param height Input frame height
      * @param fps Frame rate in frames per second
      * @param profile Encoding profile
      */
-    public native void setDefaultProfilePreset(int width, int height, float fps, @ByVal VideoEncoderProperties.Profile profile);
+    public native @Deprecated void setDefaultProfilePreset(int width,
+                                                                                                                                      int height,
+                                                                                                                                      float fps,
+                                                                                                                                      @ByVal VideoEncoderProperties.Profile profile);
 
     /**
      * Sets a default preset based on specified input size, frame rate and profile
@@ -58,7 +68,9 @@ public class VideoEncoder extends Node {
      * @param fps Frame rate in frames per second
      * @param profile Encoding profile
      */
-    public native void setDefaultProfilePreset(@ByVal @Cast("std::tuple<int,int>*") Pointer size, float fps, @ByVal VideoEncoderProperties.Profile profile);
+    public native @Deprecated void setDefaultProfilePreset(@ByVal @Cast("std::tuple<int,int>*") Pointer size,
+                                                                                                                              float fps,
+                                                                                                                              @ByVal VideoEncoderProperties.Profile profile);
 
     // node properties
     /**
@@ -77,12 +89,17 @@ public class VideoEncoder extends Node {
     /** Set rate control mode */
     public native void setRateControlMode(@ByVal VideoEncoderProperties.RateControlMode mode);
     /** Set encoding profile */
-    public native void setProfile(@ByVal @Cast("std::tuple<int,int>*") Pointer size, @ByVal VideoEncoderProperties.Profile profile);
+    public native void setProfile(@ByVal VideoEncoderProperties.Profile profile);
     /** Set encoding profile */
-    public native void setProfile(int width, int height, @ByVal VideoEncoderProperties.Profile profile);
-    /** Set output bitrate in bps. Final bitrate depends on rate control mode */
+    public native @Deprecated void setProfile(@ByVal @Cast("std::tuple<int,int>*") Pointer size,
+                                                                                                                 @ByVal VideoEncoderProperties.Profile profile);
+    /** Set encoding profile */
+    public native @Deprecated void setProfile(int width,
+                                                                                                                         int height,
+                                                                                                                         @ByVal VideoEncoderProperties.Profile profile);
+    /** Set output bitrate in bps, for CBR rate control mode. 0 for auto (based on frame size and FPS) */
     public native void setBitrate(int bitrate);
-    /** Set output bitrate in kbps. Final bitrate depends on rate control mode */
+    /** Set output bitrate in kbps, for CBR rate control mode. 0 for auto (based on frame size and FPS) */
     public native void setBitrateKbps(int bitrateKbps);
 
     /**
@@ -136,11 +153,11 @@ public class VideoEncoder extends Node {
     /** Get quality */
     public native int getQuality();
     /** Get input size */
-    public native @ByVal @Cast("std::tuple<int,int>*") Pointer getSize();
+    public native @Deprecated @ByVal @Cast("std::tuple<int,int>*") Pointer getSize();
     /** Get input width */
-    public native int getWidth();
+    public native @Deprecated int getWidth();
     /** Get input height */
-    public native int getHeight();
+    public native @Deprecated int getHeight();
     /** Get frame rate */
     public native float getFrameRate();
     /** Get lossless mode. Applies only when using [M]JPEG profile. */

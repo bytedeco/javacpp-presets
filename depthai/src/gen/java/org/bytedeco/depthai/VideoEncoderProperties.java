@@ -51,7 +51,7 @@ public class VideoEncoderProperties extends Pointer {
     }
 
     /**
-     * Encoding profile, H264, H265 or MJPEG
+     * Encoding profile, H264 (AVC), H265 (HEVC) or MJPEG
      */
     public enum Profile { H264_BASELINE(0), H264_HIGH(1), H264_MAIN(2), H265_MAIN(3), MJPEG(4);
 
@@ -62,7 +62,10 @@ public class VideoEncoderProperties extends Pointer {
         @Override public String toString() { return intern().name(); }
     }
     /**
-     * Specifies prefered bitrate (kb) of compressed output bitstream
+     * Specifies preferred bitrate (in bit/s) of compressed output bitstream in CBR mode
+     *
+     * "0" for automatic computation, based on input resolution and FPS:
+     * 720p30: 4Mbps, 1080p30: 8.5Mbps, 1440p30: 14Mbps, 2160p30: 20Mbps
      */
     public native @Cast("std::int32_t") int bitrate(); public native VideoEncoderProperties bitrate(int setter);
     /**
@@ -70,7 +73,9 @@ public class VideoEncoderProperties extends Pointer {
      */
     public native @Cast("std::int32_t") int keyframeFrequency(); public native VideoEncoderProperties keyframeFrequency(int setter);
     /**
-     * Specifies maximum bitrate (kb) of compressed output bitstream
+     * Specifies maximum bitrate (in bit/s) of compressed output bitstream in CBR mode
+     *
+     * "0" to follow {@code bitrate} setting
      */
     public native @Cast("std::int32_t") int maxBitrate(); public native VideoEncoderProperties maxBitrate(int setter);
     /**
@@ -78,8 +83,10 @@ public class VideoEncoderProperties extends Pointer {
      */
     public native @Cast("std::int32_t") int numBFrames(); public native VideoEncoderProperties numBFrames(int setter);
     /**
-     * This options specifies how many frames are available in this nodes pool (can help if
-     * receiver node is slow at consuming
+     * This options specifies how many frames are available in this node's pool.
+     * Helps when receiver is slow at consuming.
+     *
+     * Value "0" indicates automatic number of frames assignment
      */
     public native @Cast("std::uint32_t") int numFramesPool(); public native VideoEncoderProperties numFramesPool(int setter);
     /**
@@ -98,14 +105,6 @@ public class VideoEncoderProperties extends Pointer {
      * Rate control mode specifies if constant or variable bitrate should be used (H264 / H265)
      */
     public native RateControlMode rateCtrlMode(); public native VideoEncoderProperties rateCtrlMode(RateControlMode setter);
-    /**
-     * Input and compressed output frame width
-     */
-    public native @Cast("std::int32_t") int width(); public native VideoEncoderProperties width(int setter);
-    /**
-     * Input and compressed output frame height
-     */
-    public native @Cast("std::int32_t") int height(); public native VideoEncoderProperties height(int setter);
     /**
      * Frame rate
      */

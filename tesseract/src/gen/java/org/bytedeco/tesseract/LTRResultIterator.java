@@ -78,14 +78,6 @@ public class LTRResultIterator extends PageIterator {
   // The number should be interpreted as a percent probability. (0.0f-100.0f)
   public native float Confidence(@Cast("tesseract::PageIteratorLevel") int level);
 
-  // Returns the attributes of the current row.
-  public native void RowAttributes(FloatPointer row_height, FloatPointer descenders,
-                       FloatPointer ascenders);
-  public native void RowAttributes(FloatBuffer row_height, FloatBuffer descenders,
-                       FloatBuffer ascenders);
-  public native void RowAttributes(float[] row_height, float[] descenders,
-                       float[] ascenders);
-
   // ============= Functions that refer to words only ============.
 
   // Returns the font attributes of the current word. If iterating at a higher

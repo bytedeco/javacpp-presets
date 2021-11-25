@@ -39,9 +39,9 @@ public class MonoCameraProperties extends Pointer {
     }
 
     /**
-     * Select the camera sensor resolution: 1280×720, 1280×800, 640×400
+     * Select the camera sensor resolution: 1280×720, 1280×800, 640×400, 640×480
      */
-    public enum SensorResolution { THE_720_P(0), THE_800_P(1), THE_400_P(2);
+    public enum SensorResolution { THE_720_P(0), THE_800_P(1), THE_400_P(2), THE_480_P(3);
 
         public final int value;
         private SensorResolution(int v) { this.value = v; }

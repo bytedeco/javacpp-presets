@@ -64,6 +64,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../StringNodeOutputMap.java
 
 
+// Targeting ../CameraBoardSocketStringMap.java
+
+
 // Targeting ../CameraBoardSocketCameraInfoMap.java
 
 
