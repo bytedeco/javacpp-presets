@@ -467,7 +467,7 @@ public class Simple {
 
         // We make a copy of the data here... which we could avoid for
         // performance reasons but ok for this simple example.
-        BytePointer odata = new BytePointer(byte_size);
+        BytePointer odata = new BytePointer(byte_size.get());
         output_data.put(name, odata);
         switch (memory_type.get()) {
           case TRITONSERVER_MEMORY_CPU: {
