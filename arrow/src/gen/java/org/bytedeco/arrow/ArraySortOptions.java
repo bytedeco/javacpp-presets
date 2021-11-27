@@ -27,15 +27,22 @@ public class ArraySortOptions extends FunctionOptions {
         return new ArraySortOptions((Pointer)this).offsetAddress(i);
     }
 
-  public ArraySortOptions(SortOrder order/*=arrow::compute::SortOrder::Ascending*/) { super((Pointer)null); allocate(order); }
-  private native void allocate(SortOrder order/*=arrow::compute::SortOrder::Ascending*/);
+  public ArraySortOptions(SortOrder order/*=arrow::compute::SortOrder::Ascending*/,
+                              NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(order, null_placement); }
+  private native void allocate(SortOrder order/*=arrow::compute::SortOrder::Ascending*/,
+                              NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   public ArraySortOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public ArraySortOptions(@Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/) { super((Pointer)null); allocate(order); }
-  private native void allocate(@Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/);
+  public ArraySortOptions(@Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/,
+                              @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(order, null_placement); }
+  private native void allocate(@Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/,
+                              @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   @MemberGetter public static native byte kTypeName(int i);
   @MemberGetter public static native String kTypeName();
   public static native @ByVal ArraySortOptions Defaults();
 
+  /** Sorting order */
   public native SortOrder order(); public native ArraySortOptions order(SortOrder setter);
+  /** Whether nulls and NaNs are placed at the start or at the end */
+  public native NullPlacement null_placement(); public native ArraySortOptions null_placement(NullPlacement setter);
 }

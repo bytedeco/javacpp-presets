@@ -19,6 +19,7 @@ JavaCPP Presets
 [![arrow](https://github.com/bytedeco/javacpp-presets/workflows/arrow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarrow)
 [![hdf5](https://github.com/bytedeco/javacpp-presets/workflows/hdf5/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahdf5)
 [![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)
+[![lz4](https://github.com/bytedeco/javacpp-presets/workflows/lz4/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alz4)
 [![mkl](https://github.com/bytedeco/javacpp-presets/workflows/mkl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl)
 [![mkl-dnn](https://github.com/bytedeco/javacpp-presets/workflows/mkl-dnn/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl-dnn)
 [![dnnl](https://github.com/bytedeco/javacpp-presets/workflows/dnnl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adnnl)
@@ -183,12 +184,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  https://github.com/uricamic/flandmark
- * Arrow 5.0.x  https://arrow.apache.org/install/
+ * Arrow 6.0.x  https://arrow.apache.org/install/
  * HDF5 1.12.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
+ * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2021.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.4.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.18  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -200,9 +202,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Gym 0.21.x  https://github.com/openai/gym
  * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
- * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
+ * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 5.0.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.4.x  https://developer.nvidia.com/cuda-downloads
@@ -211,22 +213,22 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
- * PyTorch 1.9.x  https://github.com/pytorch/pytorch
+ * PyTorch 1.10.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.6.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.7.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.14  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.11.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.13.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.9.x  https://github.com/microsoft/onnxruntime
- * TVM 0.7.0  https://github.com/apache/tvm
+ * TVM 0.8.x  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
  * cpu_features 0.6.0  https://github.com/google/cpu_features
- * ModSecurity 3.0.5  https://github.com/SpiderLabs/ModSecurity
+ * ModSecurity 3.0.x  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

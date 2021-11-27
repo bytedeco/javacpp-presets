@@ -30,6 +30,9 @@ case $KERNEL in
         ;;
 esac
 case $ARCH in
+    arm64)
+        ARCH=arm64
+        ;;
     arm*)
         ARCH=arm
         ;;
@@ -84,7 +87,7 @@ echo
 
 if [[ -z ${OPERATION:-} ]]; then
     echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]"
-    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc."
+    echo "where possible platform names are: android-arm, android-x86, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
 
@@ -164,7 +167,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda nvcodec opencl mxnet pytorch tensorflow tensorflow-lite tensorrt tritonserver depthai ale onnx ngraph onnxruntime tvm liquidfun qt skia cpu_features modsecurity systems)
+    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan lz4 mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda nvcodec opencl mxnet pytorch tensorflow tensorflow-lite tensorrt tritonserver depthai ale onnx ngraph onnxruntime tvm liquidfun qt skia cpu_features modsecurity systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

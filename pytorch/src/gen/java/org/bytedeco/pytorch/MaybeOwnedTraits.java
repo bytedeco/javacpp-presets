@@ -15,7 +15,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace at
-@Name("c10::MaybeOwnedTraits<at::Tensor>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::MaybeOwnedTraits<at::TensorBase>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MaybeOwnedTraits extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -34,15 +34,15 @@ public class MaybeOwnedTraits extends Pointer {
     }
 
 
-  public static native @ByVal @Cast("c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") Tensor createBorrow(@Cast("const c10::MaybeOwnedTraits<at::Tensor>::owned_type*") @ByRef Tensor from);
+  public static native @ByVal @Cast("c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") TensorBase createBorrow(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::owned_type*") @ByRef TensorBase from);
 
-  public static native void assignBorrow(@Cast("c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor lhs, @Cast("const c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor rhs);
+  public static native void assignBorrow(@Cast("c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase lhs, @Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase rhs);
 
-  public static native void destroyBorrow(@Cast("c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor toDestroy);
+  public static native void destroyBorrow(@Cast("c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase toDestroy);
 
-  public static native @Cast("const c10::MaybeOwnedTraits<at::Tensor>::owned_type*") @ByRef Tensor referenceFromBorrow(@Cast("const c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor borrow);
+  public static native @Cast("const c10::MaybeOwnedTraits<at::TensorBase>::owned_type*") @ByRef TensorBase referenceFromBorrow(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase borrow);
 
-  public static native @Cast("const c10::MaybeOwnedTraits<at::Tensor>::owned_type*") Tensor pointerFromBorrow(@Cast("const c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor borrow);
+  public static native @Cast("const c10::MaybeOwnedTraits<at::TensorBase>::owned_type*") TensorBase pointerFromBorrow(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase borrow);
 
-  public static native @Cast("bool") boolean debugBorrowIsValid(@Cast("const c10::MaybeOwnedTraits<at::Tensor>::borrow_type*") @ByRef Tensor borrow);
+  public static native @Cast("bool") boolean debugBorrowIsValid(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase borrow);
 }

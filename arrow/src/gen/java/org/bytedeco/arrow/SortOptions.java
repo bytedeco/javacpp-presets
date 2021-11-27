@@ -27,13 +27,22 @@ public class SortOptions extends FunctionOptions {
         return new SortOptions((Pointer)this).offsetAddress(i);
     }
 
-  public SortOptions(@StdVector SortKey sort_keys/*={}*/) { super((Pointer)null); allocate(sort_keys); }
-  private native void allocate(@StdVector SortKey sort_keys/*={}*/);
+  public SortOptions(@StdVector SortKey sort_keys/*={}*/,
+                         NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(sort_keys, null_placement); }
+  private native void allocate(@StdVector SortKey sort_keys/*={}*/,
+                         NullPlacement null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   public SortOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public SortOptions(@StdVector SortKey sort_keys/*={}*/,
+                         @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/) { super((Pointer)null); allocate(sort_keys, null_placement); }
+  private native void allocate(@StdVector SortKey sort_keys/*={}*/,
+                         @Cast("arrow::compute::NullPlacement") int null_placement/*=arrow::compute::NullPlacement::AtEnd*/);
   @MemberGetter public static native byte kTypeName(int i);
   @MemberGetter public static native String kTypeName();
   public static native @ByVal SortOptions Defaults();
 
+  /** Column key(s) to order by and how to order by these sort keys. */
   public native @StdVector SortKey sort_keys(); public native SortOptions sort_keys(SortKey setter);
+  /** Whether nulls and NaNs are placed at the start or at the end */
+  public native NullPlacement null_placement(); public native SortOptions null_placement(NullPlacement setter);
 }

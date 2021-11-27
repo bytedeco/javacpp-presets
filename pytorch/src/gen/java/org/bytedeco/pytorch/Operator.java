@@ -47,8 +47,8 @@ public class Operator extends Pointer {
   // This is accomplished by marking the schema varargs and having no required
   // arguments.
 
-  public native @ByVal @Cast("torch::jit::Operation*") Pointer getOperation(@Const JitNode node/*=nullptr*/);
-  public native @ByVal @Cast("torch::jit::Operation*") Pointer getOperation();
+  public native @ByVal Operation getOperation(@Const JitNode node/*=nullptr*/);
+  public native @ByVal Operation getOperation();
 
   public native @Const @ByRef FunctionSchema schema();
 

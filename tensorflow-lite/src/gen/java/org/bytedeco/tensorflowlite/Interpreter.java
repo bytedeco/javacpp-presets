@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // namespace delegates
+  // namespace interpreter_wrapper
 
 /** An interpreter for a graph of nodes that input and output from tensors.
  *  Each node of the graph processes a set of input tensors and produces a
@@ -36,7 +36,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  for (int i = 0; i < input_size; i++) {
  *    input[i] = ...; */
 //  }
-/** interpreter.Invoke();
+/** interpreter->Invoke();
 /** </code></pre>
 /**
 /** Note: For nearly all practical use cases, one should not directly construct
@@ -530,10 +530,15 @@ public class Interpreter extends Pointer {
 
   /** Get an immutable tensor data structure. */
 
-  /** Get a pointer to an operation and registration data structure if in
-   *  bounds. */
+  /** Returns a pointer to an operation and registration data structure if in
+   *  bounds from the primary subgraph(subgraph_[0]). */
   public native @Const RegistrationNodePair node_and_registration(
         int node_index);
+
+  /** Returns a pointer to an operation and registration data structure if in
+   *  bounds. */
+  public native @Const RegistrationNodePair node_and_registration(
+        int subgraph_index, int node_index);
 
   /** Perform a checked cast to the appropriate tensor type (mutable pointer
    *  version). */
@@ -550,48 +555,65 @@ public class Interpreter extends Pointer {
    *  version). */
 
   /** WARNING: Experimental interface, subject to change
-   *  Returns list of all names of different method signatures defined
-   *  in the model.
+   *  Returns list of all keys of different method signatures defined in the
+   *  model.
    *  Note, pointers returned have lifetime same as the Interpreter object. */
-  public native @ByVal StringVector signature_def_names();
+  public native @ByVal StringVector signature_keys();
+
+  /** WARNING: Experimental interface, subject to change
+   *  Returns a pointer to the SignatureRunner instance to run the part of the
+   *  graph identified by a SignatureDef. The nullptr is returned if the given
+   *  signature key is not valid.
+   *  If you need to specify delegates, you have to do that before calling this
+   *  function. This function will additionally apply default delegates. Thus,
+   *  applying delegates after that might lead to undesirable behaviors.
+   *  Note, the pointed instance has lifetime same as the Interpreter object
+   *  and the SignatureRunner class is *not* thread-safe. */
+  public native SignatureRunner GetSignatureRunner(@Cast("const char*") BytePointer signature_key);
+  public native SignatureRunner GetSignatureRunner(String signature_key);
+
+  /** WARNING: Experimental interface, subject to change */
+  // Return the subgraph index that corresponds to a SignatureDef, defined by
+  // 'signature_key'.
+  // If invalid name passed, -1 will be returned.
+  public native int GetSubgraphIndexFromSignature(@Cast("const char*") BytePointer signature_key);
+  public native int GetSubgraphIndexFromSignature(String signature_key);
 
   /** WARNING: Experimental interface, subject to change
    *  Returns the mapping of inputs to tensor index in the signature
-   *  specified through 'method_name'.
+   *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_inputs(
-        @Cast("const char*") BytePointer method_name);
+        @Cast("const char*") BytePointer signature_key);
   public native @Const @ByRef StringIntMap signature_inputs(
-        String method_name);
+        String signature_key);
 
   /** WARNING: Experimental interface, subject to change
    *  Returns the mapping of outputs to tensor index in the signature
-   *  specified through 'method_name'.
+   *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_outputs(
-        @Cast("const char*") BytePointer method_name);
+        @Cast("const char*") BytePointer signature_key);
   public native @Const @ByRef StringIntMap signature_outputs(
-        String method_name);
+        String signature_key);
 
   /** WARNING: Experimental interface, subject to change
    *  Returns the input tensor identified by 'signature_input_name' in the
-   *  signature identified by 'signature_method_name'.
+   *  signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
-  public native TfLiteTensor input_tensor_by_signature_name(
-        @Cast("const char*") BytePointer signature_input_name, @Cast("const char*") BytePointer signature_method_name);
-  public native TfLiteTensor input_tensor_by_signature_name(
-        String signature_input_name, String signature_method_name);
+  public native TfLiteTensor input_tensor_by_signature(@Cast("const char*") BytePointer signature_input_name,
+                                            @Cast("const char*") BytePointer signature_key);
+  public native TfLiteTensor input_tensor_by_signature(String signature_input_name,
+                                            String signature_key);
 
   /** WARNING: Experimental interface, subject to change
    *  Returns the output tensor identified by 'signature_output_name' in the
-   *  signature identified by 'signature_method_name'.
+   *  signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
-  public native @Const TfLiteTensor output_tensor_by_signature_name(
-        @Cast("const char*") BytePointer signature_output_name,
-        @Cast("const char*") BytePointer signature_method_name);
-  public native @Const TfLiteTensor output_tensor_by_signature_name(
-        String signature_output_name,
-        String signature_method_name);
+  public native @Const TfLiteTensor output_tensor_by_signature(
+        @Cast("const char*") BytePointer signature_output_name, @Cast("const char*") BytePointer signature_key);
+  public native @Const TfLiteTensor output_tensor_by_signature(
+        String signature_output_name, String signature_key);
 
   /** Return a mutable pointer to the given input tensor. The given index must
    *  be between 0 and inputs().size(). */
@@ -646,7 +668,6 @@ public class Interpreter extends Pointer {
   public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index,
                                    @StdVector int[] dims);
 
-  // WARNING: Experimental interface, subject to change
   // Change the dimensionality of a given tensor. This is only acceptable for
   // tensor indices that are inputs or variables. Only unknown dimensions can be
   // resized with this function. Unknown dimensions are indicated as `-1` in the
@@ -686,6 +707,7 @@ public class Interpreter extends Pointer {
    *  Returns status of success or failure. */
   
   ///
+  ///
   public native @Cast("TfLiteStatus") int Invoke();
 
   /** Set the number of threads available to the interpreter.
@@ -693,7 +715,15 @@ public class Interpreter extends Pointer {
    *  NOTE: num_threads should be >= -1. Setting num_threads to 0 has the effect
    *  to disable multithreading, which is equivalent to setting num_threads
    *  to 1. If set to the value -1, the number of threads used will be
-   *  implementation-defined and platform-dependent. */
+   *  implementation-defined and platform-dependent.
+   * 
+   *  As TfLite interpreter could internally apply a TfLite delegate by default
+   *  (i.e. XNNPACK), the number of threads that are available to the default
+   *  delegate *should be* set via InterpreterBuilder APIs as follows:
+   *  std::unique_ptr<tflite::Interpreter> interpreter;
+   *  tflite::InterpreterBuilder builder(tflite model, op resolver);
+   *  builder.SetNumThreads(...)
+   *  ASSERT_EQ(builder(&interpreter), kTfLiteOk); */
   
   ///
   public native @Cast("TfLiteStatus") int SetNumThreads(int num_threads);
@@ -811,17 +841,19 @@ public class Interpreter extends Pointer {
    *  {@code prepare} and {@code invoke} function. In these functions, it's guaranteed
    *  allocating up to {@code kTensorsCapacityHeadroom} more tensors won't invalidate
    *  pointers to existing tensors. */
+  
+  ///
   @MemberGetter public static native int kTensorsCapacityHeadroom();
   public static final int kTensorsCapacityHeadroom = kTensorsCapacityHeadroom();
 
-  /** Set if buffer handle output is allowed. */
-  //
-  /** When using hardware delegation, Interpreter will make the data of output
-  /** tensors available in {@code tensor->data} by default. If the application can
-  /** consume the buffer handle directly (e.g. reading output from OpenGL
-  /** texture), it can set this flag to false, so Interpreter won't copy the
-  /** data from buffer handle to CPU memory. WARNING: This is an experimental
-  /** API and subject to change. */
+  /** Set if buffer handle output is allowed.
+   * 
+   *  When using hardware delegation, Interpreter will make the data of output
+   *  tensors available in {@code tensor->data} by default. If the application can
+   *  consume the buffer handle directly (e.g. reading output from OpenGL
+   *  texture), it can set this flag to false, so Interpreter won't copy the
+   *  data from buffer handle to CPU memory.
+   *  WARNING: This is an experimental API and subject to change. */
   public native void SetAllowBufferHandleOutput(@Cast("bool") boolean allow_buffer_handle_output);
 
   /** Reset all variable tensors to the default value.
@@ -845,9 +877,9 @@ public class Interpreter extends Pointer {
   // `flags` is a bitmask, see TfLiteCustomAllocationFlags.
   // The runtime does NOT take ownership of the underlying memory.
   //
-  // NOTE: User needs to call AllocateTensors() after this. In case of input
-  // resizing, buffers will be checked for required data size during
-  // AllocateTensors().
+  // NOTE: User needs to call AllocateTensors() after this.
+  // Invalid/insufficient buffers will cause an error during AllocateTensors or
+  // Invoke (in case of dynamic shapes in the graph).
   //
   // Parameters should satisfy the following conditions:
   // 1. tensor->allocation_type == kTfLiteArenaRw or kTfLiteArenaRwPersistent

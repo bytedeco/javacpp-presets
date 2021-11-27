@@ -66,6 +66,9 @@ public class Argument extends Pointer {
   public native @ByVal IntOptional N();
   public native @Const @ByRef IValueOptional default_value();
   public native @Cast("bool") boolean kwarg_only();
+
+  public native @Cast("bool") boolean is_out();
+
   public native @Const @ByRef AliasInfoOptional alias_info();
   public native @Cast("bool") boolean is_inferred_type();
 

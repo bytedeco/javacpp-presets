@@ -10,7 +10,23 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.arrow.global.arrow.*;
-  // IWYU pragma: keep
+
+
+/** \defgroup numeric-datatypes Datatypes for numeric data
+ *  \{
+ *  \}
+ <p>
+ *  \defgroup binary-datatypes Datatypes for binary/string data
+ *  \{
+ *  \}
+ <p>
+ *  \defgroup temporal-datatypes Datatypes for temporal data
+ *  \{
+ *  \}
+ <p>
+ *  \defgroup nested-datatypes Datatypes for nested data
+ *  \{
+ *  \} */
 
 @Namespace("arrow::detail") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class Fingerprintable extends Pointer {

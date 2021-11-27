@@ -108,11 +108,6 @@ public class StereoDepthProperties extends Pointer {
     public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
 
     /**
-     * Disparity range increased from 96 to 192, combined from full resolution and downscaled images.
-     * Suitable for short range objects
-     */
-    public native @Cast("bool") boolean enableExtendedDisparity(); public native StereoDepthProperties enableExtendedDisparity(boolean setter);
-    /**
      * Fill color for missing data at frame edges: grayscale 0..255, or -1 to replicate pixels
      */
     public native @Cast("std::int32_t") int rectifyEdgeFillColor(); public native StereoDepthProperties rectifyEdgeFillColor(int setter);

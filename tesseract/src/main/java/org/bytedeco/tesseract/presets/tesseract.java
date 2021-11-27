@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2019 Samuel Audet
+ * Copyright (C) 2014-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -39,12 +39,12 @@ import org.bytedeco.leptonica.presets.lept;
  * @author Samuel Audet
  */
 @Properties(target = "org.bytedeco.tesseract", global = "org.bytedeco.tesseract.global.tesseract", inherit = lept.class, value = {
-    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", // "tesseract/host.h",
-        "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
-        "tesseract/resultiterator.h", "tesseract/serialis.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
-        compiler = "cpp11", link = "tesseract@.4"/*, resource = {"include", "lib"}*/),
+    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/export.h", "tesseract/osdetect.h", "tesseract/unichar.h",
+        "tesseract/version.h", "tesseract/publictypes.h", "tesseract/pageiterator.h", "tesseract/ocrclass.h", "tesseract/ltrresultiterator.h",
+        "tesseract/renderer.h", "tesseract/resultiterator.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
+        compiler = "cpp11", link = "tesseract@.5"/*, resource = {"include", "lib"}*/),
     @Platform(value = "android", link = "tesseract"),
-    @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-4") })
+    @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-5") })
 public class tesseract implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tesseract"); }
 
@@ -54,7 +54,11 @@ public class tesseract implements InfoMapper {
                              "TESS_API", "TESS_LOCAL", "_TESS_FILE_BASENAME_", "TESS_CALL").cppTypes().annotations().cppText(""))
                .put(new Info("STRING_IS_PROTECTED").define(false))
                .put(new Info("BOOL").cast().valueTypes("boolean").pointerTypes("BoolPointer").define())
-               .put(new Info("TESS_CAPI_INCLUDE_BASEAPI").define())
+               .put(new Info("__cplusplus", "TESS_CAPI_INCLUDE_BASEAPI").define())
+               .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("std::vector<char>").pointerTypes("ByteVector").define())
+               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::chrono::steady_clock::time_point").cast().pointerTypes("Pointer"))
                .put(new Info("MIN_INT32").javaText("public static final int MIN_INT32 = 0x80000000;"))
 
                .put(new Info("Pix").pointerTypes("PIX").skip())

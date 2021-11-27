@@ -249,6 +249,13 @@ public class TensorImpl extends Pointer {
   public native @Cast({"", "c10::Storage&&"}) @StdMove Storage storage();
 
   /**
+   * Return the underlying storage, unsafely assuming this is a basic strided
+   * tensor. In cases where {@code storage} access would throw, this returns a
+   * default-constructed Storage.
+   */
+  public native @Cast({"", "c10::Storage&&"}) @StdMove Storage unsafe_storage();
+
+  /**
    * The number of elements in a tensor.
    *
    * WARNING: Previously, if you were using the Caffe2 API, you could
@@ -292,7 +299,11 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_xla();
 
+  public native @Cast("bool") boolean is_lazy();
+
   public native @Cast("bool") boolean is_hip();
+
+  public native @Cast("bool") boolean is_ve();
 
   public native @Cast("bool") boolean is_mkldnn();
 
@@ -301,6 +312,8 @@ public class TensorImpl extends Pointer {
   public native @Cast("bool") boolean is_metal();
 
   public native @Cast("bool") boolean is_mlc();
+
+  public native @Cast("bool") boolean is_ort();
 
   // TODO: remove this once we don't automatically enabled Autograd dispatch
   // keys
@@ -312,7 +325,7 @@ public class TensorImpl extends Pointer {
   // Inference tensor doesn't have autograd or ADInplaceOrView key.
   // Invariant:
   //   Inference tensor has version_counter_.enabled() == false
-  public native @Cast("bool") boolean is_inference_tensor();
+  public native @Cast("bool") boolean is_inference();
 
   public native @Cast("int64_t") long get_device();
 
@@ -392,6 +405,28 @@ public class TensorImpl extends Pointer {
   public native @Const @ByRef Tensor grad();
 
   /**
+   * Whether or not the imaginary part of the tensor should be negated
+   */
+  public native @Cast("bool") boolean is_conj();
+
+  /**
+   * Set whether or not to take the conjugate of the tensor (flip the imaginary
+   * bit).
+   */
+  public native void _set_conj(@Cast("bool") boolean value);
+
+  /**
+   * Whether or not the tensor should be negated
+   */
+  public native @Cast("bool") boolean is_neg();
+
+  /**
+   * Set whether or not to take the conjugate of the tensor (flip the imaginary
+   * bit).
+   */
+  public native void _set_neg(@Cast("bool") boolean value);
+
+  /**
    * Return the accumulated gradient of a tensor. This gradient is computed
    * using forward mode AD.
    *
@@ -406,7 +441,7 @@ public class TensorImpl extends Pointer {
    *   - "self" should represent the Tensor whose forward grad is accessed. It
    * is required when dealing with view.
    */
-  public native @Const @ByRef Tensor _fw_grad(@Cast("uint64_t") long level, @Const @ByRef Tensor self);
+  public native @Const @ByRef Tensor _fw_grad(@Cast("uint64_t") long level, @Const @ByRef TensorBase self);
 
   /**
    * Sets the forward gradient for this Tensor.
@@ -429,8 +464,8 @@ public class TensorImpl extends Pointer {
    * better error checking.
    */
   public native void _set_fw_grad(
-        @Const @ByRef Tensor new_grad,
-        @Const @ByRef Tensor self,
+        @Const @ByRef TensorBase new_grad,
+        @Const @ByRef TensorBase self,
         @Cast("uint64_t") long level,
         @Cast("bool") boolean is_inplace_op);
 
@@ -584,6 +619,10 @@ public class TensorImpl extends Pointer {
   public native void set_named_tensor_meta(
         @UniquePtr NamedTensorMetaInterface named_tensor_meta);
 
+  public native void set_python_dispatch(@Cast("bool") boolean k);
+
+  public native @Cast("bool") boolean is_python_dispatch();
+
   /**
    * Return the pointer to named tensor metadata.
    */
@@ -645,6 +684,9 @@ public class TensorImpl extends Pointer {
    * For usage of {@code version_counter} and {@code allow_tensor_metadata_change},
    * see NOTE [ TensorImpl Shallow-Copying ].
    */
+  public native @ByVal @Cast("c10::intrusive_ptr<c10::TensorImpl>*") Pointer shallow_copy_and_detach(
+        @Const @ByRef VariableVersion version_counter,
+        @Cast("bool") boolean allow_tensor_metadata_change);
 
   /**
    * Return a TensorImpl that is a shallow-copy of this TensorImpl.
@@ -659,6 +701,7 @@ public class TensorImpl extends Pointer {
    * For why this function doesn't check this TensorImpl's
    * {@code allow_tensor_metadata_change_}, see NOTE [ TensorImpl Shallow-Copying ].
    */
+  public native void shallow_copy_from(@Cast("const c10::intrusive_ptr<c10::TensorImpl>*") @ByRef Pointer impl);
 
   // Inference tensor doesn't have version counter,
   // set_version_counter is no-op for them.
@@ -668,9 +711,37 @@ public class TensorImpl extends Pointer {
 
   public native void bump_version();
 
-  public native @NoException(true) void set_pyobj(@Cast("PyObject*") Pointer pyobj);
+  // Associate the TensorImpl with the specified PyObject, and, if necessary,
+  // also tag the interpreter.
+  //
+  // NB: This lives in a header so that we can inline away the switch on status
+  //
+  // NB: THIS FUNCTION CAN RAISE AN EXCEPTION.  Make sure to clean up after
+  // PyObject if necessary!
+  public native void init_pyobj(
+        @Cast("c10::impl::PyInterpreter*") Pointer self_interpreter,
+        @Cast("PyObject*") Pointer pyobj,
+        PyInterpreterStatus status);
+  public native void init_pyobj(
+        @Cast("c10::impl::PyInterpreter*") Pointer self_interpreter,
+        @Cast("PyObject*") Pointer pyobj,
+        @Cast("c10::impl::PyInterpreterStatus") int status);
 
-  public native @Cast("PyObject*") @NoException(true) Pointer pyobj();
+  // Query the PyObject interpreter.  This may return null if there is no
+  // interpreter.  This is racy!
+  public native @Cast("c10::impl::PyInterpreter*") Pointer pyobj_interpreter();
+
+  // Test the interpreter tag.  If tagged for the current interpreter, return
+  // a non-nullopt (but possibly null) PyObject.  If (possibly) untagged,
+  // returns a nullopt.  If it is definitely invalid, raises an error.
+  //
+  // NB: this lives in header so that we can avoid actually creating the
+  // c10::optional
+  public native @ByVal @Cast("c10::optional<PyObject*>*") Pointer check_pyobj(@Cast("c10::impl::PyInterpreter*") Pointer self_interpreter);
+
+  // Clear the PyObject field for an interpreter, in situations where we
+  // statically know the tensor is tagged with our interpreter.
+  public native void unchecked_clear_pyobj(@Cast("c10::impl::PyInterpreter*") Pointer interpreter);
   /**
    * The device type of a Tensor, e.g., DeviceType::CPU or DeviceType::CUDA.
    */
@@ -800,4 +871,8 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_non_overlapping_and_dense();
   public native void set_storage_access_should_throw();
+
+  public native @Cast("bool") boolean owns_pyobj();
+
+  public native void set_owns_pyobj(@Cast("bool") boolean b);
 }

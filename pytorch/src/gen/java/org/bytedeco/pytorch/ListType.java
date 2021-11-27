@@ -32,6 +32,7 @@ public class ListType extends ListSingleElementType {
 
   // common cast List[Tensor]
   public static native @SharedPtr ListType ofTensors();
+  public static native @SharedPtr ListType ofOptionalTensors();
   public static native @SharedPtr ListType ofInts();
   public static native @SharedPtr ListType ofFloats();
   public static native @SharedPtr ListType ofComplexDoubles();

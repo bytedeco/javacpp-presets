@@ -1,11 +1,14 @@
 
- * Add presets for Triton Inference Server 2.14 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
+ 
+ * Include new `llvm-c/Transforms/PassBuilder.h` header file in presets for LLVM ([pull #1093](https://github.com/bytedeco/javacpp-presets/pull/1093))
+ * Introduce `macosx-arm64` builds to presets for OpenBLAS, OpenCV ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
+ * Add presets for LZ4 1.9.3 ([pull #1094](https://github.com/bytedeco/javacpp-presets/pull/1094)), Triton Inference Server 2.14 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
  * Add presets for the NvToolsExt (NVTX) module of CUDA ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Increase the amount of function pointers available for callbacks in presets for Qt ([pull #1080](https://github.com/bytedeco/javacpp-presets/pull/1080))
  * Map C++ JIT classes and functions of TorchScript in presets for PyTorch ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Synchronize `cachePackage()` and prevent repeated package caching in all presets ([pull #1071](https://github.com/bytedeco/javacpp-presets/pull/1071))
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
- * Upgrade presets for OpenCV 4.5.4, Arrow 5.0.0, MKL 2021.4, DNNL 2.4.1, OpenBLAS 0.3.18, FFTW 3.3.10, CPython 3.10.0, NumPy 1.21.2, SciPy 1.7.1, Gym 0.21.0, LLVM 13.0.0, Leptonica 1.82.0, CUDA 11.4.2, cuDNN 8.2.4, NCCL 2.11.4, PyTorch 1.9.1, TensorFlow Lite 2.6.0, ALE 0.7.2, DepthAI 2.11.0, ONNX 1.10.1, ONNX Runtime 1.9.1, and their dependencies
+ * Upgrade presets for OpenCV 4.5.4, FFmpeg 4.4.1, Arrow 6.0.1, MKL 2021.4, DNNL 2.5, OpenBLAS 0.3.18, FFTW 3.3.10, CPython 3.10.0, NumPy 1.21.4, SciPy 1.7.3, Gym 0.21.0, LLVM 13.0.0, libpostal 1.1, Leptonica 1.82.0, Tesseract 5.0.0, CUDA 11.4.2, cuDNN 8.2.4, NCCL 2.11.4, PyTorch 1.10.0, TensorFlow Lite 2.7.0, ALE 0.7.3, DepthAI 2.13.1, ONNX 1.10.2, ONNX Runtime 1.9.1, TVM 0.8.0, ModSecurity 3.0.6, and their dependencies
 
 ### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))

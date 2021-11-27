@@ -157,6 +157,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <limits>
 // #include <queue>
 
+// #include "arrow/util/async_util.h"
 // #include "arrow/util/functional.h"
 // #include "arrow/util/future.h"
 // #include "arrow/util/io_util.h"
@@ -193,14 +194,25 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** returning a future that completes when all have been visited */
 
-/** \brief Waits for an async generator to complete, discarding results. */
+/** \brief Wait for an async generator to complete, discarding results. */
 
-/** \brief Collects the results of an async generator into a vector */
+/** \brief Collect the results of an async generator into a vector */
 
 /** @see MakeMappedGenerator */
 
-/** \brief Creates a generator that will apply the map function to each element of
+/** \brief Create a generator that will apply the map function to each element of
  *  source.  The map function is not called on the end token.
+ * 
+ *  Note: This function makes a copy of {@code map} for each item
+ *  Note: Errors returned from the {@code map} function will be propagated
+ * 
+ *  If the source generator is async-reentrant then this generator will be also */
+
+/** \brief Create a generator that will apply the map function to
+ *  each element of source.  The map function is not called on the end
+ *  token.  The result of the map function should be another
+ *  generator; all these generators will then be flattened to produce
+ *  a single stream of items.
  * 
  *  Note: This function makes a copy of {@code map} for each item
  *  Note: Errors returned from the {@code map} function will be propagated
@@ -209,7 +221,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeSequencingGenerator */
 
-/** \brief Buffers an AsyncGenerator to return values in sequence order  ComesAfter
+/** \brief Buffer an AsyncGenerator to return values in sequence order  ComesAfter
  *  and IsNext determine the sequence order.
  * 
  *  ComesAfter should be a BinaryPredicate that only returns true if a comes after b
@@ -231,7 +243,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeTransformedGenerator */
 
-/** \brief Transforms an async generator using a transformer function returning a new
+/** \brief Transform an async generator using a transformer function returning a new
  *  AsyncGenerator
  * 
  *  The transform function here behaves exactly the same as the transform function in
@@ -246,14 +258,14 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeFromFuture */
 
-/** \brief Transforms a Future<AsyncGenerator<T>> into an AsyncGenerator<T>
+/** \brief Transform a Future<AsyncGenerator<T>> into an AsyncGenerator<T>
  *  that waits for the future to complete as part of the first item.
  * 
  *  This generator is not async-reentrant (even if the generator yielded by future is)
  * 
  *  This generator does not queue */
 
-/** \brief Creates a generator that will pull from the source into a queue.  Unlike
+/** \brief Create a generator that will pull from the source into a queue.  Unlike
  *  MakeReadaheadGenerator this will not pull reentrantly from the source.
  * 
  *  The source generator does not need to be async-reentrant
@@ -261,6 +273,16 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
  *  This generator is not async-reentrant (even if the source is)
  * 
  *  This generator may queue up to max_readahead additional instances of T */
+
+/** \brief Create a generator that immediately pulls from the source
+ * 
+ *  Typical generators do not pull from their source until they themselves
+ *  are pulled.  This generator does not follow that convention and will call
+ *  generator() once before it returns.  The returned generator will otherwise
+ *  mirror the source.
+ * 
+ *  This generator forwards aysnc-reentrant pressure to the source
+ *  This generator buffers one item (the first result) until it is delivered. */
 
 /** @see MakeReadaheadGenerator */
 
@@ -272,7 +294,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
  * 
  *  This generator is not async-reentrant. */
 
-/** \brief Creates a generator that pulls reentrantly from a source
+/** \brief Create a generator that pulls reentrantly from a source
  *  This generator will pull reentrantly from a source, ensuring that max_readahead
  *  requests are active at any given time.
  * 
@@ -288,7 +310,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeMergedGenerator */
 
-/** \brief Creates a generator that takes in a stream of generators and pulls from up to
+/** \brief Create a generator that takes in a stream of generators and pulls from up to
  *  max_subscriptions at a time
  * 
  *  Note: This may deliver items out of sequence. For example, items from the third
@@ -307,7 +329,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeEnumeratedGenerator */
 
-/** Wraps items from a source generator with positional information
+/** Wrap items from a source generator with positional information
  * 
  *  When used with MakeMergedGenerator and MakeSequencingGenerator this allows items to be
  *  processed in a "first-available" fashion and later resequenced which can reduce the
@@ -324,7 +346,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeTransferredGenerator */
 
-/** \brief Transfers a future to an underlying executor.
+/** \brief Transfer a future to an underlying executor.
  * 
  *  Continuations run on the returned future will be run on the given executor
  *  if they cannot be run synchronously.
@@ -351,7 +373,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 ///
 @Namespace("arrow") @MemberGetter public static native int kDefaultBackgroundQRestart();
 
-/** \brief Creates an AsyncGenerator<T> by iterating over an Iterator<T> on a background
+/** \brief Create an AsyncGenerator<T> by iterating over an Iterator<T> on a background
  *  thread
  * 
  *  The parameter max_q and q_restart control queue size and background thread task
@@ -380,10 +402,10 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 
 /** @see MakeGeneratorIterator */
 
-/** \brief Converts an AsyncGenerator<T> to an Iterator<T> by blocking until each future
+/** \brief Convert an AsyncGenerator<T> to an Iterator<T> which blocks until each future
  *  is finished */
 
-/** \brief Adds readahead to an iterator using a background thread.
+/** \brief Add readahead to an iterator using a background thread.
  * 
  *  Under the hood this is converting the iterator to a generator using
  *  MakeBackgroundGenerator, adding readahead to the converted generator with
@@ -406,15 +428,27 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
  * 
  *  This overload allows inferring the return type from the argument. */
 
-/** \brief Prepends initial_values onto a generator
+/** \brief Prepend initial_values onto a generator
  * 
  *  This generator is async-reentrant but will buffer requests and will not
  *  pull from following_values async-reentrantly. */
 
-/** \brief Allows an async generator to be cancelled
+/** \brief Allow an async generator to be cancelled
  * 
  *  This generator is async-reentrant */
 
+/** \brief Allow an async generator to be paused
+ * 
+ *  This generator is NOT async-reentrant and calling it in an async-reentrant fashion
+ *  may lead to items getting reordered (and potentially truncated if the end token is
+ *  reordered ahead of valid items)
+ * 
+ *  This generator forwards async-reentrant pressure */
+
+/** \brief If the generator is empty, return the given value, else
+ *  forward the values from the generator.
+ * 
+ *  This generator is async-reentrant. */
   // namespace arrow
 
 
@@ -447,14 +481,11 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <utility>
 
 // #include "arrow/status.h"
+// #include "arrow/util/aligned_storage.h"
 // #include "arrow/util/compare.h"
 // Targeting ../../arrow_dataset/EnsureResult.java
 
 
-
-// #if __cplusplus >= 201703L
-// #else
-// #endif
 
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString String msg);
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString BytePointer msg);
@@ -616,6 +647,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/dataset/file_base.h"
 // #include "arrow/dataset/file_csv.h"
 // #include "arrow/dataset/file_ipc.h"
+// #include "arrow/dataset/file_orc.h"
 // #include "arrow/dataset/file_parquet.h"
 // #include "arrow/dataset/scanner.h"
 
@@ -704,6 +736,24 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include "arrow/dataset/visibility.h"
 // #include "arrow/filesystem/type_fwd.h"  // IWYU pragma: export
 // #include "arrow/type_fwd.h"             // IWYU pragma: export
+
+/** \brief Controls what happens if files exist in an output directory during a dataset
+ *  write */
+@Namespace("arrow::dataset") public enum ExistingDataBehavior {
+  /** Deletes all files in a directory the first time that directory is encountered */
+  kDeleteMatchingPartitions((byte)(0)),
+  /** Ignores existing files, overwriting any that happen to have the same name as an
+   *  output file */
+  kOverwriteOrIgnore((byte)(1)),
+  /** Returns an error if there are any files or subdirectories in the output directory */
+  kError((byte)(2));
+
+    public final byte value;
+    private ExistingDataBehavior(byte v) { this.value = v; }
+    private ExistingDataBehavior(ExistingDataBehavior e) { this.value = e.value; }
+    public ExistingDataBehavior intern() { for (ExistingDataBehavior e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
   // namespace dataset
   // namespace arrow
@@ -1013,6 +1063,7 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // #include <vector>
 
 // #include "arrow/compute/exec/expression.h"
+// #include "arrow/compute/exec/options.h"
 // #include "arrow/compute/type_fwd.h"
 // #include "arrow/dataset/dataset.h"
 // #include "arrow/dataset/projector.h"
@@ -1033,6 +1084,8 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 @Namespace("arrow::dataset") @MemberGetter public static native @Cast("const int64_t") long kDefaultBatchSize();
 @Namespace("arrow::dataset") @MemberGetter public static native int kDefaultBatchReadahead();
 @Namespace("arrow::dataset") @MemberGetter public static native int kDefaultFragmentReadahead();
+@Namespace("arrow::dataset") @MemberGetter public static native int kDefaultBackpressureHigh();
+@Namespace("arrow::dataset") @MemberGetter public static native int kDefaultBackpressureLow();
 // Targeting ../../arrow_dataset/ScanOptions.java
 
 
@@ -1060,39 +1113,14 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/ScannerBuilder.java
 
 
+// Targeting ../../arrow_dataset/ScanNodeOptions.java
 
-/** \brief Construct a source ExecNode which yields batches from a dataset scan.
- * 
- *  Does not construct associated filter or project nodes.
- *  Yielded batches will be augmented with fragment/batch indices to enable stable
- *  ordering for simple ExecPlans. */
-@Namespace("arrow::dataset") public static native @ByVal ExecNodeResult MakeScanNode(ExecPlan arg0,
-                                                        @SharedPtr @ByVal Dataset arg1,
-                                                        @SharedPtr ScanOptions arg2);
-
-/** \brief Construct a ProjectNode which preserves fragment/batch indices. */
-
-///
-@Namespace("arrow::dataset") public static native @ByVal ExecNodeResult MakeAugmentedProjectNode(
-    ExecNode input, @StdString String label, @StdVector Expression exprs,
-    @ByVal(nullValue = "std::vector<std::string>{}") StringVector names);
-@Namespace("arrow::dataset") public static native @ByVal ExecNodeResult MakeAugmentedProjectNode(
-    ExecNode input, @StdString String label, @StdVector Expression exprs);
-@Namespace("arrow::dataset") public static native @ByVal ExecNodeResult MakeAugmentedProjectNode(
-    ExecNode input, @StdString BytePointer label, @StdVector Expression exprs,
-    @ByVal(nullValue = "std::vector<std::string>{}") StringVector names);
-@Namespace("arrow::dataset") public static native @ByVal ExecNodeResult MakeAugmentedProjectNode(
-    ExecNode input, @StdString BytePointer label, @StdVector Expression exprs);
-
-/** \brief Add a sink node which forwards to an AsyncGenerator<ExecBatch>
- * 
- *  Emitted batches will be ordered by fragment and batch indices, or an error
- *  will be raised if those fields are not available in the input. */
 
 // Targeting ../../arrow_dataset/InMemoryScanTask.java
 
 
-
+@Namespace("arrow::dataset::internal") public static native void InitializeScanner(ExecFactoryRegistry registry);
+  // namespace internal
   // namespace dataset
   // namespace arrow
 
@@ -1156,8 +1184,14 @@ public class arrow_dataset extends org.bytedeco.arrow.presets.arrow_dataset {
 // Targeting ../../arrow_dataset/FileSystemDatasetWriteOptions.java
 
 
+// Targeting ../../arrow_dataset/WriteNodeOptions.java
+
+
 
 /** \} */
+@Namespace("arrow::dataset::internal") public static native void InitializeDatasetWriter(
+    ExecFactoryRegistry registry);
+
 
   // namespace dataset
   // namespace arrow

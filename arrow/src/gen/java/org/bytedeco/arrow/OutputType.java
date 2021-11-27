@@ -36,9 +36,11 @@ public class OutputType extends Pointer {
   }
 
   /** Type resolution function. Given input types and shapes, return output
-   *  type and shape. This function SHOULD _not_ be used to check for arity,
-   *  that is to be performed one or more layers above. May make use of kernel
-   *  state to know what type to output in some cases. */
+   *  type and shape.  This function MAY may use the kernel state to decide
+   *  the output type based on the functionoptions.
+   * 
+   *  This function SHOULD _not_ be used to check for arity, that is to be
+   *  performed one or more layers above. */
 
   /** \brief Output an exact type, but with shape determined by promoting the
    *  shapes of the inputs (any ARRAY argument yields ARRAY). */
@@ -49,6 +51,7 @@ public class OutputType extends Pointer {
   public OutputType(@ByVal ValueDescr descr) { super((Pointer)null); allocate(descr); }
   private native void allocate(@ByVal ValueDescr descr);  // NOLINT implicit construction
 
+  /** \brief Output a computed type depending on actual input types */
   public OutputType(@ByVal @Cast("arrow::compute::OutputType::Resolver*") Pointer resolver) { super((Pointer)null); allocate(resolver); }
   private native void allocate(@ByVal @Cast("arrow::compute::OutputType::Resolver*") Pointer resolver);
 

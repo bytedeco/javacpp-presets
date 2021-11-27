@@ -21,9 +21,18 @@ public class VarianceOptions extends FunctionOptions {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VarianceOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public VarianceOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public VarianceOptions position(long position) {
+        return (VarianceOptions)super.position(position);
+    }
+    @Override public VarianceOptions getPointer(long i) {
+        return new VarianceOptions((Pointer)this).offsetAddress(i);
+    }
 
-  public VarianceOptions(int ddof/*=0*/) { super((Pointer)null); allocate(ddof); }
-  private native void allocate(int ddof/*=0*/);
+  public VarianceOptions(int ddof/*=0*/, @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/) { super((Pointer)null); allocate(ddof, skip_nulls, min_count); }
+  private native void allocate(int ddof/*=0*/, @Cast("bool") boolean skip_nulls/*=true*/, @Cast("uint32_t") int min_count/*=0*/);
   public VarianceOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
   @MemberGetter public static native byte kTypeName(int i);
@@ -31,4 +40,9 @@ public class VarianceOptions extends FunctionOptions {
   public static native @ByVal VarianceOptions Defaults();
 
   public native int ddof(); public native VarianceOptions ddof(int setter);
+  /** If true (the default), null values are ignored. Otherwise, if any value is null,
+   *  emit null. */
+  public native @Cast("bool") boolean skip_nulls(); public native VarianceOptions skip_nulls(boolean setter);
+  /** If less than this many non-null values are observed, emit null. */
+  public native @Cast("uint32_t") int min_count(); public native VarianceOptions min_count(int setter);
 }

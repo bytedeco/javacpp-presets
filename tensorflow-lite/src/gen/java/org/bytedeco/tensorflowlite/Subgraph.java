@@ -20,22 +20,26 @@ public class Subgraph extends Pointer {
              @Cast("TfLiteExternalContext**") PointerPointer external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
-             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids); }
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map); }
   private native void allocate(ErrorReporter error_reporter,
              @Cast("TfLiteExternalContext**") PointerPointer external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
-             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids);
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map);
   public Subgraph(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
-             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids); }
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map); }
   private native void allocate(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
-             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids);
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map);
 
   
 
@@ -395,6 +399,10 @@ public class Subgraph extends Pointer {
   // TODO(b/149099381): Move this function to an external context interface.
   public native @Cast("tflite::resource::ResourceIDMap*") @ByRef StringIntMap resource_ids();
 
+  // WARNING: Experimental interface, subject to change.
+  // TODO(b/149099381): Move this function to an external context interface.
+  public native @Cast("tflite::resource::InitializationStatusMap*") @ByRef IntResourceBaseMap initialization_status_map();
+
   public native @Cast("size_t") long tensors_size();
 
   // Return the number of ops in the model.
@@ -414,9 +422,6 @@ public class Subgraph extends Pointer {
   // Change the dimensionality of a given tensor. Note, this is only acceptable
   // for tensor indices that are inputs.
   // Returns status of failure or success.
-  // TODO(aselle): Consider implementing ArraySlice equivalent to make this
-  //   more adept at accepting data without an extra copy. Use absl::ArraySlice
-  //   if our partners determine that dependency is acceptable.
   public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index,
                                    @StdVector IntPointer dims);
   public native @Cast("TfLiteStatus") int ResizeInputTensor(int tensor_index,
@@ -490,7 +495,6 @@ public class Subgraph extends Pointer {
   // Ensure the data in `tensor.data` is readable. In case delegate is used,
   // it might require to copy the data from delegate buffer to raw memory.
   // WARNING: This is an experimental API and subject to change.
-  // TODO(b/119495520): make this private when refactoring complete.
   public native @Cast("TfLiteStatus") int EnsureTensorDataIsReadable(int tensor_index);
 
   // The default capacity of `tensors_` vector.
@@ -527,9 +531,9 @@ public class Subgraph extends Pointer {
   // `flags` is a bitmask, see TfLiteCustomAllocationFlags.
   // The runtime does NOT take ownership of the underlying memory.
   //
-  // NOTE: User needs to call AllocateTensors() after this. In case of input
-  // resizing, buffers will be checked for required data size during
-  // AllocateTensors().
+  // NOTE: User needs to call AllocateTensors() after this.
+  // Invalid/insufficient buffers will cause an error during AllocateTensors or
+  // Invoke (in case of dynamic shapes in the graph).
   //
   // Parameters should satisfy the following conditions:
   // 1. tensor->allocation_type == kTfLiteArenaRw or kTfLiteArenaRwPersistent
@@ -554,4 +558,15 @@ public class Subgraph extends Pointer {
   public native void SetName(@Cast("const char*") BytePointer name);
   public native void SetName(String name);
   public native @StdString String GetName();
+
+  // WARNING: This is an experimental API and subject to change.
+  // Dumps debugging info by the underlying memory planner.
+  // Note: to have minimal binary increase caused by this debug info dump for
+  // the TfLite library and allow users to plug-in their own memory planner
+  // debugger, we have utilized weak symbols to meet these two requirements. By
+  // default, there is no debugging info dumped. However, if the TfLite-provided
+  // lite:simple_memory_arena_debug_dump (i.e. containing the strong defintion)
+  // is linked to the program, calling this function will output memory usage
+  // information about tenosrs and ops.
+  public native void DumpMemoryPlannerDebugInfo();
 }

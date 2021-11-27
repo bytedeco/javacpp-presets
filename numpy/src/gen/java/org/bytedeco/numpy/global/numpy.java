@@ -75,6 +75,15 @@ public static final int __STDC_FORMAT_MACROS = 1;
 //     #ifdef __LP64__
 //     #else
 //     #endif
+
+//     #undef NPY_SIZEOF_LONGDOUBLE
+//     #undef NPY_SIZEOF_COMPLEX_LONGDOUBLE
+
+//     #ifdef __x86_64
+//     #elif defined(__arm64__)
+//     #else
+//         #error "unknown architecture"
+//     #endif
 // #endif
 
 /**

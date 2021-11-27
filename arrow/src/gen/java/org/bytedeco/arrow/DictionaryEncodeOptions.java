@@ -30,9 +30,9 @@ public class DictionaryEncodeOptions extends FunctionOptions {
 
   /** Configure how null values will be encoded */
   public enum NullEncodingBehavior {
-    /** the null value will be added to the dictionary with a proper index */
+    /** The null value will be added to the dictionary with a proper index. */
     ENCODE(0),
-    /** the null value will be masked in the indices array */
+    /** The null value will be masked in the indices array. */
     MASK(1);
 
       public final int value;

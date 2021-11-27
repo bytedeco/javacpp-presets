@@ -105,7 +105,7 @@ public class Function extends Pointer {
   public native @ByVal DatumResult Execute(@Const @ByRef DatumVector args,
                                   @Const FunctionOptions options, ExecContext ctx);
 
-  /** \brief Returns a the default options for this function.
+  /** \brief Returns the default options for this function.
    * 
    *  Whatever option semantics a Function has, implementations must guarantee
    *  that default_options() is valid to pass to Execute as options. */

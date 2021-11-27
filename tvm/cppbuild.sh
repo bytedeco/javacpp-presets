@@ -12,8 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.7.0
-download https://dist.apache.org/repos/dist/release/tvm/tvm-v$TVM_VERSION/apache-tvm-src-v$TVM_VERSION-incubating.tar.gz apache-tvm-src-v$TVM_VERSION-incubating.tar.gz
+TVM_VERSION=0.8
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -62,10 +61,15 @@ MKL_PATH="${MKL_PATH//\\//}"
 MKLDNN_PATH="${MKLDNN_PATH//\\//}"
 OPENCL_PATH="${OPENCL_PATH//\\//}"
 
-echo "Decompressing archives..."
-tar --totals -xzf ../apache-tvm-src-v$TVM_VERSION-incubating.tar.gz
+if [[ ! -d tvm ]]; then
+    git clone https://github.com/apache/tvm
+fi
+cd tvm
+git reset --hard
+git checkout v$TVM_VERSION
+git submodule update --init --recursive
+git submodule foreach --recursive 'git reset --hard'
 
-cd apache-tvm-src-v$TVM_VERSION.rc0-incubating
 export TVM_LIBRARY_PATH=`pwd`
 
 # Fix compiler errors
@@ -73,17 +77,18 @@ sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
+sedinplace '/candidate_path/d' python/setup.py
 
 # https://github.com/apache/tvm/pull/6717
 # https://github.com/apache/tvm/pull/9138
 # https://github.com/apache/tvm/pull/8682
-sedinplace 's/(lanes, \/\*Scalable=\*\/false)/::getFixed(lanes)/g' src/target/llvm/codegen_llvm.cc
-sedinplace 's/llvm::Intrinsic::getName(id, {})/llvm::Intrinsic::getBaseName(id).str()/g' src/target/llvm/codegen_llvm.cc
-sedinplace 's/::F_None/::OF_None/g' src/target/llvm/llvm_module.cc
+#sedinplace 's/(lanes, \/\*Scalable=\*\/false)/::getFixed(lanes)/g' src/target/llvm/codegen_llvm.cc
+#sedinplace 's/llvm::Intrinsic::getName(id, {})/llvm::Intrinsic::getBaseName(id).str()/g' src/target/llvm/codegen_llvm.cc
+#sedinplace 's/::F_None/::OF_None/g' src/target/llvm/llvm_module.cc
 
 # https://github.com/apache/tvm/pull/6738
 # https://github.com/apache/tvm/pull/6752
-patch -Np1 < ../../../tvm.patch
+#patch -Np1 < ../../../tvm.patch
 
 # Work around issues with llvm-config
 f=($LLVM_PATH/llvm-config*)
@@ -174,7 +179,7 @@ cp -a 3rdparty/dlpack/include/dlpack 3rdparty/dmlc-core/include/dmlc ../include
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(attr decorator psutil typed_ast tvm)
+export MODULES=(attr cloudpickle decorator psutil synr typed_ast tornado tvm)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE*/$MODULE* ../python/ || true

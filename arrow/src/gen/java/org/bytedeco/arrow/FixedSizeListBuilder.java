@@ -96,6 +96,8 @@ public class FixedSizeListBuilder extends ArrayBuilder {
 
   public native @ByVal Status AppendEmptyValues(@Cast("int64_t") long length);
 
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData array, @Cast("int64_t") long offset, @Cast("int64_t") long length);
+
   public native ArrayBuilder value_builder();
 
   public native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type();

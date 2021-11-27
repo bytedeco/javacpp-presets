@@ -136,11 +136,6 @@ public class Tensor extends Pointer {
   /** Compute the number of non-zero values in the tensor */
   public native @ByVal LongResult CountNonZero();
 
-  /** Compute the number of non-zero values in the tensor */
-  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") LongPointer result);
-  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") LongBuffer result);
-  public native @Deprecated @ByVal Status CountNonZero(@Cast("int64_t*") long[] result);
-
   /** Return the offset of the given index on the given strides */
   public static native @Cast("int64_t") long CalculateValueOffset(@Cast("int64_t*") @StdVector LongPointer strides,
                                         @Cast("int64_t*") @StdVector LongPointer index);

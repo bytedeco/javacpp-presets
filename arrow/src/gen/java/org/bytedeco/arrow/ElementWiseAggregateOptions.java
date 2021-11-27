@@ -34,6 +34,5 @@ public class ElementWiseAggregateOptions extends FunctionOptions {
   @MemberGetter public static native byte kTypeName(int i);
   @MemberGetter public static native String kTypeName();
   public static native @ByVal ElementWiseAggregateOptions Defaults();
-
   public native @Cast("bool") boolean skip_nulls(); public native ElementWiseAggregateOptions skip_nulls(boolean setter);
 }
