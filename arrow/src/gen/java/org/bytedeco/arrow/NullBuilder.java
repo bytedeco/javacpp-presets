@@ -50,6 +50,8 @@ public class NullBuilder extends ArrayBuilder {
 
   
 
+  public native @ByVal Status AppendArraySlice(@Const @ByRef ArrayData arg0, @Cast("int64_t") long arg1, @Cast("int64_t") long length);
+
   public native @ByVal Status FinishInternal(@SharedPtr ArrayData out);
 
   /** \cond FALSE */

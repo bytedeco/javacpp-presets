@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ import org.bytedeco.mkl.presets.*;
         @Platform(
             value = {"linux", "macosx", "windows"},
             compiler = "cpp14",
-            define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()"},
+            define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()", "DMLC_USE_LOGGING_LIBRARY <tvm/runtime/logging.h>"},
             exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
             include = {
                 "dlpack/dlpack.h",
@@ -63,7 +63,15 @@ import org.bytedeco.mkl.presets.*;
                 "tvm/runtime/data_type.h",
                 "tvm/runtime/object.h",
                 "tvm/runtime/memory.h",
-                "tvm/runtime/container.h",
+//                "tvm/runtime/container.h",
+                "tvm/runtime/container/base.h",
+                "tvm/runtime/container/adt.h",
+                "tvm/runtime/container/array.h",
+                "tvm/runtime/container/closure.h",
+                "tvm/runtime/container/optional.h",
+                "tvm/runtime/container/map.h",
+                "tvm/runtime/container/shape_tuple.h",
+                "tvm/runtime/container/string.h",
                 "tvm/runtime/ndarray.h",
                 "tvm/runtime/serializer.h",
                 "tvm/runtime/module.h",
@@ -130,19 +138,23 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("org_apache_tvm_native_c_api.cc").skip())
                .put(new Info("DLPACK_EXTERN_C", "DLPACK_DLL", "DMLC_STRICT_CXX11", "DMLC_CXX11_THREAD_LOCAL",
-                             "DMLC_ATTRIBUTE_UNUSED", "DMLC_SUPPRESS_UBSAN", "DMLC_NO_INLINE", "TVM_WEAK", "TVM_DLL",
+                             "DMLC_ATTRIBUTE_UNUSED", "DMLC_SUPPRESS_UBSAN", "DMLC_NO_INLINE", "DMLC_ALWAYS_INLINE", "TVM_WEAK", "TVM_DLL",
                              "TVM_ATTRIBUTE_UNUSED", "TVM_OBJECT_REG_VAR_DEF", "TVM_ADD_FILELINE", "TVM_ALWAYS_INLINE",
                              "TVM_FUNC_REG_VAR_DEF").cppTypes().annotations())
                .put(new Info("__APPLE__", "_MSC_VER", "defined(_MSC_VER)", "defined(_MSC_VER) && _MSC_VER < 1900").define(false))
-               .put(new Info("DMLC_LOG_STACK_TRACE", "DMLC_CMAKE_LITTLE_ENDIAN").define(true))
+               .put(new Info("defined DMLC_USE_LOGGING_LIBRARY", "DMLC_LOG_STACK_TRACE", "DMLC_CMAKE_LITTLE_ENDIAN").define(true))
                .put(new Info("DMLC_LITTLE_ENDIAN", "DMLC_IO_NO_ENDIAN_SWAP").translate(false))
-               .put(new Info("std::initializer_list", "std::hash", "std::nullptr_t", "dmlc::Demangle",
-                             "dmlc::InputSplit::Create", "dmlc::SeekStream::CreateForRead", "dmlc::Stream::Create",
+               .put(new Info("auto", "std::equal_to", "std::initializer_list", "std::hash", "std::nullptr_t", "dmlc::Demangle",
+                             "dmlc::DummyOStream", "dmlc::InputSplit::Create", "dmlc::SeekStream::CreateForRead", "dmlc::Stream::Create",
                              "dmlc::io::FileSystem::GetInstance", "tvm::runtime::NDArray::reset").skip())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
-               .put(new Info("std::runtime_error", "std::basic_istream<char>", "std::basic_ostream<char>").cast().pointerTypes("Pointer"))
+               .put(new Info("std::runtime_error", "std::basic_istream<char>", "std::basic_ostream<char>",
+                             "tvm::runtime::MapNode::iterator", "tvm::runtime::MapNode::KVType").cast().pointerTypes("Pointer"))
+               .put(new Info("tvm::runtime::MapNode::key_type", "tvm::runtime::MapNode::mapped_type",
+                             "key_type", "mapped_type").pointerTypes("ObjectRef"))
 
                .put(new Info("tvm::runtime::DataType::TypeCode").enumerate().cppTypes("long long"))
+               .put(new Info("tvm::runtime::ShapeTuple::index_type").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("TVMArgTypeCode::kTVMOpaqueHandle").javaNames("kTVMOpaqueHandle"))
                .put(new Info("TVMArrayHandle").valueTypes("@Cast(\"TVMArrayHandle\") DLTensor")
                                               .pointerTypes("@Cast(\"TVMArrayHandle*\") PointerPointer", "@ByPtrPtr @Cast(\"TVMArrayHandle*\") DLTensor"))
@@ -158,12 +170,18 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                .put(new Info("tvm::runtime::ArrayNode").pointerTypes("ArrayNode"))
                .put(new Info("tvm::runtime::InplaceArrayBase<tvm::runtime::ArrayNode,tvm::runtime::ObjectRef>",
                              "tvm::runtime::InplaceArrayBase<ArrayNode,tvm::runtime::ObjectRef>").pointerTypes("ArrayNodeBase"))
+               .put(new Info("tvm::runtime::SmallMapNode").pointerTypes("SmallMapNode"))
+               .put(new Info("tvm::runtime::InplaceArrayBase<tvm::runtime::SmallMapNode,tvm::runtime::MapNode::KVType>",
+                             "tvm::runtime::InplaceArrayBase<SmallMapNode,tvm::runtime::MapNode::KVType>").pointerTypes("SmallMapNodeBase"))
 
                .put(new Info("tvm::runtime::make_object<tvm::runtime::ArrayNode>").javaNames("makeArrayNode"))
                .put(new Info("tvm::runtime::ObjectPtr<tvm::runtime::ArrayNode>").pointerTypes("ArrayNodePtr"))
+               .put(new Info("tvm::runtime::ObjectPtr<tvm::runtime::MapNode>").pointerTypes("MapNodePtr"))
+               .put(new Info("tvm::runtime::Optional<tvm::runtime::String>").pointerTypes("TVMStringOptional"))
                .put(new Info("tvm::runtime::Object").pointerTypes("TVMObject"))
                .put(new Info("tvm::runtime::String").pointerTypes("TVMString"))
-               .put(new Info("tvm::runtime::StringObj::FromStd", "llvm::StringRef").skip())
+               .put(new Info("tvm::runtime::StringObj::FromStd", "tvm::runtime::ShapeTupleObj::FromStd",
+                             "tvm::runtime::TVMMovableArgValueWithContext_", "llvm::StringRef").skip())
 
                .put(new Info("FDeleter").valueTypes("FDeleter"))
                .put(new Info("tvm::runtime::NDArray::operator ->").javaNames("accessDLTensor"))

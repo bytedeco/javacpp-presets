@@ -45,6 +45,8 @@ public class SymbolicShape extends Pointer {
   public SymbolicShape(@StdVector LongOptional dims) { super((Pointer)null); allocate(dims); }
   private native void allocate(@StdVector LongOptional dims);
 
+  public native void dump();
+
   public SymbolicShape(@ByVal ShapeSymbolVector dims) { super((Pointer)null); allocate(dims); }
   private native void allocate(@ByVal ShapeSymbolVector dims);
 
@@ -54,6 +56,8 @@ public class SymbolicShape extends Pointer {
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
 
   public native @ByVal @Name("operator []") ShapeSymbol get(@Cast("size_t") long i);
+
+  public native @ByVal ShapeSymbol at(@Cast("size_t") long i);
 
   // Returns rank or nullopt in case of unranked shape.
   public native @ByVal SizeTOptional rank();

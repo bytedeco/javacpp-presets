@@ -64,6 +64,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../StringNodeOutputMap.java
 
 
+// Targeting ../CameraBoardSocketStringMap.java
+
+
 // Targeting ../CameraBoardSocketCameraInfoMap.java
 
 
@@ -994,7 +997,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 /**
  * Available IMU sensors.
  * More details about each sensor can be found in the datasheet:
- * \link https://www.ceva-dsp.com/wp-content/uploads/2019/10/BNO080_085-Datasheet.pdf \endlink
+ *
+ * https://www.ceva-dsp.com/wp-content/uploads/2019/10/BNO080_085-Datasheet.pdf
  */
 @Namespace("dai") public enum IMUSensor {
     /**
@@ -1246,6 +1250,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include "depthai-shared/common/optional.hpp"
 
 @Namespace("dai") public enum TrackerType {
+    /** Kernelized Correlation Filter tracking */
+    SHORT_TERM_KCF(1),
+    /** Short term tracking without using image data */
+    SHORT_TERM_IMAGELESS(3),
     /** Ability to track the objects without accessing image data. */
     ZERO_TERM_IMAGELESS(5),
     /** Tracking using image data too. */

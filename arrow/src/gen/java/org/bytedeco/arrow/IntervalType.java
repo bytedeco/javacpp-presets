@@ -21,7 +21,7 @@ public class IntervalType extends TemporalType {
     public ParametricType asParametricType() { return asParametricType(this); }
     @Namespace public static native @Name("static_cast<arrow::ParametricType*>") ParametricType asParametricType(IntervalType pointer);
 
-  public enum type { MONTHS(0), DAY_TIME(1);
+  public enum type { MONTHS(0), DAY_TIME(1), MONTH_DAY_NANO(2);
 
       public final int value;
       private type(int v) { this.value = v; }

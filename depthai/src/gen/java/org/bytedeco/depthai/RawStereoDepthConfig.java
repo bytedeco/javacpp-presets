@@ -59,6 +59,13 @@ public class RawStereoDepthConfig extends RawBuffer {
          * For better occlusion handling
          */
         public native @Cast("bool") boolean enableLeftRightCheck(); public native AlgorithmControl enableLeftRightCheck(boolean setter);
+
+        /**
+         * Disparity range increased from 95 to 190, combined from full resolution and downscaled images.
+         * Suitable for short range objects
+         */
+        public native @Cast("bool") boolean enableExtended(); public native AlgorithmControl enableExtended(boolean setter);
+
         /**
          * Computes disparity with sub-pixel interpolation (5 fractional bits), suitable for long range
          */
@@ -119,6 +126,24 @@ public class RawStereoDepthConfig extends RawBuffer {
      */
     public native @ByRef PostProcessing postProcessing(); public native RawStereoDepthConfig postProcessing(PostProcessing setter);
 
+    /**
+     * The basic cost function used by the Stereo Accelerator for matching the left and right images is the Census
+     * Transform. It works on a block of pixels and computes a bit vector which represents the structure of the
+     * image in that block.
+     * There are two types of Census Transform based on how the middle pixel is used:
+     * Classic Approach and Modified Census. The comparisons that are made between pixels can be or not thresholded.
+     * In some cases a mask can be applied to filter out only specific bits from the entire bit stream.
+     * All these approaches are:
+     * Classic Approach: Uses middle pixel to compare against all its neighbors over a defined window. Each
+     * comparison results in a new bit, that is 0 if central pixel is smaller, or 1 if is it bigger than its neighbor.
+     * Modified Census Transform: same as classic Census Transform, but instead of comparing central pixel
+     * with its neighbors, the window mean will be compared with each pixel over the window.
+     * Thresholding Census Transform: same as classic Census Transform, but it is not enough that a
+     * neighbor pixel to be bigger than the central pixel, it must be significant bigger (based on a threshold).
+     * Census Transform with Mask: same as classic Census Transform, but in this case not all of the pixel from
+     * the support window are part of the binary descriptor. We use a ma sk “M” to define which pixels are part
+     * of the binary descriptor (1), and which pixels should be skipped (0).
+     */
     public static class CensusTransform extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -180,6 +205,11 @@ public class RawStereoDepthConfig extends RawBuffer {
      */
     public native @ByRef CensusTransform censusTransform(); public native RawStereoDepthConfig censusTransform(CensusTransform setter);
 
+    /**
+     * The matching cost is way of measuring the similarity of image locations in stereo correspondence
+     * algorithm. Based on the configuration parameters and based on the descriptor type, a linear equation
+     * is applied to computing the cost for each candidate disparity at each pixel.
+     */
     public static class CostMatching extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -277,6 +307,13 @@ public class RawStereoDepthConfig extends RawBuffer {
      */
     public native @ByRef CostMatching costMatching(); public native RawStereoDepthConfig costMatching(CostMatching setter);
 
+    /**
+     * Cost Aggregation is based on Semi Global Block Matching (SGBM). This algorithm uses a semi global
+     * technique to aggregate the cost map. Ultimately the idea is to build inertia into the stereo algorithm. If
+     * a pixel has very little texture information, then odds are the correct disparity for this pixel is close to
+     * that of the previous pixel considered. This means that we get improved results in areas with low
+     * texture.
+     */
     public static class CostAggregation extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -294,16 +331,33 @@ public class RawStereoDepthConfig extends RawBuffer {
             return new CostAggregation((Pointer)this).offsetAddress(i);
         }
     
-        
+        @MemberGetter public static native int defaultPenaltyP1();
+        public static final int defaultPenaltyP1 = defaultPenaltyP1();
+        @MemberGetter public static native int defaultPenaltyP2();
+        public static final int defaultPenaltyP2 = defaultPenaltyP2();
 
-        
-
-        // TBD
+        /**
+         * Cost calculation linear equation parameters.
+         */
         public native @Cast("uint8_t") byte divisionFactor(); public native CostAggregation divisionFactor(byte setter);
 
-        public native @ByRef @Cast("tl::optional<std::array<uint16_t,256> >*") Pointer horizontalPenaltyCosts(); public native CostAggregation horizontalPenaltyCosts(Pointer setter);
+        /**
+         * Horizontal P1 penalty cost parameter.
+         */
+        public native @Cast("uint16_t") short horizontalPenaltyCostP1(); public native CostAggregation horizontalPenaltyCostP1(short setter);
+        /**
+         * Horizontal P2 penalty cost parameter.
+         */
+        public native @Cast("uint16_t") short horizontalPenaltyCostP2(); public native CostAggregation horizontalPenaltyCostP2(short setter);
 
-        public native @ByRef @Cast("tl::optional<std::array<uint16_t,256> >*") Pointer verticalPenaltyCosts(); public native CostAggregation verticalPenaltyCosts(Pointer setter);
+        /**
+         * Vertical P1 penalty cost parameter.
+         */
+        public native @Cast("uint16_t") short verticalPenaltyCostP1(); public native CostAggregation verticalPenaltyCostP1(short setter);
+        /**
+         * Vertical P2 penalty cost parameter.
+         */
+        public native @Cast("uint16_t") short verticalPenaltyCostP2(); public native CostAggregation verticalPenaltyCostP2(short setter);
     }
 
     /**

@@ -25,6 +25,7 @@ public class InterpreterContinuation extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InterpreterContinuation(Pointer p) { super(p); }
 
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public InterpreterContinuation(
         @Const @ByRef InterpreterState state_,
         @ByVal IValueVector stack_,

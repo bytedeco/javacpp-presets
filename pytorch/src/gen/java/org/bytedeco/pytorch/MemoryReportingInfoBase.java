@@ -25,10 +25,19 @@ public class MemoryReportingInfoBase extends DebugInfoBase {
     public MemoryReportingInfoBase(Pointer p) { super(p); }
 
 
-  // Negative alloc_size corresponds to freeing of the memory
+  /**
+   * alloc_size corresponds to the size of the ptr.
+   *
+   * total_allocated corresponds to total allocated memory.
+   *
+   * total_reserved corresponds to total size of memory pool, both used and
+   * unused, if applicable.
+   */
   public native void reportMemoryUsage(
         Pointer ptr,
         @Cast("int64_t") long alloc_size,
+        @Cast("int64_t") long total_allocated,
+        @Cast("int64_t") long total_reserved,
         @ByVal Device device);
 
   public native @Cast("bool") boolean memoryProfilingEnabled();

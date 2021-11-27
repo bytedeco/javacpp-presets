@@ -196,7 +196,18 @@ case $PLATFORM in
         export BINARY=64
         export TARGET=ARMV8
         ;;
-    macosx-*)
+    macosx-arm64)
+        patch -Np1 < ../../../OpenBLAS-macosx.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
+        export CC="clang -arch arm64"
+        export FC=
+        export LDFLAGS='-s -Wl,-rpath,@loader_path/'
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=ARMV8
+        ;;
+    macosx-x86_64)
         patch -Np1 < ../../../OpenBLAS-macosx.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"

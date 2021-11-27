@@ -18,8 +18,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CrossEntropyLoss ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/** Creates a criterion that combines :func:{@code nn.LogSoftmax} and
- *  :func:{@code nn.NLLLoss} in one single class.
+/** Creates a criterion that computes cross entropy loss between input and target.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.CrossEntropyLoss to learn
  *  about the exact behavior of this module.
  * 

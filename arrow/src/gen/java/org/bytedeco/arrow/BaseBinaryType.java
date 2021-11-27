@@ -12,7 +12,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** \brief Base class for all variable-size binary data types */
+/** \}
+ <p>
+ *  \brief Base class for all variable-size binary data types */
 @Namespace("arrow") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class BaseBinaryType extends DataType {
     static { Loader.load(); }

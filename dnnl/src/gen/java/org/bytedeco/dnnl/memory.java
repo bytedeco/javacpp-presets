@@ -792,6 +792,10 @@ public class memory extends dnnl_memory_handle {
         aBC48b32c(dnnl_aBC48b32c),
         ABcd40a16b(dnnl_ABcd40a16b),
         ABcd40a32b(dnnl_ABcd40a32b),
+        BA16a16b(dnnl_BA16a16b),
+        BA16a32b(dnnl_BA16a32b),
+        BA16a48b(dnnl_BA16a48b),
+        BA16a64b(dnnl_BA16a64b),
         BA16a16b2a(dnnl_BA16a16b2a),
         BA16a32b2a(dnnl_BA16a32b2a),
         BA16a48b2a(dnnl_BA16a48b2a),
@@ -1338,7 +1342,11 @@ public class memory extends dnnl_memory_handle {
         gOIhw2o8i16o2i(dnnl_gOIhw2o8i16o2i),
         gOIdhw2o8i16o2i(dnnl_gOIdhw2o8i16o2i),
         gOIw2o8i16o4i(dnnl_gOIw2o8i16o4i),
-        gOIhw2o8i16o4i(dnnl_gOIhw2o8i16o4i);
+        gOIhw2o8i16o4i(dnnl_gOIhw2o8i16o4i),
+        BA4b8a16b2a(dnnl_BA4b8a16b2a),
+        BA4b8a16b4a(dnnl_BA4b8a16b4a),
+        aCB4c8b16c2b(dnnl_aCB4c8b16c2b),
+        aCB4c8b16c4b(dnnl_aCB4c8b16c4b);
 
         public final int value;
         private format_tag(int v) { this.value = v; }

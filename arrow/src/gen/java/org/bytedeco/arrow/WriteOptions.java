@@ -12,7 +12,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.arrow.global.arrow.*;
 
 
-/** Experimental */
 @Namespace("arrow::csv") @Properties(inherit = org.bytedeco.arrow.presets.arrow.class)
 public class WriteOptions extends Pointer {
     static { Loader.load(); }

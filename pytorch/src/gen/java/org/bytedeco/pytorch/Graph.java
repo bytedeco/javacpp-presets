@@ -31,9 +31,8 @@ public class Graph extends Pointer {
 
   
   
-  public Graph(@ByVal @Cast("torch::jit::ScopePtr*") Pointer scope_root) { super((Pointer)null); allocate(scope_root); }
-  private native void allocate(@ByVal @Cast("torch::jit::ScopePtr*") Pointer scope_root);
-
+  public Graph(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root) { super((Pointer)null); allocate(scope_root); }
+  private native void allocate(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root);
   public Graph() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -94,7 +93,7 @@ public class Graph extends Pointer {
   public native JitNode createEnumName(Value e);
   public native JitNode createEnumValue(Value e);
   public native JitNode createList(
-        @Const @SharedPtr @ByRef Type elem_type,
+        @Const @SharedPtr @ByRef Type contained_type,
         @ByVal ValueArrayRef values);
   public native JitNode createListUnpack(Value v, @Cast("size_t") long size);
   public native JitNode createDict(

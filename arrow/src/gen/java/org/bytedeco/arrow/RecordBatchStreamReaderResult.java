@@ -37,7 +37,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
    *  an empty vector, it will actually invoke the default constructor of
    *  Result. */
   public RecordBatchStreamReaderResult() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @NoException(true) private native void allocate();
 
   /** Constructs a Result object with the given non-OK Status object. All
    *  calls to ValueOrDie() on this object will abort. The given {@code status} must
@@ -54,7 +54,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
   ///
   ///
   public RecordBatchStreamReaderResult(@Const @ByRef Status status) { super((Pointer)null); allocate(status); }
-  private native void allocate(@Const @ByRef Status status);
+  @NoException(true) private native void allocate(@Const @ByRef Status status);
 
   /** Constructs a Result object that contains {@code value}. The resulting object
    *  is considered to have an OK status. The wrapped element can be accessed
@@ -107,7 +107,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
   ///
   ///
   public RecordBatchStreamReaderResult(@Const @ByRef RecordBatchStreamReaderResult other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@Const @ByRef RecordBatchStreamReaderResult other);
+  @NoException(true) private native void allocate(@Const @ByRef RecordBatchStreamReaderResult other);
 
   /** Templatized constructor that constructs a {@code Result<T>} from a const
    *  reference to a {@code Result<U>}.
@@ -122,7 +122,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
   
   ///
   ///
-  public native @ByRef @Name("operator =") RecordBatchStreamReaderResult put(@Const @ByRef RecordBatchStreamReaderResult other);
+  public native @ByRef @Name("operator =") @NoException(true) RecordBatchStreamReaderResult put(@Const @ByRef RecordBatchStreamReaderResult other);
 
   /** Templatized constructor which constructs a {@code Result<T>} by moving the
    *  contents of a {@code Result<U>}. {@code T} must be implicitly constructible from {@code U
@@ -154,7 +154,7 @@ public class RecordBatchStreamReaderResult extends Pointer {
    *  the wrapped element through a call to ValueOrDie(). */
   
   ///
-  public native @Cast("bool") boolean ok();
+  public native @Cast("const bool") boolean ok();
 
   /** \brief Equivalent to ok(). */
   // operator bool() const { return ok(); }
@@ -226,7 +226,10 @@ public class RecordBatchStreamReaderResult extends Pointer {
   /** Cast the internally stored value to produce a new result or propagate the stored
    *  error. */
 
+// #if __cpp_constexpr >= 201304L  // non-const constexpr
   public native @SharedPtr RecordBatchStreamReader ValueUnsafe();
+// #else
+// #endif
 
   
 

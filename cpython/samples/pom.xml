@@ -16,6 +16,6 @@
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>${basedir}</sourceDirectory>
+        <sourceDirectory>.</sourceDirectory>
     </build>
 </project>

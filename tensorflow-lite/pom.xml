@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.packageName>tensorflowlite</javacpp.packageName>
-    <tensorflow.version>2.6.0</tensorflow.version>
+    <tensorflow.version>2.7.0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
@@ -96,6 +96,8 @@
               <properties>${javacpp.platform}</properties>
               <compilerOptions>
                 <compilerOption>@${tensorflow.path}/../build/objs.dos</compilerOption>
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/FORCE:MULTIPLE</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>

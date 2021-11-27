@@ -765,10 +765,18 @@ public static final int
     dnnl_aCBdef2c8b16c2b = 492,
     dnnl_aBCd2b8c16b4c = 493,
     dnnl_aBCde2b8c16b4c = 494,
+    dnnl_BA4b8a16b2a = 495,
+    dnnl_BA4b8a16b4a = 496,
+    dnnl_aCB4c8b16c2b = 497,
+    dnnl_aCB4c8b16c4b = 498,
+    dnnl_BA16a16b = 499,
+    dnnl_BA16a32b = 500,
+    dnnl_BA16a48b = 501,
+    dnnl_BA16a64b = 502,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 495,
+    dnnl_format_tag_last = 503,
 
     // Aliases
 
@@ -1650,7 +1658,7 @@ public static final int
      * 
      *  If specified:
      *   - on forward propagation use scale and shift (aka scale and bias) for
-     *     the batch normalization results
+     *     the normalization results
      *   - on backward propagation (for prop_kind == #dnnl_backward) compute
      *     diff wrt scale and shift (hence one extra output used)
      * 
@@ -1680,7 +1688,7 @@ public static final int
     /** Use scale parameter
      * 
      *  If specified:
-     *   - on forward propagation use scale for the batch normalization results
+     *   - on forward propagation use scale for the normalization results
      *   - on backward propagation (for prop_kind == #dnnl_backward) compute
      *     diff wrt scale (hence one extra output used) */
     
@@ -1690,8 +1698,8 @@ public static final int
     /** Use shift parameter
      * 
      *  If specified:
-     *   - on forward propagation use shift (aka bias) for the batch
-     *     normalization results
+     *   - on forward propagation use shift (aka bias) for the normalization
+     *     results
      *   - on backward propagation (for prop_kind == #dnnl_backward) compute
      *     diff wrt shift (hence one extra output used) */
     dnnl_use_shift = 0x10;
@@ -2612,6 +2620,9 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // When defined, SYCL CUDA backend is used.
 /* #undef DNNL_SYCL_CUDA */
 
+// When defined, stack checker is enabled.
+/* #undef DNNL_ENABLE_STACK_CHECKER */
+
 // List of configurating build controls
 // Workload controls
 public static final int BUILD_TRAINING = 1;
@@ -2637,6 +2648,12 @@ public static final int BUILD_RNN = 0;
 public static final int BUILD_SHUFFLE = 0;
 public static final int BUILD_SOFTMAX = 0;
 public static final int BUILD_SUM = 0;
+// Primitives CPU ISA controls
+public static final int BUILD_PRIMITIVE_CPU_ISA_ALL = 1;
+public static final int BUILD_SSE41 = 0;
+public static final int BUILD_AVX2 = 0;
+public static final int BUILD_AVX512 = 0;
+public static final int BUILD_AMX = 0;
 // #endif
 
 
@@ -2667,10 +2684,10 @@ public static final int BUILD_SUM = 0;
 public static final int DNNL_VERSION_MAJOR = 2;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 4;
+public static final int DNNL_VERSION_MINOR = 5;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 1;
+public static final int DNNL_VERSION_PATCH = 0;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();

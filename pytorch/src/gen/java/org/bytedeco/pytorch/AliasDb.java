@@ -14,7 +14,7 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
-
+ // namespace utils
 @Namespace("torch::jit") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AliasDb extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

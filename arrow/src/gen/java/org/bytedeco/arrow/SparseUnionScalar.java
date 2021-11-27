@@ -23,8 +23,11 @@ public class SparseUnionScalar extends UnionScalar {
       private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
   
   
-    public SparseUnionScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type); }
-    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+    public SparseUnionScalar(byte type_code, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(type_code, type); }
+    private native void allocate(byte type_code, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
+  
+    public SparseUnionScalar(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value, byte type_code, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type) { super((Pointer)null); allocate(value, type_code, type); }
+    private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<arrow::Scalar>"}) Scalar value, byte type_code, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseUnionScalar(Pointer p) { super(p); }
 

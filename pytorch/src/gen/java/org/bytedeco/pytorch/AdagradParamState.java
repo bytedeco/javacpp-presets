@@ -39,5 +39,4 @@ public class AdagradParamState extends OptimizerCloneableAdagradParamState {
   
   
   
-  // NOLINTNEXTLINE(modernize-use-override)
 }

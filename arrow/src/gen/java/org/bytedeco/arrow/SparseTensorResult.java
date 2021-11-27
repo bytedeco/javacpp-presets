@@ -95,7 +95,7 @@ public class SparseTensorResult extends Pointer {
   
   ///
   ///
-  public native @ByRef @Name("operator =") SparseTensorResult put(@Const @ByRef SparseTensorResult other);
+  public native @ByRef @Name("operator =") @NoException(true) SparseTensorResult put(@Const @ByRef SparseTensorResult other);
 
   /** Templatized constructor which constructs a {@code Result<T>} by moving the
    *  contents of a {@code Result<U>}. {@code T} must be implicitly constructible from {@code U
@@ -127,7 +127,7 @@ public class SparseTensorResult extends Pointer {
    *  the wrapped element through a call to ValueOrDie(). */
   
   ///
-  public native @Cast("bool") boolean ok();
+  public native @Cast("const bool") boolean ok();
 
   /** \brief Equivalent to ok(). */
   // operator bool() const { return ok(); }
@@ -199,7 +199,10 @@ public class SparseTensorResult extends Pointer {
   /** Cast the internally stored value to produce a new result or propagate the stored
    *  error. */
 
+// #if __cpp_constexpr >= 201304L  // non-const constexpr
   public native @SharedPtr SparseTensor ValueUnsafe();
+// #else
+// #endif
 
   
 

@@ -55,6 +55,7 @@ public class ArrayVisitor extends Pointer {
   public native @ByVal Status Visit(@Const @ByRef Time64Array array);
   public native @ByVal Status Visit(@Const @ByRef TimestampArray array);
   public native @ByVal Status Visit(@Const @ByRef DayTimeIntervalArray array);
+  public native @ByVal Status Visit(@Const @ByRef MonthDayNanoIntervalArray array);
   public native @ByVal Status Visit(@Const @ByRef MonthIntervalArray array);
   public native @ByVal Status Visit(@Const @ByRef DurationArray array);
   public native @ByVal Status Visit(@Const @ByRef Decimal128Array array);

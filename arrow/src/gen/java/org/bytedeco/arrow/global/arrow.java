@@ -26,6 +26,9 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // Targeting ../Long4Array.java
 
 
+// Targeting ../Long2Array.java
+
+
 // Targeting ../KernelStateVector.java
 
 
@@ -174,22 +177,22 @@ public class arrow extends org.bytedeco.arrow.presets.arrow {
 // specific language governing permissions and limitations
 // under the License.
 
-public static final int ARROW_VERSION_MAJOR = 5;
+public static final int ARROW_VERSION_MAJOR = 6;
 public static final int ARROW_VERSION_MINOR = 0;
-public static final int ARROW_VERSION_PATCH = 0;
+public static final int ARROW_VERSION_PATCH = 1;
 public static final int ARROW_VERSION = ((ARROW_VERSION_MAJOR * 1000) + ARROW_VERSION_MINOR) * 1000 + ARROW_VERSION_PATCH;
 
-public static final String ARROW_VERSION_STRING = "5.0.0";
+public static final String ARROW_VERSION_STRING = "6.0.1";
 
-public static final String ARROW_SO_VERSION = "500";
-public static final String ARROW_FULL_SO_VERSION = "500.0.0";
+public static final String ARROW_SO_VERSION = "600";
+public static final String ARROW_FULL_SO_VERSION = "600.1.0";
 
 public static final String ARROW_CXX_COMPILER_ID = "GNU";
-public static final String ARROW_CXX_COMPILER_VERSION = "10.3.1";
+public static final String ARROW_CXX_COMPILER_VERSION = "11.2.1";
 public static final String ARROW_CXX_COMPILER_FLAGS = "-std=c++11 -m64 -fdiagnostics-color=always -O3 -DNDEBUG";
 
-public static final String ARROW_GIT_ID = "82c55a5f5a7e377bb024400bf901c98b7fadf5d6";
-public static final String ARROW_GIT_DESCRIPTION = "1.5.6-1-g82c55a5f5a-dirty";
+public static final String ARROW_GIT_ID = "e775221fedf1bfde838026a7fee97af18e90775a";
+public static final String ARROW_GIT_DESCRIPTION = "1.5.6-33-ge775221fed-dirty";
 
 public static final String ARROW_PACKAGE_KIND = "";
 
@@ -318,6 +321,12 @@ public static final String ARROW_PACKAGE_KIND = "";
 // #define ARROW_MUST_USE_TYPE
 // #endif
 
+// #if defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER)
+// #define ARROW_RESTRICT __restrict
+// #else
+// #define ARROW_RESTRICT
+// #endif
+
 // ----------------------------------------------------------------------
 // C++/CLI support macros (see ARROW-1134)
 
@@ -353,7 +362,41 @@ public static final String ARROW_PACKAGE_KIND = "";
 // #  define ARROW_DEPRECATED_USING(...)
 // # endif
 // #endif
+
+// #ifdef __COVERITY__
+// #  define ARROW_DEPRECATED_ENUM_VALUE(...)
+// #elif __cplusplus > 201103L
+// #  define ARROW_DEPRECATED_ENUM_VALUE(...) [[deprecated(__VA_ARGS__)]]
+// #else
+// # if defined(__GNUC__) && __GNUC__ >= 6
+// #  define ARROW_DEPRECATED_ENUM_VALUE(...) __attribute__((deprecated(__VA_ARGS__)))
+// # else
+// #  define ARROW_DEPRECATED_ENUM_VALUE(...)
+// # endif
+// #endif
+
 // clang-format on
+
+// Macros to disable deprecation warnings
+
+// #ifdef __clang__
+// #define ARROW_SUPPRESS_DEPRECATION_WARNING
+//   _Pragma("clang diagnostic push");
+//   _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING _Pragma("clang diagnostic pop")
+// #elif defined(__GNUC__)
+// #define ARROW_SUPPRESS_DEPRECATION_WARNING
+//   _Pragma("GCC diagnostic push");
+//   _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING _Pragma("GCC diagnostic pop")
+// #elif defined(_MSC_VER)
+// #define ARROW_SUPPRESS_DEPRECATION_WARNING
+//   __pragma(warning(push)) __pragma(warning(disable : 4996))
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING __pragma(warning(pop))
+// #else
+// #define ARROW_SUPPRESS_DEPRECATION_WARNING
+// #define ARROW_UNSUPPRESS_DEPRECATION_WARNING
+// #endif
 
 // ----------------------------------------------------------------------
 
@@ -1130,7 +1173,7 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 
 // #include "arrow/util/macros.h"
 
-
+@Namespace("arrow::util::internal") @MemberGetter public static native @Cast("const uint8_t") byte kNonNullFiller();
 
   // namespace internal
 
@@ -1652,6 +1695,7 @@ public static final int ARROW_BITNESS = ARROW_BITNESS();
 // #include "arrow/status.h"
 // #include "arrow/util/bit_util.h"
 // #include "arrow/util/bitmap_generate.h"
+// #include "arrow/util/bitmap_ops.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/ubsan.h"
 // #include "arrow/util/visibility.h"
@@ -1800,14 +1844,11 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <utility>
 
 // #include "arrow/status.h"
+// #include "arrow/util/aligned_storage.h"
 // #include "arrow/util/compare.h"
 // Targeting ../EnsureResult.java
 
 
-
-// #if __cplusplus >= 201703L
-// #else
-// #endif
 
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString String msg);
 @Namespace("arrow::internal") public static native void DieWithMessage(@StdString BytePointer msg);
@@ -2379,6 +2420,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 /** \brief Return a MonthIntervalType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType month_interval();
 
+/** \brief Return a MonthDayNanoIntervalType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType month_day_nano_interval();
+
 /** \brief Create a TimestampType instance from its unit */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType timestamp(TimeUnit.type unit);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType timestamp(@Cast("arrow::TimeUnit::type") int unit);
@@ -2414,15 +2458,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
                                                     @StdVector ByteBuffer type_codes/*={}*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@ByVal FieldVector child_fields,
                                                     @StdVector byte[] type_codes/*={}*/);
-/** \brief Create a DenseUnionType instance */
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
-                                                   @StdVector BytePointer type_codes/*={}*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
-                                                   @StdVector ByteBuffer type_codes/*={}*/);
-@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
-                                                   @StdVector byte[] type_codes/*={}*/);
-
 /** \brief Create a SparseUnionType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>{}") StringVector field_names,
              @StdVector BytePointer type_codes/*={}*/);
@@ -2431,6 +2466,15 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
              @StdVector ByteBuffer type_codes/*={}*/);
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType sparse_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>{}") StringVector field_names,
              @StdVector byte[] type_codes/*={}*/);
+
+/** \brief Create a DenseUnionType instance */
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector BytePointer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector ByteBuffer type_codes/*={}*/);
+@Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@ByVal FieldVector child_fields,
+                                                   @StdVector byte[] type_codes/*={}*/);
 /** \brief Create a DenseUnionType instance */
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>{}") StringVector field_names,
             @StdVector BytePointer type_codes/*={}*/);
@@ -2440,75 +2484,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType dense_union(@Const @ByRef ArrayVector children, @ByVal(nullValue = "std::vector<std::string>{}") StringVector field_names,
             @StdVector byte[] type_codes/*={}*/);
 
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector BytePointer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector BytePointer type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector ByteBuffer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector ByteBuffer type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector byte[] type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector byte[] type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector BytePointer type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector ByteBuffer type_codes, UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @StdVector byte[] type_codes, @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef FieldVector child_fields,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector BytePointer type_codes,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector ByteBuffer type_codes,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names, @StdVector byte[] type_codes,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Const @ByRef StringVector field_names,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
-
-/** \brief Create a UnionType instance */
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       UnionMode.type mode/*=arrow::UnionMode::SPARSE*/);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children);
-@Namespace("arrow") public static native @Deprecated @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType union_(@Const @ByRef ArrayVector children,
-       @Cast("arrow::UnionMode::type") int mode/*=arrow::UnionMode::SPARSE*/);
 /** \brief Create a DictionaryType instance
  *  @param index_type [in] the type of the dictionary indices (must be
  *  a signed integer)
@@ -2742,6 +2717,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 @Namespace("arrow") public static native @Cast("bool") boolean is_nested(@Cast("arrow::Type::type") int type_id);
 
+@Namespace("arrow") public static native @Cast("bool") boolean is_union(@Cast("arrow::Type::type") int type_id);
+
 @Namespace("arrow") public static native int offset_bit_width(@Cast("arrow::Type::type") int type_id);
 
   // namespace arrow
@@ -2774,6 +2751,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <string>
 // #include <type_traits>
 
+// #include "arrow/util/endian.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/type_traits.h"
 // #include "arrow/util/visibility.h"
@@ -2874,6 +2852,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // #include "arrow/result.h"
 // #include "arrow/status.h"
+// #include "arrow/type_fwd.h"
 // #include "arrow/util/basic_decimal.h"
 // #include "arrow/util/string_view.h"
 // Targeting ../Decimal128.java
@@ -2882,6 +2861,10 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../Decimal256.java
 
 
+
+/** For an integer type, return the max number of decimal digits
+ *  (=minimal decimal precision) it can represent. */
+@Namespace("arrow") public static native @ByVal IntResult MaxDecimalDigitsForInteger(@Cast("arrow::Type::type") int type_id);
 
   // namespace arrow
 
@@ -2950,6 +2933,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/type_fwd.h"
+// #include "arrow/type_traits.h"
 // #include "arrow/util/functional.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/optional.h"
@@ -3091,7 +3075,20 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  the first failing future. */
 
 ///
+///
 @Namespace("arrow") public static native @ByVal Future AllComplete(@StdVector Future futures);
+
+/** \brief Create a Future which completes when all of {@code futures} complete.
+ * 
+ *  The future will finish with an ok status if all {@code futures} finish with
+ *  an ok status. Otherwise, it will be marked failed with the status of
+ *  one of the failing futures.
+ * 
+ *  Unlike AllComplete this Future will not complete immediately when a
+ *  failure occurs.  It will wait until all futures have finished. */
+
+///
+@Namespace("arrow") public static native @ByVal Future AllFinished(@StdVector Future futures);
 
 /** \brief Wait for one of the futures to end, or for the given timeout to expire.
  * 
@@ -3319,6 +3316,55 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
   // namespace arrow
 
 
+// Parsed from arrow/util/async_util.h
+
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+// #pragma once
+
+// #include <queue>
+
+// #include "arrow/result.h"
+// #include "arrow/status.h"
+// #include "arrow/util/future.h"
+// #include "arrow/util/mutex.h"
+
+/** Custom deleter for AsyncDestroyable objects */
+// Targeting ../AsyncDestroyable.java
+
+
+// Targeting ../AsyncTaskGroup.java
+
+
+// Targeting ../SerializedAsyncTaskGroup.java
+
+
+// Targeting ../AsyncToggle.java
+
+
+// Targeting ../BackpressureOptions.java
+
+
+
+  // namespace util
+  // namespace arrow
+
+
 // Parsed from arrow/util/async_generator.h
 
 // Licensed to the Apache Software Foundation (ASF) under one
@@ -3347,6 +3393,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <limits>
 // #include <queue>
 
+// #include "arrow/util/async_util.h"
 // #include "arrow/util/functional.h"
 // #include "arrow/util/future.h"
 // #include "arrow/util/io_util.h"
@@ -3383,14 +3430,25 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** returning a future that completes when all have been visited */
 
-/** \brief Waits for an async generator to complete, discarding results. */
+/** \brief Wait for an async generator to complete, discarding results. */
 
-/** \brief Collects the results of an async generator into a vector */
+/** \brief Collect the results of an async generator into a vector */
 
 /** @see MakeMappedGenerator */
 
-/** \brief Creates a generator that will apply the map function to each element of
+/** \brief Create a generator that will apply the map function to each element of
  *  source.  The map function is not called on the end token.
+ * 
+ *  Note: This function makes a copy of {@code map} for each item
+ *  Note: Errors returned from the {@code map} function will be propagated
+ * 
+ *  If the source generator is async-reentrant then this generator will be also */
+
+/** \brief Create a generator that will apply the map function to
+ *  each element of source.  The map function is not called on the end
+ *  token.  The result of the map function should be another
+ *  generator; all these generators will then be flattened to produce
+ *  a single stream of items.
  * 
  *  Note: This function makes a copy of {@code map} for each item
  *  Note: Errors returned from the {@code map} function will be propagated
@@ -3399,7 +3457,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeSequencingGenerator */
 
-/** \brief Buffers an AsyncGenerator to return values in sequence order  ComesAfter
+/** \brief Buffer an AsyncGenerator to return values in sequence order  ComesAfter
  *  and IsNext determine the sequence order.
  * 
  *  ComesAfter should be a BinaryPredicate that only returns true if a comes after b
@@ -3421,7 +3479,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeTransformedGenerator */
 
-/** \brief Transforms an async generator using a transformer function returning a new
+/** \brief Transform an async generator using a transformer function returning a new
  *  AsyncGenerator
  * 
  *  The transform function here behaves exactly the same as the transform function in
@@ -3436,14 +3494,14 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeFromFuture */
 
-/** \brief Transforms a Future<AsyncGenerator<T>> into an AsyncGenerator<T>
+/** \brief Transform a Future<AsyncGenerator<T>> into an AsyncGenerator<T>
  *  that waits for the future to complete as part of the first item.
  * 
  *  This generator is not async-reentrant (even if the generator yielded by future is)
  * 
  *  This generator does not queue */
 
-/** \brief Creates a generator that will pull from the source into a queue.  Unlike
+/** \brief Create a generator that will pull from the source into a queue.  Unlike
  *  MakeReadaheadGenerator this will not pull reentrantly from the source.
  * 
  *  The source generator does not need to be async-reentrant
@@ -3451,6 +3509,16 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  This generator is not async-reentrant (even if the source is)
  * 
  *  This generator may queue up to max_readahead additional instances of T */
+
+/** \brief Create a generator that immediately pulls from the source
+ * 
+ *  Typical generators do not pull from their source until they themselves
+ *  are pulled.  This generator does not follow that convention and will call
+ *  generator() once before it returns.  The returned generator will otherwise
+ *  mirror the source.
+ * 
+ *  This generator forwards aysnc-reentrant pressure to the source
+ *  This generator buffers one item (the first result) until it is delivered. */
 
 /** @see MakeReadaheadGenerator */
 
@@ -3462,7 +3530,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  * 
  *  This generator is not async-reentrant. */
 
-/** \brief Creates a generator that pulls reentrantly from a source
+/** \brief Create a generator that pulls reentrantly from a source
  *  This generator will pull reentrantly from a source, ensuring that max_readahead
  *  requests are active at any given time.
  * 
@@ -3478,7 +3546,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeMergedGenerator */
 
-/** \brief Creates a generator that takes in a stream of generators and pulls from up to
+/** \brief Create a generator that takes in a stream of generators and pulls from up to
  *  max_subscriptions at a time
  * 
  *  Note: This may deliver items out of sequence. For example, items from the third
@@ -3497,7 +3565,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeEnumeratedGenerator */
 
-/** Wraps items from a source generator with positional information
+/** Wrap items from a source generator with positional information
  * 
  *  When used with MakeMergedGenerator and MakeSequencingGenerator this allows items to be
  *  processed in a "first-available" fashion and later resequenced which can reduce the
@@ -3514,7 +3582,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeTransferredGenerator */
 
-/** \brief Transfers a future to an underlying executor.
+/** \brief Transfer a future to an underlying executor.
  * 
  *  Continuations run on the returned future will be run on the given executor
  *  if they cannot be run synchronously.
@@ -3541,7 +3609,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 ///
 @Namespace("arrow") @MemberGetter public static native int kDefaultBackgroundQRestart();
 
-/** \brief Creates an AsyncGenerator<T> by iterating over an Iterator<T> on a background
+/** \brief Create an AsyncGenerator<T> by iterating over an Iterator<T> on a background
  *  thread
  * 
  *  The parameter max_q and q_restart control queue size and background thread task
@@ -3570,10 +3638,10 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** @see MakeGeneratorIterator */
 
-/** \brief Converts an AsyncGenerator<T> to an Iterator<T> by blocking until each future
+/** \brief Convert an AsyncGenerator<T> to an Iterator<T> which blocks until each future
  *  is finished */
 
-/** \brief Adds readahead to an iterator using a background thread.
+/** \brief Add readahead to an iterator using a background thread.
  * 
  *  Under the hood this is converting the iterator to a generator using
  *  MakeBackgroundGenerator, adding readahead to the converted generator with
@@ -3596,15 +3664,27 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  * 
  *  This overload allows inferring the return type from the argument. */
 
-/** \brief Prepends initial_values onto a generator
+/** \brief Prepend initial_values onto a generator
  * 
  *  This generator is async-reentrant but will buffer requests and will not
  *  pull from following_values async-reentrantly. */
 
-/** \brief Allows an async generator to be cancelled
+/** \brief Allow an async generator to be cancelled
  * 
  *  This generator is async-reentrant */
 
+/** \brief Allow an async generator to be paused
+ * 
+ *  This generator is NOT async-reentrant and calling it in an async-reentrant fashion
+ *  may lead to items getting reordered (and potentially truncated if the end token is
+ *  reordered ahead of valid items)
+ * 
+ *  This generator forwards async-reentrant pressure */
+
+/** \brief If the generator is empty, return the given value, else
+ *  forward the values from the generator.
+ * 
+ *  This generator is async-reentrant. */
   // namespace arrow
 
 
@@ -3646,7 +3726,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/macros.h"
 // #include "arrow/util/variant.h"
 // #include "arrow/util/visibility.h"
-// #include "arrow/visitor.h"
+// #include "arrow/visitor.h"  // IWYU pragma: keep
 // Targeting ../Fingerprintable.java
 
 
@@ -3709,7 +3789,11 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 /** Concrete type class for boolean data */
 
-/** Concrete type class for unsigned 8-bit integer data */
+/** \addtogroup numeric-datatypes
+ * 
+ *  \{
+ <p>
+ *  Concrete type class for unsigned 8-bit integer data */
 
 /** Concrete type class for signed 8-bit integer data */
 
@@ -3730,25 +3814,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 /** Concrete type class for 32-bit floating-point data (C "float") */
 
 /** Concrete type class for 64-bit floating-point data (C "double") */
-// Targeting ../BaseListType.java
-
-
-// Targeting ../ListType.java
-
-
-// Targeting ../LargeListType.java
-
-
-// Targeting ../MapType.java
-
-
-// Targeting ../FixedSizeListType.java
-
-
 // Targeting ../BaseBinaryType.java
 
 
 
+
+///
 @Namespace("arrow") @MemberGetter public static native @Cast("const int64_t") long kBinaryMemoryLimit();
 // Targeting ../BinaryType.java
 
@@ -3765,9 +3836,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../FixedSizeBinaryType.java
 
 
-// Targeting ../StructType.java
-
-
 // Targeting ../DecimalType.java
 
 
@@ -3775,6 +3843,24 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../Decimal256Type.java
+
+
+// Targeting ../BaseListType.java
+
+
+// Targeting ../ListType.java
+
+
+// Targeting ../LargeListType.java
+
+
+// Targeting ../MapType.java
+
+
+// Targeting ../FixedSizeListType.java
+
+
+// Targeting ../StructType.java
 
 
 // Targeting ../UnionType.java
@@ -3822,6 +3908,16 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../DayTimeIntervalType.java
 
 
+
+
+///
+@Namespace("arrow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @ByVal DayTimeIntervalType.DayMilliseconds interval);
+// Targeting ../MonthDayNanoIntervalType.java
+
+
+
+@Namespace("arrow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os,
+                         @ByVal MonthDayNanoIntervalType.MonthDayNanos interval);
 // Targeting ../DurationType.java
 
 
@@ -3897,6 +3993,24 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
   // namespace internal
 
+// Helpers to get instances of data types based on general categories
+
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector SignedIntTypes();
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector UnsignedIntTypes();
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector IntTypes();
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector FloatingPointTypes();
+// Number types without boolean
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector NumericTypes();
+// Binary and string-like types (except fixed-size binary)
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector BaseBinaryTypes();
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector StringTypes();
+// Temporal types including time and timestamps for each unit
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector TemporalTypes();
+// Interval types
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector IntervalTypes();
+// Integer, floating point, base binary, and temporal
+@Namespace("arrow") public static native @Const @ByRef DataTypeVector PrimitiveTypes();
+
   // namespace arrow
 
 
@@ -3921,9 +4035,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 // Object model for scalar (non-Array) values. Not intended for use with large
 // amounts of data
-//
-// NOTE: This API is experimental as of the 0.13 version and subject to change
-// without deprecation warnings
 
 // #pragma once
 
@@ -3933,6 +4044,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include <vector>
 
 // #include "arrow/compare.h"
+// #include "arrow/extension_type.h"
 // #include "arrow/result.h"
 // #include "arrow/status.h"
 // #include "arrow/type.h"
@@ -4052,6 +4164,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../BaseBaseDayTimeIntervalScalar.java
 
 
+// Targeting ../BaseMonthDayNanoIntervalScalar.java
+
+
 // Targeting ../BaseBaseMonthIntervalType.java
 
 
@@ -4101,6 +4216,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../DayTimeIntervalScalar.java
+
+
+// Targeting ../MonthDayNanoIntervalScalar.java
 
 
 // Targeting ../DurationScalar.java
@@ -4240,6 +4358,18 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // arrow/array.h is fine.
 
 // #pragma once
+
+/** \defgroup numeric-arrays Concrete classes for numeric arrays
+ *  \{
+ *  \}
+ <p>
+ *  \defgroup binary-arrays Concrete classes for binary/string arrays
+ *  \{
+ *  \}
+ <p>
+ *  \defgroup nested-arrays Concrete classes for nested arrays
+ *  \{
+ *  \} */
 
 // #include "arrow/array/array_base.h"       // IWYU pragma: keep
 // #include "arrow/array/array_binary.h"     // IWYU pragma: keep
@@ -4527,6 +4657,10 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
 
+/** \addtogroup nested-arrays
+ * 
+ *  \{ */
+
 // ----------------------------------------------------------------------
 // ListArray
 
@@ -4565,6 +4699,8 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../DenseUnionArray.java
 
 
+
+/** \} */
 
   // namespace arrow
 
@@ -4605,6 +4741,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/bit_util.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
+// Targeting ../BooleanArray.java
+
+
 // Targeting ../Int8Array.java
 
 
@@ -4659,12 +4798,14 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // Targeting ../DurationArray.java
 
 
-// Targeting ../BooleanArray.java
-
-
 // Targeting ../DayTimeIntervalArray.java
 
 
+// Targeting ../MonthDayNanoIntervalArray.java
+
+
+
+/** \} */
 
   // namespace arrow
 
@@ -4704,9 +4845,6 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 @Namespace("arrow") public static native @ByVal ArrayResult Concatenate(@Const @ByRef ArrayVector arrays,
                                            MemoryPool pool/*=arrow::default_memory_pool()*/);
 @Namespace("arrow") public static native @ByVal ArrayResult Concatenate(@Const @ByRef ArrayVector arrays);
-
-@Namespace("arrow") public static native @Deprecated @ByVal Status Concatenate(@Const @ByRef ArrayVector arrays, MemoryPool pool,
-                   @SharedPtr Array out);
 
   // namespace arrow
 
@@ -4764,6 +4902,12 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
  *  @param out [out] the created ArrayBuilder */
 @Namespace("arrow") public static native @ByVal Status MakeBuilder(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
                    @UniquePtr ArrayBuilder out);
+
+/** \brief Construct an empty ArrayBuilder corresponding to the data
+ *  type, where any top-level or nested dictionary builders return the
+ *  exact index type specified by the type. */
+@Namespace("arrow") public static native @ByVal Status MakeBuilderExactIndex(MemoryPool pool, @SharedPtr @Cast({"", "std::shared_ptr<arrow::DataType>"}) DataType type,
+                             @UniquePtr ArrayBuilder out);
 
 /** \brief Construct an empty DictionaryBuilder initialized optionally
  *  with a pre-existing dictionary
@@ -4934,6 +5078,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // #include "arrow/util/decimal.h"
 // #include "arrow/util/macros.h"
 // #include "arrow/util/visibility.h"
+// #include "arrow/visitor_inline.h"
 // Targeting ../DictionaryMemoTable.java
 
 
@@ -5089,6 +5234,9 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 
 
 // Targeting ../DayTimeIntervalBuilder.java
+
+
+// Targeting ../MonthDayNanoIntervalBuilder.java
 
 
 
@@ -5401,7 +5549,7 @@ public static final double kDefaultAbsoluteTolerance = kDefaultAbsoluteTolerance
 // specific language governing permissions and limitations
 // under the License.
 
-/** User-defined extension types. EXPERIMENTAL in 0.13.0
+/** User-defined extension types.
  *  @since 0.13.0 */
 
 // #pragma once
@@ -6590,7 +6738,7 @@ public static final long kNoSize = kNoSize();
 
 
 
-/** Experimental: optional global initialization routine
+/** EXPERIMENTAL: optional global initialization routine
  * 
  *  This is for environments (such as manylinux) where the path
  *  to TLS CA certificates needs to be configured at runtime. */
@@ -6792,6 +6940,7 @@ public static final long kNoSize = kNoSize();
 // #include <unordered_map>
 // #include <vector>
 
+// #include "arrow/csv/invalid_row.h"
 // #include "arrow/csv/type_fwd.h"
 // #include "arrow/io/interfaces.h"
 // #include "arrow/status.h"
@@ -7028,6 +7177,9 @@ public static final long kNoSize = kNoSize();
 // Targeting ../ScalarAggregateOptions.java
 
 
+// Targeting ../CountOptions.java
+
+
 // Targeting ../ModeOptions.java
 
 
@@ -7046,9 +7198,9 @@ public static final long kNoSize = kNoSize();
 
 /** \}
  <p>
- *  \brief Count non-null (or null) values in an array.
+ *  \brief Count values in an array.
  * 
- *  @param options [in] counting options, see ScalarAggregateOptions for more information
+ *  @param options [in] counting options, see CountOptions for more information
  *  @param datum [in] to count
  *  @param ctx [in] the function execution context, optional
  *  @return out resulting datum
@@ -7058,12 +7210,10 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
-@Namespace("arrow::compute") public static native @ByVal DatumResult Count(
-    @Const @ByRef Datum datum,
-    @Const @ByRef(nullValue = "arrow::compute::ScalarAggregateOptions::Defaults()") ScalarAggregateOptions options,
-    ExecContext ctx/*=nullptr*/);
-@Namespace("arrow::compute") public static native @ByVal DatumResult Count(
-    @Const @ByRef Datum datum);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Count(@Const @ByRef Datum datum,
+                    @Const @ByRef(nullValue = "arrow::compute::CountOptions::Defaults()") CountOptions options,
+                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Count(@Const @ByRef Datum datum);
 
 /** \brief Compute the mean of a numeric array.
  * 
@@ -7082,6 +7232,25 @@ public static final long kNoSize = kNoSize();
     @Const @ByRef(nullValue = "arrow::compute::ScalarAggregateOptions::Defaults()") ScalarAggregateOptions options,
     ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Mean(
+    @Const @ByRef Datum value);
+
+/** \brief Compute the product of values of a numeric array.
+ * 
+ *  @param value [in] datum to compute product of, expecting Array or ChunkedArray
+ *  @param options [in] see ScalarAggregateOptions for more information
+ *  @param ctx [in] the function execution context, optional
+ *  @return datum of the computed sum as a Scalar
+ * 
+ *  @since 6.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Product(
+    @Const @ByRef Datum value,
+    @Const @ByRef(nullValue = "arrow::compute::ScalarAggregateOptions::Defaults()") ScalarAggregateOptions options,
+    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Product(
     @Const @ByRef Datum value);
 
 /** \brief Sum values of a numeric array.
@@ -7281,7 +7450,7 @@ public static final long kNoSize = kNoSize();
 /** Internal use only: helper function for testing HashAggregateKernels.
  *  This will be replaced by streaming execution operators. */
 @Namespace("arrow::compute::internal") public static native @ByVal DatumResult GroupBy(@Const @ByRef DatumVector arguments, @Const @ByRef DatumVector keys,
-                      @StdVector Aggregate aggregates,
+                      @StdVector Aggregate aggregates, @Cast("bool") boolean use_threads/*=false*/,
                       ExecContext ctx/*=default_exec_context()*/);
 @Namespace("arrow::compute::internal") public static native @ByVal DatumResult GroupBy(@Const @ByRef DatumVector arguments, @Const @ByRef DatumVector keys,
                       @StdVector Aggregate aggregates);
@@ -7318,8 +7487,8 @@ public static final long kNoSize = kNoSize();
 // #include <string>
 // #include <utility>
 
-// #include "arrow/compute/exec.h"  // IWYU pragma: keep
 // #include "arrow/compute/function.h"
+// #include "arrow/compute/type_fwd.h"
 // #include "arrow/datum.h"
 // #include "arrow/result.h"
 // #include "arrow/util/macros.h"
@@ -7328,6 +7497,43 @@ public static final long kNoSize = kNoSize();
 
 
 // Targeting ../ElementWiseAggregateOptions.java
+
+
+
+/** Rounding and tie-breaking modes for round compute functions.
+ *  Additional details and examples are provided in compute.rst. */
+@Namespace("arrow::compute") public enum RoundMode {
+  /** Round to nearest integer less than or equal in magnitude (aka "floor") */
+  DOWN((byte)(0)),
+  /** Round to nearest integer greater than or equal in magnitude (aka "ceil") */
+  UP((byte)(1)),
+  /** Get the integral part without fractional digits (aka "trunc") */
+  TOWARDS_ZERO((byte)(2)),
+  /** Round negative values with DOWN rule and positive values with UP rule */
+  TOWARDS_INFINITY((byte)(3)),
+  /** Round ties with DOWN rule */
+  HALF_DOWN((byte)(4)),
+  /** Round ties with UP rule */
+  HALF_UP((byte)(5)),
+  /** Round ties with TOWARDS_ZERO rule */
+  HALF_TOWARDS_ZERO((byte)(6)),
+  /** Round ties with TOWARDS_INFINITY rule */
+  HALF_TOWARDS_INFINITY((byte)(7)),
+  /** Round ties to nearest even integer */
+  HALF_TO_EVEN((byte)(8)),
+  /** Round ties to nearest odd integer */
+  HALF_TO_ODD((byte)(9));
+
+    public final byte value;
+    private RoundMode(byte v) { this.value = v; }
+    private RoundMode(RoundMode e) { this.value = e.value; }
+    public RoundMode intern() { for (RoundMode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../RoundOptions.java
+
+
+// Targeting ../RoundToMultipleOptions.java
 
 
 // Targeting ../JoinOptions.java
@@ -7357,6 +7563,9 @@ public static final long kNoSize = kNoSize();
 // Targeting ../StrptimeOptions.java
 
 
+// Targeting ../StrftimeOptions.java
+
+
 // Targeting ../PadOptions.java
 
 
@@ -7364,6 +7573,9 @@ public static final long kNoSize = kNoSize();
 
 
 // Targeting ../SliceOptions.java
+
+
+// Targeting ../NullOptions.java
 
 
 
@@ -7388,6 +7600,12 @@ public static final long kNoSize = kNoSize();
 
 
 // Targeting ../DayOfWeekOptions.java
+
+
+// Targeting ../AssumeTimezoneOptions.java
+
+
+// Targeting ../WeekOptions.java
 
 
 
@@ -7649,36 +7867,59 @@ public static final long kNoSize = kNoSize();
  *  @return the elementwise natural log */
 
 ///
+///
 @Namespace("arrow::compute") public static native @ByVal DatumResult Log1p(@Const @ByRef Datum arg, @ByVal(nullValue = "arrow::compute::ArithmeticOptions()") ArithmeticOptions options,
                     ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Log1p(@Const @ByRef Datum arg);
 
+/** \brief Get the log of a value to the given base.
+ * 
+ *  If argument is null the result will be null.
+ * 
+ *  @param arg [in] The values to compute the logarithm for.
+ *  @param base [in] The given base.
+ *  @param options [in] arithmetic options (overflow handling), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the elementwise log to the given base */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Logb(@Const @ByRef Datum arg, @Const @ByRef Datum base,
+                   @ByVal(nullValue = "arrow::compute::ArithmeticOptions()") ArithmeticOptions options,
+                   ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Logb(@Const @ByRef Datum arg, @Const @ByRef Datum base);
+
 /** \brief Round to the nearest integer less than or equal in magnitude to the
- *  argument. Array values can be of arbitrary length. If argument is null the
- *  result will be null.
+ *  argument.
+ * 
+ *  If argument is null the result will be null.
  * 
  *  @param arg [in] the value to round
  *  @param ctx [in] the function execution context, optional
  *  @return the rounded value */
 
+///
 ///
 @Namespace("arrow::compute") public static native @ByVal DatumResult Floor(@Const @ByRef Datum arg, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Floor(@Const @ByRef Datum arg);
 
 /** \brief Round to the nearest integer greater than or equal in magnitude to the
- *  argument. Array values can be of arbitrary length. If argument is null the
- *  result will be null.
+ *  argument.
+ * 
+ *  If argument is null the result will be null.
  * 
  *  @param arg [in] the value to round
  *  @param ctx [in] the function execution context, optional
  *  @return the rounded value */
 
 ///
+///
 @Namespace("arrow::compute") public static native @ByVal DatumResult Ceil(@Const @ByRef Datum arg, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Ceil(@Const @ByRef Datum arg);
 
-/** \brief Get the integral part without fractional digits. Array values can be
- *  of arbitrary length. If argument is null the result will be null.
+/** \brief Get the integral part without fractional digits.
+ * 
+ *  If argument is null the result will be null.
  * 
  *  @param arg [in] the value to truncate
  *  @param ctx [in] the function execution context, optional
@@ -7725,13 +7966,45 @@ public static final long kNoSize = kNoSize();
  * 
  *  @param arg [in] the value to extract sign from
  *  @param ctx [in] the function execution context, optional
- *  @return the elementwise sign function */
+ *  @return the element-wise sign function */
 
-///
 ///
 ///
 @Namespace("arrow::compute") public static native @ByVal DatumResult Sign(@Const @ByRef Datum arg, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Sign(@Const @ByRef Datum arg);
+
+/** \brief Round a value to a given precision.
+ * 
+ *  If argument is null the result will be null.
+ * 
+ *  @param arg [in] the value rounded
+ *  @param options [in] rounding options (rounding mode and number of digits), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the element-wise rounded value */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Round(@Const @ByRef Datum arg, @ByVal(nullValue = "arrow::compute::RoundOptions::Defaults()") RoundOptions options,
+                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Round(@Const @ByRef Datum arg);
+
+/** \brief Round a value to a given multiple.
+ * 
+ *  If argument is null the result will be null.
+ * 
+ *  @param arg [in] the value to round
+ *  @param options [in] rounding options (rounding mode and multiple), optional
+ *  @param ctx [in] the function execution context, optional
+ *  @return the element-wise rounded value */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult RoundToMultiple(
+    @Const @ByRef Datum arg, @ByVal(nullValue = "arrow::compute::RoundToMultipleOptions::Defaults()") RoundToMultipleOptions options,
+    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult RoundToMultiple(
+    @Const @ByRef Datum arg);
 
 /** \brief Compare a numeric array with a scalar.
  * 
@@ -7907,7 +8180,7 @@ public static final long kNoSize = kNoSize();
  *  will be output.
  * 
  *  For example given values = [99, 42, 3, null] and
- *  value_set = [3, 3, 99], the output will be = [1, null, 0, null]
+ *  value_set = [3, 3, 99], the output will be = [2, null, 0, null]
  * 
  *  Behaviour of nulls is governed by SetLookupOptions::skip_nulls.
  * 
@@ -7947,6 +8220,7 @@ public static final long kNoSize = kNoSize();
  *  false otherwise
  * 
  *  @param values [in] input to examine for nullity
+ *  @param options [in] NullOptions
  *  @param ctx [in] the function execution context, optional
  *  @return the resulting datum
  * 
@@ -7955,7 +8229,8 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
-@Namespace("arrow::compute") public static native @ByVal DatumResult IsNull(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult IsNull(@Const @ByRef Datum values, @ByVal(nullValue = "arrow::compute::NullOptions::Defaults()") NullOptions options,
+                     ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult IsNull(@Const @ByRef Datum values);
 
 /** \brief IsNan returns true for each element of {@code values} that is NaN,
@@ -7973,25 +8248,6 @@ public static final long kNoSize = kNoSize();
 ///
 @Namespace("arrow::compute") public static native @ByVal DatumResult IsNan(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult IsNan(@Const @ByRef Datum values);
-
-/** \brief FillNull replaces each null element in {@code values}
- *  with {@code fill_value}
- * 
- *  @param values [in] input to examine for nullity
- *  @param fill_value [in] scalar
- *  @param ctx [in] the function execution context, optional
- * 
- *  @return the resulting datum
- * 
- *  @since 1.0.0
- *  \note API not yet finalized */
-
-///
-///
-///
-@Namespace("arrow::compute") public static native @ByVal DatumResult FillNull(@Const @ByRef Datum values, @Const @ByRef Datum fill_value,
-                       ExecContext ctx/*=nullptr*/);
-@Namespace("arrow::compute") public static native @ByVal DatumResult FillNull(@Const @ByRef Datum values, @Const @ByRef Datum fill_value);
 
 /** \brief IfElse returns elements chosen from {@code left} or {@code right}
  *  depending on {@code cond}. {@code null} values in {@code cond} will be promoted to the result
@@ -8131,7 +8387,8 @@ public static final long kNoSize = kNoSize();
 
 /** \brief ISOWeek returns ISO week of year number for each element of {@code values}.
  *  First ISO week has the majority (4 or more) of its days in January.
- *  Week of the year starts with 1 and can run up to 53.
+ *  ISO week starts on Monday. Year can have 52 or 53 weeks.
+ *  Week numbering can start with 1.
  * 
  *  @param values [in] input to extract ISO week of year from
  *  @param ctx [in] the function execution context, optional
@@ -8144,6 +8401,42 @@ public static final long kNoSize = kNoSize();
 ///
 @Namespace("arrow::compute") public static native @ByVal DatumResult ISOWeek(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult ISOWeek(@Const @ByRef Datum values);
+
+/** \brief USWeek returns US week of year number for each element of {@code values}.
+ *  First US week has the majority (4 or more) of its days in January.
+ *  US week starts on Sunday. Year can have 52 or 53 weeks.
+ *  Week numbering starts with 1.
+ * 
+ *  @param values [in] input to extract US week of year from
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 6.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult USWeek(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult USWeek(@Const @ByRef Datum values);
+
+/** \brief Week returns week of year number for each element of {@code values}.
+ *  First ISO week has the majority (4 or more) of its days in January.
+ *  Year can have 52 or 53 weeks. Week numbering can start with 0 or 1
+ *  depending on DayOfWeekOptions.count_from_zero.
+ * 
+ *  @param values [in] input to extract week of year from
+ *  @param options [in] for setting numbering start
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 6.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Week(@Const @ByRef Datum values, @ByVal(nullValue = "arrow::compute::WeekOptions()") WeekOptions options,
+                                ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Week(@Const @ByRef Datum values);
 
 /** \brief ISOCalendar returns a (ISO year, ISO week, ISO day of week) struct for
  *  each element of {@code values}.
@@ -8272,8 +8565,49 @@ public static final long kNoSize = kNoSize();
  * 
  *  @since 5.0.0
  *  \note API not yet finalized */
+
+///
+///
+///
 @Namespace("arrow::compute") public static native @ByVal DatumResult Subsecond(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal DatumResult Subsecond(@Const @ByRef Datum values);
+
+/** \brief Format timestamps according to a format string
+ * 
+ *  Return formatted time strings according to the format string
+ *  {@code StrftimeOptions::format} and to the locale specifier {@code Strftime::locale}.
+ * 
+ *  @param values [in] input timestamps
+ *  @param options [in] for setting format string and locale
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 6.0.0
+ *  \note API not yet finalized */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal DatumResult Strftime(@Const @ByRef Datum values, @ByVal StrftimeOptions options,
+                                    ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult Strftime(@Const @ByRef Datum values, @ByVal StrftimeOptions options);
+
+/** \brief Converts timestamps from local timestamp without a timezone to a timestamp with
+ *  timezone, interpreting the local timestamp as being in the specified timezone for each
+ *  element of {@code values}
+ * 
+ *  @param values [in] input to convert
+ *  @param options [in] for setting source timezone, exception and ambiguous timestamp
+ *  handling.
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum
+ * 
+ *  @since 6.0.0
+ *  \note API not yet finalized */
+@Namespace("arrow::compute") public static native @ByVal DatumResult AssumeTimezone(@Const @ByRef Datum values,
+                                          @ByVal AssumeTimezoneOptions options,
+                                          ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult AssumeTimezone(@Const @ByRef Datum values,
+                                          @ByVal AssumeTimezoneOptions options);
 
   // namespace compute
   // namespace arrow
@@ -8301,6 +8635,7 @@ public static final long kNoSize = kNoSize();
 // #pragma once
 
 // #include <memory>
+// #include <utility>
 
 // #include "arrow/compute/function.h"
 // #include "arrow/datum.h"
@@ -8317,13 +8652,30 @@ public static final long kNoSize = kNoSize();
 
 
 @Namespace("arrow::compute") public enum SortOrder {
+  /** Arrange values in increasing order */
   Ascending(0),
+  /** Arrange values in decreasing order */
   Descending(1);
 
     public final int value;
     private SortOrder(int v) { this.value = v; }
     private SortOrder(SortOrder e) { this.value = e.value; }
     public SortOrder intern() { for (SortOrder e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("arrow::compute") public enum NullPlacement {
+  /** Place nulls and NaNs before any non-null values.
+   *  NaNs will come after nulls. */
+  AtStart(0),
+  /** Place nulls and NaNs after any non-null values.
+   *  NaNs will come before nulls. */
+  AtEnd(1);
+
+    public final int value;
+    private NullPlacement(int v) { this.value = v; }
+    private NullPlacement(NullPlacement e) { this.value = e.value; }
+    public NullPlacement intern() { for (NullPlacement e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 // Targeting ../SortKey.java
@@ -8333,6 +8685,9 @@ public static final long kNoSize = kNoSize();
 
 
 // Targeting ../SortOptions.java
+
+
+// Targeting ../SelectKOptions.java
 
 
 // Targeting ../PartitionNthOptions.java
@@ -8432,13 +8787,34 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
+///
 @Namespace("arrow::compute") public static native @ByVal ArrayResult Take(@Const @ByRef Array values, @Const @ByRef Array indices,
                                     @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
                                     ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal ArrayResult Take(@Const @ByRef Array values, @Const @ByRef Array indices);
 
-/** \brief Returns indices that partition an array around n-th
- *  sorted element.
+/** \brief Drop Null from an array of values
+ * 
+ *  The output array will be of the same type as the input values
+ *  array, with elements taken from the values array without nulls.
+ * 
+ *  For example given values = ["a", "b", "c", null, "e", "f"],
+ *  the output will be = ["a", "b", "c", "e", "f"]
+ * 
+ *  @param values [in] datum from which to take
+ *  @param ctx [in] the function execution context, optional
+ *  @return the resulting datum */
+@Namespace("arrow::compute") public static native @ByVal DatumResult DropNull(@Const @ByRef Datum values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal DatumResult DropNull(@Const @ByRef Datum values);
+
+/** \brief DropNull with Array inputs and output */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult DropNull(@Const @ByRef Array values, ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult DropNull(@Const @ByRef Array values);
+
+/** \brief Return indices that partition an array around n-th sorted element.
  * 
  *  Find index of n-th(0 based) smallest value and perform indirect
  *  partition of an array around that element. Output indices[0 ~ n-1]
@@ -8454,13 +8830,51 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
-///
 @Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values, @Cast("int64_t") long n,
                                             ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values, @Cast("int64_t") long n);
 
-/** \brief Returns the indices that would sort an array in the
- *  specified order.
+/** \brief Return indices that partition an array around n-th sorted element.
+ * 
+ *  This overload takes a PartitionNthOptions specifiying the pivot index
+ *  and the null handling.
+ * 
+ *  @param values [in] array to be partitioned
+ *  @param options [in] options including pivot index and null handling
+ *  @param ctx [in] the function execution context, optional
+ *  @return offsets indices that would partition an array */
+
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values,
+                                            @Const @ByRef PartitionNthOptions options,
+                                            ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult NthToIndices(@Const @ByRef Array values,
+                                            @Const @ByRef PartitionNthOptions options);
+
+/** \brief Return indices that would select the first {@code k} elements.
+ * 
+ *  Perform an indirect sort of the datum, keeping only the first {@code k} elements. The output
+ *  array will contain indices such that the item indicated by the k-th index will be in
+ *  the position it would be if the datum were sorted by {@code options.sort_keys}. However,
+ *  indices of null values will not be part of the output. The sort is not guaranteed to
+ *  be stable.
+ * 
+ *  @param datum [in] datum to be partitioned
+ *  @param options [in] options
+ *  @param ctx [in] the function execution context, optional
+ *  @return a datum with the same schema as the input */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SelectKUnstable(@Const @ByRef Datum datum,
+                                               @Const @ByRef SelectKOptions options,
+                                               ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SelectKUnstable(@Const @ByRef Datum datum,
+                                               @Const @ByRef SelectKOptions options);
+
+/** \brief Return the indices that would sort an array.
  * 
  *  Perform an indirect sort of array. The output array will contain
  *  indices that would sort an array, which would be the same length
@@ -8478,7 +8892,6 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
-///
 @Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef Array array,
                                            SortOrder order/*=arrow::compute::SortOrder::Ascending*/,
                                            ExecContext ctx/*=nullptr*/);
@@ -8487,8 +8900,26 @@ public static final long kNoSize = kNoSize();
                                            @Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/,
                                            ExecContext ctx/*=nullptr*/);
 
-/** \brief Returns the indices that would sort a chunked array in the
- *  specified order.
+/** \brief Return the indices that would sort an array.
+ * 
+ *  This overload takes a ArraySortOptions specifiying the sort order
+ *  and the null handling.
+ * 
+ *  @param array [in] array to sort
+ *  @param options [in] options including sort order and null handling
+ *  @param ctx [in] the function execution context, optional
+ *  @return offsets indices that would sort an array */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef Array array,
+                                           @Const @ByRef ArraySortOptions options,
+                                           ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef Array array,
+                                           @Const @ByRef ArraySortOptions options);
+
+/** \brief Return the indices that would sort a chunked array.
  * 
  *  Perform an indirect sort of chunked array. The output array will
  *  contain indices that would sort a chunked array, which would be
@@ -8506,7 +8937,6 @@ public static final long kNoSize = kNoSize();
 
 ///
 ///
-///
 @Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef ChunkedArray chunked_array,
                                            SortOrder order/*=arrow::compute::SortOrder::Ascending*/,
                                            ExecContext ctx/*=nullptr*/);
@@ -8515,14 +8945,33 @@ public static final long kNoSize = kNoSize();
                                            @Cast("arrow::compute::SortOrder") int order/*=arrow::compute::SortOrder::Ascending*/,
                                            ExecContext ctx/*=nullptr*/);
 
-/** \brief Returns the indices that would sort an input in the
+/** \brief Return the indices that would sort a chunked array.
+ * 
+ *  This overload takes a ArraySortOptions specifiying the sort order
+ *  and the null handling.
+ * 
+ *  @param chunked_array [in] chunked array to sort
+ *  @param options [in] options including sort order and null handling
+ *  @param ctx [in] the function execution context, optional
+ *  @return offsets indices that would sort an array */
+
+///
+///
+///
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef ChunkedArray chunked_array,
+                                           @Const @ByRef ArraySortOptions options,
+                                           ExecContext ctx/*=nullptr*/);
+@Namespace("arrow::compute") public static native @ByVal ArrayResult SortIndices(@Const @ByRef ChunkedArray chunked_array,
+                                           @Const @ByRef ArraySortOptions options);
+
+/** \brief Return the indices that would sort an input in the
  *  specified order. Input is one of array, chunked array record batch
  *  or table.
  * 
  *  Perform an indirect sort of input. The output array will contain
  *  indices that would sort an input, which would be the same length
- *  as input. Nulls will be stably partitioned to the end of the
- *  output regardless of order.
+ *  as input. Nulls will be stably partitioned to the start or to the end
+ *  of the output depending on SortOrder::null_placement.
  * 
  *  For example given input (table) = {
  *  "column1": [[null,   1], [   3, null, 2, 1]],
@@ -8623,40 +9072,6 @@ public static final long kNoSize = kNoSize();
 // ----------------------------------------------------------------------
 // Deprecated functions
 
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef ChunkedArray values, @Const @ByRef Array indices,
-    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef ChunkedArray values, @Const @ByRef Array indices);
-
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices,
-    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef ChunkedArray values, @Const @ByRef ChunkedArray indices);
-
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef Array values, @Const @ByRef ChunkedArray indices,
-    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal ChunkedArrayResult Take(
-    @Const @ByRef Array values, @Const @ByRef ChunkedArray indices);
-
-@Namespace("arrow::compute") public static native @Deprecated @ByVal RecordBatchResult Take(
-    @Const @ByRef RecordBatch batch, @Const @ByRef Array indices,
-    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options, ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal RecordBatchResult Take(
-    @Const @ByRef RecordBatch batch, @Const @ByRef Array indices);
-
-@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef Array indices,
-                                    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
-                                    ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef Array indices);
-
-@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef ChunkedArray indices,
-                                    @Const @ByRef(nullValue = "arrow::compute::TakeOptions::Defaults()") TakeOptions options,
-                                    ExecContext context/*=nullptr*/);
-@Namespace("arrow::compute") public static native @Deprecated @ByVal TableResult Take(@Const @ByRef Table table, @Const @ByRef ChunkedArray indices);
-
 @Namespace("arrow::compute") public static native @Deprecated @ByVal ArrayResult SortToIndices(@Const @ByRef Array values,
                                              ExecContext ctx/*=nullptr*/);
 @Namespace("arrow::compute") public static native @Deprecated @ByVal ArrayResult SortToIndices(@Const @ByRef Array values);
@@ -8747,6 +9162,9 @@ public static final long kNoSize = kNoSize();
 
 // Match types using 64-bit varbinary representation
 @Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher LargeBinaryLike();
+
+// Match any fixed binary type
+@Namespace("arrow::compute::match") public static native @SharedPtr TypeMatcher FixedSizeBinaryLike();
 
 // \brief Match any primitive type (boolean or any type representable as a C
 // Type)
@@ -8842,6 +9260,12 @@ public static final long kNoSize = kNoSize();
 
 
 // Targeting ../ExecPlan.java
+
+
+// Targeting ../ExecNodeOptions.java
+
+
+// Targeting ../ExecFactoryRegistry.java
 
 
 
@@ -8986,6 +9410,7 @@ public static final long kNoSize = kNoSize();
 
 @Namespace("arrow::compute") public static native @ByVal Expression greater_equal(@ByVal Expression lhs, @ByVal Expression rhs);
 
+@Namespace("arrow::compute") public static native @ByVal Expression is_null(@ByVal Expression lhs, @Cast("bool") boolean nan_is_null/*=false*/);
 @Namespace("arrow::compute") public static native @ByVal Expression is_null(@ByVal Expression lhs);
 
 @Namespace("arrow::compute") public static native @ByVal Expression is_valid(@ByVal Expression lhs);

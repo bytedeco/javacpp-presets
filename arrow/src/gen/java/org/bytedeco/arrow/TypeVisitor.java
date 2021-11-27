@@ -54,6 +54,7 @@ public class TypeVisitor extends Pointer {
   public native @ByVal Status Visit(@Const @ByRef Time32Type type);
   public native @ByVal Status Visit(@Const @ByRef Time64Type type);
   public native @ByVal Status Visit(@Const @ByRef TimestampType type);
+  public native @ByVal Status Visit(@Const @ByRef MonthDayNanoIntervalType type);
   public native @ByVal Status Visit(@Const @ByRef MonthIntervalType type);
   public native @ByVal Status Visit(@Const @ByRef DayTimeIntervalType type);
   public native @ByVal Status Visit(@Const @ByRef DurationType type);

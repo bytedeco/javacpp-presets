@@ -159,6 +159,9 @@ public class Type extends Pointer {
     /** Like LIST, but with 64-bit offsets */
     LARGE_LIST = DECIMAL128 + 13,
 
+    /** Calendar interval type with three fields. */
+    INTERVAL_MONTH_DAY_NANO = DECIMAL128 + 14,
+
     // Leave this at the end
-    MAX_ID = DECIMAL128 + 14;
+    MAX_ID = DECIMAL128 + 15;
 }

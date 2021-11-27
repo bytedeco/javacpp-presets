@@ -1,7 +1,7 @@
-diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/Configurations/15-android.conf
---- openssl-1.1.1b/Configurations/15-android.conf	2019-02-26 23:15:30.000000000 +0900
-+++ openssl-1.1.1b-android/Configurations/15-android.conf	2019-03-24 22:36:52.544514506 +0900
-@@ -22,20 +22,9 @@
+diff -ruN openssl-1.1.1l/Configurations/15-android.conf openssl-1.1.1l-android/Configurations/15-android.conf
+--- openssl-1.1.1l/Configurations/15-android.conf	2021-08-24 22:38:47.000000000 +0900
++++ openssl-1.1.1l-android/Configurations/15-android.conf	2021-10-30 18:23:15.840592056 +0900
+@@ -22,25 +22,14 @@
                  return $android_ndk = { bn_ops => "BN_AUTO" };
              }
  
@@ -12,11 +12,11 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
 -                $ndk = $ENV{$ndk_var};
 -                last if defined $ndk;
 -            }
--            die "\$ANDROID_NDK_HOME is not defined"  if (!$ndk);
--            if (!-d "$ndk/platforms" && !-f "$ndk/AndroidVersion.txt") {
--                # $ndk/platforms is traditional "all-inclusive" NDK, while
--                # $ndk/AndroidVersion.txt is so-called standalone toolchain
--                # tailored for specific target down to API level.
+-            die "\$ANDROID_NDK_HOME is not defined" if (!$ndk);
+-            my $is_standalone_toolchain = -f "$ndk/AndroidVersion.txt";
+-            my $ndk_src_props = "$ndk/source.properties";
+-            my $is_ndk = -f $ndk_src_props;
+-            if ($is_ndk == $is_standalone_toolchain) {
 -                die "\$ANDROID_NDK_HOME=$ndk is invalid";
 -            }
 +            my $ndk = $ENV{ANDROID_NDK};
@@ -25,6 +25,12 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
              $ndk = canonpath($ndk);
  
              my $ndkver = undef;
+ 
+-            if (open my $fh, "<$ndk_src_props") {
++            if (open my $fh, "<$ndk/source.properties") {
+                 local $_;
+                 while(<$fh>) {
+                     if (m|Pkg\.Revision\s*=\s*([0-9]+)|) {
 @@ -51,18 +40,10 @@
                  close $fh;
              }
@@ -38,7 +44,7 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
 -            if ($sysroot = $ENV{CROSS_SYSROOT}) {
 -                $sysroot =~ m|/android-([0-9]+)/arch-(\w+)/?$|;
 -                ($api, $arch) = ($1, $2);
--            } elsif (-f "$ndk/AndroidVersion.txt") {
+-            } elsif ($is_standalone_toolchain) {
 -                $sysroot = "$ndk/sysroot";
 -            } else {
 -                $api = "*";
@@ -47,21 +53,48 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
  
                  # see if user passed -D__ANDROID_API__=N
                  foreach (@{$useradd{CPPDEFINES}}, @{$user{CPPFLAGS}}) {
-@@ -78,17 +59,19 @@
-                                      } glob("$ndk/platforms/android-$api");
-                 die "no $ndk/platforms/android-$api" if ($#platforms < 0);
+@@ -72,69 +53,36 @@
+                     }
+                 }
  
--                $sysroot = "@platforms[$#platforms]/arch-$arch";
--                $sysroot =~ m|/android-([0-9]+)/arch-$arch|;
--                $api = $1;
+-                if (-d "$ndk/platforms") {
+-                    # list available platforms (numerically)
+-                    my @platforms = sort { $a =~ m/-([0-9]+)$/; my $aa = $1;
+-                                           $b =~ m/-([0-9]+)$/; $aa <=> $1;
+-                                         } glob("$ndk/platforms/android-$api");
+-                    die "no $ndk/platforms/android-$api" if ($#platforms < 0);
+-
+-                    $sysroot = "@platforms[$#platforms]/arch-$arch";
+-                    $sysroot =~ m|/android-([0-9]+)/arch-$arch|;
+-                    $api = $1;
+-                } elsif ($api eq "*") {
+-                    # r22 Removed platforms dir, use this JSON file
+-                    my $path = "$ndk/meta/platforms.json";
+-                    open my $fh, $path or die "Could not open '$path' $!";
+-                    while (<$fh>) {
+-                        if (/"max": (\d+),/) {
+-                            $api = $1;
+-                            last;
+-                        }
+-                    }
+-                    close $fh;
+-                }
+-                die "Could not get default API Level" if ($api eq "*");
++                # list available platforms (numerically)
++                my @platforms = sort { $a =~ m/-([0-9]+)$/; my $aa = $1;
++                                       $b =~ m/-([0-9]+)$/; $aa <=> $1;
++                                     } glob("$ndk/platforms/android-$api");
++                die "no $ndk/platforms/android-$api" if ($#platforms < 0);
++
 +                $config{target} =~ m|[^-]+-([^-]+)$|;   # split on dash
 +                $sysroot = "@platforms[$#platforms]/arch-$1";
              }
-             die "no sysroot=$sysroot"   if (!-d $sysroot);
- 
+-            die "no sysroot=$sysroot" if (length $sysroot && !-d $sysroot);
++            die "no sysroot=$sysroot"   if (!-d $sysroot);
++
 +            $sysroot =~ m|/android-([0-9]+)/arch-(\w+)/?$|;
 +            my ($api, $arch) = ($1, $2);
-+
+ 
              my $triarch = $triplet{$arch};
              my $cflags;
              my $cppflags;
@@ -71,21 +104,28 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
              if (which("clang") =~ m|^$ndk/.*/prebuilt/([^/]+)/|) {
                  my $host=$1;
                  # harmonize with gcc default
-@@ -96,27 +79,10 @@
+                 my $arm = $ndkver > 16 ? "armv7a" : "armv5te";
                  (my $tridefault = $triarch) =~ s/^arm-/$arm-/;
                  (my $tritools   = $triarch) =~ s/(?:x|i6)86(_64)?-.*/x86$1/;
-                 $cflags .= " -target $tridefault "
--                        .  "-gcc-toolchain \$($ndk_var)/toolchains"
+-                if (length $sysroot) {
+-                    $cflags .= " -target $tridefault "
+-                            .  "-gcc-toolchain \$($ndk_var)/toolchains"
+-                            .  "/$tritools-4.9/prebuilt/$host";
+-                    $user{CC} = "clang" if ($user{CC} !~ m|clang|);
+-                } else {
+-                    $user{CC} = "$tridefault$api-clang";
+-                }
++                $cflags .= " -target $tridefault "
 +                        .  "-gcc-toolchain \$(ANDROID_NDK)/toolchains"
-                         .  "/$tritools-4.9/prebuilt/$host";
-                 $user{CC} = "clang" if ($user{CC} !~ m|clang|);
++                        .  "/$tritools-4.9/prebuilt/$host";
++                $user{CC} = "clang" if ($user{CC} !~ m|clang|);
                  $user{CROSS_COMPILE} = undef;
 -                if (which("llvm-ar") =~ m|^$ndk/.*/prebuilt/([^/]+)/|) {
 -                    $user{AR} = "llvm-ar";
 -                    $user{ARFLAGS} = [ "rs" ];
 -                    $user{RANLIB} = ":";
 -                }
--            } elsif (-f "$ndk/AndroidVersion.txt") {    #"standalone toolchain"
+-            } elsif ($is_standalone_toolchain) {
 -                my $cc = $user{CC} // "clang";
 -                # One can probably argue that both clang and gcc should be
 -                # probed, but support for "standalone toolchain" was added
@@ -100,19 +140,35 @@ diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/C
              } elsif ($user{CC} eq "clang") {
                  die "no NDK clang on \$PATH";
              } else {
-@@ -133,13 +99,13 @@
-                 die "no $incroot/$triarch" if (!-d "$incroot/$triarch");
-                 $incroot =~ s|^$ndk/||;
-                 $cppflags  = "-D__ANDROID_API__=$api";
--                $cppflags .= " -isystem \$($ndk_var)/$incroot/$triarch";
--                $cppflags .= " -isystem \$($ndk_var)/$incroot";
+@@ -145,21 +93,19 @@
+                 $user{CROSS_COMPILE} = "$triarch-";
+             }
+ 
+-            if (length $sysroot) {
+-                if (!-d "$sysroot/usr/include") {
+-                    my $incroot = "$ndk/sysroot/usr/include";
+-                    die "no $incroot"          if (!-d $incroot);
+-                    die "no $incroot/$triarch" if (!-d "$incroot/$triarch");
+-                    $incroot =~ s|^$ndk/||;
+-                    $cppflags  = "-D__ANDROID_API__=$api";
+-                    $cppflags .= " -isystem \$($ndk_var)/$incroot/$triarch";
+-                    $cppflags .= " -isystem \$($ndk_var)/$incroot";
+-                }
+-                $sysroot =~ s|^$ndk/||;
+-                $sysroot = " --sysroot=\$($ndk_var)/$sysroot";
++            if (!-d "$sysroot/usr/include") {
++                my $incroot = "$ndk/sysroot/usr/include";
++                die "no $incroot"          if (!-d $incroot);
++                die "no $incroot/$triarch" if (!-d "$incroot/$triarch");
++                $incroot =~ s|^$ndk/||;
++                $cppflags  = "-D__ANDROID_API__=$api";
 +                $cppflags .= " -isystem \$(ANDROID_NDK)/$incroot/$triarch";
 +                $cppflags .= " -isystem \$(ANDROID_NDK)/$incroot";
              }
- 
-             $sysroot =~ s|^$ndk/||;
++
++            $sysroot =~ s|^$ndk/||;
              $android_ndk = {
--                cflags   => "$cflags --sysroot=\$($ndk_var)/$sysroot",
+-                cflags   => $cflags . $sysroot,
 +                cflags   => "$cflags --sysroot=\$(ANDROID_NDK)/$sysroot",
                  cppflags => $cppflags,
                  bn_ops   => $arch =~ m/64$/ ? "SIXTY_FOUR_BIT_LONG"

@@ -27,16 +27,17 @@ public class DayOfWeekOptions extends FunctionOptions {
         return new DayOfWeekOptions((Pointer)this).offsetAddress(i);
     }
 
-  public DayOfWeekOptions(@Cast("bool") boolean one_based_numbering/*=false*/, @Cast("uint32_t") int week_start/*=1*/) { super((Pointer)null); allocate(one_based_numbering, week_start); }
-  private native void allocate(@Cast("bool") boolean one_based_numbering/*=false*/, @Cast("uint32_t") int week_start/*=1*/);
+  public DayOfWeekOptions(@Cast("bool") boolean count_from_zero/*=true*/, @Cast("uint32_t") int week_start/*=1*/) { super((Pointer)null); allocate(count_from_zero, week_start); }
+  private native void allocate(@Cast("bool") boolean count_from_zero/*=true*/, @Cast("uint32_t") int week_start/*=1*/);
   public DayOfWeekOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
   @MemberGetter public static native byte kTypeName(int i);
   @MemberGetter public static native String kTypeName();
   public static native @ByVal DayOfWeekOptions Defaults();
 
-  /** Number days from 1 if true and from 0 if false */
-  public native @Cast("bool") boolean one_based_numbering(); public native DayOfWeekOptions one_based_numbering(boolean setter);
-  /** What day does the week start with (Monday=1, Sunday=7) */
+  /** Number days from 0 if true and from 1 if false */
+  public native @Cast("bool") boolean count_from_zero(); public native DayOfWeekOptions count_from_zero(boolean setter);
+  /** What day does the week start with (Monday=1, Sunday=7).
+   *  The numbering is unaffected by the count_from_zero parameter. */
   public native @Cast("uint32_t") int week_start(); public native DayOfWeekOptions week_start(int setter);
 }

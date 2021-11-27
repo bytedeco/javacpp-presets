@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ale</artifactId>
-  <version>0.7.2-${project.parent.version}</version>
+  <version>0.7.3-${project.parent.version}</version>
   <name>JavaCPP Presets for ALE</name>
 
   <dependencies>

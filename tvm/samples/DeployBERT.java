@@ -175,7 +175,7 @@ public class DeployBERT {
     public static void DeployBERTRuntime() {
         System.out.println("Running BERT runtime...");
         // load in the library
-        DLContext ctx = new DLContext().device_type(kDLCPU).device_id(0);
+        DLDevice ctx = new DLDevice().device_type(kDLCPU).device_id(0);
         Module mod_factory = Module.LoadFromFile("lib/libbert.so");
         // create the BERT runtime module
         TVMValue values = new TVMValue(2);
@@ -192,10 +192,10 @@ public class DeployBERT {
         // Use the C++ API to create some random sequence
         int batch = 1, seq_length = 128;
         DLDataType dtype = new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1);
-        NDArray inputs = NDArray.Empty(new long[]{batch, seq_length}, dtype, ctx);
-        NDArray token_types = NDArray.Empty(new long[]{batch, seq_length}, dtype, ctx);
-        NDArray valid_length = NDArray.Empty(new long[]{batch}, dtype, ctx);
-        NDArray output = NDArray.Empty(new long[]{batch, 2}, dtype, ctx);
+        NDArray inputs = NDArray.Empty(new ShapeTuple(batch, seq_length), dtype, ctx);
+        NDArray token_types = NDArray.Empty(new ShapeTuple(batch, seq_length), dtype, ctx);
+        NDArray valid_length = NDArray.Empty(new ShapeTuple(batch), dtype, ctx);
+        NDArray output = NDArray.Empty(new ShapeTuple(batch, 2), dtype, ctx);
         FloatPointer inputs_data = new FloatPointer(inputs.accessDLTensor().data()).capacity(batch * seq_length);
         FloatPointer token_types_data = new FloatPointer(token_types.accessDLTensor().data()).capacity(batch * seq_length);
         FloatPointer valid_length_data = new FloatPointer(valid_length.accessDLTensor().data()).capacity(batch);

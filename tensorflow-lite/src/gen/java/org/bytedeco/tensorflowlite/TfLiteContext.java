@@ -316,4 +316,24 @@ public class TfLiteContext extends Pointer {
                                        int tensor_idx);
   }
   public native GetEvalTensor_TfLiteContext_int GetEvalTensor(); public native TfLiteContext GetEvalTensor(GetEvalTensor_TfLiteContext_int setter);
+
+  // Retrieves named metadata buffer from the TFLite model.
+  // Returns kTfLiteOk if metadata is successfully obtained from the flatbuffer
+  // Model: that is, there exists a `metadata` entry with given `name` string.
+  // (see TFLite's schema.fbs).
+  // The corresponding `buffer` information is populated in `ptr` & `bytes`.
+  // The data from `ptr` is valid for the lifetime of the Interpreter.
+  //
+  // WARNING: This is an experimental interface that is subject to change.
+  public static class GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer(Pointer p) { super(p); }
+      protected GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("TfLiteStatus") int call(@Const TfLiteContext context,
+                                     @Cast("const char*") BytePointer name, @Cast("const char**") PointerPointer ptr,
+                                     @Cast("size_t*") SizeTPointer bytes);
+  }
+  public native GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer GetModelMetadata(); public native TfLiteContext GetModelMetadata(GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer setter);
 }
