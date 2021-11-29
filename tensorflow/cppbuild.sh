@@ -168,28 +168,28 @@ case $PLATFORM in
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-arm64)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86_64)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     linux-x86)

@@ -126,7 +126,7 @@ To use the JavaCPP Presets, you will need to download and install the following 
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
- * Android SDK API 21 or newer  http://developer.android.com/sdk/
+ * Android SDK API 24 or newer  http://developer.android.com/sdk/
 
 
 Manual Installation
@@ -143,7 +143,7 @@ Eclipse (Java SE 7 or newer):
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
 
-IntelliJ IDEA (Android 5.0 or newer):
+IntelliJ IDEA (Android 7.0 or newer):
 
  1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
  2. Copy all the JAR files into the `app/libs` subdirectory.
