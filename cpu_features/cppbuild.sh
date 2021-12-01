@@ -24,38 +24,38 @@ case $PLATFORM in
         sedinplace 's/CpuId(uint32_t leaf_id);/CpuId(uint32_t leaf_id) { }/g' include/internal/cpuid_x86.h
         sedinplace 's/GetXCR0Eax(void);/GetXCR0Eax(void) { }/g' include/internal/cpuid_x86.h
         sedinplace '/ANDROID_CPU_ARM_FEATURE_VFPv2/d' ndk_compat/cpu-features.c
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        make -j $MAKEJ
         make install
         ;;
     android-arm64)
         sedinplace 's/CpuId(uint32_t leaf_id);/CpuId(uint32_t leaf_id) { }/g' include/internal/cpuid_x86.h
         sedinplace 's/GetXCR0Eax(void);/GetXCR0Eax(void) { }/g' include/internal/cpuid_x86.h
         sedinplace '/ANDROID_CPU_ARM_FEATURE_VFPv2/d' ndk_compat/cpu-features.c
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        make -j $MAKEJ
         make install
         ;;
     android-x86)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        make -j $MAKEJ
         make install
         ;;
     android-x86_64)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        make -j $MAKEJ
         make install
         ;;
     linux-x86)
         sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
         CC="gcc -m32 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-x86_64)
         sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
         CC="gcc -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-armhf)
@@ -65,7 +65,7 @@ case $PLATFORM in
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
         sedinplace 's/(HardwareCapabilities)//g' src/define_tables.h
         CC="arm-linux-gnueabihf-gcc -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-arm64)
@@ -74,7 +74,7 @@ case $PLATFORM in
         sedinplace 's/set(PROCESSOR_IS_AARCH64 FALSE)/set(PROCESSOR_IS_AARCH64 TRUE)/g' CMakeLists.txt
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
         CC="aarch64-linux-gnu-gcc -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-ppc64le)
@@ -88,7 +88,7 @@ case $PLATFORM in
         else
           CC="powerpc64le-linux-gnu-gcc -fPIC" CMAKE_C_COMPILER=$CC $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         fi
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-mips64el)
@@ -97,12 +97,12 @@ case $PLATFORM in
         sedinplace 's/set(PROCESSOR_IS_MIPS FALSE)/set(PROCESSOR_IS_MIPS TRUE)/g' CMakeLists.txt
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
         CC="gcc -mabi=64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     macosx-*)
         CC="clang -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     windows-x86)
