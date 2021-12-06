@@ -251,7 +251,7 @@ public static final int TESSERACT_VERSION =
    TESSERACT_MINOR_VERSION <<  8 | 
    TESSERACT_MICRO_VERSION);
 
-public static final String TESSERACT_VERSION_STR = "5.0.0-rc3";
+public static final String TESSERACT_VERSION_STR = "5.0.0";
 
 // clang-format on
 

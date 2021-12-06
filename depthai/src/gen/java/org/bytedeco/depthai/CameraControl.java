@@ -154,6 +154,12 @@ public class CameraControl extends Buffer {
      */
     public native void setAutoWhiteBalanceLock(@Cast("bool") boolean lock);
 
+    /**
+     * Set a command to manually specify white-balance color correction
+     * @param colorTemperatureK Light source color temperature in kelvins, range 1000..12000
+     */
+    public native void setManualWhiteBalance(int colorTemperatureK);
+
     // Other image controls
     /**
      * Set a command to adjust image brightness
