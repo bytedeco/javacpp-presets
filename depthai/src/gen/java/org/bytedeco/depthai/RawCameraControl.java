@@ -114,7 +114,9 @@ public class RawCameraControl extends RawBuffer {
                                         */
         LUMA_DENOISE((byte)(47)),             /* [1] value
                                         */
-        CHROMA_DENOISE((byte)(48));          /* [1] value
+        CHROMA_DENOISE((byte)(48)),           /* [1] value
+                                        */
+        WB_COLOR_TEMP((byte)(49));           /* [1] value
                                         */
 
         public final byte value;
@@ -322,6 +324,7 @@ public class RawCameraControl extends RawBuffer {
     public native @Cast("uint8_t") byte sharpness(); public native RawCameraControl sharpness(byte setter);       //   0 ..  4
     public native @Cast("uint8_t") byte lumaDenoise(); public native RawCameraControl lumaDenoise(byte setter);     //   0 ..  4
     public native @Cast("uint8_t") byte chromaDenoise(); public native RawCameraControl chromaDenoise(byte setter);   //   0 ..  4
+    public native @Cast("uint16_t") short wbColorTemp(); public native RawCameraControl wbColorTemp(short setter);    // 1000 .. 12000
 
     public native void setCommand(Command cmd, @Cast("bool") boolean value/*=true*/);
     public native void setCommand(Command cmd);
