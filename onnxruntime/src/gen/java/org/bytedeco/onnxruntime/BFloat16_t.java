@@ -15,8 +15,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** \class Ort::BFloat16_t
-  * \brief is a structure that represents bfloat16 data.
+/** \brief bfloat16 (Brain Floating Point) data type
   * \details It is necessary for type dispatching to make use of C++ API
   * The type is implicitly convertible to/from uint16_t.
   * The size of the structure should align with uint16_t and one can freely cast

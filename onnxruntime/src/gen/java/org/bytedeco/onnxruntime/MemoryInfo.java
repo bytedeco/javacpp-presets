@@ -22,10 +22,18 @@ public class MemoryInfo extends BaseMemoryInfo {
     public MemoryInfo(Pointer p) { super(p); }
 
   public static native @ByVal MemoryInfo CreateCpu(@Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type1);
+  /** Used for interop with the C API */
   public MemoryInfo(OrtMemoryInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtMemoryInfo p);
   public MemoryInfo(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }
   private native void allocate(@Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type);
   public MemoryInfo(String name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type) { super((Pointer)null); allocate(name, type, id, mem_type); }
   private native void allocate(String name, @Cast("OrtAllocatorType") int type, int id, @Cast("OrtMemType") int mem_type);
+
+  public native @Cast({"char*", "std::string&&"}) @StdString BytePointer GetAllocatorName();
+  public native @Cast("OrtAllocatorType") int GetAllocatorType();
+  public native int GetDeviceId();
+  public native @Cast("OrtMemType") int GetMemoryType();
+
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef MemoryInfo o);
 }

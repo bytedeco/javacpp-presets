@@ -85,52 +85,44 @@ public class Value extends BaseValue {
     public native @Cast("size_t") long shape_len(); public native Shape shape_len(long setter);
   }
 
+  /** \brief Wraps OrtApi::CreateTensorWithDataAsOrtValue */
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(@Const OrtMemoryInfo info, FloatPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(@Const OrtMemoryInfo info, FloatBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(@Const OrtMemoryInfo info, float[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(@Const OrtMemoryInfo info, DoublePointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(@Const OrtMemoryInfo info, DoubleBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(@Const OrtMemoryInfo info, double[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(@Const OrtMemoryInfo info, BytePointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(@Const OrtMemoryInfo info, ByteBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(@Const OrtMemoryInfo info, byte[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(@Const OrtMemoryInfo info, ShortPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(@Const OrtMemoryInfo info, ShortBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(@Const OrtMemoryInfo info, short[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(@Const OrtMemoryInfo info, IntPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(@Const OrtMemoryInfo info, IntBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(@Const OrtMemoryInfo info, int[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(@Const OrtMemoryInfo info, @Cast("int64_t*") LongPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(@Const OrtMemoryInfo info, @Cast("int64_t*") LongBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(@Const OrtMemoryInfo info, @Cast("int64_t*") long[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(@Const OrtMemoryInfo info, @Cast("uint8_t*") BytePointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(@Const OrtMemoryInfo info, @Cast("uint8_t*") ByteBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(@Const OrtMemoryInfo info, @Cast("uint8_t*") byte[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(@Const OrtMemoryInfo info, @Cast("uint16_t*") ShortPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(@Const OrtMemoryInfo info, @Cast("uint16_t*") ShortBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(@Const OrtMemoryInfo info, @Cast("uint16_t*") short[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(@Const OrtMemoryInfo info, @Cast("uint32_t*") IntPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(@Const OrtMemoryInfo info, @Cast("uint32_t*") IntBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(@Const OrtMemoryInfo info, @Cast("uint32_t*") int[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(@Const OrtMemoryInfo info, @Cast("uint64_t*") LongPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(@Const OrtMemoryInfo info, @Cast("uint64_t*") LongBuffer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(@Const OrtMemoryInfo info, @Cast("uint64_t*") long[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") BoolPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") BoolPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") BoolPointer p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(@Const OrtMemoryInfo info, @Cast("bool*") boolean[] p_data, @Cast("size_t") long p_data_element_count, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  /** \brief Wraps OrtApi::CreateTensorWithDataAsOrtValue */
   public static native @StdMove Value CreateTensor(@Const OrtMemoryInfo info, Pointer p_data, @Cast("size_t") long p_data_byte_count, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
                               @Cast("ONNXTensorElementDataType") int type);
   public static native @StdMove Value CreateTensor(@Const OrtMemoryInfo info, Pointer p_data, @Cast("size_t") long p_data_byte_count, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len,
@@ -209,49 +201,41 @@ public class Value extends BaseValue {
 
 // #endif  // !defined(DISABLE_SPARSE_TENSORS)
 
+  // \brief Wraps OrtApi::CreateTensorAsOrtValue
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<float>") @StdMove Value CreateTensorFloat(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<double>") @StdMove Value CreateTensorDouble(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int8_t>") @StdMove Value CreateTensorByte(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int16_t>") @StdMove Value CreateTensorShort(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int32_t>") @StdMove Value CreateTensorInt(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<int64_t>") @StdMove Value CreateTensorLong(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint8_t>") @StdMove Value CreateTensorUByte(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint16_t>") @StdMove Value CreateTensorUShort(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint32_t>") @StdMove Value CreateTensorUInt(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<uint64_t>") @StdMove Value CreateTensorULong(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
-
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len);
   public static native @Name("CreateTensor<bool>") @StdMove Value CreateTensorBool(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len);
+  // \brief Wraps OrtApi::CreateTensorAsOrtValue
   public static native @StdMove Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
   public static native @StdMove Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
   public static native @StdMove Value CreateTensor(OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type);
@@ -302,7 +286,7 @@ public class Value extends BaseValue {
    *  at difference device than the allocator, a X-device copy will be performed if possible.
    *  </summary>
    *  <param name="data_mem_info">specified buffer memory description</param>
-   *  <param name="values_param">values buffer information</param>
+   *  <param name="values">values buffer information</param>
    *  <param name="inner_indices_data">csr inner indices pointer or nullptr for fully sparse tensors</param>
    *  <param name="inner_indices_num">number of csr inner indices or 0 for fully sparse tensors</param>
    *  <param name="outer_indices_data">pointer to csr indices data or nullptr for fully sparse tensors</param>
@@ -326,7 +310,7 @@ public class Value extends BaseValue {
    *  at difference device than the allocator, a X-device copy will be performed if possible.
    *  </summary>
    *  <param name="data_mem_info">specified buffer memory description</param>
-   *  <param name="values_param">values buffer information</param>
+   *  <param name="values">values buffer information</param>
    *  <param name="indices_shape">indices shape. use {0} for fully sparse tensors</param>
    *  <param name="indices_data">pointer to indices data or nullptr for fully sparse tensors</param> */
   public native void FillSparseTensorBlockSparse(@Const OrtMemoryInfo data_mem_info,
@@ -362,10 +346,10 @@ public class Value extends BaseValue {
    *  indices have their own enum values even if a give format has more than one kind of indices.
    *  Use GetSparseTensorIndicesData() to obtain pointer to indices buffer.
    *  </summary>
-   *  <param name="">enum requested</param>
+   *  <param name="format">enum requested</param>
    *  <returns>type and shape information</returns> */
-  public native @ByVal TensorTypeAndShapeInfo GetSparseTensorIndicesTypeShapeInfo(OrtSparseIndicesFormat arg0);
-  public native @ByVal TensorTypeAndShapeInfo GetSparseTensorIndicesTypeShapeInfo(@Cast("OrtSparseIndicesFormat") int arg0);
+  public native @ByVal TensorTypeAndShapeInfo GetSparseTensorIndicesTypeShapeInfo(OrtSparseIndicesFormat format);
+  public native @ByVal TensorTypeAndShapeInfo GetSparseTensorIndicesTypeShapeInfo(@Cast("OrtSparseIndicesFormat") int format);
 
   /** <summary>
    *  The API retrieves a pointer to the internal indices buffer. The API merely performs
@@ -379,24 +363,30 @@ public class Value extends BaseValue {
 
 // #endif  // !defined(DISABLE_SPARSE_TENSORS)
 
+  /** Wraps OrtApi::CreateValue */
   public static native @StdMove Value CreateMap(@ByRef Value keys, @ByRef Value values);
+  /** Wraps OrtApi::CreateValue */
   public static native @StdMove Value CreateSequence(@ByRef ValueVector values);
 
+  /** Create an empty Value object, must be assigned a valid one to be used */
   public Value() { super((Pointer)null); allocate(); }
   private native void allocate();
+  /** Used for interop with the C API */
   public Value(OrtValue p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtValue p);
   public Value(@StdMove Value arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@StdMove Value arg0);
   public native @ByRef @Name("operator =") Value put(@StdMove Value arg0);
 
+  /** Returns true if Value is a tensor, false for other types like map/sequence/etc */
   public native @Cast("bool") boolean IsTensor();
+  public native @Cast("bool") boolean HasValue();  /** < Return true if OrtValue contains data and returns false if the OrtValue is a None */
 
 // #if !defined(DISABLE_SPARSE_TENSORS)
   /** <summary>
-   *  Returns true if the OrtValue contains a sparse tensor
-   *  </summary>
-   *  <returns></returns> */
+  /** Returns true if the OrtValue contains a sparse tensor
+  /** </summary>
+  /** <returns></returns> */
   public native @Cast("bool") boolean IsSparseTensor();
 // #endif
 
@@ -429,26 +419,37 @@ public class Value extends BaseValue {
    *    for sparse tensors</param> */
   public native void GetStringTensorContent(Pointer buffer, @Cast("size_t") long buffer_length, @Cast("size_t*") SizeTPointer offsets, @Cast("size_t") long offsets_count);
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Name("GetTensorMutableData<float>") FloatPointer GetTensorMutableDataFloat();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Name("GetTensorMutableData<double>") DoublePointer GetTensorMutableDataDouble();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Name("GetTensorMutableData<int8_t>") BytePointer GetTensorMutableDataByte();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Name("GetTensorMutableData<int16_t>") ShortPointer GetTensorMutableDataShort();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Name("GetTensorMutableData<int32_t>") IntPointer GetTensorMutableDataInt();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("int64_t*") @Name("GetTensorMutableData<int64_t>") LongPointer GetTensorMutableDataLong();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("uint8_t*") @Name("GetTensorMutableData<uint8_t>") BytePointer GetTensorMutableDataUByte();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("uint16_t*") @Name("GetTensorMutableData<uint16_t>") ShortPointer GetTensorMutableDataUShort();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("uint32_t*") @Name("GetTensorMutableData<uint32_t>") IntPointer GetTensorMutableDataUInt();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("uint64_t*") @Name("GetTensorMutableData<uint64_t>") LongPointer GetTensorMutableDataULong();
 
+  /** Wraps OrtApi::GetTensorMutableData */
   public native @Cast("bool*") @Name("GetTensorMutableData<bool>") BoolPointer GetTensorMutableDataBool();
 
 // #if !defined(DISABLE_SPARSE_TENSORS)

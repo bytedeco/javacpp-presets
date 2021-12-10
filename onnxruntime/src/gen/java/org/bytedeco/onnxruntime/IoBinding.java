@@ -35,4 +35,6 @@ public class IoBinding extends BaseIoBinding {
   public native @StdMove ValueVector GetOutputValues(@ByRef Allocator arg0);
   public native void ClearBoundInputs();
   public native void ClearBoundOutputs();
+  public native void SynchronizeInputs();
+  public native void SynchronizeOutputs();
 }

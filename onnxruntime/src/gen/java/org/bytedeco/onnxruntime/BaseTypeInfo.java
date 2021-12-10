@@ -37,5 +37,6 @@ public class BaseTypeInfo extends Pointer {
 
   public native @Name("operator OrtTypeInfo*") OrtTypeInfo asOrtTypeInfo();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtTypeInfo release();
 }

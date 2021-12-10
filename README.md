@@ -179,7 +179,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.44.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.50.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
@@ -222,7 +222,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.13.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.9.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

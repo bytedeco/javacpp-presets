@@ -17,7 +17,7 @@ public class CApiSample {
         if (status != null && !status.isNull()) {
           String msg = g_ort.GetErrorMessage().call(status).getString();
           System.err.println(msg);
-          g_ort.ReleaseStatus().call(status);
+          g_ort.ReleaseStatus(status);
           System.exit(1);
         }
     }
@@ -27,17 +27,17 @@ public class CApiSample {
       // initialize  enviroment...one enviroment per process
       // enviroment maintains thread pools and other state info
       PointerPointer<OrtEnv> envs = new PointerPointer<OrtEnv>(1);
-      CheckStatus(g_ort.CreateEnv().call(ORT_LOGGING_LEVEL_WARNING, new BytePointer("test"), envs));
+      CheckStatus(g_ort.CreateEnv(ORT_LOGGING_LEVEL_WARNING, new BytePointer("test"), envs));
       OrtEnv env = envs.get(OrtEnv.class);
 
       // initialize session options if needed
       PointerPointer<OrtSessionOptions> sessions_options = new PointerPointer<OrtSessionOptions>(1);
-      CheckStatus(g_ort.CreateSessionOptions().call(sessions_options));
+      CheckStatus(g_ort.CreateSessionOptions(sessions_options));
       OrtSessionOptions session_options = sessions_options.get(OrtSessionOptions.class);
-      g_ort.SetIntraOpNumThreads().call(session_options, 1);
+      g_ort.SetIntraOpNumThreads(session_options, 1);
 
       // Sets graph optimization level
-      g_ort.SetSessionGraphOptimizationLevel().call(session_options, ORT_ENABLE_BASIC);
+      g_ort.SetSessionGraphOptimizationLevel(session_options, ORT_ENABLE_BASIC);
 
       // Optionally add more execution providers via session_options
       // E.g. for CUDA include cuda_provider_factory.h and uncomment the following line:
@@ -53,7 +53,7 @@ public class CApiSample {
       Pointer model_path = Loader.getPlatform().startsWith("windows") ? new CharPointer(s) : new BytePointer(s);
 
       System.out.println("Using Onnxruntime C API");
-      CheckStatus(g_ort.CreateSession().call(env, model_path, session_options, sessions));
+      CheckStatus(g_ort.CreateSession(env, model_path, session_options, sessions));
       OrtSession session = sessions.get(OrtSession.class);
 
       //*************************************************************************
@@ -61,11 +61,11 @@ public class CApiSample {
       SizeTPointer num_input_nodes = new SizeTPointer(1);
       OrtStatus status;
       PointerPointer<OrtAllocator> allocators = new PointerPointer<OrtAllocator>(1);
-      CheckStatus(g_ort.GetAllocatorWithDefaultOptions().call(allocators));
+      CheckStatus(g_ort.GetAllocatorWithDefaultOptions(allocators));
       OrtAllocator allocator = allocators.get(OrtAllocator.class);
 
       // print number of model input nodes
-      status = g_ort.SessionGetInputCount().call(session, num_input_nodes);
+      status = g_ort.SessionGetInputCount(session, num_input_nodes);
       PointerPointer input_node_names = new PointerPointer(num_input_nodes.get());
       LongPointer input_node_dims = null;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
                                            // Otherwise need vector<vector<>>
@@ -76,32 +76,32 @@ public class CApiSample {
       for (long i = 0; i < num_input_nodes.get(); i++) {
         // print input node names
         PointerPointer<BytePointer> input_names = new PointerPointer<BytePointer>(1);
-        status = g_ort.SessionGetInputName().call(session, i, allocator, input_names);
+        status = g_ort.SessionGetInputName(session, i, allocator, input_names);
         BytePointer input_name = input_names.get(BytePointer.class);
         System.out.println("Input " + i + " : name=" + input_name.getString());
         input_node_names.put(i, input_name);
 
         // print input node types
         PointerPointer<OrtTypeInfo> typeinfos = new PointerPointer<OrtTypeInfo>(1);
-        status = g_ort.SessionGetInputTypeInfo().call(session, i, typeinfos);
+        status = g_ort.SessionGetInputTypeInfo(session, i, typeinfos);
         OrtTypeInfo typeinfo = typeinfos.get(OrtTypeInfo.class);
         PointerPointer<OrtTensorTypeAndShapeInfo> tensor_infos = new PointerPointer<OrtTensorTypeAndShapeInfo>(1);
-        CheckStatus(g_ort.CastTypeInfoToTensorInfo().call(typeinfo, tensor_infos));
+        CheckStatus(g_ort.CastTypeInfoToTensorInfo(typeinfo, tensor_infos));
         OrtTensorTypeAndShapeInfo tensor_info = tensor_infos.get(OrtTensorTypeAndShapeInfo.class);
         IntPointer type = new IntPointer(1);
-        CheckStatus(g_ort.GetTensorElementType().call(tensor_info, type));
+        CheckStatus(g_ort.GetTensorElementType(tensor_info, type));
         System.out.println("Input " + i + " : type=" + type.get());
 
         // print input shapes/dims
         SizeTPointer num_dims = new SizeTPointer(1);
-        CheckStatus(g_ort.GetDimensionsCount().call(tensor_info, num_dims));
+        CheckStatus(g_ort.GetDimensionsCount(tensor_info, num_dims));
         System.out.println("Input " + i + " : num_dims=" + num_dims.get());
         input_node_dims = new LongPointer(num_dims.get());
-        g_ort.GetDimensions().call(tensor_info, input_node_dims, num_dims.get());
+        g_ort.GetDimensions(tensor_info, input_node_dims, num_dims.get());
         for (long j = 0; j < num_dims.get(); j++)
           System.out.println("Input " + i + " : dim " + j + "=" + input_node_dims.get(j));
 
-        g_ort.ReleaseTypeInfo().call(typeinfo);
+        g_ort.ReleaseTypeInfo(typeinfo);
       }
 
       // Results should be...
@@ -135,25 +135,25 @@ public class CApiSample {
 
       // create input tensor object from data values
       PointerPointer<OrtMemoryInfo> memory_infos = new PointerPointer<OrtMemoryInfo>(1);
-      CheckStatus(g_ort.CreateCpuMemoryInfo().call(OrtArenaAllocator, OrtMemTypeDefault, memory_infos));
+      CheckStatus(g_ort.CreateCpuMemoryInfo(OrtArenaAllocator, OrtMemTypeDefault, memory_infos));
       OrtMemoryInfo memory_info = memory_infos.get(OrtMemoryInfo.class);
       PointerPointer<OrtValue> input_tensors = new PointerPointer<OrtValue>(1).put(0, null);
-      CheckStatus(g_ort.CreateTensorWithDataAsOrtValue().call(memory_info, input_tensor_values, input_tensor_size * Float.SIZE / 8, input_node_dims, 4, ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, input_tensors));
+      CheckStatus(g_ort.CreateTensorWithDataAsOrtValue(memory_info, input_tensor_values, input_tensor_size * Float.SIZE / 8, input_node_dims, 4, ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, input_tensors));
       OrtValue input_tensor = input_tensors.get(OrtValue.class);
       IntPointer is_tensor = new IntPointer(1);
-      CheckStatus(g_ort.IsTensor().call(input_tensor, is_tensor));
+      CheckStatus(g_ort.IsTensor(input_tensor, is_tensor));
       assert is_tensor.get() != 0;
 
       // score model & input tensor, get back output tensor
       PointerPointer<OrtValue> output_tensors = new PointerPointer<OrtValue>(1).put(0, null);
-      CheckStatus(g_ort.Run().call(session, null, input_node_names, input_tensors, 1, output_node_names, 1, output_tensors));
+      CheckStatus(g_ort.Run(session, null, input_node_names, input_tensors, 1, output_node_names, 1, output_tensors));
       OrtValue output_tensor = output_tensors.get(OrtValue.class);
-      CheckStatus(g_ort.IsTensor().call(output_tensor, is_tensor));
+      CheckStatus(g_ort.IsTensor(output_tensor, is_tensor));
       assert is_tensor.get() != 0;
 
       // Get pointer to output tensor float values
       PointerPointer<FloatPointer> floatarrs = new PointerPointer<FloatPointer>(1);
-      CheckStatus(g_ort.GetTensorMutableData().call(output_tensor, floatarrs));
+      CheckStatus(g_ort.GetTensorMutableData(output_tensor, floatarrs));
       FloatPointer floatarr = floatarrs.get(FloatPointer.class);
       assert Math.abs(floatarr.get(0) - 0.000045) < 1e-6;
 
@@ -168,12 +168,12 @@ public class CApiSample {
       // Score for class[3] = 0.001180
       // Score for class[4] = 0.001317
 
-      g_ort.ReleaseMemoryInfo().call(memory_info);
-      g_ort.ReleaseValue().call(output_tensor);
-      g_ort.ReleaseValue().call(input_tensor);
-      g_ort.ReleaseSession().call(session);
-      g_ort.ReleaseSessionOptions().call(session_options);
-      g_ort.ReleaseEnv().call(env);
+      g_ort.ReleaseMemoryInfo(memory_info);
+      g_ort.ReleaseValue(output_tensor);
+      g_ort.ReleaseValue(input_tensor);
+      g_ort.ReleaseSession(session);
+      g_ort.ReleaseSessionOptions(session_options);
+      g_ort.ReleaseEnv(env);
       System.out.println("Done!");
       System.exit(0);
     }

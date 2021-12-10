@@ -37,7 +37,7 @@ public class OrtCustomOp extends Pointer {
         return new OrtCustomOp((Pointer)this).offsetAddress(i);
     }
 
-  public native @Cast("uint32_t") int version(); public native OrtCustomOp version(int setter);  // Initialize to ORT_API_VERSION
+  public native @Cast("uint32_t") int version(); public native OrtCustomOp version(int setter);  // Must be initialized to ORT_API_VERSION
 
   // This callback creates the kernel, which is a user defined parameter that is passed to the Kernel* callbacks below.
   public static class CreateKernel_OrtCustomOp_OrtApi_OrtKernelInfo extends FunctionPointer {

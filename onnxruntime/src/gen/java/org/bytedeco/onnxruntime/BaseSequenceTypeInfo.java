@@ -37,5 +37,6 @@ public class BaseSequenceTypeInfo extends Pointer {
 
   public native @Name("operator OrtSequenceTypeInfo*") OrtSequenceTypeInfo asOrtSequenceTypeInfo();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtSequenceTypeInfo release();
 }
