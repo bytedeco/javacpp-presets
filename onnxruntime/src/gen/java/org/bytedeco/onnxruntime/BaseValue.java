@@ -37,5 +37,6 @@ public class BaseValue extends Pointer {
 
   public native @Name("operator OrtValue*") OrtValue asOrtValue();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtValue release();
 }

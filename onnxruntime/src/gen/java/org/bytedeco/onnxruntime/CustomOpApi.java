@@ -39,6 +39,8 @@ public class CustomOpApi extends Pointer {
   public native void SetDimensions(OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") LongBuffer dim_values, @Cast("size_t") long dim_count);
   public native void SetDimensions(OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") long[] dim_values, @Cast("size_t") long dim_count);
 
+  public native @Const OrtMemoryInfo GetTensorMemoryInfo(@Const OrtValue value);
+
   public native @Cast("int64_t*") @StdVector LongPointer GetTensorShape(@Const OrtTensorTypeAndShapeInfo info);
   public native void ReleaseTensorTypeAndShapeInfo(OrtTensorTypeAndShapeInfo input);
   public native @Cast("size_t") long KernelContext_GetInputCount(@Const OrtKernelContext context);
@@ -47,6 +49,7 @@ public class CustomOpApi extends Pointer {
   public native OrtValue KernelContext_GetOutput(OrtKernelContext context, @Cast("size_t") long index, @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count);
   public native OrtValue KernelContext_GetOutput(OrtKernelContext context, @Cast("size_t") long index, @Cast("const int64_t*") LongBuffer dim_values, @Cast("size_t") long dim_count);
   public native OrtValue KernelContext_GetOutput(OrtKernelContext context, @Cast("size_t") long index, @Cast("const int64_t*") long[] dim_values, @Cast("size_t") long dim_count);
+  public native Pointer KernelContext_GetGPUComputeStream(@Const OrtKernelContext context);
 
   public native void ThrowOnError(OrtStatus result);
 }

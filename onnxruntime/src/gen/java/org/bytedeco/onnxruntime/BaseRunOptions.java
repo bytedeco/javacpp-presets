@@ -37,5 +37,6 @@ public class BaseRunOptions extends Pointer {
 
   public native @Name("operator OrtRunOptions*") OrtRunOptions asOrtRunOptions();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtRunOptions release();
 }

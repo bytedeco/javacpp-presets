@@ -37,5 +37,6 @@ public class BaseTensorTypeAndShapeInfo extends Pointer {
 
   public native @Name("operator OrtTensorTypeAndShapeInfo*") OrtTensorTypeAndShapeInfo asOrtTensorTypeAndShapeInfo();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtTensorTypeAndShapeInfo release();
 }

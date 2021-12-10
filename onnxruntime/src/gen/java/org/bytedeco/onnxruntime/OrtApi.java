@@ -15,6 +15,13 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief The C API
+*
+* All C API functions are defined inside this structure as pointers to functions.
+* Call OrtApiBase::GetApi to get a pointer to it
+*
+* \nosubgrouping
+*/
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtApi extends Pointer {
     static { Loader.load(); }
@@ -33,9 +40,16 @@ public class OrtApi extends Pointer {
         return new OrtApi((Pointer)this).offsetAddress(i);
     }
 
+  /** \name OrtStatus
+   *  \{
+  <p>
   /**
-* @param msg A null-terminated string. Its content will be copied into the newly created OrtStatus
-*/
+  * \brief Create an OrtStatus from a null terminated string
+  *
+  * @param code [in]
+  * @param msg [in] A null-terminated string. Its contents will be copied.
+  * @return A new OrtStatus object, must be destroyed with OrtApi::ReleaseStatus
+  */
   public static class CreateStatus_int_BytePointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -46,6 +60,11 @@ public class OrtApi extends Pointer {
   }
   public native CreateStatus_int_BytePointer CreateStatus(); public native OrtApi CreateStatus(CreateStatus_int_BytePointer setter);
 
+  /** \brief Get OrtErrorCode from OrtStatus
+  *
+  * @param status [in]
+  * @return OrtErrorCode that \p status was created with
+  */
   public static class GetErrorCode_OrtStatus extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -56,10 +75,11 @@ public class OrtApi extends Pointer {
   }
   public native GetErrorCode_OrtStatus GetErrorCode(); public native OrtApi GetErrorCode(GetErrorCode_OrtStatus setter);
 
-  /**
- * @param status must not be NULL
- * @return The error message inside the {@code status}. Do not free the returned value.
- */
+  /** \brief Get error string from OrtStatus
+  *
+  * @param status [in]
+  * @return The error message inside the {@code status}. Do not free the returned value.
+  */
   public static class GetErrorMessage_OrtStatus extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -70,1885 +90,1904 @@ public class OrtApi extends Pointer {
   }
   public native GetErrorMessage_OrtStatus GetErrorMessage(); public native OrtApi GetErrorMessage(GetErrorMessage_OrtStatus setter);
 
-  /**
-     * @param out Should be freed by {@code ReleaseEnv} after use
-     */
-  public static class CreateEnv_int_BytePointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateEnv_int_BytePointer_PointerPointer(Pointer p) { super(p); }
-      protected CreateEnv_int_BytePointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
-  }
-  public native CreateEnv_int_BytePointer_PointerPointer CreateEnv(); public native OrtApi CreateEnv(CreateEnv_int_BytePointer_PointerPointer setter);
+  /** \}
+   *  \name OrtEnv
+   *  \{
+  <p>
+  /** \brief Create an OrtEnv
+  *
+  * @param log_severity_level [in] The log severity level.
+  * @param logid [in] The log identifier.
+  * @param out [out] Returned newly created OrtEnv. Must be freed with OrtApi::ReleaseEnv
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateEnv( @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
+  public native OrtStatus CreateEnv( @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid, @ByPtrPtr OrtEnv out);
+  public native OrtStatus CreateEnv( @Cast("OrtLoggingLevel") int log_severity_level, String logid, @ByPtrPtr OrtEnv out);
 
-  /**
-   * @param out Should be freed by {@code ReleaseEnv} after use
-   */
-  public static class CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer(Pointer p) { super(p); }
-      protected CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtLoggingFunction logging_function, Pointer logger_param,
-                    @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
-  }
-  public native CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer CreateEnvWithCustomLogger(); public native OrtApi CreateEnvWithCustomLogger(CreateEnvWithCustomLogger_OrtLoggingFunction_Pointer_int_BytePointer_PointerPointer setter);
+  /** \brief Create an OrtEnv
+  *
+  * @param logging_function [in] A pointer to a logging function.
+  * @param logger_param [in] A pointer to arbitrary data passed as the ::OrtLoggingFunction {@code param} parameter to
+  *                         {@code logging_function}.
+  * @param log_severity_level [in] The log severity level.
+  * @param logid [in] The log identifier.
+  * @param out [out] Returned newly created OrtEnv. Must be freed with OrtApi::ReleaseEnv
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateEnvWithCustomLogger( OrtLoggingFunction logging_function, Pointer logger_param,
+                    @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid, @Cast("OrtEnv**") PointerPointer out);
+  public native OrtStatus CreateEnvWithCustomLogger( OrtLoggingFunction logging_function, Pointer logger_param,
+                    @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid, @ByPtrPtr OrtEnv out);
+  public native OrtStatus CreateEnvWithCustomLogger( OrtLoggingFunction logging_function, Pointer logger_param,
+                    @Cast("OrtLoggingLevel") int log_severity_level, String logid, @ByPtrPtr OrtEnv out);
 
-  // Platform telemetry events are on by default since they are lightweight.  You can manually turn them off.
-  public static class EnableTelemetryEvents_OrtEnv extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableTelemetryEvents_OrtEnv(Pointer p) { super(p); }
-      protected EnableTelemetryEvents_OrtEnv() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env);
-  }
-  public native EnableTelemetryEvents_OrtEnv EnableTelemetryEvents(); public native OrtApi EnableTelemetryEvents(EnableTelemetryEvents_OrtEnv setter);
-  public static class DisableTelemetryEvents_OrtEnv extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    DisableTelemetryEvents_OrtEnv(Pointer p) { super(p); }
-      protected DisableTelemetryEvents_OrtEnv() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env);
-  }
-  public native DisableTelemetryEvents_OrtEnv DisableTelemetryEvents(); public native OrtApi DisableTelemetryEvents(DisableTelemetryEvents_OrtEnv setter);
+  /** \brief Enable Telemetry
+  *
+  * \note Telemetry events are on by default since they are lightweight
+  * @param env [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus EnableTelemetryEvents( @Const OrtEnv env);
+  /** \brief Disable Telemetry
+  *
+  * @see OrtApi::EnableTelemetryEvents
+  * @param env [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus DisableTelemetryEvents( @Const OrtEnv env);
 
-  // TODO: document the path separator convention? '/' vs '\'
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief Create an OrtSession from a model file
+  *
+  * @param env [in]
+  * @param model_path [in]
+  * @param options [in]
+  * @param out [out] Returned newly created OrtSession. Must be freed with OrtApi::ReleaseSession
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  // TODO: document the path separator convention? '/' vs '\' */
   // TODO: should specify the access characteristics of model_path. Is this read only during the
   // execution of CreateSession, or does the OrtSession retain a handle to the file/directory
   // and continue to access throughout the OrtSession lifetime?
   //  What sort of access is needed to model_path : read or read/write?
-  public static class CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
+  public native OrtStatus CreateSession( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
                     @Const OrtSessionOptions options, @Cast("OrtSession**") PointerPointer out);
-  }
-  public native CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer CreateSession(); public native OrtApi CreateSession(CreateSession_OrtEnv_Pointer_OrtSessionOptions_PointerPointer setter);
+  public native OrtStatus CreateSession( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Const OrtSessionOptions options, @ByPtrPtr OrtSession out);
 
-  public static class CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
+  /** \brief Create an OrtSession from memory
+  *
+  * @param env [in]
+  * @param model_data [in]
+  * @param model_data_length [in]
+  * @param options [in]
+  * @param out [out] Returned newly created OrtSession. Must be freed with OrtApi::ReleaseSession
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
                     @Const OrtSessionOptions options, @Cast("OrtSession**") PointerPointer out);
-  }
-  public native CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer CreateSessionFromArray(); public native OrtApi CreateSessionFromArray(CreateSessionFromArray_OrtEnv_Pointer_long_OrtSessionOptions_PointerPointer setter);
+  public native OrtStatus CreateSessionFromArray( @Const OrtEnv env, @Const Pointer model_data, @Cast("size_t") long model_data_length,
+                    @Const OrtSessionOptions options, @ByPtrPtr OrtSession out);
 
-  public static class Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer(Pointer p) { super(p); }
-      protected Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSession sess, @Const OrtRunOptions run_options,
+  /** \brief Run the model in an ::OrtSession
+  *
+  * Will not return until the model run has completed. Multiple threads might be used to run the model based on
+  * the options in the ::OrtSession and settings used when creating the ::OrtEnv
+  *
+  * @param session [in]
+  * @param run_options [in] If nullptr, will use a default ::OrtRunOptions
+  * @param input_names [in] Array of null terminated UTF8 encoded strings of the input names
+  * @param inputs [in] Array of ::OrtValue%s of the input values
+  * @param input_len [in] Number of elements in the input_names and inputs arrays
+  * @param output_names [in] Array of null terminated UTF8 encoded strings of the output names
+  * @param output_names_len [in] Number of elements in the output_names and outputs array
+  * @param outputs [out] Array of ::OrtValue%s that the outputs are stored in. This can also be
+  *     an array of nullptr values, in this case ::OrtValue objects will be allocated and pointers
+  *     to them will be set into the {@code outputs} array.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus Run( OrtSession session, @Const OrtRunOptions run_options,
                     @Cast("const char*const*") PointerPointer input_names,
-                    @Cast("const OrtValue*const*") PointerPointer input, @Cast("size_t") long input_len,
-                    @Cast("const char*const*") PointerPointer output_names1, @Cast("size_t") long output_names_len,
-                    @Cast("OrtValue**") PointerPointer output);
-  }
-  public native Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer Run(); public native OrtApi Run(Run_OrtSession_OrtRunOptions_PointerPointer_PointerPointer_long_PointerPointer_long_PointerPointer setter);
+                    @Cast("const OrtValue*const*") PointerPointer inputs, @Cast("size_t") long input_len,
+                    @Cast("const char*const*") PointerPointer output_names, @Cast("size_t") long output_names_len,
+                    @Cast("OrtValue**") PointerPointer outputs);
+  public native OrtStatus Run( OrtSession session, @Const OrtRunOptions run_options,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer input_names,
+                    @Const @ByPtrPtr OrtValue inputs, @Cast("size_t") long input_len,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer output_names, @Cast("size_t") long output_names_len,
+                    @ByPtrPtr OrtValue outputs);
+  public native OrtStatus Run( OrtSession session, @Const OrtRunOptions run_options,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer input_names,
+                    @Const @ByPtrPtr OrtValue inputs, @Cast("size_t") long input_len,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer output_names, @Cast("size_t") long output_names_len,
+                    @ByPtrPtr OrtValue outputs);
+  public native OrtStatus Run( OrtSession session, @Const OrtRunOptions run_options,
+                    @Cast("const char*const*") @ByPtrPtr byte[] input_names,
+                    @Const @ByPtrPtr OrtValue inputs, @Cast("size_t") long input_len,
+                    @Cast("const char*const*") @ByPtrPtr byte[] output_names, @Cast("size_t") long output_names_len,
+                    @ByPtrPtr OrtValue outputs);
 
-  /**
-    * @return A pointer of the newly created object. The pointer should be freed by ReleaseSessionOptions after use
-    */
-  public static class CreateSessionOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSessionOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateSessionOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtSessionOptions**") PointerPointer options);
-  }
-  public native CreateSessionOptions_PointerPointer CreateSessionOptions(); public native OrtApi CreateSessionOptions(CreateSessionOptions_PointerPointer setter);
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Create an ::OrtSessionOptions object
+  *
+  * To use additional providers, you must build ORT with the extra providers enabled. Then call one of these
+  * functions to enable them in the session:<br>
+  *   OrtSessionOptionsAppendExecutionProvider_CPU<br>
+  *   OrtSessionOptionsAppendExecutionProvider_CUDA<br>
+  *   OrtSessionOptionsAppendExecutionProvider_(remaining providers...)<br>
+  * The order they are called indicates the preference order as well. In other words call this method
+  * on your most preferred execution provider first followed by the less preferred ones.
+  * If none are called Ort will use its internal CPU execution provider.
+  *
+  * @param options [out] The newly created OrtSessionOptions. Must be freed with OrtApi::ReleaseSessionOptions
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSessionOptions( @Cast("OrtSessionOptions**") PointerPointer options);
+  public native OrtStatus CreateSessionOptions( @ByPtrPtr OrtSessionOptions options);
 
-  // Set filepath to save optimized model after graph level transformations.
-  public static class SetOptimizedModelFilePath_OrtSessionOptions_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetOptimizedModelFilePath_OrtSessionOptions_Pointer(Pointer p) { super(p); }
-      protected SetOptimizedModelFilePath_OrtSessionOptions_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options,
+  /** \brief Set filepath to save optimized model after graph level transformations
+  *
+  * @param options [in]
+  * @param optimized_model_filepath [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetOptimizedModelFilePath( OrtSessionOptions options,
                     @Cast("const ORTCHAR_T*") Pointer optimized_model_filepath);
-  }
-  public native SetOptimizedModelFilePath_OrtSessionOptions_Pointer SetOptimizedModelFilePath(); public native OrtApi SetOptimizedModelFilePath(SetOptimizedModelFilePath_OrtSessionOptions_Pointer setter);
 
-  // create a copy of an existing OrtSessionOptions
-  public static class CloneSessionOptions_OrtSessionOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CloneSessionOptions_OrtSessionOptions_PointerPointer(Pointer p) { super(p); }
-      protected CloneSessionOptions_OrtSessionOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSessionOptions in_options,
+  /** \brief Create a copy of an existing ::OrtSessionOptions
+  *
+  * @param in_options [in] OrtSessionOptions to copy
+  * @param out_options [out] Returned newly created ::OrtSessionOptions. Must be freed with OrtApi::ReleaseSessionOptions
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CloneSessionOptions( @Const OrtSessionOptions in_options,
                     @Cast("OrtSessionOptions**") PointerPointer out_options);
-  }
-  public native CloneSessionOptions_OrtSessionOptions_PointerPointer CloneSessionOptions(); public native OrtApi CloneSessionOptions(CloneSessionOptions_OrtSessionOptions_PointerPointer setter);
+  public native OrtStatus CloneSessionOptions( @Const OrtSessionOptions in_options,
+                    @ByPtrPtr OrtSessionOptions out_options);
 
-  // Controls whether you want to execute operators in your graph sequentially or in parallel. Usually when the model
-  // has many branches, setting this option to ExecutionMode.ORT_PARALLEL will give you better performance.
-  // See [docs/ONNX_Runtime_Perf_Tuning.md] for more details.
-  public static class SetSessionExecutionMode_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetSessionExecutionMode_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetSessionExecutionMode_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("ExecutionMode") int execution_mode);
-  }
-  public native SetSessionExecutionMode_OrtSessionOptions_int SetSessionExecutionMode(); public native OrtApi SetSessionExecutionMode(SetSessionExecutionMode_OrtSessionOptions_int setter);
+  /** \brief Set execution mode
+  *
+  * Controls whether you want to execute operators in your graph sequentially or in parallel. Usually when the model
+  *  has many branches, setting this option to ExecutionMode.ORT_PARALLEL will give you better performance.
+  *  See [docs/ONNX_Runtime_Perf_Tuning.md] for more details.
+  *
+  * @param options [in]
+  * @param execution_mode [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetSessionExecutionMode( OrtSessionOptions options, @Cast("ExecutionMode") int execution_mode);
 
-  // Enable profiling for this session.
-  public static class EnableProfiling_OrtSessionOptions_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableProfiling_OrtSessionOptions_Pointer(Pointer p) { super(p); }
-      protected EnableProfiling_OrtSessionOptions_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
-  }
-  public native EnableProfiling_OrtSessionOptions_Pointer EnableProfiling(); public native OrtApi EnableProfiling(EnableProfiling_OrtSessionOptions_Pointer setter);
-  public static class DisableProfiling_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    DisableProfiling_OrtSessionOptions(Pointer p) { super(p); }
-      protected DisableProfiling_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native DisableProfiling_OrtSessionOptions DisableProfiling(); public native OrtApi DisableProfiling(DisableProfiling_OrtSessionOptions setter);
+  /** \brief Enable profiling for a session
+  *
+  * @param options [in]
+  * @param profile_file_prefix [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus EnableProfiling( OrtSessionOptions options, @Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
 
-  // Enable the memory pattern optimization.
-  // The idea is if the input shapes are the same, we could trace the internal memory allocation
-  // and generate a memory pattern for future request. So next time we could just do one allocation
-  // with a big chunk for all the internal memory allocation.
-  // Note: memory pattern optimization is only available when SequentialExecution enabled.
-  public static class EnableMemPattern_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableMemPattern_OrtSessionOptions(Pointer p) { super(p); }
-      protected EnableMemPattern_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native EnableMemPattern_OrtSessionOptions EnableMemPattern(); public native OrtApi EnableMemPattern(EnableMemPattern_OrtSessionOptions setter);
-  public static class DisableMemPattern_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    DisableMemPattern_OrtSessionOptions(Pointer p) { super(p); }
-      protected DisableMemPattern_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native DisableMemPattern_OrtSessionOptions DisableMemPattern(); public native OrtApi DisableMemPattern(DisableMemPattern_OrtSessionOptions setter);
+  /** \brief Disable profiling for a session
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus DisableProfiling( OrtSessionOptions options);
 
-  // Enable the memory arena on CPU
-  // Arena may pre-allocate memory for future usage.
-  // set this option to false if you don't want it.
-  public static class EnableCpuMemArena_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableCpuMemArena_OrtSessionOptions(Pointer p) { super(p); }
-      protected EnableCpuMemArena_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native EnableCpuMemArena_OrtSessionOptions EnableCpuMemArena(); public native OrtApi EnableCpuMemArena(EnableCpuMemArena_OrtSessionOptions setter);
-  public static class DisableCpuMemArena_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    DisableCpuMemArena_OrtSessionOptions(Pointer p) { super(p); }
-      protected DisableCpuMemArena_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native DisableCpuMemArena_OrtSessionOptions DisableCpuMemArena(); public native OrtApi DisableCpuMemArena(DisableCpuMemArena_OrtSessionOptions setter);
+  /** \brief Enable the memory pattern optimization
+  *
+  * The idea is if the input shapes are the same, we could trace the internal memory allocation
+  * and generate a memory pattern for future request. So next time we could just do one allocation
+  * with a big chunk for all the internal memory allocation.
+  * \note Memory pattern optimization is only available when Sequential Execution mode is enabled (see OrtApi::SetSessionExecutionMode)
+  *
+  * @see OrtApi::DisableMemPattern
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus EnableMemPattern( OrtSessionOptions options);
 
-  // < logger id to use for session output
-  public static class SetSessionLogId_OrtSessionOptions_BytePointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetSessionLogId_OrtSessionOptions_BytePointer(Pointer p) { super(p); }
-      protected SetSessionLogId_OrtSessionOptions_BytePointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const char*") BytePointer logid);
-  }
-  public native SetSessionLogId_OrtSessionOptions_BytePointer SetSessionLogId(); public native OrtApi SetSessionLogId(SetSessionLogId_OrtSessionOptions_BytePointer setter);
+  /** \brief Disable the memory pattern optimization
+  *
+  * @see OrtApi::EnableMemPattern
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus DisableMemPattern( OrtSessionOptions options);
 
-  // < applies to session load, initialization, etc
-  public static class SetSessionLogVerbosityLevel_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetSessionLogVerbosityLevel_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetSessionLogVerbosityLevel_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, int session_log_verbosity_level);
-  }
-  public native SetSessionLogVerbosityLevel_OrtSessionOptions_int SetSessionLogVerbosityLevel(); public native OrtApi SetSessionLogVerbosityLevel(SetSessionLogVerbosityLevel_OrtSessionOptions_int setter);
-  public static class SetSessionLogSeverityLevel_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetSessionLogSeverityLevel_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetSessionLogSeverityLevel_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, int session_log_severity_level);
-  }
-  public native SetSessionLogSeverityLevel_OrtSessionOptions_int SetSessionLogSeverityLevel(); public native OrtApi SetSessionLogSeverityLevel(SetSessionLogSeverityLevel_OrtSessionOptions_int setter);
+  /** \brief Enable the memory arena on CPU
+  *
+  * Arena may pre-allocate memory for future usage.
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus EnableCpuMemArena( OrtSessionOptions options);
 
-  public static class SetSessionGraphOptimizationLevel_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetSessionGraphOptimizationLevel_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetSessionGraphOptimizationLevel_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options,
+  /** \brief Disable the memory arena on CPU
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus DisableCpuMemArena( OrtSessionOptions options);
+
+  /** \brief Set session log id
+  *
+  * @param options [in]
+  * @param logid [in] The log identifier.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetSessionLogId( OrtSessionOptions options, @Cast("const char*") BytePointer logid);
+  public native OrtStatus SetSessionLogId( OrtSessionOptions options, String logid);
+
+  /** \brief Set session log verbosity level
+  *
+  * Applies to session load, initialization, etc
+  *
+  * @param options [in]
+  * @param session_log_verbosity_level [in] \snippet{doc} snippets.dox Log Verbosity Level
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetSessionLogVerbosityLevel( OrtSessionOptions options, int session_log_verbosity_level);
+
+  /** \brief Set session log severity level
+  *
+  * @param options [in]
+  * @param session_log_severity_level [in] The log severity level (refer to ::OrtLoggingLevel for possible values).
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetSessionLogSeverityLevel( OrtSessionOptions options, int session_log_severity_level);
+
+  /** \brief Set the optimization level to apply when loading a graph
+  *
+  * Please see https://www.onnxruntime.ai/docs/resources/graph-optimizations.html for an in-depth explanation
+  * @param options [in,out] The session options object
+  * @param graph_optimization_level [in] The optimization level
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetSessionGraphOptimizationLevel( OrtSessionOptions options,
                     @Cast("GraphOptimizationLevel") int graph_optimization_level);
-  }
-  public native SetSessionGraphOptimizationLevel_OrtSessionOptions_int SetSessionGraphOptimizationLevel(); public native OrtApi SetSessionGraphOptimizationLevel(SetSessionGraphOptimizationLevel_OrtSessionOptions_int setter);
 
-  // Sets the number of threads used to parallelize the execution within nodes
-  // A value of 0 means ORT will pick a default
-  // Note: If you've built ORT with OpenMP, this API has no effect on the number of threads used. In this case
-  // use the OpenMP env variables to configure the number of intra op num threads.
-  public static class SetIntraOpNumThreads_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetIntraOpNumThreads_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetIntraOpNumThreads_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, int intra_op_num_threads);
-  }
-  public native SetIntraOpNumThreads_OrtSessionOptions_int SetIntraOpNumThreads(); public native OrtApi SetIntraOpNumThreads(SetIntraOpNumThreads_OrtSessionOptions_int setter);
-
-  // Sets the number of threads used to parallelize the execution of the graph (across nodes)
-  // If sequential execution is enabled this value is ignored
-  // A value of 0 means ORT will pick a default
-  public static class SetInterOpNumThreads_OrtSessionOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetInterOpNumThreads_OrtSessionOptions_int(Pointer p) { super(p); }
-      protected SetInterOpNumThreads_OrtSessionOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, int inter_op_num_threads);
-  }
-  public native SetInterOpNumThreads_OrtSessionOptions_int SetInterOpNumThreads(); public native OrtApi SetInterOpNumThreads(SetInterOpNumThreads_OrtSessionOptions_int setter);
-
-  /*
-  Create a custom op domain. After all sessions using it are released, call ReleaseCustomOpDomain
+  /** \brief Sets the number of threads used to parallelize the execution within nodes
+  *
+  * When running a single node operation, ex. add, this sets the maximum number of threads to use.
+  *
+  * \note If built with OpenMP, this has no effect on the number of threads used. In this case
+  *       use the OpenMP env variables to configure the number of intra op num threads.
+  *
+  * @param options [in]
+  * @param intra_op_num_threads [in] Number of threads to use<br>
+  *   A value of 0 will use the default number of threads<br>
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class CreateCustomOpDomain_BytePointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateCustomOpDomain_BytePointer_PointerPointer(Pointer p) { super(p); }
-      protected CreateCustomOpDomain_BytePointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer domain, @Cast("OrtCustomOpDomain**") PointerPointer out);
-  }
-  public native CreateCustomOpDomain_BytePointer_PointerPointer CreateCustomOpDomain(); public native OrtApi CreateCustomOpDomain(CreateCustomOpDomain_BytePointer_PointerPointer setter);
+  public native OrtStatus SetIntraOpNumThreads( OrtSessionOptions options, int intra_op_num_threads);
 
-  /*
-     * Add custom ops to the OrtCustomOpDomain
-     *  Note: The OrtCustomOp* pointer must remain valid until the OrtCustomOpDomain using it is released
-    */
-  public static class CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp(Pointer p) { super(p); }
-      protected CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtCustomOpDomain custom_op_domain, @Const OrtCustomOp op);
-  }
-  public native CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp CustomOpDomain_Add(); public native OrtApi CustomOpDomain_Add(CustomOpDomain_Add_OrtCustomOpDomain_OrtCustomOp setter);
-
-  /*
-     * Add a custom op domain to the OrtSessionOptions
-     *  Note: The OrtCustomOpDomain* must not be deleted until the sessions using it are released
-    */
-  public static class AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain(Pointer p) { super(p); }
-      protected AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, OrtCustomOpDomain custom_op_domain);
-  }
-  public native AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain AddCustomOpDomain(); public native OrtApi AddCustomOpDomain(AddCustomOpDomain_OrtSessionOptions_OrtCustomOpDomain setter);
-
-  /*
-     * Loads a DLL named 'library_path' and looks for this entry point:
-     *		OrtStatus* RegisterCustomOps(OrtSessionOptions * options, const OrtApiBase* api);
-     * It then passes in the provided session options to this function along with the api base.
-     * The handle to the loaded library is returned in library_handle. It can be freed by the caller after all sessions using the passed in
-     * session options are destroyed, or if an error occurs and it is non null.
+  /** \brief Sets the number of threads used to parallelize the execution of the graph
+  *
+  * If nodes can be run in parallel, this sets the maximum number of threads to use to run them in parallel.
+  *
+  * \note If sequential execution is enabled this value is ignored, it acts as if it was set to 1.
+  *
+  * @param options [in]
+  * @param inter_op_num_threads [in] Number of threads to use<br>
+  *   A value of 0 will use the default number of threads<br>
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer(Pointer p) { super(p); }
-      protected RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const char*") BytePointer library_path,
-                    @Cast("void**") PointerPointer library_handle);
-  }
-  public native RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer RegisterCustomOpsLibrary(); public native OrtApi RegisterCustomOpsLibrary(RegisterCustomOpsLibrary_OrtSessionOptions_BytePointer_PointerPointer setter);
+  public native OrtStatus SetInterOpNumThreads( OrtSessionOptions options, int inter_op_num_threads);
 
-  /**
-    * To use additional providers, you must build ORT with the extra providers enabled. Then call one of these
-    * functions to enable them in the session:
-    *   OrtSessionOptionsAppendExecutionProvider_CPU
-    *   OrtSessionOptionsAppendExecutionProvider_CUDA
-    *   OrtSessionOptionsAppendExecutionProvider_<remaining providers...>
-    * The order they are called indicates the preference order as well. In other words call this method
-    * on your most preferred execution provider first followed by the less preferred ones.
-    * If none are called Ort will use its internal CPU execution provider.
-    */
+  /** \}
+   *  \name OrtCustomOpDomain
+   *  \{
+  <p>
+  /** \brief Create a custom op domain
+  *
+  * @param domain [in]
+  * @param out [out] Newly created domain. Must be freed with OrtApi::ReleaseCustomOpDomain
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateCustomOpDomain( @Cast("const char*") BytePointer domain, @Cast("OrtCustomOpDomain**") PointerPointer out);
+  public native OrtStatus CreateCustomOpDomain( @Cast("const char*") BytePointer domain, @ByPtrPtr OrtCustomOpDomain out);
+  public native OrtStatus CreateCustomOpDomain( String domain, @ByPtrPtr OrtCustomOpDomain out);
 
-  public static class SessionGetInputCount_OrtSession_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetInputCount_OrtSession_SizeTPointer(Pointer p) { super(p); }
-      protected SessionGetInputCount_OrtSession_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t*") SizeTPointer out);
-  }
-  public native SessionGetInputCount_OrtSession_SizeTPointer SessionGetInputCount(); public native OrtApi SessionGetInputCount(SessionGetInputCount_OrtSession_SizeTPointer setter);
-  public static class SessionGetOutputCount_OrtSession_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOutputCount_OrtSession_SizeTPointer(Pointer p) { super(p); }
-      protected SessionGetOutputCount_OrtSession_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t*") SizeTPointer out);
-  }
-  public native SessionGetOutputCount_OrtSession_SizeTPointer SessionGetOutputCount(); public native OrtApi SessionGetOutputCount(SessionGetOutputCount_OrtSession_SizeTPointer setter);
-  public static class SessionGetOverridableInitializerCount_OrtSession_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOverridableInitializerCount_OrtSession_SizeTPointer(Pointer p) { super(p); }
-      protected SessionGetOverridableInitializerCount_OrtSession_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t*") SizeTPointer out);
-  }
-  public native SessionGetOverridableInitializerCount_OrtSession_SizeTPointer SessionGetOverridableInitializerCount(); public native OrtApi SessionGetOverridableInitializerCount(SessionGetOverridableInitializerCount_OrtSession_SizeTPointer setter);
+  /** \brief Add a custom op to a custom op domain
+  *
+  * \note The OrtCustomOp* pointer must remain valid until the ::OrtCustomOpDomain using it is released
+  *
+  * @param custom_op_domain [in]
+  * @param op [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CustomOpDomain_Add( OrtCustomOpDomain custom_op_domain, @Const OrtCustomOp op);
 
-  /**
-   * @param out  should be freed by ReleaseTypeInfo after use
-   */
-  public static class SessionGetInputTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetInputTypeInfo_OrtSession_long_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetInputTypeInfo_OrtSession_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index, @Cast("OrtTypeInfo**") PointerPointer type_info);
-  }
-  public native SessionGetInputTypeInfo_OrtSession_long_PointerPointer SessionGetInputTypeInfo(); public native OrtApi SessionGetInputTypeInfo(SessionGetInputTypeInfo_OrtSession_long_PointerPointer setter);
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Add custom op domain to a session options
+  *
+  * \note The OrtCustomOpDomain* must not be deleted until all sessions using it are released
+  *
+  * @param options [in]
+  * @param custom_op_domain [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus AddCustomOpDomain( OrtSessionOptions options, OrtCustomOpDomain custom_op_domain);
 
-  /**
-   * @param out  should be freed by ReleaseTypeInfo after use
-   */
-  public static class SessionGetOutputTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOutputTypeInfo_OrtSession_long_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetOutputTypeInfo_OrtSession_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index,
-                    @Cast("OrtTypeInfo**") PointerPointer type_info);
-  }
-  public native SessionGetOutputTypeInfo_OrtSession_long_PointerPointer SessionGetOutputTypeInfo(); public native OrtApi SessionGetOutputTypeInfo(SessionGetOutputTypeInfo_OrtSession_long_PointerPointer setter);
+  /** \brief Register custom ops from a shared library
+  *
+  * Loads a shared library (dll on windows, so on linux, etc) named 'library_path' and looks for this entry point:
+  *		OrtStatus* RegisterCustomOps(OrtSessionOptions * options, const OrtApiBase* api);
+  * It then passes in the provided session options to this function along with the api base.
+  * The handle to the loaded library is returned in library_handle. It can be freed by the caller after all sessions using the passed in
+  * session options are destroyed, or if an error occurs and it is non null.
+  *
+  * @param options [in]
+  * @param library_path [in]
+  * @param library_handle [out] OS specific handle to the loaded library (Use FreeLibrary on Windows, dlclose on Linux, etc.. to unload)
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus RegisterCustomOpsLibrary( OrtSessionOptions options, @Cast("const char*") BytePointer library_path, @Cast("void**") PointerPointer library_handle);
+  public native OrtStatus RegisterCustomOpsLibrary( OrtSessionOptions options, @Cast("const char*") BytePointer library_path, @Cast("void**") @ByPtrPtr Pointer library_handle);
+  public native OrtStatus RegisterCustomOpsLibrary( OrtSessionOptions options, String library_path, @Cast("void**") @ByPtrPtr Pointer library_handle);
 
-  /**
- * @param out  should be freed by ReleaseTypeInfo after use
- */
-  public static class SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index,
-                    @Cast("OrtTypeInfo**") PointerPointer type_info);
-  }
-  public native SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer SessionGetOverridableInitializerTypeInfo(); public native OrtApi SessionGetOverridableInitializerTypeInfo(SessionGetOverridableInitializerTypeInfo_OrtSession_long_PointerPointer setter);
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief Get input count for a session
+  *
+  * This number must also match the number of inputs passed to OrtApi::Run
+  *
+  * @see OrtApi::SessionGetInputTypeInfo, OrtApi::SessionGetInputName, OrtApi::Session
+  *
+  * @param session [in]
+  * @param out [out] Number of inputs
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetInputCount( @Const OrtSession session, @Cast("size_t*") SizeTPointer out);
 
-  /**
-   * @param value is set to a null terminated UTF-8 encoded string allocated using 'allocator'.
-   *              The caller is responsible for freeing it.
-   */
-  public static class SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index, OrtAllocator allocator,
-                    @Cast("char**") PointerPointer value);
-  }
-  public native SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer SessionGetInputName(); public native OrtApi SessionGetInputName(SessionGetInputName_OrtSession_long_OrtAllocator_PointerPointer setter);
-  public static class SessionGetOutputName_OrtSession_long_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOutputName_OrtSession_long_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetOutputName_OrtSession_long_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index, OrtAllocator allocator,
-                    @Cast("char**") PointerPointer value);
-  }
-  public native SessionGetOutputName_OrtSession_long_OrtAllocator_PointerPointer SessionGetOutputName(); public native OrtApi SessionGetOutputName(SessionGetOutputName_OrtSession_long_OrtAllocator_PointerPointer setter);
-  public static class SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("size_t") long index,
+  /** \brief Get output count for a session
+  *
+  * This number must also match the number of outputs returned by OrtApi::Run
+  *
+  * @see OrtApi::SessionGetOutputTypeInfo, OrtApi::SessionGetOutputName, OrtApi::Session
+  *
+  * @param session [in]
+  * @param out [out] Number of outputs
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOutputCount( @Const OrtSession session, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get overridable initializer count
+  *
+  * @see OrtApi::SessionGetOverridableInitializerTypeInfo, OrtApi::SessionGetOverridableInitializerName
+  *
+  * @param session [in]
+  * @param out [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOverridableInitializerCount( @Const OrtSession session, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get input type information
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetInputCount returns (exclusive)
+  * @param type_info [out] Must be freed with OrtApi::ReleaseTypeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetInputTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  public native OrtStatus SessionGetInputTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @ByPtrPtr OrtTypeInfo type_info);
+
+  /** \brief Get output type information
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetOutputCount returns (exclusive)
+  * @param type_info [out] Must be freed with OrtApi::ReleaseTypeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOutputTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  public native OrtStatus SessionGetOutputTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @ByPtrPtr OrtTypeInfo type_info);
+
+  /** \brief Get overridable initializer type information
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetOverridableInitializerCount returns (exclusive)
+  * @param type_info [out] Must be freed with OrtApi::ReleaseTypeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOverridableInitializerTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  public native OrtStatus SessionGetOverridableInitializerTypeInfo( @Const OrtSession session, @Cast("size_t") long index, @ByPtrPtr OrtTypeInfo type_info);
+
+  /** \brief Get input name
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetInputCount returns (exclusive)
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated UTF-8 encoded string allocated using {@code allocator}. Must be freed using {@code allocator}.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetInputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  public native OrtStatus SessionGetInputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus SessionGetInputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus SessionGetInputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Get output name
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetOutputCount returns (exclusive)
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated UTF-8 encoded string allocated using {@code allocator}. Must be freed using {@code allocator}.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOutputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") PointerPointer value);
+  public native OrtStatus SessionGetOutputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus SessionGetOutputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus SessionGetOutputName( @Const OrtSession session, @Cast("size_t") long index, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Get overridable initializer name
+  *
+  * @param session [in]
+  * @param index [in] Must be between 0 (inclusive) and what OrtApi::SessionGetOverridableInitializerCount returns (exclusive)
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated UTF-8 encoded string allocated using {@code allocator}. Must be freed using {@code allocator}.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetOverridableInitializerName( @Const OrtSession session, @Cast("size_t") long index,
                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
-  }
-  public native SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer SessionGetOverridableInitializerName(); public native OrtApi SessionGetOverridableInitializerName(SessionGetOverridableInitializerName_OrtSession_long_OrtAllocator_PointerPointer setter);
+  public native OrtStatus SessionGetOverridableInitializerName( @Const OrtSession session, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus SessionGetOverridableInitializerName( @Const OrtSession session, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus SessionGetOverridableInitializerName( @Const OrtSession session, @Cast("size_t") long index,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
 
-  /**
-   * @return A pointer to the newly created object. The pointer should be freed by ReleaseRunOptions after use
+  /** \}
+   *  \name OrtRunOptions
+   *  \{
+  <p>
+  /** \brief Create an OrtRunOptions
+  *
+  * @param out [out] Returned newly created ::OrtRunOptions. Must be freed with OrtApi::ReleaseRunOptions
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateRunOptions( @Cast("OrtRunOptions**") PointerPointer out);
+  public native OrtStatus CreateRunOptions( @ByPtrPtr OrtRunOptions out);
+
+  /** \brief Set per-run log verbosity level
+   *
+   * @see OrtApi::RunOptionsGetRunLogVerbosityLevel
+   *
+   * @param options [in]
+   * @param log_verbosity_level [in] \snippet{doc} snippets.dox Log Verbosity Level
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public static class CreateRunOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateRunOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateRunOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtRunOptions**") PointerPointer out);
-  }
-  public native CreateRunOptions_PointerPointer CreateRunOptions(); public native OrtApi CreateRunOptions(CreateRunOptions_PointerPointer setter);
+  public native OrtStatus RunOptionsSetRunLogVerbosityLevel( OrtRunOptions options, int log_verbosity_level);
 
-  public static class RunOptionsSetRunLogVerbosityLevel_OrtRunOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsSetRunLogVerbosityLevel_OrtRunOptions_int(Pointer p) { super(p); }
-      protected RunOptionsSetRunLogVerbosityLevel_OrtRunOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options, int value);
-  }
-  public native RunOptionsSetRunLogVerbosityLevel_OrtRunOptions_int RunOptionsSetRunLogVerbosityLevel(); public native OrtApi RunOptionsSetRunLogVerbosityLevel(RunOptionsSetRunLogVerbosityLevel_OrtRunOptions_int setter);
-  public static class RunOptionsSetRunLogSeverityLevel_OrtRunOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsSetRunLogSeverityLevel_OrtRunOptions_int(Pointer p) { super(p); }
-      protected RunOptionsSetRunLogSeverityLevel_OrtRunOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options, int value);
-  }
-  public native RunOptionsSetRunLogSeverityLevel_OrtRunOptions_int RunOptionsSetRunLogSeverityLevel(); public native OrtApi RunOptionsSetRunLogSeverityLevel(RunOptionsSetRunLogSeverityLevel_OrtRunOptions_int setter);
-  public static class RunOptionsSetRunTag_OrtRunOptions_BytePointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsSetRunTag_OrtRunOptions_BytePointer(Pointer p) { super(p); }
-      protected RunOptionsSetRunTag_OrtRunOptions_BytePointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions arg0, @Cast("const char*") BytePointer run_tag);
-  }
-  public native RunOptionsSetRunTag_OrtRunOptions_BytePointer RunOptionsSetRunTag(); public native OrtApi RunOptionsSetRunTag(RunOptionsSetRunTag_OrtRunOptions_BytePointer setter);
-
-  public static class RunOptionsGetRunLogVerbosityLevel_OrtRunOptions_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsGetRunLogVerbosityLevel_OrtRunOptions_IntPointer(Pointer p) { super(p); }
-      protected RunOptionsGetRunLogVerbosityLevel_OrtRunOptions_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtRunOptions options, IntPointer out);
-  }
-  public native RunOptionsGetRunLogVerbosityLevel_OrtRunOptions_IntPointer RunOptionsGetRunLogVerbosityLevel(); public native OrtApi RunOptionsGetRunLogVerbosityLevel(RunOptionsGetRunLogVerbosityLevel_OrtRunOptions_IntPointer setter);
-  public static class RunOptionsGetRunLogSeverityLevel_OrtRunOptions_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsGetRunLogSeverityLevel_OrtRunOptions_IntPointer(Pointer p) { super(p); }
-      protected RunOptionsGetRunLogSeverityLevel_OrtRunOptions_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtRunOptions options, IntPointer out);
-  }
-  public native RunOptionsGetRunLogSeverityLevel_OrtRunOptions_IntPointer RunOptionsGetRunLogSeverityLevel(); public native OrtApi RunOptionsGetRunLogSeverityLevel(RunOptionsGetRunLogSeverityLevel_OrtRunOptions_IntPointer setter);
-  public static class RunOptionsGetRunTag_OrtRunOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsGetRunTag_OrtRunOptions_PointerPointer(Pointer p) { super(p); }
-      protected RunOptionsGetRunTag_OrtRunOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtRunOptions arg0, @Cast("const char**") PointerPointer out);
-  }
-  public native RunOptionsGetRunTag_OrtRunOptions_PointerPointer RunOptionsGetRunTag(); public native OrtApi RunOptionsGetRunTag(RunOptionsGetRunTag_OrtRunOptions_PointerPointer setter);
-
-  // Set a flag so that ALL incomplete OrtRun calls that are using this instance of OrtRunOptions
-  // will exit as soon as possible.
-  public static class RunOptionsSetTerminate_OrtRunOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsSetTerminate_OrtRunOptions(Pointer p) { super(p); }
-      protected RunOptionsSetTerminate_OrtRunOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options);
-  }
-  public native RunOptionsSetTerminate_OrtRunOptions RunOptionsSetTerminate(); public native OrtApi RunOptionsSetTerminate(RunOptionsSetTerminate_OrtRunOptions setter);
-  // Unset the terminate flag to enable this OrtRunOptions instance being used in new OrtRun calls.
-  public static class RunOptionsUnsetTerminate_OrtRunOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunOptionsUnsetTerminate_OrtRunOptions(Pointer p) { super(p); }
-      protected RunOptionsUnsetTerminate_OrtRunOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options);
-  }
-  public native RunOptionsUnsetTerminate_OrtRunOptions RunOptionsUnsetTerminate(); public native OrtApi RunOptionsUnsetTerminate(RunOptionsUnsetTerminate_OrtRunOptions setter);
-
-  /**
-   * Create a tensor from an allocator. ReleaseValue will also release the buffer inside the output value
-   * @param out Should be freed by calling ReleaseValue
-   * @param type must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
+  /** \brief Set per-run log severity level
+   *
+   * @see OrtApi::RunOptionsGetRunLogSeverityLevel
+   *
+   * @param options [in]
+   * @param log_severity_level [in] The log severity level (refer to ::OrtLoggingLevel for possible values).
    */
-  public static class CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
+  public native OrtStatus RunOptionsSetRunLogSeverityLevel( OrtRunOptions options, int log_severity_level);
+
+  /** \brief Set per-run tag
+   *
+   * This is used in a per-run log identifier.
+   *
+   * @see OrtApi::RunOptionsGetRunTag
+   *
+   * @param options [in]
+   * @param run_tag [in] The run tag.
+   */
+  public native OrtStatus RunOptionsSetRunTag( OrtRunOptions options, @Cast("const char*") BytePointer run_tag);
+  public native OrtStatus RunOptionsSetRunTag( OrtRunOptions options, String run_tag);
+
+  /** \brief Get per-run log verbosity level
+   *
+   * @see OrtApi::RunOptionsSetRunLogVerbosityLevel
+   *
+   * @param options [in]
+   * @param log_verbosity_level [out] \snippet{doc} snippets.dox Log Verbosity Level
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus RunOptionsGetRunLogVerbosityLevel( @Const OrtRunOptions options,
+                    IntPointer log_verbosity_level);
+  public native OrtStatus RunOptionsGetRunLogVerbosityLevel( @Const OrtRunOptions options,
+                    IntBuffer log_verbosity_level);
+  public native OrtStatus RunOptionsGetRunLogVerbosityLevel( @Const OrtRunOptions options,
+                    int[] log_verbosity_level);
+
+  /** \brief Get per-run log severity level
+   *
+   * @see OrtApi::RunOptionsSetRunLogSeverityLevel
+   *
+   * @param options [in]
+   * @param log_severity_level [out] The log severity level (refer to ::OrtLoggingLevel for possible values).
+   */
+  public native OrtStatus RunOptionsGetRunLogSeverityLevel( @Const OrtRunOptions options, IntPointer log_severity_level);
+  public native OrtStatus RunOptionsGetRunLogSeverityLevel( @Const OrtRunOptions options, IntBuffer log_severity_level);
+  public native OrtStatus RunOptionsGetRunLogSeverityLevel( @Const OrtRunOptions options, int[] log_severity_level);
+
+  /** \brief Get per-run tag
+   *
+   * This is used in a per-run log identifier.
+   *
+   * @see OrtApi::RunOptionsSetRunTag
+   *
+   * @param options [in]
+   * @param run_tag [out] The run tag.
+   *                     Do not free this value, it is owned by {@code options}. It will be invalidated if the run tag
+   *                     changes (i.e., with OrtApi::RunOptionsSetRunTag) or {@code options} is freed.
+   */
+  public native OrtStatus RunOptionsGetRunTag( @Const OrtRunOptions options, @Cast("const char**") PointerPointer run_tag);
+  public native OrtStatus RunOptionsGetRunTag( @Const OrtRunOptions options, @Cast("const char**") @ByPtrPtr BytePointer run_tag);
+  public native OrtStatus RunOptionsGetRunTag( @Const OrtRunOptions options, @Cast("const char**") @ByPtrPtr ByteBuffer run_tag);
+  public native OrtStatus RunOptionsGetRunTag( @Const OrtRunOptions options, @Cast("const char**") @ByPtrPtr byte[] run_tag);
+
+  /** \brief Set terminate flag
+  *
+  * If a currently executing session needs to be force terminated, this can be called from another thread to force it to fail with an error.
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus RunOptionsSetTerminate( OrtRunOptions options);
+
+  /** \brief Clears the terminate flag
+  *
+  * Used so the OrtRunOptions instance can be used in a new OrtApi::Run call without it instantly terminating
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus RunOptionsUnsetTerminate( OrtRunOptions options);
+
+  /** \}
+   *  \name OrtValue
+   *  \{
+  <p>
+  /** \brief Create a tensor
+  *
+  * Create a tensor using a supplied ::OrtAllocator
+  *
+  * @param allocator [in]
+  * @param shape [in] Tensor shape
+  * @param shape_len [in] Number of elements in {@code shape}
+  * @param type [in]
+  * @param out [out] Returns newly created ::OrtValue. Must be freed with OrtApi::ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
                     @Cast("ONNXTensorElementDataType") int type, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer CreateTensorAsOrtValue(); public native OrtApi CreateTensorAsOrtValue(CreateTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer setter);
+  public native OrtStatus CreateTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
 
-  /**
+  /** \brief Create a tensor backed by a user supplied buffer
+   *
    * Create a tensor with user's buffer. You can fill the buffer either before calling this function or after.
    * p_data is owned by caller. ReleaseValue won't release p_data.
-   * @param out Should be freed by calling ReleaseValue
+   *
+   * @param info [in]
+   * @param p_data [in]
+   * @param p_data_len [in]
+   * @param shape [in]
+   * @param shape_len [in]
+   * @param type [in]
+   * @param out [out] Returns newly created ::OrtValue. Must be freed with OrtApi::ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public static class CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo info, Pointer p_data,
+  public native OrtStatus CreateTensorWithDataAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
                     @Cast("size_t") long p_data_len, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type,
                     @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer CreateTensorWithDataAsOrtValue(); public native OrtApi CreateTensorWithDataAsOrtValue(CreateTensorWithDataAsOrtValue_OrtMemoryInfo_Pointer_long_LongPointer_long_int_PointerPointer setter);
+  public native OrtStatus CreateTensorWithDataAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("size_t") long p_data_len, @Cast("const int64_t*") LongPointer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorWithDataAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("size_t") long p_data_len, @Cast("const int64_t*") LongBuffer shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateTensorWithDataAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("size_t") long p_data_len, @Cast("const int64_t*") long[] shape, @Cast("size_t") long shape_len, @Cast("ONNXTensorElementDataType") int type,
+                    @ByPtrPtr OrtValue out);
 
-  /**
-   * \Sets *out to 1 iff an OrtValue is a tensor, 0 otherwise
-   */
-  public static class IsTensor_OrtValue_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    IsTensor_OrtValue_IntPointer(Pointer p) { super(p); }
-      protected IsTensor_OrtValue_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, IntPointer out);
-  }
-  public native IsTensor_OrtValue_IntPointer IsTensor(); public native OrtApi IsTensor(IsTensor_OrtValue_IntPointer setter);
+  /** \brief Return if an ::OrtValue is a tensor type
+  *
+  * @param value [in] A tensor type (string tensors are not supported)
+  * @param out [out] Set to 1 iff ::OrtValue is a tensor, 0 otherwise
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus IsTensor( @Const OrtValue value, IntPointer out);
+  public native OrtStatus IsTensor( @Const OrtValue value, IntBuffer out);
+  public native OrtStatus IsTensor( @Const OrtValue value, int[] out);
 
-  // This function doesn't work with string tensor
-  // this is a no-copy method whose pointer is only valid until the backing OrtValue is free'd.
-  public static class GetTensorMutableData_OrtValue_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTensorMutableData_OrtValue_PointerPointer(Pointer p) { super(p); }
-      protected GetTensorMutableData_OrtValue_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue value, @Cast("void**") PointerPointer out);
-  }
-  public native GetTensorMutableData_OrtValue_PointerPointer GetTensorMutableData(); public native OrtApi GetTensorMutableData(GetTensorMutableData_OrtValue_PointerPointer setter);
+  /** \brief Get a pointer to the raw data inside a tensor
+  *
+  * Used to read/write/modify the internal tensor data directly.
+  * \note The returned pointer is valid until the \p value is destroyed.
+  *
+  * @param value [in] A tensor type (string tensors are not supported)
+  * @param out [out] Filled in with a pointer to the internal storage
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetTensorMutableData( OrtValue value, @Cast("void**") PointerPointer out);
+  public native OrtStatus GetTensorMutableData( OrtValue value, @Cast("void**") @ByPtrPtr Pointer out);
 
-  /**
-     * @param value A tensor created from OrtCreateTensor... function.
-     * @param s each A string array. Each string in this array must be null terminated.
-     * @param s_len length of s
-     */
-  public static class FillStringTensor_OrtValue_PointerPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    FillStringTensor_OrtValue_PointerPointer_long(Pointer p) { super(p); }
-      protected FillStringTensor_OrtValue_PointerPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue value, @Cast("const char*const*") PointerPointer s, @Cast("size_t") long s_len);
-  }
-  public native FillStringTensor_OrtValue_PointerPointer_long FillStringTensor(); public native OrtApi FillStringTensor(FillStringTensor_OrtValue_PointerPointer_long setter);
+  /** \brief Set all strings at once in a string tensor
+  *
+  * @param value [in,out] A tensor of type ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING
+  * @param s [in] An array of strings. Each string in this array must be null terminated.
+  * @param s_len [in] Count of strings in s (Must match the size of \p value's tensor shape)
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus FillStringTensor( OrtValue value, @Cast("const char*const*") PointerPointer s, @Cast("size_t") long s_len);
+  public native OrtStatus FillStringTensor( OrtValue value, @Cast("const char*const*") @ByPtrPtr BytePointer s, @Cast("size_t") long s_len);
+  public native OrtStatus FillStringTensor( OrtValue value, @Cast("const char*const*") @ByPtrPtr ByteBuffer s, @Cast("size_t") long s_len);
+  public native OrtStatus FillStringTensor( OrtValue value, @Cast("const char*const*") @ByPtrPtr byte[] s, @Cast("size_t") long s_len);
 
-  /**
-     * Obtain a total length of strings contained within a tensor.
-     * For sparse tensors it returns the total length of values (nnz) strings.
-     * @param value [in] A tensor created from OrtCreateTensor... function.
-     * @param len [out] total data length, not including the trailing '\0' chars.
-     */
-  public static class GetStringTensorDataLength_OrtValue_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetStringTensorDataLength_OrtValue_SizeTPointer(Pointer p) { super(p); }
-      protected GetStringTensorDataLength_OrtValue_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("size_t*") SizeTPointer len);
-  }
-  public native GetStringTensorDataLength_OrtValue_SizeTPointer GetStringTensorDataLength(); public native OrtApi GetStringTensorDataLength(GetStringTensorDataLength_OrtValue_SizeTPointer setter);
+  /** \brief Get total byte length for all strings in a string tensor
+  *
+  * Typically used with OrtApi::GetStringTensorContent
+  *
+  * @param value [in] A tensor of type ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING
+  * @param len [out] Total byte length of all strings (does not include trailing nulls)
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetStringTensorDataLength( @Const OrtValue value, @Cast("size_t*") SizeTPointer len);
 
-  /**
-     * This API returns all of of UTF-8 encoded strings that are contained within a tensor
-     * or in non-empty values of a sparse tensor in one single buffer. Use offsets to calculate
-     * the length of each string such as len[i] = offsets[i + 1] - offsets[i] except the last
-     * string for which the length is calculated as total_len - offset[i].
-     * 
-     * @param value [in] A tensor created from OrtCreateTensor... API or a sparse tensor
-     *   created with OrtCreateSparseTensor... API.
-     * @param s [in,out] string contents. Each string is NOT null-terminated.
-     * @param s_len [in] total data length, get it from OrtGetStringTensorDataLength
-     * @param offsets [in,out] pointer to a preallocated buffer where offsets for each of the string
-     *        element are returned. The number of offsets must match the number of string elements.
-     * @param offsets_len [in] number of offsets expected in the buffer.
-     */
-  public static class GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long(Pointer p) { super(p); }
-      protected GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, Pointer s,
+  /** \brief Get all strings from a string tensor
+  *
+  * An example of the results:<br>
+  * Given \p value is a string tensor with the strings { "This" "is" "a" "test" }<br>
+  * \p s must have a size of 11 bytes<br>
+  * \p offsets must have 4 elements<br>
+  * After the call, these values will be filled in:<br>
+  * \p s will contain "Thisisatest"<br>
+  * \p offsets will contain { 0, 4, 6, 7 }<br>
+  * The length of the last string is just s_len - offsets[last]
+  *
+  * @param value [in] A tensor of type ONNX_TENSOR_ELEMENT_DATA_TYPE_STRING
+  * @param s [in] Buffer to sequentially write all tensor strings to. Each string is NOT null-terminated.
+  * @param s_len [in] Number of bytes of buffer pointed to by \p s (Get it from OrtApi::GetStringTensorDataLength)
+  * @param offsets [out] Array of start offsets into the strings written to \p s
+  * @param offsets_len [in] Number of elements in offsets
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetStringTensorContent( @Const OrtValue value, Pointer s,
                     @Cast("size_t") long s_len, @Cast("size_t*") SizeTPointer offsets, @Cast("size_t") long offsets_len);
-  }
-  public native GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long GetStringTensorContent(); public native OrtApi GetStringTensorContent(GetStringTensorContent_OrtValue_Pointer_long_SizeTPointer_long setter);
 
-  /** Retrieves OrtTensorTypeAndShapeInfo part of the OrtTypeInfo
-    * 
-    * @param type_info [in]
-    * @param out [out] a returned ptr. Don't free the 'out' value, it is owned by type_info
-    */
-  public static class CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
-      protected CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo type_info,
+  /** \}
+   *  \name OrtTypeInfo
+   *  \{
+  <p>
+  /** \brief Get ::OrtTensorTypeAndShapeInfo from an ::OrtTypeInfo
+  *
+  * @param type_info [in]
+  * @param out [out] Do not free this value, it will be valid until type_info is freed.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CastTypeInfoToTensorInfo( @Const OrtTypeInfo type_info,
                     @Cast("const OrtTensorTypeAndShapeInfo**") PointerPointer out);
-  }
-  public native CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer CastTypeInfoToTensorInfo(); public native OrtApi CastTypeInfoToTensorInfo(CastTypeInfoToTensorInfo_OrtTypeInfo_PointerPointer setter);
+  public native OrtStatus CastTypeInfoToTensorInfo( @Const OrtTypeInfo type_info,
+                    @Const @ByPtrPtr OrtTensorTypeAndShapeInfo out);
 
-  /**
-     * Return OnnxType from OrtTypeInfo
-     */
-  public static class GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer(Pointer p) { super(p); }
-      protected GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo arg0, @Cast("ONNXType*") IntPointer out);
-  }
-  public native GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer GetOnnxTypeFromTypeInfo(); public native OrtApi GetOnnxTypeFromTypeInfo(GetOnnxTypeFromTypeInfo_OrtTypeInfo_IntPointer setter);
+  /** \brief Get ::ONNXType from ::OrtTypeInfo
+  *
+  * @param type_info [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetOnnxTypeFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("ONNXType*") IntPointer out);
+  public native OrtStatus GetOnnxTypeFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("ONNXType*") IntBuffer out);
+  public native OrtStatus GetOnnxTypeFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("ONNXType*") int[] out);
 
-  /**
-     * The 'out' value should be released by calling ReleaseTensorTypeAndShapeInfo
-     */
-  public static class CreateTensorTypeAndShapeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateTensorTypeAndShapeInfo_PointerPointer(Pointer p) { super(p); }
-      protected CreateTensorTypeAndShapeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
-  }
-  public native CreateTensorTypeAndShapeInfo_PointerPointer CreateTensorTypeAndShapeInfo(); public native OrtApi CreateTensorTypeAndShapeInfo(CreateTensorTypeAndShapeInfo_PointerPointer setter);
+  /** \}
+   *  \name OrtTensorTypeAndShapeInfo
+   *  \{
+  <p>
+  /** \brief Create an ::OrtTensorTypeAndShapeInfo object
+  *
+  * @param out [out] Returns newly created ::OrtTensorTypeAndShapeInfo. Must be freed with OrtApi::ReleaseTensorTypeAndShapeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateTensorTypeAndShapeInfo( @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  public native OrtStatus CreateTensorTypeAndShapeInfo( @ByPtrPtr OrtTensorTypeAndShapeInfo out);
 
-  public static class SetTensorElementType_OrtTensorTypeAndShapeInfo_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetTensorElementType_OrtTensorTypeAndShapeInfo_int(Pointer p) { super(p); }
-      protected SetTensorElementType_OrtTensorTypeAndShapeInfo_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtTensorTypeAndShapeInfo arg0, @Cast("ONNXTensorElementDataType") int type);
-  }
-  public native SetTensorElementType_OrtTensorTypeAndShapeInfo_int SetTensorElementType(); public native OrtApi SetTensorElementType(SetTensorElementType_OrtTensorTypeAndShapeInfo_int setter);
+  /** \brief Set element type in ::OrtTensorTypeAndShapeInfo
+  *
+  * @param info [in]
+  * @param type [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetTensorElementType( OrtTensorTypeAndShapeInfo info, @Cast("ONNXTensorElementDataType") int type);
 
-  /**
- * @param info Created from CreateTensorTypeAndShapeInfo() function
- * @param dim_values An array with length of {@code dim_count}. Its elements can contain negative values.
- * @param dim_count length of dim_values
- */
-  public static class SetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long(Pointer p) { super(p); }
-      protected SetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count);
-  }
-  public native SetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long SetDimensions(); public native OrtApi SetDimensions(SetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long setter);
+  /** \brief Set shape information in ::OrtTensorTypeAndShapeInfo
+  *
+  * @param info [in]
+  * @param dim_values [in] Array with {@code dim_count} elements. Can contain negative values.
+  * @param dim_count [in] Number of elements in {@code dim_values}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetDimensions( OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count);
+  public native OrtStatus SetDimensions( OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") LongBuffer dim_values, @Cast("size_t") long dim_count);
+  public native OrtStatus SetDimensions( OrtTensorTypeAndShapeInfo info, @Cast("const int64_t*") long[] dim_values, @Cast("size_t") long dim_count);
 
-  public static class GetTensorElementType_OrtTensorTypeAndShapeInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTensorElementType_OrtTensorTypeAndShapeInfo_IntPointer(Pointer p) { super(p); }
-      protected GetTensorElementType_OrtTensorTypeAndShapeInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorTypeAndShapeInfo arg0,
+  /** \brief Get element type in ::OrtTensorTypeAndShapeInfo
+  *
+  * @see OrtApi::SetTensorElementType
+  *
+  * @param info [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetTensorElementType( @Const OrtTensorTypeAndShapeInfo info,
                     @Cast("ONNXTensorElementDataType*") IntPointer out);
-  }
-  public native GetTensorElementType_OrtTensorTypeAndShapeInfo_IntPointer GetTensorElementType(); public native OrtApi GetTensorElementType(GetTensorElementType_OrtTensorTypeAndShapeInfo_IntPointer setter);
-  public static class GetDimensionsCount_OrtTensorTypeAndShapeInfo_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetDimensionsCount_OrtTensorTypeAndShapeInfo_SizeTPointer(Pointer p) { super(p); }
-      protected GetDimensionsCount_OrtTensorTypeAndShapeInfo_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorTypeAndShapeInfo info, @Cast("size_t*") SizeTPointer out);
-  }
-  public native GetDimensionsCount_OrtTensorTypeAndShapeInfo_SizeTPointer GetDimensionsCount(); public native OrtApi GetDimensionsCount(GetDimensionsCount_OrtTensorTypeAndShapeInfo_SizeTPointer setter);
-  public static class GetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long(Pointer p) { super(p); }
-      protected GetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorTypeAndShapeInfo info, @Cast("int64_t*") LongPointer dim_values,
+  public native OrtStatus GetTensorElementType( @Const OrtTensorTypeAndShapeInfo info,
+                    @Cast("ONNXTensorElementDataType*") IntBuffer out);
+  public native OrtStatus GetTensorElementType( @Const OrtTensorTypeAndShapeInfo info,
+                    @Cast("ONNXTensorElementDataType*") int[] out);
+
+  /** \brief Get dimension count in ::OrtTensorTypeAndShapeInfo
+  *
+  * @see OrtApi::GetDimensions
+  *
+  * @param info [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetDimensionsCount( @Const OrtTensorTypeAndShapeInfo info, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Get dimensions in ::OrtTensorTypeAndShapeInfo
+  *
+  * @param info [in]
+  * @param dim_values [out] Array with {@code dim_values_length} elements. On return, filled with the dimensions stored in the ::OrtTensorTypeAndShapeInfo
+  * @param dim_values_length [in] Number of elements in {@code dim_values}. Use OrtApi::GetDimensionsCount to get this value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetDimensions( @Const OrtTensorTypeAndShapeInfo info, @Cast("int64_t*") LongPointer dim_values,
                     @Cast("size_t") long dim_values_length);
-  }
-  public native GetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long GetDimensions(); public native OrtApi GetDimensions(GetDimensions_OrtTensorTypeAndShapeInfo_LongPointer_long setter);
-  public static class GetSymbolicDimensions_OrtTensorTypeAndShapeInfo_PointerPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSymbolicDimensions_OrtTensorTypeAndShapeInfo_PointerPointer_long(Pointer p) { super(p); }
-      protected GetSymbolicDimensions_OrtTensorTypeAndShapeInfo_PointerPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorTypeAndShapeInfo info,
+  public native OrtStatus GetDimensions( @Const OrtTensorTypeAndShapeInfo info, @Cast("int64_t*") LongBuffer dim_values,
+                    @Cast("size_t") long dim_values_length);
+  public native OrtStatus GetDimensions( @Const OrtTensorTypeAndShapeInfo info, @Cast("int64_t*") long[] dim_values,
+                    @Cast("size_t") long dim_values_length);
+
+  /** \brief Get symbolic dimension names in ::OrtTensorTypeAndShapeInfo
+  *
+  * @param info [in]
+  * @param dim_params [in] Array with {@code dim_params_length} elements. On return filled with pointers to null terminated strings of the dimension names
+  * @param dim_params_length [in] Number of elements in {@code dim_params}. Use OrtApi::GetDimensionsCount to get this value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSymbolicDimensions( @Const OrtTensorTypeAndShapeInfo info,
                     @Cast("const char**") PointerPointer dim_params, @Cast("size_t") long dim_params_length);
-  }
-  public native GetSymbolicDimensions_OrtTensorTypeAndShapeInfo_PointerPointer_long GetSymbolicDimensions(); public native OrtApi GetSymbolicDimensions(GetSymbolicDimensions_OrtTensorTypeAndShapeInfo_PointerPointer_long setter);
+  public native OrtStatus GetSymbolicDimensions( @Const OrtTensorTypeAndShapeInfo info,
+                    @Cast("const char**") @ByPtrPtr BytePointer dim_params, @Cast("size_t") long dim_params_length);
+  public native OrtStatus GetSymbolicDimensions( @Const OrtTensorTypeAndShapeInfo info,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer dim_params, @Cast("size_t") long dim_params_length);
+  public native OrtStatus GetSymbolicDimensions( @Const OrtTensorTypeAndShapeInfo info,
+                    @Cast("const char**") @ByPtrPtr byte[] dim_params, @Cast("size_t") long dim_params_length);
 
-  /**
- * Return the number of elements specified by the tensor shape.
- * Return a negative value if unknown (i.e., any dimension is negative.)
- * e.g.
- * [] -> 1
- * [1,3,4] -> 12
- * [2,0,4] -> 0
- * [-1,3,4] -> -1
- */
-  public static class GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer(Pointer p) { super(p); }
-      protected GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorTypeAndShapeInfo info, @Cast("size_t*") SizeTPointer out);
-  }
-  public native GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer GetTensorShapeElementCount(); public native OrtApi GetTensorShapeElementCount(GetTensorShapeElementCount_OrtTensorTypeAndShapeInfo_SizeTPointer setter);
+  /** \brief Get total number of elements in a tensor shape from an ::OrtTensorTypeAndShapeInfo
+  *
+  * Return the number of elements specified by the tensor shape (all dimensions multiplied by each other).
+  * For 0 dimensions, 1 is returned. If any dimension is less than 0, the result is always -1.
+  *
+  * Examples:<br>
+  * [] = 1<br>
+  * [1,3,4] = 12<br>
+  * [2,0,4] = 0<br>
+  * [-1,3,4] = -1<br>
+  *
+  * @param info [in]
+  * @param out [out] Number of elements
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetTensorShapeElementCount( @Const OrtTensorTypeAndShapeInfo info, @Cast("size_t*") SizeTPointer out);
 
-  /**
-   * Returns data type and shape iff OrtValue contains a Tensor or a SparseTensor.
-   * For sparse tensors it returns a dense shape of the tensor.
-   * 
-   * @param value [in] OrtValue that contains tensor or a sparse tensor
-   * @param out [out] Should be freed by ReleaseTensorTypeAndShapeInfo after use
-   */
-  public static class GetTensorTypeAndShape_OrtValue_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTensorTypeAndShape_OrtValue_PointerPointer(Pointer p) { super(p); }
-      protected GetTensorTypeAndShape_OrtValue_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
-  }
-  public native GetTensorTypeAndShape_OrtValue_PointerPointer GetTensorTypeAndShape(); public native OrtApi GetTensorTypeAndShape(GetTensorTypeAndShape_OrtValue_PointerPointer setter);
+  /** \}
+   *  \name OrtValue
+   *  \{
+  <p>
+  /** \brief Get type and shape information from a tensor ::OrtValue
+  *
+  * @param value [in] Must be a tensor (not a map/sequence/etc) or will return failure
+  * @param out [out] Newly created ::OrtTensorTypeAndShapeInfo. Must be freed with OrtApi::ReleaseTensorTypeAndShapeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetTensorTypeAndShape( @Const OrtValue value, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  public native OrtStatus GetTensorTypeAndShape( @Const OrtValue value, @ByPtrPtr OrtTensorTypeAndShapeInfo out);
 
-  /**
-   * Get the type information of an OrtValue. API works for tensors and sparse tensors.
-   * 
-   * @param value [in]
-   * @param out [in,out] The returned value should be freed by ReleaseTypeInfo after use
-   */
-  public static class GetTypeInfo_OrtValue_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTypeInfo_OrtValue_PointerPointer(Pointer p) { super(p); }
-      protected GetTypeInfo_OrtValue_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("OrtTypeInfo**") PointerPointer out);
-  }
-  public native GetTypeInfo_OrtValue_PointerPointer GetTypeInfo(); public native OrtApi GetTypeInfo(GetTypeInfo_OrtValue_PointerPointer setter);
+  /** \brief Get type information of an OrtValue
+  *
+  * @param value [in]
+  * @param out [out] Newly created ::OrtTypeInfo. Must be freed with OrtApi::ReleaseTypeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetTypeInfo( @Const OrtValue value, @Cast("OrtTypeInfo**") PointerPointer out);
+  public native OrtStatus GetTypeInfo( @Const OrtValue value, @ByPtrPtr OrtTypeInfo out);
 
-  public static class GetValueType_OrtValue_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetValueType_OrtValue_IntPointer(Pointer p) { super(p); }
-      protected GetValueType_OrtValue_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("ONNXType*") IntPointer out);
-  }
-  public native GetValueType_OrtValue_IntPointer GetValueType(); public native OrtApi GetValueType(GetValueType_OrtValue_IntPointer setter);
+  /** \brief Get ONNXType of an ::OrtValue
+  *
+  * @param value [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetValueType( @Const OrtValue value, @Cast("ONNXType*") IntPointer out);
+  public native OrtStatus GetValueType( @Const OrtValue value, @Cast("ONNXType*") IntBuffer out);
+  public native OrtStatus GetValueType( @Const OrtValue value, @Cast("ONNXType*") int[] out);
 
-  /**
-   * Creates an instance of OrtMemoryInfo. It must be freed by ReleaseMemoryInfo after use.
-   * This may describe one of the existing ORT allocator types OR a custom allocator.
-   * 
-   * @param name [in] such as "cpu", "gpu"
-   * @param type [in] one of the enum values
-   * @param device [in] ID. For GPU gpu id.
-   * @param mem_type [in] . Memory type enum value.
-   */
-  public static class CreateMemoryInfo_BytePointer_int_int_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateMemoryInfo_BytePointer_int_int_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateMemoryInfo_BytePointer_int_int_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id,
+  /** \}
+   *  \name OrtMemoryInfo
+   *  \{
+  <p>
+  /** \brief Create an ::OrtMemoryInfo
+  *
+  * @param name [in]
+  * @param type [in]
+  * @param id [in]
+  * @param mem_type [in]
+  * @param out [out] Newly created ::OrtMemoryInfo. Must be freed with OrtAPi::ReleaseMemoryInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateMemoryInfo( @Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id,
                     @Cast("OrtMemType") int mem_type, @Cast("OrtMemoryInfo**") PointerPointer out);
-  }
-  public native CreateMemoryInfo_BytePointer_int_int_int_PointerPointer CreateMemoryInfo(); public native OrtApi CreateMemoryInfo(CreateMemoryInfo_BytePointer_int_int_int_PointerPointer setter);
+  public native OrtStatus CreateMemoryInfo( @Cast("const char*") BytePointer name, @Cast("OrtAllocatorType") int type, int id,
+                    @Cast("OrtMemType") int mem_type, @ByPtrPtr OrtMemoryInfo out);
+  public native OrtStatus CreateMemoryInfo( String name, @Cast("OrtAllocatorType") int type, int id,
+                    @Cast("OrtMemType") int mem_type, @ByPtrPtr OrtMemoryInfo out);
 
-  /**
-   * Convenience function for special case of CreateMemoryInfo, for the CPU allocator. Uses name = "Cpu" and id = 0.
-   */
-  public static class CreateCpuMemoryInfo_int_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateCpuMemoryInfo_int_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateCpuMemoryInfo_int_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type1,
+  /** \brief Create an ::OrtMemoryInfo for CPU memory
+  *
+  * Special case version of OrtApi::CreateMemoryInfo for CPU based memory. Same as using OrtApi::CreateMemoryInfo with name = "Cpu" and id = 0.
+  *
+  * @param type [in]
+  * @param mem_type [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateCpuMemoryInfo( @Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type,
                     @Cast("OrtMemoryInfo**") PointerPointer out);
-  }
-  public native CreateCpuMemoryInfo_int_int_PointerPointer CreateCpuMemoryInfo(); public native OrtApi CreateCpuMemoryInfo(CreateCpuMemoryInfo_int_int_PointerPointer setter);
+  public native OrtStatus CreateCpuMemoryInfo( @Cast("OrtAllocatorType") int type, @Cast("OrtMemType") int mem_type,
+                    @ByPtrPtr OrtMemoryInfo out);
 
-  /**
- * Test if two memory info are equal
- * \Sets 'out' to 0 if equal, -1 if not equal
- */
-  public static class CompareMemoryInfo_OrtMemoryInfo_OrtMemoryInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CompareMemoryInfo_OrtMemoryInfo_OrtMemoryInfo_IntPointer(Pointer p) { super(p); }
-      protected CompareMemoryInfo_OrtMemoryInfo_OrtMemoryInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo info1, @Const OrtMemoryInfo info2, IntPointer out);
-  }
-  public native CompareMemoryInfo_OrtMemoryInfo_OrtMemoryInfo_IntPointer CompareMemoryInfo(); public native OrtApi CompareMemoryInfo(CompareMemoryInfo_OrtMemoryInfo_OrtMemoryInfo_IntPointer setter);
+  /** \brief Compare ::OrtMemoryInfo objects for equality
+  *
+  * Compares all settings of each ::OrtMemoryInfo for equality
+  *
+  * @param info [in] 1
+  * @param info [in] 2
+  * @param out [out] Set to 0 if equal, -1 if not equal
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CompareMemoryInfo( @Const OrtMemoryInfo info1, @Const OrtMemoryInfo info2, IntPointer out);
+  public native OrtStatus CompareMemoryInfo( @Const OrtMemoryInfo info1, @Const OrtMemoryInfo info2, IntBuffer out);
+  public native OrtStatus CompareMemoryInfo( @Const OrtMemoryInfo info1, @Const OrtMemoryInfo info2, int[] out);
 
-  /**
- * Do not free the returned value
- */
-  public static class MemoryInfoGetName_OrtMemoryInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    MemoryInfoGetName_OrtMemoryInfo_PointerPointer(Pointer p) { super(p); }
-      protected MemoryInfoGetName_OrtMemoryInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo ptr, @Cast("const char**") PointerPointer out);
-  }
-  public native MemoryInfoGetName_OrtMemoryInfo_PointerPointer MemoryInfoGetName(); public native OrtApi MemoryInfoGetName(MemoryInfoGetName_OrtMemoryInfo_PointerPointer setter);
-  public static class MemoryInfoGetId_OrtMemoryInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    MemoryInfoGetId_OrtMemoryInfo_IntPointer(Pointer p) { super(p); }
-      protected MemoryInfoGetId_OrtMemoryInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo ptr, IntPointer out);
-  }
-  public native MemoryInfoGetId_OrtMemoryInfo_IntPointer MemoryInfoGetId(); public native OrtApi MemoryInfoGetId(MemoryInfoGetId_OrtMemoryInfo_IntPointer setter);
-  public static class MemoryInfoGetMemType_OrtMemoryInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    MemoryInfoGetMemType_OrtMemoryInfo_IntPointer(Pointer p) { super(p); }
-      protected MemoryInfoGetMemType_OrtMemoryInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo ptr, @Cast("OrtMemType*") IntPointer out);
-  }
-  public native MemoryInfoGetMemType_OrtMemoryInfo_IntPointer MemoryInfoGetMemType(); public native OrtApi MemoryInfoGetMemType(MemoryInfoGetMemType_OrtMemoryInfo_IntPointer setter);
-  public static class MemoryInfoGetType_OrtMemoryInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    MemoryInfoGetType_OrtMemoryInfo_IntPointer(Pointer p) { super(p); }
-      protected MemoryInfoGetType_OrtMemoryInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo ptr, @Cast("OrtAllocatorType*") IntPointer out);
-  }
-  public native MemoryInfoGetType_OrtMemoryInfo_IntPointer MemoryInfoGetType(); public native OrtApi MemoryInfoGetType(MemoryInfoGetType_OrtMemoryInfo_IntPointer setter);
+  /** \brief Get name from ::OrtMemoryInfo
+  *
+  * @param ptr [in]
+  * @param out [out] Writes null terminated string to this pointer. Do NOT free the returned pointer. It is valid for the lifetime of the ::OrtMemoryInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") PointerPointer out);
+  public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus MemoryInfoGetName( @Const OrtMemoryInfo ptr, @Cast("const char**") @ByPtrPtr byte[] out);
 
-  public static class AllocatorAlloc_OrtAllocator_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AllocatorAlloc_OrtAllocator_long_PointerPointer(Pointer p) { super(p); }
-      protected AllocatorAlloc_OrtAllocator_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtAllocator ptr, @Cast("size_t") long size, @Cast("void**") PointerPointer out);
-  }
-  public native AllocatorAlloc_OrtAllocator_long_PointerPointer AllocatorAlloc(); public native OrtApi AllocatorAlloc(AllocatorAlloc_OrtAllocator_long_PointerPointer setter);
-  public static class AllocatorFree_OrtAllocator_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AllocatorFree_OrtAllocator_Pointer(Pointer p) { super(p); }
-      protected AllocatorFree_OrtAllocator_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtAllocator ptr, Pointer p);
-  }
-  public native AllocatorFree_OrtAllocator_Pointer AllocatorFree(); public native OrtApi AllocatorFree(AllocatorFree_OrtAllocator_Pointer setter);
-  public static class AllocatorGetInfo_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AllocatorGetInfo_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected AllocatorGetInfo_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtAllocator ptr, @Cast("const OrtMemoryInfo**") PointerPointer out);
-  }
-  public native AllocatorGetInfo_OrtAllocator_PointerPointer AllocatorGetInfo(); public native OrtApi AllocatorGetInfo(AllocatorGetInfo_OrtAllocator_PointerPointer setter);
+  /** \brief Get the id from ::OrtMemoryInfo
+  */
+  public native OrtStatus MemoryInfoGetId( @Const OrtMemoryInfo ptr, IntPointer out);
+  public native OrtStatus MemoryInfoGetId( @Const OrtMemoryInfo ptr, IntBuffer out);
+  public native OrtStatus MemoryInfoGetId( @Const OrtMemoryInfo ptr, int[] out);
 
-  // This API returns a CPU non-arena based allocator
-  // The returned pointer doesn't have to be freed.
-  // Always returns the same instance on every invocation.
-  public static class GetAllocatorWithDefaultOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetAllocatorWithDefaultOptions_PointerPointer(Pointer p) { super(p); }
-      protected GetAllocatorWithDefaultOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtAllocator**") PointerPointer out);
-  }
-  public native GetAllocatorWithDefaultOptions_PointerPointer GetAllocatorWithDefaultOptions(); public native OrtApi GetAllocatorWithDefaultOptions(GetAllocatorWithDefaultOptions_PointerPointer setter);
+  /** \brief Get the ::OrtMemType from ::OrtMemoryInfo
+  */
+  public native OrtStatus MemoryInfoGetMemType( @Const OrtMemoryInfo ptr, @Cast("OrtMemType*") IntPointer out);
+  public native OrtStatus MemoryInfoGetMemType( @Const OrtMemoryInfo ptr, @Cast("OrtMemType*") IntBuffer out);
+  public native OrtStatus MemoryInfoGetMemType( @Const OrtMemoryInfo ptr, @Cast("OrtMemType*") int[] out);
 
-  // Override symbolic dimensions (by specific denotation strings) with actual values if known at session initialization time to enable
-  // optimizations that can take advantage of fixed values (such as memory planning, etc)
-  public static class AddFreeDimensionOverride_OrtSessionOptions_BytePointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddFreeDimensionOverride_OrtSessionOptions_BytePointer_long(Pointer p) { super(p); }
-      protected AddFreeDimensionOverride_OrtSessionOptions_BytePointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const char*") BytePointer dim_denotation,
+  /** \brief Get the ::OrtAllocatorType from ::OrtMemoryInfo
+  */
+  public native OrtStatus MemoryInfoGetType( @Const OrtMemoryInfo ptr, @Cast("OrtAllocatorType*") IntPointer out);
+  public native OrtStatus MemoryInfoGetType( @Const OrtMemoryInfo ptr, @Cast("OrtAllocatorType*") IntBuffer out);
+  public native OrtStatus MemoryInfoGetType( @Const OrtMemoryInfo ptr, @Cast("OrtAllocatorType*") int[] out);
+
+  /** \}
+   *  \name OrtAllocator
+   *  \{
+   <p>
+   *  \brief Calls OrtAllocator::Alloc function */
+  public native OrtStatus AllocatorAlloc( OrtAllocator ort_allocator, @Cast("size_t") long size, @Cast("void**") PointerPointer out);
+  public native OrtStatus AllocatorAlloc( OrtAllocator ort_allocator, @Cast("size_t") long size, @Cast("void**") @ByPtrPtr Pointer out);
+  /** \brief Calls OrtAllocator::Free function */
+  public native OrtStatus AllocatorFree( OrtAllocator ort_allocator, Pointer p);
+  /** \brief Calls OrtAllocator::Info function */
+  public native OrtStatus AllocatorGetInfo( @Const OrtAllocator ort_allocator, @Cast("const OrtMemoryInfo**") PointerPointer out);
+  public native OrtStatus AllocatorGetInfo( @Const OrtAllocator ort_allocator, @Const @ByPtrPtr OrtMemoryInfo out);
+
+  /** \brief Get the default allocator
+  *
+  * The default allocator is a CPU based, non-arena. Always returns the same pointer to the same default allocator.
+  *
+  * @param out [out] Returned value should NOT be freed
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetAllocatorWithDefaultOptions( @Cast("OrtAllocator**") PointerPointer out);
+  public native OrtStatus GetAllocatorWithDefaultOptions( @ByPtrPtr OrtAllocator out);
+
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Override session symbolic dimensions
+  *
+  * Override symbolic dimensions (by specific denotation strings) with actual values if known at session initialization time to enable
+  * optimizations that can take advantage of fixed values (such as memory planning, etc)
+  *
+  * @param options [in]
+  * @param dim_denotation [in]
+  * @param dim_value [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus AddFreeDimensionOverride( OrtSessionOptions options, @Cast("const char*") BytePointer dim_denotation,
                     @Cast("int64_t") long dim_value);
-  }
-  public native AddFreeDimensionOverride_OrtSessionOptions_BytePointer_long AddFreeDimensionOverride(); public native OrtApi AddFreeDimensionOverride(AddFreeDimensionOverride_OrtSessionOptions_BytePointer_long setter);
+  public native OrtStatus AddFreeDimensionOverride( OrtSessionOptions options, String dim_denotation,
+                    @Cast("int64_t") long dim_value);
 
-  /**
-   * APIs to support non-tensor types - map and sequence.
-   * Currently only the following types are supported
-   * Note: the following types should be kept in sync with data_types.h
-   * Map types
-   * =========
-   * std::map<std::string, std::string>
-   * std::map<std::string, int64_t>
-   * std::map<std::string, float>
-   * std::map<std::string, double>
-   * std::map<int64_t, std::string>
-   * std::map<int64_t, int64_t>
-   * std::map<int64_t, float>
-   * std::map<int64_t, double>
-   *
-   * Sequence types
-   * ==============
-   * std::vector<std::string>
-   * std::vector<int64_t>
-   * std::vector<float>
-   * std::vector<double>
-   * std::vector<std::map<std::string, float>>
-   * std::vector<std::map<int64_t, float>
-   */
+  /** \}
+   *  \name OrtValue
+   *  \{ */
 
-  /**
-   * If input OrtValue represents a map, you need to retrieve the keys and values
-   * separately. Use index=0 to retrieve keys and index=1 to retrieve values.
-   * If input OrtValue represents a sequence, use index to retrieve the index'th element
-   * of the sequence.
-   */
-  public static class GetValue_OrtValue_int_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetValue_OrtValue_int_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected GetValue_OrtValue_int_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, int index, OrtAllocator allocator,
+  /* Internal information (not seen in Doxygen)
+  *
+  * APIs to support non-tensor types - map and sequence.
+  * Currently only the following types are supported
+  * Note: the following types should be kept in sync with data_types.h
+  * Map types
+  * =========
+  * std::map<std::string, std::string>
+  * std::map<std::string, int64_t>
+  * std::map<std::string, float>
+  * std::map<std::string, double>
+  * std::map<int64_t, std::string>
+  * std::map<int64_t, int64_t>
+  * std::map<int64_t, float>
+  * std::map<int64_t, double>
+  *
+  * Sequence types
+  * ==============
+  * std::vector<std::string>
+  * std::vector<int64_t>
+  * std::vector<float>
+  * std::vector<double>
+  * std::vector<std::map<std::string, float>>
+  * std::vector<std::map<int64_t, float>
+  */
+
+  /** \brief Get non tensor data from an ::OrtValue
+  *
+  * If {@code value} is of type ONNX_TYPE_MAP, you need to retrieve the keys and values
+  * separately. Use index=0 to retrieve keys and index=1 to retrieve values.
+  * If {@code value} is of type ONNX_TYPE_SEQUENCE, use index to retrieve the index'th element
+  * of the sequence.
+  *
+  * @param value [in]
+  * @param index [in] See above for usage based on {@code value} type
+  * @param allocator [in] Allocator used to allocate ::OrtValue
+  * @param out [out] Created ::OrtValue that holds the element requested. Must be freed with OrtApi::ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetValue( @Const OrtValue value, int index, OrtAllocator allocator,
                     @Cast("OrtValue**") PointerPointer out);
-  }
-  public native GetValue_OrtValue_int_OrtAllocator_PointerPointer GetValue(); public native OrtApi GetValue(GetValue_OrtValue_int_OrtAllocator_PointerPointer setter);
+  public native OrtStatus GetValue( @Const OrtValue value, int index, OrtAllocator allocator,
+                    @ByPtrPtr OrtValue out);
 
-  /**
-   * Returns 2 for type map and N for sequence where N is the number of elements
-   * in the sequence.
-   */
-  public static class GetValueCount_OrtValue_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetValueCount_OrtValue_SizeTPointer(Pointer p) { super(p); }
-      protected GetValueCount_OrtValue_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("size_t*") SizeTPointer out);
-  }
-  public native GetValueCount_OrtValue_SizeTPointer GetValueCount(); public native OrtApi GetValueCount(GetValueCount_OrtValue_SizeTPointer setter);
+  /** \brief Get non tensor value count from an ::OrtValue
+  *
+  * If {@code value} is of type ONNX_TYPE_MAP 2 will always be returned. For ONNX_TYPE_SEQUENCE
+  * the number of elements in the sequence will be returned
+  *
+  * @param value [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetValueCount( @Const OrtValue value, @Cast("size_t*") SizeTPointer out);
 
-  /**
-   * To construct a map, use num_values = 2 and 'in' should be an arrary of 2 OrtValues
-   * representing keys and values.
-   * To construct a sequence, use num_values = N where N is the number of the elements in the
-   * sequence. 'in' should be an arrary of N OrtValues.
-   * \value_type should be either map or sequence.
-   */
-  public static class CreateValue_PointerPointer_long_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateValue_PointerPointer_long_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateValue_PointerPointer_long_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const OrtValue*const*") PointerPointer in, @Cast("size_t") long num_values,
+  /** \brief Create a map or sequence ::OrtValue
+  *
+  * To construct a map (ONNX_TYPE_MAP), use num_values = 2 and {@code in} should be an array of 2 ::OrtValue%s
+  * representing keys and values.<br>
+  *
+  * To construct a sequence (ONNX_TYPE_SEQUENCE), use num_values = N where N is the number of the elements in the
+  * sequence. 'in' should be an array of N ::OrtValue%s.
+  *
+  * @param in [in] See above for details
+  * @param num_values [in]
+  * @param value_type [in] Must be either ONNX_TYPE_MAP or ONNX_TYPE_SEQUENCE
+  * @param out [out] Newly created ::OrtValue. Must be freed with OrtApi::ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateValue( @Cast("const OrtValue*const*") PointerPointer in, @Cast("size_t") long num_values,
                     @Cast("ONNXType") int value_type, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateValue_PointerPointer_long_int_PointerPointer CreateValue(); public native OrtApi CreateValue(CreateValue_PointerPointer_long_int_PointerPointer setter);
+  public native OrtStatus CreateValue( @Const @ByPtrPtr OrtValue in, @Cast("size_t") long num_values,
+                    @Cast("ONNXType") int value_type, @ByPtrPtr OrtValue out);
 
-  /**
-     * Construct OrtValue that contains a value of non-standard type created for
-     * experiments or while awaiting standardization. OrtValue in this case would contain
-     * an internal representation of the Opaque type. Opaque types are distinguished between
-     * each other by two strings 1) domain and 2) type name. The combination of the two
-     * must be unique, so the type representation is properly identified internally. The combination
-     * must be properly registered from within ORT at both compile/run time or by another API.
-     *
-     * To construct the OrtValue pass domain and type names, also a pointer to a data container
-     * the type of which must be know to both ORT and the client program. That data container may or may
-     * not match the internal representation of the Opaque type. The sizeof(data_container) is passed for
-     * verification purposes.
-     *
-     * \domain_name - domain name for the Opaque type, null terminated.
-     * \type_name   - type name for the Opaque type, null terminated.
-     * \data_contianer - data to populate OrtValue
-     * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
-     *                    data_container size internally.
-     */
-  public static class CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer(Pointer p) { super(p); }
-      protected CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer domain_name, @Cast("const char*") BytePointer type_name,
+  /** \brief Create an opaque (custom user defined type) ::OrtValue
+  *
+  * Constructs an ::OrtValue that contains a value of non-standard type created for
+  * experiments or while awaiting standardization. ::OrtValue in this case would contain
+  * an internal representation of the Opaque type. Opaque types are distinguished from
+  * each other by two strings 1) domain and 2) type name. The combination of the two
+  * must be unique, so the type representation is properly identified internally. The combination
+  * must be properly registered from within ORT at both compile/run time or by another API.
+  *
+  * To construct the ::OrtValue pass domain and type names, also a pointer to a data container
+  * the type of which must be known to both ORT and the client program. That data container may or may
+  * not match the internal representation of the Opaque type. The sizeof(data_container) is passed for
+  * verification purposes.
+  *
+  * @param domain_name [in] Null terminated string of the domain name
+  * @param type_name [in] Null terminated string of the type name
+  * @param data_container [in] User pointer Data to populate ::OrtValue
+  * @param data_container_size [in] Size in bytes of what {@code data_container} points to
+  * @param out [out] Newly created ::OrtValue. Must be freed with OrtApi::ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateOpaqueValue( @Cast("const char*") BytePointer domain_name, @Cast("const char*") BytePointer type_name,
                     @Const Pointer data_container, @Cast("size_t") long data_container_size, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer CreateOpaqueValue(); public native OrtApi CreateOpaqueValue(CreateOpaqueValue_BytePointer_BytePointer_Pointer_long_PointerPointer setter);
+  public native OrtStatus CreateOpaqueValue( @Cast("const char*") BytePointer domain_name, @Cast("const char*") BytePointer type_name,
+                    @Const Pointer data_container, @Cast("size_t") long data_container_size, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateOpaqueValue( String domain_name, String type_name,
+                    @Const Pointer data_container, @Cast("size_t") long data_container_size, @ByPtrPtr OrtValue out);
 
-  /**
-     * Fetch data from an OrtValue that contains a value of non-standard type created for
-     * experiments or while awaiting standardization.
-     * \domain_name - domain name for the Opaque type, null terminated.
-     * \type_name   - type name for the Opaque type, null terminated.
-     * \data_contianer - data to populate OrtValue
-     * \data_container_size - sizeof() of the data container. Must match the sizeof() of the expected
-     *                    data_container size internally.
-     */
-
-  public static class GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long(Pointer p) { super(p); }
-      protected GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*") BytePointer domain_name, @Cast("const char*") BytePointer type_name, @Const OrtValue in,
+  /** \brief Get internal data from an opaque (custom user defined type) ::OrtValue
+  *
+  * Copies internal data from an opaque value into a user provided buffer
+  *
+  * @see OrtApi::CreateOpaqueValue
+  *
+  * @param domain_name [in] Null terminated string of the domain name
+  * @param type_name [in] Null terminated string of the type name
+  * @param in [in] The opaque ::OrtValue
+  * @param data_container [out] Buffer to copy data into
+  * @param data_container_size [out] Size in bytes of the buffer pointed to by data_container. Must match the size of the internal buffer.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetOpaqueValue( @Cast("const char*") BytePointer domain_name, @Cast("const char*") BytePointer type_name, @Const OrtValue in,
                     Pointer data_container, @Cast("size_t") long data_container_size);
-  }
-  public native GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long GetOpaqueValue(); public native OrtApi GetOpaqueValue(GetOpaqueValue_BytePointer_BytePointer_OrtValue_Pointer_long setter);
+  public native OrtStatus GetOpaqueValue( String domain_name, String type_name, @Const OrtValue in,
+                    Pointer data_container, @Cast("size_t") long data_container_size);
 
-  /**
-     * Fetch a float stored as an attribute in the graph node
-     * \info - OrtKernelInfo instance
-     * \name - name of the attribute to be parsed
-     * \out - pointer to memory where the attribute is to be stored
-     */
-  public static class KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer(Pointer p) { super(p); }
-      protected KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+  /** \}
+   *  \name OrtKernelInfo
+   *  \{
+  <p>
+  /** \brief Get a float stored as an attribute in the graph node
+  *
+  * @param info [in] ::OrtKernelInfo instance
+  * @param name [in] Null terminated string of the name of the attribute
+  * @param out [out] Pointer to memory where the attribute will be stored
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
                     FloatPointer out);
-  }
-  public native KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer KernelInfoGetAttribute_float(); public native OrtApi KernelInfoGetAttribute_float(KernelInfoGetAttribute_float_OrtKernelInfo_BytePointer_FloatPointer setter);
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, String name,
+                    FloatBuffer out);
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    float[] out);
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, String name,
+                    FloatPointer out);
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    FloatBuffer out);
+  public native OrtStatus KernelInfoGetAttribute_float( @Const OrtKernelInfo info, String name,
+                    float[] out);
 
-  /**
-     * Fetch a 64-bit int stored as an attribute in the graph node
-     * \info - OrtKernelInfo instance
-     * \name - name of the attribute to be parsed
-     * \out - pointer to memory where the attribute is to be stored
-     */
-  public static class KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer(Pointer p) { super(p); }
-      protected KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+  /** \brief Fetch a 64-bit int stored as an attribute in the graph node
+  *
+  * @param info [in] ::OrtKernelInfo instance
+  * @param name [in] Null terminated string of the name of the attribute
+  * @param out [out] Pointer to memory where the attribute will be stored
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
                     @Cast("int64_t*") LongPointer out);
-  }
-  public native KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer KernelInfoGetAttribute_int64(); public native OrtApi KernelInfoGetAttribute_int64(KernelInfoGetAttribute_int64_OrtKernelInfo_BytePointer_LongPointer setter);
-  /**
-     * Fetch a string stored as an attribute in the graph node
-     * \info - OrtKernelInfo instance
-     * \name - name of the attribute to be parsed
-     * \out - pointer to memory where the attribute's contents are to be stored
-     * \size - actual size of string attribute
-     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the string
-        attribute, and a success status is returned.
-        <p>
-        If the {@code size} parameter is greater than or equal to the actual string attribute's size,
-        the value of {@code size} is set to the true size of the string attribute, the provided memory
-        is filled with the attribute's contents, and a success status is returned.
-        <p>
-        If the {@code size} parameter is lesser than the actual string attribute's size and {@code out}
-        is not nullptr, the value of {@code size} is set to the true size of the string attribute
-        and a failure status is returned.)
-     */
-  public static class KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer(Pointer p) { super(p); }
-      protected KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name, @Cast("char*") BytePointer out,
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") LongBuffer out);
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") long[] out);
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") LongPointer out);
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") LongBuffer out);
+  public native OrtStatus KernelInfoGetAttribute_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") long[] out);
+
+  /** \brief Fetch a string stored as an attribute in the graph node
+  *
+  * If {@code out} is nullptr, the value of {@code size} is set to the true size of the string
+  * attribute, and a success status is returned.
+  *
+  * If the {@code size} parameter is greater than or equal to the actual string attribute's size,
+  * the value of {@code size} is set to the true size of the string attribute, the provided memory
+  * is filled with the attribute's contents, and a success status is returned.
+  *
+  * If the {@code size} parameter is less than the actual string attribute's size and {@code out}
+  * is not nullptr, the value of {@code size} is set to the true size of the string attribute
+  * and a failure status is returned.)
+  *
+  * @param info [in] ::OrtKernelInfo instance
+  * @param name [in] Null terminated string of the name of the attribute
+  * @param out [out] Pointer to memory where the attribute will be stored
+  * @param size [in,out] See above comments for details
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name, @Cast("char*") BytePointer out,
                     @Cast("size_t*") SizeTPointer size);
-  }
-  public native KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer KernelInfoGetAttribute_string(); public native OrtApi KernelInfoGetAttribute_string(KernelInfoGetAttribute_string_OrtKernelInfo_BytePointer_BytePointer_SizeTPointer setter);
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, String name, @Cast("char*") ByteBuffer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name, @Cast("char*") byte[] out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, String name, @Cast("char*") BytePointer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name, @Cast("char*") ByteBuffer out,
+                    @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttribute_string( @Const OrtKernelInfo info, String name, @Cast("char*") byte[] out,
+                    @Cast("size_t*") SizeTPointer size);
 
-  public static class KernelContext_GetInputCount_OrtKernelContext_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelContext_GetInputCount_OrtKernelContext_SizeTPointer(Pointer p) { super(p); }
-      protected KernelContext_GetInputCount_OrtKernelContext_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelContext context, @Cast("size_t*") SizeTPointer out);
-  }
-  public native KernelContext_GetInputCount_OrtKernelContext_SizeTPointer KernelContext_GetInputCount(); public native OrtApi KernelContext_GetInputCount(KernelContext_GetInputCount_OrtKernelContext_SizeTPointer setter);
-  public static class KernelContext_GetOutputCount_OrtKernelContext_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelContext_GetOutputCount_OrtKernelContext_SizeTPointer(Pointer p) { super(p); }
-      protected KernelContext_GetOutputCount_OrtKernelContext_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelContext context, @Cast("size_t*") SizeTPointer out);
-  }
-  public native KernelContext_GetOutputCount_OrtKernelContext_SizeTPointer KernelContext_GetOutputCount(); public native OrtApi KernelContext_GetOutputCount(KernelContext_GetOutputCount_OrtKernelContext_SizeTPointer setter);
-  public static class KernelContext_GetInput_OrtKernelContext_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelContext_GetInput_OrtKernelContext_long_PointerPointer(Pointer p) { super(p); }
-      protected KernelContext_GetInput_OrtKernelContext_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelContext context, @Cast("size_t") long index,
+  /** \}
+   *  \name OrtKernelContext
+   *  \{
+  <p>
+  /** \brief Used for custom operators, get the input count of a kernel
+  *
+  * @see ::OrtCustomOp
+  */
+  public native OrtStatus KernelContext_GetInputCount( @Const OrtKernelContext context, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Used for custom operators, get the output count of a kernel
+  *
+  * @see ::OrtCustomOp
+  */
+  public native OrtStatus KernelContext_GetOutputCount( @Const OrtKernelContext context, @Cast("size_t*") SizeTPointer out);
+
+  /** \brief Used for custom operators, get an input of a kernel
+  *
+  * @see ::OrtCustomOp
+  */
+  public native OrtStatus KernelContext_GetInput( @Const OrtKernelContext context, @Cast("size_t") long index,
                     @Cast("const OrtValue**") PointerPointer out);
-  }
-  public native KernelContext_GetInput_OrtKernelContext_long_PointerPointer KernelContext_GetInput(); public native OrtApi KernelContext_GetInput(KernelContext_GetInput_OrtKernelContext_long_PointerPointer setter);
-  public static class KernelContext_GetOutput_OrtKernelContext_long_LongPointer_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelContext_GetOutput_OrtKernelContext_long_LongPointer_long_PointerPointer(Pointer p) { super(p); }
-      protected KernelContext_GetOutput_OrtKernelContext_long_LongPointer_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtKernelContext context, @Cast("size_t") long index,
+  public native OrtStatus KernelContext_GetInput( @Const OrtKernelContext context, @Cast("size_t") long index,
+                    @Const @ByPtrPtr OrtValue out);
+
+  /** \brief Used for custom operators, get an output of a kernel
+  *
+  * @see ::OrtCustomOp
+  */
+  public native OrtStatus KernelContext_GetOutput( OrtKernelContext context, @Cast("size_t") long index,
                     @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native KernelContext_GetOutput_OrtKernelContext_long_LongPointer_long_PointerPointer KernelContext_GetOutput(); public native OrtApi KernelContext_GetOutput(KernelContext_GetOutput_OrtKernelContext_long_LongPointer_long_PointerPointer setter);
+  public native OrtStatus KernelContext_GetOutput( OrtKernelContext context, @Cast("size_t") long index,
+                    @Cast("const int64_t*") LongPointer dim_values, @Cast("size_t") long dim_count, @ByPtrPtr OrtValue out);
+  public native OrtStatus KernelContext_GetOutput( OrtKernelContext context, @Cast("size_t") long index,
+                    @Cast("const int64_t*") LongBuffer dim_values, @Cast("size_t") long dim_count, @ByPtrPtr OrtValue out);
+  public native OrtStatus KernelContext_GetOutput( OrtKernelContext context, @Cast("size_t") long index,
+                    @Cast("const int64_t*") long[] dim_values, @Cast("size_t") long dim_count, @ByPtrPtr OrtValue out);
 
-  public static class ReleaseEnv_OrtEnv extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseEnv_OrtEnv(Pointer p) { super(p); }
-      protected ReleaseEnv_OrtEnv() { allocate(); }
-      private native void allocate();
-      public native void call(OrtEnv input);
-  }
-  public native ReleaseEnv_OrtEnv ReleaseEnv(); public native OrtApi ReleaseEnv(ReleaseEnv_OrtEnv setter);
-  public static class ReleaseStatus_OrtStatus extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseStatus_OrtStatus(Pointer p) { super(p); }
-      protected ReleaseStatus_OrtStatus() { allocate(); }
-      private native void allocate();
-      public native void call(OrtStatus input);
-  }
-  public native ReleaseStatus_OrtStatus ReleaseStatus(); public native OrtApi ReleaseStatus(ReleaseStatus_OrtStatus setter);  // nullptr for Status* indicates success
-  public static class ReleaseMemoryInfo_OrtMemoryInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseMemoryInfo_OrtMemoryInfo(Pointer p) { super(p); }
-      protected ReleaseMemoryInfo_OrtMemoryInfo() { allocate(); }
-      private native void allocate();
-      public native void call(OrtMemoryInfo input);
-  }
-  public native ReleaseMemoryInfo_OrtMemoryInfo ReleaseMemoryInfo(); public native OrtApi ReleaseMemoryInfo(ReleaseMemoryInfo_OrtMemoryInfo setter);
-  public static class ReleaseSession_OrtSession extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseSession_OrtSession(Pointer p) { super(p); }
-      protected ReleaseSession_OrtSession() { allocate(); }
-      private native void allocate();
-      public native void call(OrtSession input);
-  }
-  public native ReleaseSession_OrtSession ReleaseSession(); public native OrtApi ReleaseSession(ReleaseSession_OrtSession setter);  //Don't call ReleaseSession from Dllmain (because session owns a thread pool)
-  public static class ReleaseValue_OrtValue extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseValue_OrtValue(Pointer p) { super(p); }
-      protected ReleaseValue_OrtValue() { allocate(); }
-      private native void allocate();
-      public native void call(OrtValue input);
-  }
-  public native ReleaseValue_OrtValue ReleaseValue(); public native OrtApi ReleaseValue(ReleaseValue_OrtValue setter);
-  public static class ReleaseRunOptions_OrtRunOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseRunOptions_OrtRunOptions(Pointer p) { super(p); }
-      protected ReleaseRunOptions_OrtRunOptions() { allocate(); }
-      private native void allocate();
-      public native void call(OrtRunOptions input);
-  }
-  public native ReleaseRunOptions_OrtRunOptions ReleaseRunOptions(); public native OrtApi ReleaseRunOptions(ReleaseRunOptions_OrtRunOptions setter);
-  public static class ReleaseTypeInfo_OrtTypeInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseTypeInfo_OrtTypeInfo(Pointer p) { super(p); }
-      protected ReleaseTypeInfo_OrtTypeInfo() { allocate(); }
-      private native void allocate();
-      public native void call(OrtTypeInfo input);
-  }
-  public native ReleaseTypeInfo_OrtTypeInfo ReleaseTypeInfo(); public native OrtApi ReleaseTypeInfo(ReleaseTypeInfo_OrtTypeInfo setter);
-  public static class ReleaseTensorTypeAndShapeInfo_OrtTensorTypeAndShapeInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseTensorTypeAndShapeInfo_OrtTensorTypeAndShapeInfo(Pointer p) { super(p); }
-      protected ReleaseTensorTypeAndShapeInfo_OrtTensorTypeAndShapeInfo() { allocate(); }
-      private native void allocate();
-      public native void call(OrtTensorTypeAndShapeInfo input);
-  }
-  public native ReleaseTensorTypeAndShapeInfo_OrtTensorTypeAndShapeInfo ReleaseTensorTypeAndShapeInfo(); public native OrtApi ReleaseTensorTypeAndShapeInfo(ReleaseTensorTypeAndShapeInfo_OrtTensorTypeAndShapeInfo setter);
-  public static class ReleaseSessionOptions_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseSessionOptions_OrtSessionOptions(Pointer p) { super(p); }
-      protected ReleaseSessionOptions_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native void call(OrtSessionOptions input);
-  }
-  public native ReleaseSessionOptions_OrtSessionOptions ReleaseSessionOptions(); public native OrtApi ReleaseSessionOptions(ReleaseSessionOptions_OrtSessionOptions setter);
-  public static class ReleaseCustomOpDomain_OrtCustomOpDomain extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseCustomOpDomain_OrtCustomOpDomain(Pointer p) { super(p); }
-      protected ReleaseCustomOpDomain_OrtCustomOpDomain() { allocate(); }
-      private native void allocate();
-      public native void call(OrtCustomOpDomain input);
-  }
-  public native ReleaseCustomOpDomain_OrtCustomOpDomain ReleaseCustomOpDomain(); public native OrtApi ReleaseCustomOpDomain(ReleaseCustomOpDomain_OrtCustomOpDomain setter);
+  /** \}
+   *  \name OrtEnv
+   *  \{ */
+  public native void ReleaseEnv(OrtEnv input);
+  /** \}
+   *  \name OrtStatus
+   *  \{ */
+  public native void ReleaseStatus(OrtStatus input);
+  /** \}
+   *  \name OrtMemoryInfo
+   *  \{ */
+  public native void ReleaseMemoryInfo(OrtMemoryInfo input);
+  /** \}
+   *  \name OrtSession
+   *  \{ */
+  public native void ReleaseSession(OrtSession input);  //Don't call ReleaseSession from Dllmain (because session owns a thread pool)
+  /** \}
+   *  \name OrtValue
+   *  \{ */
+  public native void ReleaseValue(OrtValue input);
+  /** \}
+   *  \name OrtRunOptions
+   *  \{ */
+  public native void ReleaseRunOptions(OrtRunOptions input);
+  /** \}
+   *  \name OrtTypeInfo
+   *  \{ */
+  public native void ReleaseTypeInfo(OrtTypeInfo input);
+  /** \}
+   *  \name OrtTensorTypeAndShapeInfo
+   *  \{ */
+  public native void ReleaseTensorTypeAndShapeInfo(OrtTensorTypeAndShapeInfo input);
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{ */
+  public native void ReleaseSessionOptions(OrtSessionOptions input);
+  /** \}
+   *  \name OrtCustomOpDomain
+   *  \{ */
+  public native void ReleaseCustomOpDomain(OrtCustomOpDomain input);
 
-  // End of Version 1 - DO NOT MODIFY ABOVE (see above text for more information)
-
-  // Version 2 - In development, feel free to add/remove/rearrange here
-
-  /**
-    * GetDenotationFromTypeInfo
-	 * This api augments OrtTypeInfo to return denotations on the type.
-	 * This is used by WinML to determine if an input/output is intended to be an Image or a Tensor.
-    */
-  public static class GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer(Pointer p) { super(p); }
-      protected GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo arg0, @Cast("const char**const") PointerPointer denotation,
+  /** \}
+   *  \name OrtTypeInfo
+   *  \{
+  <p>
+  /** \brief Get denotation from type information
+  *
+  * Augments ::OrtTypeInfo to return denotations on the type.
+  *
+  * This is used by WinML to determine if an input/output is intended to be an Image or a Tensor.
+  *
+  * @param type_info [in]
+  * @param denotation [out] Pointer to the null terminated denotation string is written to this pointer. This pointer is valid until the object is destroyed or the name is changed, do not free.
+  * @param len [out] Length in bytes of the string returned in {@code denotation}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetDenotationFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("const char**const") PointerPointer denotation,
                     @Cast("size_t*") SizeTPointer len);
-  }
-  public native GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer GetDenotationFromTypeInfo(); public native OrtApi GetDenotationFromTypeInfo(GetDenotationFromTypeInfo_OrtTypeInfo_PointerPointer_SizeTPointer setter);
+  public native OrtStatus GetDenotationFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("const char**const") @ByPtrPtr BytePointer denotation,
+                    @Cast("size_t*") SizeTPointer len);
+  public native OrtStatus GetDenotationFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("const char**const") @ByPtrPtr ByteBuffer denotation,
+                    @Cast("size_t*") SizeTPointer len);
+  public native OrtStatus GetDenotationFromTypeInfo( @Const OrtTypeInfo type_info, @Cast("const char**const") @ByPtrPtr byte[] denotation,
+                    @Cast("size_t*") SizeTPointer len);
 
-  // OrtTypeInfo Casting methods
-
-  /**
-    * CastTypeInfoToMapTypeInfo
-	 * This api augments OrtTypeInfo to return an OrtMapTypeInfo when the type is a map.
-	 * The OrtMapTypeInfo has additional information about the map's key type and value type.
-	 * This is used by WinML to support model reflection APIs.
-	 * This is used by WinML to support model reflection APIs.
-	 *
-	 * Don't free the 'out' value
-    */
-  public static class CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
-      protected CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo type_info,
+  /** \brief Get detailed map information from an ::OrtTypeInfo
+  *
+  * This augments ::OrtTypeInfo to return an ::OrtMapTypeInfo when the type is a map.
+  * The OrtMapTypeInfo has additional information about the map's key type and value type.
+  *
+  * This is used by WinML to support model reflection APIs.
+  *
+  * @param type_info [out]
+  * @param out [out] A pointer to the ::OrtMapTypeInfo. Do not free this value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CastTypeInfoToMapTypeInfo( @Const OrtTypeInfo type_info,
                     @Cast("const OrtMapTypeInfo**") PointerPointer out);
-  }
-  public native CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer CastTypeInfoToMapTypeInfo(); public native OrtApi CastTypeInfoToMapTypeInfo(CastTypeInfoToMapTypeInfo_OrtTypeInfo_PointerPointer setter);
+  public native OrtStatus CastTypeInfoToMapTypeInfo( @Const OrtTypeInfo type_info,
+                    @Const @ByPtrPtr OrtMapTypeInfo out);
 
-  /**
-    * CastTypeInfoToSequenceTypeInfo
-	 * This api augments OrtTypeInfo to return an OrtSequenceTypeInfo when the type is a sequence.
-	 * The OrtSequenceTypeInfo has additional information about the sequence's element type.
-    * This is used by WinML to support model reflection APIs.
-	 *
-	 * Don't free the 'out' value
-    */
-  public static class CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer(Pointer p) { super(p); }
-      protected CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTypeInfo type_info,
+  /** \brief Cast ::OrtTypeInfo to an ::OrtSequenceTypeInfo
+  *
+  * This api augments ::OrtTypeInfo to return an ::OrtSequenceTypeInfo when the type is a sequence.
+	* The ::OrtSequenceTypeInfo has additional information about the sequence's element type.
+  *
+  * This is used by WinML to support model reflection APIs.
+	*
+  * @param type_info [in]
+	* @param out [out] A pointer to the OrtSequenceTypeInfo. Do not free this value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CastTypeInfoToSequenceTypeInfo( @Const OrtTypeInfo type_info,
                     @Cast("const OrtSequenceTypeInfo**") PointerPointer out);
-  }
-  public native CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer CastTypeInfoToSequenceTypeInfo(); public native OrtApi CastTypeInfoToSequenceTypeInfo(CastTypeInfoToSequenceTypeInfo_OrtTypeInfo_PointerPointer setter);
+  public native OrtStatus CastTypeInfoToSequenceTypeInfo( @Const OrtTypeInfo type_info,
+                    @Const @ByPtrPtr OrtSequenceTypeInfo out);
 
-  // OrtMapTypeInfo Accessors
+  /** \}
+   *  \name OrtMapTypeInfo
+   *  \{
+  <p>
+  /** \brief Get key type from an ::OrtMapTypeInfo
+  *
+  * Key types are restricted to being scalar types.
+  *
+  * This is used by WinML to support model reflection APIs.
+  *
+  * @param map_type_info [in]
+  * @param out [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetMapKeyType( @Const OrtMapTypeInfo map_type_info, @Cast("ONNXTensorElementDataType*") IntPointer out);
+  public native OrtStatus GetMapKeyType( @Const OrtMapTypeInfo map_type_info, @Cast("ONNXTensorElementDataType*") IntBuffer out);
+  public native OrtStatus GetMapKeyType( @Const OrtMapTypeInfo map_type_info, @Cast("ONNXTensorElementDataType*") int[] out);
 
-  /**
-    * GetMapKeyType
-	 * This api augments get the key type of a map. Key types are restricted to being scalar types and use ONNXTensorElementDataType.
-	 * This is used by WinML to support model reflection APIs.
-    */
-  public static class GetMapKeyType_OrtMapTypeInfo_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetMapKeyType_OrtMapTypeInfo_IntPointer(Pointer p) { super(p); }
-      protected GetMapKeyType_OrtMapTypeInfo_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMapTypeInfo map_type_info, @Cast("ONNXTensorElementDataType*") IntPointer out);
-  }
-  public native GetMapKeyType_OrtMapTypeInfo_IntPointer GetMapKeyType(); public native OrtApi GetMapKeyType(GetMapKeyType_OrtMapTypeInfo_IntPointer setter);
+  /** \brief Get the value type from an ::OrtMapTypeInfo
+  *
+  * @param map_type_info [in]
+  * @param type_info [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetMapValueType( @Const OrtMapTypeInfo map_type_info, @Cast("OrtTypeInfo**") PointerPointer type_info);
+  public native OrtStatus GetMapValueType( @Const OrtMapTypeInfo map_type_info, @ByPtrPtr OrtTypeInfo type_info);
 
-  /**
-    * GetMapValueType
-	 * This api augments get the value type of a map.
-    */
-  public static class GetMapValueType_OrtMapTypeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetMapValueType_OrtMapTypeInfo_PointerPointer(Pointer p) { super(p); }
-      protected GetMapValueType_OrtMapTypeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMapTypeInfo map_type_info, @Cast("OrtTypeInfo**") PointerPointer type_info);
-  }
-  public native GetMapValueType_OrtMapTypeInfo_PointerPointer GetMapValueType(); public native OrtApi GetMapValueType(GetMapValueType_OrtMapTypeInfo_PointerPointer setter);
-
-  // OrtSequenceTypeInfo Accessors
-
-  /**
-    * GetSequenceElementType
-	 * This api augments get the element type of a sequence.
-	 * This is used by WinML to support model reflection APIs.
-    */
-  public static class GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer(Pointer p) { super(p); }
-      protected GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSequenceTypeInfo sequence_type_info,
+  /** \}
+   *  \name OrtSequenceTypeInfo
+   *  \{
+  <p>
+  /** \brief Get element type from an ::OrtSequenceTypeInfo
+  *
+  * This is used by WinML to support model reflection APIs.
+  *
+  * @param sequence_type_info [in]
+  * @param type_info [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSequenceElementType( @Const OrtSequenceTypeInfo sequence_type_info,
                     @Cast("OrtTypeInfo**") PointerPointer type_info);
-  }
-  public native GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer GetSequenceElementType(); public native OrtApi GetSequenceElementType(GetSequenceElementType_OrtSequenceTypeInfo_PointerPointer setter);
+  public native OrtStatus GetSequenceElementType( @Const OrtSequenceTypeInfo sequence_type_info,
+                    @ByPtrPtr OrtTypeInfo type_info);
 
-  public static class ReleaseMapTypeInfo_OrtMapTypeInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseMapTypeInfo_OrtMapTypeInfo(Pointer p) { super(p); }
-      protected ReleaseMapTypeInfo_OrtMapTypeInfo() { allocate(); }
-      private native void allocate();
-      public native void call(OrtMapTypeInfo input);
-  }
-  public native ReleaseMapTypeInfo_OrtMapTypeInfo ReleaseMapTypeInfo(); public native OrtApi ReleaseMapTypeInfo(ReleaseMapTypeInfo_OrtMapTypeInfo setter);
-  public static class ReleaseSequenceTypeInfo_OrtSequenceTypeInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseSequenceTypeInfo_OrtSequenceTypeInfo(Pointer p) { super(p); }
-      protected ReleaseSequenceTypeInfo_OrtSequenceTypeInfo() { allocate(); }
-      private native void allocate();
-      public native void call(OrtSequenceTypeInfo input);
-  }
-  public native ReleaseSequenceTypeInfo_OrtSequenceTypeInfo ReleaseSequenceTypeInfo(); public native OrtApi ReleaseSequenceTypeInfo(ReleaseSequenceTypeInfo_OrtSequenceTypeInfo setter);
+  /** \}
+   *  \name OrtMapTypeInfo
+   *  \{ */
+  public native void ReleaseMapTypeInfo(OrtMapTypeInfo input);
+  /** \}
+   *  \name OrtSequenceTypeInfo
+   *  \{ */
+  public native void ReleaseSequenceTypeInfo(OrtSequenceTypeInfo input);
 
-  /**
-   * @param out is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
-   * Profiling is turned ON automatically if enabled for the particular session by invoking EnableProfiling()
-   * on the SessionOptions instance used to create the session.
-   */
-  public static class SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSession sess, OrtAllocator allocator, @Cast("char**") PointerPointer out);
-  }
-  public native SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer SessionEndProfiling(); public native OrtApi SessionEndProfiling(SessionEndProfiling_OrtSession_OrtAllocator_PointerPointer setter);
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief End profiling and return filename of the profile data
+  *
+  * Profiling is turned on through OrtApi::EnableProfiling
+  *
+  * @param session [in]
+  * @param allocator [in]
+  * @param out [out] Null terminated string of the filename, allocated using {@code allocator}. Must be freed using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionEndProfiling( OrtSession session, OrtAllocator allocator, @Cast("char**") PointerPointer out);
+  public native OrtStatus SessionEndProfiling( OrtSession session, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer out);
+  public native OrtStatus SessionEndProfiling( OrtSession session, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer out);
+  public native OrtStatus SessionEndProfiling( OrtSession session, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] out);
 
-  /**
-   * @param out is a pointer to the newly created object. The pointer should be freed by calling ReleaseModelMetadata after use.
-   */
-  public static class SessionGetModelMetadata_OrtSession_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetModelMetadata_OrtSession_PointerPointer(Pointer p) { super(p); }
-      protected SessionGetModelMetadata_OrtSession_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("OrtModelMetadata**") PointerPointer out);
-  }
-  public native SessionGetModelMetadata_OrtSession_PointerPointer SessionGetModelMetadata(); public native OrtApi SessionGetModelMetadata(SessionGetModelMetadata_OrtSession_PointerPointer setter);
+  /** \brief Get ::OrtModelMetadata from an ::OrtSession
+  *
+  * @param session [in]
+  * @param out [out] Newly created ::OrtModelMetadata. Must be freed using OrtApi::ReleaseModelMetadata
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetModelMetadata( @Const OrtSession session, @Cast("OrtModelMetadata**") PointerPointer out);
+  public native OrtStatus SessionGetModelMetadata( @Const OrtSession session, @ByPtrPtr OrtModelMetadata out);
 
-  /**
-   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
-   */
-  public static class ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  /** \}
+   *  \name OrtModelMetadata
+   *  \{
+  <p>
+  /** \brief Get {@code producer name} from an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}. Must be freed using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetProducerName( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetProducerName(); public native OrtApi ModelMetadataGetProducerName(ModelMetadataGetProducerName_OrtModelMetadata_OrtAllocator_PointerPointer setter);
-  public static class ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  public native OrtStatus ModelMetadataGetProducerName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataGetProducerName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataGetProducerName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Get {@code graph name} from an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}. Must be freed using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetGraphName( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetGraphName(); public native OrtApi ModelMetadataGetGraphName(ModelMetadataGetGraphName_OrtModelMetadata_OrtAllocator_PointerPointer setter);
-  public static class ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata, OrtAllocator allocator,
+  public native OrtStatus ModelMetadataGetGraphName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataGetGraphName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataGetGraphName( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Get {@code domain} from an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}. Must be freed using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetDomain( @Const OrtModelMetadata model_metadata, OrtAllocator allocator,
                     @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetDomain(); public native OrtApi ModelMetadataGetDomain(ModelMetadataGetDomain_OrtModelMetadata_OrtAllocator_PointerPointer setter);
-  public static class ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  public native OrtStatus ModelMetadataGetDomain( @Const OrtModelMetadata model_metadata, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataGetDomain( @Const OrtModelMetadata model_metadata, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataGetDomain( @Const OrtModelMetadata model_metadata, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Get {@code description} from an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}. Must be freed using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetDescription( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetDescription(); public native OrtApi ModelMetadataGetDescription(ModelMetadataGetDescription_OrtModelMetadata_OrtAllocator_PointerPointer setter);
-  /**
-   * @param value  is set to a null terminated string allocated using 'allocator'. The caller is responsible for freeing it.
-   * 'value' will be a nullptr if the given key is not found in the custom metadata map.
-   */
-  public static class ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  public native OrtStatus ModelMetadataGetDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataGetDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataGetDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \brief Return data for a key in the custom metadata map in an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param key [in] Null terminated string
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}. Must be freed using {@code allocator}
+  * {@code value} will be set to nullptr if the given key is not found in the custom metadata map.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("const char*") BytePointer key, @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer ModelMetadataLookupCustomMetadataMap(); public native OrtApi ModelMetadataLookupCustomMetadataMap(ModelMetadataLookupCustomMetadataMap_OrtModelMetadata_OrtAllocator_BytePointer_PointerPointer setter);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("const char*") BytePointer key, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, String key, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("const char*") BytePointer key, @Cast("char**") @ByPtrPtr byte[] value);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, String key, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("const char*") BytePointer key, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataLookupCustomMetadataMap( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, String key, @Cast("char**") @ByPtrPtr byte[] value);
 
-  public static class ModelMetadataGetVersion_OrtModelMetadata_LongPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetVersion_OrtModelMetadata_LongPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetVersion_OrtModelMetadata_LongPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata, @Cast("int64_t*") LongPointer value);
-  }
-  public native ModelMetadataGetVersion_OrtModelMetadata_LongPointer ModelMetadataGetVersion(); public native OrtApi ModelMetadataGetVersion(ModelMetadataGetVersion_OrtModelMetadata_LongPointer setter);
+  /** \brief Get version number from an ::OrtModelMetadata
+  *
+  * @param model_metadata [in]
+  * @param value [out] Set to the version number
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetVersion( @Const OrtModelMetadata model_metadata, @Cast("int64_t*") LongPointer value);
+  public native OrtStatus ModelMetadataGetVersion( @Const OrtModelMetadata model_metadata, @Cast("int64_t*") LongBuffer value);
+  public native OrtStatus ModelMetadataGetVersion( @Const OrtModelMetadata model_metadata, @Cast("int64_t*") long[] value);
 
-  public static class ReleaseModelMetadata_OrtModelMetadata extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseModelMetadata_OrtModelMetadata(Pointer p) { super(p); }
-      protected ReleaseModelMetadata_OrtModelMetadata() { allocate(); }
-      private native void allocate();
-      public native void call(OrtModelMetadata input);
-  }
-  public native ReleaseModelMetadata_OrtModelMetadata ReleaseModelMetadata(); public native OrtApi ReleaseModelMetadata(ReleaseModelMetadata_OrtModelMetadata setter);
+  public native void ReleaseModelMetadata(OrtModelMetadata input);
 
-  /*
-  * Creates an environment with global threadpools that will be shared across sessions.
-  * Use this in conjunction with DisablePerSessionThreads API or else the session will use
+  /** \}
+   *  \name OrtEnv
+   *  \{
+  <p>
+  /** \brief Create an OrtEnv
+  *
+  * Create an environment with global threadpools that will be shared across sessions.
+  * Use this in conjunction with OrtApi::DisablePerSessionThreads or else the session will use
   * its own thread pools.
+  *
+  * @param log_severity_level [in] The log severity level.
+  * @param logid [in] The log identifier.
+  * @param tp_options [in]
+  * @param out [out] Returned newly created OrtEnv. Must be freed with OrtApi::ReleaseEnv
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid,
-                    @Const OrtThreadingOptions t_options, @Cast("OrtEnv**") PointerPointer out);
-  }
-  public native CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer CreateEnvWithGlobalThreadPools(); public native OrtApi CreateEnvWithGlobalThreadPools(CreateEnvWithGlobalThreadPools_int_BytePointer_OrtThreadingOptions_PointerPointer setter);
+  public native OrtStatus CreateEnvWithGlobalThreadPools( @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid,
+                    @Const OrtThreadingOptions tp_options, @Cast("OrtEnv**") PointerPointer out);
+  public native OrtStatus CreateEnvWithGlobalThreadPools( @Cast("OrtLoggingLevel") int log_severity_level, @Cast("const char*") BytePointer logid,
+                    @Const OrtThreadingOptions tp_options, @ByPtrPtr OrtEnv out);
+  public native OrtStatus CreateEnvWithGlobalThreadPools( @Cast("OrtLoggingLevel") int log_severity_level, String logid,
+                    @Const OrtThreadingOptions tp_options, @ByPtrPtr OrtEnv out);
 
-  /*
-  * Calling this API will make the session use the global threadpools shared across sessions.
-  * This API should be used in conjunction with CreateEnvWithGlobalThreadPools API.
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Use global thread pool on a session
+  *
+  * Disable using per session thread pool and use the shared global threadpool.
+  * This should be used in conjunction with OrtApi::CreateEnvWithGlobalThreadPools.
+  *
+  * @param options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class DisablePerSessionThreads_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    DisablePerSessionThreads_OrtSessionOptions(Pointer p) { super(p); }
-      protected DisablePerSessionThreads_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native DisablePerSessionThreads_OrtSessionOptions DisablePerSessionThreads(); public native OrtApi DisablePerSessionThreads(DisablePerSessionThreads_OrtSessionOptions setter);
+  public native OrtStatus DisablePerSessionThreads( OrtSessionOptions options);
 
-  public static class CreateThreadingOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateThreadingOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateThreadingOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtThreadingOptions**") PointerPointer out);
-  }
-  public native CreateThreadingOptions_PointerPointer CreateThreadingOptions(); public native OrtApi CreateThreadingOptions(CreateThreadingOptions_PointerPointer setter);
+  /** \}
+   *  \name OrtThreadingOptions
+   *  \{
+  <p>
+  /** \brief Create an ::OrtThreadingOptions
+  *
+  * @param out [out] Newly created ::OrtThreadingOptions. Must be freed with OrtApi::ReleaseThreadingOptions
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateThreadingOptions( @Cast("OrtThreadingOptions**") PointerPointer out);
+  public native OrtStatus CreateThreadingOptions( @ByPtrPtr OrtThreadingOptions out);
 
-  public static class ReleaseThreadingOptions_OrtThreadingOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseThreadingOptions_OrtThreadingOptions(Pointer p) { super(p); }
-      protected ReleaseThreadingOptions_OrtThreadingOptions() { allocate(); }
-      private native void allocate();
-      public native void call(OrtThreadingOptions input);
-  }
-  public native ReleaseThreadingOptions_OrtThreadingOptions ReleaseThreadingOptions(); public native OrtApi ReleaseThreadingOptions(ReleaseThreadingOptions_OrtThreadingOptions setter);
+  public native void ReleaseThreadingOptions(OrtThreadingOptions input);
 
+  /** \}
+   *  \name OrtModelMetadata
+   *  \{
+  <p>
   /**
-   * @param num_keys contains the number of keys in the custom metadata map
-   * @param keys is an array of null terminated strings (array count = num_keys) allocated using 'allocator'.
-   * The caller is responsible for freeing each string and the pointer array.
-   * 'keys' will be a nullptr if custom metadata map is empty.
-   */
-  public static class ModelMetadataGetCustomMetadataMapKeys_OrtModelMetadata_OrtAllocator_PointerPointer_LongPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetCustomMetadataMapKeys_OrtModelMetadata_OrtAllocator_PointerPointer_LongPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetCustomMetadataMapKeys_OrtModelMetadata_OrtAllocator_PointerPointer_LongPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  *
+  * @param model_metadata [in]
+  * @param allocator [in]
+  * @param keys [out] Array of null terminated strings (array count = num_keys) allocated using {@code allocator}.
+  *  The strings and the pointer array must be freed using {@code allocator}
+  *  {@code keys} will be set to nullptr if the custom metadata map is empty.
+  * @param num_keys [out] Set to the number of elements in the {@code keys} array
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ModelMetadataGetCustomMetadataMapKeys( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer keys, @Cast("int64_t*") LongPointer num_keys);
-  }
-  public native ModelMetadataGetCustomMetadataMapKeys_OrtModelMetadata_OrtAllocator_PointerPointer_LongPointer ModelMetadataGetCustomMetadataMapKeys(); public native OrtApi ModelMetadataGetCustomMetadataMapKeys(ModelMetadataGetCustomMetadataMapKeys_OrtModelMetadata_OrtAllocator_PointerPointer_LongPointer setter);
+  public native OrtStatus ModelMetadataGetCustomMetadataMapKeys( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer keys, @Cast("int64_t*") LongBuffer num_keys);
+  public native OrtStatus ModelMetadataGetCustomMetadataMapKeys( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char***") @ByPtrPtr PointerPointer keys, @Cast("int64_t*") long[] num_keys);
 
-  // Override symbolic dimensions (by specific name strings) with actual values
-  // if known at session initialization time to enable optimizations that can
-  // take advantage of fixed values (such as memory planning, etc)
-  public static class AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long(Pointer p) { super(p); }
-      protected AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /**
+  *
+  * Override symbolic dimensions (by specific name strings) with actual values
+  * if known at session initialization time to enable optimizations that can
+  * take advantage of fixed values (such as memory planning, etc)
+  *
+  */
+  public native OrtStatus AddFreeDimensionOverrideByName(
                     OrtSessionOptions options, @Cast("const char*") BytePointer dim_name,
                     @Cast("int64_t") long dim_value);
-  }
-  public native AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long AddFreeDimensionOverrideByName(); public native OrtApi AddFreeDimensionOverrideByName(AddFreeDimensionOverrideByName_OrtSessionOptions_BytePointer_long setter);
+  public native OrtStatus AddFreeDimensionOverrideByName(
+                    OrtSessionOptions options, String dim_name,
+                    @Cast("int64_t") long dim_value);
 
-  /**
-   * @param out_ptr will hold a pointer to the array of char *
-   * representing available providers.
-   * @param provider_length is a pointer to an int variable where
-   * the number of available providers will be added.
-   * The caller is responsible for freeing each char * and the pointer
-   * array by calling ReleaseAvailableProviders().
-   */
-  public static class GetAvailableProviders_PointerPointer_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetAvailableProviders_PointerPointer_IntPointer(Pointer p) { super(p); }
-      protected GetAvailableProviders_PointerPointer_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("char***") @ByPtrPtr PointerPointer out_ptr,
-                    IntPointer provider_length);
-  }
-  public native GetAvailableProviders_PointerPointer_IntPointer GetAvailableProviders(); public native OrtApi GetAvailableProviders(GetAvailableProviders_PointerPointer_IntPointer setter);
+  /** \}
+   *  \name Misc
+   *  \{
+  <p>
+  /** \brief Get the names of all available providers
+  *
+  * \note The providers in the list are not guaranteed to be usable. They may fail to load due to missing system dependencies.
+  *    For example, if the CUDA/cuDNN libraries are not installed, the CUDA provider will report an error when it is added to the session options.
+  *
+  * @param out_ptr [out] Set to a pointer to an array of null terminated strings of the available providers. The entries and the
+  *    array itself must be freed using OrtApi::ReleaseAvailableProviders
+  * @param provider_length [out] Set to the number of entries in the {@code out_ptr} array
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetAvailableProviders( @Cast("char***") @ByPtrPtr PointerPointer out_ptr, IntPointer provider_length);
+  public native OrtStatus GetAvailableProviders( @Cast("char***") @ByPtrPtr PointerPointer out_ptr, IntBuffer provider_length);
+  public native OrtStatus GetAvailableProviders( @Cast("char***") @ByPtrPtr PointerPointer out_ptr, int[] provider_length);
 
-  /**
-   * @param ptr is the pointer to an array of available providers you
-   * get after calling GetAvailableProviders().
-   * @param providers_length is the number of available providers.
-   */
-  public static class ReleaseAvailableProviders_PointerPointer_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseAvailableProviders_PointerPointer_int(Pointer p) { super(p); }
-      protected ReleaseAvailableProviders_PointerPointer_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("char**") PointerPointer ptr,
+  /** \brief Release data from OrtApi::GetAvailableProviders
+  *
+  * @param ptr [in] The {@code out_ptr} result from OrtApi::GetAvailableProviders.
+  * @param providers_length [in] The {@code provider_length} result from OrtApi::GetAvailableProviders
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus ReleaseAvailableProviders( @Cast("char**") PointerPointer ptr,
                     int providers_length);
-  }
-  public native ReleaseAvailableProviders_PointerPointer_int ReleaseAvailableProviders(); public native OrtApi ReleaseAvailableProviders(ReleaseAvailableProviders_PointerPointer_int setter);
+  public native OrtStatus ReleaseAvailableProviders( @Cast("char**") @ByPtrPtr BytePointer ptr,
+                    int providers_length);
+  public native OrtStatus ReleaseAvailableProviders( @Cast("char**") @ByPtrPtr ByteBuffer ptr,
+                    int providers_length);
+  public native OrtStatus ReleaseAvailableProviders( @Cast("char**") @ByPtrPtr byte[] ptr,
+                    int providers_length);
 
-  /**
-     * This API returns a length of string element at [index]. For sparse tensors
-     * it will return a string element of sparse values. It is an error to request
-     * an out of bounds element.
-     * 
-     * @param value [in] - A tensor created from OrtCreateTensor... function.
-     * @param index [in] - flat index of string tensor element, length of element at index will be returned.
-     * @param out [out] - number of UTF-8 bytes that the string contains
-     */
-  public static class GetStringTensorElementLength_OrtValue_long_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetStringTensorElementLength_OrtValue_long_SizeTPointer(Pointer p) { super(p); }
-      protected GetStringTensorElementLength_OrtValue_long_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("size_t") long index, @Cast("size_t*") SizeTPointer out);
-  }
-  public native GetStringTensorElementLength_OrtValue_long_SizeTPointer GetStringTensorElementLength(); public native OrtApi GetStringTensorElementLength(GetStringTensorElementLength_OrtValue_long_SizeTPointer setter);
+  /** \}
+   *  \name OrtValue
+   *  \{
+  <p>
+  /** \brief Get the length of a single string in a string tensor
+  *
+  * @param value [in] A string tensor
+  * @param index [in] Index of the string in the tensor
+  * @param out [out] Set to number of bytes of the string element
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetStringTensorElementLength( @Const OrtValue value, @Cast("size_t") long index, @Cast("size_t*") SizeTPointer out);
 
-  /**
-     * This API will return a copy UTF-8 data contained with a string element at the specified index.
-     * For sparse tensors it would return a string element of sparse values. It is an error to request an out
-     * of bounds element.
-     * 
-     * @param s string element contents in UTF-8 encoding. The string is NOT null-terminated.
-     * @param value A tensor created from OrtCreateTensor... function.
-     * @param s_len element length, get it from OrtGetStringTensorElementLength.
-     * @param index offset of element of tensor to return.
-     */
-  public static class GetStringTensorElement_OrtValue_long_long_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetStringTensorElement_OrtValue_long_long_Pointer(Pointer p) { super(p); }
-      protected GetStringTensorElement_OrtValue_long_long_Pointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, @Cast("size_t") long s_len, @Cast("size_t") long index, Pointer s);
-  }
-  public native GetStringTensorElement_OrtValue_long_long_Pointer GetStringTensorElement(); public native OrtApi GetStringTensorElement(GetStringTensorElement_OrtValue_long_long_Pointer setter);
+  /** \brief Get a single string from a string tensor
+  *
+  * @param value [in] A string tensor
+  * @param s_len [in] Number of bytes in the {@code s} buffer. Must match the value returned by OrtApi::GetStringTensorElementLength.
+  * @param index [in] Index of the string in the tensor
+  * @param s [out] The string element contents in UTF-8 encoding. The string is NOT null-terminated.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetStringTensorElement( @Const OrtValue value, @Cast("size_t") long s_len, @Cast("size_t") long index, Pointer s);
 
-  /**
-     * @param value - A tensor created from OrtCreateTensor... function.
-     * @param s - A null terminated UTF-8 encoded string.
-     * @param index - index of string tensor element to fill
-     */
-  public static class FillStringTensorElement_OrtValue_BytePointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    FillStringTensorElement_OrtValue_BytePointer_long(Pointer p) { super(p); }
-      protected FillStringTensorElement_OrtValue_BytePointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue value, @Cast("const char*") BytePointer s, @Cast("size_t") long index);
-  }
-  public native FillStringTensorElement_OrtValue_BytePointer_long FillStringTensorElement(); public native OrtApi FillStringTensorElement(FillStringTensorElement_OrtValue_BytePointer_long setter);
+  /** \brief Set a single string in a string tensor
+  *
+  * @param value [in] A string tensor
+  * @param s [in] A null terminated UTF-8 encoded string
+  * @param index [in] Index of the string in the tensor to set
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus FillStringTensorElement( OrtValue value, @Cast("const char*") BytePointer s, @Cast("size_t") long index);
+  public native OrtStatus FillStringTensorElement( OrtValue value, String s, @Cast("size_t") long index);
 
-  /**
-     * Set a single session configuration entry as a pair of strings
-     * If a configuration with same key exists, this will overwrite the configuration with the given config_value
-     * @param config_key    A null terminated string representation of the config key
-     * @param config_value  A null terminated string representation of the config value
-     * The config_key and the format of config_value are defined in onnxruntime_session_options_config_keys.h
-     */
-  public static class AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer(Pointer p) { super(p); }
-      protected AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options,
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Set a session configuration entry as a pair of strings
+  *
+  * If a configuration with same key exists, this will overwrite the configuration with the given config_value.
+  *
+  * The config_key and the format of config_value are defined in onnxruntime_session_options_config_keys.h
+  *
+  * @param options [in]
+  * @param config_key [in] A null terminated string representation of the config key
+  * @param config_value [in] A null terminated string representation of the config value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus AddSessionConfigEntry( OrtSessionOptions options,
                     @Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
-  }
-  public native AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer AddSessionConfigEntry(); public native OrtApi AddSessionConfigEntry(AddSessionConfigEntry_OrtSessionOptions_BytePointer_BytePointer setter);
+  public native OrtStatus AddSessionConfigEntry( OrtSessionOptions options,
+                    String config_key, String config_value);
 
-  /** 
-   * This API returns an allocator bound to the provided OrtSession instance according 
-   * to the spec within mem_info if successful
-   * @param sess valid OrtSession instance
-   * @param mem_info - valid OrtMemoryInfo instance
-   * @param - out a ptr to an instance of OrtAllocator which wraps the allocator 
-              bound to the OrtSession instance
-              Freeing the returned pointer only frees the OrtAllocator instance and not
-              the wrapped session owned allocator itself.
-   * @return OrtStatus or nullptr if successful
-   */
-  public static class CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer(Pointer p) { super(p); }
-      protected CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Const OrtMemoryInfo mem_info,
+  /** \}
+   *  \name OrtAllocator
+   *  \{
+  <p>
+  /** \brief Create an allocator for an ::OrtSession following an ::OrtMemoryInfo
+  *
+  * @param session [in]
+  * @param mem_info [in] valid ::OrtMemoryInfo instance
+  * @param out [out] Newly created ::OrtAllocator. Must be freed with OrtApi::ReleaseAllocator
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateAllocator( @Const OrtSession session, @Const OrtMemoryInfo mem_info,
                     @Cast("OrtAllocator**") PointerPointer out);
-  }
-  public native CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer CreateAllocator(); public native OrtApi CreateAllocator(CreateAllocator_OrtSession_OrtMemoryInfo_PointerPointer setter);
+  public native OrtStatus CreateAllocator( @Const OrtSession session, @Const OrtMemoryInfo mem_info,
+                    @ByPtrPtr OrtAllocator out);
 
-  // Release instance of OrtAllocator obtained from CreateAllocator API
-  public static class ReleaseAllocator_OrtAllocator extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseAllocator_OrtAllocator(Pointer p) { super(p); }
-      protected ReleaseAllocator_OrtAllocator() { allocate(); }
-      private native void allocate();
-      public native void call(OrtAllocator input);
-  }
-  public native ReleaseAllocator_OrtAllocator ReleaseAllocator(); public native OrtApi ReleaseAllocator(ReleaseAllocator_OrtAllocator setter);
+  /** \brief Release an ::OrtAllocator obtained from OrtApi::CreateAllocator
+  */
+  public native void ReleaseAllocator(OrtAllocator input);
 
-  public static class RunWithBinding_OrtSession_OrtRunOptions_OrtIoBinding extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RunWithBinding_OrtSession_OrtRunOptions_OrtIoBinding(Pointer p) { super(p); }
-      protected RunWithBinding_OrtSession_OrtRunOptions_OrtIoBinding() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSession sess, @Const OrtRunOptions run_options, @Const OrtIoBinding binding_ptr);
-  }
-  public native RunWithBinding_OrtSession_OrtRunOptions_OrtIoBinding RunWithBinding(); public native OrtApi RunWithBinding(RunWithBinding_OrtSession_OrtRunOptions_OrtIoBinding setter);
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief Run a model using Io Bindings for the inputs & outputs
+  *
+  * @see OrtApi::Run
+  *
+  * @param session [in]
+  * @param run_options [in]
+  * @param binding_ptr [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus RunWithBinding( OrtSession session, @Const OrtRunOptions run_options, @Const OrtIoBinding binding_ptr);
 
-  // Creates an IoBinding instance that allows one to bind pre-allocated OrtValues
-  // to input names. Thus if you want to use a raw on device buffer as input or output
-  // you can avoid extra copy during runtime.
-  public static class CreateIoBinding_OrtSession_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateIoBinding_OrtSession_PointerPointer(Pointer p) { super(p); }
-      protected CreateIoBinding_OrtSession_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSession sess, @Cast("OrtIoBinding**") PointerPointer out);
-  }
-  public native CreateIoBinding_OrtSession_PointerPointer CreateIoBinding(); public native OrtApi CreateIoBinding(CreateIoBinding_OrtSession_PointerPointer setter);
+  /** \brief Create an ::OrtIoBinding instance
+  *
+  * An IoBinding object allows one to bind pre-allocated ::OrtValue%s to input names.
+  * Thus if you want to use a raw on device buffer as input or output you can avoid
+  * extra copy during runtime.
+  *
+  * @param session [in]
+  * @param out [out] Newly created ::OrtIoBinding. Must be freed with OrtApi::ReleaseIoBinding
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateIoBinding( OrtSession session, @Cast("OrtIoBinding**") PointerPointer out);
+  public native OrtStatus CreateIoBinding( OrtSession session, @ByPtrPtr OrtIoBinding out);
 
-  // Release instance or OrtIoBinding obtained from CreateIoBinding API
-  public static class ReleaseIoBinding_OrtIoBinding extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseIoBinding_OrtIoBinding(Pointer p) { super(p); }
-      protected ReleaseIoBinding_OrtIoBinding() { allocate(); }
-      private native void allocate();
-      public native void call(OrtIoBinding input);
-  }
-  public native ReleaseIoBinding_OrtIoBinding ReleaseIoBinding(); public native OrtApi ReleaseIoBinding(ReleaseIoBinding_OrtIoBinding setter);
+  /** \}
+   *  \name OrtIoBinding
+   *  \{
+  <p>
+  /** \brief Release an ::OrtIoBinding obtained from OrtApi::CreateIoBinding
+  */
+  public native void ReleaseIoBinding(OrtIoBinding input);
 
-  /**
-   * The function will bind the OrtValue to a specified input name.
-   * The OrtValue must be a Tensor. ORT would use that value in place of input for the specified name.
-   * @param binding_ptr - an instance of OrtIoBinding created by CreateIoBinding()
-   * @param name - name for the model input
-   * @param  val_ptr - OrtValue of Tensor type.
-   * @return OrtStatus instance on error which the caller is responsible to free or nullptr on success
-   */
-  public static class BindInput_OrtIoBinding_BytePointer_OrtValue extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    BindInput_OrtIoBinding_BytePointer_OrtValue(Pointer p) { super(p); }
-      protected BindInput_OrtIoBinding_BytePointer_OrtValue() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtValue val_ptr);
-  }
-  public native BindInput_OrtIoBinding_BytePointer_OrtValue BindInput(); public native OrtApi BindInput(BindInput_OrtIoBinding_BytePointer_OrtValue setter);
+  /** \brief Bind an ::OrtValue to an ::OrtIoBinding input
+  *
+  * When using OrtApi::RunWithBinding this value is used for the named input
+  *
+  * @param binding_ptr [in]
+  * @param name [in] Name for the model input
+  * @param val_ptr [in] ::OrtValue of Tensor type.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus BindInput( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtValue val_ptr);
+  public native OrtStatus BindInput( OrtIoBinding binding_ptr, String name, @Const OrtValue val_ptr);
 
-  /**
-   * The function will bind the OrtValue to the specified output name.
-   * The OrtValue must be a Tensor. ORT would use that value in place of output for the specified name.
-   *
-   * @param binding_ptr - an instance of OrtIoBinding created by CreateIoBinding()
-   * @param name - name for the model output
-   * @param  val_ptr - OrtValue of Tensor type.
-   * @return OrtStatus instance on error which the caller is responsible to free or nullptr on success
-   */
-  public static class BindOutput_OrtIoBinding_BytePointer_OrtValue extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    BindOutput_OrtIoBinding_BytePointer_OrtValue(Pointer p) { super(p); }
-      protected BindOutput_OrtIoBinding_BytePointer_OrtValue() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtValue val_ptr);
-  }
-  public native BindOutput_OrtIoBinding_BytePointer_OrtValue BindOutput(); public native OrtApi BindOutput(BindOutput_OrtIoBinding_BytePointer_OrtValue setter);
+  /** \brief Bind an ::OrtValue to an ::OrtIoBinding output
+  *
+  * When using OrtApi::RunWithBinding this value is used for the named output
+  *
+  * @param binding_ptr [in]
+  * @param name [in] Null terminated string of the model output name
+  * @param val_ptr [in] ::OrtValue of Tensor type.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus BindOutput( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtValue val_ptr);
+  public native OrtStatus BindOutput( OrtIoBinding binding_ptr, String name, @Const OrtValue val_ptr);
 
-  /**
-   * The function will bind the OrtValue to a device which specification is contained within OrtMemoryInfo
-   * You can either create an instance of OrtMemoryInfo with a device id or obtain one from the allocator that you are created/using
-   * This is useful when one or more outputs have dynamic shapes and, it is hard to pre-allocated and bind a chunk of
-   * memory within OrtValue ahead of time.
-   *
-   * @param binding_ptr - an instance of OrtIoBinding created by CreateIoBinding()
-   * @param name - name for the model output
-   * @param  mem_info_ptr - OrtMemoryInfo
-   * @return OrtStatus instance on error which the caller is responsible to free or nullptr on success
-   */
-  public static class BindOutputToDevice_OrtIoBinding_BytePointer_OrtMemoryInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    BindOutputToDevice_OrtIoBinding_BytePointer_OrtMemoryInfo(Pointer p) { super(p); }
-      protected BindOutputToDevice_OrtIoBinding_BytePointer_OrtMemoryInfo() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtMemoryInfo val_ptr);
-  }
-  public native BindOutputToDevice_OrtIoBinding_BytePointer_OrtMemoryInfo BindOutputToDevice(); public native OrtApi BindOutputToDevice(BindOutputToDevice_OrtIoBinding_BytePointer_OrtMemoryInfo setter);
+  /** \brief Bind an ::OrtIoBinding output to a device
+  *
+  * Binds the ::OrtValue to a device which is specified by ::OrtMemoryInfo.
+  * You can either create an instance of ::OrtMemoryInfo with a device id or obtain one from the allocator that you have created/are using
+  * This is useful when one or more outputs have dynamic shapes and, it is hard to pre-allocate and bind a chunk of
+  * memory within ::OrtValue ahead of time.
+  *
+  * @see OrtApi::RunWithBinding
+  *
+  * @param binding_ptr [in]
+  * @param name [in] Null terminated string of the device name
+  * @param mem_info_ptr [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus BindOutputToDevice( OrtIoBinding binding_ptr, @Cast("const char*") BytePointer name, @Const OrtMemoryInfo mem_info_ptr);
+  public native OrtStatus BindOutputToDevice( OrtIoBinding binding_ptr, String name, @Const OrtMemoryInfo mem_info_ptr);
 
-  /**
-    * The function returns the names of the outputs in the order they were bound. This is useful after running the model
-    * with bound outputs because the returned names are in order in which output OrtValues are returned. This API is optional
-    * to use. If you knew the order of outputs and its names you used for binding you would not need to use this API.
-    *
-    * @param  binding_ptr - a ptr to an instance of OrtIoBinding created obtained from CreateIoBinding()
-    * @param  allocator - a ptr to an instance of OrtAllocator obtained with CreateAllocator() or GetAllocatorWithDefaultOptions()
-    *                      the specified allocator will be used to allocate continuous buffers for output strings and lengths.
-    * @param buffer - pointer to a continuous buffer of non-zero terminated UTF-8 encoded strings. The number of strings stored is returned count parameter.
-    *                 this buffer will be allocated with the specified allocator and must be freed after it is no longer needed.
-    * @param lengths - a pointer to a continuous buffer of size_t lengths of strings returned in the buffer. The number of items is returned
-    *                  in the count. This buffer is allocated with the specified allocator and must be freed after it is no longer needed.
-    * \para count - is the number of strings returned. If the instance of OrtIoBiding has no bound outputs, zero is returned,
-    *              no memory allocation is performed and buffer and lengths are nullptr on return.
-    */
-  public static class GetBoundOutputNames_OrtIoBinding_OrtAllocator_PointerPointer_PointerPointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetBoundOutputNames_OrtIoBinding_OrtAllocator_PointerPointer_PointerPointer_SizeTPointer(Pointer p) { super(p); }
-      protected GetBoundOutputNames_OrtIoBinding_OrtAllocator_PointerPointer_PointerPointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
+  /** \brief Get the names of an ::OrtIoBinding's outputs
+  *
+  * Returns the names of the outputs in the order they were bound. This is useful after running the model
+  * with bound outputs because the returned names are in order in which output ::OrtValue are returned. This is useful if
+  * the order of outputs and their names is not known.
+  *
+  * @param binding_ptr [in]
+  * @param allocator [in] Allocator used to allocate continuous buffers for output strings and lengths.
+  * @param buffer [out] Returns an array of non-null terminated UTF-8 strings. The number of strings stored is returned in the count parameter.
+  *   This buffer is allocated using {@code allocator} and must be freed using it.
+  * @param lengths [out] Returns an array of {@code count} lengths of the strings returned in {@code buffer}
+  *   This buffer is allocated using {@code allocator} and must be freed using it.
+  * @param count [out] Number of strings returned. If {@code binding_ptr} has no bound outputs, zero is returned,
+  *              no memory allocation is performed and buffer and lengths are set to nullptr.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetBoundOutputNames( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
                     @Cast("char**") PointerPointer buffer, @Cast("size_t**") PointerPointer lengths, @Cast("size_t*") SizeTPointer count);
-  }
-  public native GetBoundOutputNames_OrtIoBinding_OrtAllocator_PointerPointer_PointerPointer_SizeTPointer GetBoundOutputNames(); public native OrtApi GetBoundOutputNames(GetBoundOutputNames_OrtIoBinding_OrtAllocator_PointerPointer_PointerPointer_SizeTPointer setter);
+  public native OrtStatus GetBoundOutputNames( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr BytePointer buffer, @Cast("size_t**") @ByPtrPtr SizeTPointer lengths, @Cast("size_t*") SizeTPointer count);
+  public native OrtStatus GetBoundOutputNames( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr ByteBuffer buffer, @Cast("size_t**") @ByPtrPtr SizeTPointer lengths, @Cast("size_t*") SizeTPointer count);
+  public native OrtStatus GetBoundOutputNames( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
+                    @Cast("char**") @ByPtrPtr byte[] buffer, @Cast("size_t**") @ByPtrPtr SizeTPointer lengths, @Cast("size_t*") SizeTPointer count);
 
-  /**
-    * The function returns an array of pointers to individually allocated OrtValues that contain results of a model execution with RunWithBinding()
-    * The array contains the same number of OrtValues and they are in the same order as they were bound with BindOutput()
-    * or BindOutputToDevice().
-    * The returned OrtValues must be individually released after they are no longer needed.
-    * The array is allocated using the specified instance of the allocator and must be freed using the same allocator after
-    * all the OrtValues contained therein are individually released.
-    *
-    * @param binding_ptr - instance of OrtIoBidning
-    * @param allocator - instance of allocator to allocate output array
-    * @param output - pointer to the allocated buffer. Returns nullptr if no outputs.
-    * @param output_count - pointer to the number of OrtValues returned. Zero if no outputs.
-    */
-  public static class GetBoundOutputValues_OrtIoBinding_OrtAllocator_PointerPointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetBoundOutputValues_OrtIoBinding_OrtAllocator_PointerPointer_SizeTPointer(Pointer p) { super(p); }
-      protected GetBoundOutputValues_OrtIoBinding_OrtAllocator_PointerPointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
+  /** \brief Get the output ::OrtValue objects from an ::OrtIoBinding
+  *
+  * Returns an array of pointers to individually allocated ::OrtValue%s that contain results of a model execution with OrtApi::RunWithBinding
+  * The array contains the same number of ::OrtValue%s and they are in the same order as they were bound with OrtApi::BindOutput
+  * or OrtApi::BindOutputToDevice.
+  *
+  * The returned ::OrtValue%s must be released using OrtApi::ReleaseValue after they are no longer needed.
+  * The array is allocated using the specified instance of the allocator and must be freed using the same allocator after
+  * all the ::OrtValue%s contained therein are individually released.
+  *
+  * @param binding_ptr [in]
+  * @param allocator [in] Allocator used to allocate output array
+  * @param output [out] Set to the allocated array of allocated ::OrtValue outputs. Set to nullptr if there are 0 outputs.
+  * @param output_count [out] Set to number of ::OrtValue%s returned
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetBoundOutputValues( @Const OrtIoBinding binding_ptr, OrtAllocator allocator,
                     @Cast("OrtValue***") @ByPtrPtr PointerPointer output, @Cast("size_t*") SizeTPointer output_count);
-  }
-  public native GetBoundOutputValues_OrtIoBinding_OrtAllocator_PointerPointer_SizeTPointer GetBoundOutputValues(); public native OrtApi GetBoundOutputValues(GetBoundOutputValues_OrtIoBinding_OrtAllocator_PointerPointer_SizeTPointer setter);
 
-  /** Clears any previously specified bindings for inputs/outputs
+  /** \brief Clears any previously set Inputs for an ::OrtIoBinding
    */
   public static class ClearBoundInputs_OrtIoBinding extends FunctionPointer {
       static { Loader.load(); }
@@ -1959,6 +1998,9 @@ public class OrtApi extends Pointer {
       public native void call(OrtIoBinding binding_ptr);
   }
   public native ClearBoundInputs_OrtIoBinding ClearBoundInputs(); public native OrtApi ClearBoundInputs(ClearBoundInputs_OrtIoBinding setter);
+
+  /** \brief Clears any previously set Outputs for an ::OrtIoBinding
+   */
   public static class ClearBoundOutputs_OrtIoBinding extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1969,593 +2011,629 @@ public class OrtApi extends Pointer {
   }
   public native ClearBoundOutputs_OrtIoBinding ClearBoundOutputs(); public native OrtApi ClearBoundOutputs(ClearBoundOutputs_OrtIoBinding setter);
 
-  /**
-   * Provides element-level access into a tensor.
-   * @param location_values a pointer to an array of index values that specify an element's location in the tensor data blob
-   * @param location_values_count length of location_values
-   * @param out a pointer to the element specified by location_values
-   * e.g.
-   * Given a tensor with overall shape [3,224,224], an element at
-   * location [2,150,128] can be accessed directly.
-   *
-   * This function only works for numeric tensors.
-   * This is a no-copy method whose pointer is only valid until the backing OrtValue is free'd.
-   */
-  public static class TensorAt_OrtValue_LongPointer_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    TensorAt_OrtValue_LongPointer_long_PointerPointer(Pointer p) { super(p); }
-      protected TensorAt_OrtValue_LongPointer_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue value, @Cast("const int64_t*") LongPointer location_values, @Cast("size_t") long location_values_count, @Cast("void**") PointerPointer out);
-  }
-  public native TensorAt_OrtValue_LongPointer_long_PointerPointer TensorAt(); public native OrtApi TensorAt(TensorAt_OrtValue_LongPointer_long_PointerPointer setter);
-
-  /**
-   * Creates an allocator instance and registers it with the env to enable
-   * sharing between multiple sessions that use the same env instance.
-   * Lifetime of the created allocator will be valid for the duration of the environment.
-   * Returns an error if an allocator with the same OrtMemoryInfo is already registered.
-   * @param env OrtEnv instance (must be non-null).
-   * @param mem_info (must be non-null).
-   * @param arena_cfg if nullptr defaults will be used.
-   * See docs/C_API.md for details.
+  /** \}
+   *  \name OrtValue
+   *  \{
+  <p>
+  /** \brief Direct memory access to a specified tensor element
+  *
+  * For example, given a tensor with shape of [3,224,224], a pointer to the element at location [2,150,128] can be retrieved
+  *
+  * This function only works for numeric type tensors (No strings, etc).
+  * This is a no-copy method whose returned pointer is valid until the passed in ::OrtValue is free'd.
+  *
+  * @param value [in]
+  * @param location_values [in] Pointer to an array of index values that specify an element's location relative to its shape
+  * @param location_values_count [in] Number of elements in location_values. Must match the number of elements in the tensor's shape.
+  * @param out [out] Set to a pointer to the element specified
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class CreateAndRegisterAllocator_OrtEnv_OrtMemoryInfo_OrtArenaCfg extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateAndRegisterAllocator_OrtEnv_OrtMemoryInfo_OrtArenaCfg(Pointer p) { super(p); }
-      protected CreateAndRegisterAllocator_OrtEnv_OrtMemoryInfo_OrtArenaCfg() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtEnv env, @Const OrtMemoryInfo mem_info,
+  public native OrtStatus TensorAt( OrtValue value, @Cast("const int64_t*") LongPointer location_values, @Cast("size_t") long location_values_count, @Cast("void**") PointerPointer out);
+  public native OrtStatus TensorAt( OrtValue value, @Cast("const int64_t*") LongPointer location_values, @Cast("size_t") long location_values_count, @Cast("void**") @ByPtrPtr Pointer out);
+  public native OrtStatus TensorAt( OrtValue value, @Cast("const int64_t*") LongBuffer location_values, @Cast("size_t") long location_values_count, @Cast("void**") @ByPtrPtr Pointer out);
+  public native OrtStatus TensorAt( OrtValue value, @Cast("const int64_t*") long[] location_values, @Cast("size_t") long location_values_count, @Cast("void**") @ByPtrPtr Pointer out);
+
+  /** \}
+   *  \name OrtEnv
+   *  \{
+  <p>
+  /** \brief Create an allocator and register it with the ::OrtEnv
+  *
+  * Enables sharing the allocator between multiple sessions that use the same env instance.
+  * Lifetime of the created allocator will be valid for the duration of the environment.
+  * Returns an error if an allocator with the same ::OrtMemoryInfo is already registered.
+  *
+  * See https://onnxruntime.ai/docs/reference/api/c-api.html for details.
+  *
+  * @param env [in] ::OrtEnv instance
+  * @param mem_info [in]
+  * @param arena_cfg [in] Pass nullptr for defaults
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateAndRegisterAllocator( OrtEnv env, @Const OrtMemoryInfo mem_info,
                     @Const OrtArenaCfg arena_cfg);
-  }
-  public native CreateAndRegisterAllocator_OrtEnv_OrtMemoryInfo_OrtArenaCfg CreateAndRegisterAllocator(); public native OrtApi CreateAndRegisterAllocator(CreateAndRegisterAllocator_OrtEnv_OrtMemoryInfo_OrtArenaCfg setter);
 
-  /**
-   * Set the language projection for collecting telemetry data when Env is created
-   * @param projection the source projected language.
+  /** \brief Set language projection
+  *
+  * Set the language projection for collecting telemetry data when Env is created.
+  *
+  * The default is ORT_PROJECTION_C, which means it will classify the language not in the list to C also.
+  *
+  * @param ort_env [in]
+  * @param projection [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class SetLanguageProjection_OrtEnv_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetLanguageProjection_OrtEnv_int(Pointer p) { super(p); }
-      protected SetLanguageProjection_OrtEnv_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv ort_env, @Cast("OrtLanguageProjection") int projection);
-  }
-  public native SetLanguageProjection_OrtEnv_int SetLanguageProjection(); public native OrtApi SetLanguageProjection(SetLanguageProjection_OrtEnv_int setter);
+  public native OrtStatus SetLanguageProjection( @Const OrtEnv ort_env, @Cast("OrtLanguageProjection") int projection);
 
-  /**
-   * On some platforms, this timer may not be as precise as nanoseconds
-   * For instance, on Windows and MacOS, the precision will be ~100ns
-   * @param out is set to the nanoseconds of profiling's start time
-   */
-  public static class SessionGetProfilingStartTimeNs_OrtSession_LongPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionGetProfilingStartTimeNs_OrtSession_LongPointer(Pointer p) { super(p); }
-      protected SessionGetProfilingStartTimeNs_OrtSession_LongPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtSession sess, @Cast("uint64_t*") LongPointer out);
-  }
-  public native SessionGetProfilingStartTimeNs_OrtSession_LongPointer SessionGetProfilingStartTimeNs(); public native OrtApi SessionGetProfilingStartTimeNs(SessionGetProfilingStartTimeNs_OrtSession_LongPointer setter);
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief Return the time that profiling was started
+  *
+  * \note The timer precision varies per platform. On Windows and MacOS, the precision will be ~100ns
+  *
+  * @param session [in]
+  * @param out [out] nanoseconds of profiling's start time
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionGetProfilingStartTimeNs( @Const OrtSession session, @Cast("uint64_t*") LongPointer out);
+  public native OrtStatus SessionGetProfilingStartTimeNs( @Const OrtSession session, @Cast("uint64_t*") LongBuffer out);
+  public native OrtStatus SessionGetProfilingStartTimeNs( @Const OrtSession session, @Cast("uint64_t*") long[] out);
 
-  /**
-   * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
-   * A value of 0 means ORT will pick the default.
-   * A value of 1 means the invoking thread will be used; no threads will be created in the thread pool.
-   */
-  public static class SetGlobalIntraOpNumThreads_OrtThreadingOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetGlobalIntraOpNumThreads_OrtThreadingOptions_int(Pointer p) { super(p); }
-      protected SetGlobalIntraOpNumThreads_OrtThreadingOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options, int intra_op_num_threads);
-  }
-  public native SetGlobalIntraOpNumThreads_OrtThreadingOptions_int SetGlobalIntraOpNumThreads(); public native OrtApi SetGlobalIntraOpNumThreads(SetGlobalIntraOpNumThreads_OrtThreadingOptions_int setter);
-  public static class SetGlobalInterOpNumThreads_OrtThreadingOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetGlobalInterOpNumThreads_OrtThreadingOptions_int(Pointer p) { super(p); }
-      protected SetGlobalInterOpNumThreads_OrtThreadingOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options, int inter_op_num_threads);
-  }
-  public native SetGlobalInterOpNumThreads_OrtThreadingOptions_int SetGlobalInterOpNumThreads(); public native OrtApi SetGlobalInterOpNumThreads(SetGlobalInterOpNumThreads_OrtThreadingOptions_int setter);
+  /** \}
+   *  \name OrtThreadingOptions
+   *  \{
+  <p>
+  /** \brief Set global intra-op thread count
+  *
+  * This configures the global thread pool options to be used in the call to OrtApi::CreateEnvWithGlobalThreadPools
+  *
+  * @param tp_options [in]
+  * @param intra_op_num_threads [in] Number of threads, special values:<br>
+  *    0 = Use default thread count<br>
+  *    1 = The invoking thread will be used; no threads will be created in the thread pool.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalIntraOpNumThreads( OrtThreadingOptions tp_options, int intra_op_num_threads);
 
-  /**
-   * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
-   * Allow spinning of thread pools when their queues are empty. This API will set the value for both
-   * inter_op and intra_op threadpools.
-   * @param allow_spinning valid values are 1 and 0.
-   * 1: threadpool will spin to wait for queue to become non-empty, 0: it won't spin.
-   * Prefer a value of 0 if your CPU usage is very high.
-   */
-  public static class SetGlobalSpinControl_OrtThreadingOptions_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetGlobalSpinControl_OrtThreadingOptions_int(Pointer p) { super(p); }
-      protected SetGlobalSpinControl_OrtThreadingOptions_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options, int allow_spinning);
-  }
-  public native SetGlobalSpinControl_OrtThreadingOptions_int SetGlobalSpinControl(); public native OrtApi SetGlobalSpinControl(SetGlobalSpinControl_OrtThreadingOptions_int setter);
+  /** \brief Set global inter-op thread count
+  *
+  * This configures the global thread pool options to be used in the call to OrtApi::CreateEnvWithGlobalThreadPools
+  *
+  * @param tp_options [in]
+  * @param inter_op_num_threads [in] Number of threads, special values:<br>
+  *    0 = Use default thread count<br>
+  *    1 = The invoking thread will be used; no threads will be created in the thread pool.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalInterOpNumThreads( OrtThreadingOptions tp_options, int inter_op_num_threads);
 
-  /**
-   * Add a pre-allocated initializer to a session. If a model contains an initializer with a name
-   * that is same as the name passed to this API call, ORT will use this initializer instance
-   * instead of deserializing one from the model file. This is useful when you want to share
-   * the same initializer across sessions.
-   * @param name name of the initializer
-   * @param val OrtValue containing the initializer. Lifetime of 'val' and the underlying initializer buffer must be
-   * managed by the user (created using the CreateTensorWithDataAsOrtValue API) and it must outlive the session object
-   * to which it is added.
-   */
-  public static class AddInitializer_OrtSessionOptions_BytePointer_OrtValue extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddInitializer_OrtSessionOptions_BytePointer_OrtValue(Pointer p) { super(p); }
-      protected AddInitializer_OrtSessionOptions_BytePointer_OrtValue() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options, @Cast("const char*") BytePointer name,
+  /** \brief Set global spin control options
+  *
+  * This will configure the global thread pool options to be used in the call to OrtApi::CreateEnvWithGlobalThreadPools.
+  * Allow spinning of thread pools when their queues are empty. This will set the value for both
+  * inter_op and intra_op threadpools.
+  *
+  * @param tp_options [in]
+  * @param allow_spinning [in] Valid values are 0 or 1.<br>
+  *   0 = It won't spin (recommended if CPU usage is high)<br>
+  *   1 = Threadpool will spin to wait for queue to become non-empty
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalSpinControl( OrtThreadingOptions tp_options, int allow_spinning);
+
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Add a pre-allocated initializer to a session
+  *
+  * If a model contains an initializer with a name that is same as the name passed to this call,
+  * ORT will use this initializer instance instead of deserializing one from the model file. This
+  * is useful when you want to share the same initializer across sessions.
+  *
+  * @param options [in]
+  * @param name [in] Null terminated string of the initializer name
+  * @param val [in] ::OrtValue containing the initializer. Its lifetime and the underlying initializer buffer must be
+  *   managed by the user (created using the OrtApi::CreateTensorWithDataAsOrtValue) and it must outlive the session object
+  *   to which it is added.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus AddInitializer( OrtSessionOptions options, @Cast("const char*") BytePointer name,
                     @Const OrtValue val);
-  }
-  public native AddInitializer_OrtSessionOptions_BytePointer_OrtValue AddInitializer(); public native OrtApi AddInitializer(AddInitializer_OrtSessionOptions_BytePointer_OrtValue setter);
+  public native OrtStatus AddInitializer( OrtSessionOptions options, String name,
+                    @Const OrtValue val);
 
+  /** \}
+   *  \name OrtEnv
+   *  \{
+  <p>
   /**
-   * Creates a custom environment with global threadpools and logger that will be shared across sessions.
-   * Use this in conjunction with DisablePerSessionThreads API or else the session will use
-   * its own thread pools.
-   *
-   * @param out should be freed by {@code ReleaseEnv} after use
-   */
-  public static class CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtLoggingFunction logging_function, Pointer logger_param, @Cast("OrtLoggingLevel") int logging_level,
-                    @Cast("const char*") BytePointer logid, @Const OrtThreadingOptions tp_options, @Cast("OrtEnv**") PointerPointer out);
-  }
-  public native CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer CreateEnvWithCustomLoggerAndGlobalThreadPools(); public native OrtApi CreateEnvWithCustomLoggerAndGlobalThreadPools(CreateEnvWithCustomLoggerAndGlobalThreadPools_OrtLoggingFunction_Pointer_int_BytePointer_OrtThreadingOptions_PointerPointer setter);
-
-  /**
-   * Append CUDA execution provider to the session options
-   * If CUDA is not available (due to a non cuda enabled build), this function will return failure.
-   */
-  public static class SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions(Pointer p) { super(p); }
-      protected SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
-                    OrtSessionOptions options, @Const OrtCUDAProviderOptions cuda_options);
-  }
-  public native SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions SessionOptionsAppendExecutionProvider_CUDA(); public native OrtApi SessionOptionsAppendExecutionProvider_CUDA(SessionOptionsAppendExecutionProvider_CUDA_OrtSessionOptions_OrtCUDAProviderOptions setter);
-
-  /**
-   * Append ROCM execution provider to the session options
-   * If ROCM is not available (due to a non rocm enabled build), this function will return failure.
-   */
-  public static class SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions(Pointer p) { super(p); }
-      protected SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
-                    OrtSessionOptions options, @Const OrtROCMProviderOptions rocm_options);
-  }
-  public native SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions SessionOptionsAppendExecutionProvider_ROCM(); public native OrtApi SessionOptionsAppendExecutionProvider_ROCM(SessionOptionsAppendExecutionProvider_ROCM_OrtSessionOptions_OrtROCMProviderOptions setter);
-
-  /**
-   * Append OpenVINO execution provider to the session options
-   * If OpenVINO is not available (due to the OpenVINO provider shared library or its dependencies not being installed), this function will fail.
-   */
-  public static class SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions(Pointer p) { super(p); }
-      protected SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
-                    OrtSessionOptions options, @Const OrtOpenVINOProviderOptions provider_options);
-  }
-  public native SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions SessionOptionsAppendExecutionProvider_OpenVINO(); public native OrtApi SessionOptionsAppendExecutionProvider_OpenVINO(SessionOptionsAppendExecutionProvider_OpenVINO_OrtSessionOptions_OrtOpenVINOProviderOptions setter);
-
-  /**
-   * Use this API to configure the global thread pool options to be used in the call to CreateEnvWithGlobalThreadPools.
-   * When this API is called, flush-to-zero and denormal-as-zero are applied to threads in both intra and inter global thread pool.
-   * Note that an alternative way not using this option at runtime is to train and export a model without denormals
-   * and that's recommended because turning this option on may hurt model accuracy.
-   */
-  public static class SetGlobalDenormalAsZero_OrtThreadingOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetGlobalDenormalAsZero_OrtThreadingOptions(Pointer p) { super(p); }
-      protected SetGlobalDenormalAsZero_OrtThreadingOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtThreadingOptions tp_options);
-  }
-  public native SetGlobalDenormalAsZero_OrtThreadingOptions SetGlobalDenormalAsZero(); public native OrtApi SetGlobalDenormalAsZero(SetGlobalDenormalAsZero_OrtThreadingOptions setter);
-
-  /**
-  * (Deprecated) Use {@code CreateArenaCfgV2} instead
-  * Use this API to create the configuration of an arena that can eventually be used to define
-  * an arena based allocator's behavior
-  * @param max_mem - use 0 to allow ORT to choose the default
-  * @param arena_extend_strategy -  use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
-  * @param initial_chunk_size_bytes - use -1 to allow ORT to choose the default
-  * @param max_dead_bytes_per_chunk - use -1 to allow ORT to choose the default
-  * @param out - a pointer to an OrtArenaCfg instance
-  * @return a nullptr in case of success or a pointer to an OrtStatus instance in case of failure
-  * See docs/C_API.md for details on what the following parameters mean and how to choose these values
+  * Create a custom environment with global threadpools and logger that will be shared across sessions.
+  * Use this in conjunction with OrtApi::DisablePerSessionThreads or else the session will use
+  * its own thread pools.
+  *
+  * @param logging_function [in] A pointer to a logging function.
+  * @param logger_param [in] A pointer to arbitrary data passed as the ::OrtLoggingFunction {@code param} parameter to
+  *                         {@code logging_function}.
+  * @param log_severity_level [in] The log severity level.
+  * @param logid [in] The log identifier.
+  * @param tp_options [in]
+  * @param out [out] Newly created OrtEnv. Must be freed with OrtApi::ReleaseEnv
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class CreateArenaCfg_long_int_int_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateArenaCfg_long_int_int_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateArenaCfg_long_int_int_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes,
+  public native OrtStatus CreateEnvWithCustomLoggerAndGlobalThreadPools( OrtLoggingFunction logging_function, Pointer logger_param, @Cast("OrtLoggingLevel") int log_severity_level,
+                    @Cast("const char*") BytePointer logid, @Const OrtThreadingOptions tp_options, @Cast("OrtEnv**") PointerPointer out);
+  public native OrtStatus CreateEnvWithCustomLoggerAndGlobalThreadPools( OrtLoggingFunction logging_function, Pointer logger_param, @Cast("OrtLoggingLevel") int log_severity_level,
+                    @Cast("const char*") BytePointer logid, @Const OrtThreadingOptions tp_options, @ByPtrPtr OrtEnv out);
+  public native OrtStatus CreateEnvWithCustomLoggerAndGlobalThreadPools( OrtLoggingFunction logging_function, Pointer logger_param, @Cast("OrtLoggingLevel") int log_severity_level,
+                    String logid, @Const OrtThreadingOptions tp_options, @ByPtrPtr OrtEnv out);
+
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Append CUDA provider to session options
+  *
+  * If CUDA is not available (due to a non CUDA enabled build, or if CUDA is not installed on the system), this function will return failure.
+  *
+  * @param options [in]
+  * @param cuda_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_CUDA(
+                    OrtSessionOptions options, @Const OrtCUDAProviderOptions cuda_options);
+
+  /** \brief Append ROCM execution provider to the session options
+  *
+  * If ROCM is not available (due to a non ROCM enabled build, or if ROCM is not installed on the system), this function will return failure.
+  *
+  * @param options [in]
+  * @param rocm_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_ROCM(
+                    OrtSessionOptions options, @Const OrtROCMProviderOptions rocm_options);
+
+  /** \brief Append OpenVINO execution provider to the session options
+  *
+  * If OpenVINO is not available (due to a non OpenVINO enabled build, or if OpenVINO is not installed on the system), this function will fail.
+  *
+  * @param options [in]
+  * @param provider_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_OpenVINO(
+                    OrtSessionOptions options, @Const OrtOpenVINOProviderOptions provider_options);
+
+  /** \}
+   *  \name OrtThreadingOptions
+   *  \{
+  <p>
+  /** \brief Set threading flush-to-zero and denormal-as-zero
+  *
+  * Sets global thread pool options to be used in the call to OrtApi::CreateEnvWithGlobalThreadPools.
+  * Flush-to-zero and denormal-as-zero are applied to threads in both intra and inter global thread pool.
+  * \note This option is not needed if the models used have no denormals. Having no denormals is recommended as this option may hurt model accuracy.
+  *
+  * @param tp_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalDenormalAsZero( OrtThreadingOptions tp_options);
+
+  /** \}
+   *  \name OrtArenaCfg
+   *  \{
+  <p>
+  /** @deprecated Use OrtApi::CreateArenaCfgV2
+  *
+  * This will create the configuration of an arena that can eventually be used to define an arena based allocator's behavior
+  *
+  * @param max_mem [in] Use 0 to allow ORT to choose the default
+  * @param arena_extend_strategy [in] Use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
+  * @param initial_chunk_size_bytes [in] Use -1 to allow ORT to choose the default
+  * @param max_dead_bytes_per_chunk [in] Use -1 to allow ORT to choose the default
+  * @param out [in] A pointer to an OrtArenaCfg instance
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateArenaCfg( @Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes,
                     int max_dead_bytes_per_chunk, @Cast("OrtArenaCfg**") PointerPointer out);
-  }
-  public native CreateArenaCfg_long_int_int_int_PointerPointer CreateArenaCfg(); public native OrtApi CreateArenaCfg(CreateArenaCfg_long_int_int_int_PointerPointer setter);
+  public native OrtStatus CreateArenaCfg( @Cast("size_t") long max_mem, int arena_extend_strategy, int initial_chunk_size_bytes,
+                    int max_dead_bytes_per_chunk, @ByPtrPtr OrtArenaCfg out);
 
-  public static class ReleaseArenaCfg_OrtArenaCfg extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleaseArenaCfg_OrtArenaCfg(Pointer p) { super(p); }
-      protected ReleaseArenaCfg_OrtArenaCfg() { allocate(); }
-      private native void allocate();
-      public native void call(OrtArenaCfg input);
-  }
-  public native ReleaseArenaCfg_OrtArenaCfg ReleaseArenaCfg(); public native OrtApi ReleaseArenaCfg(ReleaseArenaCfg_OrtArenaCfg setter);
+  public native void ReleaseArenaCfg(OrtArenaCfg input);
 
+  /** \}
+   *  \name OrtModelMetadata
+   *  \{
+  <p>
   /**
-  * Use this API to obtain the description of the graph present in the model
+  * Use this to obtain the description of the graph present in the model
   * (doc_string field of the GraphProto message within the ModelProto message).
   * If it doesn't exist, an empty string will be returned.
-  * @param model_metadata - an instance of OrtModelMetadata
-  * @param allocator - allocator used to allocate the string that will be returned back
-  * @param value - is set to a null terminated string allocated using 'allocator'.
-    The caller is responsible for freeing it.
+  *
+  * @param model_metadata [in] An instance of ::OrtModelMetadata
+  * @param allocator [in] Allocator used to allocate the string that will be returned back
+  * @param value [out] Set to a null terminated string allocated using {@code allocator}.  The caller is responsible for freeing it using {@code allocator}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtModelMetadata model_metadata,
+  public native OrtStatus ModelMetadataGetGraphDescription( @Const OrtModelMetadata model_metadata,
                     OrtAllocator allocator, @Cast("char**") PointerPointer value);
-  }
-  public native ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer ModelMetadataGetGraphDescription(); public native OrtApi ModelMetadataGetGraphDescription(ModelMetadataGetGraphDescription_OrtModelMetadata_OrtAllocator_PointerPointer setter);
-  /**
-   * Append TensorRT execution provider to the session options with TensorRT provider options. 
-   * If TensorRT is not available (due to a non TensorRT enabled build), this function will return failure.
-   */
-  public static class SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions(Pointer p) { super(p); }
-      protected SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
+  public native OrtStatus ModelMetadataGetGraphDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer value);
+  public native OrtStatus ModelMetadataGetGraphDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer value);
+  public native OrtStatus ModelMetadataGetGraphDescription( @Const OrtModelMetadata model_metadata,
+                    OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] value);
+
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Append TensorRT provider to session options
+  *
+  * If TensorRT is not available (due to a non TensorRT enabled build, or if TensorRT is not installed on the system), this function will return failure.
+  *
+  * @param options [in]
+  * @param tensorrt_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_TensorRT(
                     OrtSessionOptions options, @Const OrtTensorRTProviderOptions tensorrt_options);
-  }
-  public native SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions SessionOptionsAppendExecutionProvider_TensorRT(); public native OrtApi SessionOptionsAppendExecutionProvider_TensorRT(SessionOptionsAppendExecutionProvider_TensorRT_OrtSessionOptions_OrtTensorRTProviderOptions setter);
 
-  /**
-  * Set the current device id of the GPU execution provider (cuda/tensorrt/rocm). The device id should be less
-  * than the total number of devices available. Using this API makes sense only when doing multi-GPU inferencing.
+  /** \}
+   *  \name Misc
+   *  \{
+  <p>
+  /** \brief Set current GPU device ID
+  *
+  * Set the current device id of the GPU execution provider (CUDA/tensorrt/rocm). The device id should be less
+  * than the total number of devices available. This is only useful when multiple-GPUs are installed and it is
+  * required to restrict execution to a single GPU.
+  *
+  * @param device_id [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class SetCurrentGpuDeviceId_int extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SetCurrentGpuDeviceId_int(Pointer p) { super(p); }
-      protected SetCurrentGpuDeviceId_int() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( int device_id);
-  }
-  public native SetCurrentGpuDeviceId_int SetCurrentGpuDeviceId(); public native OrtApi SetCurrentGpuDeviceId(SetCurrentGpuDeviceId_int setter);
+  public native OrtStatus SetCurrentGpuDeviceId( int device_id);
 
-  /**
-   * Get the current device id of the GPU execution provider (cuda/tensorrt/rocm).
-   */
-  public static class GetCurrentGpuDeviceId_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetCurrentGpuDeviceId_IntPointer(Pointer p) { super(p); }
-      protected GetCurrentGpuDeviceId_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( IntPointer device_id);
-  }
-  public native GetCurrentGpuDeviceId_IntPointer GetCurrentGpuDeviceId(); public native OrtApi GetCurrentGpuDeviceId(GetCurrentGpuDeviceId_IntPointer setter);
+  /** \brief Get current GPU device ID
+  *
+  * Get the current device id of the GPU execution provider (CUDA/tensorrt/rocm).
+  *
+  * @see OrtApi::SetCurrentGpuDeviceId
+  *
+  * @param device_id [out]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetCurrentGpuDeviceId( IntPointer device_id);
+  public native OrtStatus GetCurrentGpuDeviceId( IntBuffer device_id);
+  public native OrtStatus GetCurrentGpuDeviceId( int[] device_id);
 
-  /**
-     * Fetch an array of int64_t values stored as an attribute in the graph node
-     * \info - OrtKernelInfo instance
-     * \name - name of the attribute to be parsed
-     * \out - pointer to memory where the attribute's contents are to be stored
-     * \size - actual size of attribute array
-     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
-        array's size, and a success status is returned.
-        <p>
-        If the {@code size} parameter is greater than or equal to the actual attribute array's size,
-        the value of {@code size} is set to the true size of the attribute array's size,
-        the provided memory is filled with the attribute's contents,
-        and a success status is returned.
-        <p>
-        If the {@code size} parameter is lesser than the actual attribute array's size and {@code out}
-        is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
-        and a failure status is returned.)
-     */
-  public static class KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer(Pointer p) { super(p); }
-      protected KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+  /** \}
+   *  \name OrtKernelInfo
+   *  \{
+  <p>
+  /** \brief Fetch an array of int64_t values stored as an attribute in the graph node
+  *
+  *
+  * If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
+  * array's size, and a success status is returned.
+  *
+  * If the {@code size} parameter is greater than or equal to the actual attribute array's size,
+  * the value of {@code size} is set to the true size of the attribute array's size,
+  * the provided memory is filled with the attribute's contents,
+  * and a success status is returned.
+  *
+  * If the {@code size} parameter is less than the actual attribute array's size and {@code out}
+  * is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
+  * and a failure status is returned.)
+  *
+  * @param info [in] instance
+  * @param name [in] name of the attribute to be parsed
+  * @param out [out] pointer to memory where the attribute's contents are to be stored
+  * @param size [in, out] actual size of attribute array
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
                     FloatPointer out, @Cast("size_t*") SizeTPointer size);
-  }
-  public native KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer KernelInfoGetAttributeArray_float(); public native OrtApi KernelInfoGetAttributeArray_float(KernelInfoGetAttributeArray_float_OrtKernelInfo_BytePointer_FloatPointer_SizeTPointer setter);
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, String name,
+                    FloatBuffer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    float[] out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, String name,
+                    FloatPointer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    FloatBuffer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_float( @Const OrtKernelInfo info, String name,
+                    float[] out, @Cast("size_t*") SizeTPointer size);
 
-  /**
-     * Fetch an array of int64_t values stored as an attribute in the graph node
-     * \info - OrtKernelInfo instance
-     * \name - name of the attribute to be parsed
-     * \out - pointer to memory where the attribute's contents are to be stored
-     * \size - actual size of attribute array
-     * (If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
-        array's size, and a success status is returned.
-        <p>
-        If the {@code size} parameter is greater than or equal to the actual attribute array's size,
-        the value of {@code size} is set to the true size of the attribute array's size,
-        the provided memory is filled with the attribute's contents,
-        and a success status is returned.
-        <p>
-        If the {@code size} parameter is lesser than the actual attribute array's size and {@code out}
-        is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
-        and a failure status is returned.)
-     */
-  public static class KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer(Pointer p) { super(p); }
-      protected KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
-                    @Cast("int64_t*") LongPointer out, @Cast("size_t*") SizeTPointer size);
-  }
-  public native KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer KernelInfoGetAttributeArray_int64(); public native OrtApi KernelInfoGetAttributeArray_int64(KernelInfoGetAttributeArray_int64_OrtKernelInfo_BytePointer_LongPointer_SizeTPointer setter);
-
-  /**
-  * Use this API to create the configuration of an arena that can eventually be used to define
-  * an arena based allocator's behavior
-  * @param arena_config_keys - keys to configure the arena
-  * @param arena_config_values - values to configure the arena
-  * @param num_keys - number of keys passed in
-  * Supported keys are (See docs/C_API.md for details on what the following parameters mean and how to choose these values.):
-  * "max_mem": Maximum memory that can be allocated by the arena based allocator.
-     Use 0 for ORT to pick the best value. Default is 0.
-  * "arena_extend_strategy": 0 = kNextPowerOfTwo, 1 = kSameAsRequested.
-     Use -1 to allow ORT to choose the default.
-  * "initial_chunk_size_bytes": (Possible) Size of the first allocation in the arena.
-     Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
-     Ultimately, the first allocation size is determined by the allocation memory request.
-  * "max_dead_bytes_per_chunk": Threshold of unused memory in an allocated chunk of arena memory after
-     crossing which the current chunk is chunked into 2.
-  * "initial_growth_chunk_size_bytes": (Possible) Size of the second allocation in the arena.
-     Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
-     Ultimately, the allocation size is determined by the allocation memory request.
-     Further allocation sizes are governed by the arena extend strategy.
+  /** \brief Fetch an array of int64_t values stored as an attribute in the graph node
+  *
+  * If {@code out} is nullptr, the value of {@code size} is set to the true size of the attribute
+  * array's size, and a success status is returned.
+  *
+  * If the {@code size} parameter is greater than or equal to the actual attribute array's size,
+  * the value of {@code size} is set to the true size of the attribute array's size,
+  * the provided memory is filled with the attribute's contents,
+  * and a success status is returned.
+  *
+  * If the {@code size} parameter is less than the actual attribute array's size and {@code out}
+  * is not nullptr, the value of {@code size} is set to the true size of the attribute array's size
+  * and a failure status is returned.)
+  *
+  * @param info [in] instance
+  * @param name [in] name of the attribute to be parsed
+  * @param out [out] pointer to memory where the attribute's contents are to be stored
+  * @param size [in, out] actual size of attribute array
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer(Pointer p) { super(p); }
-      protected CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("const char*const*") PointerPointer arena_config_keys,
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") LongPointer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") LongBuffer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") long[] out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") LongPointer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, @Cast("const char*") BytePointer name,
+                    @Cast("int64_t*") LongBuffer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfoGetAttributeArray_int64( @Const OrtKernelInfo info, String name,
+                    @Cast("int64_t*") long[] out, @Cast("size_t*") SizeTPointer size);
+
+  /** \}
+   *  \name OrtArenaCfg
+   *  \{
+  <p>
+  /** \brief Create an ::OrtArenaCfg
+  *
+  * Create the configuration of an arena that can eventually be used to define an arena based allocator's behavior.
+  *
+  * Supported keys are (See https://onnxruntime.ai/docs/reference/api/c-api.html for details on what the
+  * following parameters mean and how to choose these values.):
+  * "max_mem": Maximum memory that can be allocated by the arena based allocator.
+  *  Use 0 for ORT to pick the best value. Default is 0.
+  * "arena_extend_strategy": 0 = kNextPowerOfTwo, 1 = kSameAsRequested.
+  *  Use -1 to allow ORT to choose the default.
+  * "initial_chunk_size_bytes": (Possible) Size of the first allocation in the arena.
+  *  Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
+  *  Ultimately, the first allocation size is determined by the allocation memory request.
+  * "max_dead_bytes_per_chunk": Threshold of unused memory in an allocated chunk of arena memory after
+  *  crossing which the current chunk is chunked into 2.
+  * "initial_growth_chunk_size_bytes": (Possible) Size of the second allocation in the arena.
+  *  Only relevant if arena strategy is {@code kNextPowerOfTwo}. Use -1 to allow ORT to choose the default.
+  *  Ultimately, the allocation size is determined by the allocation memory request.
+  *  Further allocation sizes are governed by the arena extend strategy.
+  *
+  * @param arena_config_keys [in] Keys to configure the arena
+  * @param arena_config_values [in] Values to configure the arena
+  * @param num_keys [in] Number of keys in {@code arena_config_keys} and {@code arena_config_values}
+  * @param out [out] Newly created ::OrtArenaCfg. Must be freed with OrtApi::ReleaseArenaCfg
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateArenaCfgV2( @Cast("const char*const*") PointerPointer arena_config_keys,
                     @Cast("const size_t*") SizeTPointer arena_config_values, @Cast("size_t") long num_keys,
                     @Cast("OrtArenaCfg**") PointerPointer out);
-  }
-  public native CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer CreateArenaCfgV2(); public native OrtApi CreateArenaCfgV2(CreateArenaCfgV2_PointerPointer_SizeTPointer_long_PointerPointer setter);
+  public native OrtStatus CreateArenaCfgV2( @Cast("const char*const*") @ByPtrPtr BytePointer arena_config_keys,
+                    @Cast("const size_t*") SizeTPointer arena_config_values, @Cast("size_t") long num_keys,
+                    @ByPtrPtr OrtArenaCfg out);
+  public native OrtStatus CreateArenaCfgV2( @Cast("const char*const*") @ByPtrPtr ByteBuffer arena_config_keys,
+                    @Cast("const size_t*") SizeTPointer arena_config_values, @Cast("size_t") long num_keys,
+                    @ByPtrPtr OrtArenaCfg out);
+  public native OrtStatus CreateArenaCfgV2( @Cast("const char*const*") @ByPtrPtr byte[] arena_config_keys,
+                    @Cast("const size_t*") SizeTPointer arena_config_values, @Cast("size_t") long num_keys,
+                    @ByPtrPtr OrtArenaCfg out);
 
-  /**
-     * Set a single run configuration entry as a pair of strings
-     * If a configuration with same key exists, this will overwrite the configuration with the given config_value
-     * @param config_key    A null terminated string representation of the config key
-     * @param config_value  A null terminated string representation of the config value
-     * The config_key and the format of config_value are defined in onnxruntime_run_options_config_keys.h
-     */
-  public static class AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer(Pointer p) { super(p); }
-      protected AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtRunOptions options,
+  /** \}
+   *  \name OrtRunOptions
+   *  \{
+  <p>
+  /** \brief Set a single run configuration entry as a pair of strings
+  *
+  * If a configuration with same key exists, this will overwrite the configuration with the given config_value
+  *
+  * The config_key and the format of config_value are defined in onnxruntime_run_options_config_keys.h
+  *
+  * @param options [in]
+  * @param config_key [in] A null terminated string representation of the config key
+  * @param config_value [in]  A null terminated string representation of the config value
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus AddRunConfigEntry( OrtRunOptions options,
                     @Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
-  }
-  public native AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer AddRunConfigEntry(); public native OrtApi AddRunConfigEntry(AddRunConfigEntry_OrtRunOptions_BytePointer_BytePointer setter);
+  public native OrtStatus AddRunConfigEntry( OrtRunOptions options,
+                    String config_key, String config_value);
 
-  /*
-     * Creates an OrtPrepackedWeightsContainer instance.
-     * This container will hold pre-packed buffers of shared initializers for sharing between sessions
-     * (i.e.) if there are shared initializers that can be shared between sessions, the pre-packed buffers
-     * of these (if any) may possibly be shared to provide memory footprint savings. Pass this container
-     * to sessions that you would like to share pre-packed buffers of shared initializers at session
-     * creation time.
-     *  \out - created OrtPrepackedWeightsContainer instance
-    */
-  public static class CreatePrepackedWeightsContainer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreatePrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
-      protected CreatePrepackedWeightsContainer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtPrepackedWeightsContainer**") PointerPointer out);
-  }
-  public native CreatePrepackedWeightsContainer_PointerPointer CreatePrepackedWeightsContainer(); public native OrtApi CreatePrepackedWeightsContainer(CreatePrepackedWeightsContainer_PointerPointer setter);
+  /** \}
+   *  \name OrtPrepackedWeightsContainer
+   *  \{
+  <p>
+  /** \brief Create an ::OrtPrepackedWeightsContainer
+  *
+  * This container will hold pre-packed buffers of shared initializers for sharing between sessions
+  * (i.e.) if there are shared initializers that can be shared between sessions, the pre-packed buffers
+  * of these (if any) may possibly be shared to provide memory footprint savings. Pass this container
+  * to sessions that you would like to share pre-packed buffers of shared initializers at session
+  * creation time.
+  *
+  *  @param out [out] Newly created ::OrtPrepackedWeightsContainer. Must be freed with OrtApi::ReleasePrepackedWeightsContainer
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreatePrepackedWeightsContainer( @Cast("OrtPrepackedWeightsContainer**") PointerPointer out);
+  public native OrtStatus CreatePrepackedWeightsContainer( @ByPtrPtr OrtPrepackedWeightsContainer out);
 
-  /*
-     * Release OrtPrepackedWeightsContainer instance
-     *  Note: The OrtPrepackedWeightsContainer instance must not be released until the sessions using it are released
-    */
-  public static class ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer(Pointer p) { super(p); }
-      protected ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer() { allocate(); }
-      private native void allocate();
-      public native void call(OrtPrepackedWeightsContainer input);
-  }
-  public native ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer ReleasePrepackedWeightsContainer(); public native OrtApi ReleasePrepackedWeightsContainer(ReleasePrepackedWeightsContainer_OrtPrepackedWeightsContainer setter);
+  /** \brief Release OrtPrepackedWeightsContainer instance
+  *
+  * \note instance must not be released until the sessions using it are released
+  */
+  public native void ReleasePrepackedWeightsContainer(OrtPrepackedWeightsContainer input);
 
-  /**
-     * Same functionality offered by CreateSession() API except that a container that contains
-     pre-packed weights' buffers is written into/read from by the created session.
-     This is useful when used in conjunction with the AddInitializer() API which injects
-     shared initializer info into sessions. Wherever possible, the pre-packed versions of these
-     shared initializers are cached in this container so that multiple sessions can just re-use
-     these instead of duplicating these in memory.
-     * \env - OrtEnv instance instance
-     * \model_path - model path
-     * \options - OrtSessionOptions instance
-     * \prepacked_weights_container - OrtPrepackedWeightsContainer instance
-     * \out - created session instance
-     */
-  public static class CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
-      protected CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
+  /** \}
+   *  \name OrtSession
+   *  \{
+  <p>
+  /** \brief Create session with prepacked weights container
+  *
+  * Same functionality offered by OrtApi::CreateSession except that a container that contains
+  * pre-packed weights' buffers is written into/read from by the created session.
+  * This is useful when used in conjunction with OrtApi::AddInitializer which injects
+  * shared initializer info into sessions. Wherever possible, the pre-packed versions of these
+  * shared initializers are cached in this container so that multiple sessions can just re-use
+  * these instead of duplicating these in memory.
+  *
+  * @param env [in] OrtEnv instance instance
+  * @param model_path [in] Null terminated string of the path (wchar on Windows, char otherwise)
+  * @param options [in]
+  * @param prepacked_weights_container [in]
+  * @param out [out] Newly created ::OrtSession. Must be freed with OrtApi::ReleaseSession
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSessionWithPrepackedWeightsContainer( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
                     @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
                     @Cast("OrtSession**") PointerPointer out);
-  }
-  public native CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer CreateSessionWithPrepackedWeightsContainer(); public native OrtApi CreateSessionWithPrepackedWeightsContainer(CreateSessionWithPrepackedWeightsContainer_OrtEnv_Pointer_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer setter);
+  public native OrtStatus CreateSessionWithPrepackedWeightsContainer( @Const OrtEnv env, @Cast("const ORTCHAR_T*") Pointer model_path,
+                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @ByPtrPtr OrtSession out);
 
-  /**
-     * Same functionality offered by CreateSessionFromArray() API except that a container that contains
-     pre-packed weights' buffers is written into/read from by the created session.
-     This is useful when used in conjunction with the AddInitializer() API which injects
-     shared initializer info into sessions. Wherever possible, the pre-packed versions of these
-     shared initializers are cached in this container so that multiple sessions can just re-use
-     these instead of duplicating these in memory.
-     * \env - OrtEnv instance instance
-     * \model_data - model byte array
-     * \model_data_length - the size of the model byte array
-     * \options - OrtSessionOptions instance
-     * \prepacked_weights_container - OrtPrepackedWeightsContainer instance
-     * \out - created session instance
-     */
-  public static class CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer(Pointer p) { super(p); }
-      protected CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtEnv env,
+  /** \brief Create session from memory with prepacked weights container
+  *
+  * Same functionality offered by OrtApi::CreateSessionFromArray except that a container that contains
+  * pre-packed weights' buffers is written into/read from by the created session.
+  * This is useful when used in conjunction with OrtApi::AddInitializer which injects
+  * shared initializer info into sessions. Wherever possible, the pre-packed versions of these
+  * shared initializers are cached in this container so that multiple sessions can just re-use
+  * these instead of duplicating these in memory.
+  *
+  * @param env [in]
+  * @param model_data [in] Array of bytes holding the model
+  * @param model_data_length [in] Number of bytes in {@code model_data_model}
+  * @param options [in]
+  * @param prepacked_weights_container [in]
+  * @param out [out] Newly created ::OrtSession. Must be freed with OrtApi::ReleaseSession
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSessionFromArrayWithPrepackedWeightsContainer( @Const OrtEnv env,
                     @Const Pointer model_data, @Cast("size_t") long model_data_length,
                     @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
                     @Cast("OrtSession**") PointerPointer out);
-  }
-  public native CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer CreateSessionFromArrayWithPrepackedWeightsContainer(); public native OrtApi CreateSessionFromArrayWithPrepackedWeightsContainer(CreateSessionFromArrayWithPrepackedWeightsContainer_OrtEnv_Pointer_long_OrtSessionOptions_OrtPrepackedWeightsContainer_PointerPointer setter);
+  public native OrtStatus CreateSessionFromArrayWithPrepackedWeightsContainer( @Const OrtEnv env,
+                    @Const Pointer model_data, @Cast("size_t") long model_data_length,
+                    @Const OrtSessionOptions options, OrtPrepackedWeightsContainer prepacked_weights_container,
+                    @ByPtrPtr OrtSession out);
 
-  /*   
-   * Append TensorRT execution provider to the session options with TensorRT provider options.
-   * If TensorRT is not available (due to a non TensorRT enabled build), this function will return failure.
-   * Note: this API is slightly different than SessionOptionsAppendExecutionProvider_TensorRT.
-   * SessionOptionsAppendExecutionProvider_TensorRT takes struct OrtTensorRTProviderOptions which is open to user as argument,
-   * but this API takes opaque struct OrtTensorRTProviderOptionsV2 which must be created by CreateTensorRTProviderOptions.
-   * User needs to instantiate OrtTensorRTProviderOptions as well as allocate/release buffers for some members of OrtTensorRTProviderOptions.
-   * However, for using OrtTensorRTProviderOptionsV2, CreateTensorRTProviderOptions and ReleaseTensorRTProviderOptions will do the memory allocation and release for you. 
-   *
-   * \param options - OrtSessionOptions instance 
-   * \param tensorrt_options - OrtTensorRTProviderOptionsV2 instance 
-   */
-  public static class SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2(Pointer p) { super(p); }
-      protected SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call(
-                    OrtSessionOptions options, @Const OrtTensorRTProviderOptionsV2 tensorrt_options);
-  }
-  public native SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 SessionOptionsAppendExecutionProvider_TensorRT_V2(); public native OrtApi SessionOptionsAppendExecutionProvider_TensorRT_V2(SessionOptionsAppendExecutionProvider_TensorRT_V2_OrtSessionOptions_OrtTensorRTProviderOptionsV2 setter);
-
-  /**
-   * Use this API to create the configuration of a TensorRT Execution Provider which is an instance of OrtTensorRTProviderOptionsV2.
-   *
-   * @param out - pointer to the pointer of TensorRT EP provider options instance.
-   */
-  public static class CreateTensorRTProviderOptions_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateTensorRTProviderOptions_PointerPointer(Pointer p) { super(p); }
-      protected CreateTensorRTProviderOptions_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Cast("OrtTensorRTProviderOptionsV2**") PointerPointer out);
-  }
-  public native CreateTensorRTProviderOptions_PointerPointer CreateTensorRTProviderOptions(); public native OrtApi CreateTensorRTProviderOptions(CreateTensorRTProviderOptions_PointerPointer setter);
-
-  /**
-  * Use this API to set appropriate configuration knobs of a TensorRT Execution Provider.
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Append TensorRT execution provider to the session options
   *
-  * Please reference to https://www.onnxruntime.ai/docs/reference/execution-providers/TensorRT-ExecutionProvider.html#c-api-example
-  * to know the available keys and values. Key should be in string format of the member of OrtTensorRTProviderOptions and value should be its related range.
+  * If TensorRT is not available (due to a non TensorRT enabled build), this function will return failure.
+  *
+  * This is slightly different from OrtApi::SessionOptionsAppendExecutionProvider_TensorRT, it takes an
+  * ::OrtTensorRTProviderOptions which is publicly defined. This takes an opaque ::OrtTensorRTProviderOptionsV2
+  * which must be created with OrtApi::CreateTensorRTProviderOptions.
+  *
+  * For OrtApi::SessionOptionsAppendExecutionProvider_TensorRT, the user needs to instantiate ::OrtTensorRTProviderOptions
+  * as well as allocate/release buffers for some members of ::OrtTensorRTProviderOptions.
+  * Here, OrtApi::CreateTensorRTProviderOptions and Ortapi::ReleaseTensorRTProviderOptions will do the memory management for you.
+  *
+  * @param options [in]
+  * @param tensorrt_options [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_TensorRT_V2(
+                    OrtSessionOptions options, @Const OrtTensorRTProviderOptionsV2 tensorrt_options);
+
+  /** \}
+   *  \name OrtTensorRTProviderOptionsV2
+   *  \{
+  <p>
+  /** \brief Create an OrtTensorRTProviderOptionsV2
+  *
+  * @param out [out] Newly created ::OrtTensorRTProviderOptionsV2. Must be released with OrtApi::ReleaseTensorRTProviderOptions
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateTensorRTProviderOptions( @Cast("OrtTensorRTProviderOptionsV2**") PointerPointer out);
+  public native OrtStatus CreateTensorRTProviderOptions( @ByPtrPtr OrtTensorRTProviderOptionsV2 out);
+
+  /** \brief Set options in a TensorRT Execution Provider.
+  *
+  * Please refer to https://www.onnxruntime.ai/docs/reference/execution-providers/TensorRT-ExecutionProvider.html#c-api-example
+  * to know the available keys and values. Key should be in null terminated string format of the member of ::OrtTensorRTProviderOptionsV2
+  * and value should be its related range.
+  *
   * For example, key="trt_max_workspace_size" and value="2147483648"
   *
-  * @param tensorrt_options - OrtTensorRTProviderOptionsV2 instance
-  * @param provider_options_keys - array of UTF-8 null-terminated string for provider options keys
-  * @param provider_options_values - array of UTF-8 null-terminated string for provider options values
-  * @param num_keys - number of keys
+  * @param tensorrt_options [in]
+  * @param provider_options_keys [in] Array of UTF-8 null-terminated string for provider options keys
+  * @param provider_options_values [in] Array of UTF-8 null-terminated string for provider options values
+  * @param num_keys [in] Number of elements in the {@code provider_option_keys} and {@code provider_options_values} arrays
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long(Pointer p) { super(p); }
-      protected UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtTensorRTProviderOptionsV2 tensorrt_options,
+  public native OrtStatus UpdateTensorRTProviderOptions( OrtTensorRTProviderOptionsV2 tensorrt_options,
                     @Cast("const char*const*") PointerPointer provider_options_keys,
                     @Cast("const char*const*") PointerPointer provider_options_values,
                     @Cast("size_t") long num_keys);
-  }
-  public native UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long UpdateTensorRTProviderOptions(); public native OrtApi UpdateTensorRTProviderOptions(UpdateTensorRTProviderOptions_OrtTensorRTProviderOptionsV2_PointerPointer_PointerPointer_long setter);
+  public native OrtStatus UpdateTensorRTProviderOptions( OrtTensorRTProviderOptionsV2 tensorrt_options,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus UpdateTensorRTProviderOptions( OrtTensorRTProviderOptionsV2 tensorrt_options,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus UpdateTensorRTProviderOptions( OrtTensorRTProviderOptionsV2 tensorrt_options,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
+                    @Cast("size_t") long num_keys);
 
-  /**
-  * Get serialized TensorRT provider options string.
+  /** \brief Get serialized TensorRT provider options string.
   *
-  * For example, "trt_max_workspace_size=2147483648;trt_max_partition_iterations=10;trt_int8_enable=1;......" 
+  * For example, "trt_max_workspace_size=2147483648;trt_max_partition_iterations=10;trt_int8_enable=1;......"
   *
-  * @param tensorrt_options - OrTensorRTProviderOptionsV2 instance 
-  * @param allocator - a ptr to an instance of OrtAllocator obtained with CreateAllocator() or GetAllocatorWithDefaultOptions()
+  * @param tensorrt_options - OrTensorRTProviderOptionsV2 instance
+  * @param allocator - a ptr to an instance of OrtAllocator obtained with OrtApi::CreateAllocator or OrtApi::GetAllocatorWithDefaultOptions
   *                      the specified allocator will be used to allocate continuous buffers for output strings and lengths.
   * @param ptr - is a UTF-8 null terminated string allocated using 'allocator'. The caller is responsible for using the same allocator to free it.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer(Pointer p) { super(p); }
-      protected GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") PointerPointer ptr);
-  }
-  public native GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer GetTensorRTProviderOptionsAsString(); public native OrtApi GetTensorRTProviderOptionsAsString(GetTensorRTProviderOptionsAsString_OrtTensorRTProviderOptionsV2_OrtAllocator_PointerPointer setter);
+  public native OrtStatus GetTensorRTProviderOptionsAsString( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") PointerPointer ptr);
+  public native OrtStatus GetTensorRTProviderOptionsAsString( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer ptr);
+  public native OrtStatus GetTensorRTProviderOptionsAsString( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
+  public native OrtStatus GetTensorRTProviderOptionsAsString( @Const OrtTensorRTProviderOptionsV2 tensorrt_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] ptr);
 
-  /**
-  * Use this API to release the instance of OrtTensorRTProviderV2.
+  /** \brief Release an ::OrtTensorRTProviderOptionsV2
+  *
+  * \note This is an exception in the naming convention of other Release* functions, as the name of the method does not have the V2 suffix, but the type does
   */
   public static class ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 extends FunctionPointer {
       static { Loader.load(); }
@@ -2567,375 +2645,477 @@ public class OrtApi extends Pointer {
   }
   public native ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 ReleaseTensorRTProviderOptions(); public native OrtApi ReleaseTensorRTProviderOptions(ReleaseTensorRTProviderOptions_OrtTensorRTProviderOptionsV2 setter);
 
-  /*
-  * Enable custom operators in onnxruntime-extensions: https://github.com/microsoft/onnxruntime-extensions.git
+  /** \}
+   *  \name OrtSessionOptions
+   *  \{
+  <p>
+  /** \brief Enable custom operators
+  *
+  * See onnxruntime-extensions: https://github.com/microsoft/onnxruntime-extensions.git
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class EnableOrtCustomOps_OrtSessionOptions extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    EnableOrtCustomOps_OrtSessionOptions(Pointer p) { super(p); }
-      protected EnableOrtCustomOps_OrtSessionOptions() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtSessionOptions options);
-  }
-  public native EnableOrtCustomOps_OrtSessionOptions EnableOrtCustomOps(); public native OrtApi EnableOrtCustomOps(EnableOrtCustomOps_OrtSessionOptions setter);
+  public native OrtStatus EnableOrtCustomOps( OrtSessionOptions options);
 
-  /**
-   * Registers a custom allocator instance with the env to enable
-   * sharing between multiple sessions that use the same env instance.
-   * Returns an error if an allocator with the same OrtMemoryInfo is already registered.
-   * 
-   * The behavior of this API is exactly the same as CreateAndRegisterAllocator() except
-   * instead of ORT creating an allocator based on provided info, in this case 
-   * ORT uses the user-provided custom allocator.
-   * See docs/C_API.md for details.
-   * 
-   * @param env [in,out] OrtEnv instance (must be non-null).
-   * @param allocator [in] user provided allocator (must be non-null).
-   * 
+  /** \}
+   *  \name OrtAllocator
+   *  \{
+  <p>
+  /** \brief Register a custom allocator
+  *
+  * Enables sharing between multiple sessions that use the same env instance.
+  * Returns an error if an allocator with the same ::OrtMemoryInfo is already registered.
+  *
+  * The behavior of this is exactly the same as OrtApi::CreateAndRegisterAllocator except
+  * instead of ORT creating an allocator based on provided info, in this case
+  * ORT uses the user-provided custom allocator.
+  * See https://onnxruntime.ai/docs/reference/api/c-api.html for details.
+  *
+  * @param env [in]
+  * @param allocator [in] User provided allocator
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class RegisterAllocator_OrtEnv_OrtAllocator extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    RegisterAllocator_OrtEnv_OrtAllocator(Pointer p) { super(p); }
-      protected RegisterAllocator_OrtEnv_OrtAllocator() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtEnv env, OrtAllocator allocator);
-  }
-  public native RegisterAllocator_OrtEnv_OrtAllocator RegisterAllocator(); public native OrtApi RegisterAllocator(RegisterAllocator_OrtEnv_OrtAllocator setter);
+  public native OrtStatus RegisterAllocator( OrtEnv env, OrtAllocator allocator);
 
-  /**
-   * Unregisters a registered allocator for sharing across sessions 
-   * based on provided OrtMemoryInfo.
-   * It is an error if you provide an OrtmemoryInfo not corresponding to any
-   * registered allocators for sharing.
+  /** \brief Unregister a custom allocator
+  *
+  * It is an error if you provide an ::OrtMemoryInfo not corresponding to any
+  * registered allocators for sharing.
+  *
+  * @param env [in]
+  * @param mem_info [in]
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
   */
-  public static class UnregisterAllocator_OrtEnv_OrtMemoryInfo extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    UnregisterAllocator_OrtEnv_OrtMemoryInfo(Pointer p) { super(p); }
-      protected UnregisterAllocator_OrtEnv_OrtMemoryInfo() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtEnv env,
+  public native OrtStatus UnregisterAllocator( OrtEnv env,
                     @Const OrtMemoryInfo mem_info);
-  }
-  public native UnregisterAllocator_OrtEnv_OrtMemoryInfo UnregisterAllocator(); public native OrtApi UnregisterAllocator(UnregisterAllocator_OrtEnv_OrtMemoryInfo setter);
 
-  /**
-   * Sets *out to 1 iff an OrtValue is a SparseTensor, and 0 otherwise
-   * 
-   * @param value [in] existing OrtValue
-   * @param out [out] unless an error occurs, contains 1 iff the value contains an instance
-   *  of sparse tensor or 0 otherwise.
-   */
-  public static class IsSparseTensor_OrtValue_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    IsSparseTensor_OrtValue_IntPointer(Pointer p) { super(p); }
-      protected IsSparseTensor_OrtValue_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue value, IntPointer out);
-  }
-  public native IsSparseTensor_OrtValue_IntPointer IsSparseTensor(); public native OrtApi IsSparseTensor(IsSparseTensor_OrtValue_IntPointer setter);
+  /** \}
+   *  \name OrtValue
+   *  \{
+  <p>
+  /** \brief Sets *out to 1 iff an ::OrtValue is a SparseTensor, and 0 otherwise
+  *
+  * @param value [in] existing ::OrtValue
+  * @param out [out] unless an error occurs, contains 1 iff the value contains an instance
+  *  of sparse tensor or 0 otherwise.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus IsSparseTensor( @Const OrtValue value, IntPointer out);
+  public native OrtStatus IsSparseTensor( @Const OrtValue value, IntBuffer out);
+  public native OrtStatus IsSparseTensor( @Const OrtValue value, int[] out);
 
-  /**
-   * Create an OrtValue with a sparse tensor that is empty.
-   * Use FillSparseTensor<Format>() functions to populate sparse tensor with non-zero values and
-   * format specific indices data.
-   * Use ReleaseValue to destroy the sparse tensor, this will also release the buffer inside the output value
-   * if any was allocated.
-   * @param allocator [in,out] allocator to use when performing an allocation. Allocation will be performed
-   *   by FillSparseTensor<Format>() APIs. The lifespan of the allocator instance must eclipse the lifespan
-   *   this sparse tensor instance as the same allocator will be used to free memory.
-   * @param dense_shape [in] shape of the original dense tensor
-   * @param dense_shape_len [in] number of shape dimensions being passed
-   * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
-   * @param out [out] Should be freed by calling ReleaseValue
-   * @return OrtStatus*
-   */
-  public static class CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtAllocator allocator, @Cast("const int64_t*") LongPointer dense_shape,
+  /** \brief Create an ::OrtValue with a sparse tensor that is empty.
+  *
+  * Use FillSparseTensor<Format>() functions to populate sparse tensor with non-zero values and
+  * format specific indices data.
+  * Use ReleaseValue to destroy the sparse tensor, this will also release the buffer inside the output value
+  * if any was allocated.
+  * @param allocator [in,out] allocator to use when performing an allocation. Allocation will be performed
+  *   by FillSparseTensor<Format>() APIs. The lifespan of the allocator instance must eclipse the lifespan
+  *   this sparse tensor instance as the same allocator will be used to free memory.
+  * @param dense_shape [in] shape of the original dense tensor
+  * @param dense_shape_len [in] number of shape dimensions being passed
+  * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
+  * @param out [out] Should be freed by calling ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSparseTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongPointer dense_shape,
                     @Cast("size_t") long dense_shape_len, @Cast("ONNXTensorElementDataType") int type, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer CreateSparseTensorAsOrtValue(); public native OrtApi CreateSparseTensorAsOrtValue(CreateSparseTensorAsOrtValue_OrtAllocator_LongPointer_long_int_PointerPointer setter);
+  public native OrtStatus CreateSparseTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongPointer dense_shape,
+                    @Cast("size_t") long dense_shape_len, @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateSparseTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") LongBuffer dense_shape,
+                    @Cast("size_t") long dense_shape_len, @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateSparseTensorAsOrtValue( OrtAllocator allocator, @Cast("const int64_t*") long[] dense_shape,
+                    @Cast("size_t") long dense_shape_len, @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
 
   /**
-   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
-   * The API will allocate required memory and copy the supplied NNZ values and COO indices into that memory allocation.
-   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue to populate with data
-   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
-   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
-   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
-   * @param values_shape [in] pointer to values shape array
-   * @param values_shape_len [in] length of the values_shape
-   * @param values [in] pointer to an array of values. For strings, pass const char**.
-   * @param indices_data [in] pointer to a location of COO indices
-   * @param indices_num [in] number of COO indices
-   */
-  public static class FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long(Pointer p) { super(p); }
-      protected FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+  * This fills populates an empty tensor that was created using OrtApi::CreateSparseTensorAsOrtValue.
+  * This will allocate required memory and copy the supplied NNZ values and COO indices into that memory allocation.
+  * Memory allocation is performed using the allocator that was specified with OrtApi::CreateSparseTensorAsOrtValue.
+  *
+  * @param ort_value [in,out] ::OrtValue to populate with data
+  * @param data_mem_info [in] serves to identify the location of the data to be copied. If the allocator specified
+  *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+  *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+  * @param values_shape [in] pointer to values shape array
+  * @param values_shape_len [in] length of the values_shape
+  * @param values [in] pointer to an array of values. For strings, pass const char**.
+  * @param indices_data [in] pointer to a location of COO indices
+  * @param indices_num [in] number of COO indices
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus FillSparseTensorCoo( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
                     @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
                     @Cast("const int64_t*") LongPointer indices_data, @Cast("size_t") long indices_num);
-  }
-  public native FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long FillSparseTensorCoo(); public native OrtApi FillSparseTensorCoo(FillSparseTensorCoo_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long setter);
+  public native OrtStatus FillSparseTensorCoo( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongBuffer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongBuffer indices_data, @Cast("size_t") long indices_num);
+  public native OrtStatus FillSparseTensorCoo( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") long[] values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") long[] indices_data, @Cast("size_t") long indices_num);
 
   /**
-   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
-   * The API will allocate required memory and copy the supplied NNZ values and CSR indices into that memory allocation.
-   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue to populate with data
-   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
-   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
-   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
-   * @param values_shape [in] pointer to values shape array
-   * @param values_shape_len [in] length of the values_shape
-   * @param values [in] - pointer to an array of values. For strings, pass const char**.
-   * @param inner_indices_data [in] pointer to a location of CSR inner indices
-   * @param inner_indices_num [in] number of CSR inner indices
-   * @param outer_indices_data [in] pointer to a location of CSR outer indices
-   * @param outer_indices_num [in] number of CSR outer indices
-   */
-  public static class FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long(Pointer p) { super(p); }
-      protected FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+  * This fills populates an empty tensor that was created using OrtApi::CreateSparseTensorAsOrtValue.
+  * This will allocate required memory and copy the supplied NNZ values and CSR indices into that memory allocation.
+  * Memory allocation is performed using the allocator that was specified with OrtApi::CreateSparseTensorAsOrtValue.
+  *
+  * @param ort_value [in,out] ::OrtValue to populate with data
+  * @param data_mem_info [in] serves to identify the location of the data to be copied. If the allocator specified
+  *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+  *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+  * @param values_shape [in] pointer to values shape array
+  * @param values_shape_len [in] length of the values_shape
+  * @param values [in] - pointer to an array of values. For strings, pass const char**.
+  * @param inner_indices_data [in] pointer to a location of CSR inner indices
+  * @param inner_indices_num [in] number of CSR inner indices
+  * @param outer_indices_data [in] pointer to a location of CSR outer indices
+  * @param outer_indices_num [in] number of CSR outer indices
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus FillSparseTensorCsr( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
                     @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
                     @Cast("const int64_t*") LongPointer inner_indices_data, @Cast("size_t") long inner_indices_num,
                     @Cast("const int64_t*") LongPointer outer_indices_data, @Cast("size_t") long outer_indices_num);
-  }
-  public native FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long FillSparseTensorCsr(); public native OrtApi FillSparseTensorCsr(FillSparseTensorCsr_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_LongPointer_long setter);
+  public native OrtStatus FillSparseTensorCsr( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongBuffer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongBuffer inner_indices_data, @Cast("size_t") long inner_indices_num,
+                    @Cast("const int64_t*") LongBuffer outer_indices_data, @Cast("size_t") long outer_indices_num);
+  public native OrtStatus FillSparseTensorCsr( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") long[] values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") long[] inner_indices_data, @Cast("size_t") long inner_indices_num,
+                    @Cast("const int64_t*") long[] outer_indices_data, @Cast("size_t") long outer_indices_num);
 
   /**
-   * This API fills populates an empty tensor that was created using CreateSparseTensorAsOrtValue API.
-   * The API will allocate required memory and copy the supplied NNZ values and BlockSparse indices into that memory allocation.
-   * Memory allocation is performed using the allocator that was specified with CreateSparseTensorAsOrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue to populate with data
-   * @param mem_info [in] serves to identify the location of the data to be copied. If the allocator specified 
-   *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
-   *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
-   * @param values [in] structure with values information
-   * @param indices_shape_data [in] pointer to a location of indices shape
-   * @param indices_shape_len [in] length of the block sparse indices shape
-   * @param indices_data [in] pointer to a location of indices data. Shape will determine the length of the indices data.
-   */
-  public static class FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer(Pointer p) { super(p); }
-      protected FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+  * This fills populates an empty tensor that was created using OrtApi::CreateSparseTensorAsOrtValue.
+  * This will allocate required memory and copy the supplied NNZ values and BlockSparse indices into that memory allocation.
+  * Memory allocation is performed using the allocator that was specified with OrtApi::CreateSparseTensorAsOrtValue.
+  *
+  * @param ort_value [in,out] ::OrtValue to populate with data
+  * @param data_mem_info [in] serves to identify the location of the data to be copied. If the allocator specified
+  *  at the creation time has memory info that is not the same as mem_info argument to this function a X-device copy will be performed.
+  *  String data is assumed to be on CPU and will only be copied into a CPU allocated buffer.
+  * @param values_shape [in]
+  * @param values_shape_len [in]
+  * @param values [in] structure with values information
+  * @param indices_shape_data [in] pointer to a location of indices shape
+  * @param indices_shape_len [in] length of the block sparse indices shape
+  * @param indices_data [in] pointer to a location of indices data. Shape will determine the length of the indices data.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus FillSparseTensorBlockSparse( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
                     @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
                     @Cast("const int64_t*") LongPointer indices_shape_data, @Cast("size_t") long indices_shape_len,
                     @Const IntPointer indices_data);
-  }
-  public native FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer FillSparseTensorBlockSparse(); public native OrtApi FillSparseTensorBlockSparse(FillSparseTensorBlockSparse_OrtValue_OrtMemoryInfo_LongPointer_long_Pointer_LongPointer_long_IntPointer setter);
+  public native OrtStatus FillSparseTensorBlockSparse( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") LongBuffer values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") LongBuffer indices_shape_data, @Cast("size_t") long indices_shape_len,
+                    @Const IntBuffer indices_data);
+  public native OrtStatus FillSparseTensorBlockSparse( OrtValue ort_value, @Const OrtMemoryInfo data_mem_info,
+                    @Cast("const int64_t*") long[] values_shape, @Cast("size_t") long values_shape_len, @Const Pointer values,
+                    @Cast("const int64_t*") long[] indices_shape_data, @Cast("size_t") long indices_shape_len,
+                    @Const int[] indices_data);
 
   /**
-   * Create an OrtValue with a sparse tensor. This is the first step.
-   * Next, use Use<Format>Indices() functions to supply sparse tensor with
-   * format specific indices data and set its sparse format to a specific enum value.
-   * This API will not perform memory allocations. It will
-   * use supplied user buffer which should outlive the created sparse tensor.
-   * Use ReleaseValue to destroy the sparse tensor. It would not release the supplied values buffer.
-   * This API can not be used to map strings from the user allocated memory. Strings must always be copied
-   * and have UTF-8 encoding. Therefore, use CreateSparseTensorAsOrtValue() API above and then fill it with data
-   * using appropriate Make*() function.
-   * 
-   * @param info [in] memory info where sparse values reside.
-   * @param p_data [in,out] pointer to a user allocated buffer with values. To create a full sparse tensor with no non-zero
-   *   values, pass nullptr
-   * @param dense_shape [in] shape of the original dense tensor
-   * @param dense_shape_len [in] number of shape dimensions being passed
-   * @param values_shape [in] shape of the values data. To create a fully sparse tensor with no non-zero values,
-   *   pass {0} shape.
-   * @param values_shape_len [in] number of values shape dimensions
-   * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
-   * @param out [out] Should be freed by calling ReleaseValue
-   * @return OrtStatus*
-   */
-  public static class CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer(Pointer p) { super(p); }
-      protected CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtMemoryInfo info, Pointer p_data,
+  * Create an ::OrtValue with a sparse tensor. This is the first step.
+  * Next, use Use<Format>Indices() functions to supply sparse tensor with
+  * format specific indices data and set its sparse format to a specific enum value.
+  * This will not perform memory allocations. It will
+  * use supplied user buffer which should outlive the created sparse tensor.
+  * Use OrtApi::ReleaseValue to destroy the sparse tensor. It would not release the supplied values buffer.
+  * This function can not be used to map strings from the user allocated memory. Strings must always be copied
+  * and have UTF-8 encoding. Therefore, use OrtApi::CreateSparseTensorAsOrtValue above and then fill it with data
+  * using appropriate Make*() function.
+  *
+  * @param info [in] memory info where sparse values reside.
+  * @param p_data [in,out] pointer to a user allocated buffer with values. To create a full sparse tensor with no non-zero
+  *   values, pass nullptr
+  * @param dense_shape [in] shape of the original dense tensor
+  * @param dense_shape_len [in] number of shape dimensions being passed
+  * @param values_shape [in] shape of the values data. To create a fully sparse tensor with no non-zero values,
+  *   pass {0} shape.
+  * @param values_shape_len [in] number of values shape dimensions
+  * @param type [in] must be one of TENSOR_ELEMENT_DATA_TYPE_xxxx
+  * @param out [out] Should be freed by calling ReleaseValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus CreateSparseTensorWithValuesAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
                     @Cast("const int64_t*") LongPointer dense_shape, @Cast("size_t") long dense_shape_len,
                     @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len,
                     @Cast("ONNXTensorElementDataType") int type, @Cast("OrtValue**") PointerPointer out);
-  }
-  public native CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer CreateSparseTensorWithValuesAsOrtValue(); public native OrtApi CreateSparseTensorWithValuesAsOrtValue(CreateSparseTensorWithValuesAsOrtValue_OrtMemoryInfo_Pointer_LongPointer_long_LongPointer_long_int_PointerPointer setter);
+  public native OrtStatus CreateSparseTensorWithValuesAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("const int64_t*") LongPointer dense_shape, @Cast("size_t") long dense_shape_len,
+                    @Cast("const int64_t*") LongPointer values_shape, @Cast("size_t") long values_shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateSparseTensorWithValuesAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("const int64_t*") LongBuffer dense_shape, @Cast("size_t") long dense_shape_len,
+                    @Cast("const int64_t*") LongBuffer values_shape, @Cast("size_t") long values_shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
+  public native OrtStatus CreateSparseTensorWithValuesAsOrtValue( @Const OrtMemoryInfo info, Pointer p_data,
+                    @Cast("const int64_t*") long[] dense_shape, @Cast("size_t") long dense_shape_len,
+                    @Cast("const int64_t*") long[] values_shape, @Cast("size_t") long values_shape_len,
+                    @Cast("ONNXTensorElementDataType") int type, @ByPtrPtr OrtValue out);
 
   /**
-   * The API assigns Coo format indices to the SparseTensor that was created by 
-   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
-   * ORT_SPARSE_COO. The API will not allocate any additional memory for data. The life span of
-   * indices_data buffer should eclipse the life span of this OrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
-   * @param indices_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
-   * @param indices_num [in]  number of COO indices. Should either be 0 for fully sparse tensors, be equal
-   *  to the number of nnz values specified to CreateSparseTensorWithValuesAsOrtValue for 1-D {nnz} indices or
-   *  be twice as number of nnz values for a  2-D indices {nnz, 2}
-   */
-  public static class UseCooIndices_OrtValue_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    UseCooIndices_OrtValue_LongPointer_long(Pointer p) { super(p); }
-      protected UseCooIndices_OrtValue_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("int64_t*") LongPointer indices_data, @Cast("size_t") long indices_num);
-  }
-  public native UseCooIndices_OrtValue_LongPointer_long UseCooIndices(); public native OrtApi UseCooIndices(UseCooIndices_OrtValue_LongPointer_long setter);
+  * This assigns Coo format indices to the SparseTensor that was created by
+  * OrtApi::CreateSparseTensorWithValuesAsOrtValue above. It also sets OrtSparseFormat to
+  * ORT_SPARSE_COO. This will not allocate any additional memory for data. The life span of
+  * indices_data buffer should eclipse the life span of this ::OrtValue.
+  *
+  * @param ort_value [in,out] ::OrtValue instance constructed with OrtApi::CreateSparseTensorWithValuesAsOrtValue
+  * @param indices_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
+  * @param indices_num [in]  number of COO indices. Should either be 0 for fully sparse tensors, be equal
+  *  to the number of nnz values specified to OrtApi::CreateSparseTensorWithValuesAsOrtValue for 1-D {nnz} indices or
+  *  be twice as number of nnz values for a  2-D indices {nnz, 2}
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus UseCooIndices( OrtValue ort_value, @Cast("int64_t*") LongPointer indices_data, @Cast("size_t") long indices_num);
+  public native OrtStatus UseCooIndices( OrtValue ort_value, @Cast("int64_t*") LongBuffer indices_data, @Cast("size_t") long indices_num);
+  public native OrtStatus UseCooIndices( OrtValue ort_value, @Cast("int64_t*") long[] indices_data, @Cast("size_t") long indices_num);
 
   /**
-   * The API assigns CSR format indices to the SparseTensor that was created by 
-   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
-   * ORT_SPARSE_CSRC. The API will not allocate any additional memory for data. The life spans of
-   * indner_data and outer_data buffers should eclipse the life span of this OrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
-   * @param inner_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
-   * @param inner_num [in]  number of inner CSR indices. Should either be 0 for fully sparse tensors or be equal
-   * to the number of nnz values specified to CreateSparseTensorWithValuesAsOrtValue.
-   * @param outer_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
-   * @param outer_num [in] number of CSR outer indices. Should either be 0 for fully sparse tensors or
-   * equal to rows + 1 of the dense shape.
-   */
-  public static class UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long(Pointer p) { super(p); }
-      protected UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("int64_t*") LongPointer inner_data, @Cast("size_t") long inner_num,
+  * The assigns CSR format indices to the SparseTensor that was created by
+  * OrtApi::CreateSparseTensorWithValuesAsOrtValue above. It also sets OrtSparseFormat to
+  * ORT_SPARSE_CSRC. This will not allocate any additional memory for data. The life spans of
+  * inner_data and outer_data buffers should eclipse the life span of this ::OrtValue.
+  *
+  * @param ort_value [in,out] ::OrtValue instance constructed with OrtApi::CreateSparseTensorWithValuesAsOrtValue
+  * @param inner_data [in,out] pointer to a user pre-allocated buffer or nullptr for fully sparse tensors.
+  * @param inner_num [in]  number of inner CSR indices. Should either be 0 for fully sparse tensors or be equal
+  * to the number of nnz values specified to OrtApi::CreateSparseTensorWithValuesAsOrtValue.
+  * @param outer_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
+  * @param outer_num [in] number of CSR outer indices. Should either be 0 for fully sparse tensors or
+  * equal to rows + 1 of the dense shape.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus UseCsrIndices( OrtValue ort_value, @Cast("int64_t*") LongPointer inner_data, @Cast("size_t") long inner_num,
                     @Cast("int64_t*") LongPointer outer_data, @Cast("size_t") long outer_num);
-  }
-  public native UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long UseCsrIndices(); public native OrtApi UseCsrIndices(UseCsrIndices_OrtValue_LongPointer_long_LongPointer_long setter);
+  public native OrtStatus UseCsrIndices( OrtValue ort_value, @Cast("int64_t*") LongBuffer inner_data, @Cast("size_t") long inner_num,
+                    @Cast("int64_t*") LongBuffer outer_data, @Cast("size_t") long outer_num);
+  public native OrtStatus UseCsrIndices( OrtValue ort_value, @Cast("int64_t*") long[] inner_data, @Cast("size_t") long inner_num,
+                    @Cast("int64_t*") long[] outer_data, @Cast("size_t") long outer_num);
 
   /**
-   * The API assigns BlockSparse format indices to the SparseTensor that was created by 
-   * CreateSparseTensorWithValuesAsOrtValue API above. It also sets OrtSparseFormat to 
-   * ORT_SPARSE_BLOCK_SPARSE. The API will not allocate any additional memory for data. The life span of
-   * indices_data buffer must eclipse the lifespan of this OrtValue.
-   * 
-   * @param ort_value [in,out] OrtValue instance constructed with CreateSparseTensorWithValuesAsOrtValue
-   * @param indices_shape [in] pointer to indices shape. Use {0} for fully sparse tensors
-   * @param indices_shape_len [in] length of the indices shape
-   * @param indices_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
-   */
-  public static class UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer(Pointer p) { super(p); }
-      protected UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( OrtValue ort_value, @Cast("const int64_t*") LongPointer indices_shape, @Cast("size_t") long indices_shape_len, IntPointer indices_data);
-  }
-  public native UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer UseBlockSparseIndices(); public native OrtApi UseBlockSparseIndices(UseBlockSparseIndices_OrtValue_LongPointer_long_IntPointer setter);
+  * The assigns BlockSparse format indices to the SparseTensor that was created by
+  * OrtApi::CreateSparseTensorWithValuesAsOrtValue above. It also sets OrtSparseFormat to
+  * ORT_SPARSE_BLOCK_SPARSE. This will not allocate any additional memory for data. The life span of
+  * indices_data buffer must eclipse the lifespan of this ::OrtValue.
+  *
+  * @param ort_value [in,out] OrtValue instance constructed with OrtApi::CreateSparseTensorWithValuesAsOrtValue
+  * @param indices_shape [in] pointer to indices shape. Use {0} for fully sparse tensors
+  * @param indices_shape_len [in] length of the indices shape
+  * @param indices_data [in,out] pointer to user pre-allocated buffer or nullptr for fully sparse tensors.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus UseBlockSparseIndices( OrtValue ort_value, @Cast("const int64_t*") LongPointer indices_shape, @Cast("size_t") long indices_shape_len, IntPointer indices_data);
+  public native OrtStatus UseBlockSparseIndices( OrtValue ort_value, @Cast("const int64_t*") LongBuffer indices_shape, @Cast("size_t") long indices_shape_len, IntBuffer indices_data);
+  public native OrtStatus UseBlockSparseIndices( OrtValue ort_value, @Cast("const int64_t*") long[] indices_shape, @Cast("size_t") long indices_shape_len, int[] indices_data);
+
+  /** \brief Returns sparse tensor format enum iff a given ort value contains an instance of sparse tensor.
+  *
+  * @param ort_value [in] ::OrtValue that contains an instance of sparse tensor
+  * @param out [out] pointer to out parameter
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSparseTensorFormat( @Const OrtValue ort_value, @Cast("OrtSparseFormat*") IntPointer out);
+  public native OrtStatus GetSparseTensorFormat( @Const OrtValue ort_value, @Cast("OrtSparseFormat*") IntBuffer out);
+  public native OrtStatus GetSparseTensorFormat( @Const OrtValue ort_value, @Cast("OrtSparseFormat*") int[] out);
+
+  /** \brief Returns data type and shape of sparse tensor values (nnz) iff ::OrtValue contains a SparseTensor.
+  *
+  * @param ort_value [in] An ::OrtValue that contains a fully constructed sparse tensor
+  * @param out [out] Must be freed by OrtApi::ReleaseTensorTypeAndShapeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSparseTensorValuesTypeAndShape( @Const OrtValue ort_value, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  public native OrtStatus GetSparseTensorValuesTypeAndShape( @Const OrtValue ort_value, @ByPtrPtr OrtTensorTypeAndShapeInfo out);
+
+  /** \brief Returns numeric data for sparse tensor values (nnz). For string values use GetStringTensor*().
+  *
+  * @param ort_value [in] an instance of ::OrtValue containing sparse tensor
+  * @param out [out] returns a pointer to values data.  Do not attempt to free this ptr.
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSparseTensorValues( @Const OrtValue ort_value, @Cast("const void**") PointerPointer out);
+  public native OrtStatus GetSparseTensorValues( @Const OrtValue ort_value, @Cast("const void**") @ByPtrPtr Pointer out);
+
+  /** \brief Returns data type, shape for the type of indices specified by indices_format.
+  *
+  * @param ort_value [in] ::OrtValue containing sparse tensor.
+  * @param indices_format [in] One of the indices formats. It is an error to request a format that the sparse
+  * tensor does not contain.
+  * @param out [out] an instance of ::OrtTensorTypeAndShapeInfo. Must be freed by OrtApi::ReleaseTensorTypeAndShapeInfo
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSparseTensorIndicesTypeShape( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
+  public native OrtStatus GetSparseTensorIndicesTypeShape( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @ByPtrPtr OrtTensorTypeAndShapeInfo out);
+  public native OrtStatus GetSparseTensorIndicesTypeShape( @Const OrtValue ort_value, @Cast("OrtSparseIndicesFormat") int indices_format, @ByPtrPtr OrtTensorTypeAndShapeInfo out);
+
+  /** \brief Returns indices data for the type of the indices specified by indices_format
+  *
+  * @param ort_value [in] ::OrtValue containing sparse tensor.
+  * @param indices_format [in] One of the indices formats. It is an error to request a format that the sparse tensor does not contain.
+  * @param num_indices [out] Pointer to where the number of indices entries is returned
+  * @param indices [out] Returned pointer to the indices data. Do not free the returned pointer as it refers to internal data owned by the ::OrtValue
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus GetSparseTensorIndices( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("size_t*") SizeTPointer num_indices, @Cast("const void**") PointerPointer indices);
+  public native OrtStatus GetSparseTensorIndices( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("size_t*") SizeTPointer num_indices, @Cast("const void**") @ByPtrPtr Pointer indices);
+  public native OrtStatus GetSparseTensorIndices( @Const OrtValue ort_value, @Cast("OrtSparseIndicesFormat") int indices_format, @Cast("size_t*") SizeTPointer num_indices, @Cast("const void**") @ByPtrPtr Pointer indices);
 
   /**
-   * The API returns sparse tensor format enum iff a given ort value contains an instance of sparse tensor.
-   * 
-   * @param ort_value [in] OrtValue that contains an instance of sparse tensor
-   * @param out [out] pointer to out parameter
+   * \brief Sets out to 1 iff an optional type OrtValue has an element, 0 otherwise (OrtValue is None)
+   * Use this API to find if the optional type OrtValue is None or not.
+   * If the optional type OrtValue is not None, use the OrtValue just like any other OrtValue.
+   * For example, if you get an OrtValue that corresponds to Optional(tensor) and 
+   * if HasValue() returns true, use it as tensor and so on.
+   <p>
+   * @param value [in] Input OrtValue.
+   * @param out [out] indicating if the input OrtValue contains data (1) or if it is a None (0)
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public static class GetSparseTensorFormat_OrtValue_IntPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSparseTensorFormat_OrtValue_IntPointer(Pointer p) { super(p); }
-      protected GetSparseTensorFormat_OrtValue_IntPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("OrtSparseFormat*") IntPointer out);
-  }
-  public native GetSparseTensorFormat_OrtValue_IntPointer GetSparseTensorFormat(); public native OrtApi GetSparseTensorFormat(GetSparseTensorFormat_OrtValue_IntPointer setter);
+  public native OrtStatus HasValue( @Const OrtValue value, IntPointer out);
+  public native OrtStatus HasValue( @Const OrtValue value, IntBuffer out);
+  public native OrtStatus HasValue( @Const OrtValue value, int[] out);
+  /** \}
+   *  \name OrtKernelContext
+   *  \{
+  /** \brief Used for custom operators, gets the GPU compute stream to use to launch the custom a GPU kernel     
+  *   @see ::OrtCustomOp
+  * @param OrtKernelContext [context] instance
+  * @param Returns [out] pointer to a GPU compute stream that can be used to launch the custom GPU kernel.
+  *             If retrieving the GPU compute stream is not relevant (GPU not enabled in the build, kernel partitioned to
+  *             some other EP), then a nullptr is returned as the output param.
+  *             Do not free or mutate the returned pointer as it refers to internal data owned by the underlying session.
+  *             Only use it for custom kernel launching.
+  */
+  public native OrtStatus KernelContext_GetGPUComputeStream( @Const OrtKernelContext context, @Cast("void**") PointerPointer out);
+  public native OrtStatus KernelContext_GetGPUComputeStream( @Const OrtKernelContext context, @Cast("void**") @ByPtrPtr Pointer out);
 
-  /**
-   *  The API Returns data type and shape of sparse tensor values (nnz) iff OrtValue contains a SparseTensor.
-   * 
-   * @param ort_value [in] an OrtValue that contains a fully constructed sparse tensor
-   * @param out [out] Should be freed by ReleaseTensorTypeAndShapeInfo after use
+  /** \}
+   *  \name GetTensorMemoryInfo
+   *  \{
+  /** \brief Returns a pointer to the ::OrtMemoryInfo of a Tensor
+   * @param ort_value [in] ::OrtValue containing tensor.
+   * @param mem_info [out] ::OrtMemoryInfo of the tensor. Do NOT free the returned pointer. It is valid for the lifetime of the ::OrtValue
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public static class GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer(Pointer p) { super(p); }
-      protected GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
-  }
-  public native GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer GetSparseTensorValuesTypeAndShape(); public native OrtApi GetSparseTensorValuesTypeAndShape(GetSparseTensorValuesTypeAndShape_OrtValue_PointerPointer setter);
+  public native OrtStatus GetTensorMemoryInfo( @Const OrtValue value, @Cast("const OrtMemoryInfo**") PointerPointer mem_info);
+  public native OrtStatus GetTensorMemoryInfo( @Const OrtValue value, @Const @ByPtrPtr OrtMemoryInfo mem_info);
 
-  /**
-   * The API returns numeric data for sparse tensor values (nnz). For string values use GetStringTensor*() API.
-   * 
-   * @param ort_value [in] an instance of OrtValue containing sparse tensor
-   * @param out [out] returns a pointer to values data.  Do not attempt to free this ptr.
+  /** \}
+   *  \name GetExecutionProviderApi
+   *  \{
+  /** \brief Get a pointer to the requested version of the Execution Provider specific
+   * API extensions to the OrtApi 
+   * @param provider_name [in] The name of the execution provider name. Currently only the following
+   * values are supported: "DML".
+   * @param version [in] Must be ::ORT_API_VERSION.
+   * @param provider_api [out] A void pointer containing a reference to the execution provider versioned api structure.
+   * For example, the provider_api pointer can be cast to the OrtDmlApi* when the provider_name is "DML".
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
    */
-  public static class GetSparseTensorValues_OrtValue_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSparseTensorValues_OrtValue_PointerPointer(Pointer p) { super(p); }
-      protected GetSparseTensorValues_OrtValue_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, @Cast("const void**") PointerPointer out);
-  }
-  public native GetSparseTensorValues_OrtValue_PointerPointer GetSparseTensorValues(); public native OrtApi GetSparseTensorValues(GetSparseTensorValues_OrtValue_PointerPointer setter);
+  public native OrtStatus GetExecutionProviderApi( @Cast("const char*") BytePointer provider_name, @Cast("uint32_t") int version, @Cast("const void**") PointerPointer provider_api);
+  public native OrtStatus GetExecutionProviderApi( @Cast("const char*") BytePointer provider_name, @Cast("uint32_t") int version, @Cast("const void**") @ByPtrPtr Pointer provider_api);
+  public native OrtStatus GetExecutionProviderApi( String provider_name, @Cast("uint32_t") int version, @Cast("const void**") @ByPtrPtr Pointer provider_api);
 
-  /**
-   * The API returns data type, shape for the type of indices specified by
-   * indices_format.
-   * 
-   * @param ort_value [in] OrtValue containing sparse tensor.
-   * @param indices_format [in] - one of the indices formats. It is an error to request a format that the sparse
-   * tensor does not contain.
-   * @param an [out] instance of OrtTensorTypeAndShapeInfo. Must be freed by the ReleaseTensorTypeAndShapeInfo.
-   */
-  public static class GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer(Pointer p) { super(p); }
-      protected GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("OrtTensorTypeAndShapeInfo**") PointerPointer out);
-  }
-  public native GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer GetSparseTensorIndicesTypeShape(); public native OrtApi GetSparseTensorIndicesTypeShape(GetSparseTensorIndicesTypeShape_OrtValue_OrtSparseIndicesFormat_PointerPointer setter);
+  /** \}
+   <p>
+   *  \name SessionOptions
+   *  \{
+  /** \brief Set custom thread creation function
+  *
+  * @param session [in] options
+  * @param custom [in] thread creation function
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsSetCustomCreateThreadFn( OrtSessionOptions options, OrtCustomCreateThreadFn ort_custom_create_thread_fn);
 
-  /**
-   * The API returns indices data for the type of the indices specified by indices_format.
-   * Do not free the returned ptr as it points directly to the internal sparse tensor buffer.
-   * 
-   * @param ort_value [in] OrtValue containing sparse tensor.
-   * @param indices_format [in] - one of the indices formats. It is an error to request a format that the sparse
-   * tensor does not contain.
-   * @param num_indices [out] ptr where the number of indices entries is returned
-   * @param indices [out] out param where the pointer to the internal buffer is returned. Do not free this buffer.
-   */
-  public static class GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer(Pointer p) { super(p); }
-      protected GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer() { allocate(); }
-      private native void allocate();
-      public native @Cast("OrtStatusPtr") OrtStatus call( @Const OrtValue ort_value, OrtSparseIndicesFormat indices_format, @Cast("size_t*") SizeTPointer num_indices, @Cast("const void**") PointerPointer indices);
-  }
-  public native GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer GetSparseTensorIndices(); public native OrtApi GetSparseTensorIndices(GetSparseTensorIndices_OrtValue_OrtSparseIndicesFormat_SizeTPointer_PointerPointer setter);
+  /** \brief Set creation options for custom thread 
+  *
+  * @param session [in] options
+  * @param custom [in] thread creation options (can be nullptr)
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsSetCustomThreadCreationOptions( OrtSessionOptions options, Pointer ort_custom_thread_creation_options);
+
+  /** \brief Set custom thread join function
+  *
+  * @param session [in] options
+  * @param custom [in] join thread function, must not be nullptr when ort_custom_create_thread_fn is set
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SessionOptionsSetCustomJoinThreadFn( OrtSessionOptions options, OrtCustomJoinThreadFn ort_custom_join_thread_fn);
+  /** \}
+   <p>
+   *  \name OrtThreadingOptions
+   *  \{
+  /** \brief Set custom thread creation function for global thread pools
+  *
+  * @param tp_options [inout]
+  * @param custom [in] thread creation function
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalCustomCreateThreadFn( OrtThreadingOptions tp_options, OrtCustomCreateThreadFn ort_custom_create_thread_fn);
+
+  /** \brief Set custom thread creation options for global thread pools
+  *
+  * @param tp_options [inout]
+  * @param custom [in] thread creation options (can be nullptr)
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalCustomThreadCreationOptions( OrtThreadingOptions tp_options, Pointer ort_custom_thread_creation_options);
+
+  /** \brief Set custom thread join function for global thread pools
+  *
+  * @param tp_options [inout]
+  * @param custom [in] thread join function, must not be nullptr when global ort_custom_create_thread_fn is set
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SetGlobalCustomJoinThreadFn( OrtThreadingOptions tp_options, OrtCustomJoinThreadFn ort_custom_join_thread_fn);
+  /** \}
+  <p>
+  /** \brief Synchronize bound inputs. The call may be necessary for some providers, such as cuda,
+  *   in case the system that allocated bound memory operated on a different stream. However, the
+  *   operation is provider specific and could be a no-op.
+  *
+  * @param binding_ptr [inout]
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SynchronizeBoundInputs( OrtIoBinding binding_ptr);
+
+  /** \brief Synchronize bound outputs. The call may be necessary for some providers, such as cuda,
+  *   in case the system that allocated bound memory operated on a different stream. However, the
+  *   operation is provider specific and could be a no-op.
+  *
+  * @param binding_ptr [inout]
+  * 
+  * * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  public native OrtStatus SynchronizeBoundOutputs( OrtIoBinding binding_ptr);
 }

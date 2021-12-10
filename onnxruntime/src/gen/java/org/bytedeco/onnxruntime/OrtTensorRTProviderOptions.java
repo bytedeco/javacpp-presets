@@ -15,9 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** <summary>
- *  Options for the TensorRT provider that are passed to SessionOptionsAppendExecutionProvider_TensorRT
- *  </summary> */
+/** \brief TensorRT Provider Options
+*
+* @see OrtApi::SessionOptionsAppendExecutionProvider_TensorRT
+*/
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtTensorRTProviderOptions extends Pointer {
     static { Loader.load(); }
@@ -36,7 +37,8 @@ public class OrtTensorRTProviderOptions extends Pointer {
         return new OrtTensorRTProviderOptions((Pointer)this).offsetAddress(i);
     }
 
-  public native int device_id(); public native OrtTensorRTProviderOptions device_id(int setter);                                // cuda device id.
+  /** CUDA device id (0 = default device) */
+  public native int device_id(); public native OrtTensorRTProviderOptions device_id(int setter);
   public native int has_user_compute_stream(); public native OrtTensorRTProviderOptions has_user_compute_stream(int setter);                  // indicator of user specified CUDA compute stream.
   public native Pointer user_compute_stream(); public native OrtTensorRTProviderOptions user_compute_stream(Pointer setter);                    // user specified CUDA compute stream.
   public native int trt_max_partition_iterations(); public native OrtTensorRTProviderOptions trt_max_partition_iterations(int setter);             // maximum iterations for TensorRT parser to get capability

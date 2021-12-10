@@ -15,6 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \addtogroup Global
+ * ONNX Runtime C API
+ * \{
+ */
 // The actual types defined have an Ort prefix
 @Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtEnv extends Pointer {

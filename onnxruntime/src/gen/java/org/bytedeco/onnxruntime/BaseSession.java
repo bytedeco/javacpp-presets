@@ -37,5 +37,6 @@ public class BaseSession extends Pointer {
 
   public native @Name("operator OrtSession*") OrtSession asOrtSession();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtSession release();
 }

@@ -28,9 +28,24 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-/** \file onnxruntime_c_api.h
-  <p>
-  \brief ONNX Runtime C API.
+// See docs\c_cxx\README.md on generating the Doxygen documentation from this file
+
+/** \mainpage C & C++ APIs
+*
+* <h1>C</h1>
+*
+* ::OrtApi - Click here to jump to the structure with all C API functions.
+*
+* <h1>C++</h1>
+*
+* ::Ort - Click here to jump to the namespace holding all of the C++ wrapper classes
+*
+* It is a set of header only wrapper classes around the C API. The goal is to turn the C style return value error codes into C++ exceptions, and to
+* automate memory management through standard C++ RAII principles.
+*
+* \addtogroup Global
+* ONNX Runtime C API
+* \{
 */
 
 // #pragma once
@@ -38,12 +53,16 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // #include <stdint.h>
 // #include <string.h>
 
-// This value is used in structures passed to ORT so that a newer version of ORT will still work with them
-public static final int ORT_API_VERSION = 9;
+/** \brief The API version defined in this header
+*
+* This value is used by some API functions to behave as this version of the header expects.
+*/
+public static final int ORT_API_VERSION = 10;
 
 // #ifdef __cplusplus
 // #endif
 
+/** \} */
 // SAL2 Definitions
 // #ifndef _WIN32
 // #define _In_
@@ -124,8 +143,40 @@ public static final int ORT_API_VERSION = 9;
 // #define NO_EXCEPTION
 // #endif
 
-// Copied from TensorProto::DataType
-// Currently, Ort doesn't support complex64, complex128
+// __VA_ARGS__ on Windows and Linux are different
+// #define ORT_API(RETURN_TYPE, NAME, ...) RETURN_TYPE ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION
+
+// #define ORT_API_STATUS(NAME, ...)
+//   _Success_(return == 0) _Check_return_ _Ret_maybenull_ OrtStatusPtr ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION ORT_MUST_USE_RESULT
+
+// XXX: Unfortunately, SAL annotations are known to not work with function pointers
+// #define ORT_API2_STATUS(NAME, ...)
+//   _Check_return_ _Ret_maybenull_ OrtStatusPtr(ORT_API_CALL* NAME)(__VA_ARGS__) NO_EXCEPTION ORT_MUST_USE_RESULT
+
+// Used in *.cc files. Almost as same as ORT_API_STATUS, except without ORT_MUST_USE_RESULT and ORT_EXPORT
+// #define ORT_API_STATUS_IMPL(NAME, ...)
+//   _Success_(return == 0) _Check_return_ _Ret_maybenull_ OrtStatusPtr ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION
+
+// #define ORT_CLASS_RELEASE(X) void(ORT_API_CALL * Release##X)(_Frees_ptr_opt_ Ort##X * input)
+
+// #ifdef __DOXYGEN__
+// #undef ORT_API_STATUS
+// #define ORT_API_STATUS(NAME, ...) OrtStatus* NAME(__VA_ARGS__)
+// #undef ORT_API2_STATUS
+// #define ORT_API2_STATUS(NAME, ...) OrtStatus* NAME(__VA_ARGS__)
+// #undef ORT_CLASS_RELEASE
+// #define ORT_CLASS_RELEASE(X) void Release##X(Ort##X* input)
+// #undef NO_EXCEPTION
+// #define NO_EXCEPTION
+// #endif
+/** \addtogroup Global
+ * ONNX Runtime C API
+ * \{
+ */
+
+/** Copied from TensorProto::DataType
+* Currently, Ort doesn't support complex64, complex128
+*/
 /** enum ONNXTensorElementDataType */
 public static final int
   ONNX_TENSOR_ELEMENT_DATA_TYPE_UNDEFINED = 0,
@@ -154,7 +205,8 @@ public static final int
   ONNX_TYPE_SEQUENCE = 2,
   ONNX_TYPE_MAP = 3,
   ONNX_TYPE_OPAQUE = 4,
-  ONNX_TYPE_SPARSETENSOR = 5;
+  ONNX_TYPE_SPARSETENSOR = 5,
+  ONNX_TYPE_OPTIONAL = 6;
 
 // These types are synced with internal
 // SparseFormatFlags
@@ -179,12 +231,21 @@ public enum OrtSparseIndicesFormat {
     @Override public String toString() { return intern().name(); }
 }
 
+/** \brief Logging severity levels
+ *
+ * In typical API usage, specifying a logging severity level specifies the minimum severity of log messages to show.
+ */
 /** enum OrtLoggingLevel */
 public static final int
+  /** Verbose informational messages (least severe). */
   ORT_LOGGING_LEVEL_VERBOSE = 0,
+  /** Informational messages. */
   ORT_LOGGING_LEVEL_INFO = 1,
+  /** Warning messages. */
   ORT_LOGGING_LEVEL_WARNING = 2,
+  /** Error messages. */
   ORT_LOGGING_LEVEL_ERROR = 3,
+  /** Fatal error messages (most severe). */
   ORT_LOGGING_LEVEL_FATAL = 4;
 
 /** enum OrtErrorCode */
@@ -202,6 +263,7 @@ public static final int
   ORT_INVALID_GRAPH = 10,
   ORT_EP_FAIL = 11;
 
+/** \} */
 // #define ORT_RUNTIME_CLASS(X)
 //   struct Ort##X;
 //   typedef struct Ort##X Ort##X;
@@ -265,24 +327,6 @@ public static final int
 
 // #ifdef _WIN32
 // #else
-// #endif
-
-// __VA_ARGS__ on Windows and Linux are different
-// #define ORT_API(RETURN_TYPE, NAME, ...) RETURN_TYPE ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION
-
-// #define ORT_API_STATUS(NAME, ...)
-//   _Success_(return == 0) _Check_return_ _Ret_maybenull_ OrtStatusPtr ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION ORT_MUST_USE_RESULT
-
-// XXX: Unfortunately, SAL annotations are known to not work with function pointers
-// #define ORT_API2_STATUS(NAME, ...)
-//   _Check_return_ _Ret_maybenull_ OrtStatusPtr(ORT_API_CALL* NAME)(__VA_ARGS__) NO_EXCEPTION ORT_MUST_USE_RESULT
-
-// Used in *.cc files. Almost as same as ORT_API_STATUS, except without ORT_MUST_USE_RESULT and ORT_EXPORT
-// #define ORT_API_STATUS_IMPL(NAME, ...)
-//   _Success_(return == 0) _Check_return_ _Ret_maybenull_ OrtStatusPtr ORT_API_CALL NAME(__VA_ARGS__) NO_EXCEPTION
-
-// #define ORT_CLASS_RELEASE(X) void(ORT_API_CALL * Release##X)(_Frees_ptr_opt_ Ort##X * input)
-// #define ORT_CLASS_RELEASE2(X) void(ORT_API_CALL * Release##X)(_Frees_ptr_opt_ Ort##X##V2 * input)
 // Targeting ../OrtAllocator.java
 
 
@@ -290,9 +334,11 @@ public static final int
 
 
 
-// Graph optimization level.
-// Refer to https://www.onnxruntime.ai/docs/resources/graph-optimizations.html
-// for an in-depth understanding of Graph Optimizations in ORT
+/** \brief Graph optimization level
+*
+* Refer to https://www.onnxruntime.ai/docs/resources/graph-optimizations.html
+* for an in-depth understanding of Graph Optimizations
+*/
 /** enum GraphOptimizationLevel */
 public static final int
   ORT_DISABLE_ALL = 0,
@@ -305,10 +351,12 @@ public static final int
   ORT_SEQUENTIAL = 0,
   ORT_PARALLEL = 1;
 
-// Set the language projection, default is C, which means it will classify the language not in the list to C also.
+/** \brief Language projection identifiers
+* /see OrtApi::SetLanguageProjection
+*/
 /** enum OrtLanguageProjection */
 public static final int
-  ORT_PROJECTION_C = 0,  // default
+  ORT_PROJECTION_C = 0,
   ORT_PROJECTION_CPLUSPLUS = 1,
   ORT_PROJECTION_CSHARP = 2,
   ORT_PROJECTION_PYTHON = 3,
@@ -324,26 +372,31 @@ public static final int
 
 /** enum OrtAllocatorType */
 public static final int
-  Invalid = -1,
+  OrtInvalidAllocator = -1,
   OrtDeviceAllocator = 0,
   OrtArenaAllocator = 1;
 
-/**
- * memory types for allocator, exec provider specific types should be extended in each provider
- * Whenever this struct is updated, please also update the MakeKey function in onnxruntime/core/framework/execution_provider.cc
+/** \brief Memory types for allocated memory, execution provider specific types should be extended in each provider.
 */
+// Whenever this struct is updated, please also update the MakeKey function in onnxruntime / core / framework / execution_provider.cc
 /** enum OrtMemType */
 public static final int
-  OrtMemTypeCPUInput = -2,              // Any CPU memory used by non-CPU execution provider
-  OrtMemTypeCPUOutput = -1,             // CPU accessible memory outputted by non-CPU execution provider, i.e. CUDA_PINNED
-  OrtMemTypeCPU = OrtMemTypeCPUOutput,  // temporary CPU accessible memory allocated by non-CPU execution provider, i.e. CUDA_PINNED
-  OrtMemTypeDefault = 0;                // the default allocator for execution provider
+  /** Any CPU memory used by non-CPU execution provider */
+  OrtMemTypeCPUInput = -2,
+  /** CPU accessible memory outputted by non-CPU execution provider, i.e. CUDA_PINNED */
+  OrtMemTypeCPUOutput = -1,
+  /** Temporary CPU accessible memory allocated by non-CPU execution provider, i.e. CUDA_PINNED */
+  OrtMemTypeCPU = OrtMemTypeCPUOutput,
+  /** The default allocator for execution provider */
+  OrtMemTypeDefault = 0;
 
+/** \brief Algorithm to use for cuDNN Convolution Op
+*/
 /** enum OrtCudnnConvAlgoSearch */
 public static final int
-  EXHAUSTIVE = 0,  // expensive exhaustive benchmarking using cudnnFindConvolutionForwardAlgorithmEx
-  HEURISTIC = 1,   // lightweight heuristic based search using cudnnGetConvolutionForwardAlgorithm_v7
-  DEFAULT = 2;     // default algorithm using CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_PRECOMP_GEMM
+  OrtCudnnConvAlgoSearchExhaustive = 0,  // expensive exhaustive benchmarking using cudnnFindConvolutionForwardAlgorithmEx
+  OrtCudnnConvAlgoSearchHeuristic = 1,   // lightweight heuristic based search using cudnnGetConvolutionForwardAlgorithm_v7
+  OrtCudnnConvAlgoSearchDefault = 2;     // default algorithm using CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_PRECOMP_GEMM
 // Targeting ../OrtCUDAProviderOptions.java
 
 
@@ -360,7 +413,23 @@ public static final int
 
 
 
+/** \brief The Onnxruntime library's entry point to access the C API
+*
+* Call this to get the a pointer to an ::OrtApiBase
+*/
 public static native @Const OrtApiBase OrtGetApiBase();
+// Targeting ../OrtThreadWorkerFn.java
+
+
+// Targeting ../OrtCustomHandleType.java
+
+
+// Targeting ../OrtCustomCreateThreadFn.java
+
+
+// Targeting ../OrtCustomJoinThreadFn.java
+
+
 // Targeting ../OrtApi.java
 
 
@@ -389,13 +458,15 @@ public static final int
 /*
  * This is the old way to add the CUDA provider to the session, please use SessionOptionsAppendExecutionProvider_CUDA above to access the latest functionality
  * This function always exists, but will only succeed if Onnxruntime was built with CUDA support and the CUDA provider shared library exists
- * 
- * \param device_id cuda device id, starts from zero.
+ *
+ * \param device_id CUDA device id, starts from zero.
 */
-public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppendExecutionProvider_CUDA( OrtSessionOptions options, int device_id);
+public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppendExecutionProvider_CUDA( OrtSessionOptions options, int device_id);
 
 // #ifdef __cplusplus
 // #endif
+
+/** \} */
 
 
 // Parsed from onnxruntime/core/session/onnxruntime_cxx_api.h
@@ -428,6 +499,10 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 // #ifdef ORT_NO_EXCEPTIONS
 // #include <iostream>
 // #endif
+
+/** \brief All C++ Onnxruntime APIs are defined inside this namespace
+* 
+*/
 // Targeting ../OrtException.java
 
 
@@ -450,14 +525,12 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 
 // If macro ORT_API_MANUAL_INIT is defined, no static initialization will be performed. Instead, user must call InitApi() before using it.
 
-
 // #endif
 
-// This returns a reference to the OrtApi interface in use, in case someone wants to use the C API functions
+/** This returns a reference to the OrtApi interface in use */
 @Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
 
-// This is a C++ wrapper for GetAvailableProviders() C API and returns
-// a vector of strings representing the available execution providers.
+/** This is a C++ wrapper for OrtApi::GetAvailableProviders() and returns a vector of strings representing the available execution providers. */
 @Namespace("Ort") public static native @ByVal StringVector GetAvailableProviders();
 
 // This is used internally by the C++ API. This macro is to make it easy to generate overloaded methods for all of the various OrtRelease* functions for every Ort* type
@@ -481,6 +554,8 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 @Namespace("Ort") public static native void OrtRelease(OrtThreadingOptions ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtIoBinding ptr);
 @Namespace("Ort") public static native void OrtRelease(OrtArenaCfg ptr);
+
+// #undef ORT_DEFINE_RELEASE
 // Targeting ../Float16_t.java
 
 
@@ -532,6 +607,9 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 // Targeting ../BaseValue.java
 
 
+// Targeting ../UnownedMemoryInfo.java
+
+
 // Targeting ../UnownedTensorTypeAndShapeInfo.java
 
 
@@ -580,9 +658,6 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 // Targeting ../AllocatorWithDefaultOptions.java
 
 
-// Targeting ../UnownedMemoryInfo.java
-
-
 // Targeting ../MemoryInfo.java
 
 
@@ -617,7 +692,7 @@ public static native @Cast("OrtStatusPtr") @Platform(extension="-gpu") OrtStatus
 /**
  * @param use_arena zero: false. non-zero: true.
  */
-public static native @Cast("OrtStatusPtr") OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( OrtSessionOptions options, int use_arena);
+public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( OrtSessionOptions options, int use_arena);
 
 // #ifdef __cplusplus
 // #endif
@@ -636,7 +711,7 @@ public static native @Cast("OrtStatusPtr") OrtStatus OrtSessionOptionsAppendExec
 /**
  * @param use_arena zero: false. non-zero: true.
  */
-public static native @Cast("OrtStatusPtr") OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
+public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
 
 // #ifdef __cplusplus
 // #endif

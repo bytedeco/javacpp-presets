@@ -14,10 +14,18 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
-@Name("Ort::Unowned<Ort::MapTypeInfo>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class UnownedMapTypeInfo extends MapTypeInfo {
+
+/** \brief Thread work loop function
+*
+* Onnxruntime will provide the working loop on custom thread creation
+* Argument is an onnxruntime built-in type which will be provided when thread pool calls OrtCustomCreateThreadFn
+*/
+@Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class OrtThreadWorkerFn extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnownedMapTypeInfo(Pointer p) { super(p); }
-
+    public    OrtThreadWorkerFn(Pointer p) { super(p); }
+    protected OrtThreadWorkerFn() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer ort_worker_fn_param);
 }

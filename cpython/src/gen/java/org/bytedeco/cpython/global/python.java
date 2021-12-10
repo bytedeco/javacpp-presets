@@ -52,16 +52,6 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #ifndef MS_WINDOWS
 // #include <unistd.h>
 // #endif
-// #ifdef HAVE_CRYPT_H
-// #if defined(HAVE_CRYPT_R) && !defined(_GNU_SOURCE)
-/* Required for glibc to expose the crypt_r() function prototype. */
-// #  define _GNU_SOURCE
-// #  define _Py_GNU_SOURCE_FOR_CRYPT
-// #endif
-// #include <crypt.h>
-// #ifdef _Py_GNU_SOURCE_FOR_CRYPT
-// #endif
-// #endif
 
 /* For size_t? */
 // #ifdef HAVE_STDDEF_H
@@ -133,6 +123,7 @@ public class python extends org.bytedeco.cpython.helper.python {
 // #include "sliceobject.h"
 // #include "cellobject.h"
 // #include "iterobject.h"
+// #include "cpython/initconfig.h"
 // #include "genobject.h"
 // #include "descrobject.h"
 // #include "genericaliasobject.h"
@@ -145,8 +136,6 @@ public class python extends org.bytedeco.cpython.helper.python {
 
 // #include "codecs.h"
 // #include "pyerrors.h"
-
-// #include "cpython/initconfig.h"
 // #include "pythread.h"
 // #include "pystate.h"
 // #include "context.h"
@@ -198,12 +187,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        10;
-public static final int PY_MICRO_VERSION =        0;
+public static final int PY_MICRO_VERSION =        1;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.10.0";
+public static final String PY_VERSION =              "3.10.1";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -848,6 +837,9 @@ public static final int HAVE_LIBINTL_H = 1;
 /* Define to 1 if you have the <libutil.h> header file. */
 /* #undef HAVE_LIBUTIL_H */
 
+/* Define to 1 if you have the `uuid' library (-luuid). */
+public static final int HAVE_LIBUUID = 1;
+
 /* Define if you have the 'link' function. */
 public static final int HAVE_LINK = 1;
 
@@ -1121,6 +1113,9 @@ public static final int HAVE_SCHED_SETPARAM = 1;
 
 /* Define to 1 if you have the `sched_setscheduler' function. */
 public static final int HAVE_SCHED_SETSCHEDULER = 1;
+
+/* Define to 1 if you have the `sem_clockwait' function. */
+public static final int HAVE_SEM_CLOCKWAIT = 1;
 
 /* Define to 1 if you have the `sem_getvalue' function. */
 public static final int HAVE_SEM_GETVALUE = 1;
@@ -1729,6 +1724,9 @@ public static final int STDC_HEADERS = 1;
    (which you can't on SCO ODT 3.0). */
 public static final int SYS_SELECT_WITH_SYS_TIME = 1;
 
+/* Custom thread stack size depending on chosen sanitizer runtimes. */
+/* #undef THREAD_STACK_SIZE */
+
 /* Library needed by timemodule.c: librt may be needed for clock_gettime() */
 /* #undef TIMEMODULE_LIB */
 
@@ -1747,7 +1745,7 @@ public static final int _ALL_SOURCE = 1;
 // #endif
 /* Enable GNU extensions on systems that have them.  */
 // #ifndef _GNU_SOURCE
-// # define _GNU_SOURCE 1
+public static final int _GNU_SOURCE = 1;
 // #endif
 /* Enable threading extensions on Solaris.  */
 // #ifndef _POSIX_PTHREAD_SEMANTICS
@@ -1821,7 +1819,6 @@ public static final int _DARWIN_C_SOURCE = 1;
 public static final int _FILE_OFFSET_BITS = 64;
 
 /* Define on Linux to activate all library features */
-// #define _GNU_SOURCE 1
 
 /* Define to include mbstate_t for mbrtowc */
 /* #undef _INCLUDE__STDC_A1_SOURCE */
@@ -3240,7 +3237,7 @@ public static final int
 @NoException public static native int _PyTime_FromNanosecondsObject(@Cast("_PyTime_t*") long[] t,
     PyObject obj);
 
-/* Convert a number of seconds (Python float or int) to a timetamp.
+/* Convert a number of seconds (Python float or int) to a timestamp.
    Raise an exception and return -1 on error, return 0 on success. */
 @NoException public static native int _PyTime_FromSecondsObject(@Cast("_PyTime_t*") LongPointer t,
     PyObject obj,
@@ -3252,7 +3249,7 @@ public static final int
     PyObject obj,
     @Cast("_PyTime_round_t") int round);
 
-/* Convert a number of milliseconds (Python float or int, 10^-3) to a timetamp.
+/* Convert a number of milliseconds (Python float or int, 10^-3) to a timestamp.
    Raise an exception and return -1 on error, return 0 on success. */
 @NoException public static native int _PyTime_FromMillisecondsObject(@Cast("_PyTime_t*") LongPointer t,
     PyObject obj,
@@ -4155,7 +4152,7 @@ they can have object code that is not dependent on Python compilation flags.
 @NoException public static native PyObject _Py_XNewRef(PyObject obj);
 
 // Py_NewRef() and Py_XNewRef() are exported as functions for the stable ABI.
-// Names overriden with macros by static inline functions for best
+// Names overridden with macros by static inline functions for best
 // performances.
 // #define Py_NewRef(obj) _Py_NewRef(_PyObject_CAST(obj))
 // #define Py_XNewRef(obj) _Py_XNewRef(_PyObject_CAST(obj))
@@ -7522,48 +7519,69 @@ public static final int
 
 /* --- Unicode-Escape Codecs ---------------------------------------------- */
 
+/* Variant of PyUnicode_DecodeUnicodeEscape that supports partial decoding. */
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeStateful(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeStateful(
+        String string,
+        @Cast("Py_ssize_t") long length,
+        String errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed
+);
+
 /* Helper for PyUnicode_DecodeUnicodeEscape that detects invalid escape
    chars. */
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         @Cast("const char*") BytePointer string,
         @Cast("Py_ssize_t") long length,
         @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") PointerPointer first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         @Cast("const char*") BytePointer string,
         @Cast("Py_ssize_t") long length,
         @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr BytePointer first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         String string,
         @Cast("Py_ssize_t") long length,
         String errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr ByteBuffer first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         @Cast("const char*") BytePointer string,
         @Cast("Py_ssize_t") long length,
         @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr byte[] first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         String string,
         @Cast("Py_ssize_t") long length,
         String errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr BytePointer first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         @Cast("const char*") BytePointer string,
         @Cast("Py_ssize_t") long length,
         @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr ByteBuffer first_invalid_escape
 );
-@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscapeInternal(
         String string,
         @Cast("Py_ssize_t") long length,
         String errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed,
         @Cast("const char**") @ByPtrPtr byte[] first_invalid_escape
 );
 
@@ -7578,6 +7596,20 @@ public static final int
     @Cast("const Py_UNICODE*") Pointer data,
     @Cast("Py_ssize_t") long length
     );
+
+/* Variant of PyUnicode_DecodeRawUnicodeEscape that supports partial decoding. */
+@NoException public static native PyObject _PyUnicode_DecodeRawUnicodeEscapeStateful(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed
+);
+@NoException public static native PyObject _PyUnicode_DecodeRawUnicodeEscapeStateful(
+        String string,
+        @Cast("Py_ssize_t") long length,
+        String errors,
+        @Cast("Py_ssize_t*") SizeTPointer consumed
+);
 
 /* --- Latin-1 Codecs ----------------------------------------------------- */
 
@@ -11185,6 +11217,16 @@ public static native PyObject PyExc_ResourceWarning(); public static native void
     @Cast("Py_ssize_t") long end,
     String reason
     );
+
+@NoException public static native PyObject _PyErr_ProgramDecodedTextObject(
+    PyObject filename,
+    int lineno,
+    @Cast("const char*") BytePointer encoding);
+@NoException public static native PyObject _PyErr_ProgramDecodedTextObject(
+    PyObject filename,
+    int lineno,
+    String encoding);
+
 @NoException public static native PyObject _PyUnicodeTranslateError_Create(
     PyObject object,
     @Cast("Py_ssize_t") long start,
@@ -11625,6 +11667,8 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 
 // #ifndef Py_PYCORECONFIG_H
 // #define Py_PYCORECONFIG_H
+// #ifndef Py_LIMITED_API
+// #ifdef __cplusplus
 // Targeting ../PyStatus.java
 
 
@@ -11719,6 +11763,8 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 @NoException public static native void Py_GetArgcArgv(IntBuffer argc, @Cast("wchar_t***") @ByPtrPtr PointerPointer argv);
 @NoException public static native void Py_GetArgcArgv(int[] argc, @Cast("wchar_t***") @ByPtrPtr PointerPointer argv);
 
+// #ifdef __cplusplus
+// #endif
 // #endif /* !Py_LIMITED_API */
 // #endif /* !Py_PYCORECONFIG_H */
 
@@ -11728,8 +11774,6 @@ public static native @ByRef PyTypeObject PyContextToken_Type(); public static na
 // #ifndef Py_CPYTHON_PYSTATE_H
 // #  error "this header file must not be included directly"
 // #endif
-
-// #include "cpython/initconfig.h"
 
 @NoException public static native int _PyInterpreterState_RequiresIDRef(PyInterpreterState arg0);
 @NoException public static native void _PyInterpreterState_RequireIDRef(PyInterpreterState arg0, int arg1);
@@ -11850,7 +11894,7 @@ public static final int PyTrace_OPCODE = 7;
 @NoException public static native int _PyInterpreterState_SetConfig(
     @Const PyConfig config);
 
-// Get the configuration of the currrent interpreter.
+// Get the configuration of the current interpreter.
 // The caller must hold the GIL.
 @NoException public static native @Const PyConfig _Py_GetConfig();
 // Targeting ../_xid.java
@@ -13044,7 +13088,7 @@ public static native @Const _frozen PyImport_FrozenModules(); public static nati
 
 /* Takes an arbitrary object which must support the (character, single segment)
    buffer interface and returns a pointer to a read-only memory location
-   useable as character based input for subsequent processing.
+   usable as character based input for subsequent processing.
 
    Return 0 on success.  buffer and buffer_len are only set in case no error
    occurs. Otherwise, -1 is returned and an exception set. */

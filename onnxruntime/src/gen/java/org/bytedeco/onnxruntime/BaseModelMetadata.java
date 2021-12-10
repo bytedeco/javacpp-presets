@@ -37,5 +37,6 @@ public class BaseModelMetadata extends Pointer {
 
   public native @Name("operator OrtModelMetadata*") OrtModelMetadata asOrtModelMetadata();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtModelMetadata release();
 }

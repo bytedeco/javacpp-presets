@@ -15,9 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** <summary>
- *  Options for the CUDA provider that are passed to SessionOptionsAppendExecutionProvider_CUDA
- *  </summary> */
+/** \brief CUDA Provider Options
+*
+* @see OrtApi::SessionOptionsAppendExecutionProvider_CUDA
+*/
 @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtCUDAProviderOptions extends Pointer {
     static { Loader.load(); }

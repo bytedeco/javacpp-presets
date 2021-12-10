@@ -37,5 +37,6 @@ public class BaseIoBinding extends Pointer {
 
   public native @Name("operator OrtIoBinding*") OrtIoBinding asOrtIoBinding();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtIoBinding release();
 }

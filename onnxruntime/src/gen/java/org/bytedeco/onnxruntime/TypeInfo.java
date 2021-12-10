@@ -21,11 +21,15 @@ public class TypeInfo extends BaseTypeInfo {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TypeInfo(Pointer p) { super(p); }
 
+  /** C API Interop */
   public TypeInfo(OrtTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTypeInfo p);
 
+  /** Wraps OrtApi::CastTypeInfoToTensorInfo */
   public native @ByVal UnownedTensorTypeAndShapeInfo GetTensorTypeAndShapeInfo();
+  /** Wraps OrtApi::CastTypeInfoToSequenceTypeInfo */
   public native @ByVal UnownedSequenceTypeInfo GetSequenceTypeInfo();
+  /** Wraps OrtApi::CastTypeInfoToMapTypeInfo */
   public native @ByVal UnownedMapTypeInfo GetMapTypeInfo();
 
   public native @Cast("ONNXType") int GetONNXType();

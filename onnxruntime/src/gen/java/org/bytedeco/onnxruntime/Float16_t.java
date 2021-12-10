@@ -15,8 +15,7 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-/** \class Ort::Float16_t
-  * \brief it is a structure that represents float16 data.
+/** \brief IEEE 754 half-precision floating point data type
   * \details It is necessary for type dispatching to make use of C++ API
   * The type is implicitly convertible to/from uint16_t.
   * The size of the structure should align with uint16_t and one can freely cast

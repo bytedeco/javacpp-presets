@@ -26,6 +26,7 @@ public class ArenaCfg extends BaseArenaCfg {
     public ArenaCfg(Pointer p) { super(p); }
 
   /**
+  * Wraps OrtApi::CreateArenaCfg
   * @param max_mem - use 0 to allow ORT to choose the default
   * @param arena_extend_strategy -  use -1 to allow ORT to choose the default, 0 = kNextPowerOfTwo, 1 = kSameAsRequested
   * @param initial_chunk_size_bytes - use -1 to allow ORT to choose the default

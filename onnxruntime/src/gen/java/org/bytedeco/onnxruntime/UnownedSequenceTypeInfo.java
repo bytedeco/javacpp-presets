@@ -14,7 +14,6 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
-
 @Name("Ort::Unowned<Ort::SequenceTypeInfo>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class UnownedSequenceTypeInfo extends SequenceTypeInfo {
     static { Loader.load(); }

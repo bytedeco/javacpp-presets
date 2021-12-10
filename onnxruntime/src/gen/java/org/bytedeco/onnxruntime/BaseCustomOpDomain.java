@@ -37,5 +37,6 @@ public class BaseCustomOpDomain extends Pointer {
 
   public native @Name("operator OrtCustomOpDomain*") OrtCustomOpDomain asOrtCustomOpDomain();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtCustomOpDomain release();
 }

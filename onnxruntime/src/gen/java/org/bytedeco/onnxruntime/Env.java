@@ -15,6 +15,11 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief The Env (Environment)
+*
+* The Env holds the logging state used by all other objects.
+* <b>Note:</b> One Env must be created before using any other Onnxruntime functionality
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class Env extends BaseEnv {
     static { Loader.load(); }
@@ -30,22 +35,30 @@ public class Env extends BaseEnv {
         return new Env((Pointer)this).offsetAddress(i);
     }
 
+
+  /** \brief Wraps OrtApi::CreateEnv */
   public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }
   private native void allocate(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
   public Env() { super((Pointer)null); allocate(); }
   private native void allocate();
   public Env(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(logging_level, logid); }
   private native void allocate(@Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
+
+  /** \brief Wraps OrtApi::CreateEnvWithCustomLogger */
+  public Env(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param);
+  public Env(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
+  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param);
+
+  /** \brief Wraps OrtApi::CreateEnvWithGlobalThreadPools */
   public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_level, logid); }
   private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/);
   public Env(@Const OrtThreadingOptions tp_options) { super((Pointer)null); allocate(tp_options); }
   private native void allocate(@Const OrtThreadingOptions tp_options);
   public Env(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_level, logid); }
   private native void allocate(@Const OrtThreadingOptions tp_options, @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
-  public Env(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
-  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, @Cast("const char*") BytePointer logid, OrtLoggingFunction logging_function, Pointer logger_param);
-  public Env(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param) { super((Pointer)null); allocate(logging_level, logid, logging_function, logger_param); }
-  private native void allocate(@Cast("OrtLoggingLevel") int logging_level, String logid, OrtLoggingFunction logging_function, Pointer logger_param);
+
+  /** \brief Wraps OrtApi::CreateEnvWithCustomLoggerAndGlobalThreadPools */
   public Env(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
         @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, @Cast("const char*") BytePointer logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_function, logger_param, logging_level, logid); }
   private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
@@ -56,13 +69,16 @@ public class Env extends BaseEnv {
         @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/) { super((Pointer)null); allocate(tp_options, logging_function, logger_param, logging_level, logid); }
   private native void allocate(@Const OrtThreadingOptions tp_options, OrtLoggingFunction logging_function, Pointer logger_param,
         @Cast("OrtLoggingLevel") int logging_level/*=ORT_LOGGING_LEVEL_WARNING*/, String logid/*=""*/);
+
+  /** \brief C Interop Helper */
   public Env(OrtEnv p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtEnv p);
 
+  /** Wraps OrtApi::EnableTelemetryEvents */
   public native @ByRef Env EnableTelemetryEvents();
+  /** Wraps OrtApi::DisableTelemetryEvents */
   public native @ByRef Env DisableTelemetryEvents();
 
+  /** Wraps OrtApi::CreateAndRegisterAllocator */
   public native @ByRef Env CreateAndRegisterAllocator(@Const OrtMemoryInfo mem_info, @Const OrtArenaCfg arena_cfg);
-
-  
 }

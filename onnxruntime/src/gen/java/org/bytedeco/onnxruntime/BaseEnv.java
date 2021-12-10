@@ -37,5 +37,6 @@ public class BaseEnv extends Pointer {
 
   public native @Name("operator OrtEnv*") OrtEnv asOrtEnv();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtEnv release();
 }

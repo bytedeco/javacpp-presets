@@ -15,14 +15,19 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief Wrapper around ::OrtSequenceTypeInfo
+*
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class SequenceTypeInfo extends BaseSequenceTypeInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SequenceTypeInfo(Pointer p) { super(p); }
 
+  /** Used for interop with the C API */
   public SequenceTypeInfo(OrtSequenceTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtSequenceTypeInfo p);
 
+  /** Wraps OrtApi::GetSequenceElementType */
   public native @ByVal TypeInfo GetSequenceElementType();
 }

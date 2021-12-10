@@ -15,26 +15,36 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief Wrapper around ::OrtTensorTypeAndShapeInfo
+*
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class TensorTypeAndShapeInfo extends BaseTensorTypeAndShapeInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorTypeAndShapeInfo(Pointer p) { super(p); }
 
+  /** Used for interop with the C API */
   public TensorTypeAndShapeInfo(OrtTensorTypeAndShapeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtTensorTypeAndShapeInfo p);
 
+  /** Wraps OrtApi::GetTensorElementType */
   public native @Cast("ONNXTensorElementDataType") int GetElementType();
+  /** Wraps OrtApi::GetTensorShapeElementCount */
   public native @Cast("size_t") long GetElementCount();
 
+  /** Wraps OrtApi::GetDimensionsCount */
   public native @Cast("size_t") long GetDimensionsCount();
+  /** Wraps OrtApi::GetDimensions */
   public native void GetDimensions(@Cast("int64_t*") LongPointer values, @Cast("size_t") long values_count);
   public native void GetDimensions(@Cast("int64_t*") LongBuffer values, @Cast("size_t") long values_count);
   public native void GetDimensions(@Cast("int64_t*") long[] values, @Cast("size_t") long values_count);
+  /** Wraps OrtApi::GetSymbolicDimensions */
   public native void GetSymbolicDimensions(@Cast("const char**") PointerPointer values, @Cast("size_t") long values_count);
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr BytePointer values, @Cast("size_t") long values_count);
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr ByteBuffer values, @Cast("size_t") long values_count);
   public native void GetSymbolicDimensions(@Cast("const char**") @ByPtrPtr byte[] values, @Cast("size_t") long values_count);
 
+  /** Uses GetDimensionsCount & GetDimensions to return a std::vector of the shape */
   public native @Cast("int64_t*") @StdVector LongPointer GetShape();
 }
