@@ -624,6 +624,7 @@
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
+        <module>ngt</module>
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
