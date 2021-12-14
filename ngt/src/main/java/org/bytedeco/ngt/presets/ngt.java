@@ -24,7 +24,6 @@ package org.bytedeco.ngt.presets;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
-import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.*;
 
 @Properties(
@@ -33,7 +32,7 @@ import org.bytedeco.javacpp.tools.*;
     global = "org.bytedeco.ngt.global.ngt",
     value = {
         @Platform(
-            value = {"linux-x86"},
+            value = {"linux-x86_64"},
 	    define = {
 		    "SHARED_PTR_NAMESPACE std",
 	   	    "UNIQUE_PTR_NAMESPACE std",

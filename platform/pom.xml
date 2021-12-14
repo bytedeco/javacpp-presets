@@ -29,6 +29,7 @@
     <module>../chilitags/platform</module>
     <module>../flandmark/platform</module>
     <module>../arrow/platform</module>
+    <module>../ngt/platform</module>
     <module>../hdf5/platform</module>
     <module>../hyperscan/platform</module>
     <module>../lz4/platform</module>
@@ -360,6 +361,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>modsecurity-platform</artifactId>
       <version>3.0.6-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>ngt-platform</artifactId>
+      <version>1.13.8-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

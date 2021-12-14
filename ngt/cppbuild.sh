@@ -7,25 +7,6 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export TARGET_CPU=
-export EXTRA_ARGS=
-case $PLATFORM in
-    linux-x86)
-        export CC="gcc -m32"
-        export CXX="g++ -m32"
-        export TARGET_CPU="x86"
-        ;;
-    linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
-        export TARGET_CPU="x64"
-        ;;
-    *)
-        echo "Error: Platform \"$PLATFORM\" is not supported"
-        return 0
-        ;;
-esac
-
 # Must be kept in sync with ngt.version in pom.xml
 NGT_VERSION=1.13.8
 download https://github.com/yahoojapan/NGT/archive/refs/tags/v$NGT_VERSION.tar.gz ngt-$NGT_VERSION.tar.gz
@@ -41,7 +22,6 @@ cd NGT-$NGT_VERSION
 mkdir -p build
 cd build
 
-
 case $PLATFORM in
     linux-x86_64)
         export CC="gcc -m64"
@@ -50,10 +30,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
-
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
-
-
