@@ -22,6 +22,7 @@
 
 package org.bytedeco.ngt.presets;
 
+import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
@@ -36,8 +37,7 @@ import org.bytedeco.javacpp.tools.*;
 	    define = {
 		    "SHARED_PTR_NAMESPACE std",
 	   	    "UNIQUE_PTR_NAMESPACE std",
-		    "NGT_SHARED_MEMORY_ALLOCATOR ON",
-		    "NGT_LARGE_DATASET ON"},
+		    },
             include = {
 		// "ObjectRepository.h",
            	// "Graph.h",
@@ -55,10 +55,9 @@ import org.bytedeco.javacpp.tools.*;
 		// "NGT/Capi.h",
                 "NGT/Index.h"
             }
-	    ,
-            compiler = "cpp11",
-            link = "ngt",
-            preload = "libngt"
+	,compiler = "cpp11"
+        ,link = "ngt"
+        ,preload = {"gomp"}
         )
     }
 )
