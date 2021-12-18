@@ -19,9 +19,9 @@ jobs:
   linux-x86_64:
     runs-on: ubuntu-18.04
     container: centos:7
-    strategy:
-      matrix:
-        ext: ["", -gpu]
+#    strategy:
+#      matrix:
+#        ext: ["", -gpu]
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   macosx-x86_64:
@@ -33,9 +33,9 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86_64:
     runs-on: windows-2019
-    strategy:
-      matrix:
-        ext: ["", -gpu]
+#    strategy:
+#      matrix:
+#        ext: ["", -gpu]
     env:
         BUILD_DIR: C:\build
         MAVEN_OPTIONS: -Djavacpp.parser.skip -Dmaven.javadoc.skip

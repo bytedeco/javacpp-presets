@@ -20,6 +20,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/pytorch/apidocs/
 
+&lowast; The JNI bindings can instead link with [LibTorch](https://pytorch.org/cppdocs/installing.html), as long as its libraries are from the same version of PyTorch and can be found on the system library path, after setting the "org.bytedeco.javacpp.pathsFirst" system property to "true".
+
 
 Sample Usage
 ------------
