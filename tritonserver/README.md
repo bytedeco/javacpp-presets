@@ -64,7 +64,7 @@ Now, this `models` directory will be our model repository.
  $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:21.09-py3 bash
  $ apt update
  $ apt install -y openjdk-11-jdk
- $ wget https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
+ $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
  $ tar zxvf apache-maven-3.8.4-bin.tar.gz
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
  $ git clone https://github.com/bytedeco/javacpp-presets.git
