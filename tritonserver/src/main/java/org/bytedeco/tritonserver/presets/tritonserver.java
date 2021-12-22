@@ -54,7 +54,7 @@ import org.bytedeco.tensorrt.presets.nvparsers;
             exclude = {"<cudaGL.h>", "<cuda_gl_interop.h>"},
             link = "tritonserver",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/local/cuda/include/", "/usr/include"},
-            linkpath = {"/usr/local/cuda/lib/", "/opt/tritonserver/lib/"}
+            linkpath = {"/usr/local/cuda/lib64/", "/opt/tritonserver/lib/"}
         ),
         @Platform(
             value = "windows-x86_64",
