@@ -47,11 +47,10 @@ public class TensorIndex extends Pointer {
 
   // Case 1: `at::indexing::None`
   // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
+  public TensorIndex(@ByVal(nullValue = "c10::nullopt_t(at::indexing::None)") @Cast("c10::nullopt_t*") Pointer none) { super((Pointer)null); allocate(none); }
+  private native void allocate(@ByVal(nullValue = "c10::nullopt_t(at::indexing::None)") @Cast("c10::nullopt_t*") Pointer none);
   public TensorIndex() { super((Pointer)null); allocate(); }
   private native void allocate();
-
-  public TensorIndex(@ByVal @Cast("c10::nullopt_t*") Pointer arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@ByVal @Cast("c10::nullopt_t*") Pointer arg0);
 
   // Case 2: "..." / `at::indexing::Ellipsis`
   // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.UninitializedObject)
