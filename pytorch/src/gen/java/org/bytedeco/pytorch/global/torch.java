@@ -285,6 +285,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../CompilationUnitVector.java
 
 
+// Targeting ../OptimizerParamGroupVector.java
+
+
 // Targeting ../Bool2Vector.java
 
 

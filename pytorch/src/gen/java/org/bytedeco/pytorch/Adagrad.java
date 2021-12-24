@@ -22,12 +22,12 @@ public class Adagrad extends Optimizer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Adagrad(Pointer p) { super(p); }
 
-  public Adagrad(@StdVector OptimizerParamGroup param_groups,
+  public Adagrad(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults) { super((Pointer)null); allocate(param_groups, defaults); }
-  private native void allocate(@StdVector OptimizerParamGroup param_groups,
+  private native void allocate(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults);
-  public Adagrad(@StdVector OptimizerParamGroup param_groups) { super((Pointer)null); allocate(param_groups); }
-  private native void allocate(@StdVector OptimizerParamGroup param_groups);
+  public Adagrad(@ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
+  private native void allocate(@ByVal OptimizerParamGroupVector param_groups);
 
   public Adagrad(
         @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
