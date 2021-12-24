@@ -22,12 +22,12 @@ public class Adam extends Optimizer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Adam(Pointer p) { super(p); }
 
-   public Adam(@StdVector OptimizerParamGroup param_groups,
+   public Adam(@ByVal OptimizerParamGroupVector param_groups,
           @ByVal(nullValue = "torch::optim::AdamOptions{}") AdamOptions defaults) { super((Pointer)null); allocate(param_groups, defaults); }
-   private native void allocate(@StdVector OptimizerParamGroup param_groups,
+   private native void allocate(@ByVal OptimizerParamGroupVector param_groups,
           @ByVal(nullValue = "torch::optim::AdamOptions{}") AdamOptions defaults);
-   public Adam(@StdVector OptimizerParamGroup param_groups) { super((Pointer)null); allocate(param_groups); }
-   private native void allocate(@StdVector OptimizerParamGroup param_groups);
+   public Adam(@ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
+   private native void allocate(@ByVal OptimizerParamGroupVector param_groups);
    public Adam(
           @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
           @ByVal(nullValue = "torch::optim::AdamOptions{}") AdamOptions defaults) { super((Pointer)null); allocate(params, defaults); }
