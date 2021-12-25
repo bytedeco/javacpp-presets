@@ -2686,7 +2686,7 @@ public static final int DNNL_VERSION_MAJOR = 2;
 public static final int DNNL_VERSION_MINOR = 5;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 0;
+public static final int DNNL_VERSION_PATCH = 1;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -7192,7 +7192,7 @@ public static native @Cast("dnnl_status_t") int dnnl_set_primitive_cache_capacit
 
 /** \} dnnl_api_primitive_cache
  <p>
- *  \addtogroup dnnl_api_mathmode
+ *  \addtogroup dnnl_api_mathmode Floating-point Math Mode
  *  \{
  <p>
  *  Returns the floating-point math mode that will be used by default

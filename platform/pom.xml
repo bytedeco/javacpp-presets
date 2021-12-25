@@ -169,7 +169,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2021.4-${project.version}</version>
+      <version>2022.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -179,12 +179,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5-${project.version}</version>
+      <version>2.5.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.18-${project.version}</version>
+      <version>0.3.19-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
