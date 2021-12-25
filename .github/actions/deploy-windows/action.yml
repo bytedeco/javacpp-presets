@@ -100,8 +100,10 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18230/w_onemkl_p_2021.4.0.640_offline.exe
-          w_onemkl_p_2021.4.0.640_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18414/w_onemkl_p_2022.0.0.115_offline.exe
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18418/w_BaseKit_32bit_p_2022.1.0.37_offline.exe
+          w_onemkl_p_2022.0.0.115_offline.exe -s -a -s --eula accept
+          w_BaseKit_32bit_p_2022.1.0.37_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (

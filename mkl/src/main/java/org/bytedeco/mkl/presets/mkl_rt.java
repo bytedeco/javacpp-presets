@@ -42,11 +42,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",
         "mkl_dnn_types.h", "mkl_dnn.h", "mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
               compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/oneapi/mkl/latest/include/",
-              linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}, link = "mkl_rt@.1",
-              preload = {"mkl_core@.1", "iomp5", "libiomp5md", "mkl_gnu_thread@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1",
-                         "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_p4@.1", "mkl_p4m@.1", "mkl_p4m3@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
-                         "mkl_vml_def@.1", "mkl_vml_ia@.1", "mkl_vml_mc@.1", "mkl_vml_mc2@.1", "mkl_vml_mc3@.1", "mkl_vml_p4@.1", "mkl_vml_p4m@.1", "mkl_vml_p4m2@.1", "mkl_vml_p4m3@.1",
-                         "mkl_vml_avx@.1", "mkl_vml_avx2@.1", "mkl_vml_avx512@.1", "mkl_vml_avx512_mic@.1", "mkl_vml_cmpt@.1"}, resource = {"include", "lib"}),
+              linkpath = {"/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}, link = "mkl_rt@.2",
+              preload = {"mkl_core@.2", "iomp5", "libiomp5md", "mkl_gnu_thread@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2",
+                         "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_p4@.2", "mkl_p4m@.2", "mkl_p4m3@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
+                         "mkl_vml_def@.2", "mkl_vml_ia@.2", "mkl_vml_mc@.2", "mkl_vml_mc2@.2", "mkl_vml_mc3@.2", "mkl_vml_p4@.2", "mkl_vml_p4m@.2", "mkl_vml_p4m2@.2", "mkl_vml_p4m3@.2",
+                         "mkl_vml_avx@.2", "mkl_vml_avx2@.2", "mkl_vml_avx512@.2", "mkl_vml_avx512_mic@.2", "mkl_vml_cmpt@.2"}, resource = {"include", "lib"}),
     @Platform(value = "linux-x86",    linkpath = {"/opt/intel/oneapi/mkl/latest/lib/ia32/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/"}),
     @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/oneapi/mkl/latest/lib/intel64/", "/opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/"}),
     @Platform(value = "windows",     includepath = "C:/Program Files (x86)/Intel/oneAPI/mkl/latest/include/"),
@@ -98,7 +98,7 @@ public class mkl_rt implements InfoMapper {
                .put(new Info("MKL_DEPRECATED_C").cppText("#define MKL_DEPRECATED_C deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
-               .put(new Info("MKL_CBWR_UNSET_ALL").translate(false))
+               .put(new Info("MKL_CBWR_UNSET_ALL", "MKL_BLACS_LASTMPI").translate(false))
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
                .put(new Info("sparse_vector_t").valueTypes("sparse_vector").pointerTypes("@ByPtrPtr sparse_vector"))
@@ -109,6 +109,7 @@ public class mkl_rt implements InfoMapper {
                .put(new Info("dss_delete_").javaText("public static native int dss_delete_(@Cast(\"void**\") @ByPtrPtr _MKL_DSS_HANDLE_t arg0, IntPointer arg1);"))
 
                .put(new Info("!defined(MKL_CALL_CONV)").define(false))
+               .put(new Info("!defined(_WIN32) & !defined(_WIN64)").define(true))
 
                .put(new Info("VSL_SS_DNAN").cppTypes("long long"))
                .put(new Info("VSLStreamStatePtr").valueTypes("VSLStreamStatePtr").pointerTypes("@Cast(\"void**\") @ByPtrPtr VSLStreamStatePtr"))
