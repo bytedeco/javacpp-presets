@@ -37,7 +37,7 @@ public class LayerFactory extends Pointer {
         public    Constructor(Pointer p) { super(p); }
         protected Constructor() { allocate(); }
         private native void allocate();
-        public native @Ptr Layer call(@ByRef LayerParams params);
+        public native @Cast({"", "cv::Ptr<cv::dnn::Layer>"}) @Ptr Layer call(@ByRef LayerParams params);
     }
 
     /** Registers the layer class with typename \p type and specified \p constructor. Thread-safe. */
