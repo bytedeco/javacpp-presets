@@ -17,11 +17,13 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 
-    @Namespace("cv::dnn") @Properties(inherit = org.bytedeco.opencv.presets.opencv_dnn.class)
+    @Namespace("cv::dnn") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_dnn.class)
 public class ELULayer extends ActivationLayer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ELULayer(Pointer p) { super(p); }
     
+        public native float alpha(); public native ELULayer alpha(float setter);
+
         public static native @Ptr ELULayer create(@Const @ByRef LayerParams params);
     }

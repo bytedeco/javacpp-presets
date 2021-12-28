@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20211004;
+public static final int OPENCV_DNN_API_VERSION = 20211220;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -282,6 +282,9 @@ public static final int OPENCV_DNN_API_VERSION = 20211004;
 // Targeting ../opencv_dnn/LRNLayer.java
 
 
+// Targeting ../opencv_dnn/ArgLayer.java
+
+
 // Targeting ../opencv_dnn/PoolingLayer.java
 
 
@@ -375,6 +378,81 @@ public static final int OPENCV_DNN_API_VERSION = 20211004;
 // Targeting ../opencv_dnn/ExpLayer.java
 
 
+// Targeting ../opencv_dnn/CeilLayer.java
+
+
+// Targeting ../opencv_dnn/FloorLayer.java
+
+
+// Targeting ../opencv_dnn/LogLayer.java
+
+
+// Targeting ../opencv_dnn/RoundLayer.java
+
+
+// Targeting ../opencv_dnn/SqrtLayer.java
+
+
+// Targeting ../opencv_dnn/NotLayer.java
+
+
+// Targeting ../opencv_dnn/AcosLayer.java
+
+
+// Targeting ../opencv_dnn/AcoshLayer.java
+
+
+// Targeting ../opencv_dnn/AsinLayer.java
+
+
+// Targeting ../opencv_dnn/AsinhLayer.java
+
+
+// Targeting ../opencv_dnn/AtanLayer.java
+
+
+// Targeting ../opencv_dnn/AtanhLayer.java
+
+
+// Targeting ../opencv_dnn/CosLayer.java
+
+
+// Targeting ../opencv_dnn/CoshLayer.java
+
+
+// Targeting ../opencv_dnn/ErfLayer.java
+
+
+// Targeting ../opencv_dnn/HardSwishLayer.java
+
+
+// Targeting ../opencv_dnn/SinLayer.java
+
+
+// Targeting ../opencv_dnn/SinhLayer.java
+
+
+// Targeting ../opencv_dnn/SoftplusLayer.java
+
+
+// Targeting ../opencv_dnn/SoftsignLayer.java
+
+
+// Targeting ../opencv_dnn/TanLayer.java
+
+
+// Targeting ../opencv_dnn/CeluLayer.java
+
+
+// Targeting ../opencv_dnn/HardSigmoidLayer.java
+
+
+// Targeting ../opencv_dnn/SeluLayer.java
+
+
+// Targeting ../opencv_dnn/ThresholdedReluLayer.java
+
+
 // Targeting ../opencv_dnn/ActivationLayerInt8.java
 
 
@@ -406,6 +484,9 @@ public static final int OPENCV_DNN_API_VERSION = 20211004;
 
 
 // Targeting ../opencv_dnn/ShiftLayerInt8.java
+
+
+// Targeting ../opencv_dnn/CompareLayer.java
 
 
 // Targeting ../opencv_dnn/DataAugmentationLayer.java
@@ -530,7 +611,8 @@ public static final int OPENCV_DNN_API_VERSION = 20211004;
         DNN_BACKEND_INFERENCE_ENGINE = 2,
         DNN_BACKEND_OPENCV = 3,
         DNN_BACKEND_VKCOM = 4,
-        DNN_BACKEND_CUDA = 5;
+        DNN_BACKEND_CUDA = 5,
+        DNN_BACKEND_WEBNN = 6;
 // #ifdef __OPENCV_BUILD
 // #endif
 

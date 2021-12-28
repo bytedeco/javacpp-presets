@@ -97,6 +97,16 @@ public class Dictionary extends Pointer {
                 @Ptr Dictionary baseDictionary);
 
     /**
+     * \brief Read a new dictionary from FileNode. Format:
+     * nmarkers: 35
+     * markersize: 6
+     * marker_0: "101011111011111001001001101100000000"
+     * ...
+     * marker_34: "011111010000111011111110110101100101"
+     */
+    public static native @Cast("bool") boolean readDictionary(@Const @ByRef FileNode fn, @Ptr Dictionary dictionary);
+
+    /**
      * @see getPredefinedDictionary
      */
     public static native @Ptr Dictionary get(int dict);

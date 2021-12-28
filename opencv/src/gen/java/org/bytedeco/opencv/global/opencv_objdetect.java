@@ -172,6 +172,9 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 // Targeting ../opencv_objdetect/HOGDescriptor.java
 
 
+// Targeting ../opencv_objdetect/QRCodeEncoder.java
+
+
 // Targeting ../opencv_objdetect/QRCodeDetector.java
 
 

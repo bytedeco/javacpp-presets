@@ -72,7 +72,7 @@ public class Point extends IntPointer {
     private native void allocate();
     public Point(int _x, int _y) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(int _x, int _y);
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
     public Point(@Const @ByRef Point pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
 // #elif OPENCV_ABI_COMPATIBILITY < 500
@@ -80,7 +80,7 @@ public class Point extends IntPointer {
     public Point(@Const @ByRef Size sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size sz);
 
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
     public native @ByRef @Name("operator =") Point put(@Const @ByRef Point pt);
 // #elif OPENCV_ABI_COMPATIBILITY < 500
 // #endif

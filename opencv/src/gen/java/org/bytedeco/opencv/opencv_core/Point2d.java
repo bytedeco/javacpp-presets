@@ -33,7 +33,7 @@ public class Point2d extends DoublePointer {
     private native void allocate();
     public Point2d(double _x, double _y) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(double _x, double _y);
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
     public Point2d(@Const @ByRef Point2d pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
 // #elif OPENCV_ABI_COMPATIBILITY < 500
@@ -41,7 +41,7 @@ public class Point2d extends DoublePointer {
     public Point2d(@Const @ByRef Size2d sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size2d sz);
 
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
     public native @ByRef @Name("operator =") Point2d put(@Const @ByRef Point2d pt);
 // #elif OPENCV_ABI_COMPATIBILITY < 500
 // #endif

@@ -25,6 +25,7 @@ public class ScaleLayer extends Layer {
     
         public native @Cast("bool") boolean hasBias(); public native ScaleLayer hasBias(boolean setter);
         public native int axis(); public native ScaleLayer axis(int setter);
+        public native @Str BytePointer mode(); public native ScaleLayer mode(BytePointer setter);
 
         public static native @Ptr ScaleLayer create(@Const @ByRef LayerParams params);
     }

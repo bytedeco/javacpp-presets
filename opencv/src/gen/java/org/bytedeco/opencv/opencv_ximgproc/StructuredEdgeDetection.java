@@ -47,38 +47,38 @@ public class StructuredEdgeDetection extends Algorithm {
     <p>
     The algorithm underlies this function is much more robust to texture presence, than common
     approaches, e.g. Sobel
-    @param _src source image (RGB, float, in [0;1]) to detect edges
-    @param _dst destination image (grayscale, float, in [0;1]) where edges are drawn
+    @param src source image (RGB, float, in [0;1]) to detect edges
+    @param dst destination image (grayscale, float, in [0;1]) where edges are drawn
     @see Sobel, Canny
      */
-    public native void detectEdges(@ByVal Mat _src, @ByVal Mat _dst);
-    public native void detectEdges(@ByVal UMat _src, @ByVal UMat _dst);
-    public native void detectEdges(@ByVal GpuMat _src, @ByVal GpuMat _dst);
+    public native void detectEdges(@ByVal Mat src, @ByVal Mat dst);
+    public native void detectEdges(@ByVal UMat src, @ByVal UMat dst);
+    public native void detectEdges(@ByVal GpuMat src, @ByVal GpuMat dst);
 
     /** \brief The function computes orientation from edge image.
     <p>
-    @param _src edge image.
-    @param _dst orientation image.
+    @param src edge image.
+    @param dst orientation image.
      */
-    public native void computeOrientation(@ByVal Mat _src, @ByVal Mat _dst);
-    public native void computeOrientation(@ByVal UMat _src, @ByVal UMat _dst);
-    public native void computeOrientation(@ByVal GpuMat _src, @ByVal GpuMat _dst);
+    public native void computeOrientation(@ByVal Mat src, @ByVal Mat dst);
+    public native void computeOrientation(@ByVal UMat src, @ByVal UMat dst);
+    public native void computeOrientation(@ByVal GpuMat src, @ByVal GpuMat dst);
 
 
     /** \brief The function edgenms in edge image and suppress edges where edge is stronger in orthogonal direction.
     <p>
     @param edge_image edge image from detectEdges function.
     @param orientation_image orientation image from computeOrientation function.
-    @param _dst suppressed image (grayscale, float, in [0;1])
+    @param dst suppressed image (grayscale, float, in [0;1])
     @param r radius for NMS suppression.
     @param s radius for boundary suppression.
     @param m multiplier for conservative suppression.
     @param isParallel enables/disables parallel computing.
      */
-    public native void edgesNms(@ByVal Mat edge_image, @ByVal Mat orientation_image, @ByVal Mat _dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
-    public native void edgesNms(@ByVal Mat edge_image, @ByVal Mat orientation_image, @ByVal Mat _dst);
-    public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat _dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
-    public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat _dst);
-    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat _dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
-    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat _dst);
+    public native void edgesNms(@ByVal Mat edge_image, @ByVal Mat orientation_image, @ByVal Mat dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
+    public native void edgesNms(@ByVal Mat edge_image, @ByVal Mat orientation_image, @ByVal Mat dst);
+    public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
+    public native void edgesNms(@ByVal UMat edge_image, @ByVal UMat orientation_image, @ByVal UMat dst);
+    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat dst, int r/*=2*/, int s/*=0*/, float m/*=1*/, @Cast("bool") boolean isParallel/*=true*/);
+    public native void edgesNms(@ByVal GpuMat edge_image, @ByVal GpuMat orientation_image, @ByVal GpuMat dst);
 }

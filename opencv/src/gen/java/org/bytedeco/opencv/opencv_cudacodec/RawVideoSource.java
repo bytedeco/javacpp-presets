@@ -41,11 +41,21 @@ public class RawVideoSource extends Pointer {
     public native @Cast("bool") boolean getNextPacket(@Cast("unsigned char**") @ByPtrPtr ByteBuffer data, @Cast("size_t*") SizeTPointer size);
     public native @Cast("bool") boolean getNextPacket(@Cast("unsigned char**") @ByPtrPtr byte[] data, @Cast("size_t*") SizeTPointer size);
 
+    /** \brief Returns true if the last packet contained a key frame.
+     */
+    public native @Cast("bool") boolean lastPacketContainsKeyFrame();
+
     /** \brief Returns information about video file format.
     */
     public native @ByVal FormatInfo format();
 
     /** \brief Updates the coded width and height inside format.
     */
-    public native void updateFormat(int codedWidth, int codedHeight);
+    public native void updateFormat(@Const @ByRef FormatInfo videoFormat);
+
+    /** \brief Returns any extra data associated with the video source.
+    <p>
+    @param extraData 1D cv::Mat containing the extra data if it exists.
+     */
+    public native void getExtraData(@ByRef Mat extraData);
 }

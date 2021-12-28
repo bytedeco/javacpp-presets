@@ -43,11 +43,21 @@ public class FormatInfo extends Pointer {
     public native @Cast("cv::cudacodec::Codec") int codec(); public native FormatInfo codec(int setter);
     public native @Cast("cv::cudacodec::ChromaFormat") int chromaFormat(); public native FormatInfo chromaFormat(int setter);
     public native int nBitDepthMinus8(); public native FormatInfo nBitDepthMinus8(int setter);
-    /** Width of the decoded frame returned by nextFrame(frame) */
+    /** Coded sequence width in pixels. */
+    public native int ulWidth(); public native FormatInfo ulWidth(int setter);
+    /** Coded sequence height in pixels. */
+    public native int ulHeight(); public native FormatInfo ulHeight(int setter);
+    /** Width of the decoded frame returned by nextFrame(frame). */
     public native int width(); public native FormatInfo width(int setter);
-    /** Height of the decoded frame returned by nextFrame(frame) */
+    /** Height of the decoded frame returned by nextFrame(frame). */
     public native int height(); public native FormatInfo height(int setter);
+    public native int ulMaxWidth(); public native FormatInfo ulMaxWidth(int setter);
+    public native int ulMaxHeight(); public native FormatInfo ulMaxHeight(int setter);
     /** ROI inside the decoded frame returned by nextFrame(frame), containing the useable video frame. */
     public native @ByRef Rect displayArea(); public native FormatInfo displayArea(Rect setter);
     public native @Cast("bool") boolean valid(); public native FormatInfo valid(boolean setter);
+    public native double fps(); public native FormatInfo fps(double setter);
+    /** Maximum number of internal decode surfaces. */
+    public native int ulNumDecodeSurfaces(); public native FormatInfo ulNumDecodeSurfaces(int setter);
+    public native @Cast("cv::cudacodec::DeinterlaceMode") int deinterlaceMode(); public native FormatInfo deinterlaceMode(int setter);
 }
