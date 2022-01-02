@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf"
-ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt"
+ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libopenvino"
 
 if [[ "$EXTENSION" == *gpl ]]; then
     # Enable GPL and nonfree modules
@@ -64,6 +64,10 @@ download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPE
 mkdir -p $PLATFORM$EXTENSION
 cd $PLATFORM$EXTENSION
 INSTALL_PATH=`pwd`
+OPENVINO_PATH="$INSTALL_PATH/../../../openvino/cppbuild/$PLATFORM/"
+OPENVINO_PATH="${OPENVINO_PATH//\\//}"
+OPENVINO_LIBS="-linference_engine -linference_engine_transformations -lngraph"
+
 echo "Decompressing archives..."
 tar --totals -xzf ../nasm-$NASM_VERSION.tar.gz
 tar --totals -xzf ../$ZLIB.tar.gz
@@ -843,7 +847,7 @@ EOF
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I$OPENVINO_PATH/deployment_tools/inference_engine/include" --extra-ldflags="-L../lib/ -L$OPENVINO_PATH/deployment_tools/ngraph/lib -L$OPENVINO_PATH/deployment_tools/inference_engine/lib/intel64" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $OPENVINO_LIBS $LIBS"
         make -j $MAKEJ
         make install
         ;;
