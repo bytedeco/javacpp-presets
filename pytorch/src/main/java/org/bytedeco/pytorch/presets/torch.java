@@ -890,6 +890,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::aten::clone").javaNames("_clone"))
                .put(new Info("c10::TensorOptions<c10::Device>").javaNames("TensorOptions"))
                .put(new Info("c10::detail::_str<CompileTimeEmptyString>").javaNames("_strCompileTimeEmptyString"))
+               .put(new Info("at::TensorBase").base("AbstractTensor").pointerTypes("TensorBase"))
                .put(new Info("at::TensorBase::data_ptr<int8_t>").javaNames("data_ptr_byte"))
                .put(new Info("at::TensorBase::data_ptr<int16_t>").javaNames("data_ptr_short"))
                .put(new Info("at::TensorBase::data_ptr<int>").javaNames("data_ptr_int"))
