@@ -94,12 +94,12 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                 lib = platform.startsWith("linux") ? "mklml_intel" : "mklml";
                 resources.add("/org/bytedeco/mkldnn/");
             } else if (lib.equals("mkl") || lib.equals("mkl_rt")) {
-                String[] libs = {"iomp5", "libiomp5md", "mkl_core@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
-                                 "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1", "mkl_gnu_thread@.1", "mkl_rt@.1"};
+                String[] libs = {"iomp5", "libiomp5md", "mkl_core@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
+                                 "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2", "mkl_gnu_thread@.2", "mkl_rt@.2"};
                 for (i = 0; i < libs.length; i++) {
                     preloads.add(i, libs[i] + "#" + libs[i]);
                 }
-                lib = "mkl_rt@.1";
+                lib = "mkl_rt@.2";
                 resources.add("/org/bytedeco/mkl/");
             }
         }

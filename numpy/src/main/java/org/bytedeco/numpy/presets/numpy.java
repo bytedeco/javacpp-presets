@@ -104,7 +104,7 @@ public class numpy implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__multiarray_api.h").linePatterns("#define PyArray_GetNDArrayCVersion .*",
-                                                                "         PyArray_API\\[303\\]\\)").skip())
+                                                                "#define PyDataMem_DefaultHandler .*").skip())
                .put(new Info("__ufunc_api.h").linePatterns("#define PyUFunc_Type .*",
                                                            "         PyUFunc_API\\[42\\]\\)").skip())
 
