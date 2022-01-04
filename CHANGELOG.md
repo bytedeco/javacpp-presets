@@ -1,4 +1,5 @@
 
+ * Add to `torch.Tensor` convenient `create()`, `createBuffer()`, and `createIndexer()` factory methods for PyTorch
  * Upgrade requirements to Android 7.0 for camera support in OpenCV and FFmpeg ([issue bytedeco/javacv#1692](https://github.com/bytedeco/javacv/issues/1692))
  * Include new `llvm-c/Transforms/PassBuilder.h` header file in presets for LLVM ([pull #1093](https://github.com/bytedeco/javacpp-presets/pull/1093))
  * Introduce `macosx-arm64` builds to presets for OpenBLAS, OpenCV ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
