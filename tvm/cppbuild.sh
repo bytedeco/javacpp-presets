@@ -72,6 +72,10 @@ git submodule foreach --recursive 'git reset --hard'
 
 export TVM_LIBRARY_PATH=`pwd`
 
+# prevent setuptools from trying to build NumPy or SciPy
+sedinplace '/numpy/d' python/gen_requirements.py
+sedinplace '/scipy/d' python/gen_requirements.py
+
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
@@ -131,7 +135,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH --upgrade setuptools
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0
 
 case $PLATFORM in
     linux-x86_64)

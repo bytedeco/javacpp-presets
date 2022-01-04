@@ -487,12 +487,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
         int i = 0;
         if (load.equals("mkl") || load.equals("mkl_rt")) {
-            String[] libs = {"iomp5", "libiomp5md", "mkl_core@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
-                             "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1", "mkl_gnu_thread@.1", "mkl_rt@.1"};
+            String[] libs = {"iomp5", "libiomp5md", "mkl_core@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
+                             "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2", "mkl_gnu_thread@.2", "mkl_rt@.2"};
             for (i = 0; i < libs.length; i++) {
                 preloads.add(i, libs[i] + "#" + libs[i]);
             }
-            load = "mkl_rt@.1";
+            load = "mkl_rt@.2";
             resources.add("/org/bytedeco/mkl/");
         }
 

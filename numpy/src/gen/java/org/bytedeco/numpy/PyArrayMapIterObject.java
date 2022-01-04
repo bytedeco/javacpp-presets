@@ -15,7 +15,6 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
-
 /*
  * Store the information needed for fancy-indexing over an array. The
  * fields are slightly unordered to keep consec, dataptr and subspace
