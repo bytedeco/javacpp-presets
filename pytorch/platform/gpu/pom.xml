@@ -29,12 +29,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.18-${project.parent.version}</version>
+      <version>0.3.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.21.4-${project.parent.version}</version>
+      <version>1.22.0-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>

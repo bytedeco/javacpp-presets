@@ -108,8 +108,8 @@ public class DetectorParameters extends Pointer {
 
     public DetectorParameters() { super((Pointer)null); allocate(); }
     private native void allocate();
-
     public static native @Ptr DetectorParameters create();
+    public static native @Cast("bool") boolean readDetectorParameters(@Const @ByRef FileNode fn, @Ptr DetectorParameters params);
 
     public native int adaptiveThreshWinSizeMin(); public native DetectorParameters adaptiveThreshWinSizeMin(int setter);
     public native int adaptiveThreshWinSizeMax(); public native DetectorParameters adaptiveThreshWinSizeMax(int setter);

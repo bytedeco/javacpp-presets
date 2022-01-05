@@ -957,6 +957,8 @@ public static final int CV_STATIC_ANALYSIS = 1;
 // #  elif __cplusplus >= 201703L
 //   available when compiler is C++17 compliant
 // #    define CV_NODISCARD_STD [[nodiscard]]
+// #  elif defined(__INTEL_COMPILER)
+     // see above, available when C++17 is enabled
 // #  elif defined(_MSC_VER) && _MSC_VER >= 1911 && _MSVC_LANG >= 201703L
 //   available with VS2017 v15.3+ with /std:c++17 or higher; works on functions and classes
 // #    define CV_NODISCARD_STD [[nodiscard]]
@@ -1998,7 +2000,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    5;
-public static final int CV_VERSION_REVISION = 4;
+public static final int CV_VERSION_REVISION = 5;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -7139,7 +7141,7 @@ public static final String cvFuncName = "";
 
 
 
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
 
 // #endif
 
@@ -7147,7 +7149,7 @@ public static final String cvFuncName = "";
 
 
 
-// #if (defined(__GNUC__) && __GNUC__ < 5)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
+// #if (defined(__GNUC__) && __GNUC__ < 5) && !defined(__clang__)  // GCC 4.x bug. Details: https://github.com/opencv/opencv/pull/20837
 
 // #endif
 
@@ -8291,7 +8293,7 @@ mixChannels , or split .
 @param minLoc pointer to the returned minimum location (in 2D case); NULL is used if not required.
 @param maxLoc pointer to the returned maximum location (in 2D case); NULL is used if not required.
 @param mask optional mask used to select a sub-array.
-@see max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
+@see max, min, reduceArgMin, reduceArgMax, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoublePointer minVal,
                             DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
@@ -8330,6 +8332,49 @@ mixChannels , or split .
                             Point maxLoc/*=0*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
 @Namespace("cv") public static native void minMaxLoc(@ByVal GpuMat src, double[] minVal);
 
+/**
+ * \brief Finds indices of min elements along provided axis
+ *
+ * \note
+ *      - If input or output array is not continuous, this function will create an internal copy.
+ *      - NaN handling is left unspecified, see patchNaNs().
+ *      - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of min.
+ * @param axis axis to reduce along.
+ * @see reduceArgMax, minMaxLoc, min, max, compare, reduce
+ */
+@Namespace("cv") public static native void reduceArgMin(@ByVal Mat src, @ByVal Mat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMin(@ByVal Mat src, @ByVal Mat dst, int axis);
+@Namespace("cv") public static native void reduceArgMin(@ByVal UMat src, @ByVal UMat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMin(@ByVal UMat src, @ByVal UMat dst, int axis);
+@Namespace("cv") public static native void reduceArgMin(@ByVal GpuMat src, @ByVal GpuMat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMin(@ByVal GpuMat src, @ByVal GpuMat dst, int axis);
+
+/**
+ * \brief Finds indices of max elements along provided axis
+ *
+ * \note
+ *      - If input or output array is not continuous, this function will create an internal copy.
+ *      - NaN handling is left unspecified, see patchNaNs().
+ *      - The returned index is always in bounds of input matrix.
+ *
+ * @param src input single-channel array.
+ * @param dst output array of type CV_32SC1 with the same dimensionality as src,
+ * except for axis being reduced - it should be set to 1.
+ * @param lastIndex whether to get the index of first or last occurrence of max.
+ * @param axis axis to reduce along.
+ * @see reduceArgMin, minMaxLoc, min, max, compare, reduce
+ */
+@Namespace("cv") public static native void reduceArgMax(@ByVal Mat src, @ByVal Mat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMax(@ByVal Mat src, @ByVal Mat dst, int axis);
+@Namespace("cv") public static native void reduceArgMax(@ByVal UMat src, @ByVal UMat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMax(@ByVal UMat src, @ByVal UMat dst, int axis);
+@Namespace("cv") public static native void reduceArgMax(@ByVal GpuMat src, @ByVal GpuMat dst, int axis, @Cast("bool") boolean lastIndex/*=false*/);
+@Namespace("cv") public static native void reduceArgMax(@ByVal GpuMat src, @ByVal GpuMat dst, int axis);
 
 /** \brief Finds the global minimum and maximum in an array
 <p>
@@ -8426,7 +8471,7 @@ a single row. 1 means that the matrix is reduced to a single column.
 @param rtype reduction operation that could be one of #ReduceTypes
 @param dtype when negative, the output vector will have the same type as the input matrix,
 otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
-@see repeat
+@see repeat, reduceArgMin, reduceArgMax
 */
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype, int dtype/*=-1*/);
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype);

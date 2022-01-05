@@ -171,7 +171,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.4  https://opencv.org/releases.html
+ * OpenCV 4.5.5  https://opencv.org/releases.html
  * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
@@ -188,17 +188,17 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.12.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2021.x  https://software.intel.com/mkl
+ * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.18  http://www.openblas.net/
+ * OpenBLAS 0.3.19  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.10.x  https://www.python.org/downloads/
- * NumPy 1.21.x  https://github.com/numpy/numpy
- * SciPy 1.7.x  https://github.com/scipy/scipy
+ * NumPy 1.22.x  https://github.com/numpy/numpy
+ * SciPy 1.8.x  https://github.com/scipy/scipy
  * Gym 0.21.x  https://github.com/openai/gym
  * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi

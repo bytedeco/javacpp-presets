@@ -42,7 +42,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 //   the other hand can materialize a `const Tensor &` without
 //   touching the reference-count.
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorBase extends Pointer {
+public class TensorBase extends AbstractTensor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorBase(Pointer p) { super(p); }

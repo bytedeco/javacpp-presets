@@ -15,6 +15,7 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+
 /*
  * The main array object structure.
  *
@@ -82,4 +83,8 @@ public class PyArrayObject extends PyObject {
     /* For weak references */
     public native PyObject weakreflist(); public native PyArrayObject weakreflist(PyObject setter);
     public native Pointer _buffer_info(); public native PyArrayObject _buffer_info(Pointer setter);  /* private buffer info, tagged to allow warning */
+    /*
+     * For malloc/calloc/realloc/free per object
+     */
+    public native PyObject mem_handler(); public native PyArrayObject mem_handler(PyObject setter);
 }

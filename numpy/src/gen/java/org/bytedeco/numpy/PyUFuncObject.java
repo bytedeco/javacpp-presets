@@ -15,6 +15,7 @@ import static org.bytedeco.cpython.global.python.*;
 import static org.bytedeco.numpy.global.numpy.*;
 
 
+
 @Properties(inherit = org.bytedeco.numpy.presets.numpy.class)
 public class PyUFuncObject extends Pointer {
     static { Loader.load(); }
@@ -118,14 +119,10 @@ public class PyUFuncObject extends Pointer {
          * but this was never implemented. (This is also why the above
          * selector is called the "legacy" selector.)
          */
-//     #if PY_VERSION_HEX >= 0x03080000
         public native vectorcallfunc vectorcall(); public native PyUFuncObject vectorcall(vectorcallfunc setter);
-//     #else
-//     #endif
-        /*
-         * A function which returns a masked inner loop for the ufunc.
-         */
-        public native PyUFunc_MaskedInnerLoopSelectionFunc masked_inner_loop_selector(); public native PyUFuncObject masked_inner_loop_selector(PyUFunc_MaskedInnerLoopSelectionFunc setter);
+
+        /* Was previously the `PyUFunc_MaskedInnerLoopSelectionFunc` */
+        public native Pointer _always_null_previously_masked_innerloop_selector(); public native PyUFuncObject _always_null_previously_masked_innerloop_selector(Pointer setter);
 
         /*
          * List of flags for each operand when ufunc is called by nditer object.
@@ -157,4 +154,10 @@ public class PyUFuncObject extends Pointer {
         /* Identity for reduction, when identity == PyUFunc_IdentityValue */
         public native PyObject identity_value(); public native PyUFuncObject identity_value(PyObject setter);
 
+        /* New in NPY_API_VERSION 0x0000000F and above */
+
+        /* New private fields related to dispatching */
+        public native Pointer _dispatch_cache(); public native PyUFuncObject _dispatch_cache(Pointer setter);
+        /* A PyListObject of `(tuple of DTypes, ArrayMethod/Promoter)` */
+        public native PyObject _loops(); public native PyUFuncObject _loops(PyObject setter);
 }

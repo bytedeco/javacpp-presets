@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.21.4
+NUMPY_VERSION=1.22.0
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -46,6 +46,9 @@ cd numpy-$NUMPY_VERSION
 
 # https://github.com/scipy/scipy/issues/13072
 sedinplace 's/for lib in libraries:/for lib in libraries[:]:/g' ./numpy/distutils/command/build_ext.py
+
+# https://github.com/numpy/numpy/pull/20354
+sedinplace 's/auto x/double x/g' numpy/core/setup.py
 
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
@@ -102,6 +105,8 @@ case $PLATFORM in
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
+        # https://github.com/numpy/numpy/pull/20695
+        sedinplace -i 's/machine = platform.machine()/return False/g' numpy/core/setup.py
         ATLAS=None CC="gcc -m32" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;

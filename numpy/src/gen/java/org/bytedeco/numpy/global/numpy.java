@@ -49,7 +49,7 @@ public static final int NPY_RELAXED_STRIDES_CHECKING = 1;
 public static final int NPY_USE_C99_FORMATS = 1;
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x01000009;
-public static final int NPY_API_VERSION = 0x0000000E;
+public static final int NPY_API_VERSION = 0x0000000F;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -58,8 +58,8 @@ public static final int __STDC_FORMAT_MACROS = 1;
 
 // Parsed from numpyconfig.h
 
-// #ifndef _NPY_NUMPYCONFIG_H_
-// #define _NPY_NUMPYCONFIG_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_NUMPYCONFIG_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_NUMPYCONFIG_H_
 
 // #include "_numpyconfig.h"
 
@@ -79,8 +79,10 @@ public static final int __STDC_FORMAT_MACROS = 1;
 //     #undef NPY_SIZEOF_LONGDOUBLE
 //     #undef NPY_SIZEOF_COMPLEX_LONGDOUBLE
 
-//     #ifdef __x86_64
-//     #elif defined(__arm64__)
+//     #if defined(__arm64__)
+//     #elif defined(__x86_64)
+//     #elif defined (__i386)
+//     #elif defined(__ppc__) || defined (__ppc64__)
 //     #else
 //         #error "unknown architecture"
 //     #endif
@@ -108,14 +110,15 @@ public static final int NPY_1_18_API_VERSION = 0x00000008;
 public static final int NPY_1_19_API_VERSION = 0x00000008;
 public static final int NPY_1_20_API_VERSION = 0x0000000e;
 public static final int NPY_1_21_API_VERSION = 0x0000000e;
+public static final int NPY_1_22_API_VERSION = 0x0000000f;
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_NUMPYCONFIG_H_ */
 
 
 // Parsed from npy_common.h
 
-// #ifndef _NPY_COMMON_H_
-// #define _NPY_COMMON_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_COMMON_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_COMMON_H_
 
 /* need Python.h for npy_intp, npy_uintp */
 // #include <Python.h>
@@ -408,10 +411,27 @@ public static final String NPY_DOUBLE_FMT = "g";
 // #endif
 public static final int NPY_FALSE = 0;
 public static final int NPY_TRUE = 1;
-
-
+/*
+ * `NPY_SIZEOF_LONGDOUBLE` isn't usually equal to sizeof(long double).
+ * In some certain cases, it may forced to be equal to sizeof(double)
+ * even against the compiler implementation and the same goes for
+ * `complex long double`.
+ *
+ * Therefore, avoid `long double`, use `npy_longdouble` instead,
+ * and when it comes to standard math functions make sure of using
+ * the double version when `NPY_SIZEOF_LONGDOUBLE` == `NPY_SIZEOF_DOUBLE`.
+ * For example:
+ *   npy_longdouble *ptr, x;
+ *   #if NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE
+ *       npy_longdouble r = modf(x, ptr);
+ *   #else
+ *       npy_longdouble r = modfl(x, ptr);
+ *   #endif
+ *
+ * See https://github.com/numpy/numpy/issues/20348
+ */
 // #if NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE
-        public static final String NPY_LONGDOUBLE_FMT = "g";
+    public static final String NPY_LONGDOUBLE_FMT = "g";
 // #else
 // #endif
 
@@ -868,13 +888,13 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 
 /* End of typedefs for numarray style bit-width names */
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_COMMON_H_ */
 
 
 // Parsed from npy_os.h
 
-// #ifndef _NPY_OS_H_
-// #define _NPY_OS_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_OS_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_OS_H_
 
 // #if defined(linux) || defined(__linux) || defined(__linux__)
 //     #define NPY_OS_LINUX
@@ -902,7 +922,7 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_OS_UNKNOWN
 // #endif
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_OS_H_ */
 
 
 // Parsed from npy_cpu.h
@@ -927,10 +947,11 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
  *              NPY_CPU_ARCEL
  *              NPY_CPU_ARCEB
  *              NPY_CPU_RISCV64
+ *              NPY_CPU_LOONGARCH
  *              NPY_CPU_WASM
  */
-// #ifndef _NPY_CPUARCH_H_
-// #define _NPY_CPUARCH_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_
 
 // #include "numpyconfig.h"
 
@@ -1012,6 +1033,8 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_CPU_ARCEB
 // #elif defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 64
 //     #define NPY_CPU_RISCV64
+// #elif defined(__loongarch__)
+//     #define NPY_CPU_LOONGARCH
 // #elif defined(__EMSCRIPTEN__)
     /* __EMSCRIPTEN__ is defined by emscripten: an LLVM-to-Web compiler */
 //     #define NPY_CPU_WASM
@@ -1020,7 +1043,7 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     information about your platform (OS, CPU and compiler)
 // #endif
 
-/* 
+/*
  * Except for the following architectures, memory access is limited to the natural
  * alignment of data types otherwise it may lead to bus error or performance regression.
  * For more details about unaligned access, see https://www.kernel.org/doc/Documentation/unaligned-memory-access.txt.
@@ -1031,13 +1054,13 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #ifndef NPY_ALIGNMENT_REQUIRED
 // #endif
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_CPU_H_ */
 
 
 // Parsed from npy_endian.h
 
-// #ifndef _NPY_ENDIAN_H_
-// #define _NPY_ENDIAN_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_ENDIAN_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_ENDIAN_H_
 
 /*
  * NPY_BYTE_ORDER is set to the same value as BYTE_ORDER set by glibc in
@@ -1081,7 +1104,9 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //             || defined(NPY_CPU_PPC64LE)
 //             || defined(NPY_CPU_ARCEL)
 //             || defined(NPY_CPU_RISCV64)
+//             || defined(NPY_CPU_LOONGARCH)
 //             || defined(NPY_CPU_WASM)
+
 //     #elif defined(NPY_CPU_PPC)
 //             || defined(NPY_CPU_SPARC)
 //             || defined(NPY_CPU_S390)
@@ -1095,12 +1120,14 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //             || defined(NPY_CPU_OR1K)
 //             || defined(NPY_CPU_M68K)
 //             || defined(NPY_CPU_ARCEB)
+
 //     #else
 //         #error Unknown CPU: can not set endianness
 //     #endif
-// #endif
 
 // #endif
+
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_ENDIAN_H_ */
 
 
 // Parsed from npy_interrupt.h
@@ -1121,8 +1148,8 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
  * https://github.com/python/cpython/pull/20599).
  */
 
-// #ifndef NPY_INTERRUPT_H
-// #define NPY_INTERRUPT_H
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_
 
 // #ifndef NPY_NO_SIGNAL
 
@@ -1153,20 +1180,20 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //         PyOS_setsig(SIGINT, _npy_sig_save);
 //         }
 
-// #else /* NPY_NO_SIGNAL  */
+// #else  /* NPY_NO_SIGNAL  */
 
 // #define NPY_SIGINT_ON
 // #define NPY_SIGINT_OFF
 
-// #endif /* HAVE_SIGSETJMP */
+// #endif  /* HAVE_SIGSETJMP */
 
-// #endif /* NPY_INTERRUPT_H */
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_INTERRUPT_H_ */
 
 
 // Parsed from npy_math.h
 
-// #ifndef __NPY_MATH_C99_H_
-// #define __NPY_MATH_C99_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_
 
 // #ifdef __cplusplus
 // #endif
@@ -1310,6 +1337,17 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 @NoException public static native @Cast("npy_long") long npy_lshiftl(@Cast("npy_long") long a, @Cast("npy_long") long b);
 @NoException public static native @Cast("npy_longlong") long npy_rshiftll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
 @NoException public static native @Cast("npy_longlong") long npy_lshiftll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
+
+@NoException public static native @Cast("uint8_t") byte npy_popcountuhh(@Cast("npy_ubyte") byte a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountuh(@Cast("npy_ushort") short a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountu(@Cast("npy_uint") int a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountul(@Cast("npy_ulong") long a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountull(@Cast("npy_ulonglong") long a);
+@NoException public static native @Cast("uint8_t") byte npy_popcounthh(@Cast("npy_byte") byte a);
+@NoException public static native @Cast("uint8_t") byte npy_popcounth(@Cast("npy_short") short a);
+@NoException public static native @Cast("uint8_t") byte npy_popcount(@Cast("npy_int") int a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountl(@Cast("npy_long") long a);
+@NoException public static native @Cast("uint8_t") byte npy_popcountll(@Cast("npy_longlong") long a);
 
 /*
  * C99 double math funcs
@@ -1557,7 +1595,7 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 //     union {
 //         ctype z;
 //         type a[2];
-//     } z1;;
+//     } z1;
 // 
 //     z1.a[0] = (x);
 //     z1.a[1] = (y);
@@ -1727,13 +1765,13 @@ public static final int NPY_FPE_INVALID =       8;
 // #include "npy_math_internal.h"
 // #endif
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_ */
 
 
 // Parsed from halffloat.h
 
-// #ifndef __NPY_HALFFLOAT_H__
-// #define __NPY_HALFFLOAT_H__
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_HALFFLOAT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_HALFFLOAT_H_
 
 // #include <Python.h>
 // #include <numpy/npy_math.h>
@@ -1801,13 +1839,13 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #ifdef __cplusplus
 // #endif
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_HALFFLOAT_H_ */
 
 
 // Parsed from utils.h
 
-// #ifndef __NUMPY_UTILS_HEADER__
-// #define __NUMPY_UTILS_HEADER__
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_UTILS_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_UTILS_H_
 
 // #ifndef __COMP_NPY_UNUSED
 //     #if defined(__GNUC__)
@@ -1842,12 +1880,13 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #define NPY_CAT_(a, b) NPY_CAT__(a, b)
 // #define NPY_CAT(a, b) NPY_CAT_(a, b)
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_UTILS_H_ */
 
 
 // Parsed from arrayobject.h
 
-// #ifndef Py_ARRAYOBJECT_H
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_ARRAYOBJECT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_ARRAYOBJECT_H_
 // #define Py_ARRAYOBJECT_H
 
 // #include "ndarrayobject.h"
@@ -1857,13 +1896,13 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #include "noprefix.h"
 // #endif
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_ARRAYOBJECT_H_ */
 
 
 // Parsed from arrayscalars.h
 
-// #ifndef _NPY_ARRAYSCALARS_H_
-// #define _NPY_ARRAYSCALARS_H_
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_
 // Targeting ../PyBoolScalarObject.java
 
 
@@ -1966,13 +2005,13 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 // #define PyArrayScalar_ASSIGN(obj, cls, val)
 //         PyArrayScalar_VAL(obj, cls) = val
 
-// #endif
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_ARRAYSCALARS_H_ */
 
 
 // Parsed from ndarraytypes.h
 
-// #ifndef NDARRAYTYPES_H
-// #define NDARRAYTYPES_H
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NDARRAYTYPES_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NDARRAYTYPES_H_
 
 // #include "npy_common.h"
 // #include "npy_endian.h"
@@ -2325,12 +2364,10 @@ public static final int
 // #define NPY_ERR(str) fprintf(stderr, #str); fflush(stderr);
 // #define NPY_ERR2(str) fprintf(stderr, str); fflush(stderr);
 
-  /*
-   * Macros to define how array, and dimension/strides data is
-   * allocated.
-   */
-
-  /* Data buffer - PyDataMem_NEW/FREE/RENEW are in multiarraymodule.c */
+/*
+* Macros to define how array, and dimension/strides data is
+* allocated. These should be made private
+*/
 
 public static final int NPY_USE_PYMEM = 1;
 
@@ -2468,6 +2505,12 @@ public static final int NPY_OBJECT_DTYPE_FLAGS = (NPY_LIST_PICKLE | NPY_USE_GETI
 // Targeting ../PyArray_ArrayDescr.java
 
 
+// Targeting ../PyDataMemAllocator.java
+
+
+// Targeting ../PyDataMem_Handler.java
+
+
 // Targeting ../PyArrayObject.java
 
 
@@ -2556,7 +2599,7 @@ public static final int NPY_ARRAY_FORCECAST =       0x0010;
 
 /*
  * Always copy the array. Returned arrays are always CONTIGUOUS,
- * ALIGNED, and WRITEABLE.
+ * ALIGNED, and WRITEABLE. See also: NPY_ARRAY_ENSURENOCOPY = 0x4000.
  *
  * This flag may be requested in constructor functions.
  */
@@ -2616,6 +2659,13 @@ public static final int NPY_ARRAY_WRITEABLE =       0x0400;
  */
 public static final int NPY_ARRAY_UPDATEIFCOPY =    0x1000; /* Deprecated in 1.14 */
 public static final int NPY_ARRAY_WRITEBACKIFCOPY = 0x2000;
+
+/*
+ * No copy may be made while converting from an object/array (result is a view)
+ *
+ * This flag may be requested in constructor functions.
+ */
+public static final int NPY_ARRAY_ENSURENOCOPY = 0x4000;
 
 /*
  * NOTE: there are also internal flags defined in multiarray/arrayobject.h,
@@ -2907,6 +2957,8 @@ public static final int NPY_ITER_PER_OP_FLAGS =               0xffff0000;
 //                 _PyAIT(it)->dataptr = PyArray_BYTES(_PyAIT(it)->ao);
 //                 for (__npy_i = 0; __npy_i<=_PyAIT(it)->nd_m1;
 //                      __npy_i++) {
+//                         _PyAIT(it)->coordinates[__npy_i] =
+//                                 (__npy_ind / _PyAIT(it)->factors[__npy_i]);
 //                         _PyAIT(it)->dataptr +=
 //                                 (__npy_ind / _PyAIT(it)->factors[__npy_i])
 //                                 * _PyAIT(it)->strides[__npy_i];
@@ -2992,9 +3044,11 @@ public static final int
  * Include inline implementations - functions defined there are not
  * considered public API
  */
-// #define _NPY_INCLUDE_NEIGHBORHOOD_IMP
+// #define NUMPY_CORE_INCLUDE_NUMPY__NEIGHBORHOOD_IMP_H_
 // #include "_neighborhood_iterator_imp.h"
-// #undef _NPY_INCLUDE_NEIGHBORHOOD_IMP
+// #undef NUMPY_CORE_INCLUDE_NUMPY__NEIGHBORHOOD_IMP_H_
+
+
 
 /* The default array type */
 public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
@@ -3110,6 +3164,8 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
  * assumes you know what you're doing.
  */
 @NoException public static native void PyArray_CLEARFLAGS(PyArrayObject arr, int flags);
+
+@NoException public static native PyObject PyArray_HANDLER(PyArrayObject arr);
 
 // #define PyTypeNum_ISBOOL(type) ((type) == NPY_BOOL)
 
@@ -3286,7 +3342,7 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
  */
 // #undef NPY_DEPRECATED_INCLUDES
 
-// #endif /* NPY_ARRAYTYPES_H */
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NDARRAYTYPES_H_ */
 
 
 // Parsed from ndarrayobject.h
@@ -3294,9 +3350,9 @@ public static final int NPY_OPPBYTE = NPY_LITTLE;
 /*
  * DON'T INCLUDE THIS DIRECTLY.
  */
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_NDARRAYOBJECT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_NDARRAYOBJECT_H_
 
-// #ifndef NPY_NDARRAYOBJECT_H
-// #define NPY_NDARRAYOBJECT_H
 // #ifdef __cplusplus
 // #endif
 
@@ -3513,7 +3569,7 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 // #endif
 
 
-// #endif /* NPY_NDARRAYOBJECT_H */
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NDARRAYOBJECT_H_ */
 
 
 // Parsed from __multiarray_api.h
@@ -3970,6 +4026,10 @@ public static native @Cast("NPY_CASTING") int NPY_DEFAULT_ASSIGN_CASTING(); publ
 @NoException public static native PyObject PyArray_MapIterArrayCopyIfOverlap(PyArrayObject arg0, PyObject arg1, int arg2, PyArrayObject arg3);
 @NoException public static native int PyArray_ResolveWritebackIfCopy(PyArrayObject arg0);
 @NoException public static native int PyArray_SetWritebackIfCopyBase(PyArrayObject arg0, PyArrayObject arg1);
+@NoException public static native PyObject PyDataMem_SetHandler(PyObject arg0);
+@NoException public static native PyObject PyDataMem_GetHandler();
+public static native PyObject PyDataMem_DefaultHandler(); public static native void PyDataMem_DefaultHandler(PyObject setter);
+
 
 // #else
 
@@ -4002,7 +4062,7 @@ public static native @Cast("void**") PointerPointer PyArray_API(); public static
 
 // Parsed from _neighborhood_iterator_imp.h
 
-// #ifndef _NPY_INCLUDE_NEIGHBORHOOD_IMP
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY__NEIGHBORHOOD_IMP_H_
 // #error You should not include this header directly
 // #endif
 /*
@@ -4281,8 +4341,8 @@ public static native @Cast("void**") PointerPointer PyUFunc_API(); public static
 
 // Parsed from ufuncobject.h
 
-// #ifndef Py_UFUNCOBJECT_H
-// #define Py_UFUNCOBJECT_H
+// #ifndef NUMPY_CORE_INCLUDE_NUMPY_UFUNCOBJECT_H_
+// #define NUMPY_CORE_INCLUDE_NUMPY_UFUNCOBJECT_H_
 
 // #include <numpy/npy_math.h>
 // #include <numpy/npy_common.h>
@@ -4300,9 +4360,6 @@ public static native @Cast("void**") PointerPointer PyUFunc_API(); public static
 
 
 // Targeting ../PyUFunc_LegacyInnerLoopSelectionFunc.java
-
-
-// Targeting ../PyUFunc_MaskedInnerLoopSelectionFunc.java
 
 
 // Targeting ../PyUFuncObject.java
@@ -4424,10 +4481,10 @@ public static final int UFUNC_FPE_INVALID =       NPY_FPE_INVALID;
 // #endif
 // #endif
 
-
 // #ifdef __cplusplus
 // #endif
-// #endif /* !Py_UFUNCOBJECT_H */
+
+// #endif  /* NUMPY_CORE_INCLUDE_NUMPY_UFUNCOBJECT_H_ */
 
 
 }

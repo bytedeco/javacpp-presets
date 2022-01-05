@@ -155,7 +155,7 @@ encoding, frames with other formats will be used as is.
 want to work with raw video stream.
 @param frameSize Size of the input video frames.
 @param fps Framerate of the created video stream.
-@param params Encoder parameters. See cudacodec::EncoderParams .
+@param params Encoder parameters. See cudacodec::EncoderParams.
 @param format Surface format of input frames ( SF_UYVY , SF_YUY2 , SF_YV12 , SF_NV12 ,
 SF_IYUV , SF_BGR or SF_GRAY). BGR or gray frames will be converted to YV12 format before
 encoding, frames with other formats will be used as is.
@@ -194,7 +194,7 @@ public static final int
     /** UYVY (4:2:2) */
     Uncompressed_UYVY   = (('U'<<24)|('Y'<<16)|('V'<<8)|('Y'));
 
-/** \brief Chroma formats supported by cudacodec::VideoReader .
+/** \brief Chroma formats supported by cudacodec::VideoReader.
  */
 /** enum cv::cudacodec::ChromaFormat */
 public static final int
@@ -203,9 +203,37 @@ public static final int
     YUV422 = 2,
     YUV444 = 3,
     NumFormats = 4;
+
+/** \brief Deinterlacing mode used by decoder.
+* @param Weave Weave both fields (no deinterlacing). For progressive content and for content that doesn't need deinterlacing.
+* Bob Drop one field.
+* @param Adaptive Adaptive deinterlacing needs more video memory than other deinterlacing modes.
+* */
+/** enum cv::cudacodec::DeinterlaceMode */
+public static final int
+    Weave = 0,
+    Bob = 1,
+    Adaptive = 2;
 // Targeting ../opencv_cudacodec/FormatInfo.java
 
 
+
+/** \brief cv::cudacodec::VideoReader generic properties identifier.
+*/
+/** enum class cv::cudacodec::VideoReaderProps */
+public static final int
+    /** Index for retrieving the decoded frame using retrieve(). */
+    PROP_DECODED_FRAME_IDX = 0,
+    /** Index for retrieving the extra data associated with a video source using retrieve(). */
+    PROP_EXTRA_DATA_INDEX = 1,
+    /** Base index for retrieving raw encoded data using retrieve(). */
+    PROP_RAW_PACKAGES_BASE_INDEX = 2,
+    /** Number of raw packages recieved since the last call to grab(). */
+    PROP_NUMBER_OF_RAW_PACKAGES_SINCE_LAST_GRAB = 3,
+    /** Status of raw mode. */
+    PROP_RAW_MODE = 4,
+    /** FFmpeg source only - Indicates whether the Last Raw Frame (LRF), output from VideoReader::retrieve() when VideoReader is initialized in raw mode, contains encoded data for a key frame. */
+    PROP_LRF_HAS_KEY_FRAME = 5;
 // Targeting ../opencv_cudacodec/VideoReader.java
 
 
@@ -216,14 +244,20 @@ public static final int
 /** \brief Creates video reader.
 <p>
 @param filename Name of the input video file.
+@param rawMode Allow the raw encoded data which has been read up until the last call to grab() to be retrieved by calling retrieve(rawData,RAW_DATA_IDX).
 <p>
 FFMPEG is used to read videos. User can implement own demultiplexing with cudacodec::RawVideoSource
  */
+@Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Str BytePointer filename, @Cast("const bool") boolean rawMode/*=false*/);
 @Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Str BytePointer filename);
+@Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Str String filename, @Cast("const bool") boolean rawMode/*=false*/);
 @Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Str String filename);
+
 /** \overload
 @param source RAW video source implemented by user.
+@param rawMode Allow the raw encoded data which has been read up until the last call to grab() to be retrieved by calling retrieve(rawData,RAW_DATA_IDX).
 */
+@Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Ptr RawVideoSource source, @Cast("const bool") boolean rawMode/*=false*/);
 @Namespace("cv::cudacodec") public static native @Ptr org.bytedeco.opencv.opencv_cudacodec.VideoReader createVideoReader(@Ptr RawVideoSource source);
 
 /** \} */

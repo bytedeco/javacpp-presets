@@ -136,9 +136,7 @@ sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_
 sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
-sedinplace '/TensorIndex(c10::nullopt_t)/i\
-  TensorIndex() : TensorIndex(c10::nullopt) {}\
-' aten/src/ATen/TensorIndexing.h
+sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
 sedinplace '/^};/a\
