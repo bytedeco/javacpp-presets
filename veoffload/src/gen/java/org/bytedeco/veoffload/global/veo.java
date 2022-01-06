@@ -110,7 +110,13 @@ public static final int
 @NoException public static native int veo_alloc_mem(veo_proc_handle arg0, @Cast("uint64_t*") long[] arg1, @Cast("const size_t") long arg2);
 @NoException public static native int veo_free_mem(veo_proc_handle arg0, @Cast("uint64_t") long arg1);
 @NoException public static native int veo_read_mem(veo_proc_handle arg0, Pointer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_read_mem(veo_proc_handle arg0, BytePointer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_read_mem(veo_proc_handle arg0, ByteBuffer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_read_mem(veo_proc_handle arg0, byte[] arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
 @NoException public static native int veo_write_mem(veo_proc_handle arg0, @Cast("uint64_t") long arg1, @Const Pointer arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_write_mem(veo_proc_handle arg0, @Cast("uint64_t") long arg1, @Const BytePointer arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_write_mem(veo_proc_handle arg0, @Cast("uint64_t") long arg1, @Const ByteBuffer arg2, @Cast("size_t") long arg3);
+@NoException public static native int veo_write_mem(veo_proc_handle arg0, @Cast("uint64_t") long arg1, @Const byte[] arg2, @Cast("size_t") long arg3);
 @NoException public static native int veo_num_contexts(veo_proc_handle arg0);
 @NoException public static native veo_thr_ctxt veo_get_context(veo_proc_handle arg0, int arg1);
 
@@ -153,6 +159,9 @@ public static final int
 
 
 @NoException public static native @Cast("uint64_t") long veo_call_async_vh(veo_thr_ctxt arg0, Arg1_Pointer arg1, Pointer arg2);
+@NoException public static native @Cast("uint64_t") long veo_call_async_vh(veo_thr_ctxt arg0, Arg1_Pointer arg1, BytePointer arg2);
+@NoException public static native @Cast("uint64_t") long veo_call_async_vh(veo_thr_ctxt arg0, Arg1_Pointer arg1, ByteBuffer arg2);
+@NoException public static native @Cast("uint64_t") long veo_call_async_vh(veo_thr_ctxt arg0, Arg1_Pointer arg1, byte[] arg2);
 
 @NoException public static native int veo_call_peek_result(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Cast("uint64_t*") LongPointer arg2);
 @NoException public static native int veo_call_peek_result(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Cast("uint64_t*") LongBuffer arg2);
@@ -162,7 +171,16 @@ public static final int
 @NoException public static native int veo_call_wait_result(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Cast("uint64_t*") long[] arg2);
 
 @NoException public static native @Cast("uint64_t") long veo_async_read_mem(veo_thr_ctxt arg0, Pointer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_read_mem(veo_thr_ctxt arg0, BytePointer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_read_mem(veo_thr_ctxt arg0, ByteBuffer arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_read_mem(veo_thr_ctxt arg0, byte[] arg1, @Cast("uint64_t") long arg2, @Cast("size_t") long arg3);
 @NoException public static native @Cast("uint64_t") long veo_async_write_mem(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Const Pointer arg2,
+                             @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_write_mem(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Const BytePointer arg2,
+                             @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_write_mem(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Const ByteBuffer arg2,
+                             @Cast("size_t") long arg3);
+@NoException public static native @Cast("uint64_t") long veo_async_write_mem(veo_thr_ctxt arg0, @Cast("uint64_t") long arg1, @Const byte[] arg2,
                              @Cast("size_t") long arg3);
 
 @NoException public static native veo_thr_ctxt veo_context_open_with_attr(
@@ -177,9 +195,21 @@ public static final int
 
 @NoException public static native int veo_alloc_hmem(veo_proc_handle arg0, @Cast("void**") PointerPointer arg1, @Cast("const size_t") long arg2);
 @NoException public static native int veo_alloc_hmem(veo_proc_handle arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("const size_t") long arg2);
+@NoException public static native int veo_alloc_hmem(veo_proc_handle arg0, @Cast("void**") @ByPtrPtr BytePointer arg1, @Cast("const size_t") long arg2);
+@NoException public static native int veo_alloc_hmem(veo_proc_handle arg0, @Cast("void**") @ByPtrPtr ByteBuffer arg1, @Cast("const size_t") long arg2);
+@NoException public static native int veo_alloc_hmem(veo_proc_handle arg0, @Cast("void**") @ByPtrPtr byte[] arg1, @Cast("const size_t") long arg2);
 @NoException public static native int veo_free_hmem(Pointer arg0);
+@NoException public static native int veo_free_hmem(BytePointer arg0);
+@NoException public static native int veo_free_hmem(ByteBuffer arg0);
+@NoException public static native int veo_free_hmem(byte[] arg0);
 @NoException public static native int veo_hmemcpy(Pointer arg0, @Const Pointer arg1, @Cast("size_t") long arg2);
+@NoException public static native int veo_hmemcpy(BytePointer arg0, @Const BytePointer arg1, @Cast("size_t") long arg2);
+@NoException public static native int veo_hmemcpy(ByteBuffer arg0, @Const ByteBuffer arg1, @Cast("size_t") long arg2);
+@NoException public static native int veo_hmemcpy(byte[] arg0, @Const byte[] arg1, @Cast("size_t") long arg2);
 @NoException public static native int veo_args_set_hmem(veo_args arg0, int arg1, Pointer arg2);
+@NoException public static native int veo_args_set_hmem(veo_args arg0, int arg1, BytePointer arg2);
+@NoException public static native int veo_args_set_hmem(veo_args arg0, int arg1, ByteBuffer arg2);
+@NoException public static native int veo_args_set_hmem(veo_args arg0, int arg1, byte[] arg2);
 
 // #ifdef __cplusplus // extern "C"
 // #endif

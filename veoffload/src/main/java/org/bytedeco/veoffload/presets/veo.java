@@ -52,6 +52,8 @@ public class veo implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "veoffload"); }
 
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("void").valueTypes("void").pointerTypes("Pointer", "BytePointer", "ByteBuffer", "byte[]"))
+               .put(new Info("uint64_t (*)(void*)").pointerTypes("Arg1_Pointer"));
     }
 
     public static native String getenv(String name);
