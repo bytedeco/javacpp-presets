@@ -1,4 +1,5 @@
 
+ * Add `long rs2_get_frame_data_address()` to reduce garbage for real-time applications using librealsense2 ([discussion bytedeco/javacpp#532](https://github.com/bytedeco/javacpp/discussions/532))
  * Add to `torch.Tensor` convenient `create()`, `createBuffer()`, and `createIndexer()` factory methods for PyTorch
  * Upgrade requirements to Android 7.0 for camera support in OpenCV and FFmpeg ([issue bytedeco/javacv#1692](https://github.com/bytedeco/javacv/issues/1692))
  * Include new `llvm-c/Transforms/PassBuilder.h` header file in presets for LLVM ([pull #1093](https://github.com/bytedeco/javacpp-presets/pull/1093))

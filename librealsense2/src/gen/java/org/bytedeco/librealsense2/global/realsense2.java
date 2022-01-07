@@ -1374,6 +1374,8 @@ public static native int rs2_get_frame_data_size(@Const rs2_frame frame, @ByPtrP
 */
 public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @Cast("rs2_error**") PointerPointer error);
 public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @ByPtrPtr rs2_error error);
+public static native @Cast("const void*") @Name("rs2_get_frame_data") long rs2_get_frame_data_address(@Const rs2_frame frame, @Cast("rs2_error**") PointerPointer error);
+public static native @Cast("const void*") @Name("rs2_get_frame_data") long rs2_get_frame_data_address(@Const rs2_frame frame, @ByPtrPtr rs2_error error);
 
 /**
 * retrieve frame width in pixels

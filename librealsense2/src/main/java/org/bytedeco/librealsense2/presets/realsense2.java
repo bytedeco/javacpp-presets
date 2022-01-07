@@ -70,6 +70,11 @@ public class realsense2 implements InfoMapper {
         infoMap.put(new Info("rs2_camera_info", "rs2_stream").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("RS2_API_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
                .put(new Info("RS2_API_FULL_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
+               .put(new Info("rs2_get_frame_data").javaText(
+                       "public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @Cast(\"rs2_error**\") PointerPointer error);\n"
+                     + "public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @ByPtrPtr rs2_error error);\n"
+                     + "public static native @Cast(\"const void*\") @Name(\"rs2_get_frame_data\") long rs2_get_frame_data_address(@Const rs2_frame frame, @Cast(\"rs2_error**\") PointerPointer error);\n"
+                     + "public static native @Cast(\"const void*\") @Name(\"rs2_get_frame_data\") long rs2_get_frame_data_address(@Const rs2_frame frame, @ByPtrPtr rs2_error error);\n"))
                .put(new Info("rs2_create_playback_device", "rs2_cah_trigger_to_string", "rs2_ambient_light_to_string", "rs2_digital_gain_to_string",
                              "rs2_create_y411_decoder").skip());
     }
