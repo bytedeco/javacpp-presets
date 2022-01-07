@@ -46,7 +46,7 @@ public class PyDictObject extends Pointer {
     /* If ma_values is NULL, the table is "combined": keys and values
        are stored in ma_keys.
 
-       If ma_values is not NULL, the table is splitted:
+       If ma_values is not NULL, the table is split:
        keys are stored in ma_keys and values are stored in ma_values */
     public native PyObject ma_values(int i); public native PyDictObject ma_values(int i, PyObject setter);
     public native @Cast("PyObject**") PointerPointer ma_values(); public native PyDictObject ma_values(PointerPointer setter);

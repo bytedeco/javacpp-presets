@@ -8,8 +8,12 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.7.3
+HIGHS=1.1.1
+SCIPY_VERSION=1.8.0rc2
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
+download https://github.com/ERGO-Code/HiGHS/archive/refs/tags/v$HIGHS.tar.gz HiGHS-$HIGHS.tar.gz
+download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
+download https://github.com/scipy/PROPACK/archive/refs/heads/main.tar.gz PROPACK-main.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -48,8 +52,14 @@ NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../boost_$BOOST.tar.gz
+tar --totals -xzf ../HiGHS-$HIGHS.tar.gz
+tar --totals -xzf ../unuran-main.tar.gz
+tar --totals -xzf ../PROPACK-main.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost/
+#cp -a HiGHS-$HIGHS/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
+cp -a unuran-main/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
+cp -a PROPACK-main/* scipy-$SCIPY_VERSION/scipy/sparse/linalg/_propack/PROPACK/
 cd scipy-$SCIPY_VERSION
 
 # prevent setuptools from trying to build NumPy
@@ -84,12 +94,12 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-TOOLS="cython==0.29.24 pybind11==2.6.2 pythran==0.9.11 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.3.0 gast==0.4.0"
+TOOLS="cython==0.29.24 pybind11==2.6.2 pythran==0.10.0 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.4.0 gast==0.5.0"
 if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.21.4 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.0 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
@@ -144,18 +154,35 @@ case $PLATFORM in
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done
         ;;
     windows-x86)
+        # parameters required by clang-cl
         export CL="-m32"
         # the build sometimes fails with multiple jobs
-        MAKEJ=1
-        # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
+        export MAKEJ=1
+        # SciPy can only be built from very short paths on Windows
+        cmd.exe //c "mklink /j \\scipy ."
+        export CPYTHON_PATH=$(cygpath -w $CPYTHON_PATH)
+        export PYTHON_BIN_PATH=$(cygpath -w $PYTHON_BIN_PATH)
+        export PYTHON_LIB_PATH=$(cygpath -w $PYTHON_LIB_PATH)
+        export OPENBLAS_PATH=$(cygpath -w $OPENBLAS_PATH)
+        export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
+        export ATLAS=None
+        cmd.exe //c "cd \\scipy & $PYTHON_BIN_PATH setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH"
         ;;
     windows-x86_64)
+        # parameters required by clang-cl
         export CL="-m64"
         # the build sometimes fails with multiple jobs
-        MAKEJ=1
-        # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
+        export MAKEJ=1
+        # SciPy can only be built from very short paths on Windows
+        cmd.exe //c "mklink /j \\scipy ."
+        export CPYTHON_PATH=$(cygpath -w $CPYTHON_PATH)
+        export PYTHON_BIN_PATH=$(cygpath -w $PYTHON_BIN_PATH)
+        export PYTHON_LIB_PATH=$(cygpath -w $PYTHON_LIB_PATH)
+        export OPENBLAS_PATH=$(cygpath -w $OPENBLAS_PATH)
+        export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
+        export ATLAS=None
+        cmd.exe //c "cd \\scipy & $PYTHON_BIN_PATH setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH"
+        cmd.exe //c "rmdir \\scipy"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

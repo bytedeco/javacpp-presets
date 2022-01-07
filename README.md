@@ -126,7 +126,7 @@ To use the JavaCPP Presets, you will need to download and install the following 
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
- * Android SDK API 21 or newer  http://developer.android.com/sdk/
+ * Android SDK API 24 or newer  http://developer.android.com/sdk/
 
 
 Manual Installation
@@ -143,7 +143,7 @@ Eclipse (Java SE 7 or newer):
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
 
-IntelliJ IDEA (Android 5.0 or newer):
+IntelliJ IDEA (Android 7.0 or newer):
 
  1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
  2. Copy all the JAR files into the `app/libs` subdirectory.
@@ -171,7 +171,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.4  https://opencv.org/releases.html
+ * OpenCV 4.5.5  https://opencv.org/releases.html
  * FFmpeg 4.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
@@ -179,7 +179,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.44.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.50.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
@@ -188,17 +188,17 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.12.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2021.x  https://software.intel.com/mkl
+ * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.18  http://www.openblas.net/
+ * OpenBLAS 0.3.19  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.10.x  https://www.python.org/downloads/
- * NumPy 1.21.x  https://github.com/numpy/numpy
- * SciPy 1.7.x  https://github.com/scipy/scipy
+ * NumPy 1.22.x  https://github.com/numpy/numpy
+ * SciPy 1.8.x  https://github.com/scipy/scipy
  * Gym 0.21.x  https://github.com/openai/gym
  * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
@@ -212,17 +212,17 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * NCCL 2.11.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
- * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
+ * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
  * PyTorch 1.10.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.7.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.14  https://developer.nvidia.com/nvidia-triton-inference-server
+ * Triton Inference Server 2.17.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.13.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.9.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

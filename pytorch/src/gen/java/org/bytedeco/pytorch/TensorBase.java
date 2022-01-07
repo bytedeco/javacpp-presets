@@ -42,7 +42,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 //   the other hand can materialize a `const Tensor &` without
 //   touching the reference-count.
 @Namespace("at") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorBase extends Pointer {
+public class TensorBase extends AbstractTensor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorBase(Pointer p) { super(p); }
@@ -262,6 +262,18 @@ private native void allocate(); }
   public native @ByVal TensorOptions options();
 
   public native Pointer data_ptr();
+
+  public native @Name("data_ptr<int8_t>") BytePointer data_ptr_byte();
+
+  public native @Name("data_ptr<int16_t>") ShortPointer data_ptr_short();
+
+  public native @Name("data_ptr<int>") IntPointer data_ptr_int();
+
+  public native @Cast("int64_t*") @Name("data_ptr<int64_t>") LongPointer data_ptr_long();
+
+  public native @Name("data_ptr<float>") FloatPointer data_ptr_float();
+
+  public native @Name("data_ptr<double>") DoublePointer data_ptr_double();
 
   // Purposely not defined here to avoid inlining
   public native void print();

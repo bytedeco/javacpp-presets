@@ -19,7 +19,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.10.0
+PYTORCH_VERSION=1.10.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -82,7 +82,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools pyyaml typing_extensions
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0 pyyaml==6.0 typing_extensions==4.0.0
 
 case $PLATFORM in
     linux-x86)
@@ -136,9 +136,7 @@ sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_
 sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
-sedinplace '/TensorIndex(c10::nullopt_t)/i\
-  TensorIndex() : TensorIndex(c10::nullopt) {}\
-' aten/src/ATen/TensorIndexing.h
+sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
 sedinplace '/^};/a\

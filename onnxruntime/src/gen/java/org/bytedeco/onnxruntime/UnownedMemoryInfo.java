@@ -15,12 +15,14 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
-@Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class UnownedMemoryInfo extends BaseMemoryInfo {
+/** \brief Wraps an object that inherits from Ort::Base and stops it from deleting the contained pointer on destruction
+* 
+* This has the effect of making it not own the memory held by Ort::Base.
+*/
+@Name("Ort::Unowned<const Ort::MemoryInfo>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class UnownedMemoryInfo extends MemoryInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnownedMemoryInfo(Pointer p) { super(p); }
 
-  public UnownedMemoryInfo(@Const OrtMemoryInfo p) { super((Pointer)null); allocate(p); }
-  private native void allocate(@Const OrtMemoryInfo p);
 }

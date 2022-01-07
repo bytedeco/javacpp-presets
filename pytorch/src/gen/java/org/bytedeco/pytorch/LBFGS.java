@@ -22,12 +22,12 @@ public class LBFGS extends Optimizer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LBFGS(Pointer p) { super(p); }
 
-   public LBFGS(@StdVector OptimizerParamGroup param_groups,
+   public LBFGS(@ByVal OptimizerParamGroupVector param_groups,
           @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults) { super((Pointer)null); allocate(param_groups, defaults); }
-   private native void allocate(@StdVector OptimizerParamGroup param_groups,
+   private native void allocate(@ByVal OptimizerParamGroupVector param_groups,
           @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults);
-   public LBFGS(@StdVector OptimizerParamGroup param_groups) { super((Pointer)null); allocate(param_groups); }
-   private native void allocate(@StdVector OptimizerParamGroup param_groups);
+   public LBFGS(@ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
+   private native void allocate(@ByVal OptimizerParamGroupVector param_groups);
    public LBFGS(
           @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
           @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults) { super((Pointer)null); allocate(params, defaults); }

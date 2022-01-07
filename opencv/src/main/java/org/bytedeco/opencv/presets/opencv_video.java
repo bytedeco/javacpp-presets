@@ -36,9 +36,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = {opencv_calib3d.class, opencv_dnn.class},
     value = {
         @Platform(include = {"<opencv2/video.hpp>", /*"<opencv2/video/tracking_c.h>",*/ "<opencv2/video/tracking.hpp>",
-            "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.4.5"),
+            "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.405"),
         @Platform(value = "ios", preload = "libopencv_video"),
-        @Platform(value = "windows", link = "opencv_video454")},
+        @Platform(value = "windows", link = "opencv_video455")},
     target = "org.bytedeco.opencv.opencv_video",
     global = "org.bytedeco.opencv.global.opencv_video"
 )

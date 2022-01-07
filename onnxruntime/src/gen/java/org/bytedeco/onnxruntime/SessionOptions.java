@@ -15,6 +15,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief Options object used when creating a new Session object
+*
+* Wraps ::OrtSessionOptions object and methods
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class SessionOptions extends BaseSessionOptions {
     static { Loader.load(); }
@@ -30,47 +34,79 @@ public class SessionOptions extends BaseSessionOptions {
         return new SessionOptions((Pointer)this).offsetAddress(i);
     }
 
+  /** Wraps OrtApi::CreateSessionOptions */
   public SessionOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
+  /** Used for interop with the C API */
   public SessionOptions(OrtSessionOptions p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtSessionOptions p);
 
+  /** Creates and returns a copy of this SessionOptions object. Wraps OrtApi::CloneSessionOptions */
   public native @ByVal SessionOptions Clone();
 
+  /** Wraps OrtApi::SetIntraOpNumThreads */
   public native @ByRef SessionOptions SetIntraOpNumThreads(int intra_op_num_threads);
+  /** Wraps OrtApi::SetInterOpNumThreads */
   public native @ByRef SessionOptions SetInterOpNumThreads(int inter_op_num_threads);
+  /** Wraps OrtApi::SetSessionGraphOptimizationLevel */
   public native @ByRef SessionOptions SetGraphOptimizationLevel(@Cast("GraphOptimizationLevel") int graph_optimization_level);
 
+  /** Wraps OrtApi::EnableCpuMemArena */
   public native @ByRef SessionOptions EnableCpuMemArena();
+  /** Wraps OrtApi::DisableCpuMemArena */
   public native @ByRef SessionOptions DisableCpuMemArena();
 
+  /** Wraps OrtApi::SetOptimizedModelFilePath */
   public native @ByRef SessionOptions SetOptimizedModelFilePath(@Cast("const ORTCHAR_T*") Pointer optimized_model_file);
 
+  /** Wraps OrtApi::EnableProfiling */
   public native @ByRef SessionOptions EnableProfiling(@Cast("const ORTCHAR_T*") Pointer profile_file_prefix);
+  /** Wraps OrtApi::DisableProfiling */
   public native @ByRef SessionOptions DisableProfiling();
 
+  /** Wraps OrtApi::EnableOrtCustomOps */
   public native @ByRef SessionOptions EnableOrtCustomOps();
 
+  /** Wraps OrtApi::EnableMemPattern */
   public native @ByRef SessionOptions EnableMemPattern();
+  /** Wraps OrtApi::DisableMemPattern */
   public native @ByRef SessionOptions DisableMemPattern();
 
+  /** Wraps OrtApi::SetSessionExecutionMode */
   public native @ByRef SessionOptions SetExecutionMode(@Cast("ExecutionMode") int execution_mode);
 
+  /** Wraps OrtApi::SetSessionLogId */
   public native @ByRef SessionOptions SetLogId(@Cast("const char*") BytePointer logid);
   public native @ByRef SessionOptions SetLogId(String logid);
+  /** Wraps OrtApi::SetSessionLogSeverityLevel */
   public native @ByRef SessionOptions SetLogSeverityLevel(int level);
 
+  /** Wraps OrtApi::AddCustomOpDomain */
   public native @ByRef SessionOptions Add(OrtCustomOpDomain custom_op_domain);
 
+  /** Wraps OrtApi::DisablePerSessionThreads */
   public native @ByRef SessionOptions DisablePerSessionThreads();
 
+  /** Wraps OrtApi::AddSessionConfigEntry */
   public native @ByRef SessionOptions AddConfigEntry(@Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
   public native @ByRef SessionOptions AddConfigEntry(String config_key, String config_value);
+  /** Wraps OrtApi::AddInitializer */
   public native @ByRef SessionOptions AddInitializer(@Cast("const char*") BytePointer name, @Const OrtValue ort_val);
   public native @ByRef SessionOptions AddInitializer(String name, @Const OrtValue ort_val);
 
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA */
   public native @ByRef SessionOptions AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_ROCM */
   public native @ByRef SessionOptions AppendExecutionProvider_ROCM(@Const @ByRef OrtROCMProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_OpenVINO */
   public native @ByRef SessionOptions AppendExecutionProvider_OpenVINO(@Const @ByRef OrtOpenVINOProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_TensorRT */
   public native @ByRef SessionOptions AppendExecutionProvider_TensorRT(@Const @ByRef OrtTensorRTProviderOptions provider_options);
+
+  /** Wraps OrtApi::SessionOptionsSetCustomCreateThreadFn */
+  public native @ByRef SessionOptions SetCustomCreateThreadFn(OrtCustomCreateThreadFn ort_custom_create_thread_fn);
+  /** Wraps OrtApi::SessionOptionsSetCustomThreadCreationOptions */
+  public native @ByRef SessionOptions SetCustomThreadCreationOptions(Pointer ort_custom_thread_creation_options);
+  /** Wraps OrtApi::SessionOptionsSetCustomJoinThreadFn */
+  public native @ByRef SessionOptions SetCustomJoinThreadFn(OrtCustomJoinThreadFn ort_custom_join_thread_fn);
 }

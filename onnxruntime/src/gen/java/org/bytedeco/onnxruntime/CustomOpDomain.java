@@ -15,16 +15,22 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief Custom Op Domain
+*
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class CustomOpDomain extends BaseCustomOpDomain {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CustomOpDomain(Pointer p) { super(p); }
 
+
+  /** \brief Wraps OrtApi::CreateCustomOpDomain */
   public CustomOpDomain(@Cast("const char*") BytePointer domain) { super((Pointer)null); allocate(domain); }
   private native void allocate(@Cast("const char*") BytePointer domain);
   public CustomOpDomain(String domain) { super((Pointer)null); allocate(domain); }
   private native void allocate(String domain);
 
+  /** Wraps CustomOpDomain_Add */
   public native void Add(OrtCustomOp op);
 }

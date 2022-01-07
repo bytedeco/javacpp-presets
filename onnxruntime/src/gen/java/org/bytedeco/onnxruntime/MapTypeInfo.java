@@ -15,15 +15,21 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
+/** \brief Wrapper around ::OrtMapTypeInfo
+*
+*/
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class MapTypeInfo extends BaseMapTypeInfo {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MapTypeInfo(Pointer p) { super(p); }
 
+  /** Used for interop with the C API */
   public MapTypeInfo(OrtMapTypeInfo p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtMapTypeInfo p);
 
+  /** Wraps OrtApi::GetMapKeyType */
   public native @Cast("ONNXTensorElementDataType") int GetMapKeyType();
+  /** Wraps OrtApi::GetMapValueType */
   public native @ByVal TypeInfo GetMapValueType();
 }

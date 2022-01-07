@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * PyTorch 1.10.0  https://pytorch.org/
+ * PyTorch 1.10.1  https://pytorch.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -19,6 +19,8 @@ Documentation
 Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/pytorch/apidocs/
+
+&lowast; The JNI bindings can instead link with [LibTorch](https://pytorch.org/cppdocs/installing.html), as long as its libraries are from the same version of PyTorch and can be found on the system library path, after setting the "org.bytedeco.javacpp.pathsFirst" system property to "true".
 
 
 Sample Usage
@@ -46,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform</artifactId>
-            <version>1.10.0-1.5.7-SNAPSHOT</version>
+            <version>1.10.1-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform-gpu</artifactId>
-            <version>1.10.0-1.5.7-SNAPSHOT</version>
+            <version>1.10.1-1.5.7-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
@@ -67,7 +69,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.4-1.5.7-SNAPSHOT</version>
+            <version>2022.0-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

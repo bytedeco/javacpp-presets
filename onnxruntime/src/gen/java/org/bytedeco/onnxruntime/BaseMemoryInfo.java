@@ -37,5 +37,6 @@ public class BaseMemoryInfo extends Pointer {
 
   public native @Name("operator OrtMemoryInfo*") OrtMemoryInfo asOrtMemoryInfo();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtMemoryInfo release();
 }

@@ -2484,8 +2484,7 @@ public static final int
     dnnl_cpu_isa_avx512_core_bf16 = 0xe7,
 
     /** Intel AVX-512, Intel DL Boost and bfloat16 support and
-     *  Intel AMX with 8-bit integer and bfloat16 support
-     *  (initial support) */
+     *  Intel AMX with 8-bit integer and bfloat16 support */
     dnnl_cpu_isa_avx512_core_amx = 0x3e7,
 
     /** Intel AVX2 and Intel Deep Learning Boost (Intel DL Boost) support */
@@ -2687,7 +2686,7 @@ public static final int DNNL_VERSION_MAJOR = 2;
 public static final int DNNL_VERSION_MINOR = 5;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 0;
+public static final int DNNL_VERSION_PATCH = 1;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -7193,7 +7192,7 @@ public static native @Cast("dnnl_status_t") int dnnl_set_primitive_cache_capacit
 
 /** \} dnnl_api_primitive_cache
  <p>
- *  \addtogroup dnnl_api_mathmode
+ *  \addtogroup dnnl_api_mathmode Floating-point Math Mode
  *  \{
  <p>
  *  Returns the floating-point math mode that will be used by default

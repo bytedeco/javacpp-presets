@@ -22,12 +22,12 @@ public class RMSprop extends Optimizer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RMSprop(Pointer p) { super(p); }
 
-  public RMSprop(@StdVector OptimizerParamGroup param_groups,
+  public RMSprop(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal(nullValue = "torch::optim::RMSpropOptions{}") RMSpropOptions defaults) { super((Pointer)null); allocate(param_groups, defaults); }
-  private native void allocate(@StdVector OptimizerParamGroup param_groups,
+  private native void allocate(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal(nullValue = "torch::optim::RMSpropOptions{}") RMSpropOptions defaults);
-  public RMSprop(@StdVector OptimizerParamGroup param_groups) { super((Pointer)null); allocate(param_groups); }
-  private native void allocate(@StdVector OptimizerParamGroup param_groups);
+  public RMSprop(@ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
+  private native void allocate(@ByVal OptimizerParamGroupVector param_groups);
 
   public RMSprop(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
         @ByVal(nullValue = "torch::optim::RMSpropOptions{}") RMSpropOptions defaults) { super((Pointer)null); allocate(params, defaults); }

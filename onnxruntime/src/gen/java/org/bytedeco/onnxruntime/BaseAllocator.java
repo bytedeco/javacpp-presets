@@ -37,5 +37,6 @@ public class BaseAllocator extends Pointer {
 
   public native @Name("operator OrtAllocator*") OrtAllocator asOrtAllocator();
 
+  /** \brief Releases ownership of the contained pointer */
   public native OrtAllocator release();
 }

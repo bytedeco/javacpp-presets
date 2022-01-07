@@ -22,9 +22,9 @@ public class SGD extends Optimizer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SGD(Pointer p) { super(p); }
 
-  public SGD(@StdVector OptimizerParamGroup param_groups,
+  public SGD(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal SGDOptions defaults) { super((Pointer)null); allocate(param_groups, defaults); }
-  private native void allocate(@StdVector OptimizerParamGroup param_groups,
+  private native void allocate(@ByVal OptimizerParamGroupVector param_groups,
         @ByVal SGDOptions defaults);
 
   public SGD(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,

@@ -2690,13 +2690,13 @@ public static final int
 /** connected components algorithm */
 /** enum cv::ConnectedComponentsAlgorithmsTypes */
 public static final int
-    /** BBDT \cite Grana2010 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for both BBDT and SAUF. */
+    /** Spaghetti \cite Bolelli2019 algorithm for 8-way connectivity, Spaghetti4C \cite Bolelli2021 algorithm for 4-way connectivity. */
     CCL_DEFAULT   = -1,
     /** SAUF \cite Wu2009 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for SAUF. */
     CCL_WU        = 0,
     /** BBDT \cite Grana2010 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for both BBDT and SAUF. */
     CCL_GRANA     = 1,
-    /** Spaghetti \cite Bolelli2019 algorithm for 8-way connectivity, SAUF algorithm for 4-way connectivity. */
+    /** Spaghetti \cite Bolelli2019 algorithm for 8-way connectivity, Spaghetti4C \cite Bolelli2021 algorithm for 4-way connectivity. The parallel implementation described in \cite Bolelli2017 is available for both Spaghetti and Spaghetti4C. */
     CCL_BOLELLI   = 2,
     /** Same as CCL_WU. It is preferable to use the flag with the name of the algorithm (CCL_SAUF) rather than the one with the name of the first author (CCL_WU). */
     CCL_SAUF      = 3,
@@ -3067,53 +3067,134 @@ public static final int
     COLOR_RGBA2YUV_YV12 = 133,
     COLOR_BGRA2YUV_YV12 = 134,
 
-    /** Demosaicing */
+    /** Demosaicing, see \ref color_convert_bayer "color conversions" for additional information */
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR = 46,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR = 47,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR = 48,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR = 49,
 
+    COLOR_BayerRGGB2BGR = COLOR_BayerBG2BGR,
+    COLOR_BayerGRBG2BGR = COLOR_BayerGB2BGR,
+    COLOR_BayerBGGR2BGR = COLOR_BayerRG2BGR,
+    COLOR_BayerGBRG2BGR = COLOR_BayerGR2BGR,
+
+    COLOR_BayerRGGB2RGB = COLOR_BayerBGGR2BGR,
+    COLOR_BayerGRBG2RGB = COLOR_BayerGBRG2BGR,
+    COLOR_BayerBGGR2RGB = COLOR_BayerRGGB2BGR,
+    COLOR_BayerGBRG2RGB = COLOR_BayerGRBG2BGR,
+
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB = COLOR_BayerRG2BGR,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB = COLOR_BayerGR2BGR,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB = COLOR_BayerBG2BGR,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB = COLOR_BayerGB2BGR,
 
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2GRAY = 86,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2GRAY = 87,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2GRAY = 88,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2GRAY = 89,
 
+    COLOR_BayerRGGB2GRAY = COLOR_BayerBG2GRAY,
+    COLOR_BayerGRBG2GRAY = COLOR_BayerGB2GRAY,
+    COLOR_BayerBGGR2GRAY = COLOR_BayerRG2GRAY,
+    COLOR_BayerGBRG2GRAY = COLOR_BayerGR2GRAY,
+
     /** Demosaicing using Variable Number of Gradients */
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR_VNG = 62,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR_VNG = 63,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR_VNG = 64,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR_VNG = 65,
 
+    COLOR_BayerRGGB2BGR_VNG = COLOR_BayerBG2BGR_VNG,
+    COLOR_BayerGRBG2BGR_VNG = COLOR_BayerGB2BGR_VNG,
+    COLOR_BayerBGGR2BGR_VNG = COLOR_BayerRG2BGR_VNG,
+    COLOR_BayerGBRG2BGR_VNG = COLOR_BayerGR2BGR_VNG,
+
+    COLOR_BayerRGGB2RGB_VNG = COLOR_BayerBGGR2BGR_VNG,
+    COLOR_BayerGRBG2RGB_VNG = COLOR_BayerGBRG2BGR_VNG,
+    COLOR_BayerBGGR2RGB_VNG = COLOR_BayerRGGB2BGR_VNG,
+    COLOR_BayerGBRG2RGB_VNG = COLOR_BayerGRBG2BGR_VNG,
+
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB_VNG = COLOR_BayerRG2BGR_VNG,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB_VNG = COLOR_BayerGR2BGR_VNG,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB_VNG = COLOR_BayerBG2BGR_VNG,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB_VNG = COLOR_BayerGB2BGR_VNG,
 
     /** Edge-Aware Demosaicing */
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGR_EA  = 135,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGR_EA  = 136,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGR_EA  = 137,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGR_EA  = 138,
 
+    COLOR_BayerRGGB2BGR_EA  = COLOR_BayerBG2BGR_EA,
+    COLOR_BayerGRBG2BGR_EA  = COLOR_BayerGB2BGR_EA,
+    COLOR_BayerBGGR2BGR_EA  = COLOR_BayerRG2BGR_EA,
+    COLOR_BayerGBRG2BGR_EA  = COLOR_BayerGR2BGR_EA,
+
+    COLOR_BayerRGGB2RGB_EA  = COLOR_BayerBGGR2BGR_EA,
+    COLOR_BayerGRBG2RGB_EA  = COLOR_BayerGBRG2BGR_EA,
+    COLOR_BayerBGGR2RGB_EA  = COLOR_BayerRGGB2BGR_EA,
+    COLOR_BayerGBRG2RGB_EA  = COLOR_BayerGRBG2BGR_EA,
+
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGB_EA  = COLOR_BayerRG2BGR_EA,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGB_EA  = COLOR_BayerGR2BGR_EA,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGB_EA  = COLOR_BayerBG2BGR_EA,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGB_EA  = COLOR_BayerGB2BGR_EA,
 
     /** Demosaicing with alpha channel */
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2BGRA = 139,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2BGRA = 140,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2BGRA = 141,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2BGRA = 142,
 
+    COLOR_BayerRGGB2BGRA = COLOR_BayerBG2BGRA,
+    COLOR_BayerGRBG2BGRA = COLOR_BayerGB2BGRA,
+    COLOR_BayerBGGR2BGRA = COLOR_BayerRG2BGRA,
+    COLOR_BayerGBRG2BGRA = COLOR_BayerGR2BGRA,
+
+    COLOR_BayerRGGB2RGBA = COLOR_BayerBGGR2BGRA,
+    COLOR_BayerGRBG2RGBA = COLOR_BayerGBRG2BGRA,
+    COLOR_BayerBGGR2RGBA = COLOR_BayerRGGB2BGRA,
+    COLOR_BayerGBRG2RGBA = COLOR_BayerGRBG2BGRA,
+
+    /** equivalent to RGGB Bayer pattern */
     COLOR_BayerBG2RGBA = COLOR_BayerRG2BGRA,
+    /** equivalent to GRBG Bayer pattern */
     COLOR_BayerGB2RGBA = COLOR_BayerGR2BGRA,
+    /** equivalent to BGGR Bayer pattern */
     COLOR_BayerRG2RGBA = COLOR_BayerBG2BGRA,
+    /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGBA = COLOR_BayerGB2BGRA,
 
     COLOR_COLORCVT_MAX  = 143;
@@ -4295,12 +4376,12 @@ The function finds lines in a set of points using a modification of the Hough tr
 @param point Input vector of points. Each vector must be encoded as a Point vector {@code (x,y)}. Type must be CV_32FC2 or CV_32SC2.
 @param lines Output vector of found lines. Each vector is encoded as a vector<Vec3d> {@code (votes, rho, theta)}.
 The larger the value of 'votes', the higher the reliability of the Hough line.
-@param lines_max Max count of hough lines.
+@param lines_max Max count of Hough lines.
 @param threshold Accumulator threshold parameter. Only those lines are returned that get enough
-votes ( {@code >\texttt{threshold}} )
-@param min_rho Minimum Distance value of the accumulator in pixels.
-@param max_rho Maximum Distance value of the accumulator in pixels.
-@param rho_step Distance resolution of the accumulator in pixels.
+votes ( {@code >\texttt{threshold}} ).
+@param min_rho Minimum value for {@code \rho} for the accumulator (Note: {@code \rho} can be negative. The absolute value {@code |\rho|} is the distance of a line to the origin.).
+@param max_rho Maximum value for {@code \rho} for the accumulator.
+@param rho_step Distance resolution of the accumulator.
 @param min_theta Minimum angle value of the accumulator in radians.
 @param max_theta Maximum angle value of the accumulator in radians.
 @param theta_step Angle resolution of the accumulator in radians.
@@ -6849,9 +6930,10 @@ image with 4 or 8 way connectivity - returns N, the total number of labels [0, N
 represents the background label. ltype specifies the output label image type, an important
 consideration based on the total number of labels or alternatively the total number of pixels in
 the source image. ccltype specifies the connected components labeling algorithm to use, currently
-Grana (BBDT) and Wu's (SAUF) \cite Wu2009 algorithms are supported, see the #ConnectedComponentsAlgorithmsTypes
-for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
-This function uses parallel version of both Grana and Wu's algorithms if at least one allowed
+Bolelli (Spaghetti) \cite Bolelli2019, Grana (BBDT) \cite Grana2010 and Wu's (SAUF) \cite Wu2009 algorithms
+are supported, see the #ConnectedComponentsAlgorithmsTypes for details. Note that SAUF algorithm forces
+a row major ordering of labels while Spaghetti and BBDT do not.
+This function uses parallel version of the algorithms if at least one allowed
 parallel framework is enabled and if the rows of the image are at least twice the number returned by #getNumberOfCPUs.
 <p>
 @param image the 8-bit single-channel image to be labeled
@@ -6892,9 +6974,10 @@ image with 4 or 8 way connectivity - returns N, the total number of labels [0, N
 represents the background label. ltype specifies the output label image type, an important
 consideration based on the total number of labels or alternatively the total number of pixels in
 the source image. ccltype specifies the connected components labeling algorithm to use, currently
-Grana's (BBDT) and Wu's (SAUF) \cite Wu2009 algorithms are supported, see the #ConnectedComponentsAlgorithmsTypes
-for details. Note that SAUF algorithm forces a row major ordering of labels while BBDT does not.
-This function uses parallel version of both Grana and Wu's algorithms (statistics included) if at least one allowed
+Bolelli (Spaghetti) \cite Bolelli2019, Grana (BBDT) \cite Grana2010 and Wu's (SAUF) \cite Wu2009 algorithms
+are supported, see the #ConnectedComponentsAlgorithmsTypes for details. Note that SAUF algorithm forces
+a row major ordering of labels while Spaghetti and BBDT do not.
+This function uses parallel version of the algorithms (statistics included) if at least one allowed
 parallel framework is enabled and if the rows of the image are at least twice the number returned by #getNumberOfCPUs.
 <p>
 @param image the 8-bit single-channel image to be labeled

@@ -42,9 +42,9 @@ runs:
         python3 -m pip install gdown || python3 -m pip install gdown
 
         if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
-          curl -LO https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
-          unzip -qq android-ndk-r18b-linux-x86_64.zip
-          ln -sf android-ndk-r18b android-ndk
+          curl -LO https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+          unzip -qq android-ndk-r21e-linux-x86_64.zip
+          ln -sf android-ndk-r21e android-ndk
           export MAVEN_OPTIONS="-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path= -Djavacpp.platform.suffix=-clang"
         fi
 
@@ -109,8 +109,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18222/l_onemkl_p_2021.4.0.640_offline.sh
-          bash l_onemkl_p_2021.4.0.640_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18444/l_onemkl_p_2022.0.1.117_offline.sh
+          bash l_onemkl_p_2022.0.1.117_offline.sh -s -a -s --eula accept
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

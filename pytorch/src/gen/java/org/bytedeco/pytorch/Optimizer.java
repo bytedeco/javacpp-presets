@@ -52,7 +52,7 @@ public class Optimizer extends Pointer {
   public native @ByRef @NoException(true) OptimizerOptions defaults();
 
   /** Provides a reference to the param_groups this optimizer holds. */
-  public native @StdVector @NoException(true) OptimizerParamGroup param_groups();
+  public native @ByRef @NoException(true) OptimizerParamGroupVector param_groups();
 
   /** Provides a const reference to the param_groups this optimizer holds. */
 

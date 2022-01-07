@@ -81,6 +81,7 @@ public class opencv_ximgproc extends org.bytedeco.opencv.presets.opencv_ximgproc
 // #include "ximgproc/structured_edge_detection.hpp"
 // #include "ximgproc/edgeboxes.hpp"
 // #include "ximgproc/edge_drawing.hpp"
+// #include "ximgproc/scansegment.hpp"
 // #include "ximgproc/seeds.hpp"
 // #include "ximgproc/segmentation.hpp"
 // #include "ximgproc/fast_hough_transform.hpp"
@@ -98,6 +99,7 @@ public class opencv_ximgproc extends org.bytedeco.opencv.presets.opencv_ximgproc
 // #include "ximgproc/run_length_morphology.hpp"
 // #include "ximgproc/edgepreserving_filter.hpp"
 // #include "ximgproc/color_match.hpp"
+// #include "ximgproc/radon_transform.hpp"
 
 
 /** \defgroup ximgproc Extended Image Processing

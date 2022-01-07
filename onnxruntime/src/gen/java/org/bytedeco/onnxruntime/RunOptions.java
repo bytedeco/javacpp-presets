@@ -30,24 +30,39 @@ public class RunOptions extends BaseRunOptions {
         return new RunOptions((Pointer)this).offsetAddress(i);
     }
 
+  /** Wraps OrtApi::CreateRunOptions */
   public RunOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
 
+  /** Wraps OrtApi::RunOptionsSetRunLogVerbosityLevel */
   public native @ByRef RunOptions SetRunLogVerbosityLevel(int arg0);
+  /** Wraps OrtApi::RunOptionsGetRunLogVerbosityLevel */
   public native int GetRunLogVerbosityLevel();
 
+  /** Wraps OrtApi::RunOptionsSetRunLogSeverityLevel */
   public native @ByRef RunOptions SetRunLogSeverityLevel(int arg0);
   
 
+  /** wraps OrtApi::RunOptionsSetRunTag */
   public native @ByRef RunOptions SetRunTag(@Cast("const char*") BytePointer run_tag);
   public native @ByRef RunOptions SetRunTag(String run_tag);
+  /** Wraps OrtApi::RunOptionsGetRunTag */
   public native @Cast("const char*") BytePointer GetRunTag();
 
+  /** Wraps OrtApi::AddRunConfigEntry */
   public native @ByRef RunOptions AddConfigEntry(@Cast("const char*") BytePointer config_key, @Cast("const char*") BytePointer config_value);
   public native @ByRef RunOptions AddConfigEntry(String config_key, String config_value);
 
-  // terminate ALL currently executing Session::Run calls that were made using this RunOptions instance
+  /** \brief Terminates all currently executing Session::Run calls that were made using this RunOptions instance
+  *
+  * If a currently executing session needs to be force terminated, this can be called from another thread to force it to fail with an error
+  * Wraps OrtApi::RunOptionsSetTerminate 
+  */
   public native @ByRef RunOptions SetTerminate();
-  // unset the terminate flag so this RunOptions instance can be used in a new Session::Run call
+
+  /** \brief Clears the terminate flag so this RunOptions instance can be used in a new Session::Run call without it instantly terminating
+  *
+  * Wraps OrtApi::RunOptionsUnsetTerminate
+  */
   public native @ByRef RunOptions UnsetTerminate();
 }

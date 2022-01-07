@@ -14,9 +14,14 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
+// #endif
 
-// When passing in an allocator to any ORT function, be sure that the allocator object
-// is not destroyed until the last allocated object using it is freed.
+/** \brief Memory allocation interface
+*
+* Structure of function pointers that defines a memory allocator. This can be created and filled in by the user for custom allocators.
+* 
+* When an allocator is passed to any function, be sure that the allocator object is not destroyed until the last allocated object using it is freed.
+*/
 @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtAllocator extends Pointer {
     static { Loader.load(); }
