@@ -23,7 +23,7 @@ public class IteratorOverClassifierChoicesExample {
         BytePointer choiceText;
 
         TessBaseAPI api = new TessBaseAPI();
-        // Initialize tesseract-ocr with English, intializing tessdata path with the standard ENV variable
+        // Initialize tesseract-ocr with English, initializing tessdata path with the standard ENV variable
         if (api.Init(System.getenv("TESSDATA_PREFIX") + "/tessdata", "eng") != 0) {
             System.err.println("Could not initialize tesseract.");
             System.exit(1);
