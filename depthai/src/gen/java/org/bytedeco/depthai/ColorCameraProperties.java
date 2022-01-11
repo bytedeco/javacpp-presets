@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  *  Specify properties for ColorCamera such as camera ID, ...
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ColorCameraProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public ColorCameraProperties() { super((Pointer)null); allocate(); }
@@ -159,11 +159,6 @@ public class ColorCameraProperties extends Pointer {
      */
     public native float sensorCropX(); public native ColorCameraProperties sensorCropX(float setter);
     public native float sensorCropY(); public native ColorCameraProperties sensorCropY(float setter);
-
-    /**
-     * Whether to wait for config at 'inputConfig' io
-     */
-    public native @Cast("bool") boolean inputConfigSync(); public native ColorCameraProperties inputConfigSync(boolean setter);
 
     /**
      * Whether to keep aspect ratio of input (video size) or not

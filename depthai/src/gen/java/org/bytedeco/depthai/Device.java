@@ -259,7 +259,7 @@ public class Device extends DeviceBase {
     public native @ByVal StringVector getQueueEvents(@StdString String queueName);
 
     /**
-     * Gets or waits until any any queue has received a message
+     * Gets or waits until any queue has received a message
      *
      * @param maxNumEvents Maximum number of events to remove from queue. Default is unlimited
      * @param timeout Timeout after which return regardless. If negative then wait is indefinite. Default is -1

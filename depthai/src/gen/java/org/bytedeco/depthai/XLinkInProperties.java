@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for XLinkIn such as stream name, ...
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class XLinkInProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class XLinkInProperties extends XLinkInPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public XLinkInProperties() { super((Pointer)null); allocate(); }

@@ -21,15 +21,16 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief SpatialLocationCalculator node. Calculates spatial location data on a set of ROIs on depth map.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SpatialLocationCalculator extends Node {
+public class SpatialLocationCalculator extends SpatialLocationCalculatorPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SpatialLocationCalculator(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public SpatialLocationCalculator(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public SpatialLocationCalculator(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SpatialLocationCalculatorProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SpatialLocationCalculatorProperties props);
 
     /**
      * Initial config to use when calculating spatial location data.
@@ -63,5 +64,11 @@ public class SpatialLocationCalculator extends Node {
      * Specify whether or not wait until configuration message arrives to inputConfig Input.
      * @param wait True to wait for configuration message, false otherwise.
      */
-    public native void setWaitForConfigInput(@Cast("bool") boolean _wait);
+    public native @Deprecated void setWaitForConfigInput(@Cast("bool") boolean _wait);
+
+    /**
+     * @see setWaitForConfigInput
+     * @return True if wait for inputConfig message, false otherwise
+     */
+    public native @Cast("bool") @Deprecated boolean getWaitForConfigInput();
 }

@@ -21,34 +21,27 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief DetectionNetwork, base for different network specializations
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class DetectionNetwork extends NeuralNetwork {
+public class DetectionNetwork extends DetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionNetwork(Pointer p) { super(p); }
 
-
-    public native @StdString @Override BytePointer getName();
-    /**
-     * Input message with data to be infered upon
-     * Default queue is blocking with size 5
-     */
-    @MemberGetter public native @ByRef Input input();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     /**
      * Outputs ImgDetections message that carries parsed detection results.
+     * Overrides NeuralNetwork 'out' with ImgDetections output message type.
      */
     @MemberGetter public native @ByRef Output out();
-
-    /**
-     * Passthrough message on which the inference was performed.
-     *
-     * Suitable for when input queue is set to non-blocking behavior.
-     */
-    @MemberGetter public native @ByRef Output passthrough();
 
     /**
      * Specifies confidence threshold at which to filter the rest of the detections.
      * @param thresh Detection confidence must be greater than specified threshold to be added to the list
      */
     public native void setConfidenceThreshold(float thresh);
+
+    /**
+     * Retrieves threshold at which to filter the rest of the detections.
+     * @return Detection confidence
+     */
+    public native float getConfidenceThreshold();
 }

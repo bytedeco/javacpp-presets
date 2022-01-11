@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for SpatialLocationCalculator
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SpatialLocationCalculatorProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class SpatialLocationCalculatorProperties extends SpatialLocationCalculatorPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public SpatialLocationCalculatorProperties() { super((Pointer)null); allocate(); }
@@ -39,7 +39,4 @@ public class SpatialLocationCalculatorProperties extends Pointer {
     }
 
     public native @ByRef RawSpatialLocationCalculatorConfig roiConfig(); public native SpatialLocationCalculatorProperties roiConfig(RawSpatialLocationCalculatorConfig setter);
-
-    /** Whether to wait for config at 'inputConfig' IO */
-    public native @Cast("bool") boolean inputConfigSync(); public native SpatialLocationCalculatorProperties inputConfigSync(boolean setter);
 }

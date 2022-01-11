@@ -63,7 +63,7 @@ public class SpatialLocations extends Pointer {
      */
     public native @Cast("std::uint32_t") int depthAveragePixelCount(); public native SpatialLocations depthAveragePixelCount(int setter);
     /**
-     *  Spatial coordinates: x,y,z; x,y are the relative positions of the center of ROI to the center of depth map
+     *  Spatial coordinates - x,y,z; x,y are the relative positions of the center of ROI to the center of depth map
      */
     public native @ByRef Point3f spatialCoordinates(); public native SpatialLocations spatialCoordinates(Point3f setter);
 }

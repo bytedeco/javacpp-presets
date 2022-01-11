@@ -21,18 +21,19 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief NeuralNetwork node. Runs a neural inference on input data.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class NeuralNetwork extends Node {
+public class NeuralNetwork extends NeuralNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NeuralNetwork(Pointer p) { super(p); }
 
-
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public NeuralNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public NeuralNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr NeuralNetworkProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr NeuralNetworkProperties props);
 
     /**
-     * Input message with data to be infered upon
+     * Input message with data to be inferred upon
      * Default queue is blocking with size 5
      */
     @MemberGetter public native @ByRef Input input();
@@ -49,6 +50,17 @@ public class NeuralNetwork extends Node {
      */
     @MemberGetter public native @ByRef Output passthrough();
 
+    /**
+     * Inputs mapped to network inputs. Useful for infering from separate data sources
+     * Default input is non-blocking with queue size 1 and waits for messages
+     */
+    @MemberGetter public native @ByRef InputMap inputs();
+
+    /**
+     * Passthroughs which correspond to specified input
+     */
+    @MemberGetter public native @ByRef OutputMap passthroughs();
+
     // Specify local filesystem path to load the blob (which gets loaded at loadAssets)
     /**
      * Load network blob into assets and use once pipeline is started.
@@ -60,7 +72,7 @@ public class NeuralNetwork extends Node {
     public native void setBlobPath(@StdString String path);
 
     /**
-     * Specifies how many frames will be avilable in the pool
+     * Specifies how many frames will be available in the pool
      * @param numFrames How many frames will pool have
      */
     public native void setNumPoolFrames(int numFrames);

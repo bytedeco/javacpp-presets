@@ -21,18 +21,20 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief SPIOut node. Sends messages over SPI.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SPIOut extends Node {
+public class SPIOut extends SPIOutPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SPIOut(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
+    public SPIOut(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SPIOutProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SPIOutProperties props);
     public SPIOut(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
 
     /**
-     * Input for any type of messages to be transfered over SPI stream
+     * Input for any type of messages to be transferred over SPI stream
      *
      * Default queue is blocking with size 8
      */

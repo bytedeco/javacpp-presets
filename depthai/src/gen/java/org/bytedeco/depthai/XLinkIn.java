@@ -21,15 +21,16 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief XLinkIn node. Receives messages over XLink.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class XLinkIn extends Node {
+public class XLinkIn extends XLinkInPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public XLinkIn(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public XLinkIn(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public XLinkIn(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr XLinkInProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr XLinkInProperties props);
 
     /**
      * Outputs message of same type as send from host.

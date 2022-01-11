@@ -55,6 +55,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../NodeVector.java
 
 
+// Targeting ../StringStringTuple.java
+
+
 // Targeting ../FloatVectorVectorIntIntTuple.java
 
 
@@ -80,6 +83,18 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 
 // Targeting ../StringNodeIoInfoMap.java
+
+
+// Targeting ../StringNodeInputMap.java
+
+
+// Targeting ../StringNodeOutputMap.java
+
+
+// Targeting ../StringNodeInputMapMap.java
+
+
+// Targeting ../StringNodeOutputMapMap.java
 
 
 // Targeting ../ConnectionSet.java
@@ -289,11 +304,66 @@ public static final int
   // namespace dai
 
 
-// Parsed from depthai-shared/common/CameraBoardSocket.hpp
+// Parsed from depthai-shared/utility/Serialization.hpp
 
 // #pragma once
 
+// std
+// #include <cstddef>
+// #include <cstdint>
+// #include <vector>
+
+// libraries
+// #include <nop/serializer.h>
+// #include <nop/structure.h>
+// #include <nop/utility/buffer_reader.h>
+// #include <nop/utility/stream_writer.h>
+
 // #include <nlohmann/json.hpp>
+
+// To not require exceptions for embedded usecases.
+// #ifndef __has_feature           // Optional of course.
+//     #define __has_feature(x) 0  // Compatibility with non-clang compilers.
+// #endif
+// #if __has_feature(cxx_exceptions) || defined(__cpp_exceptions) || (defined(_MSC_VER) && defined(_CPPUNWIND)) || defined(__EXCEPTIONS)
+//     #define DEPTHAI_EXCEPTIONS
+// #endif
+// Targeting ../VectorWriter.java
+
+
+
+// libnop serialization
+// If exceptions are available it throws in error cases
+// Otherwise return value can be checked
+
+// libnop deserialization
+
+  // namespace utility
+
+// // In dai scope
+// template<typename Base, typename Derived>
+// struct Serializable : Base {
+//     virtual void serialize(std::vector<std::uint8_t>& data) {
+//         utility::serialize(static_cast<const Derived&>(*this), data);
+//     }
+// };
+
+  // namespace dai
+
+// Macros
+// #define DEPTHAI_SERIALIZE_EXT(...)
+//     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(__VA_ARGS__)
+//     NOP_EXTERNAL_STRUCTURE(__VA_ARGS__)
+
+// #define DEPTHAI_SERIALIZE(...)
+//     NLOHMANN_DEFINE_TYPE_INTRUSIVE(__VA_ARGS__)
+//     NOP_STRUCTURE(__VA_ARGS__)
+
+
+// Parsed from depthai-shared/common/CameraBoardSocket.hpp
+
+// #pragma once
+// #include <cstdint>
 /**
  * Which Camera socket to use.
  *
@@ -314,8 +384,7 @@ public static final int
 // Parsed from depthai-shared/common/CameraImageOrientation.hpp
 
 // #pragma once
-
-// #include <nlohmann/json.hpp>
+// #include <cstdint>
 /**
  * Camera sensor image orientation / pixel readout.
  * This exposes direct sensor settings. 90 or 270 degrees rotation is not available.
@@ -338,8 +407,10 @@ public static final int
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../ChipTemperature.java
+
+
 
 
 
@@ -349,8 +420,10 @@ public static final int
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../CpuUsage.java
+
+
 
 
 
@@ -376,8 +449,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../MemoryInfo.java
+
+
 
 
 
@@ -390,9 +465,11 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // std
 // #include <cstdint>
 
-// libraries
-// #include "nlohmann/json.hpp"
+// project
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Point2f.java
+
+
 
 
 
@@ -406,9 +483,11 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // std
 // #include <cstdint>
 
-// libraries
-// #include "nlohmann/json.hpp"
+// project
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Point3f.java
+
+
 
 
 
@@ -422,9 +501,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // std
 // #include <cstdint>
 
-// libraries
-// #include "nlohmann/json.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Size2f.java
+
+
 
 
 
@@ -440,8 +520,9 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "depthai-shared/common/Point2f.hpp"
 // #include "depthai-shared/common/Size2f.hpp"
-// #include "nlohmann/json.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Rect.java
+
 
 
 
@@ -454,13 +535,13 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // std
 // #include <cstdint>
 
-// libraries
-// #include "nlohmann/json.hpp"
-
 // shared
 // #include "depthai-shared/common/Point2f.hpp"
 // #include "depthai-shared/common/Size2f.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RotatedRect.java
+
+
 
 
 
@@ -475,6 +556,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Extrinsics.java
 
 
@@ -485,7 +567,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include <cstdint>
 /**
  * Which CameraModel to initialize the calibration with.
  */
@@ -506,6 +588,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "depthai-shared/common/CameraModel.hpp"
 // #include "depthai-shared/common/Extrinsics.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../CameraInfo.java
 
 
@@ -519,7 +602,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include <vector>
 
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../StereoRectification.java
+
+
 
 
 
@@ -538,9 +624,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/common/Extrinsics.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/StereoRectification.hpp"
-
-// libraries
-// #include "nlohmann/json.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../EepromData.java
 
 
@@ -553,13 +637,13 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #pragma once
 
 // std
+// #include <chrono>
 // #include <cstdint>
 
-// libraries
-// #include <chrono>
-
-// #include "nlohmann/json.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Timestamp.java
+
+
 
 
 
@@ -629,10 +713,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawBuffer.java
 
 
@@ -647,22 +731,30 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "RawBuffer.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Timestamp.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../IMUReport.java
+
 
 
 // Targeting ../IMUReportAccelerometer.java
 
 
+
 // Targeting ../IMUReportGyroscope.java
+
 
 
 // Targeting ../IMUReportMagneticField.java
 
 
+
 // Targeting ../IMUReportRotationVectorWAcc.java
 
 
+
 // Targeting ../IMUPacket.java
+
+
 
 
 // Targeting ../RawIMUData.java
@@ -676,11 +768,11 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
 // #include "RawBuffer.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawCameraControl.java
 
 
@@ -696,6 +788,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "RawBuffer.hpp"
 // #include "depthai-shared/common/Timestamp.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawImgFrame.java
 
 
@@ -709,7 +802,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "RawBuffer.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../ImgDetection.java
+
+
 
 
 // Targeting ../RawImgDetections.java
@@ -723,7 +819,6 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
@@ -734,6 +829,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/common/Point2f.hpp"
 // #include "depthai-shared/common/RotatedRect.hpp"
 // #include "depthai-shared/common/Size2f.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawImageManipConfig.java
 
 
@@ -746,6 +842,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #pragma once
 
 // #include "RawBuffer.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../TensorInfo.java
 
 
@@ -763,7 +860,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "RawBuffer.hpp"
 // #include "RawImgDetections.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../SpatialImgDetection.java
+
+
 
 
 // Targeting ../RawSpatialImgDetections.java
@@ -777,14 +877,15 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
 // #include "RawBuffer.hpp"
 // #include "RawImgFrame.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../SpatialLocationCalculatorConfigThresholds.java
+
 
 
 
@@ -799,6 +900,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // Targeting ../SpatialLocationCalculatorConfigData.java
 
 
+
 // Targeting ../RawSpatialLocationCalculatorConfig.java
 
 
@@ -810,7 +912,6 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
@@ -818,7 +919,9 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "RawSpatialLocationCalculatorConfig.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../SpatialLocations.java
+
 
 
 // Targeting ../RawSpatialLocations.java
@@ -833,11 +936,11 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #pragma once
 // #include <cstdint>
 // #include <depthai-shared/common/optional.hpp>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
 // #include "RawBuffer.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 
 /**
  * Median filter config for disparity post-processing
@@ -861,7 +964,6 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #pragma once
 // #include <cstdint>
-// #include <nlohmann/json.hpp>
 // #include <vector>
 
 // #include "DatatypeEnum.hpp"
@@ -869,6 +971,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/common/ChipTemperature.hpp"
 // #include "depthai-shared/common/CpuUsage.hpp"
 // #include "depthai-shared/common/MemoryInfo.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawSystemInformation.java
 
 
@@ -886,6 +989,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
 // #include "depthai-shared/datatype/RawImgDetections.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../Tracklet.java
 
 
@@ -906,6 +1010,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // project
 // #include "depthai-shared/common/UsbSpeed.hpp"
 // #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // #include "depthai-shared/xlink/XLinkConstants.hpp"
 
 @Namespace("dai") @MemberGetter public static native @Cast("const uint32_t") int PREBOOT_CONFIG_MAGIC1();
@@ -913,6 +1018,9 @@ public static final int PREBOOT_CONFIG_MAGIC1 = PREBOOT_CONFIG_MAGIC1();
 @Namespace("dai") @MemberGetter public static native @Cast("const uint32_t") int PREBOOT_CONFIG_MAGIC2();
 public static final int PREBOOT_CONFIG_MAGIC2 = PREBOOT_CONFIG_MAGIC2();
 // Targeting ../PrebootConfig.java
+
+
+
 
 
 
@@ -926,8 +1034,8 @@ public static final int PREBOOT_CONFIG_MAGIC2 = PREBOOT_CONFIG_MAGIC2();
 // std
 // #include <cstdint>
 
-// libraries
-// #include <nlohmann/json.hpp>
+// project
+// #include "depthai-shared/utility/Serialization.hpp"
 
 // Follows spdlog levels
 @Namespace("dai") public enum LogLevel { TRACE(0), DEBUG(1), INFO(2), WARN(3), ERR(4), CRITICAL(5), OFF(6);
@@ -949,13 +1057,13 @@ public static final int PREBOOT_CONFIG_MAGIC2 = PREBOOT_CONFIG_MAGIC2();
 // std
 // #include <cstdint>
 
-// libraries
-// #include <nlohmann/json.hpp>
-
 // project
 // #include "LogLevel.hpp"
 // #include "depthai-shared/common/Timestamp.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../LogMessage.java
+
+
 
 
 
@@ -983,16 +1091,79 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // Watchdog timeout
 @Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_WATCHDOG_TIMEOUT();
 
+// Maximum metadata size
+@Namespace("dai::device") @MemberGetter public static native int XLINK_MESSAGE_METADATA_MAX_SIZE();
+public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA_MAX_SIZE();
+
   // namespace device
   // namespace dai
 
+
+// Parsed from depthai-shared/properties/Properties.hpp
+
+// #pragma once
+
+// #include "depthai-shared/utility/Serialization.hpp"
+// Targeting ../DaiProperties.java
+
+
+// Targeting ../IMUPropertiesSerializable.java
+
+
+// Targeting ../ColorCameraPropertiesSerializable.java
+
+
+// Targeting ../MonoCameraPropertiesSerializable.java
+
+
+// Targeting ../ImageManipPropertiesSerializable.java
+
+
+// Targeting ../GlobalPropertiesSerializable.java
+
+
+// Targeting ../NeuralNetworkPropertiesSerializable.java
+
+
+// Targeting ../DetectionNetworkPropertiesSerializable.java
+
+
+// Targeting ../ObjectTrackerPropertiesSerializable.java
+
+
+// Targeting ../SPIOutPropertiesSerializable.java
+
+
+// Targeting ../SpatialDetectionNetworkPropertiesSerializable.java
+
+
+// Targeting ../SpatialLocationCalculatorPropertiesSerializable.java
+
+
+// Targeting ../StereoDepthPropertiesSerializable.java
+
+
+// Targeting ../SystemLoggerPropertiesSerializable.java
+
+
+// Targeting ../VideoEncoderPropertiesSerializable.java
+
+
+// Targeting ../XLinkInPropertiesSerializable.java
+
+
+// Targeting ../XLinkOutPropertiesSerializable.java
+
+
+
+  // namespace dai
 
 // Parsed from depthai-shared/properties/IMUProperties.hpp
 
 // #pragma once
 
-// #include <depthai-shared/datatype/RawIMUData.hpp>
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/datatype/RawIMUData.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 
 /**
  * Available IMU sensors.
@@ -1133,7 +1304,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // Targeting ../IMUSensorConfig.java
 
 
+
 // Targeting ../IMUProperties.java
+
+
 
 
 
@@ -1144,11 +1318,12 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/common/optional.hpp>
-// #include <nlohmann/json.hpp>
-
 // #include "depthai-shared/common/EepromData.hpp"
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../GlobalProperties.java
+
+
 
 
 
@@ -1159,12 +1334,13 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/datatype/RawCameraControl.hpp>
-// #include <nlohmann/json.hpp>
-
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/datatype/RawCameraControl.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../ColorCameraProperties.java
+
+
 
 
 
@@ -1175,10 +1351,12 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/common/optional.hpp>
-// #include <depthai-shared/datatype/RawImageManipConfig.hpp>
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/datatype/RawImageManipConfig.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../ImageManipProperties.java
+
+
 
 
 
@@ -1189,12 +1367,13 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/datatype/RawCameraControl.hpp>
-// #include <nlohmann/json.hpp>
-
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/datatype/RawCameraControl.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../MonoCameraProperties.java
+
+
 
 
 
@@ -1205,9 +1384,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/common/optional.hpp>
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../NeuralNetworkProperties.java
+
+
 
 
 
@@ -1221,14 +1402,13 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // std
 // #include <vector>
 
-// libraries
-// #include <nlohmann/json.hpp>
-
 // project
 // #include "NeuralNetworkProperties.hpp"
 // #include "depthai-shared/common/DetectionNetworkType.hpp"
 // #include "depthai-shared/common/optional.hpp"
 // Targeting ../DetectionNetworkProperties.java
+
+
 
 
 
@@ -1242,12 +1422,9 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // std
 // #include <vector>
 
-// libraries
-// #include <nlohmann/json.hpp>
-
 // project
-
 // #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 
 @Namespace("dai") public enum TrackerType {
     /** Kernelized Correlation Filter tracking */
@@ -1266,19 +1443,21 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("dai") public enum TrackerIdAssigmentPolicy {
+@Namespace("dai") public enum TrackerIdAssignmentPolicy {
     /** Always take a new, unique ID */
     UNIQUE_ID(0),
     /** Take the smallest available ID */
     SMALLEST_ID(1);
 
     public final int value;
-    private TrackerIdAssigmentPolicy(int v) { this.value = v; }
-    private TrackerIdAssigmentPolicy(TrackerIdAssigmentPolicy e) { this.value = e.value; }
-    public TrackerIdAssigmentPolicy intern() { for (TrackerIdAssigmentPolicy e : values()) if (e.value == value) return e; return this; }
+    private TrackerIdAssignmentPolicy(int v) { this.value = v; }
+    private TrackerIdAssignmentPolicy(TrackerIdAssignmentPolicy e) { this.value = e.value; }
+    public TrackerIdAssignmentPolicy intern() { for (TrackerIdAssignmentPolicy e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 // Targeting ../ObjectTrackerProperties.java
+
+
 
 
 
@@ -1289,8 +1468,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../SPIOutProperties.java
+
+
 
 
 
@@ -1305,7 +1486,6 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <vector>
 
 // libraries
-// #include <nlohmann/json.hpp>
 
 // project
 // #include "DetectionNetworkProperties.hpp"
@@ -1316,6 +1496,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 
 
+
+
   // namespace dai
 
 
@@ -1323,11 +1505,14 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/common/optional.hpp>
-// #include <depthai-shared/datatype/RawSpatialLocationCalculatorConfig.hpp>
-// #include <nlohmann/json.hpp>
 // #include <vector>
+
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/datatype/RawSpatialLocationCalculatorConfig.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../SpatialLocationCalculatorProperties.java
+
+
 
 
 
@@ -1338,13 +1523,14 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <depthai-shared/common/EepromData.hpp>
-// #include <depthai-shared/common/optional.hpp>
-// #include <nlohmann/json.hpp>
-
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/common/EepromData.hpp"
+// #include "depthai-shared/common/optional.hpp"
 // #include "depthai-shared/datatype/RawStereoDepthConfig.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../StereoDepthProperties.java
+
+
 
 
 
@@ -1355,11 +1541,12 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
-
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../SystemLoggerProperties.java
+
+
 
 
 
@@ -1371,8 +1558,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #pragma once
 
 // #include <depthai-shared/common/optional.hpp>
-// #include <nlohmann/json.hpp>
+
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../VideoEncoderProperties.java
+
+
 
 
 
@@ -1383,10 +1573,11 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
-
+// #include "depthai-shared/properties/Properties.hpp"
 // #include "depthai-shared/xlink/XLinkConstants.hpp"
 // Targeting ../XLinkInProperties.java
+
+
 
 
 
@@ -1397,8 +1588,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../XLinkOutProperties.java
+
+
 
 
 
@@ -1414,8 +1607,8 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 // #include <exception>
 // #include <unordered_map>
 
-// libraries
-// #include <nlohmann/json.hpp>
+// project
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../AssetView.java
 
 
@@ -1430,8 +1623,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../NodeConnectionSchema.java
+
+
 
 
 
@@ -1442,8 +1637,10 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../NodeIoInfo.java
+
+
 
 
 
@@ -1454,11 +1651,13 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // #pragma once
 
-// #include <nlohmann/json.hpp>
-// #include <unordered_map>
+// #include <tuple>
 
 // #include "NodeIoInfo.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../NodeObjInfo.java
+
+
 
 
 
@@ -1467,23 +1666,15 @@ public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // Parsed from depthai-shared/pipeline/PipelineSchema.hpp
 
-//  To parse this JSON data, first install
-//
-//      Boost     http://www.boost.org
-//      json.hpp  https://github.com/nlohmann/json
-//
-//  Then include this file, and then do
-//
-//     PipelineSchema.hpp data = nlohmann::json::parse(jsonString);
-
 // #pragma once
-
-// #include <nlohmann/json.hpp>
 
 // #include "NodeConnectionSchema.hpp"
 // #include "NodeObjInfo.hpp"
 // #include "depthai-shared/properties/GlobalProperties.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../PipelineSchema.java
+
+
 
 
 
@@ -1801,6 +1992,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #pragma once
 
 // #include <algorithm>
+// #include <memory>
 // #include <set>
 // #include <string>
 // #include <tuple>
@@ -1808,15 +2000,70 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // project
 // #include "depthai/openvino/OpenVINO.hpp"
 // #include "depthai/pipeline/AssetManager.hpp"
+// #include "depthai/utility/copyable_unique_ptr.hpp"
 
 // depthai-shared
 // #include "depthai-shared/datatype/DatatypeEnum.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
 
 // libraries
-// #include "nlohmann/json.hpp"
 // #include "tl/optional.hpp"
 // fwd declare Pipeline
 // Targeting ../Node.java
+
+
+// Targeting ../IMUPropertiesNode.java
+
+
+// Targeting ../ColorCameraPropertiesNode.java
+
+
+// Targeting ../ImageManipPropertiesNode.java
+
+
+// Targeting ../NeuralNetworkPropertiesNode.java
+
+
+// Targeting ../DetectionNetworkPropertiesNode.java
+
+
+// Targeting ../MobileNetDetectionNetworkPropertiesNode.java
+
+
+// Targeting ../YoloDetectionNetworkPropertiesNode.java
+
+
+// Targeting ../ObjectTrackerPropertiesNode.java
+
+
+// Targeting ../SPIOutPropertiesNode.java
+
+
+// Targeting ../SpatialDetectionNetworkPropertiesNode.java
+
+
+// Targeting ../MobileNetSpatialDetectionNetworkPropertiesNode.java
+
+
+// Targeting ../YoloSpatialDetectionNetworkPropertiesNode.java
+
+
+// Targeting ../SpatialLocationCalculatorPropertiesNode.java
+
+
+// Targeting ../StereoDepthPropertiesNode.java
+
+
+// Targeting ../SystemLoggerPropertiesNode.java
+
+
+// Targeting ../VideoEncoderPropertiesNode.java
+
+
+// Targeting ../XLinkInPropertiesNode.java
+
+
+// Targeting ../XLinkOutPropertiesNode.java
 
 
 
@@ -1871,7 +2118,6 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "node/IMU.hpp"
 // #include "node/ImageManip.hpp"
 // #include "node/MonoCamera.hpp"
-// #include "node/MyProducer.hpp"
 // #include "node/NeuralNetwork.hpp"
 // #include "node/ObjectTracker.hpp"
 // #include "node/SPIIn.hpp"

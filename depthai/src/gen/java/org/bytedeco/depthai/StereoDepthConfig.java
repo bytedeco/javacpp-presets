@@ -35,6 +35,7 @@ public class StereoDepthConfig extends Buffer {
         return new StereoDepthConfig((Pointer)this).offsetAddress(i);
     }
 
+
     /**
      * Construct StereoDepthConfig message.
      */
@@ -42,6 +43,12 @@ public class StereoDepthConfig extends Buffer {
     private native void allocate();
     public StereoDepthConfig(@SharedPtr RawStereoDepthConfig ptr) { super((Pointer)null); allocate(ptr); }
     private native void allocate(@SharedPtr RawStereoDepthConfig ptr);
+
+    /**
+     * @param align Set the disparity/depth alignment: centered (between the 'left' and 'right' inputs),
+     * or from the perspective of a rectified output stream
+     */
+    public native void setDepthAlign(RawStereoDepthConfig.AlgorithmControl.DepthAlign align);
 
     /**
      * Confidence threshold for disparity calculation

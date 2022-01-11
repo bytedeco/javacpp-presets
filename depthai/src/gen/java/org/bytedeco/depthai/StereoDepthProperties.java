@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for StereoDepth
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class StereoDepthProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public StereoDepthProperties() { super((Pointer)null); allocate(); }
@@ -37,6 +37,9 @@ public class StereoDepthProperties extends Pointer {
     @Override public StereoDepthProperties getPointer(long i) {
         return new StereoDepthProperties((Pointer)this).offsetAddress(i);
     }
+
+    @MemberGetter public static native @Cast("const std::int32_t") int AUTO();
+    public static final int AUTO = AUTO();
 
     public static class RectificationMesh extends Pointer {
         static { Loader.load(); }
@@ -80,25 +83,6 @@ public class StereoDepthProperties extends Pointer {
     /** Initial stereo config */
     public native @ByRef RawStereoDepthConfig initialConfig(); public native StereoDepthProperties initialConfig(RawStereoDepthConfig setter);
 
-    /** Whether to wait for config at 'inputConfig' IO */
-    public native @Cast("bool") boolean inputConfigSync(); public native StereoDepthProperties inputConfigSync(boolean setter);
-
-    /**
-     * Align the disparity/depth to the perspective of a rectified output, or center it
-     */
-    public enum DepthAlign { RECTIFIED_RIGHT(0), RECTIFIED_LEFT(1), CENTER(2);
-
-        public final int value;
-        private DepthAlign(int v) { this.value = v; }
-        private DepthAlign(DepthAlign e) { this.value = e.value; }
-        public DepthAlign intern() { for (DepthAlign e : values()) if (e.value == value) return e; return this; }
-        @Override public String toString() { return intern().name(); }
-    }
-
-    /**
-     * Set the disparity/depth alignment to the perspective of a rectified output, or center it
-     */
-    public native DepthAlign depthAlign(); public native StereoDepthProperties depthAlign(DepthAlign setter);
     /**
      * Which camera to align disparity/depth to.
      * When configured (not AUTO), takes precedence over 'depthAlign'
@@ -108,7 +92,7 @@ public class StereoDepthProperties extends Pointer {
     public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
 
     /**
-     * Fill color for missing data at frame edges: grayscale 0..255, or -1 to replicate pixels
+     * Fill color for missing data at frame edges - grayscale 0..255, or -1 to replicate pixels
      */
     public native @Cast("std::int32_t") int rectifyEdgeFillColor(); public native StereoDepthProperties rectifyEdgeFillColor(int setter);
     /**
@@ -149,4 +133,23 @@ public class StereoDepthProperties extends Pointer {
 
     /** Num frames in output pool */
     public native int numFramesPool(); public native StereoDepthProperties numFramesPool(int setter);
+
+    /**
+     * Number of shaves reserved for stereo depth post processing.
+     * Post processing can use multiple shaves to increase performance.
+     * -1 means auto, resources will be allocated based on enabled filters.
+     * 0 means that it will reuse the shave assigned for main stereo algorithm.
+     * For optimal performance it's recommended to allocate more than 0,
+     * so post processing will run in parallel with main stereo algorithm.
+     */
+    public native @Cast("std::int32_t") int numPostProcessingShaves(); public native StereoDepthProperties numPostProcessingShaves(int setter);
+
+    /**
+     * Number of memory slices reserved for stereo depth post processing.
+     * -1 means auto, memory will be allocated based on initial stereo settings and number of shaves.
+     * 0 means that it will reuse the memory slices assigned for main stereo algorithm.
+     * For optimal performance it's recommended to allocate more than 0,
+     * so post processing will run in parallel with main stereo algorithm.
+     */
+    public native @Cast("std::int32_t") int numPostProcessingMemorySlices(); public native StereoDepthProperties numPostProcessingMemorySlices(int setter);
 }

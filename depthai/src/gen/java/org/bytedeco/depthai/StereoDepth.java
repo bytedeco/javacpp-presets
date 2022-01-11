@@ -21,15 +21,28 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief StereoDepth node. Compute stereo disparity and depth from left-right image pair.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class StereoDepth extends Node {
+public class StereoDepth extends StereoDepthPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoDepth(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
+    /**
+     * Preset modes for stereo depth.
+     */
+    public enum PresetMode { HIGH_ACCURACY(0), HIGH_DENSITY(1);
+
+        public final int value;
+        private PresetMode(int v) { this.value = v; }
+        private PresetMode(PresetMode e) { this.value = e.value; }
+        public PresetMode intern() { for (PresetMode e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
     public StereoDepth(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public StereoDepth(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr StereoDepthProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr StereoDepthProperties props);
 
     /**
      * Initial config to use for StereoDepth.
@@ -129,11 +142,11 @@ public class StereoDepth extends Node {
     /**
      * Outputs ImgFrame message that carries RAW8 confidence map.
      * Lower values means higher confidence of the calculated disparity value.
-     * RGB aligment, left-right check or any postproccessing (e.g. median filter) is not performed on confidence map.
+     * RGB alignment, left-right check or any postproccessing (e.g. median filter) is not performed on confidence map.
      */
     @MemberGetter public native @ByRef Output confidenceMap();
 
-// #if 0  // will be enabled when confidence map RGB aligment/LR-check support will be added
+// #if 0  // will be enabled when confidence map RGB alignment/LR-check support will be added
 // #endif
 
     /**
@@ -223,7 +236,7 @@ public class StereoDepth extends Node {
      * @param align Set the disparity/depth alignment: centered (between the 'left' and 'right' inputs),
      * or from the perspective of a rectified output stream
      */
-    public native void setDepthAlign(@ByVal StereoDepthProperties.DepthAlign align);
+    public native void setDepthAlign(RawStereoDepthConfig.AlgorithmControl.DepthAlign align);
 
     /**
      * @param camera Set the camera from whose perspective the disparity/depth will be aligned
@@ -313,4 +326,19 @@ public class StereoDepth extends Node {
      * @return Maximum disparity value that the node can return
      */
     public native @Deprecated float getMaxDisparity();
+
+    /**
+     * Specify allocated hardware resources for stereo depth.
+     * Suitable only to increase post processing runtime.
+     * @param numShaves Number of shaves.
+     * @param numMemorySlices Number of memory slices.
+     */
+    public native void setPostProcessingHardwareResources(int numShaves, int numMemorySlices);
+
+    /**
+     * Sets a default preset based on specified option.
+     * @param mode Stereo depth preset mode
+     */
+    public native void setDefaultProfilePreset(PresetMode mode);
+    public native void setDefaultProfilePreset(@Cast("dai::node::StereoDepth::PresetMode") int mode);
 }

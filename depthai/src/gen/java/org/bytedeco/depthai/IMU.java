@@ -21,18 +21,20 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief IMU node for BNO08X.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class IMU extends Node {
+public class IMU extends IMUPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMU(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
     /**
      * Constructs IMU node.
      */
     public IMU(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public IMU(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr IMUProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr IMUProperties props);
 
     /**
      * Outputs IMUData message that carries IMU packets.

@@ -21,15 +21,17 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief ObjectTracker node. Performs object tracking using Kalman filter and hungarian algorithm.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ObjectTracker extends Node {
+public class ObjectTracker extends ObjectTrackerPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ObjectTracker(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
     public ObjectTracker(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public ObjectTracker(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ObjectTrackerProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ObjectTrackerProperties props);
 
     /**
      * Input ImgFrame message on which tracking will be performed. RGBp, BGRp, NV12, YUV420p types are supported.
@@ -67,7 +69,7 @@ public class ObjectTracker extends Node {
     @MemberGetter public native @ByRef Output passthroughDetectionFrame();
 
     /**
-     * Passthrough image detections message from neural nework output.
+     * Passthrough image detections message from neural network output.
      * Suitable for when input queue is set to non-blocking behavior.
      */
     @MemberGetter public native @ByRef Output passthroughDetections();
@@ -100,9 +102,9 @@ public class ObjectTracker extends Node {
     public native void setTrackerType(@Cast("dai::TrackerType") int type);
 
     /**
-     * Specify tracker ID assigment policy.
-     * @param type Tracker ID assigment policy.
+     * Specify tracker ID assignment policy.
+     * @param type Tracker ID assignment policy.
      */
-    public native void setTrackerIdAssigmentPolicy(TrackerIdAssigmentPolicy type);
-    public native void setTrackerIdAssigmentPolicy(@Cast("dai::TrackerIdAssigmentPolicy") int type);
+    public native void setTrackerIdAssignmentPolicy(TrackerIdAssignmentPolicy type);
+    public native void setTrackerIdAssignmentPolicy(@Cast("dai::TrackerIdAssignmentPolicy") int type);
 }

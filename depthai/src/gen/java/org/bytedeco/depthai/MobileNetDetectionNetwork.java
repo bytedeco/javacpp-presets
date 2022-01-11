@@ -21,11 +21,13 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief MobileNetDetectionNetwork node. Parses MobileNet results
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class MobileNetDetectionNetwork extends DetectionNetwork {
+public class MobileNetDetectionNetwork extends MobileNetDetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MobileNetDetectionNetwork(Pointer p) { super(p); }
 
     public MobileNetDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public MobileNetDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr DetectionNetworkProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr DetectionNetworkProperties props);
 }

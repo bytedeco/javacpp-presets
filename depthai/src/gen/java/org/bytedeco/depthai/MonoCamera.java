@@ -21,15 +21,16 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief MonoCamera node. For use with grayscale sensors.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class MonoCamera extends Node {
+public class MonoCamera extends ColorCameraPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MonoCamera(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public MonoCamera(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public MonoCamera(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr MonoCameraProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr MonoCameraProperties props);
 
     /**
      * Initial control options to apply to sensor

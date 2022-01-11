@@ -21,18 +21,14 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief SpatialDetectionNetwork node. Runs a neural inference on input image and calculates spatial location data.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SpatialDetectionNetwork extends DetectionNetwork {
+public class SpatialDetectionNetwork extends SpatialDetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SpatialDetectionNetwork(Pointer p) { super(p); }
 
-
-    public native @StdString @Override BytePointer getName();
-    public SpatialDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
-    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     /**
-     * Input message with data to be infered upon
+     * Input message with data to be inferred upon
      * Default queue is blocking with size 5
      */
     @MemberGetter public native @ByRef Input input();
@@ -76,13 +72,13 @@ public class SpatialDetectionNetwork extends DetectionNetwork {
     public native void setBoundingBoxScaleFactor(float scaleFactor);
 
     /**
-     * Specifies lower threshold in milimeters for depth values which will used to calculate spatial data
+     * Specifies lower threshold in millimeters for depth values which will used to calculate spatial data
      * @param lowerThreshold LowerThreshold must be in the interval [0,upperThreshold] and less than upperThreshold.
      */
     public native void setDepthLowerThreshold(@Cast("uint32_t") int lowerThreshold);
 
     /**
-     * Specifies upper threshold in milimeters for depth values which will used to calculate spatial data
+     * Specifies upper threshold in millimeters for depth values which will used to calculate spatial data
      * @param upperThreshold UpperThreshold must be in the interval (lowerThreshold,65535].
      */
     public native void setDepthUpperThreshold(@Cast("uint32_t") int upperThreshold);

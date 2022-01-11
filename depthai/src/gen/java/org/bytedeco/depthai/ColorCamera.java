@@ -21,20 +21,24 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief ColorCamera node. For use with color sensors.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ColorCamera extends Node {
+public class ColorCamera extends ColorCameraPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorCamera(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
-    public native int getScaledSize(int input, int num, int denom);
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     /**
      * Constructs ColorCamera node.
      */
     public ColorCamera(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public ColorCamera(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ColorCameraProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ColorCameraProperties props);
+
+    /**
+     * Computes the scaled size given numerator and denominator
+     */
+    public native int getScaledSize(int input, int num, int denom);
 
     /**
      * Initial control options to apply to sensor
@@ -42,7 +46,7 @@ public class ColorCamera extends Node {
     @MemberGetter public native @ByRef CameraControl initialControl();
 
     /**
-     * Input for ImageManipConfig message, which can modify crop paremeters in runtime
+     * Input for ImageManipConfig message, which can modify crop parameters in runtime
      *
      * Default queue is non-blocking with size 8
      */
@@ -255,13 +259,13 @@ public class ColorCamera extends Node {
      * before sending out a frame.
      * @param wait True to wait for inputConfig message, false otherwise
      */
-    public native void setWaitForConfigInput(@Cast("bool") boolean _wait);
+    public native @Deprecated void setWaitForConfigInput(@Cast("bool") boolean _wait);
 
     /**
      * @see setWaitForConfigInput
      * @return True if wait for inputConfig message, false otherwise
      */
-    public native @Cast("bool") boolean getWaitForConfigInput();
+    public native @Cast("bool") @Deprecated boolean getWaitForConfigInput();
 
     /**
      * Specifies whether preview output should preserve aspect ratio,

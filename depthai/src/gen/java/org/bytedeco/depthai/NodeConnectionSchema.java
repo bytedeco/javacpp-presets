@@ -39,7 +39,9 @@ public class NodeConnectionSchema extends Pointer {
     }
 
     public native @Cast("int64_t") long node1Id(); public native NodeConnectionSchema node1Id(long setter);
+    public native @StdString BytePointer node1OutputGroup(); public native NodeConnectionSchema node1OutputGroup(BytePointer setter);
     public native @StdString BytePointer node1Output(); public native NodeConnectionSchema node1Output(BytePointer setter);
     public native @Cast("int64_t") long node2Id(); public native NodeConnectionSchema node2Id(long setter);
+    public native @StdString BytePointer node2InputGroup(); public native NodeConnectionSchema node2InputGroup(BytePointer setter);
     public native @StdString BytePointer node2Input(); public native NodeConnectionSchema node2Input(BytePointer setter);
 }

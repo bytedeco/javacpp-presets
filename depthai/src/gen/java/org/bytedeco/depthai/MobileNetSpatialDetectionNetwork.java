@@ -21,7 +21,7 @@ import static org.bytedeco.depthai.global.depthai.*;
  * MobileNetSpatialDetectionNetwork node. Mobilenet-SSD based network with spatial location data.
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class MobileNetSpatialDetectionNetwork extends SpatialDetectionNetwork {
+public class MobileNetSpatialDetectionNetwork extends MobileNetSpatialDetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MobileNetSpatialDetectionNetwork(Pointer p) { super(p); }
