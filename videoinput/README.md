@@ -90,7 +90,7 @@ public class ExampleUsage {
         //optionally setup a second (or third, fourth ...) device - same options as above
         VI.setupDevice(device2);
 
-        //As requested width and height can not always be accommodated
+        //As requested width and height can not always be accomodated
         //make sure to check the size once the device is setup
 
         int width   = VI.getWidth(device1);
