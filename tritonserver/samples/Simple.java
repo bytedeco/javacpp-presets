@@ -36,6 +36,7 @@ import static org.bytedeco.tritonserver.global.tritonserver.*;
 
 public class Simple {
     static final double TRITON_MIN_COMPUTE_CAPABILITY = 6.0;
+    private static final boolean TRITON_ENABLE_GPU = true;
 
     static void FAIL(String MSG) {
         System.err.println("Cuda failure: " + MSG);
@@ -143,7 +144,7 @@ public class Simple {
               actual_memory_type.put(0, requested_memory_type);
             }
 
-            switch (actual_memory_type.get()) {
+            switch (TRITON_ENABLE_GPU ? actual_memory_type.get(): TRITONSERVER_MEMORY_CPU) {
               case TRITONSERVER_MEMORY_CPU_PINNED: {
                 int err = cudaSetDevice((int)actual_memory_type_id.get());
                 if ((err != cudaSuccess) && (err != cudaErrorNoDevice) &&
@@ -228,6 +229,11 @@ public class Simple {
               Pointer.free(buffer);
               break;
             case TRITONSERVER_MEMORY_CPU_PINNED: {
+              if(!TRITON_ENABLE_GPU){
+                System.err.println("error: freeing memory_type TRITONSERVER_MEMORY_CPU_PINNED " +
+                                 "is invalid with GPU disabled");
+                break;
+              }
               int err = cudaSetDevice((int)memory_type_id);
               if (err == cudaSuccess) {
                 err = cudaFreeHost(buffer);
@@ -239,6 +245,11 @@ public class Simple {
               break;
             }
             case TRITONSERVER_MEMORY_GPU: {
+              if(!TRITON_ENABLE_GPU){
+                System.err.println("error: memory_type TRITONSERVER_MEMORY_GPU is " +
+                                 "invalid with GPU disabled");
+                break;
+              }
               int err = cudaSetDevice((int)memory_type_id);
               if (err == cudaSuccess) {
                 err = cudaFree(buffer);
@@ -457,7 +468,7 @@ public class Simple {
               byte_size.get() + " for " + name);
         }
 
-        if (enforce_memory_type && (memory_type.get() != requested_memory_type)) {
+        if (!TRITON_ENABLE_GPU && enforce_memory_type && (memory_type.get() != requested_memory_type)) {
           FAIL(
               "unexpected memory type, expected to be allocated in " +
               TRITONSERVER_MemoryTypeString(requested_memory_type) +
@@ -483,6 +494,11 @@ public class Simple {
           }
 
           case TRITONSERVER_MEMORY_GPU: {
+            if(!TRITON_ENABLE_GPU){
+                System.err.println("error: memory_type TRITONSERVER_MEMORY_GPU is " +
+                                 "invalid with GPU disabled");
+                break;
+            }
             System.out.println(name + " is stored in GPU memory");
             FAIL_IF_CUDA_ERR(
                 cudaMemcpy(odata, base, byte_size.get(), cudaMemcpyDeviceToHost),
@@ -583,7 +599,7 @@ public class Simple {
       FAIL_IF_ERR(
           TRITONSERVER_ServerOptionsSetStrictModelConfig(server_options, true),
           "setting strict model configuration");
-      double min_compute_capability = TRITON_MIN_COMPUTE_CAPABILITY;
+      double min_compute_capability = TRITON_ENABLE_GPU ? TRITON_MIN_COMPUTE_CAPABILITY: 0;
       FAIL_IF_ERR(
           TRITONSERVER_ServerOptionsSetMinSupportedComputeCapability(
               server_options, min_compute_capability),
@@ -781,50 +797,52 @@ public class Simple {
 
       Pointer input0_base = input0_data;
       Pointer input1_base = input1_data;
-      CudaDataDeleter input0_gpu = new CudaDataDeleter();
-      CudaDataDeleter input1_gpu = new CudaDataDeleter();
-      boolean use_cuda_memory =
-          (enforce_memory_type &&
-           (requested_memory_type != TRITONSERVER_MEMORY_CPU));
-      if (use_cuda_memory) {
-        FAIL_IF_CUDA_ERR(cudaSetDevice(0), "setting CUDA device to device 0");
-        if (requested_memory_type != TRITONSERVER_MEMORY_CPU_PINNED) {
-          Pointer dst = new Pointer();
-          FAIL_IF_CUDA_ERR(
-              cudaMalloc(dst, input0_size),
-              "allocating GPU memory for INPUT0 data");
-          input0_gpu.reset(dst);
-          FAIL_IF_CUDA_ERR(
-              cudaMemcpy(dst, input0_data, input0_size, cudaMemcpyHostToDevice),
-              "setting INPUT0 data in GPU memory");
-          FAIL_IF_CUDA_ERR(
-              cudaMalloc(dst, input1_size),
-              "allocating GPU memory for INPUT1 data");
-          input1_gpu.reset(dst);
-          FAIL_IF_CUDA_ERR(
-              cudaMemcpy(dst, input1_data, input1_size, cudaMemcpyHostToDevice),
-              "setting INPUT1 data in GPU memory");
-        } else {
-          Pointer dst = new Pointer();
-          FAIL_IF_CUDA_ERR(
-              cudaHostAlloc(dst, input0_size, cudaHostAllocPortable),
-              "allocating pinned memory for INPUT0 data");
-          input0_gpu.reset(dst);
-          FAIL_IF_CUDA_ERR(
-              cudaMemcpy(dst, input0_data, input0_size, cudaMemcpyHostToHost),
-              "setting INPUT0 data in pinned memory");
-          FAIL_IF_CUDA_ERR(
-              cudaHostAlloc(dst, input1_size, cudaHostAllocPortable),
-              "allocating pinned memory for INPUT1 data");
-          input1_gpu.reset(dst);
-          FAIL_IF_CUDA_ERR(
-              cudaMemcpy(dst, input1_data, input1_size, cudaMemcpyHostToHost),
-              "setting INPUT1 data in pinned memory");
+      if(TRITON_ENABLE_GPU) {
+        CudaDataDeleter input0_gpu = new CudaDataDeleter();
+        CudaDataDeleter input1_gpu = new CudaDataDeleter();
+        boolean use_cuda_memory =
+            (enforce_memory_type &&
+            (requested_memory_type != TRITONSERVER_MEMORY_CPU));
+        if (use_cuda_memory) {
+          FAIL_IF_CUDA_ERR(cudaSetDevice(0), "setting CUDA device to device 0");
+          if (requested_memory_type != TRITONSERVER_MEMORY_CPU_PINNED) {
+            Pointer dst = new Pointer();
+            FAIL_IF_CUDA_ERR(
+                cudaMalloc(dst, input0_size),
+                "allocating GPU memory for INPUT0 data");
+            input0_gpu.reset(dst);
+            FAIL_IF_CUDA_ERR(
+                cudaMemcpy(dst, input0_data, input0_size, cudaMemcpyHostToDevice),
+                "setting INPUT0 data in GPU memory");
+            FAIL_IF_CUDA_ERR(
+                cudaMalloc(dst, input1_size),
+                "allocating GPU memory for INPUT1 data");
+            input1_gpu.reset(dst);
+            FAIL_IF_CUDA_ERR(
+                cudaMemcpy(dst, input1_data, input1_size, cudaMemcpyHostToDevice),
+                "setting INPUT1 data in GPU memory");
+          } else {
+            Pointer dst = new Pointer();
+            FAIL_IF_CUDA_ERR(
+                cudaHostAlloc(dst, input0_size, cudaHostAllocPortable),
+                "allocating pinned memory for INPUT0 data");
+            input0_gpu.reset(dst);
+            FAIL_IF_CUDA_ERR(
+                cudaMemcpy(dst, input0_data, input0_size, cudaMemcpyHostToHost),
+                "setting INPUT0 data in pinned memory");
+            FAIL_IF_CUDA_ERR(
+                cudaHostAlloc(dst, input1_size, cudaHostAllocPortable),
+                "allocating pinned memory for INPUT1 data");
+            input1_gpu.reset(dst);
+            FAIL_IF_CUDA_ERR(
+                cudaMemcpy(dst, input1_data, input1_size, cudaMemcpyHostToHost),
+                "setting INPUT1 data in pinned memory");
+          }
         }
-      }
 
-      input0_base = use_cuda_memory ? input0_gpu : input0_data;
-      input1_base = use_cuda_memory ? input1_gpu : input1_data;
+        input0_base = use_cuda_memory ? input0_gpu : input0_data;
+        input1_base = use_cuda_memory ? input1_gpu : input1_data;
+      }
 
       FAIL_IF_ERR(
           TRITONSERVER_InferenceRequestAppendInputData(
