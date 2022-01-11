@@ -21,15 +21,16 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief ImageManip node. Capability to crop, resize, warp, ... incoming image frames
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ImageManip extends Node {
+public class ImageManip extends ImageManipPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageManip(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public ImageManip(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public ImageManip(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ImageManipProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr ImageManipProperties props);
 
     /**
      * Initial config to use when manipulating frames
@@ -68,9 +69,15 @@ public class ImageManip extends Node {
     // Functions to set properties
     /**
      * Specify whether or not wait until configuration message arrives to inputConfig Input.
-     * @param wait True to wait for configuration message, false otherwise
+     * @param wait True to wait for configuration message, false otherwise.
      */
-    public native void setWaitForConfigInput(@Cast("bool") boolean _wait);
+    public native @Deprecated void setWaitForConfigInput(@Cast("bool") boolean _wait);
+
+    /**
+     * @see setWaitForConfigInput
+     * @return True if wait for inputConfig message, false otherwise
+     */
+    public native @Cast("bool") @Deprecated boolean getWaitForConfigInput();
 
     /**
      * Specify number of frames in pool.

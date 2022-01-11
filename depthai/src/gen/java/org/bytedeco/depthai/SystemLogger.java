@@ -21,15 +21,17 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief SystemLogger node. Send system information periodically.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SystemLogger extends Node {
+public class SystemLogger extends SystemLoggerPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SystemLogger(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
     public SystemLogger(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public SystemLogger(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SystemLoggerProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr SystemLoggerProperties props);
 
     /**
      * Outputs SystemInformation message that carries various system information
@@ -38,8 +40,13 @@ public class SystemLogger extends Node {
     @MemberGetter public native @ByRef Output out();
 
     /**
-     * Specify logging rate, at which messages will be sent to out output
+     * Specify logging rate, at which messages will be sent out
      * @param hz Sending rate in hertz (messages per second)
      */
     public native void setRate(float hz);
+
+    /**
+     * Gets logging rate, at which messages will be sent out
+     */
+    public native float getRate();
 }

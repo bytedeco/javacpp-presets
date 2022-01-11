@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Samuel Audet
+ * Copyright (C) 2021-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
         @Platform(
             value = {"linux-arm", "linux-x86", "macosx-x86"},
             compiler = "cpp14",
-            define = {"SHARED_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
+            define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
                 "XLink/XLinkPublicDefines.h",
                 "depthai/depthai.hpp",
@@ -54,6 +54,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/utility/Initialization.hpp",
                 "depthai/utility/LockingQueue.hpp",
                 "depthai/utility/Pimpl.hpp",
+                "depthai-shared/utility/Serialization.hpp",
                 "depthai-shared/common/CameraBoardSocket.hpp",
                 "depthai-shared/common/CameraImageOrientation.hpp",
                 "depthai-shared/common/ChipTemperature.hpp",
@@ -90,6 +91,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/log/LogLevel.hpp",
                 "depthai-shared/log/LogMessage.hpp",
                 "depthai-shared/xlink/XLinkConstants.hpp",
+                "depthai-shared/properties/Properties.hpp",
                 "depthai-shared/properties/IMUProperties.hpp",
                 "depthai-shared/properties/GlobalProperties.hpp",
                 "depthai-shared/properties/ColorCameraProperties.hpp",
@@ -174,7 +176,7 @@ public class depthai implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(true))
-               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE").cppTypes().annotations())
+               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE").cppTypes().annotations())
 
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("std::int16_t", "std::uint16_t").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
@@ -194,7 +196,9 @@ public class depthai implements InfoMapper {
                              "std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>",
                              "std::tuple<int,int>", "std::tuple<float,float>", "std::tuple<bool,dai::DeviceInfo>", "std::tuple<bool,std::string>",
                              "std::tuple<unsigned int,unsigned int>", "std::tuple<float,float,float,float>", "tl::optional<std::array<uint16_t,256> >",
-                             "std::array<uint32_t,4>", "std::array<uint16_t,256>", "std::array<uint8_t,6>", "nlohmann::json").cast().pointerTypes("Pointer"))
+                             "std::array<uint32_t,4>", "std::array<uint16_t,256>", "std::array<uint8_t,6>", "nlohmann::json",
+                             "std::unordered_map<std::tuple<std::string,std::string>,dai::NodeIoInfo,dai::NodeObjInfo::IoInfoKey>",
+                             "dai::copyable_unique_ptr<dai::Properties>", "nop::Status<void>").cast().pointerTypes("Pointer"))
                .put(new Info("std::hash<dai::Node::Connection>").pointerTypes("ConnectionHash"))
                .put(new Info("std::shared_ptr<dai::Asset>").annotations("@SharedPtr").pointerTypes("Asset"))
                .put(new Info("std::shared_ptr<dai::ADatatype>").annotations("@SharedPtr").pointerTypes("ADatatype"))
@@ -214,6 +218,10 @@ public class depthai implements InfoMapper {
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())
                .put(new Info("std::unordered_map<int64_t,dai::NodeObjInfo>").pointerTypes("LongNodeObjInfoMap").define())
                .put(new Info("std::unordered_map<std::string,dai::NodeIoInfo>").pointerTypes("StringNodeIoInfoMap").define())
+               .put(new Info("std::unordered_map<std::string,dai::Node::Input*>").pointerTypes("StringNodeInputMap").define())
+               .put(new Info("std::unordered_map<std::string,dai::Node::Output*>").pointerTypes("StringNodeOutputMap").define())
+               .put(new Info("std::unordered_map<std::string,dai::Node::InputMap*>").pointerTypes("StringNodeInputMapMap").define())
+               .put(new Info("std::unordered_map<std::string,dai::Node::OutputMap*>").pointerTypes("StringNodeOutputMapMap").define())
                .put(new Info("const std::unordered_map<std::string,dai::Node::Input>",
                                    "std::unordered_map<std::string,dai::Node::Input>").pointerTypes("StringNodeInputMap").define())
                .put(new Info("const std::unordered_map<std::string,dai::Node::Output>",
@@ -224,22 +232,100 @@ public class depthai implements InfoMapper {
                .put(new Info("tl::optional<dai::OpenVINO::Version>").pointerTypes("VersionOptional").define())
                .put(new Info("tl::optional<std::string>").pointerTypes("StringOptional").define())
                .put(new Info("tl::optional<dai::EepromData>").pointerTypes("EepromDataOptional").define())
+               .put(new Info("std::tuple<std::string,std::string>").pointerTypes("StringStringTuple").define())
                .put(new Info("std::tuple<std::vector<std::vector<float> >,int,int>").pointerTypes("FloatVectorVectorIntIntTuple").define())
 
                .put(new Info("dai::Node").immutable().purify())
                .put(new Info("dai::Node::Connection").pointerTypes("Node.Connection"))
                .put(new Info("dai::Node::Input").pointerTypes("Node.Input"))
                .put(new Info("dai::Node::Output").pointerTypes("Node.Output"))
+               .put(new Info("dai::Node::InputMap").pointerTypes("Node.InputMap"))
+               .put(new Info("dai::Node::OutputMap").pointerTypes("Node.OutputMap"))
+               .put(new Info("dai::Properties").pointerTypes("DaiProperties"))
                .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
                              "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::ObjectTracker", "dai::node::SPIOut",
                              "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
                              "dai::node::SystemLogger", "dai::node::VideoEncoder", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
+               .put(new Info("dai::node::IMU::Properties").pointerTypes("IMUProperties"))
+               .put(new Info("dai::node::ColorCamera::Properties").pointerTypes("ColorCameraProperties"))
+               .put(new Info("dai::node::MonoCamera::Properties").pointerTypes("MonoCameraProperties"))
+               .put(new Info("dai::node::ImageManip::Properties").pointerTypes("ImageManipProperties"))
+               .put(new Info("dai::node::NeuralNetwork::Properties").pointerTypes("NeuralNetworkProperties"))
+               .put(new Info("dai::node::DetectionNetwork::Properties",
+                             "dai::node::MobileNetDetectionNetwork::Properties",
+                             "dai::node::YoloDetectionNetwork::Properties").pointerTypes("DetectionNetworkProperties"))
+               .put(new Info("dai::node::ObjectTracker::Properties").pointerTypes("ObjectTrackerProperties"))
+               .put(new Info("dai::node::SPIOut::Properties").pointerTypes("SPIOutProperties"))
+               .put(new Info("dai::node::SpatialDetectionNetwork::Properties").pointerTypes("SpatialDetectionNetworkProperties"))
+               .put(new Info("dai::node::SpatialLocationCalculator::Properties").pointerTypes("SpatialLocationCalculatorProperties"))
+               .put(new Info("dai::node::StereoDepth::Properties").pointerTypes("StereoDepthProperties"))
+               .put(new Info("dai::node::SystemLogger::Properties").pointerTypes("SystemLoggerProperties"))
+               .put(new Info("dai::node::VideoEncoder::Properties").pointerTypes("VideoEncoderProperties"))
+               .put(new Info("dai::node::XLinkIn::Properties").pointerTypes("XLinkInProperties"))
+               .put(new Info("dai::node::XLinkOut::Properties").pointerTypes("XLinkOutProperties"))
                .put(new Info("dai::node::ColorCamera::Properties::SensorResolution").pointerTypes("ColorCameraProperties.SensorResolution"))
                .put(new Info("dai::node::MonoCamera::Properties::SensorResolution").pointerTypes("MonoCameraProperties.SensorResolution"))
-               .put(new Info("dai::node::StereoDepth::Properties::DepthAlign").pointerTypes("StereoDepthProperties.DepthAlign"))
-               .put(new Info("dai::node::StereoDepth::Properties::MedianFilter").pointerTypes("StereoDepthProperties.MedianFilter"))
+//               .put(new Info("dai::node::StereoDepth::Properties::DepthAlign").pointerTypes("StereoDepthProperties.DepthAlign"))
+//               .put(new Info("dai::node::StereoDepth::Properties::MedianFilter").pointerTypes("StereoDepthProperties.MedianFilter"))
                .put(new Info("dai::node::VideoEncoder::Properties::Profile").pointerTypes("VideoEncoderProperties.Profile"))
                .put(new Info("dai::node::VideoEncoder::Properties::RateControlMode").pointerTypes("VideoEncoderProperties.RateControlMode"))
+               .put(new Info("dai::RawStereoDepthConfig::AlgorithmControl::DepthAlign",
+                             "Properties::DepthAlign", "AlgorithmControl::DepthAlign").enumerate().pointerTypes("RawStereoDepthConfig.AlgorithmControl.DepthAlign"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::IMU,dai::IMUProperties>").pointerTypes("IMUPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ColorCamera,dai::ColorCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::MonoCamera,dai::MonoCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ImageManip,dai::ImageManipProperties>").pointerTypes("ImageManipPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::NeuralNetwork,dai::NeuralNetworkProperties>").pointerTypes("NeuralNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::NeuralNetwork,dai::node::DetectionNetwork,dai::DetectionNetworkProperties>").pointerTypes("DetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::DetectionNetwork,dai::node::MobileNetDetectionNetwork,dai::DetectionNetworkProperties>",
+                             "dai::NodeCRTP<dai::node::DetectionNetwork,MobileNetDetectionNetwork,dai::DetectionNetworkProperties>").pointerTypes("MobileNetDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::DetectionNetwork,dai::node::YoloDetectionNetwork,dai::DetectionNetworkProperties>",
+                             "dai::NodeCRTP<dai::node::DetectionNetwork,YoloDetectionNetwork,dai::DetectionNetworkProperties>").pointerTypes("YoloDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ObjectTracker,dai::ObjectTrackerProperties>").pointerTypes("ObjectTrackerPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SPIOut,dai::SPIOutProperties>").pointerTypes("SPIOutPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::DetectionNetwork,dai::node::SpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>").pointerTypes("SpatialDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::SpatialDetectionNetwork,dai::node::MobileNetSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>",
+                             "dai::NodeCRTP<dai::node::SpatialDetectionNetwork,MobileNetSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>").pointerTypes("MobileNetSpatialDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::node::SpatialDetectionNetwork,dai::node::YoloSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>",
+                             "dai::NodeCRTP<dai::node::SpatialDetectionNetwork,YoloSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>").pointerTypes("YoloSpatialDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SpatialLocationCalculator,dai::SpatialLocationCalculatorProperties>").pointerTypes("SpatialLocationCalculatorPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::StereoDepth,dai::StereoDepthProperties>").pointerTypes("StereoDepthPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SystemLogger,dai::SystemLoggerProperties>").pointerTypes("SystemLoggerPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::VideoEncoder,dai::VideoEncoderProperties>").pointerTypes("VideoEncoderPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::XLinkIn,dai::XLinkInProperties>").pointerTypes("XLinkInPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::XLinkOut,dai::XLinkOutProperties>").pointerTypes("XLinkOutPropertiesNode"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::IMUProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,IMUProperties>").pointerTypes("IMUPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ColorCameraProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,ColorCameraProperties>").pointerTypes("ColorCameraPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::MonoCameraProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,MonoCameraProperties>").pointerTypes("MonoCameraPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ImageManipProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,ImageManipProperties>").pointerTypes("ImageManipPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::GlobalProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,GlobalProperties>").pointerTypes("GlobalPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::NeuralNetworkProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,NeuralNetworkProperties>").pointerTypes("NeuralNetworkPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::NeuralNetworkProperties,dai::DetectionNetworkProperties>",
+                             "dai::PropertiesSerializable<dai::NeuralNetworkProperties,DetectionNetworkProperties>").pointerTypes("DetectionNetworkPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ObjectTrackerProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,ObjectTrackerProperties>").pointerTypes("ObjectTrackerPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::SPIOutProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,SPIOutProperties>").pointerTypes("SPIOutPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::DetectionNetworkProperties,dai::SpatialDetectionNetworkProperties>",
+                             "dai::PropertiesSerializable<dai::DetectionNetworkProperties,SpatialDetectionNetworkProperties>").pointerTypes("SpatialDetectionNetworkPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::SpatialLocationCalculatorProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,SpatialLocationCalculatorProperties>").pointerTypes("SpatialLocationCalculatorPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::StereoDepthProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,StereoDepthProperties>").pointerTypes("StereoDepthPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::SystemLoggerProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,SystemLoggerProperties>").pointerTypes("SystemLoggerPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::VideoEncoderProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,VideoEncoderProperties>").pointerTypes("VideoEncoderPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::XLinkInProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,XLinkInProperties>").pointerTypes("XLinkInPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::XLinkOutProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,XLinkOutProperties>").pointerTypes("XLinkOutPropertiesSerializable"))
 
                .put(new Info("dai::IMUReport::accuracy").javaNames("reportAccuracy"))
                .put(new Info("dai::DataInputQueue::send(const std::shared_ptr<dai::ADatatype>&)",
@@ -316,7 +402,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"front<dai::SpatialLocationCalculatorData>\") @SharedPtr SpatialLocationCalculatorData frontSpatialLocationCalculatorData();\n"
                      + "public native @Name(\"front<dai::StereoDepthConfig>\") @SharedPtr StereoDepthConfig frontStereoDepthConfig();\n"
                      + "public native @Name(\"front<dai::SystemInformation>\") @SharedPtr SystemInformation frontSystemInformation();\n"))
-               .put(new Info("dai::DeviceBootloader::Version::toString").javaText("public native @StdString String toString();"))
+               .put(new Info("dai::DeviceBootloader::Version::toString", "dai::Node::toString").javaText("public native @StdString String toString();"))
 
                .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(std::shared_ptr<RawBuffer>)>").valueTypes("RawBufferCallback"))
                .put(new Info("std::function<void(LogMessage)>").valueTypes("LogCallback"))

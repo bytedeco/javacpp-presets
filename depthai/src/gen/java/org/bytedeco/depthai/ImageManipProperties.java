@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for ImageManip
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ImageManipProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class ImageManipProperties extends ImageManipPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public ImageManipProperties() { super((Pointer)null); allocate(); }
@@ -40,9 +40,6 @@ public class ImageManipProperties extends Pointer {
 
     /** Initial configuration for ImageManip node */
     public native @ByRef RawImageManipConfig initialConfig(); public native ImageManipProperties initialConfig(RawImageManipConfig setter);
-
-    /** Whether to wait for config at 'inputConfig' IO */
-    public native @Cast("bool") boolean inputConfigSync(); public native ImageManipProperties inputConfigSync(boolean setter);
 
     /** Maximum output frame size in bytes (eg: 300x300 BGR image -> 300*300*3 bytes) */
     public native int outputFrameSize(); public native ImageManipProperties outputFrameSize(int setter);

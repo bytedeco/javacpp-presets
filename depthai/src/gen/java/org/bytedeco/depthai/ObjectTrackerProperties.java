@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for ObjectTracker
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class ObjectTrackerProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class ObjectTrackerProperties extends ObjectTrackerPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public ObjectTrackerProperties() { super((Pointer)null); allocate(); }
@@ -38,9 +38,29 @@ public class ObjectTrackerProperties extends Pointer {
         return new ObjectTrackerProperties((Pointer)this).offsetAddress(i);
     }
 
+    /**
+     * Confidence threshold for tracklets.
+     * Above this threshold detections will be tracked.
+     * Default 0, all detections are tracked.
+     */
     public native float trackerThreshold(); public native ObjectTrackerProperties trackerThreshold(float setter);
+    /**
+     * Maximum number of objects to track.
+     * Maximum 60 for SHORT_TERM_KCF, maximum 1000 for other tracking methods.
+     * Default 60.
+     */
     public native @Cast("std::int32_t") int maxObjectsToTrack(); public native ObjectTrackerProperties maxObjectsToTrack(int setter);
+    /**
+     * Which detections labels to track.
+     * Default all labels are tracked.
+     */
     public native @Cast("std::uint32_t*") @StdVector IntPointer detectionLabelsToTrack(); public native ObjectTrackerProperties detectionLabelsToTrack(IntPointer setter);
+    /**
+     * Tracking method.
+     */
     public native TrackerType trackerType(); public native ObjectTrackerProperties trackerType(TrackerType setter);
-    public native TrackerIdAssigmentPolicy trackerIdAssigmentPolicy(); public native ObjectTrackerProperties trackerIdAssigmentPolicy(TrackerIdAssigmentPolicy setter);
+    /**
+     * New ID assignment policy.
+     */
+    public native TrackerIdAssignmentPolicy trackerIdAssignmentPolicy(); public native ObjectTrackerProperties trackerIdAssignmentPolicy(TrackerIdAssignmentPolicy setter);
 }

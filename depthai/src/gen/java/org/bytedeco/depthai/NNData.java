@@ -58,7 +58,7 @@ public class NNData extends Buffer {
     public native void setLayer(@StdString String name, @Cast("std::uint8_t*") @StdVector byte[] data);
 
     /**
-     * Set a layer with datatype U8. Integers are casted to bytes.
+     * Set a layer with datatype U8. Integers are cast to bytes.
      * @param name Name of the layer
      * @param data Data to store
      */
@@ -108,7 +108,7 @@ public class NNData extends Buffer {
     /**
      * Retrieve layers tensor information
      * @param name Name of the layer
-     * @param tensor [out] Outputs tensor infromation of that layer
+     * @param tensor [out] Outputs tensor information of that layer
      * @return True if layer exists, false otherwise
      */
     public native @Cast("bool") boolean getLayer(@StdString BytePointer name, @ByRef TensorInfo tensor);
@@ -137,7 +137,7 @@ public class NNData extends Buffer {
 
     // uint8
     /**
-     * Convinience function to retrieve U8 data from layer
+     * Convenience function to retrieve U8 data from layer
      * @param name Name of the layer
      * @return U8 binary data
      */
@@ -146,7 +146,7 @@ public class NNData extends Buffer {
 
     // fp16
     /**
-     * Convinience function to retrieve float values from layers FP16 tensor
+     * Convenience function to retrieve float values from layers FP16 tensor
      * @param name Name of the layer
      * @return Float data
      */
@@ -155,7 +155,7 @@ public class NNData extends Buffer {
 
     // int32
     /**
-     * Convinience function to retrieve INT32 values from layers tensor
+     * Convenience function to retrieve INT32 values from layers tensor
      * @param name Name of the layer
      * @return INT32 data
      */
@@ -164,19 +164,19 @@ public class NNData extends Buffer {
 
     // first layer
     /**
-     * Convinience function to retrieve U8 data from first layer
+     * Convenience function to retrieve U8 data from first layer
      * @return U8 binary data
      */
     public native @Cast("std::uint8_t*") @StdVector BytePointer getFirstLayerUInt8();
 
     /**
-     * Convinience function to retrieve float values from first layers FP16 tensor
+     * Convenience function to retrieve float values from first layers FP16 tensor
      * @return Float data
      */
     public native @StdVector FloatPointer getFirstLayerFp16();
 
     /**
-     * Convinience function to retrieve INT32 values from first layers tensor
+     * Convenience function to retrieve INT32 values from first layers tensor
      * @return INT32 data
      */
     public native @Cast("std::int32_t*") @StdVector IntPointer getFirstLayerInt32();
