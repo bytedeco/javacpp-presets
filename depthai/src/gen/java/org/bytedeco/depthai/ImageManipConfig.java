@@ -84,7 +84,7 @@ public class ImageManipConfig extends Buffer {
     public native void setCenterCrop(float ratio);
 
     /**
-     * Specifies warp by suppling 4 points in either absolute or normalized coordinates
+     * Specifies warp by supplying 4 points in either absolute or normalized coordinates
      * @param pt 4 points specifying warp
      * @param normalizedCoords If true pt is interpreted as normalized, absolute otherwise
      */
@@ -129,14 +129,14 @@ public class ImageManipConfig extends Buffer {
     public native void setRotationRadians(float rad);
 
     /**
-     * Specifies output image size. After crop stage the image will be streched to fit.
+     * Specifies output image size. After crop stage the image will be stretched to fit.
      * @param w Width in pixels
      * @param h Height in pixels
      */
     public native void setResize(int w, int h);
 
     /**
-     * Specifies output image size. After crop stage the image will be streched to fit.
+     * Specifies output image size. After crop stage the image will be stretched to fit.
      * @param size Size in pixels
      */
     public native void setResize(@ByVal @Cast("std::tuple<int,int>*") Pointer size);

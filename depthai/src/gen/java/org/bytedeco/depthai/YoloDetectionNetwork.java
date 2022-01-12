@@ -21,13 +21,15 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief YoloDetectionNetwork node. Parses Yolo results
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class YoloDetectionNetwork extends DetectionNetwork {
+public class YoloDetectionNetwork extends YoloDetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public YoloDetectionNetwork(Pointer p) { super(p); }
 
     public YoloDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public YoloDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr DetectionNetworkProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr DetectionNetworkProperties props);
 
     /** Set num classes */
     public native void setNumClasses(int numClasses);
@@ -41,4 +43,15 @@ public class YoloDetectionNetwork extends DetectionNetwork {
     public native void setAnchorMasks(@ByVal StringIntVectorMap anchorMasks);
     /** Set Iou threshold */
     public native void setIouThreshold(float thresh);
+
+    /** Get num classes */
+    public native int getNumClasses();
+    /** Get coordianate size */
+    public native int getCoordinateSize();
+    /** Get anchors */
+    public native @StdVector FloatPointer getAnchors();
+    /** Get anchor masks */
+    public native @ByVal StringIntVectorMap getAnchorMasks();
+    /** Get Iou threshold */
+    public native float getIouThreshold();
 }

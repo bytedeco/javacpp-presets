@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties which apply for whole pipeline
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class GlobalProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class GlobalProperties extends GlobalPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public GlobalProperties() { super((Pointer)null); allocate(); }

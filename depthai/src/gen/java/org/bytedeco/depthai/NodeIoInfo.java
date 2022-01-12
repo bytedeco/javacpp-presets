@@ -45,8 +45,10 @@ public class NodeIoInfo extends Pointer {
         @Override public String toString() { return intern().name(); }
     }
 
+    public native @StdString BytePointer group(); public native NodeIoInfo group(BytePointer setter);
     public native @StdString BytePointer name(); public native NodeIoInfo name(BytePointer setter);
     public native Type type(); public native NodeIoInfo type(Type setter);
     public native @Cast("bool") boolean blocking(); public native NodeIoInfo blocking(boolean setter);
     public native int queueSize(); public native NodeIoInfo queueSize(int setter);
+    public native @Cast("bool") boolean waitForMessage(); public native NodeIoInfo waitForMessage(boolean setter);
 }

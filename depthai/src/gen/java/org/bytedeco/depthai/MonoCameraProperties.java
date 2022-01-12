@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for MonoCamera such as camera ID, ...
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class MonoCameraProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class MonoCameraProperties extends MonoCameraPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public MonoCameraProperties() { super((Pointer)null); allocate(); }

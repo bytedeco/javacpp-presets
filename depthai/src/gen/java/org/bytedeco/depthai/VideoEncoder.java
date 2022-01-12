@@ -21,15 +21,17 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief VideoEncoder node. Encodes frames into MJPEG, H264 or H265.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class VideoEncoder extends Node {
+public class VideoEncoder extends VideoEncoderPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoEncoder(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
 
     public VideoEncoder(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public VideoEncoder(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr VideoEncoderProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr VideoEncoderProperties props);
 
     /**
      * Input for NV12 ImgFrame to be encoded

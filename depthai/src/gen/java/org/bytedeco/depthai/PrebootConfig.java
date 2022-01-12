@@ -62,4 +62,5 @@ public class PrebootConfig extends Pointer {
 
     public native @ByRef USB usb(); public native PrebootConfig usb(USB setter);
     public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogTimeoutMs(); public native PrebootConfig watchdogTimeoutMs(IntOptional setter);
+    public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogInitialDelayMs(); public native PrebootConfig watchdogInitialDelayMs(IntOptional setter);
 }

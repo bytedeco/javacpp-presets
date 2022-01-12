@@ -66,18 +66,18 @@ public class OpenVINO extends Pointer {
     public static native @Cast("dai::OpenVINO::Version") int parseVersionName(@StdString String versionString);
 
     /**
-     * Returns a list of potentionally supported versions for a specified blob major and minor versions.
+     * Returns a list of potentially supported versions for a specified blob major and minor versions.
      * @param majorVersion Major version from OpenVINO blob
      * @param minorVersion Minor version from OpenVINO blob
-     * @return Vector of potentionally supported versions
+     * @return Vector of potentially supported versions
      */
     public static native @Cast("dai::OpenVINO::Version*") @StdVector IntPointer getBlobSupportedVersions(@Cast("std::uint32_t") int majorVersion, @Cast("std::uint32_t") int minorVersion);
 
     /**
-     * Returns latest potentionally supported version by a given blob version.
+     * Returns latest potentially supported version by a given blob version.
      * @param majorVersion Major version from OpenVINO blob
      * @param minorVersion Minor version from OpenVINO blob
-     * @return Latest potentionally supported version
+     * @return Latest potentially supported version
      */
     public static native @Cast("dai::OpenVINO::Version") int getBlobLatestSupportedVersion(@Cast("std::uint32_t") int majorVersion, @Cast("std::uint32_t") int minorVersion);
 

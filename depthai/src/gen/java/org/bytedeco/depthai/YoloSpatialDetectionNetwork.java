@@ -21,13 +21,14 @@ import static org.bytedeco.depthai.global.depthai.*;
  * YoloSpatialDetectionNetwork node. (tiny)Yolov3/v4 based network with spatial location data.
  */
 @Namespace("dai::node") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class YoloSpatialDetectionNetwork extends SpatialDetectionNetwork {
+public class YoloSpatialDetectionNetwork extends YoloSpatialDetectionNetworkPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public YoloSpatialDetectionNetwork(Pointer p) { super(p); }
 
     public YoloSpatialDetectionNetwork(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+
     /** Set num classes */
     public native void setNumClasses(int numClasses);
     /** Set coordianate size */
@@ -40,4 +41,15 @@ public class YoloSpatialDetectionNetwork extends SpatialDetectionNetwork {
     public native void setAnchorMasks(@ByVal StringIntVectorMap anchorMasks);
     /** Set Iou threshold */
     public native void setIouThreshold(float thresh);
+
+    /** Get num classes */
+    public native int getNumClasses();
+    /** Get coordianate size */
+    public native int getCoordinateSize();
+    /** Get anchors */
+    public native @StdVector FloatPointer getAnchors();
+    /** Get anchor masks */
+    public native @ByVal StringIntVectorMap getAnchorMasks();
+    /** Get Iou threshold */
+    public native float getIouThreshold();
 }
