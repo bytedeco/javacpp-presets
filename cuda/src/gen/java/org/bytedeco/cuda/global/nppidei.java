@@ -17,7 +17,7 @@ public class nppidei extends org.bytedeco.cuda.presets.nppidei {
 
 // Parsed from <nppi_data_exchange_and_initialization.h>
 
- /* Copyright 2009-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

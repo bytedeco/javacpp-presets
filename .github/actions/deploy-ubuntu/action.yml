@@ -12,24 +12,28 @@ runs:
           export PREFIX=arm-linux-gnueabihf
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
+          export ARCH2=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-4-local-11.4.2_470.57.02-1.aarch64.rpm
-          export CUDNN=cudnn-11.4-linux-aarch64sbsa-v8.2.4.15.tgz
-          export NCCL=nccl_2.11.4-1+cuda11.4_aarch64.txz
+          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.aarch64.rpm
+          export CUDNN=cudnn-linux-sbsa-8.3.2.44_cuda11.5-archive.tar.xz
+          export NCCL=2.11.4-1+cuda11.5.aarch64
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
+          export ARCH2=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-4-local-11.4.2_470.57.02-1.ppc64le.rpm
-          export CUDNN=cudnn-11.4-linux-ppc64le-v8.2.4.15.tgz
-          export NCCL=nccl_2.11.4-1+cuda11.4_ppc64le.txz
+          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.ppc64le.rpm
+          export CUDNN=cudnn-linux-ppc64le-8.3.2.44_cuda11.5-archive.tar.xz
+          export NCCL=2.11.4-1+cuda11.5.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
+          export ARCH2=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel7-11-4-local-11.4.2_470.57.02-1.x86_64.rpm
-          export CUDNN=cudnn-11.4-linux-x64-v8.2.4.15.tgz
-          export NCCL=nccl_2.11.4-1+cuda11.4_x86_64.txz
+          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.x86_64.rpm
+          export CUDNN=cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
+          export NCCL=2.11.4-1+cuda11.5.x86_64
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
+        echo "ARCH2=$ARCH2" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
         apt-get update
@@ -106,17 +110,18 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/$CUDA
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.4/$CUDNN
-          curl -LO https://developer.download.nvidia.com/compute/redist/nccl/v2.11/$NCCL
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.5.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/$CUDNN
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm
 
-          rpm -i --force --ignorearch --nodeps $CUDA
-          pushd /var/cuda-repo-rhel8-11-4-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps $CUDA libnccl*.rpm
+          pushd /var/cuda-repo-rhel8-11-5-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf $CUDNN -C /usr/local/
-          tar -hxvf $NCCL --strip-components=1 -C /usr/local/cuda/
-          mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/
+          tar -hxvf $CUDNN --strip-components=1 -C /usr/local/cuda/
+          mv /usr/include/nccl* /usr/local/cuda/include/
+          mv /usr/local/cuda/lib/* /usr/lib64/libnccl* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
           mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
@@ -127,6 +132,7 @@ runs:
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
@@ -146,8 +152,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1RpILZixMHfqXJqq9331lj-zj3kb58FWc
-          tar -hxvf TensorRT-8.0.1.6.Ubuntu-20.04.aarch64-gnu.cuda-11.3.cudnn8.2.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1AwYLuKDe0FBU0AftSH7Fy7m38VPUyGmm
+          tar -hxvf TensorRT-8.2.2.1.Ubuntu-20.04.aarch64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

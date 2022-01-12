@@ -19,7 +19,7 @@ public class nppicc extends org.bytedeco.cuda.presets.nppicc {
 
 // Parsed from <nppi_color_conversion.h>
 
- /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

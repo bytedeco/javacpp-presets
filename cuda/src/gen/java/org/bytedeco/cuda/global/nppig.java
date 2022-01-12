@@ -19,7 +19,7 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
 
 // Parsed from <nppi_geometry_transforms.h>
 
- /* Copyright 2009-2020 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

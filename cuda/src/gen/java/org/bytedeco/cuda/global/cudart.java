@@ -120,7 +120,7 @@ public class cudart extends org.bytedeco.cuda.presets.cudart {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 11040;
+public static final int CUDA_VERSION = 11050;
 
 // #ifdef __cplusplus
 // #endif
@@ -431,7 +431,60 @@ public static final int
     CU_AD_FORMAT_HALF           = 0x10,
     /** 32-bit floating point */
     CU_AD_FORMAT_FLOAT          = 0x20,
-    CU_AD_FORMAT_NV12           = 0xb0;
+    /** 8-bit YUV planar format, with 4:2:0 sampling */
+    CU_AD_FORMAT_NV12           = 0xb0,
+    /** 1 channel unsigned 8-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT8X1   = 0xc0,
+    /** 2 channel unsigned 8-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT8X2   = 0xc1,
+    /** 4 channel unsigned 8-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT8X4   = 0xc2,
+    /** 1 channel unsigned 16-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT16X1  = 0xc3,
+    /** 2 channel unsigned 16-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT16X2  = 0xc4,
+    /** 4 channel unsigned 16-bit normalized integer */
+    CU_AD_FORMAT_UNORM_INT16X4  = 0xc5,
+    /** 1 channel signed 8-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT8X1   = 0xc6,
+    /** 2 channel signed 8-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT8X2   = 0xc7,
+    /** 4 channel signed 8-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT8X4   = 0xc8,
+    /** 1 channel signed 16-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT16X1  = 0xc9,
+    /** 2 channel signed 16-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT16X2  = 0xca,
+    /** 4 channel signed 16-bit normalized integer */
+    CU_AD_FORMAT_SNORM_INT16X4  = 0xcb,
+    /** 4 channel unsigned normalized block-compressed (BC1 compression) format */
+    CU_AD_FORMAT_BC1_UNORM      = 0x91,
+    /** 4 channel unsigned normalized block-compressed (BC1 compression) format with sRGB encoding*/
+    CU_AD_FORMAT_BC1_UNORM_SRGB = 0x92,
+    /** 4 channel unsigned normalized block-compressed (BC2 compression) format */
+    CU_AD_FORMAT_BC2_UNORM      = 0x93,
+    /** 4 channel unsigned normalized block-compressed (BC2 compression) format with sRGB encoding*/
+    CU_AD_FORMAT_BC2_UNORM_SRGB = 0x94,
+    /** 4 channel unsigned normalized block-compressed (BC3 compression) format */
+    CU_AD_FORMAT_BC3_UNORM      = 0x95,
+    /** 4 channel unsigned normalized block-compressed (BC3 compression) format with sRGB encoding*/
+    CU_AD_FORMAT_BC3_UNORM_SRGB = 0x96,
+    /** 1 channel unsigned normalized block-compressed (BC4 compression) format */
+    CU_AD_FORMAT_BC4_UNORM      = 0x97,
+    /** 1 channel signed normalized block-compressed (BC4 compression) format */
+    CU_AD_FORMAT_BC4_SNORM      = 0x98,
+    /** 2 channel unsigned normalized block-compressed (BC5 compression) format */
+    CU_AD_FORMAT_BC5_UNORM      = 0x99,
+    /** 2 channel signed normalized block-compressed (BC5 compression) format */
+    CU_AD_FORMAT_BC5_SNORM      = 0x9a,
+    /** 3 channel unsigned half-float block-compressed (BC6H compression) format */
+    CU_AD_FORMAT_BC6H_UF16      = 0x9b,
+    /** 3 channel signed half-float block-compressed (BC6H compression) format */
+    CU_AD_FORMAT_BC6H_SF16      = 0x9c,
+    /** 4 channel unsigned normalized block-compressed (BC7 compression) format */
+    CU_AD_FORMAT_BC7_UNORM      = 0x9d,
+    /** 4 channel unsigned normalized block-compressed (BC7 compression) format with sRGB encoding */
+    CU_AD_FORMAT_BC7_UNORM_SRGB = 0x9e;
 
 /**
  * Texture reference addressing modes
@@ -682,7 +735,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED = 103,
     /** Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate */
     CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_HANDLE_SUPPORTED = 104,
-    /** Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested ::cuMemCreate */
+    /** Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate */
     CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED = 105,
     /** Maximum number of blocks per multiprocessor */
     CU_DEVICE_ATTRIBUTE_MAX_BLOCKS_PER_MULTIPROCESSOR = 106,
@@ -698,7 +751,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_RESERVED_SHARED_MEMORY_PER_BLOCK = 111,
     /** Device supports sparse CUDA arrays and sparse CUDA mipmapped arrays */
     CU_DEVICE_ATTRIBUTE_SPARSE_CUDA_ARRAY_SUPPORTED = 112,
-    /** Device supports using the ::cuMemHostRegister flag CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU */
+    /** Device supports using the ::cuMemHostRegister flag ::CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU */
     CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED = 113,
     /** External timeline semaphore interop is supported on the device */
     CU_DEVICE_ATTRIBUTE_TIMELINE_SEMAPHORE_INTEROP_SUPPORTED = 114,
@@ -1702,7 +1755,8 @@ public static final int
     CUDA_ERROR_UNSUPPORTED_EXEC_AFFINITY      = 224,
 
     /**
-     * This indicates that the device kernel source is invalid.
+     * This indicates that the device kernel source is invalid. This includes
+     * compilation/linker errors encountered in device code or user error.
      */
     CUDA_ERROR_INVALID_SOURCE                 = 300,
 
@@ -2113,9 +2167,9 @@ public static final int CU_MEMHOSTREGISTER_DEVICEMAP =    0x02;
  * On Windows the flag is a no-op.
  * On Linux that memory is marked as non cache-coherent for the GPU and
  * is expected to be physically contiguous. It may return
- * CUDA_ERROR_NOT_PERMITTED if run as an unprivileged user,
- * CUDA_ERROR_NOT_SUPPORTED on older Linux kernel versions.
- * On all other platforms, it is not supported and CUDA_ERROR_NOT_SUPPORTED
+ * ::CUDA_ERROR_NOT_PERMITTED if run as an unprivileged user,
+ * ::CUDA_ERROR_NOT_SUPPORTED on older Linux kernel versions.
+ * On all other platforms, it is not supported and ::CUDA_ERROR_NOT_SUPPORTED
  * is returned.
  * Flag for ::cuMemHostRegister()
  */
@@ -2124,12 +2178,12 @@ public static final int CU_MEMHOSTREGISTER_IOMEMORY =     0x04;
 /**
 * If set, the passed memory pointer is treated as pointing to memory that is
 * considered read-only by the device.  On platforms without
-* CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES, this flag is
+* ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES, this flag is
 * required in order to register memory mapped to the CPU as read-only.  Support
 * for the use of this flag can be queried from the device attribute
-* CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED.  Using this flag with
+* ::CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED.  Using this flag with
 * a current context associated with a device that does not have this attribute
-* set will cause ::cuMemHostRegister to error with CUDA_ERROR_NOT_SUPPORTED.
+* set will cause ::cuMemHostRegister to error with ::CUDA_ERROR_NOT_SUPPORTED.
 */
 public static final int CU_MEMHOSTREGISTER_READ_ONLY =    0x08;
 // Targeting ../cudart/CUDA_MEMCPY2D_v2.java
@@ -3281,117 +3335,117 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * \p dev. The supported attributes are:
  * - ::CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_BLOCK: Maximum number of threads per
  *   block;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X: Maximum x-dimension of a block;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y: Maximum y-dimension of a block;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z: Maximum z-dimension of a block;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X: Maximum x-dimension of a grid;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y: Maximum y-dimension of a grid;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z: Maximum z-dimension of a grid;
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_X: Maximum x-dimension of a block
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Y: Maximum y-dimension of a block
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCK_DIM_Z: Maximum z-dimension of a block
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_X: Maximum x-dimension of a grid
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Y: Maximum y-dimension of a grid
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_GRID_DIM_Z: Maximum z-dimension of a grid
  * - ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_BLOCK: Maximum amount of
- *   shared memory available to a thread block in bytes;
+ *   shared memory available to a thread block in bytes
  * - ::CU_DEVICE_ATTRIBUTE_TOTAL_CONSTANT_MEMORY: Memory available on device for
- *   __constant__ variables in a CUDA C kernel in bytes;
- * - ::CU_DEVICE_ATTRIBUTE_WARP_SIZE: Warp size in threads;
+ *   __constant__ variables in a CUDA C kernel in bytes
+ * - ::CU_DEVICE_ATTRIBUTE_WARP_SIZE: Warp size in threads
  * - ::CU_DEVICE_ATTRIBUTE_MAX_PITCH: Maximum pitch in bytes allowed by the
  *   memory copy functions that involve memory regions allocated through
- *   ::cuMemAllocPitch();
+ *   ::cuMemAllocPitch()
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_WIDTH: Maximum 1D
- *  texture width;
+ *  texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_LINEAR_WIDTH: Maximum width
- *  for a 1D texture bound to linear memory;
+ *  for a 1D texture bound to linear memory
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_MIPMAPPED_WIDTH: Maximum
- *  mipmapped 1D texture width;
+ *  mipmapped 1D texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_WIDTH: Maximum 2D
- *  texture width;
+ *  texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_HEIGHT: Maximum 2D
- *  texture height;
+ *  texture height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LINEAR_WIDTH: Maximum width
- *  for a 2D texture bound to linear memory;
+ *  for a 2D texture bound to linear memory
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LINEAR_HEIGHT: Maximum height
- *  for a 2D texture bound to linear memory;
+ *  for a 2D texture bound to linear memory
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LINEAR_PITCH: Maximum pitch
- *  in bytes for a 2D texture bound to linear memory;
+ *  in bytes for a 2D texture bound to linear memory
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_MIPMAPPED_WIDTH: Maximum
- *  mipmapped 2D texture width;
+ *  mipmapped 2D texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_MIPMAPPED_HEIGHT: Maximum
- *  mipmapped 2D texture height;
+ *  mipmapped 2D texture height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH: Maximum 3D
- *  texture width;
+ *  texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT: Maximum 3D
- *  texture height;
+ *  texture height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH: Maximum 3D
- *  texture depth;
+ *  texture depth
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_WIDTH_ALTERNATE:
  *  Alternate maximum 3D texture width, 0 if no alternate
- *  maximum 3D texture size is supported;
+ *  maximum 3D texture size is supported
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_HEIGHT_ALTERNATE:
  *  Alternate maximum 3D texture height, 0 if no alternate
- *  maximum 3D texture size is supported;
+ *  maximum 3D texture size is supported
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE3D_DEPTH_ALTERNATE:
  *  Alternate maximum 3D texture depth, 0 if no alternate
- *  maximum 3D texture size is supported;
+ *  maximum 3D texture size is supported
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURECUBEMAP_WIDTH:
- *  Maximum cubemap texture width or height;
+ *  Maximum cubemap texture width or height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_LAYERED_WIDTH:
- *  Maximum 1D layered texture width;
+ *  Maximum 1D layered texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE1D_LAYERED_LAYERS:
- *   Maximum layers in a 1D layered texture;
+ *   Maximum layers in a 1D layered texture
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LAYERED_WIDTH:
- *  Maximum 2D layered texture width;
+ *  Maximum 2D layered texture width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LAYERED_HEIGHT:
- *   Maximum 2D layered texture height;
+ *   Maximum 2D layered texture height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURE2D_LAYERED_LAYERS:
- *   Maximum layers in a 2D layered texture;
+ *   Maximum layers in a 2D layered texture
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURECUBEMAP_LAYERED_WIDTH:
- *   Maximum cubemap layered texture width or height;
+ *   Maximum cubemap layered texture width or height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_TEXTURECUBEMAP_LAYERED_LAYERS:
- *   Maximum layers in a cubemap layered texture;
+ *   Maximum layers in a cubemap layered texture
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE1D_WIDTH:
- *   Maximum 1D surface width;
+ *   Maximum 1D surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE2D_WIDTH:
- *   Maximum 2D surface width;
+ *   Maximum 2D surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE2D_HEIGHT:
- *   Maximum 2D surface height;
+ *   Maximum 2D surface height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE3D_WIDTH:
- *   Maximum 3D surface width;
+ *   Maximum 3D surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE3D_HEIGHT:
- *   Maximum 3D surface height;
+ *   Maximum 3D surface height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE3D_DEPTH:
- *   Maximum 3D surface depth;
+ *   Maximum 3D surface depth
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE1D_LAYERED_WIDTH:
- *   Maximum 1D layered surface width;
+ *   Maximum 1D layered surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE1D_LAYERED_LAYERS:
- *   Maximum layers in a 1D layered surface;
+ *   Maximum layers in a 1D layered surface
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE2D_LAYERED_WIDTH:
- *   Maximum 2D layered surface width;
+ *   Maximum 2D layered surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE2D_LAYERED_HEIGHT:
- *   Maximum 2D layered surface height;
+ *   Maximum 2D layered surface height
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACE2D_LAYERED_LAYERS:
- *   Maximum layers in a 2D layered surface;
+ *   Maximum layers in a 2D layered surface
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACECUBEMAP_WIDTH:
- *   Maximum cubemap surface width;
+ *   Maximum cubemap surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACECUBEMAP_LAYERED_WIDTH:
- *   Maximum cubemap layered surface width;
+ *   Maximum cubemap layered surface width
  * - ::CU_DEVICE_ATTRIBUTE_MAXIMUM_SURFACECUBEMAP_LAYERED_LAYERS:
- *   Maximum layers in a cubemap layered surface;
+ *   Maximum layers in a cubemap layered surface
  * - ::CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_BLOCK: Maximum number of 32-bit
- *   registers available to a thread block;
- * - ::CU_DEVICE_ATTRIBUTE_CLOCK_RATE: The typical clock frequency in kilohertz;
+ *   registers available to a thread block
+ * - ::CU_DEVICE_ATTRIBUTE_CLOCK_RATE: The typical clock frequency in kilohertz
  * - ::CU_DEVICE_ATTRIBUTE_TEXTURE_ALIGNMENT: Alignment requirement; texture
  *   base addresses aligned to ::textureAlign bytes do not need an offset
- *   applied to texture fetches;
+ *   applied to texture fetches
  * - ::CU_DEVICE_ATTRIBUTE_TEXTURE_PITCH_ALIGNMENT: Pitch alignment requirement
- *   for 2D texture references bound to pitched memory;
+ *   for 2D texture references bound to pitched memory
  * - ::CU_DEVICE_ATTRIBUTE_GPU_OVERLAP: 1 if the device can concurrently copy
- *   memory between host and device while executing a kernel, or 0 if not;
+ *   memory between host and device while executing a kernel, or 0 if not
  * - ::CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT: Number of multiprocessors on
- *   the device;
+ *   the device
  * - ::CU_DEVICE_ATTRIBUTE_KERNEL_EXEC_TIMEOUT: 1 if there is a run time limit
- *   for kernels executed on the device, or 0 if not;
+ *   for kernels executed on the device, or 0 if not
  * - ::CU_DEVICE_ATTRIBUTE_INTEGRATED: 1 if the device is integrated with the
- *   memory subsystem, or 0 if not;
+ *   memory subsystem, or 0 if not
  * - ::CU_DEVICE_ATTRIBUTE_CAN_MAP_HOST_MEMORY: 1 if the device can map host
- *   memory into the CUDA address space, or 0 if not;
+ *   memory into the CUDA address space, or 0 if not
  * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE: Compute mode that device is currently
  *   in. Available modes are as follows:
  *   - ::CU_COMPUTEMODE_DEFAULT: Default mode - Device is not restricted and
@@ -3404,33 +3458,33 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  *   executing multiple kernels within the same context simultaneously, or 0 if
  *   not. It is not guaranteed that multiple kernels will be resident
  *   on the device concurrently so this feature should not be relied upon for
- *   correctness;
+ *   correctness.
  * - ::CU_DEVICE_ATTRIBUTE_ECC_ENABLED: 1 if error correction is enabled on the
- *    device, 0 if error correction is disabled or not supported by the device;
- * - ::CU_DEVICE_ATTRIBUTE_PCI_BUS_ID: PCI bus identifier of the device;
+ *    device, 0 if error correction is disabled or not supported by the device
+ * - ::CU_DEVICE_ATTRIBUTE_PCI_BUS_ID: PCI bus identifier of the device
  * - ::CU_DEVICE_ATTRIBUTE_PCI_DEVICE_ID: PCI device (also known as slot) identifier
- *   of the device;
+ *   of the device
  * - ::CU_DEVICE_ATTRIBUTE_PCI_DOMAIN_ID: PCI domain identifier of the device
  * - ::CU_DEVICE_ATTRIBUTE_TCC_DRIVER: 1 if the device is using a TCC driver. TCC
- *    is only available on Tesla hardware running Windows Vista or later;
- * - ::CU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE: Peak memory clock frequency in kilohertz;
- * - ::CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH: Global memory bus width in bits;
- * - ::CU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE: Size of L2 cache in bytes. 0 if the device doesn't have L2 cache;
- * - ::CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_MULTIPROCESSOR: Maximum resident threads per multiprocessor;
+ *    is only available on Tesla hardware running Windows Vista or later
+ * - ::CU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE: Peak memory clock frequency in kilohertz
+ * - ::CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH: Global memory bus width in bits
+ * - ::CU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE: Size of L2 cache in bytes. 0 if the device doesn't have L2 cache
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_THREADS_PER_MULTIPROCESSOR: Maximum resident threads per multiprocessor
  * - ::CU_DEVICE_ATTRIBUTE_UNIFIED_ADDRESSING: 1 if the device shares a unified address space with
- *   the host, or 0 if not;
- * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR: Major compute capability version number;
- * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR: Minor compute capability version number;
+ *   the host, or 0 if not
+ * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MAJOR: Major compute capability version number
+ * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_CAPABILITY_MINOR: Minor compute capability version number
  * - ::CU_DEVICE_ATTRIBUTE_GLOBAL_L1_CACHE_SUPPORTED: 1 if device supports caching globals
- *    in L1 cache, 0 if caching globals in L1 cache is not supported by the device;
+ *    in L1 cache, 0 if caching globals in L1 cache is not supported by the device
  * - ::CU_DEVICE_ATTRIBUTE_LOCAL_L1_CACHE_SUPPORTED: 1 if device supports caching locals
- *    in L1 cache, 0 if caching locals in L1 cache is not supported by the device;
+ *    in L1 cache, 0 if caching locals in L1 cache is not supported by the device
  * - ::CU_DEVICE_ATTRIBUTE_MAX_SHARED_MEMORY_PER_MULTIPROCESSOR: Maximum amount of
  *   shared memory available to a multiprocessor in bytes; this amount is shared
- *   by all thread blocks simultaneously resident on a multiprocessor;
+ *   by all thread blocks simultaneously resident on a multiprocessor
  * - ::CU_DEVICE_ATTRIBUTE_MAX_REGISTERS_PER_MULTIPROCESSOR: Maximum number of 32-bit
  *   registers available to a multiprocessor; this number is shared by all thread
- *   blocks simultaneously resident on a multiprocessor;
+ *   blocks simultaneously resident on a multiprocessor
  * - ::CU_DEVICE_ATTRIBUTE_MANAGED_MEMORY: 1 if device supports allocating managed memory
  *   on this system, 0 if allocating managed memory is not supported by the device on this system.
  * - ::CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD: 1 if device is on a multi-GPU board, 0 if not.
@@ -3456,14 +3510,20 @@ public static native @Cast("CUresult") int cuDeviceGetTexture1DLinearMaxWidth(@C
  * - ::CU_DEVICE_ATTRIBUTE_VIRTUAL_MEMORY_MANAGEMENT_SUPPORTED:  Device supports virtual memory management APIs like ::cuMemAddressReserve, ::cuMemCreate, ::cuMemMap and related APIs
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_POSIX_FILE_DESCRIPTOR_SUPPORTED: Device supports exporting memory to a posix file descriptor with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
  * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_HANDLE_SUPPORTED:  Device supports exporting memory to a Win32 NT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
- * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED: Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested ::cuMemCreate
- * - ::CU_DEVICE_ATTRIBUTE_MAX_PERSISTING_L2_CACHE_SIZE: Maximum L2 persisting lines capacity setting in bytes.
- * - ::CU_DEVICE_ATTRIBUTE_MAX_ACCESS_POLICY_WINDOW_SIZE: Maximum value of CUaccessPolicyWindow::num_bytes. 
- * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCKS_PER_MULTIPROCESSOR: Maximum number of thread blocks that can reside on a multiprocessor.
+ * - ::CU_DEVICE_ATTRIBUTE_HANDLE_TYPE_WIN32_KMT_HANDLE_SUPPORTED: Device supports exporting memory to a Win32 KMT handle with ::cuMemExportToShareableHandle, if requested via ::cuMemCreate
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_BLOCKS_PER_MULTIPROCESSOR: Maximum number of thread blocks that can reside on a multiprocessor
  * - ::CU_DEVICE_ATTRIBUTE_GENERIC_COMPRESSION_SUPPORTED: Device supports compressible memory allocation via ::cuMemCreate
- * - ::CU_DEVICE_ATTRIBUTE_RESERVED_SHARED_MEMORY_PER_BLOCK: Amount of shared memory per block reserved by CUDA driver in bytes.
- * - ::CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED: Device supports using the ::cuMemHostRegister flag CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_PERSISTING_L2_CACHE_SIZE: Maximum L2 persisting lines capacity setting in bytes
+ * - ::CU_DEVICE_ATTRIBUTE_MAX_ACCESS_POLICY_WINDOW_SIZE: Maximum value of CUaccessPolicyWindow::num_bytes 
+ * - ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_WITH_CUDA_VMM_SUPPORTED: Device supports specifying the GPUDirect RDMA flag with ::cuMemCreate.
+ * - ::CU_DEVICE_ATTRIBUTE_RESERVED_SHARED_MEMORY_PER_BLOCK: Amount of shared memory per block reserved by CUDA driver in bytes
+ * - ::CU_DEVICE_ATTRIBUTE_SPARSE_CUDA_ARRAY_SUPPORTED: Device supports sparse CUDA arrays and sparse CUDA mipmapped arrays. 
+ * - ::CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED: Device supports using the ::cuMemHostRegister flag ::CU_MEMHOSTERGISTER_READ_ONLY to register memory that must be mapped as read-only to the GPU
  * - ::CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED: Device supports using the ::cuMemAllocAsync and ::cuMemPool family of APIs
+ * - ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_SUPPORTED: Device supports GPUDirect RDMA APIs, like nvidia_p2p_get_pages (see https://docs.nvidia.com/cuda/gpudirect-rdma for more information)
+ * - ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_FLUSH_WRITES_OPTIONS: The returned attribute shall be interpreted as a bitmask, where the individual bits are described by the ::CUflushGPUDirectRDMAWritesOptions enum
+ * - ::CU_DEVICE_ATTRIBUTE_GPU_DIRECT_RDMA_WRITES_ORDERING: GPUDirect RDMA writes to the device do not need to be flushed for consumers within the scope indicated by the returned attribute. See ::CUGPUDirectRDMAWritesOrdering for the numerical values returned here.
+ * - ::CU_DEVICE_ATTRIBUTE_MEMPOOL_SUPPORTED_HANDLE_TYPES: Bitmask of handle types supported with mempool based IPC
  *
  * @param pi     - Returned device attribute value
  * @param attrib - Device attribute to query
@@ -4237,6 +4297,13 @@ public static native @Cast("CUresult") int cuCtxCreate_v3(@ByPtrPtr CUctx_st pct
  * destroyed regardless of how many threads it is current to.
  * It is the responsibility of the calling function to ensure that no API
  * call issues using \p ctx while ::cuCtxDestroy() is executing.
+ *
+ * Destroys and cleans up all resources associated with the context.
+ * It is the caller's responsibility to ensure that the context or its resources
+ * are not accessed or passed in subsequent API calls and doing so will result in undefined behavior.
+ * These resources include CUDA types such as ::CUmodule, ::CUfunction, ::CUstream, ::CUevent,
+ * ::CUarray, ::CUmipmappedArray, ::CUtexObject, ::CUsurfObject, ::CUtexref, ::CUsurfref,
+ * ::CUgraphicsResource, ::CUlinkState, ::CUexternalMemory and ::CUexternalSemaphore.
  *
  * If \p ctx is current to the calling thread then \p ctx will also be
  * popped from the current thread's context stack (as though ::cuCtxPopCurrent()
@@ -5229,6 +5296,7 @@ public static native @Cast("CUresult") int cuModuleLoadFatBinary(@ByPtrPtr CUmod
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
+ * \note_destroy_ub
  *
  * @see ::cuModuleGetFunction,
  * ::cuModuleGetGlobal,
@@ -5580,8 +5648,9 @@ public static native @Cast("CUresult") int cuLinkDestroy(CUlinkState_st state);
 /**
  * \brief Gets free and total memory
  *
- * Returns in \p *free and \p *total respectively, the free and total amount of
- * memory available for allocation by the CUDA context, in bytes.
+ * Returns in \p *total the total amount of memory available to the the current context.
+ * Returns in \p *free the amount of memory on the device that is free according to the OS.
+ * CUDA is not guaranteed to be able to allocate all of the memory that the OS reports as free.
  *
  * @param free  - Returned free memory in bytes
  * @param total - Returned total memory in bytes
@@ -6448,10 +6517,10 @@ public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdevicept
  *
  * - ::CU_MEMHOSTREGISTER_READ_ONLY: The pointer is treated as pointing to memory
  *   that is considered read-only by the device.  On platforms without
- *   CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES, this flag is
+ *   ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS_USES_HOST_PAGE_TABLES, this flag is
  *   required in order to register memory mapped to the CPU as read-only.  Support
  *   for the use of this flag can be queried from the device attribute
- *   CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED.  Using this flag with
+ *   ::CU_DEVICE_ATTRIBUTE_READ_ONLY_HOST_REGISTER_SUPPORTED.  Using this flag with
  *   a current context associated with a device that does not have this attribute
  *   set will cause ::cuMemHostRegister to error with CUDA_ERROR_NOT_SUPPORTED.
  *
@@ -8596,7 +8665,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * float16's:
  * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR desc;
-    desc.FormatFlags = CU_AD_FORMAT_HALF;
+    desc.Format = CU_AD_FORMAT_HALF;
     desc.NumChannels = 4;
     desc.Width = width;
     desc.Height = height;
@@ -8606,7 +8675,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * of which is two 8-bit unsigned chars:
  * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR arrayDesc;
-    desc.FormatFlags = CU_AD_FORMAT_UNSIGNED_INT8;
+    desc.Format = CU_AD_FORMAT_UNSIGNED_INT8;
     desc.NumChannels = 2;
     desc.Width = width;
     desc.Height = height;
@@ -8932,7 +9001,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  * 4x16-bit float16's:
  * <pre>{@code
     CUDA_ARRAY3D_DESCRIPTOR desc;
-    desc.FormatFlags = CU_AD_FORMAT_HALF;
+    desc.Format = CU_AD_FORMAT_HALF;
     desc.NumChannels = 4;
     desc.Width = width;
     desc.Height = height;
@@ -14849,7 +14918,7 @@ public static native @Cast("CUresult") int cuGraphExternalSemaphoresWaitNodeSetP
  * @param nodeParams      - Parameters for the node
  *
  * When ::cuGraphAddMemAllocNode creates an allocation node, it returns the address of the allocation in
- * @param nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
+ * \p nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
  *
  * If the allocation is freed in the same graph, by creating a free node using ::cuGraphAddMemFreeNode,
  * the allocation can be accessed by nodes ordered after the allocation node but before the free node.
@@ -15027,7 +15096,9 @@ public static native @Cast("CUresult") int cuGraphMemFreeNodeGetParams(CUgraphNo
  *
  * @see
  * ::cuGraphAddMemAllocNode,
- * ::cuGraphAddMemFreeNode
+ * ::cuGraphAddMemFreeNode,
+ * ::cuDeviceSetGraphMemAttribute,
+ * ::cuDeviceGetGraphMemAttribute
  */
 public static native @Cast("CUresult") int cuDeviceGraphMemTrim(@Cast("CUdevice") int device);
 
@@ -15053,6 +15124,7 @@ public static native @Cast("CUresult") int cuDeviceGraphMemTrim(@Cast("CUdevice"
  * ::CUDA_ERROR_INVALID_DEVICE
  *
  * @see
+ * ::cuDeviceSetGraphMemAttribute,
  * ::cuGraphAddMemAllocNode,
  * ::cuGraphAddMemFreeNode
  */
@@ -15077,6 +15149,7 @@ public static native @Cast("CUresult") int cuDeviceGetGraphMemAttribute(@Cast("C
  * ::CUDA_ERROR_INVALID_DEVICE
  *
  * @see
+ * ::cuDeviceGetGraphMemAttribute,
  * ::cuGraphAddMemAllocNode,
  * ::cuGraphAddMemFreeNode
  */
@@ -18770,6 +18843,8 @@ public static final int
 // #endif
 // #include "vector_types.h"
 
+
+
 /**
  * \defgroup CUDART_TYPES Data types used by CUDA Runtime
  * \ingroup CUDART
@@ -19823,14 +19898,67 @@ public static final int
 /** enum cudaChannelFormatKind */
 public static final int
     /** Signed channel format */
-    cudaChannelFormatKindSigned                 = 0,
+    cudaChannelFormatKindSigned                         = 0,
     /** Unsigned channel format */
-    cudaChannelFormatKindUnsigned               = 1,
+    cudaChannelFormatKindUnsigned                       = 1,
     /** Float channel format */
-    cudaChannelFormatKindFloat                  = 2,
+    cudaChannelFormatKindFloat                          = 2,
     /** No channel format */
-    cudaChannelFormatKindNone                   = 3,
-    cudaChannelFormatKindNV12                   = 4;
+    cudaChannelFormatKindNone                           = 3,
+    /** Unsigned 8-bit integers, planar 4:2:0 YUV format */
+    cudaChannelFormatKindNV12                           = 4,
+    /** 1 channel unsigned 8-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized8X1          = 5,
+    /** 2 channel unsigned 8-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized8X2          = 6,
+    /** 4 channel unsigned 8-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized8X4          = 7,
+    /** 1 channel unsigned 16-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized16X1         = 8,
+    /** 2 channel unsigned 16-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized16X2         = 9,
+    /** 4 channel unsigned 16-bit normalized integer */
+    cudaChannelFormatKindUnsignedNormalized16X4         = 10,
+    /** 1 channel signed 8-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized8X1            = 11,
+    /** 2 channel signed 8-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized8X2            = 12,
+    /** 4 channel signed 8-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized8X4            = 13,
+    /** 1 channel signed 16-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized16X1           = 14,
+    /** 2 channel signed 16-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized16X2           = 15,
+    /** 4 channel signed 16-bit normalized integer */
+    cudaChannelFormatKindSignedNormalized16X4           = 16,
+    /** 4 channel unsigned normalized block-compressed (BC1 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed1       = 17,
+    /** 4 channel unsigned normalized block-compressed (BC1 compression) format with sRGB encoding*/
+    cudaChannelFormatKindUnsignedBlockCompressed1SRGB   = 18,
+    /** 4 channel unsigned normalized block-compressed (BC2 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed2       = 19,
+    /** 4 channel unsigned normalized block-compressed (BC2 compression) format with sRGB encoding */
+    cudaChannelFormatKindUnsignedBlockCompressed2SRGB   = 20,
+    /** 4 channel unsigned normalized block-compressed (BC3 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed3       = 21,
+    /** 4 channel unsigned normalized block-compressed (BC3 compression) format with sRGB encoding */
+    cudaChannelFormatKindUnsignedBlockCompressed3SRGB   = 22,
+    /** 1 channel unsigned normalized block-compressed (BC4 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed4       = 23,
+    /** 1 channel signed normalized block-compressed (BC4 compression) format */
+    cudaChannelFormatKindSignedBlockCompressed4         = 24,
+    /** 2 channel unsigned normalized block-compressed (BC5 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed5       = 25,
+    /** 2 channel signed normalized block-compressed (BC5 compression) format */
+    cudaChannelFormatKindSignedBlockCompressed5         = 26,
+    /** 3 channel unsigned half-float block-compressed (BC6H compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed6H      = 27,
+    /** 3 channel signed half-float block-compressed (BC6H compression) format */
+    cudaChannelFormatKindSignedBlockCompressed6H        = 28,
+    /** 4 channel unsigned normalized block-compressed (BC7 compression) format */
+    cudaChannelFormatKindUnsignedBlockCompressed7       = 29,
+    /** 4 channel unsigned normalized block-compressed (BC7 compression) format with sRGB encoding */
+    cudaChannelFormatKindUnsignedBlockCompressed7SRGB   = 30;
 // Targeting ../cudart/cudaChannelFormatDesc.java
 
 
@@ -20173,6 +20301,14 @@ public static final int
     cudaFuncAttributeMaxDynamicSharedMemorySize = 8,
     /** Preferred shared memory-L1 cache split */
     cudaFuncAttributePreferredSharedMemoryCarveout = 9,
+
+
+
+
+
+
+
+
     cudaFuncAttributeMax = 10;
 
 /**
@@ -20210,6 +20346,17 @@ public static final int
     cudaSharedmemCarveoutMaxShared    = 100,
     /** Prefer maximum available L1 cache, minimum shared memory */
     cudaSharedmemCarveoutMaxL1        = 0;
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * CUDA device compute modes
@@ -20543,6 +20690,8 @@ public static final int
     /** Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly to register memory that must be mapped as read-only to the GPU */
     cudaDevAttrHostRegisterReadOnlySupported  = 113,
     /** External timeline semaphore interop is supported on the device */
+    cudaDevAttrTimelineSemaphoreInteropSupported = 114,
+    /** Deprecated, External timeline semaphore interop is supported on the device */
     cudaDevAttrMaxTimelineSemaphoreInteropSupported = 114,
     /** Device supports using the ::cudaMallocAsync and ::cudaMemPool family of APIs */
     cudaDevAttrMemoryPoolsSupported           = 115,
@@ -20554,6 +20703,9 @@ public static final int
     cudaDevAttrGPUDirectRDMAWritesOrdering    = 118,
     /** Handle types supported with mempool based IPC */
     cudaDevAttrMemoryPoolSupportedHandleTypes = 119,
+
+
+
     cudaDevAttrMax = 120;
 
 /**
@@ -20831,6 +20983,11 @@ public static final int
 //           0,         /* size_t       reservedSharedMemPerBlock */
 //         }
 
+
+
+
+
+
 /**
  * CUDA IPC Handle Size
  */
@@ -20972,6 +21129,12 @@ public static final int
      */
     cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32  = 10;
 // Targeting ../cudart/cudaExternalSemaphoreHandleDesc.java
+
+
+// Targeting ../cudart/cudaExternalSemaphoreSignalParams_v1.java
+
+
+// Targeting ../cudart/cudaExternalSemaphoreWaitParams_v1.java
 
 
 // Targeting ../cudart/cudaExternalSemaphoreSignalParams.java
@@ -21889,7 +22052,7 @@ public static final int
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  11040;
+public static final int CUDART_VERSION =  11050;
 
 // #if defined(__CUDA_API_VER_MAJOR__) && defined(__CUDA_API_VER_MINOR__)
 public static native @MemberGetter int __CUDART_API_VERSION();
@@ -21976,8 +22139,13 @@ public static final int __CUDART_API_VERSION = __CUDART_API_VERSION();
  * in the current process.
  *
  * Explicitly destroys and cleans up all resources associated with the current
- * device in the current process.  Any subsequent API call to this device will 
- * reinitialize the device.
+ * device in the current process. It is the caller's responsibility to ensure
+ * that the resources are not accessed or passed in subsequent API calls and
+ * doing so will result in undefined behavior. These resources include CUDA types
+ * such as ::cudaStream_t, ::cudaEvent_t, ::cudaArray_t, ::cudaMipmappedArray_t,
+ * ::cudaTextureObject_t, ::cudaSurfaceObject_t, ::textureReference, ::surfaceReference,
+ * ::cudaExternalMemory_t, ::cudaExternalSemaphore_t and ::cudaGraphicsResource_t.
+ * Any subsequent API call to this device will reinitialize the device.
  *
  * Note that this function will reset the device immediately.  It is the caller's
  * responsibility to ensure that the device is not being accessed by any 
@@ -23377,93 +23545,93 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  *
  * Returns in \p *value the integer value of the attribute \p attr on device
  * \p device. The supported attributes are:
- * - ::cudaDevAttrMaxThreadsPerBlock: Maximum number of threads per block;
- * - ::cudaDevAttrMaxBlockDimX: Maximum x-dimension of a block;
- * - ::cudaDevAttrMaxBlockDimY: Maximum y-dimension of a block;
- * - ::cudaDevAttrMaxBlockDimZ: Maximum z-dimension of a block;
- * - ::cudaDevAttrMaxGridDimX: Maximum x-dimension of a grid;
- * - ::cudaDevAttrMaxGridDimY: Maximum y-dimension of a grid;
- * - ::cudaDevAttrMaxGridDimZ: Maximum z-dimension of a grid;
+ * - ::cudaDevAttrMaxThreadsPerBlock: Maximum number of threads per block
+ * - ::cudaDevAttrMaxBlockDimX: Maximum x-dimension of a block
+ * - ::cudaDevAttrMaxBlockDimY: Maximum y-dimension of a block
+ * - ::cudaDevAttrMaxBlockDimZ: Maximum z-dimension of a block
+ * - ::cudaDevAttrMaxGridDimX: Maximum x-dimension of a grid
+ * - ::cudaDevAttrMaxGridDimY: Maximum y-dimension of a grid
+ * - ::cudaDevAttrMaxGridDimZ: Maximum z-dimension of a grid
  * - ::cudaDevAttrMaxSharedMemoryPerBlock: Maximum amount of shared memory
- *   available to a thread block in bytes;
+ *   available to a thread block in bytes
  * - ::cudaDevAttrTotalConstantMemory: Memory available on device for
- *   __constant__ variables in a CUDA C kernel in bytes;
- * - ::cudaDevAttrWarpSize: Warp size in threads;
+ *   __constant__ variables in a CUDA C kernel in bytes
+ * - ::cudaDevAttrWarpSize: Warp size in threads
  * - ::cudaDevAttrMaxPitch: Maximum pitch in bytes allowed by the memory copy
- *   functions that involve memory regions allocated through ::cudaMallocPitch();
- * - ::cudaDevAttrMaxTexture1DWidth: Maximum 1D texture width;
+ *   functions that involve memory regions allocated through ::cudaMallocPitch()
+ * - ::cudaDevAttrMaxTexture1DWidth: Maximum 1D texture width
  * - ::cudaDevAttrMaxTexture1DLinearWidth: Maximum width for a 1D texture bound
- *   to linear memory;
- * - ::cudaDevAttrMaxTexture1DMipmappedWidth: Maximum mipmapped 1D texture width;
- * - ::cudaDevAttrMaxTexture2DWidth: Maximum 2D texture width;
- * - ::cudaDevAttrMaxTexture2DHeight: Maximum 2D texture height;
+ *   to linear memory
+ * - ::cudaDevAttrMaxTexture1DMipmappedWidth: Maximum mipmapped 1D texture width
+ * - ::cudaDevAttrMaxTexture2DWidth: Maximum 2D texture width
+ * - ::cudaDevAttrMaxTexture2DHeight: Maximum 2D texture height
  * - ::cudaDevAttrMaxTexture2DLinearWidth: Maximum width for a 2D texture
- *   bound to linear memory;
+ *   bound to linear memory
  * - ::cudaDevAttrMaxTexture2DLinearHeight: Maximum height for a 2D texture
- *   bound to linear memory;
+ *   bound to linear memory
  * - ::cudaDevAttrMaxTexture2DLinearPitch: Maximum pitch in bytes for a 2D
- *   texture bound to linear memory;
+ *   texture bound to linear memory
  * - ::cudaDevAttrMaxTexture2DMipmappedWidth: Maximum mipmapped 2D texture
- *   width;
+ *   width
  * - ::cudaDevAttrMaxTexture2DMipmappedHeight: Maximum mipmapped 2D texture
- *   height;
- * - ::cudaDevAttrMaxTexture3DWidth: Maximum 3D texture width;
- * - ::cudaDevAttrMaxTexture3DHeight: Maximum 3D texture height;
- * - ::cudaDevAttrMaxTexture3DDepth: Maximum 3D texture depth;
+ *   height
+ * - ::cudaDevAttrMaxTexture3DWidth: Maximum 3D texture width
+ * - ::cudaDevAttrMaxTexture3DHeight: Maximum 3D texture height
+ * - ::cudaDevAttrMaxTexture3DDepth: Maximum 3D texture depth
  * - ::cudaDevAttrMaxTexture3DWidthAlt: Alternate maximum 3D texture width,
- *   0 if no alternate maximum 3D texture size is supported;
+ *   0 if no alternate maximum 3D texture size is supported
  * - ::cudaDevAttrMaxTexture3DHeightAlt: Alternate maximum 3D texture height,
- *   0 if no alternate maximum 3D texture size is supported;
+ *   0 if no alternate maximum 3D texture size is supported
  * - ::cudaDevAttrMaxTexture3DDepthAlt: Alternate maximum 3D texture depth,
- *   0 if no alternate maximum 3D texture size is supported;
+ *   0 if no alternate maximum 3D texture size is supported
  * - ::cudaDevAttrMaxTextureCubemapWidth: Maximum cubemap texture width or
- *   height;
- * - ::cudaDevAttrMaxTexture1DLayeredWidth: Maximum 1D layered texture width;
+ *   height
+ * - ::cudaDevAttrMaxTexture1DLayeredWidth: Maximum 1D layered texture width
  * - ::cudaDevAttrMaxTexture1DLayeredLayers: Maximum layers in a 1D layered
- *   texture;
- * - ::cudaDevAttrMaxTexture2DLayeredWidth: Maximum 2D layered texture width;
- * - ::cudaDevAttrMaxTexture2DLayeredHeight: Maximum 2D layered texture height;
+ *   texture
+ * - ::cudaDevAttrMaxTexture2DLayeredWidth: Maximum 2D layered texture width
+ * - ::cudaDevAttrMaxTexture2DLayeredHeight: Maximum 2D layered texture height
  * - ::cudaDevAttrMaxTexture2DLayeredLayers: Maximum layers in a 2D layered
- *   texture;
+ *   texture
  * - ::cudaDevAttrMaxTextureCubemapLayeredWidth: Maximum cubemap layered
- *   texture width or height;
+ *   texture width or height
  * - ::cudaDevAttrMaxTextureCubemapLayeredLayers: Maximum layers in a cubemap
- *   layered texture;
- * - ::cudaDevAttrMaxSurface1DWidth: Maximum 1D surface width;
- * - ::cudaDevAttrMaxSurface2DWidth: Maximum 2D surface width;
- * - ::cudaDevAttrMaxSurface2DHeight: Maximum 2D surface height;
- * - ::cudaDevAttrMaxSurface3DWidth: Maximum 3D surface width;
- * - ::cudaDevAttrMaxSurface3DHeight: Maximum 3D surface height;
- * - ::cudaDevAttrMaxSurface3DDepth: Maximum 3D surface depth;
- * - ::cudaDevAttrMaxSurface1DLayeredWidth: Maximum 1D layered surface width;
+ *   layered texture
+ * - ::cudaDevAttrMaxSurface1DWidth: Maximum 1D surface width
+ * - ::cudaDevAttrMaxSurface2DWidth: Maximum 2D surface width
+ * - ::cudaDevAttrMaxSurface2DHeight: Maximum 2D surface height
+ * - ::cudaDevAttrMaxSurface3DWidth: Maximum 3D surface width
+ * - ::cudaDevAttrMaxSurface3DHeight: Maximum 3D surface height
+ * - ::cudaDevAttrMaxSurface3DDepth: Maximum 3D surface depth
+ * - ::cudaDevAttrMaxSurface1DLayeredWidth: Maximum 1D layered surface width
  * - ::cudaDevAttrMaxSurface1DLayeredLayers: Maximum layers in a 1D layered
- *   surface;
- * - ::cudaDevAttrMaxSurface2DLayeredWidth: Maximum 2D layered surface width;
- * - ::cudaDevAttrMaxSurface2DLayeredHeight: Maximum 2D layered surface height;
+ *   surface
+ * - ::cudaDevAttrMaxSurface2DLayeredWidth: Maximum 2D layered surface width
+ * - ::cudaDevAttrMaxSurface2DLayeredHeight: Maximum 2D layered surface height
  * - ::cudaDevAttrMaxSurface2DLayeredLayers: Maximum layers in a 2D layered
- *   surface;
- * - ::cudaDevAttrMaxSurfaceCubemapWidth: Maximum cubemap surface width;
+ *   surface
+ * - ::cudaDevAttrMaxSurfaceCubemapWidth: Maximum cubemap surface width
  * - ::cudaDevAttrMaxSurfaceCubemapLayeredWidth: Maximum cubemap layered
- *   surface width;
+ *   surface width
  * - ::cudaDevAttrMaxSurfaceCubemapLayeredLayers: Maximum layers in a cubemap
- *   layered surface;
+ *   layered surface
  * - ::cudaDevAttrMaxRegistersPerBlock: Maximum number of 32-bit registers 
- *   available to a thread block;
- * - ::cudaDevAttrClockRate: Peak clock frequency in kilohertz;
+ *   available to a thread block
+ * - ::cudaDevAttrClockRate: Peak clock frequency in kilohertz
  * - ::cudaDevAttrTextureAlignment: Alignment requirement; texture base
  *   addresses aligned to ::textureAlign bytes do not need an offset applied
- *   to texture fetches;
+ *   to texture fetches
  * - ::cudaDevAttrTexturePitchAlignment: Pitch alignment requirement for 2D
- *   texture references bound to pitched memory;
+ *   texture references bound to pitched memory
  * - ::cudaDevAttrGpuOverlap: 1 if the device can concurrently copy memory
- *   between host and device while executing a kernel, or 0 if not;
- * - ::cudaDevAttrMultiProcessorCount: Number of multiprocessors on the device;
+ *   between host and device while executing a kernel, or 0 if not
+ * - ::cudaDevAttrMultiProcessorCount: Number of multiprocessors on the device
  * - ::cudaDevAttrKernelExecTimeout: 1 if there is a run time limit for kernels
- *   executed on the device, or 0 if not;
+ *   executed on the device, or 0 if not
  * - ::cudaDevAttrIntegrated: 1 if the device is integrated with the memory
- *   subsystem, or 0 if not;
+ *   subsystem, or 0 if not
  * - ::cudaDevAttrCanMapHostMemory: 1 if the device can map host memory into
- *   the CUDA address space, or 0 if not;
+ *   the CUDA address space, or 0 if not
  * - ::cudaDevAttrComputeMode: Compute mode is the compute mode that the device
  *   is currently in. Available modes are as follows:
  *   - ::cudaComputeModeDefault: Default mode - Device is not restricted and
@@ -23479,75 +23647,81 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  *   multiple kernels within the same context simultaneously, or 0 if
  *   not. It is not guaranteed that multiple kernels will be resident on the
  *   device concurrently so this feature should not be relied upon for
- *   correctness;
+ *   correctness.
  * - ::cudaDevAttrEccEnabled: 1 if error correction is enabled on the device,
- *   0 if error correction is disabled or not supported by the device;
- * - ::cudaDevAttrPciBusId: PCI bus identifier of the device;
+ *   0 if error correction is disabled or not supported by the device
+ * - ::cudaDevAttrPciBusId: PCI bus identifier of the device
  * - ::cudaDevAttrPciDeviceId: PCI device (also known as slot) identifier of
- *   the device;
+ *   the device
  * - ::cudaDevAttrTccDriver: 1 if the device is using a TCC driver. TCC is only
- *   available on Tesla hardware running Windows Vista or later;
- * - ::cudaDevAttrMemoryClockRate: Peak memory clock frequency in kilohertz;
- * - ::cudaDevAttrGlobalMemoryBusWidth: Global memory bus width in bits;
+ *   available on Tesla hardware running Windows Vista or later.
+ * - ::cudaDevAttrMemoryClockRate: Peak memory clock frequency in kilohertz
+ * - ::cudaDevAttrGlobalMemoryBusWidth: Global memory bus width in bits
  * - ::cudaDevAttrL2CacheSize: Size of L2 cache in bytes. 0 if the device
- *   doesn't have L2 cache;
+ *   doesn't have L2 cache.
  * - ::cudaDevAttrMaxThreadsPerMultiProcessor: Maximum resident threads per 
- *   multiprocessor;
+ *   multiprocessor
  * - ::cudaDevAttrUnifiedAddressing: 1 if the device shares a unified address
- *   space with the host, or 0 if not;
+ *   space with the host, or 0 if not
  * - ::cudaDevAttrComputeCapabilityMajor: Major compute capability version
- *   number;
+ *   number
  * - ::cudaDevAttrComputeCapabilityMinor: Minor compute capability version
- *   number;
+ *   number
  * - ::cudaDevAttrStreamPrioritiesSupported: 1 if the device supports stream
- *   priorities, or 0 if not;
+ *   priorities, or 0 if not
  * - ::cudaDevAttrGlobalL1CacheSupported: 1 if device supports caching globals 
- *    in L1 cache, 0 if not;
+ *    in L1 cache, 0 if not
  * - ::cudaDevAttrLocalL1CacheSupported: 1 if device supports caching locals 
- *    in L1 cache, 0 if not;
+ *    in L1 cache, 0 if not
  * - ::cudaDevAttrMaxSharedMemoryPerMultiprocessor: Maximum amount of shared memory
  *   available to a multiprocessor in bytes; this amount is shared by all 
- *   thread blocks simultaneously resident on a multiprocessor;
+ *   thread blocks simultaneously resident on a multiprocessor
  * - ::cudaDevAttrMaxRegistersPerMultiprocessor: Maximum number of 32-bit registers 
  *   available to a multiprocessor; this number is shared by all thread blocks
- *   simultaneously resident on a multiprocessor;
+ *   simultaneously resident on a multiprocessor
  * - ::cudaDevAttrManagedMemory: 1 if device supports allocating
- *   managed memory, 0 if not;
- * - ::cudaDevAttrIsMultiGpuBoard: 1 if device is on a multi-GPU board, 0 if not;
+ *   managed memory, 0 if not
+ * - ::cudaDevAttrIsMultiGpuBoard: 1 if device is on a multi-GPU board, 0 if not
  * - ::cudaDevAttrMultiGpuBoardGroupID: Unique identifier for a group of devices on the
- *   same multi-GPU board;
+ *   same multi-GPU board
  * - ::cudaDevAttrHostNativeAtomicSupported: 1 if the link between the device and the
- *   host supports native atomic operations;
+ *   host supports native atomic operations
  * - ::cudaDevAttrSingleToDoublePrecisionPerfRatio: Ratio of single precision performance
- *   (in floating-point operations per second) to double precision performance;
+ *   (in floating-point operations per second) to double precision performance
  * - ::cudaDevAttrPageableMemoryAccess: 1 if the device supports coherently accessing
- *   pageable memory without calling cudaHostRegister on it, and 0 otherwise.
+ *   pageable memory without calling cudaHostRegister on it, and 0 otherwise
  * - ::cudaDevAttrConcurrentManagedAccess: 1 if the device can coherently access managed
- *   memory concurrently with the CPU, and 0 otherwise.
+ *   memory concurrently with the CPU, and 0 otherwise
  * - ::cudaDevAttrComputePreemptionSupported: 1 if the device supports
- *   Compute Preemption, 0 if not.
+ *   Compute Preemption, 0 if not
  * - ::cudaDevAttrCanUseHostPointerForRegisteredMem: 1 if the device can access host
- *   registered memory at the same virtual address as the CPU, and 0 otherwise.
+ *   registered memory at the same virtual address as the CPU, and 0 otherwise
  * - ::cudaDevAttrCooperativeLaunch: 1 if the device supports launching cooperative kernels
- *   via ::cudaLaunchCooperativeKernel, and 0 otherwise.
+ *   via ::cudaLaunchCooperativeKernel, and 0 otherwise
  * - ::cudaDevAttrCooperativeMultiDeviceLaunch: 1 if the device supports launching cooperative
- *   kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise.
+ *   kernels via ::cudaLaunchCooperativeKernelMultiDevice, and 0 otherwise
  * - ::cudaDevAttrCanFlushRemoteWrites: 1 if the device supports flushing of outstanding 
- *   remote writes, and 0 otherwise.
+ *   remote writes, and 0 otherwise
  * - ::cudaDevAttrHostRegisterSupported: 1 if the device supports host memory registration
- *   via ::cudaHostRegister, and 0 otherwise.
+ *   via ::cudaHostRegister, and 0 otherwise
  * - ::cudaDevAttrPageableMemoryAccessUsesHostPageTables: 1 if the device accesses pageable memory via the
- *   host's page tables, and 0 otherwise.
+ *   host's page tables, and 0 otherwise
  * - ::cudaDevAttrDirectManagedMemAccessFromHost: 1 if the host can directly access managed memory on the device
- *   without migration, and 0 otherwise.
+ *   without migration, and 0 otherwise
  * - ::cudaDevAttrMaxSharedMemoryPerBlockOptin: Maximum per block shared memory size on the device. This value can
  *   be opted into when using ::cudaFuncSetAttribute
- * - ::cudaDevAttrMaxBlocksPerMultiprocessor: Maximum number of thread blocks that can reside on a multiprocessor.
- * - ::cudaDevAttrMaxPersistingL2CacheSize: Maximum L2 persisting lines capacity setting in bytes.
- * - ::cudaDevAttrMaxAccessPolicyWindowSize: Maximum value of cudaAccessPolicyWindow::num_bytes.
- * - ::cudaDevAttrHostRegisterReadOnly: Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly
- *   to register memory that must be mapped as read-only to the GPU
+ * - ::cudaDevAttrMaxBlocksPerMultiprocessor: Maximum number of thread blocks that can reside on a multiprocessor
+ * - ::cudaDevAttrMaxPersistingL2CacheSize: Maximum L2 persisting lines capacity setting in bytes
+ * - ::cudaDevAttrMaxAccessPolicyWindowSize: Maximum value of cudaAccessPolicyWindow::num_bytes
+ * - ::cudaDevAttrReservedSharedMemoryPerBlock: Shared memory reserved by CUDA driver per block in bytes
  * - ::cudaDevAttrSparseCudaArraySupported: 1 if the device supports sparse CUDA arrays and sparse CUDA mipmapped arrays.
+ * - ::cudaDevAttrHostRegisterReadOnlySupported: Device supports using the ::cudaHostRegister flag cudaHostRegisterReadOnly
+ *   to register memory that must be mapped as read-only to the GPU
+ * - ::cudaDevAttrMemoryPoolsSupported: 1 if the device supports using the cudaMallocAsync and cudaMemPool family of APIs, and 0 otherwise
+ * - ::cudaDevAttrGPUDirectRDMASupported: 1 if the device supports GPUDirect RDMA APIs, and 0 otherwise
+ * - ::cudaDevAttrGPUDirectRDMAFlushWritesOptions: bitmask to be interpreted according to the ::cudaFlushGPUDirectRDMAWritesOptions enum 
+ * - ::cudaDevAttrGPUDirectRDMAWritesOrdering: see the ::cudaGPUDirectRDMAWritesOrdering enum for numerical values
+ * - ::cudaDevAttrMemoryPoolSupportedHandleTypes: Bitmask of handle types supported with mempool based IPC
  *
  * @param value  - Returned device attribute value
  * @param attr   - Device attribute to query
@@ -23763,6 +23937,10 @@ public static native @Cast("cudaError_t") int cudaChooseDevice(int[] device, @Co
  * This call may be made from any host thread, to any device, and at 
  * any time.  This function will do no synchronization with the previous 
  * or new device, and should be considered a very low overhead call.
+ * If the current context bound to the calling thread is not the primary context,
+ * this call will bind the primary context to the calling thread and all the
+ * subsequent memory allocations, stream and event creations, and kernel launches
+ * will be associated with the primary context.
  *
  * @param device - Device on which the active host thread should execute the
  * device code.
@@ -24838,7 +25016,7 @@ public static native @Cast("cudaError_t") int cudaEventCreateWithFlags(@ByPtrPtr
  * \brief Records an event
  *
  * Captures in \p event the contents of \p stream at the time of this call.
- * \p event and \p stream must be on the same device.
+ * \p event and \p stream must be on the same CUDA context.
  * Calls such as ::cudaEventQuery() or ::cudaStreamWaitEvent() will then
  * examine or wait for completion of the work that was captured. Uses of
  * \p stream after this call do not modify \p event. See note on default
@@ -24879,7 +25057,7 @@ public static native @Cast("cudaError_t") int cudaEventRecord(CUevent_st event);
  * \brief Records an event
  *
  * Captures in \p event the contents of \p stream at the time of this call.
- * \p event and \p stream must be on the same device.
+ * \p event and \p stream must be on the same CUDA context.
  * Calls such as ::cudaEventQuery() or ::cudaStreamWaitEvent() will then
  * examine or wait for completion of the work that was captured. Uses of
  * \p stream after this call do not modify \p event. See note on default
@@ -27635,8 +27813,9 @@ public static native @Cast("cudaError_t") int cudaMemcpy3DPeerAsync(@Const cudaM
 /**
  * \brief Gets free and total device memory
  *
- * Returns in \p *free and \p *total respectively, the free and total amount of
- * memory available for allocation by the device in bytes.
+ * Returns in \p *total the total amount of memory available on the device.
+ * Returns in \p *free the amount of memory on the device that is free according to the OS.
+ * CUDA is not guaranteed to be able to allocate all of the memory that the OS reports as free.
  *
  * @param free  - Returned free memory in bytes
  * @param total - Returned total memory in bytes
@@ -32594,7 +32773,7 @@ public static native @Cast("cudaError_t") int cudaGraphExternalSemaphoresWaitNod
  * @param nodeParams      - Parameters for the node
  *
  * When ::cudaGraphAddMemAllocNode creates an allocation node, it returns the address of the allocation in
- * @param nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
+ * \p nodeParams.dptr.  The allocation's address remains fixed across instantiations and launches.
  *
  * If the allocation is freed in the same graph, by creating a free node using ::cudaGraphAddMemFreeNode,
  * the allocation can be accessed by nodes ordered after the allocation node but before the free node.
@@ -32820,10 +32999,10 @@ public static native @Cast("cudaError_t") int cudaDeviceGraphMemTrim(int device)
  * \note_callback
  *
  * @see
+ * ::cudaDeviceSetGraphMemAttribute,
  * ::cudaGraphAddMemAllocNode,
  * ::cudaGraphAddMemFreeNode,
  * ::cudaDeviceGraphMemTrim,
- * ::cudaDeviceSetGraphMemAttribute,
  * ::cudaMallocAsync,
  * ::cudaFreeAsync,
  */
@@ -32854,10 +33033,10 @@ public static native @Cast("cudaError_t") int cudaDeviceGetGraphMemAttribute(int
  * \note_callback
  *
  * @see
+ * ::cudaDeviceGetGraphMemAttribute,
  * ::cudaGraphAddMemAllocNode,
  * ::cudaGraphAddMemFreeNode,
  * ::cudaDeviceGraphMemTrim,
- * ::cudaDeviceGetGraphMemAttribute,
  * ::cudaMallocAsync,
  * ::cudaFreeAsync,
  */

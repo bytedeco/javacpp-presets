@@ -17,7 +17,7 @@ public class nppitc extends org.bytedeco.cuda.presets.nppitc {
 
 // Parsed from <nppi_threshold_and_compare_operations.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

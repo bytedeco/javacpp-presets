@@ -46,7 +46,6 @@ public class nvmlGridLicenseExpiry_t extends Pointer {
     public native @Cast("unsigned short") short min(); public native nvmlGridLicenseExpiry_t min(short setter);
     /** Seconds value of license expiry */
     public native @Cast("unsigned short") short sec(); public native nvmlGridLicenseExpiry_t sec(short setter);
-
     /** License expiry status */
     public native @Cast("unsigned char") byte status(); public native nvmlGridLicenseExpiry_t status(byte setter);
 }

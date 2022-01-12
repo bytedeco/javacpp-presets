@@ -17,7 +17,7 @@ public class nppim extends org.bytedeco.cuda.presets.nppim {
 
 // Parsed from <nppi_morphological_operations.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

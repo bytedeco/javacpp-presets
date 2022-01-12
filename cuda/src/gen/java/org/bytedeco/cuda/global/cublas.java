@@ -100,9 +100,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 6;
-public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 51;
+public static final int CUBLAS_VER_MINOR = 7;
+public static final int CUBLAS_VER_PATCH = 4;
+public static final int CUBLAS_VER_BUILD = 6;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 1000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -7849,7 +7849,14 @@ public static final int
    *
    * int64_t, default: 0
    */
-  CUBLASLT_MATMUL_DESC_ALPHA_VECTOR_BATCH_STRIDE = 14;
+  CUBLASLT_MATMUL_DESC_ALPHA_VECTOR_BATCH_STRIDE = 14,
+
+  /** Number of SMs to target for parallel execution. Optimizes heuristics for execution on a different number of SMs
+   * when user expects a concurrent stream to be using some of the device resources.
+   *
+   * int32_t, default: 0 - use the number reported by the device.
+   */
+  CUBLASLT_MATMUL_DESC_SM_COUNT_TARGET = 15;
 
 /** Internal. Do not use directly.
  */
@@ -8280,10 +8287,13 @@ public static final int
    */
   CUBLASLT_MATMUL_PREF_IMPL_MASK = 12,
 
-  /** Number of SMs to target for parallel execution. Optimizes heuristics for execution in smaller number of SM when
-   * user expects a concurrent stream to be using some of the device resources.
+  /** Number of SMs to target for parallel execution. Optimizes heuristics for execution on a different number of SMs
+   * when user expects a concurrent stream to be using some of the device resources.
+   *
+   * Overrides the SM count target set in the matrix multiplication descriptor (see cublasLtMatmulDescAttributes_t).
    *
    * int32_t, default: 0 - use the number reported by the device.
+   * DEPRECATED, will be removed in a future release, see cublasLtMatmulDescAttributes_t for replacement
    */
   CUBLASLT_MATMUL_PREF_SM_COUNT_TARGET = 13;
 

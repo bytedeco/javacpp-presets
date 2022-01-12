@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,31 +48,28 @@ import org.bytedeco.cuda.presets.nvrtc;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
-            link = "nvinfer@.8"
+            link = "nvinfer@.8",
+            preload = "nvinfer_builder_resource@.8.2.2"
         ),
         @Platform(
             value = "linux-arm64",
             includepath = {"/usr/include/aarch64-linux-gnu/", "/usr/local/tensorrt/include/"},
-            linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/tensorrt/lib/"},
-            preload = "myelin@.1"
+            linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/tensorrt/lib/"}
         ),
         @Platform(
             value = "linux-ppc64le",
             includepath = {"/usr/include/powerpc64le-linux-gnu/", "/usr/local/tensorrt/include/"},
-            linkpath = {"/usr/lib/powerpc64le-linux-gnu/", "/usr/local/tensorrt/lib/"},
-            preload = "myelin@.1"
+            linkpath = {"/usr/lib/powerpc64le-linux-gnu/", "/usr/local/tensorrt/lib/"}
         ),
         @Platform(
             value = "linux-x86_64",
             includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"},
-            preload = "myelin@.1"
+            linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}
         ),
         @Platform(
             value = "windows-x86_64",
             includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/include",
-            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/",
-            preload = "myelin64_1"
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TensorRT/lib/"
         )
     },
     target = "org.bytedeco.tensorrt.nvinfer",
@@ -135,6 +132,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::ISliceLayer", "nvinfer1::IShapeLayer", "nvinfer1::ITopKLayer", "nvinfer1::IMatrixMultiplyLayer", "nvinfer1::ISelectLayer",
                              "nvinfer1::IConstantLayer", "nvinfer1::IResizeLayer", "nvinfer1::ILoop", "nvinfer1::ILoopBoundaryLayer", "nvinfer1::ILoopOutputLayer",
                              "nvinfer1::IRecurrenceLayer", "nvinfer1::ITripLimitLayer", "nvinfer1::IFillLayer", "nvinfer1::IQuantizeLayer", "nvinfer1::IDequantizeLayer",
+                             "nvinfer1::IAssertionLayer", "nvinfer1::IConditionLayer", "nvinfer1::IEinsumLayer", "nvinfer1::IIfConditional",
+                             "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",

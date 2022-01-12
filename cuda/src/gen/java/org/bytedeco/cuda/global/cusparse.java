@@ -73,21 +73,22 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 // #include <driver_types.h>
 // #include <library_types.h>
 // #include <stdint.h>
+// #include <stdio.h>
 
 //##############################################################################
 //# CUSPARSE VERSION INFORMATION
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 11;
-public static final int CUSPARSE_VER_MINOR = 6;
+public static final int CUSPARSE_VER_MINOR = 7;
 public static final int CUSPARSE_VER_PATCH = 0;
-public static final int CUSPARSE_VER_BUILD = 120;
+public static final int CUSPARSE_VER_BUILD = 107;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
 
 // #############################################################################
-// # MACRO
+// # BASIC MACROS
 // #############################################################################
 
 // #if !defined(CUSPARSEAPI)
@@ -108,7 +109,9 @@ public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 +
 // #   define CUSPARSE_CPP_VERSION 0
 // #endif
 
-//------------------------------------------------------------------------------
+// #############################################################################
+// # CUSPARSE_DEPRECATED MACRO
+// #############################################################################
 
 // #if !defined(DISABLE_CUSPARSE_DEPRECATED)
 
@@ -234,11 +237,6 @@ public static final int
     CUSPARSE_SOLVE_POLICY_NO_LEVEL = 0,
     CUSPARSE_SOLVE_POLICY_USE_LEVEL = 1;
 
-/** enum cusparseSideMode_t */
-public static final int
-    CUSPARSE_SIDE_LEFT  = 0,
-    CUSPARSE_SIDE_RIGHT = 1;
-
 /** enum cusparseColorAlg_t */
 public static final int
     CUSPARSE_COLOR_ALG0 = 0, // default
@@ -289,6 +287,22 @@ public static native @Cast("cusparseStatus_t") int cusparseGetPointerMode(cuspar
 
 public static native @Cast("cusparseStatus_t") int cusparseSetPointerMode(cusparseContext handle,
                        @Cast("cusparsePointerMode_t") int mode);
+// Targeting ../cusparse/cusparseLoggerCallback_t.java
+
+
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerSetCallback(cusparseLoggerCallback_t callback);
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerSetFile(@Cast("FILE*") Pointer file);
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerOpenFile(@Cast("const char*") BytePointer logFile);
+public static native @Cast("cusparseStatus_t") int cusparseLoggerOpenFile(String logFile);
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerSetLevel(int level);
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerSetMask(int mask);
+
+public static native @Cast("cusparseStatus_t") int cusparseLoggerForceDisable();
 
 //##############################################################################
 //# HELPER ROUTINES
@@ -12987,7 +13001,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSparseToDense(cuspars
                       cusparseSpMatDescr matA,
                       cusparseDnMatDescr matB,
                       @Cast("cusparseSparseToDenseAlg_t") int alg,
-                      Pointer buffer);
+                      Pointer externalBuffer);
 
 
 // #############################################################################
@@ -13008,13 +13022,13 @@ public static native @Cast("cusparseStatus_t") int cusparseDenseToSparse_analysi
                                cusparseDnMatDescr matA,
                                cusparseSpMatDescr matB,
                                @Cast("cusparseDenseToSparseAlg_t") int alg,
-                               Pointer buffer);
+                               Pointer externalBuffer);
 
 public static native @Cast("cusparseStatus_t") int cusparseDenseToSparse_convert(cusparseContext handle,
                               cusparseDnMatDescr matA,
                               cusparseSpMatDescr matB,
                               @Cast("cusparseDenseToSparseAlg_t") int alg,
-                              Pointer buffer);
+                              Pointer externalBuffer);
 
 // #############################################################################
 // # SPARSE MATRIX-VECTOR MULTIPLICATION
@@ -13346,11 +13360,43 @@ public static native @Cast("cusparseStatus_t") int cusparseSDDMM(cusparseContext
               @Cast("cudaDataType") int computeType,
               @Cast("cusparseSDDMMAlg_t") int alg,
               Pointer externalBuffer);
+// Targeting ../cusparse/cusparseSpMMOpPlan.java
+
+
+
+/** enum cusparseSpMMOpAlg_t */
+public static final int
+    CUSPARSE_SPMM_OP_ALG_DEFAULT = 0;
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMMOp_createPlan(cusparseContext handle,
+                          @ByPtrPtr cusparseSpMMOpPlan plan,
+                          @Cast("cusparseOperation_t") int opA,
+                          @Cast("cusparseOperation_t") int opB,
+                          cusparseSpMatDescr matA,
+                          cusparseDnMatDescr matB,
+                          cusparseDnMatDescr matC,
+                          @Cast("cudaDataType") int computeType,
+                          @Cast("cusparseSpMMOpAlg_t") int alg,
+                          @Const Pointer addOperationNvvmBuffer,
+                          @Cast("size_t") long addOperationBufferSize,
+                          @Const Pointer mulOperationNvvmBuffer,
+                          @Cast("size_t") long mulOperationBufferSize,
+                          @Const Pointer epilogueNvvmBuffer,
+                          @Cast("size_t") long epilogueBufferSize,
+                          @Cast("size_t*") SizeTPointer SpMMWorkspaceSize);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMMOp(cusparseSpMMOpPlan plan,
+               Pointer externalBuffer);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpMMOp_destroyPlan(cusparseSpMMOpPlan plan);
+
+//------------------------------------------------------------------------------
 
 // #if defined(__cplusplus) // extern "C"
 // #endif // defined(__cplusplus)
 
 // #undef CUSPARSE_DEPRECATED
+// #undef CUSPARSE_PREVIEW
 
 // #endif // !defined(CUSPARSE_H_)
 

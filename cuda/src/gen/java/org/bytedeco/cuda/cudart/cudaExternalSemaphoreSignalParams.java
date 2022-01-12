@@ -11,9 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
-// #if defined(__CUDA_API_VERSION_INTERNAL)
-// #endif
-
 /**
  * External semaphore signal parameters, compatible with driver type
  */

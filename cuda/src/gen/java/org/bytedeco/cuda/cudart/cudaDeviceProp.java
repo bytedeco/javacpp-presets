@@ -210,4 +210,7 @@ public class cudaDeviceProp extends Pointer {
     public native int accessPolicyMaxWindowSize(); public native cudaDeviceProp accessPolicyMaxWindowSize(int setter);
     /** Shared memory reserved by CUDA driver per block in bytes */
     public native @Cast("size_t") long reservedSharedMemPerBlock(); public native cudaDeviceProp reservedSharedMemPerBlock(long setter);
+
+
+
 }
