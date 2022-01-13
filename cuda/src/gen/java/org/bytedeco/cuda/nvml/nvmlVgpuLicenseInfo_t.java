@@ -35,4 +35,6 @@ public class nvmlVgpuLicenseInfo_t extends Pointer {
     public native @Cast("unsigned char") byte isLicensed(); public native nvmlVgpuLicenseInfo_t isLicensed(byte setter);
     /** License expiry information */
     public native @ByRef nvmlVgpuLicenseExpiry_t licenseExpiry(); public native nvmlVgpuLicenseInfo_t licenseExpiry(nvmlVgpuLicenseExpiry_t setter);
+    /** Current license state */
+    public native @Cast("unsigned int") int currentState(); public native nvmlVgpuLicenseInfo_t currentState(int setter);
 }

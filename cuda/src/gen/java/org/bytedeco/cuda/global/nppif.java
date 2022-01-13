@@ -18479,6 +18479,10 @@ public static native @Cast("NppStatus") int nppiGradientVectorSobelBorder_32f_C3
  *  integer Voronoi diagram containing site indices and/or a signed 16-bit integer Voronoi diagram containing relative Manhattan
  *  distances to the closest sites.  Minimum and maximum image ROI widths and heights are 64 and 32767.
  *  
+ *  Note that an input image that does not contain at least one site pixel is considered to be an invalid image.  If you suspect that your input image
+ *  may be invalid you can call an NPP function like nppiCountInRange() first to confirm that the image is valid before calling the distance transform
+ *  function.
+ *  
  *  The nMinSiteValue and nMaxSiteValue parameters can be used to control which source image pixels are considered sites(traditionally 0) and non-sites (everything else).
  *  
  *  Antialiased true distance transform, when available, is only available as double precision floating point (Npp64f) output data only
@@ -22846,7 +22850,7 @@ public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFInfo_32u
  *  
  * @param pContoursPixelCountsListHost Host memory pointer to list returned by CompressedMarkerLabelsUFInfo_32u call.
  * @param nCompressedLabelCount the total label count returned by the nppiCompressMarkerLabelsUF function.  
- * @param nTotalImagePixelContourCount the total number of contour pixels in the image from the NppiContourTotalsInfo object.  
+ * @param nTotalImagePixelContourCount the total number of contour pixels in the image from the NppiContourTotalsInfo object returned from nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx() call.  
  * @param nFirstContourGeometryListID the ID of the first contour geometry list to process. 
  * @param nLastContourGeometryListID the ID of the last contour geometry list to process, last ID MUST be greater than first ID. 
  * @param hpBufferSize Required buffer size. Important: hpBufferSize is a 
@@ -22929,7 +22933,7 @@ public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFGetGeome
  * @param pContoursPixelsFoundListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by previous call to nppiCompressedMarkerLabelsUFContoursPixelGeometryLists_C1R_Ctx. 
  * @param pContoursPixelsStartingOffsetDev device memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
  * @param pContoursPixelsStartingOffsetHost host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
- * @param nTotalImagePixelContourCount the total number of contour pixels in the image. 
+ * @param nTotalImagePixelContourCount the total number of contour pixels in the image returned by nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx() call. 
  * @param nMaxMarkerLabelID the value of the maximum marker label ID returned by corresponding compress marker labels UF call. 
  * @param nFirstContourGeometryListID the ID of the first contour geometry list to output. 
  * @param nLastContourGeometryListID the ID of the last contour geometry list to output, last ID MUST be greater than first ID. 
@@ -23011,6 +23015,225 @@ public static native @Cast("NppStatus") int nppiCompressedMarkerLabelsUFContours
 /** \} compressed_marker_labels_UF_contour_geometry_lists  */
 
 /** \} image_filter_compressed_marker_labels_info */
+
+/** \defgroup image_filter_contour_pixel_interpolation
+ * Various functions for interpolating pixels in image contours.
+ *    
+ * \{
+ *
+ */
+
+/** \name ContoursImageMarchingSquaresInterpolation
+ *
+ * Apply Marching Squares bilinear interpolation to all contour pixels in a contours image where contour pixels have values of 0 
+ * and non-contour pixels have values of 255. 
+ *
+ * \{
+ *
+ */
+
+/**
+ * 1 channel integer coordinate based contours image to marching squares bilinear interpolated coordinates contours image. 
+ *  
+ * Note that ALL input and output data for the function MUST be in device memory except where noted otherwise. 
+ * Also nFirstContourID and nLastContourID allow only a portion of the contour geometry lists in the image to be output. 
+ *  
+ * Note that the geometry list for each contour will begin at pContoursGeometryListsHost[pContoursPixelStartingOffsetHost[nContourID] * sizeof(NppiContourPixelGeometryInfo). 
+ *  
+ * Note that to significantly improve performance by default a contour that contains more than 256K pixels will be bypassed when generating the 
+ * output geometry list. The contour ID and number of contour pixels will be output in the contour list however. You can still get this function 
+ * to output the geometry of this size contour howver by calling the function with a starting contour ID of that contour ID and and ending contour 
+ * ID of that contour ID + 1.  Note that doing so for contours approaching a million pixels can take many minutes. Also, due to the structure of 
+ * some images contour ID 0 can contain ALL contours in the image so setting the starting contour ID to 1 can significantly increase output 
+ * preprocessing performance. 
+ *  
+ * Also note that the ordered contour geometry list is contained in the oContourOrderedGeometryLocation object within the NppiContourPixelGeometryInfo 
+ * object for each contour pixel and that this location information is the only valid information in the object relevent to that ordered pixel. 
+ *  
+ * Note that for a particular contour geometry pixel list the bounding box for that contour will be contained in the following
+ * elements of first pixel (pixel 0) of the corresponding contour pixel list.
+ *  
+ * <pre>{@code 
+ * pixel[0].oContourPrevPixelLocation.x will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.x      upper left x
+ * pixel[0].oContourPrevPixelLocation.y will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.y      upper left y
+ * pixel[0].oContourNextPixelLocation.x will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.width  lower right x
+ * pixel[0].oContourNextPixelLocation.y will contain pCurMarkerLabelsInfo->oMarkerLabelBoundingBox.height lower right y
+ * }</pre>
+ *  
+ * Note that while the bounding box is relatively accurate occasionally a few contour pixels may extend beyond the bounding box limits. 
+ *  
+ * @param pContoursImageDev pointer to device memory image of at least oSizeROI.width * sizeof(Npp8u) * oSizeROI.height bytes.
+ * @param nContoursImageStep image line step. 
+ * @param pContoursInterpolatedImageDev pointer to device memory image of at least oSizeROI.width * sizeof(NppiPoint32f) * OSizeROI.height bytes.
+ * @param nContoursInterpolatedImageStep image line step 
+ * @param pContoursDirectionImageDev \ref source_image_pointer to output image in device memory containing per contour pixel direction info around each uniquely labeled connected pixel region returned by corresponding nppiCompressedMarkerLabelsUFInfo call. 
+ * @param nContoursDirectionImageStep image_line_step for contours image. 
+ * @param pContoursPixelGeometryListsDev pointer to device memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * @param pContoursPixelGeometryListsHost pointer to host memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * @param pContoursInterpolatedGeometryListsDev pointer to device memory buffer allocated to be at least nTotalImagePixelContourCount * sizeof(NppPoint32f) bytes. 
+ * @param pContoursPixelsFoundListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by previous call to nppiCompressedMarkerLabelsUFContoursPixelGeometryLists_C1R_Ctx. 
+ * @param pContoursPixelsStartingOffsetDev device memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
+ * @param pContoursPixelsStartingOffsetHost host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
+ * @param nTotalImagePixelContourCount the total number of contour pixels in the image returned by nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx() call. 
+ * @param nMaxMarkerLabelID the value of the maximum marker label ID returned by corresponding compress marker labels UF call. 
+ * @param nFirstContourGeometryListID the ID of the first contour geometry list to output. 
+ * @param nLastContourGeometryListID the ID of the last contour geometry list to output, last ID MUST be greater than first ID. 
+ * @param pContoursBlockSegmentListDev device memory pointer to array of NppiContourBlockSegment objects, contents will be initialized by NPP. 
+ * @param pContoursBlockSegmentListHost host memory pointer to array of NppiContourBlockSegment objects, contents will be intialized by NPP. 
+ * @param oSizeROI \ref roi_specification for the images, must be the same as used in previous calls. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes. 
+ */ 
+
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_32f_C1R_Ctx(@Cast("Npp8u*") BytePointer pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint32f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint32f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_32f_C1R_Ctx(@Cast("Npp8u*") ByteBuffer pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint32f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint32f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_32f_C1R_Ctx(@Cast("Npp8u*") byte[] pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint32f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint32f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+
+/*
+ * \param pContoursImageDev pointer to device memory image of at least oSizeROI.width * sizeof(Npp8u) * oSizeROI.height bytes.
+ * \param nContoursImageStep image line step. 
+ * \param pContoursInterpolatedImageDev pointer to device memory image of at least oSizeROI.width * sizeof(NppiPoint64f) * OSizeROI.height bytes.
+ * \param nContoursInterpolatedImageStep image line step 
+ * \param pContoursDirectionImageDev \ref source_image_pointer to output image in device memory containing per contour pixel direction info around each uniquely labeled connected pixel region returned by corresponding nppiCompressedMarkerLabelsUFInfo call. 
+ * \param nContoursDirectionImageStep image_line_step for contours image. 
+ * \param pContoursPixelGeometryListsDev pointer to device memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * \param pContoursPixelGeometryListsHost pointer to host memory buffer allocated to be at least as big as size returned by corresponding nppiCompressedMarkerLabelsUFGetGeometryListsSize call. 
+ * \param pContoursInterpolatedGeometryListsDev pointer to device memory buffer allocated to be at least nTotalImagePixelContourCount * sizeof(NppPoint64f) bytes. 
+ * \param pContoursPixelsFoundListHost host memory pointer to array of nMaxMarkerLabelID unsigned integers returned by previous call to nppiCompressedMarkerLabelsUFContoursPixelGeometryLists_C1R_Ctx. 
+ * \param pContoursPixelsStartingOffsetDev device memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
+ * \param pContoursPixelsStartingOffsetHost host memory pointer to array of unsigned integers returned by this call representing the starting offset index of each contour found during geometry list generation. 
+ * \param nTotalImagePixelContourCount the total number of contour pixels in the image returned by nppiCompressedMarkerLabelsUFInfo_32u_C1R_Ctx() call. 
+ * \param nMaxMarkerLabelID the value of the maximum marker label ID returned by corresponding compress marker labels UF call. 
+ * \param nFirstContourGeometryListID the ID of the first contour geometry list to output. 
+ * \param nLastContourGeometryListID the ID of the last contour geometry list to output, last ID MUST be greater than first ID. 
+ * \param pContoursBlockSegmentListDev device memory pointer to array of NppiContourBlockSegment objects, contents will be initialized by NPP. 
+ * \param pContoursBlockSegmentListHost host memory pointer to array of NppiContourBlockSegment objects, contents will be intialized by NPP. 
+ * \param oSizeROI \ref roi_specification for the images, must be the same as used in previous calls. 
+ * \param nppStreamCtx \ref application_managed_stream_context. 
+ * \return \ref image_data_error_codes, \ref roi_error_codes. 
+ */ 
+
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_64f_C1R_Ctx(@Cast("Npp8u*") BytePointer pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint64f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint64f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") IntPointer pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_64f_C1R_Ctx(@Cast("Npp8u*") ByteBuffer pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint64f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint64f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") IntBuffer pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiContoursImageMarchingSquaresInterpolation_64f_C1R_Ctx(@Cast("Npp8u*") byte[] pContoursImageDev,
+                                                          @Cast("Npp32s") int nContoursImageStep,
+                                                          NppiPoint64f pContoursInterpolatedImageDev,
+                                                          @Cast("Npp32s") int nContoursInterpolatedImageStep,
+                                                          NppiContourPixelDirectionInfo pContoursDirectionImageDev, 
+                                                          @Cast("Npp32s") int nContoursDirectionImageStep,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsDev,
+                                                          NppiContourPixelGeometryInfo pContoursPixelGeometryListsHost,
+                                                          NppiPoint64f pContoursInterpolatedGeometryListsDev,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsFoundListHost,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetDev,
+                                                          @Cast("Npp32u*") int[] pContoursPixelsStartingOffsetHost,
+                                                          @Cast("Npp32u") int nTotalImagePixelContourCount,
+                                                          @Cast("Npp32u") int nMaxMarkerLabelID,
+                                                          @Cast("Npp32u") int nFirstContourGeometryListID,
+                                                          @Cast("Npp32u") int nLastContourGeometryListID,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListDev,
+                                                          NppiContourBlockSegment pContoursBlockSegmentListHost,
+                                                          @ByVal NppiSize oSizeROI,
+                                                          @ByVal NppStreamContext nppStreamCtx);
+
+/** \} contours_image_marching_squares_interpolation  */
+
+/** \} image_filter_contour_pixel_interpolation */
 
 /** \defgroup image_filter_bound_segments BoundSegments
  *  

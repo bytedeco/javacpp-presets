@@ -31,6 +31,8 @@ public class nvmlGpuInstancePlacement_t extends Pointer {
         return new nvmlGpuInstancePlacement_t((Pointer)this).offsetAddress(i);
     }
 
+    /** Index of first occupied memory slice */
     public native @Cast("unsigned int") int start(); public native nvmlGpuInstancePlacement_t start(int setter);
+    /** Number of memory slices occupied */
     public native @Cast("unsigned int") int size(); public native nvmlGpuInstancePlacement_t size(int setter);
 }

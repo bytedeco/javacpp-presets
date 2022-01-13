@@ -179,7 +179,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5.1-${project.version}</version>
+      <version>2.5.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -264,7 +264,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>11.5-8.3-${project.version}</version>
+      <version>11.6-8.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -299,7 +299,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>8.0-${project.version}</version>
+      <version>8.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -314,7 +314,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.14.0-${project.version}</version>
+      <version>2.14.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

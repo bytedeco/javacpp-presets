@@ -636,6 +636,10 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       headers given to ::nvrtcCreateProgram.
  *     - \c --pre-include=\<header\> (\c -include)\n
  *       Preinclude \c \<header\> during preprocessing.
+ *     - \c --no-source-include (\c -no-source-include)
+ *       The preprocessor by default adds the directory of each input sources
+ *       to the include path. This option disables this feature and only
+ *       considers the path specified explicitly.
  *   - Language Dialect
  *     - \c --std={c++03|c++11|c++14|c++17} (\c -std={c++11|c++14|c++17})\n
  *       Set language dialect to C++03, C++11, C++14 or C++17

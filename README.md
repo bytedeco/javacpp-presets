@@ -207,7 +207,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 5.0.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.5.x  https://developer.nvidia.com/cuda-downloads
+ * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
    * NCCL 2.11.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
