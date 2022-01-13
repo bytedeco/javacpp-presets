@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -284,9 +284,9 @@ import java.util.List;
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "cudart", "cudart_static", "cuda", "cublasLt", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
 //                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/extras/CUPTI/lib64/"}),
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5/extras/CUPTI/lib64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},

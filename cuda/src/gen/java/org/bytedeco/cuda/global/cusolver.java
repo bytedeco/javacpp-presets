@@ -91,9 +91,9 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
 
 
 public static final int CUSOLVER_VER_MAJOR = 11;
-public static final int CUSOLVER_VER_MINOR = 2;
-public static final int CUSOLVER_VER_PATCH = 0;
-public static final int CUSOLVER_VER_BUILD = 120;
+public static final int CUSOLVER_VER_MINOR = 3;
+public static final int CUSOLVER_VER_PATCH = 2;
+public static final int CUSOLVER_VER_BUILD = 107;
 public static final int CUSOLVER_VERSION = (CUSOLVER_VER_MAJOR * 1000 + 
                         CUSOLVER_VER_MINOR *  100 + 
                         CUSOLVER_VER_PATCH);
@@ -272,7 +272,8 @@ public static final int
 /** enum cusolverAlgMode_t */
 public static final int
    CUSOLVER_ALG_0 = 0,  /* default algorithm */
-   CUSOLVER_ALG_1 = 1;
+   CUSOLVER_ALG_1 = 1,
+   CUSOLVER_ALG_2 = 2;
 
 
 /** enum cusolverStorevMode_t */
@@ -391,7 +392,8 @@ public static native @Cast("cusolverStatus_t") int cusolverGetVersion(
 
 /** enum cusolverDnFunction_t */
 public static final int
-   CUSOLVERDN_GETRF = 0 ;
+   CUSOLVERDN_GETRF = 0,
+   CUSOLVERDN_POTRF = 1 ;
 
 
 

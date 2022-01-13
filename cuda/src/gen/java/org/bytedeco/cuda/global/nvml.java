@@ -985,6 +985,12 @@ public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x
 // Targeting ../nvml/nvmlVgpuProcessUtilizationSample_t.java
 
 
+// Targeting ../nvml/nvmlVgpuLicenseExpiry_t.java
+
+
+// Targeting ../nvml/nvmlVgpuLicenseInfo_t.java
+
+
 // Targeting ../nvml/nvmlProcessUtilizationSample_t.java
 
 
@@ -1010,6 +1016,15 @@ public static final int NVML_DEVICE_ARCH_TURING =    6; // Devices based on the 
 public static final int NVML_DEVICE_ARCH_AMPERE =    7; // Devices based on the NVIDIA Ampere architecture
 
 public static final int NVML_DEVICE_ARCH_UNKNOWN =   0xffffffff; // Anything else, presumably something newer
+
+/**
+ * PCI bus types
+ */
+public static final int NVML_BUS_TYPE_UNKNOWN =  0;
+public static final int NVML_BUS_TYPE_PCI =      1;
+public static final int NVML_BUS_TYPE_PCIE =     2;
+public static final int NVML_BUS_TYPE_FPCI =     3;
+public static final int NVML_BUS_TYPE_AGP =      4;
 
 /** \} */
 /** \} */
@@ -3550,7 +3565,6 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevi
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") IntBuffer speed);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") int[] speed);
 
-
 /**
  * Retrieves the current temperature readings for the device, in degrees C.
  *
@@ -4526,6 +4540,8 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProces
  *       Querying per-instance information using MIG device handles is not supported if the device is in vGPU Host virtualization mode.
  *
  * @param device                               The device handle or MIG device handle
+#else
+ * @param device                               The device handle
  * @param infoCount                            Reference in which to provide the \a infos array size, and
  *                                             to return the number of returned elements
  * @param infos                                Reference in which to return the process information
@@ -4744,6 +4760,24 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBAR1MemoryInfo(nvmlD
  *
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetViolationStatus(nvmlDevice_st device, @Cast("nvmlPerfPolicyType_t") int perfPolicyType, nvmlViolationTime_t violTime);
+
+/**
+ * Gets the device's interrupt number
+ *
+ * @param device                               The identifier of the target device
+ * @param irqNum                               The interrupt number associated with the specified device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if irq number is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a irqNum is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") IntPointer irqNum);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer irqNum);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") int[] irqNum);
 
 /**
  * \}
@@ -6728,6 +6762,8 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFbUsage(@Cast(
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFbUsage(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned long long*") long[] fbUsage);
 
 /**
+ * @deprecated Use \ref nvmlVgpuInstanceGetLicenseInfo.
+ *
  * Retrieve the current licensing state of the vGPU instance.
  *
  * If the vGPU is currently licensed, \a licensed is set to 1, otherwise it is set to 0.
@@ -7403,6 +7439,23 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetAccountingStat
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceClearAccountingPids(@Cast("nvmlVgpuInstance_t") int vgpuInstance);
+
+/**
+ * Query the license information of the vGPU instance.
+ *
+ * For Maxwell &tm; or newer fully supported devices.
+ *
+ * @param vgpuInstance              Identifier of the target vGPU instance
+ * @param licenseInfo               Pointer to vGPU license information structure
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if information is successfully retrieved
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a vgpuInstance is 0, or \a licenseInfo is NULL
+ *         - \ref NVML_ERROR_NOT_FOUND         if \a vgpuInstance does not match a valid active vGPU instance on the system
+ *         - \ref NVML_ERROR_DRIVER_NOT_LOADED if NVIDIA driver is not running on the vGPU instance
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetLicenseInfo(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuLicenseInfo_t licenseInfo);
 // Targeting ../nvml/nvmlExcludedDeviceInfo_t.java
 
 
@@ -8128,6 +8181,22 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMigDeviceHandleByInd
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDeviceHandleFromMigDeviceHandle(nvmlDevice_st migDevice, @ByPtrPtr nvmlDevice_st device);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDeviceHandleFromMigDeviceHandle(nvmlDevice_st migDevice, @Cast("nvmlDevice_st**") PointerPointer device);
+
+/**
+ * Get the type of the GPU Bus (PCIe, PCI, ...)
+ *
+ * @param device                               The identifier of the target device
+ * @param type                                 The PCI Bus type
+ *
+ * return
+ *         - \ref NVML_SUCCESS                 if the bus \a type is successfully retreived
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \device is invalid or \type is NULL
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") IntPointer type);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") IntBuffer type);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") int[] type);
 
 /** \} */
 

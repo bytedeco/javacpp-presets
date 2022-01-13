@@ -17,7 +17,7 @@ public class nppisu extends org.bytedeco.cuda.presets.nppisu {
 
 // Parsed from <nppi_support_functions.h>
 
- /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 

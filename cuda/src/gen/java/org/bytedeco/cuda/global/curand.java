@@ -91,8 +91,8 @@ public class curand extends org.bytedeco.cuda.presets.curand {
 
 public static final int CURAND_VER_MAJOR = 10;
 public static final int CURAND_VER_MINOR = 2;
-public static final int CURAND_VER_PATCH = 5;
-public static final int CURAND_VER_BUILD = 120;
+public static final int CURAND_VER_PATCH = 7;
+public static final int CURAND_VER_BUILD = 107;
 public static final int CURAND_VERSION = (CURAND_VER_MAJOR * 1000 + 
                         CURAND_VER_MINOR *  100 + 
                         CURAND_VER_PATCH);
@@ -188,6 +188,8 @@ public static final int
     CURAND_ORDERING_PSEUDO_SEEDED = 102,
     /** Specific legacy sequence for pseudorandom results, guaranteed to remain the same for all cuRAND release */
     CURAND_ORDERING_PSEUDO_LEGACY = 103,
+    /** Specific ordering adjusted to the device it is being executed on, provides the best performance */
+    CURAND_ORDERING_PSEUDO_DYNAMIC = 104,
     /** Specific n-dimensional ordering for quasirandom results */
     CURAND_ORDERING_QUASI_DEFAULT = 201;
 

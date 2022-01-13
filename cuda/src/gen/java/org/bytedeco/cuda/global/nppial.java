@@ -17,7 +17,7 @@ public class nppial extends org.bytedeco.cuda.presets.nppial {
 
 // Parsed from <nppi_arithmetic_and_logical_operations.h>
 
- /* Copyright 2009-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
