@@ -62,7 +62,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.5-8.3-1.5.7-SNAPSHOT</version>
+            <version>11.6-8.3-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

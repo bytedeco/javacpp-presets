@@ -14,21 +14,21 @@ runs:
           export ARCH=arm64
           export ARCH2=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.0_510.39.01-1.aarch64.rpm
           export CUDNN=cudnn-linux-sbsa-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.aarch64
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH2=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.0_510.39.01-1.ppc64le.rpm
           export CUDNN=cudnn-linux-ppc64le-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
           export ARCH2=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.x86_64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.0_510.39.01-1.x86_64.rpm
           export CUDNN=cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.x86_64
         fi
@@ -110,13 +110,13 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.5.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm
 
           rpm -i --force --ignorearch --nodeps $CUDA libnccl*.rpm
-          pushd /var/cuda-repo-rhel8-11-5-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          pushd /var/cuda-repo-rhel8-11-6-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           tar -hxvf $CUDNN --strip-components=1 -C /usr/local/cuda/
@@ -133,6 +133,7 @@ runs:
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so

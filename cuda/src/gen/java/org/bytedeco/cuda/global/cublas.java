@@ -100,9 +100,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 11;
-public static final int CUBLAS_VER_MINOR = 7;
-public static final int CUBLAS_VER_PATCH = 4;
-public static final int CUBLAS_VER_BUILD = 6;
+public static final int CUBLAS_VER_MINOR = 8;
+public static final int CUBLAS_VER_PATCH = 1;
+public static final int CUBLAS_VER_BUILD = 74;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 1000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -8094,6 +8094,13 @@ public static final int
    */
   CUBLASLT_EPILOGUE_RELU_AUX_BIAS = (CUBLASLT_EPILOGUE_RELU_AUX | CUBLASLT_EPILOGUE_BIAS),
 
+  /* ReLu gradient. Apply ReLu gradient to matmul output. Store ReLu gradient in the output matrix.
+   *
+   * This epilogue mode requires an extra input,
+   * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+   */
+  CUBLASLT_EPILOGUE_DRELU = 8 | 128,
+
   /* ReLu and Bias gradients. Apply independently ReLu and Bias gradient to
    * matmul output. Store ReLu gradient in the output matrix, and Bias gradient
    * in the auxiliary output (see CUBLASLT_MATMUL_DESC_BIAS_POINTER).
@@ -8101,7 +8108,7 @@ public static final int
    * This epilogue mode requires an extra input,
    * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
    */
-  CUBLASLT_EPILOGUE_DRELU_BGRAD = 8 | 16 | 128,
+  CUBLASLT_EPILOGUE_DRELU_BGRAD = CUBLASLT_EPILOGUE_DRELU | 16,
 
   /** GELU, apply GELU point-wise transform to the results (x:=GELU(x)).
    */
@@ -8125,6 +8132,13 @@ public static final int
    */
   CUBLASLT_EPILOGUE_GELU_AUX_BIAS = (CUBLASLT_EPILOGUE_GELU_AUX | CUBLASLT_EPILOGUE_BIAS),
 
+  /* GELU gradient. Apply GELU gradient to matmul output. Store GELU gradient in the output matrix.
+   *
+   * This epilogue mode requires an extra input,
+   * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
+   */
+  CUBLASLT_EPILOGUE_DGELU = 64 | 128,
+
   /* GELU and Bias gradients. Apply independently GELU and Bias gradient to
    * matmul output. Store GELU gradient in the output matrix, and Bias gradient
    * in the auxiliary output (see CUBLASLT_MATMUL_DESC_BIAS_POINTER).
@@ -8132,7 +8146,7 @@ public static final int
    * This epilogue mode requires an extra input,
    * see CUBLASLT_MATMUL_DESC_EPILOGUE_AUX_POINTER.
    */
-  CUBLASLT_EPILOGUE_DGELU_BGRAD = 16 | 64 | 128,
+  CUBLASLT_EPILOGUE_DGELU_BGRAD = CUBLASLT_EPILOGUE_DGELU | 16,
 
   /** Bias gradient based on the input matrix A.
    *
