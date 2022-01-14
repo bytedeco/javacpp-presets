@@ -776,6 +776,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>depthai</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -825,6 +826,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>depthai</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -874,6 +876,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>depthai</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -923,6 +926,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>depthai</module>
         <module>cpu_features</module>
       </modules>
       <properties>
