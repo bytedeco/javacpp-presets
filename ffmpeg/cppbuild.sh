@@ -40,7 +40,7 @@ MFX_VERSION=1.35.1
 NVCODEC_VERSION=11.1.5.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.4.4
-FFMPEG_VERSION=4.4.1
+FFMPEG_VERSION=5.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -99,7 +99,7 @@ cd ..
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+patch -Np2 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 

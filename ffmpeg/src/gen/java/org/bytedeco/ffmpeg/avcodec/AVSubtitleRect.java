@@ -44,12 +44,6 @@ public class AVSubtitleRect extends Pointer {
     /** number of colors in pict, undefined when pict is not set */
     public native int nb_colors(); public native AVSubtitleRect nb_colors(int setter);
 
-// #if FF_API_AVPICTURE
-    /**
-     * @deprecated unused
-     */
-    public native @Deprecated @ByRef AVPicture pict(); public native AVSubtitleRect pict(AVPicture setter);
-// #endif
     /**
      * data+linesize for the bitmap of this subtitle.
      * Can be set for text/ass as well once they are rendered.

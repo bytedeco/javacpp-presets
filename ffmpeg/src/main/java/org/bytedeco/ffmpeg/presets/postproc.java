@@ -38,8 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.postproc",
     value = {
         // GPL only
-        @Platform(cinclude = "<libpostproc/postprocess.h>", link = "postproc@.55", extension = "-gpl"),
-        @Platform(value = "windows", preload = "postproc-55", extension = "-gpl")
+        @Platform(cinclude = "<libpostproc/postprocess.h>", link = "postproc@.56", extension = "-gpl"),
+        @Platform(value = "windows", preload = "postproc-56", extension = "-gpl")
     }
 )
 public class postproc implements InfoMapper {

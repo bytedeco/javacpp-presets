@@ -56,15 +56,4 @@ public class AVComponentDescriptor extends Pointer {
      * Number of bits in the component.
      */
     public native int depth(); public native AVComponentDescriptor depth(int setter);
-
-// #if FF_API_PLUS1_MINUS1
-    /** deprecated, use step instead */
-    public native @Deprecated int step_minus1(); public native AVComponentDescriptor step_minus1(int setter);
-
-    /** deprecated, use depth instead */
-    public native @Deprecated int depth_minus1(); public native AVComponentDescriptor depth_minus1(int setter);
-
-    /** deprecated, use offset instead */
-    public native @Deprecated int offset_plus1(); public native AVComponentDescriptor offset_plus1(int setter);
-// #endif
 }

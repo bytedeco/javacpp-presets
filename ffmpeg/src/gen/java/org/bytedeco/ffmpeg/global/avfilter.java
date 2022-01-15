@@ -99,11 +99,14 @@ public class avfilter extends org.bytedeco.ffmpeg.presets.avfilter {
 
 
 
+// #if FF_API_PAD_COUNT
 /**
- * Get the number of elements in a NULL-terminated array of AVFilterPads (e.g.
- * AVFilter.inputs/outputs).
+ * Get the number of elements in an AVFilter's inputs or outputs array.
+ *
+ * @deprecated Use avfilter_filter_pad_count() instead.
  */
-@NoException public static native int avfilter_pad_count(@Const AVFilterPad pads);
+@NoException public static native @Deprecated int avfilter_pad_count(@Const AVFilterPad pads);
+// #endif
 
 /**
  * Get the name of an AVFilterPad.
@@ -145,6 +148,22 @@ public static final int AVFILTER_FLAG_DYNAMIC_OUTPUTS =       (1 << 1);
  */
 public static final int AVFILTER_FLAG_SLICE_THREADS =         (1 << 2);
 /**
+ * The filter is a "metadata" filter - it does not modify the frame data in any
+ * way. It may only affect the metadata (i.e. those fields copied by
+ * av_frame_copy_props()).
+ *
+ * More precisely, this means:
+ * - video: the data of any frame output by the filter must be exactly equal to
+ *   some frame that is received on one of its inputs. Furthermore, all frames
+ *   produced on a given output must correspond to frames received on the same
+ *   input and their order must be unchanged. Note that the filter may still
+ *   drop or duplicate the frames.
+ * - audio: the data produced by the filter on any of its outputs (viewed e.g.
+ *   as an array of interleaved samples) must be exactly equal to the data
+ *   received by the filter on one of its inputs.
+ */
+public static final int AVFILTER_FLAG_METADATA_ONLY =         (1 << 3);
+/**
  * Some filters support a generic "enable" expression option that can be used
  * to enable or disable a filter in the timeline. Filters supporting this
  * option have this flag set. When the enable expression is false, the default
@@ -169,6 +188,11 @@ public static final int AVFILTER_FLAG_SUPPORT_TIMELINE = (AVFILTER_FLAG_SUPPORT_
 // Targeting ../avfilter/AVFilter.java
 
 
+
+/**
+ * Get the number of elements in an AVFilter's inputs or outputs array.
+ */
+@NoException public static native @Cast("unsigned") int avfilter_filter_pad_count(@Const AVFilter filter, int is_output);
 
 /**
  * Process multiple parts of the frame concurrently.
@@ -205,21 +229,6 @@ public static final int AVFILTER_THREAD_SLICE = (1 << 0);
 @NoException public static native void avfilter_link_free(@Cast("AVFilterLink**") PointerPointer link);
 @NoException public static native void avfilter_link_free(@ByPtrPtr AVFilterLink link);
 
-// #if FF_API_FILTER_GET_SET
-/**
- * Get the number of channels of a link.
- * @deprecated Use av_buffersink_get_channels()
- */
-@NoException public static native @Deprecated int avfilter_link_get_channels(AVFilterLink link);
-// #endif
-// #if FF_API_FILTER_LINK_SET_CLOSED
-/**
- * Set the closed field of a link.
- * @deprecated applications are not supposed to mess with links, they should
- * close the sinks.
- */
-@NoException public static native @Deprecated void avfilter_link_set_closed(AVFilterLink link, int closed);
-// #endif
 /**
  * Negotiate the media format, dimensions, etc of all inputs to a filter.
  *
@@ -255,30 +264,6 @@ public static final int AVFILTER_CMD_FLAG_FAST =  2;
  */
 @NoException public static native @Const AVFilter av_filter_iterate(@Cast("void**") PointerPointer opaque);
 @NoException public static native @Const AVFilter av_filter_iterate(@Cast("void**") @ByPtrPtr Pointer opaque);
-
-// #if FF_API_NEXT
-/** Initialize the filter system. Register all builtin filters. */
-@NoException public static native @Deprecated void avfilter_register_all();
-
-/**
- * Register a filter. This is only needed if you plan to use
- * avfilter_get_by_name later to lookup the AVFilter structure by name. A
- * filter can still by instantiated with avfilter_graph_alloc_filter even if it
- * is not registered.
- *
- * @param filter the filter to register
- * @return 0 if the registration was successful, a negative value
- * otherwise
- */
-@NoException public static native @Deprecated int avfilter_register(AVFilter filter);
-
-/**
- * Iterate over all registered filters.
- * @return If prev is non-NULL, next registered filter after prev or NULL if
- * prev is the last filter. If prev is NULL, return the first registered filter.
- */
-@NoException public static native @Const @Deprecated AVFilter avfilter_next(@Const AVFilter prev);
-// #endif
 
 /**
  * Get a filter definition matching the given name.

@@ -108,7 +108,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
+@NoException public static native @Const AVInputFormat av_input_audio_device_next(@Const AVInputFormat d);
 
 /**
  * Video input devices iterator.
@@ -117,7 +117,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
+@NoException public static native @Const AVInputFormat av_input_video_device_next(@Const AVInputFormat d);
 
 /**
  * Audio output devices iterator.
@@ -126,7 +126,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
+@NoException public static native @Const AVOutputFormat av_output_audio_device_next(@Const AVOutputFormat d);
 
 /**
  * Video output devices iterator.
@@ -135,7 +135,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d);
+@NoException public static native @Const AVOutputFormat av_output_video_device_next(@Const AVOutputFormat d);
 // Targeting ../avdevice/AVDeviceRect.java
 
 
@@ -480,17 +480,17 @@ public static final int
  * @return count of autodetected devices, negative on error.
  * \note device argument takes precedence over device_name when both are set.
  */
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, String device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, String device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, String device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
 
 /**

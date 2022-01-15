@@ -37,11 +37,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avcodec",
     global = "org.bytedeco.ffmpeg.global.avcodec",
     value = {
-        @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/packet.h>",
+        @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/packet.h>", "<libavcodec/defs.h>",
                               "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>"},
-                  link = "avcodec@.58"),
+                  link = "avcodec@.59"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
-        @Platform(value = "windows", preload = "avcodec-58")
+        @Platform(value = "windows", preload = "avcodec-59")
     }
 )
 public class avcodec implements InfoMapper {

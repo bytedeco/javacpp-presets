@@ -58,15 +58,16 @@ public class AVFilter extends Pointer {
     public native @Cast("const char*") BytePointer description(); public native AVFilter description(BytePointer setter);
 
     /**
-     * List of inputs, terminated by a zeroed element.
+     * List of static inputs.
      *
      * NULL if there are no (static) inputs. Instances of filters with
      * AVFILTER_FLAG_DYNAMIC_INPUTS set may have more inputs than present in
      * this list.
      */
     public native @Const AVFilterPad inputs(); public native AVFilter inputs(AVFilterPad setter);
+
     /**
-     * List of outputs, terminated by a zeroed element.
+     * List of static outputs.
      *
      * NULL if there are no (static) outputs. Instances of filters with
      * AVFILTER_FLAG_DYNAMIC_OUTPUTS set may have more outputs than present in
@@ -96,6 +97,22 @@ public class AVFilter extends Pointer {
      * New public fields should be added right above.
      *****************************************************************
      */
+
+    /**
+     * The number of entries in the list of inputs.
+     */
+    public native @Cast("uint8_t") byte nb_inputs(); public native AVFilter nb_inputs(byte setter);
+
+    /**
+     * The number of entries in the list of outputs.
+     */
+    public native @Cast("uint8_t") byte nb_outputs(); public native AVFilter nb_outputs(byte setter);
+
+    /**
+     * This field determines the state of the formats union.
+     * It is an enum FilterFormatsState value.
+     */
+    public native @Cast("uint8_t") byte formats_state(); public native AVFilter formats_state(byte setter);
 
     /**
      * Filter pre-initialization function
@@ -193,50 +210,74 @@ public class AVFilter extends Pointer {
     public native Uninit_AVFilterContext uninit(); public native AVFilter uninit(Uninit_AVFilterContext setter);
 
     /**
-     * Query formats supported by the filter on its inputs and outputs.
-     *
-     * This callback is called after the filter is initialized (so the inputs
-     * and outputs are fixed), shortly before the format negotiation. This
-     * callback may be called more than once.
-     *
-     * This callback must set AVFilterLink.outcfg.formats on every input link and
-     * AVFilterLink.incfg.formats on every output link to a list of pixel/sample
-     * formats that the filter supports on that link. For audio links, this
-     * filter must also set \ref AVFilterLink.incfg.samplerates "in_samplerates" /
-     * \ref AVFilterLink.outcfg.samplerates "out_samplerates" and
-     * \ref AVFilterLink.incfg.channel_layouts "in_channel_layouts" /
-     * \ref AVFilterLink.outcfg.channel_layouts "out_channel_layouts" analogously.
-     *
-     * This callback may be NULL for filters with one input, in which case
-     * libavfilter assumes that it supports all input formats and preserves
-     * them on output.
-     *
-     * @return zero on success, a negative value corresponding to an
-     * AVERROR code otherwise
+     * The state of the following union is determined by formats_state.
+     * See the documentation of enum FilterFormatsState in internal.h.
      */
-    public static class Query_formats_AVFilterContext extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Query_formats_AVFilterContext(Pointer p) { super(p); }
-        protected Query_formats_AVFilterContext() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterContext arg0);
-    }
-    public native Query_formats_AVFilterContext query_formats(); public native AVFilter query_formats(Query_formats_AVFilterContext setter);
+        /**
+         * Query formats supported by the filter on its inputs and outputs.
+         *
+         * This callback is called after the filter is initialized (so the inputs
+         * and outputs are fixed), shortly before the format negotiation. This
+         * callback may be called more than once.
+         *
+         * This callback must set AVFilterLink.outcfg.formats on every input link
+         * and AVFilterLink.incfg.formats on every output link to a list of
+         * pixel/sample formats that the filter supports on that link. For audio
+         * links, this filter must also set \ref AVFilterLink.incfg.samplerates
+         * "in_samplerates" / \ref AVFilterLink.outcfg.samplerates "out_samplerates"
+         * and \ref AVFilterLink.incfg.channel_layouts "in_channel_layouts" /
+         * \ref AVFilterLink.outcfg.channel_layouts "out_channel_layouts" analogously.
+         *
+         * This callback must never be NULL if the union is in this state.
+         *
+         * @return zero on success, a negative value corresponding to an
+         * AVERROR code otherwise
+         */
+        public static class Query_func_AVFilterContext extends FunctionPointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public    Query_func_AVFilterContext(Pointer p) { super(p); }
+            protected Query_func_AVFilterContext() { allocate(); }
+            private native void allocate();
+            public native int call(AVFilterContext arg0);
+        }
+        @Name("formats.query_func") public native Query_func_AVFilterContext formats_query_func(); public native AVFilter formats_query_func(Query_func_AVFilterContext setter);
+        /**
+         * A pointer to an array of admissible pixel formats delimited
+         * by AV_PIX_FMT_NONE. The generic code will use this list
+         * to indicate that this filter supports each of these pixel formats,
+         * provided that all inputs and outputs use the same pixel format.
+         *
+         * This list must never be NULL if the union is in this state.
+         * The type of all inputs and outputs of filters using this must
+         * be AVMEDIA_TYPE_VIDEO.
+         */
+        @Name("formats.pixels_list") public native @Cast("const AVPixelFormat*") IntPointer formats_pixels_list(); public native AVFilter formats_pixels_list(IntPointer setter);
+        /**
+         * Analogous to pixels, but delimited by AV_SAMPLE_FMT_NONE
+         * and restricted to filters that only have AVMEDIA_TYPE_AUDIO
+         * inputs and outputs.
+         *
+         * In addition to that the generic code will mark all inputs
+         * and all outputs as supporting all sample rates and every
+         * channel count and channel layout, as long as all inputs
+         * and outputs use the same sample rate and channel count/layout.
+         */
+        @Name("formats.samples_list") public native @Cast("const AVSampleFormat*") IntPointer formats_samples_list(); public native AVFilter formats_samples_list(IntPointer setter);
+        /**
+         * Equivalent to { pix_fmt, AV_PIX_FMT_NONE } as pixels_list.
+         */
+        @Name("formats.pix_fmt") public native @Cast("AVPixelFormat") int formats_pix_fmt(); public native AVFilter formats_pix_fmt(int setter);
+        /**
+         * Equivalent to { sample_fmt, AV_SAMPLE_FMT_NONE } as samples_list.
+         */
+        @Name("formats.sample_fmt") public native @Cast("AVSampleFormat") int formats_sample_fmt(); public native AVFilter formats_sample_fmt(int setter);
 
     /** size of private data to allocate for the filter */
     public native int priv_size(); public native AVFilter priv_size(int setter);
 
     /** Additional flags for avfilter internal use only. */
     public native int flags_internal(); public native AVFilter flags_internal(int setter);
-
-// #if FF_API_NEXT
-    /**
-     * Used by the filter registration system. Must not be touched by any other
-     * code.
-     */
-    public native AVFilter next(); public native AVFilter next(AVFilter setter);
-// #endif
 
     /**
      * Make the filter instance process a command.
@@ -259,21 +300,6 @@ public class AVFilter extends Pointer {
         public native int call(AVFilterContext arg0, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") BytePointer res, int res_len, int flags);
     }
     public native Process_command_AVFilterContext_BytePointer_BytePointer_BytePointer_int_int process_command(); public native AVFilter process_command(Process_command_AVFilterContext_BytePointer_BytePointer_BytePointer_int_int setter);
-
-    /**
-     * Filter initialization function, alternative to the init()
-     * callback. Args contains the user-supplied parameters, opaque is
-     * used for providing binary data.
-     */
-    public static class Init_opaque_AVFilterContext_Pointer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Init_opaque_AVFilterContext_Pointer(Pointer p) { super(p); }
-        protected Init_opaque_AVFilterContext_Pointer() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterContext ctx, Pointer opaque);
-    }
-    public native Init_opaque_AVFilterContext_Pointer init_opaque(); public native AVFilter init_opaque(Init_opaque_AVFilterContext_Pointer setter);
 
     /**
      * Filter activation function.

@@ -77,7 +77,4 @@ public class AVCodecParser extends Pointer {
         public native int call(AVCodecContext avctx, @Cast("const uint8_t*") BytePointer buf, int buf_size);
     }
     public native Split_AVCodecContext_BytePointer_int split(); public native AVCodecParser split(Split_AVCodecContext_BytePointer_int setter);
-// #if FF_API_NEXT
-    public native @Deprecated AVCodecParser next(); public native AVCodecParser next(AVCodecParser setter);
-// #endif
 }
