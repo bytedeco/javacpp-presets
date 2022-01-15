@@ -18,12 +18,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>11.4-8.2-${project.parent.version}</version>
+      <version>11.6-8.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt</artifactId>
-      <version>8.0-${project.parent.version}</version>
+      <version>8.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -49,12 +49,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>11.4-8.2-${project.parent.version}</version>
+            <version>11.6-8.3-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt</artifactId>
-            <version>8.0-${project.parent.version}</version>
+            <version>8.2-${project.parent.version}</version>
           </dependency>
         </dependencies>
       </plugin>

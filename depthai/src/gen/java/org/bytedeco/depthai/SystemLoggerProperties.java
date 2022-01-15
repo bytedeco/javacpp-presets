@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * SystemLoggerProperties structure
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SystemLoggerProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class SystemLoggerProperties extends SystemLoggerPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public SystemLoggerProperties() { super((Pointer)null); allocate(); }

@@ -64,7 +64,7 @@ JavaCPP Presets
 
 Introduction
 ------------
-The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
+The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which in turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
 
 For orientation purposes, the documentation of this repository can be thought of as being split into 2 levels:
 
@@ -204,14 +204,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 5.0.0  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 5.0.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.4.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.2.x  https://developer.nvidia.com/cudnn
+ * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
    * NCCL 2.11.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
- * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
+ * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
  * PyTorch 1.10.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
@@ -219,7 +219,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.17.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.13.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.14.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime

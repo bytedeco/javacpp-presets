@@ -168,7 +168,7 @@ public class RawImageManipConfig extends RawBuffer {
     public native @Cast("bool") boolean enableFormat(); public native RawImageManipConfig enableFormat(boolean setter);
 
     // Usable with runtime config only,
-    // when ImageManipProperties.inputConfigSync is set
+    // when ImageManipProperties.inputConfig.setWaitForMessage(true) is set
     public native @Cast("bool") boolean reusePreviousImage(); public native RawImageManipConfig reusePreviousImage(boolean setter);
     public native @Cast("bool") boolean skipCurrentImage(); public native RawImageManipConfig skipCurrentImage(boolean setter);
 

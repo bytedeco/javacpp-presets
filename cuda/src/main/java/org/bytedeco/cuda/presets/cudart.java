@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>",
                          "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = "/usr/local/cuda-11.4/include/", link = {"cudart@.11.0", "cuda@.1#"}, linkpath = "/usr/local/cuda-11.4/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-11.4/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.4/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-11.4/lib/", "/usr/local/cuda/lib/"}),
+              includepath = {"/usr/local/cuda-11.6/include/", "/usr/include/"}, link = {"cudart@.11.0", "cuda@.1#"}, linkpath = {"/usr/local/cuda-11.6/lib/", "/usr/lib/"}),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-11.6/lib64/", "/usr/lib64/"}),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.6/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-11.6/lib/", "/usr/local/cuda/lib/"}),
     @Platform(value = "windows-x86_64",     preload = "cudart64_110",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.4/lib/x64/") },
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {

@@ -17,8 +17,8 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.depthai.global.depthai.*;
 
 
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class IMUProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class IMUProperties extends IMUPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public IMUProperties() { super((Pointer)null); allocate(); }

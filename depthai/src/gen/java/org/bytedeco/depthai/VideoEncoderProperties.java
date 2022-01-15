@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for VideoEncoder such as profile, bitrate, ...
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class VideoEncoderProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class VideoEncoderProperties extends VideoEncoderPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public VideoEncoderProperties() { super((Pointer)null); allocate(); }

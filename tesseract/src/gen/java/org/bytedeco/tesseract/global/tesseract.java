@@ -26,7 +26,7 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 
 // Parsed from tesseract/export.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        export.h
 // Description: Place holder
 //
@@ -40,8 +40,6 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_PLATFORM_H_
 // #define TESSERACT_PLATFORM_H_
@@ -69,7 +67,7 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 
 // Parsed from tesseract/osdetect.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        osdetect.h
 // Description: Orientation and script detection.
 // Author:      Samuel Charron
@@ -85,8 +83,6 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCMAIN_OSDETECT_H_
 // #define TESSERACT_CCMAIN_OSDETECT_H_
@@ -161,7 +157,7 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 
 // Parsed from tesseract/unichar.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        unichar.h
 // Description: Unicode character/ligature class.
 // Author:      Ray Smith
@@ -176,8 +172,6 @@ public class tesseract extends org.bytedeco.tesseract.presets.tesseract {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCUTIL_UNICHAR_H_
 // #define TESSERACT_CCUTIL_UNICHAR_H_
@@ -220,7 +214,7 @@ public static final int
 
 // Parsed from tesseract/version.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        version.h
 // Description: Version information
 //
@@ -234,8 +228,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_API_VERSION_H_
 // #define TESSERACT_API_VERSION_H_
@@ -244,14 +236,14 @@ public static final int
 
 public static final int TESSERACT_MAJOR_VERSION = 5;
 public static final int TESSERACT_MINOR_VERSION = 0;
-public static final int TESSERACT_MICRO_VERSION = 0;
+public static final int TESSERACT_MICRO_VERSION = 1;
 
 public static final int TESSERACT_VERSION =          
   (TESSERACT_MAJOR_VERSION << 16 | 
    TESSERACT_MINOR_VERSION <<  8 | 
    TESSERACT_MICRO_VERSION);
 
-public static final String TESSERACT_VERSION_STR = "5.0.0";
+public static final String TESSERACT_VERSION_STR = "5.0.1";
 
 // clang-format on
 
@@ -260,7 +252,7 @@ public static final String TESSERACT_VERSION_STR = "5.0.0";
 
 // Parsed from tesseract/publictypes.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        publictypes.h
 // Description: Types used in both the API and internally
 // Author:      Ray Smith
@@ -275,8 +267,6 @@ public static final String TESSERACT_VERSION_STR = "5.0.0";
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCSTRUCT_PUBLICTYPES_H_
 // #define TESSERACT_CCSTRUCT_PUBLICTYPES_H_
@@ -532,7 +522,7 @@ public static final int
 
 // Parsed from tesseract/pageiterator.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        pageiterator.h
 // Description: Iterator for tesseract page structure that avoids using
 //              tesseract internal data structures.
@@ -548,8 +538,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCMAIN_PAGEITERATOR_H_
 // #define TESSERACT_CCMAIN_PAGEITERATOR_H_
@@ -582,6 +570,7 @@ public static final int
 
 // Parsed from tesseract/ocrclass.h
 
+// SPDX-License-Identifier: Apache-2.0
 /**********************************************************************
  * File:        ocrclass.h
  * Description: Class definitions and constants for the OCR API.
@@ -635,7 +624,7 @@ public static final int
 
 // Parsed from tesseract/ltrresultiterator.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        ltrresultiterator.h
 // Description: Iterator for tesseract results in strict left-to-right
 //              order that avoids using tesseract internal data structures.
@@ -651,8 +640,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCMAIN_LTR_RESULT_ITERATOR_H_
 // #define TESSERACT_CCMAIN_LTR_RESULT_ITERATOR_H_
@@ -681,7 +668,7 @@ public static final int
 
 // Parsed from tesseract/renderer.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        renderer.h
 // Description: Rendering interface to inject into TessBaseAPI
 //
@@ -695,8 +682,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_API_RENDERER_H_
 // #define TESSERACT_API_RENDERER_H_
@@ -751,7 +736,7 @@ public static final int
 
 // Parsed from tesseract/resultiterator.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        resultiterator.h
 // Description: Iterator for tesseract results that is capable of
 //              iterating in proper reading order over Bi Directional
@@ -768,8 +753,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_CCMAIN_RESULT_ITERATOR_H_
 // #define TESSERACT_CCMAIN_RESULT_ITERATOR_H_
@@ -792,7 +775,7 @@ public static final int
 
 // Parsed from tesseract/baseapi.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        baseapi.h
 // Description: Simple API for calling tesseract.
 // Author:      Ray Smith
@@ -807,8 +790,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef TESSERACT_API_BASEAPI_H_
 // #define TESSERACT_API_BASEAPI_H_
@@ -872,7 +853,7 @@ public static final int
 
 // Parsed from tesseract/capi.h
 
-///////////////////////////////////////////////////////////////////////
+// SPDX-License-Identifier: Apache-2.0
 // File:        capi.h
 // Description: C-API TessBaseAPI
 //
@@ -886,8 +867,6 @@ public static final int
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
 
 // #ifndef API_CAPI_H_
 // #define API_CAPI_H_

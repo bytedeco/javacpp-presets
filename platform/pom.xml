@@ -179,7 +179,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5.1-${project.version}</version>
+      <version>2.5.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -249,7 +249,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>5.0.0-${project.version}</version>
+      <version>5.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -264,7 +264,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>11.4-8.2-${project.version}</version>
+      <version>11.6-8.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -299,7 +299,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>8.0-${project.version}</version>
+      <version>8.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -314,7 +314,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.13.3-${project.version}</version>
+      <version>2.14.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -372,7 +372,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
         <executions>
           <execution>
             <id>properties</id>
@@ -394,7 +394,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.3.0</version>
         <configuration>
           <attach>false</attach>
           <descriptors>

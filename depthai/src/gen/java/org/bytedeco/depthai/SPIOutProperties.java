@@ -20,8 +20,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * Specify properties for SPIOut node
  */
-@Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class SPIOutProperties extends Pointer {
+@Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class SPIOutProperties extends SPIOutPropertiesSerializable {
     static { Loader.load(); }
     /** Default native constructor. */
     public SPIOutProperties() { super((Pointer)null); allocate(); }

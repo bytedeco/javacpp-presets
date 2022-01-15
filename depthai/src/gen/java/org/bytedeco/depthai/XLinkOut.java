@@ -21,18 +21,19 @@ import static org.bytedeco.depthai.global.depthai.*;
  * \brief XLinkOut node. Sends messages over XLink.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class XLinkOut extends Node {
+public class XLinkOut extends XLinkOutPropertiesNode {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public XLinkOut(Pointer p) { super(p); }
 
-    public native @StdString @Override BytePointer getName();
-
+    @MemberGetter public static native @Cast("const char*") BytePointer NAME();
     public XLinkOut(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId) { super((Pointer)null); allocate(par, nodeId); }
     private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId);
+    public XLinkOut(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr XLinkOutProperties props) { super((Pointer)null); allocate(par, nodeId, props); }
+    private native void allocate(@SharedPtr PipelineImpl par, @Cast("int64_t") long nodeId, @UniquePtr XLinkOutProperties props);
 
     /**
-     * Input for any type of messages to be transfered over XLink stream
+     * Input for any type of messages to be transferred over XLink stream
      *
      * Default queue is blocking with size 8
      */

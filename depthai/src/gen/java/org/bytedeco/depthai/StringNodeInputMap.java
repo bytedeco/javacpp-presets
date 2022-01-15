@@ -16,20 +16,22 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
-@Name("std::unordered_map<std::string,dai::Node::Input>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+@Name("std::unordered_map<std::string,dai::Node::Input*>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class StringNodeInputMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringNodeInputMap(Pointer p) { super(p); }
     public StringNodeInputMap()       { allocate();  }
     private native void allocate();
-
+    public native @Name("operator =") @ByRef StringNodeInputMap put(@ByRef StringNodeInputMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef Node.Input get(@StdString BytePointer i);
+    @Index public native Node.Input get(@StdString BytePointer i);
+    public native StringNodeInputMap put(@StdString BytePointer i, Node.Input value);
 
+    public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -39,7 +41,7 @@ public class StringNodeInputMap extends Pointer {
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
         public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator *().second") @MemberGetter @ByRef @Const Node.Input second();
+        public native @Name("operator *().second") @MemberGetter @Const Node.Input second();
     }
 }
 

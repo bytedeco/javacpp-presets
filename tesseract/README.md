@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Tesseract 5.0.0  https://github.com/tesseract-ocr
+ * Tesseract 5.0.1  https://github.com/tesseract-ocr
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>5.0.0-1.5.7-SNAPSHOT</version>
+            <version>5.0.1-1.5.7-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

@@ -13,6 +13,9 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
+/**
+ * GPU instance profile information.
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGpuInstanceProfileInfo_t extends Pointer {
     static { Loader.load(); }

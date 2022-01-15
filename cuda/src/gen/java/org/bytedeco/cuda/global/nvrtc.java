@@ -568,6 +568,7 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       Generate line-number information.
  *   - Code generation
  *     - \c --ptxas-options \<options\> (\c -Xptxas)\n
+ *     - \c --ptxas-options=\<options\> \n
  *       Specify options directly to ptxas, the PTX optimizing assembler.
  *     - \c --maxrregcount=\<N\> (\c -maxrregcount)\n
  *       Specify the maximum amount of registers that GPU functions can use.
@@ -635,6 +636,10 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       headers given to ::nvrtcCreateProgram.
  *     - \c --pre-include=\<header\> (\c -include)\n
  *       Preinclude \c \<header\> during preprocessing.
+ *     - \c --no-source-include (\c -no-source-include)
+ *       The preprocessor by default adds the directory of each input sources
+ *       to the include path. This option disables this feature and only
+ *       considers the path specified explicitly.
  *   - Language Dialect
  *     - \c --std={c++03|c++11|c++14|c++17} (\c -std={c++11|c++14|c++17})\n
  *       Set language dialect to C++03, C++11, C++14 or C++17
@@ -657,6 +662,9 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       (\c -default-device)\n
  *       Treat entities with no execution space annotation as \c __device__
  *       entities.
+ *     - \c --device-int128 (\c -device-int128)\n
+ *       Allow the \c __int128 type in device code. Also causes the macro \c __CUDACC_RTC_INT128__
+ *       to be defined.
  *     - \c --optimization-info=\<kind\> (\c -opt-info)\n
  *       Provide optimization reports for the specified kind of optimization.
  *       The following kind tags are supported:
@@ -665,7 +673,9 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       Embed used compiler's version info into generated PTX/CUBIN 
  *       - Default: \c false
  *     - \c --display-error-number (\c -err-no)\n
- *       Display diagnostic number for warning messages.
+ *       Display diagnostic number for warning messages. (Default)
+ *     - \c --no-display-error-number (\c -no-err-no)\n
+ *       Disables the display of a diagnostic number for warning messages.
  *     - \c --diag-error=<error-number>,... (\c -diag-error)\n
  *       Emit error for specified diagnostic message number(s). Message numbers can be separated by comma.
  *     - \c --diag-suppress=<error-number>,... (\c -diag-suppress)\n

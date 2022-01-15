@@ -123,6 +123,9 @@ public static final String NVML_API_VERSION_STR =        "11";
 // #ifndef NVML_NO_UNVERSIONED_FUNC_DEFS
 // #endif // #ifndef NVML_NO_UNVERSIONED_FUNC_DEFS
 
+// #define NVML_STRUCT_VERSION(data, ver) (unsigned int)(sizeof(nvml ## data ## _v ## ver ## _t) |
+//                                                       (ver << 24))
+
 /***************************************************************************************************/
 /** \defgroup nvmlDeviceStructs Device Structs
  *  \{
@@ -178,10 +181,19 @@ public static final String NVML_DEVICE_PCI_BUS_ID_FMT =                  "%08X:%
 // Targeting ../nvml/nvmlMemory_t.java
 
 
+// Targeting ../nvml/nvmlMemory_v2_t.java
+
+
+
+public static native @MemberGetter int nvmlMemory_v2();
+public static final int nvmlMemory_v2 = nvmlMemory_v2();
 // Targeting ../nvml/nvmlBAR1Memory_t.java
 
 
 // Targeting ../nvml/nvmlProcessInfo_v1_t.java
+
+
+// Targeting ../nvml/nvmlProcessInfo_v2_t.java
 
 
 // Targeting ../nvml/nvmlProcessInfo_t.java
@@ -440,23 +452,24 @@ public static final int nvmlFlagForce =       0x01;
  *   */
 /** enum nvmlBrandType_t */
 public static final int
-    NVML_BRAND_UNKNOWN          = 0,
-    NVML_BRAND_QUADRO           = 1,
-    NVML_BRAND_TESLA            = 2,
-    NVML_BRAND_NVS              = 3,
-    NVML_BRAND_GRID             = 4,   // Deprecated from API reporting. Keeping definition for backward compatibility.
-    NVML_BRAND_GEFORCE          = 5,
-    NVML_BRAND_TITAN            = 6,
-    NVML_BRAND_NVIDIA_VAPPS     = 7,   // NVIDIA Virtual Applications
-    NVML_BRAND_NVIDIA_VPC       = 8,   // NVIDIA Virtual PC
-    NVML_BRAND_NVIDIA_VCS       = 9,   // NVIDIA Virtual Compute Server
-    NVML_BRAND_NVIDIA_VWS       = 10,  // NVIDIA RTX Virtual Workstation
-    NVML_BRAND_NVIDIA_VGAMING   = 11,  // NVIDIA vGaming
-    NVML_BRAND_QUADRO_RTX       = 12,
-    NVML_BRAND_NVIDIA_RTX       = 13,
-    NVML_BRAND_NVIDIA           = 14,
-    NVML_BRAND_GEFORCE_RTX      = 15,  // Unused
-    NVML_BRAND_TITAN_RTX        = 16,  // Unused
+    NVML_BRAND_UNKNOWN              = 0,
+    NVML_BRAND_QUADRO               = 1,
+    NVML_BRAND_TESLA                = 2,
+    NVML_BRAND_NVS                  = 3,
+    NVML_BRAND_GRID                 = 4,   // Deprecated from API reporting. Keeping definition for backward compatibility.
+    NVML_BRAND_GEFORCE              = 5,
+    NVML_BRAND_TITAN                = 6,
+    NVML_BRAND_NVIDIA_VAPPS         = 7,   // NVIDIA Virtual Applications
+    NVML_BRAND_NVIDIA_VPC           = 8,   // NVIDIA Virtual PC
+    NVML_BRAND_NVIDIA_VCS           = 9,   // NVIDIA Virtual Compute Server
+    NVML_BRAND_NVIDIA_VWS           = 10,  // NVIDIA RTX Virtual Workstation
+    NVML_BRAND_NVIDIA_CLOUD_GAMING  = 11,  // NVIDIA Cloud Gaming
+    NVML_BRAND_NVIDIA_VGAMING       = NVML_BRAND_NVIDIA_CLOUD_GAMING,  // Deprecated from API reporting. Keeping definition for backward compatibility.
+    NVML_BRAND_QUADRO_RTX           = 12,
+    NVML_BRAND_NVIDIA_RTX           = 13,
+    NVML_BRAND_NVIDIA               = 14,
+    NVML_BRAND_GEFORCE_RTX          = 15,  // Unused
+    NVML_BRAND_TITAN_RTX            = 16,  // Unused
 
     // Keep this last
     NVML_BRAND_COUNT = 17;
@@ -985,6 +998,28 @@ public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x
 // Targeting ../nvml/nvmlVgpuProcessUtilizationSample_t.java
 
 
+// Targeting ../nvml/nvmlVgpuLicenseExpiry_t.java
+
+
+
+/**
+ * vGPU license state
+ */
+/** Unknown state */
+public static final int NVML_GRID_LICENSE_STATE_UNKNOWN =                 0;
+/** Uninitialized state */
+public static final int NVML_GRID_LICENSE_STATE_UNINITIALIZED =           1;
+/** Unlicensed unrestricted state */
+public static final int NVML_GRID_LICENSE_STATE_UNLICENSED_UNRESTRICTED = 2;
+/** Unlicensed restricted state */
+public static final int NVML_GRID_LICENSE_STATE_UNLICENSED_RESTRICTED =   3;
+/** Unlicensed state */
+public static final int NVML_GRID_LICENSE_STATE_UNLICENSED =              4;
+/** Licensed state */
+public static final int NVML_GRID_LICENSE_STATE_LICENSED =                5;
+// Targeting ../nvml/nvmlVgpuLicenseInfo_t.java
+
+
 // Targeting ../nvml/nvmlProcessUtilizationSample_t.java
 
 
@@ -1010,6 +1045,37 @@ public static final int NVML_DEVICE_ARCH_TURING =    6; // Devices based on the 
 public static final int NVML_DEVICE_ARCH_AMPERE =    7; // Devices based on the NVIDIA Ampere architecture
 
 public static final int NVML_DEVICE_ARCH_UNKNOWN =   0xffffffff; // Anything else, presumably something newer
+
+/**
+ * PCI bus types
+ */
+public static final int NVML_BUS_TYPE_UNKNOWN =  0;
+public static final int NVML_BUS_TYPE_PCI =      1;
+public static final int NVML_BUS_TYPE_PCIE =     2;
+public static final int NVML_BUS_TYPE_FPCI =     3;
+public static final int NVML_BUS_TYPE_AGP =      4;
+
+/**
+ * Device Power Source
+ */
+public static final int NVML_POWER_SOURCE_AC =      0x00000000;
+public static final int NVML_POWER_SOURCE_BATTERY = 0x00000001;
+
+/*
+ * Device PCIE link Max Speed
+ */
+public static final int NVML_PCIE_LINK_MAX_SPEED_INVALID =   0x00000000;
+public static final int NVML_PCIE_LINK_MAX_SPEED_2500MBPS =  0x00000001;
+public static final int NVML_PCIE_LINK_MAX_SPEED_5000MBPS =  0x00000002;
+public static final int NVML_PCIE_LINK_MAX_SPEED_8000MBPS =  0x00000003;
+public static final int NVML_PCIE_LINK_MAX_SPEED_16000MBPS = 0x00000004;
+public static final int NVML_PCIE_LINK_MAX_SPEED_32000MBPS = 0x00000005;
+
+/*
+ * Adaptive clocking status
+ */
+public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_DISABLED = 0x00000000;
+public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_ENABLED =  0x00000001;
 
 /** \} */
 /** \} */
@@ -3550,6 +3616,25 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevi
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") IntBuffer speed);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") int[] speed);
 
+/**
+ * Retrieves the number of fans on the device.
+ *
+ * For all discrete products with dedicated fans.
+ *
+ * @param device                               The identifier of the target device
+ * @param numFans                              The number of fans
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a fan number query was successful
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a numFans is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not have a fan
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumFans(nvmlDevice_st device, @Cast("unsigned int*") IntPointer numFans);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumFans(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer numFans);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumFans(nvmlDevice_st device, @Cast("unsigned int*") int[] numFans);
 
 /**
  * Retrieves the current temperature readings for the device, in degrees C.
@@ -3912,7 +3997,8 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuOperationMode(nvm
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuOperationMode(nvmlDevice_st device, @Cast("nvmlGpuOperationMode_t*") int[] current, @Cast("nvmlGpuOperationMode_t*") int[] pending);
 
 /**
- * Retrieves the amount of used, free and total memory available on the device, in bytes.
+ * Retrieves the amount of used, free, reserved and total memory available on the device, in bytes.
+ * The reserved amount is supported on version 2 only.
  *
  * For all products.
  *
@@ -3922,11 +4008,13 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuOperationMode(nvm
  * Under Linux and Windows TCC, the reported amount of used memory is equal to the sum of memory allocated
  * by all active channels on the device.
  *
- * See \ref nvmlMemory_t for details on available memory info.
+ * See \ref nvmlMemory_v2_t for details on available memory info.
  *
  * \note In MIG mode, if device handle is provided, the API returns aggregate
  *       information, only if the caller has appropriate privileges. Per-instance
  *       information can be queried by using specific MIG device handles.
+ * 
+ * \note nvmlDeviceGetMemoryInfo_v2 adds additional memory information.
  *
  * @param device                               The identifier of the target device
  * @param memory                               Reference in which to return the memory information
@@ -3940,6 +4028,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuOperationMode(nvm
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryInfo(nvmlDevice_st device, nvmlMemory_t memory);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryInfo_v2(nvmlDevice_st device, nvmlMemory_v2_t memory);
 
 /**
  * Retrieves the current compute mode for the device.
@@ -4499,9 +4588,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBridgeChipInfo(nvmlD
  *
  * @see \ref nvmlSystemGetProcessName
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
 
 /**
  * Get information about processes with a graphics context on a device
@@ -4544,9 +4633,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProces
  *
  * @see \ref nvmlSystemGetProcessName
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
 
 /**
  * Get information about processes with a MPS compute context on a device
@@ -4589,9 +4678,9 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProce
  *
  * @see \ref nvmlSystemGetProcessName
  */
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
-public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v3(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_t infos);
 
 /**
  * Check if the GPU devices are on the same physical board.
@@ -4744,6 +4833,114 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBAR1MemoryInfo(nvmlD
  *
  */
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetViolationStatus(nvmlDevice_st device, @Cast("nvmlPerfPolicyType_t") int perfPolicyType, nvmlViolationTime_t violTime);
+
+/**
+ * Gets the device's interrupt number
+ *
+ * @param device                               The identifier of the target device
+ * @param irqNum                               The interrupt number associated with the specified device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if irq number is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a irqNum is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") IntPointer irqNum);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer irqNum);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetIrqNum(nvmlDevice_st device, @Cast("unsigned int*") int[] irqNum);
+
+/**
+ * Gets the device's core count
+ *
+ * @param device                               The identifier of the target device
+ * @param numCores                             The number of cores for the specified device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if Gpu core count is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a numCores is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumGpuCores(nvmlDevice_st device, @Cast("unsigned int*") IntPointer numCores);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumGpuCores(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer numCores);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetNumGpuCores(nvmlDevice_st device, @Cast("unsigned int*") int[] numCores);
+
+/**
+ * Gets the devices power source
+ *
+ * @param device                               The identifier of the target device
+ * @param powerSource                          The power source of the device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if the current power source was successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a powerSource is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerSource(nvmlDevice_st device, @Cast("nvmlPowerSource_t*") IntPointer powerSource);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerSource(nvmlDevice_st device, @Cast("nvmlPowerSource_t*") IntBuffer powerSource);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerSource(nvmlDevice_st device, @Cast("nvmlPowerSource_t*") int[] powerSource);
+
+/**
+ * Gets the device's memory bus width
+ *
+ * @param device                               The identifier of the target device
+ * @param maxSpeed                             The devices's memory bus width
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if the memory bus width is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a busWidth is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryBusWidth(nvmlDevice_st device, @Cast("unsigned int*") IntPointer busWidth);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryBusWidth(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer busWidth);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryBusWidth(nvmlDevice_st device, @Cast("unsigned int*") int[] busWidth);
+
+/**
+ * Gets the device's PCIE Max Link speed in MBPS
+ *
+ * @param device                               The identifier of the target device
+ * @param maxSpeed                             The devices's PCIE Max Link speed in MBPS
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if Pcie Max Link Speed is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a maxSpeed is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntPointer maxSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer maxSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") int[] maxSpeed);
+
+/**
+ * Gets the device's Adaptive Clock status
+ *
+ * @param device                               The identifier of the target device
+ * @param adaptiveClockStatus                  The current adaptive clocking status
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if the current adaptive clocking status is successfully retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid, or \a adaptiveClockStatus is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if this query is not supported by the device
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetAdaptiveClockInfoStatus(nvmlDevice_st device, @Cast("unsigned int*") IntPointer adaptiveClockStatus);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetAdaptiveClockInfoStatus(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer adaptiveClockStatus);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetAdaptiveClockInfoStatus(nvmlDevice_st device, @Cast("unsigned int*") int[] adaptiveClockStatus);
 
 /**
  * \}
@@ -6728,6 +6925,8 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFbUsage(@Cast(
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFbUsage(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned long long*") long[] fbUsage);
 
 /**
+ * @deprecated Use \ref nvmlVgpuInstanceGetLicenseInfo_v2.
+ *
  * Retrieve the current licensing state of the vGPU instance.
  *
  * If the vGPU is currently licensed, \a licensed is set to 1, otherwise it is set to 0.
@@ -6972,6 +7171,28 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetFBCSessions(@C
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntPointer gpuInstanceId);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") IntBuffer gpuInstanceId);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("unsigned int*") int[] gpuInstanceId);
+
+/**
+* Retrieves the PCI Id of the given vGPU Instance i.e. the PCI Id of the GPU as seen inside the VM.
+*
+* The vGPU PCI id is returned as "00000000:00:00.0" if NVIDIA driver is not installed on the vGPU instance.
+*
+* @param vgpuInstance                         Identifier of the target vGPU instance
+* @param vgpuPciId                            Caller-supplied buffer to return vGPU PCI Id string
+* @param length                               Size of the vgpuPciId buffer
+*
+* @return
+*         - \ref NVML_SUCCESS                 if vGPU PCI Id is sucessfully retrieved
+*         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+*         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a vgpuInstance is 0, or \a vgpuPciId is NULL
+*         - \ref NVML_ERROR_NOT_FOUND         if \a vgpuInstance does not match a valid active vGPU instance on the system
+*         - \ref NVML_ERROR_DRIVER_NOT_LOADED if NVIDIA driver is not running on the vGPU instance
+*         - \ref NVML_ERROR_INSUFFICIENT_SIZE if \a length is too small, \a length is set to required length
+*         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+*/
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") BytePointer vgpuPciId, @Cast("unsigned int*") IntPointer length);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") ByteBuffer vgpuPciId, @Cast("unsigned int*") IntBuffer length);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") byte[] vgpuPciId, @Cast("unsigned int*") int[] length);
 // Targeting ../nvml/nvmlVgpuVersion_t.java
 
 
@@ -7403,6 +7624,23 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetAccountingStat
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceClearAccountingPids(@Cast("nvmlVgpuInstance_t") int vgpuInstance);
+
+/**
+ * Query the license information of the vGPU instance.
+ *
+ * For Maxwell &tm; or newer fully supported devices.
+ *
+ * @param vgpuInstance              Identifier of the target vGPU instance
+ * @param licenseInfo               Pointer to vGPU license information structure
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if information is successfully retrieved
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a vgpuInstance is 0, or \a licenseInfo is NULL
+ *         - \ref NVML_ERROR_NOT_FOUND         if \a vgpuInstance does not match a valid active vGPU instance on the system
+ *         - \ref NVML_ERROR_DRIVER_NOT_LOADED if NVIDIA driver is not running on the vGPU instance
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetLicenseInfo_v2(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuLicenseInfo_t licenseInfo);
 // Targeting ../nvml/nvmlExcludedDeviceInfo_t.java
 
 
@@ -7482,6 +7720,15 @@ public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =        0x8;
 // Targeting ../nvml/nvmlGpuInstanceProfileInfo_t.java
 
 
+// Targeting ../nvml/nvmlGpuInstanceProfileInfo_v2_t.java
+
+
+
+/**
+ * Version identifier value for \ref nvmlGpuInstanceProfileInfo_v2_t.version.
+ */
+public static native @MemberGetter int nvmlGpuInstanceProfileInfo_v2();
+public static final int nvmlGpuInstanceProfileInfo_v2 = nvmlGpuInstanceProfileInfo_v2();
 // Targeting ../nvml/nvmlGpuInstanceInfo_t.java
 
 
@@ -7513,6 +7760,15 @@ public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
 // Targeting ../nvml/nvmlComputeInstanceProfileInfo_t.java
 
 
+// Targeting ../nvml/nvmlComputeInstanceProfileInfo_v2_t.java
+
+
+
+/**
+ * Version identifier value for \ref nvmlComputeInstanceProfileInfo_v2_t.version.
+ */
+public static native @MemberGetter int nvmlComputeInstanceProfileInfo_v2();
+public static final int nvmlComputeInstanceProfileInfo_v2 = nvmlComputeInstanceProfileInfo_v2();
 // Targeting ../nvml/nvmlComputeInstanceInfo_t.java
 
 
@@ -7588,7 +7844,6 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMigMode(nvmlDevice_s
  *
  * For Ampere &tm; or newer fully supported devices.
  * Supported on Linux only.
- * Requires privileged user.
  *
  * @param device                               The identifier of the target device
  * @param profile                              One of the NVML_GPU_INSTANCE_PROFILE_*
@@ -7605,10 +7860,43 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstanceProfileIn
                                                          nvmlGpuInstanceProfileInfo_t info);
 
 /**
+ * Versioned wrapper around \ref nvmlDeviceGetGpuInstanceProfileInfo that accepts a versioned
+ * \ref nvmlGpuInstanceProfileInfo_v2_t or later output structure.
+ * 
+ * \note The caller must set the \ref nvmlGpuInstanceProfileInfo_v2_t.version field to the
+ * appropriate version prior to calling this function. For example:
+ * <pre>{@code
+ *     nvmlGpuInstanceProfileInfo_v2_t profileInfo =
+ *         { .version = nvmlGpuInstanceProfileInfo_v2 };
+ *     nvmlReturn_t result = nvmlDeviceGetGpuInstanceProfileInfoV(device,
+ *                                                                profile,
+ *                                                                &profileInfo);
+ * }</pre>
+ *
+ * For Ampere &tm; or newer fully supported devices.
+ * Supported on Linux only.
+ *
+ * @param device                               The identifier of the target device
+ * @param profile                              One of the NVML_GPU_INSTANCE_PROFILE_*
+ * @param info                                 Returns detailed profile information
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED     If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  If \a device, \a profile, \a info, or \a info->version are invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     If \a device doesn't have MIG mode enabled or \a profile isn't supported
+ *         - \ref NVML_ERROR_NO_PERMISSION     If user doesn't have permission to perform the operation
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstanceProfileInfoV(nvmlDevice_st device, @Cast("unsigned int") int profile,
+                                                          nvmlGpuInstanceProfileInfo_v2_t info);
+
+/**
  * Get GPU instance placements.
  *
  * A placement represents the location of a GPU instance within a device. This API only returns all the possible
  * placements for the given profile.
+ * A created GPU instance occupies memory slices described by its placement. Creation of new GPU instance will
+ * fail if there is overlap with the already occupied memory slices.
  *
  * For Ampere &tm; or newer fully supported devices.
  * Supported on Linux only.
@@ -7821,7 +8109,6 @@ public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetInfo(nvmlGpuIns
  *
  * For Ampere &tm; or newer fully supported devices.
  * Supported on Linux only.
- * Requires privileged user.
  *
  * @param gpuInstance                          The identifier of the target GPU instance
  * @param profile                              One of the NVML_COMPUTE_INSTANCE_PROFILE_*
@@ -7838,6 +8125,40 @@ public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetInfo(nvmlGpuIns
 public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetComputeInstanceProfileInfo(nvmlGpuInstance_st gpuInstance, @Cast("unsigned int") int profile,
                                                                   @Cast("unsigned int") int engProfile,
                                                                   nvmlComputeInstanceProfileInfo_t info);
+
+/**
+ * Versioned wrapper around \ref nvmlGpuInstanceGetComputeInstanceProfileInfo that accepts a versioned
+ * \ref nvmlComputeInstanceProfileInfo_v2_t or later output structure.
+ *
+ * \note The caller must set the \ref nvmlGpuInstanceProfileInfo_v2_t.version field to the
+ * appropriate version prior to calling this function. For example:
+ * <pre>{@code
+ *     nvmlComputeInstanceProfileInfo_v2_t profileInfo =
+ *         { .version = nvmlComputeInstanceProfileInfo_v2 };
+ *     nvmlReturn_t result = nvmlGpuInstanceGetComputeInstanceProfileInfoV(gpuInstance,
+ *                                                                         profile,
+ *                                                                         engProfile,
+ *                                                                         &profileInfo);
+ * }</pre>
+ *
+ * For Ampere &tm; or newer fully supported devices.
+ * Supported on Linux only.
+ *
+ * @param gpuInstance                          The identifier of the target GPU instance
+ * @param profile                              One of the NVML_COMPUTE_INSTANCE_PROFILE_*
+ * @param engProfile                           One of the NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_*
+ * @param info                                 Returns detailed profile information
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 Upon success
+ *         - \ref NVML_ERROR_UNINITIALIZED     If library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  If \a gpuInstance, \a profile, \a engProfile, \a info, or \a info->version are invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     If \a profile isn't supported
+ *         - \ref NVML_ERROR_NO_PERMISSION     If user doesn't have permission to perform the operation
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpuInstanceGetComputeInstanceProfileInfoV(nvmlGpuInstance_st gpuInstance, @Cast("unsigned int") int profile,
+                                                                   @Cast("unsigned int") int engProfile,
+                                                                   nvmlComputeInstanceProfileInfo_v2_t info);
 
 /**
  * Get compute instance profile capacity.
@@ -8129,6 +8450,22 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMigDeviceHandleByInd
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDeviceHandleFromMigDeviceHandle(nvmlDevice_st migDevice, @ByPtrPtr nvmlDevice_st device);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDeviceHandleFromMigDeviceHandle(nvmlDevice_st migDevice, @Cast("nvmlDevice_st**") PointerPointer device);
 
+/**
+ * Get the type of the GPU Bus (PCIe, PCI, ...)
+ *
+ * @param device                               The identifier of the target device
+ * @param type                                 The PCI Bus type
+ *
+ * return
+ *         - \ref NVML_SUCCESS                 if the bus \a type is successfully retreived
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \device is invalid or \type is NULL
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") IntPointer type);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") IntBuffer type);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") int[] type);
+
 /** \} */
 
 /**
@@ -8145,15 +8482,25 @@ public static native @Cast("nvmlReturn_t") int nvmlComputeInstanceGetInfo(nvmlCo
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v1_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v2_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v1_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGraphicsRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v2_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v1_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v1_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntPointer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer infoCount, nvmlProcessInfo_v2_t infos);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMPSComputeRunningProcesses_v2(nvmlDevice_st device, @Cast("unsigned int*") int[] infoCount, nvmlProcessInfo_v2_t infos);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstancePossiblePlacements(nvmlDevice_st device, @Cast("unsigned int") int profileId, nvmlGpuInstancePlacement_t placements, @Cast("unsigned int*") IntPointer count);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstancePossiblePlacements(nvmlDevice_st device, @Cast("unsigned int") int profileId, nvmlGpuInstancePlacement_t placements, @Cast("unsigned int*") IntBuffer count);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstancePossiblePlacements(nvmlDevice_st device, @Cast("unsigned int") int profileId, nvmlGpuInstancePlacement_t placements, @Cast("unsigned int*") int[] count);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetLicenseInfo(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuLicenseInfo_t licenseInfo);
 // #endif // #ifdef NVML_NO_UNVERSIONED_FUNC_DEFS
 
 // #if defined(NVML_NO_UNVERSIONED_FUNC_DEFS)
@@ -8178,6 +8525,7 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpuInstancePossibleP
 // #undef nvmlGetBlacklistDeviceCount
 // #undef nvmlGetBlacklistDeviceInfoByIndex
 // #undef nvmlDeviceGetGpuInstancePossiblePlacements
+// #undef nvmlVgpuInstanceGetLicenseInfo
 // #endif
 
 // #ifdef __cplusplus

@@ -17,7 +17,7 @@ public class npps extends org.bytedeco.cuda.presets.npps {
 
 // Parsed from <npps.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -100,7 +100,7 @@ public class npps extends org.bytedeco.cuda.presets.npps {
 
 // Parsed from <npps_support_functions.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -329,7 +329,7 @@ public static native void nppsFree(Pointer pValues);
 
 // Parsed from <npps_initialization.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -951,7 +951,7 @@ public static native @Cast("NppStatus") int nppsCopy_64fc(@Const Npp64fc pSrc, N
 
 // Parsed from <npps_conversion_functions.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -2186,7 +2186,7 @@ public static native @Cast("NppStatus") int nppsThreshold_GTVal_64fc_I(Npp64fc p
 
 // Parsed from <npps_arithmetic_and_logical_operations.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -8647,7 +8647,7 @@ public static native @Cast("NppStatus") int nppsRShiftC_32s_I(int nValue, @Cast(
 
 // Parsed from <npps_statistics_functions.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -16159,7 +16159,7 @@ public static native @Cast("NppStatus") int nppsAverageRelativeErrorGetBufferSiz
 
 // Parsed from <npps_filtering_functions.h>
 
- /* Copyright 2010-2019 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2010-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
