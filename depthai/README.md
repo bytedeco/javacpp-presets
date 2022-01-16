@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>depthai-platform</artifactId>
-            <version>2.13.3-1.5.7-SNAPSHOT</version>
+            <version>2.13.3-7abd507db16ea96b5f5a67d11f09f59b50d41827-1.5.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

@@ -44,7 +44,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(
-            value = {"linux-arm", "linux-x86", "macosx-x86"},
+            value = {"android-arm", "android-arm64", "android-x86", "android-x86_64" ,"linux-arm", "linux-arm64", "linux-x86", "linux-x86_64", "macosx-x86_64"},
             compiler = "cpp14",
             define = {"SHARED_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
@@ -324,6 +324,8 @@ public class depthai implements InfoMapper {
                .put(new Info("std::function<void(std::string,std::shared_ptr<ADatatype>)>").valueTypes("NameMessageCallback"))
                .put(new Info("std::function<void(std::shared_ptr<ADatatype>)>").valueTypes("MessageCallback"))
                .put(new Info("std::function<void()>").valueTypes("Callback"))
+
+               .put(new Info("dai::DeviceInfo::toString").javaText("public native @StdString String toString();"))
         ;
     }
 

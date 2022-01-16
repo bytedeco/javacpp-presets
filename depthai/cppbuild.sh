@@ -7,21 +7,28 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DEPTHAI_VERSION=2.13.3
+DEPTHAI_VERSION_COMMIT=7abd507db16ea96b5f5a67d11f09f59b50d41827
+DEPTHAI_VERSION=2.13.3-7abd507db16ea96b5f5a67d11f09f59b50d41827
 LIBUSB_VERSION=1.0.22
-download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
-download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
+
+# download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
+# download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
+
+# download https://github.com/luxonis/depthai-core/archive/7abd507db16ea96b5f5a67d11f09f59b50d41827.tar.gz depthai-core-$DEPTHAI_VERSION_COMMIT.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 mkdir -p include lib bin
 INSTALL_PATH=`pwd`
-echo "Decompressing archives..."
-tar --totals -xzf ../depthai-core-v$DEPTHAI_VERSION.tar.gz
-tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
-cd depthai-core-v$DEPTHAI_VERSION
-#patch -Np1 < ../../../depthai.patch
+# echo "Decompressing archives..."
+# tar --totals -xzf ../depthai-core-$DEPTHAI_VERSION_COMMIT.tar.gz
+
+git clone https://github.com/luxonis/depthai-core.git depthai-core-$DEPTHAI_VERSION_COMMIT --recursive
+cd depthai-core-$DEPTHAI_VERSION_COMMIT
+git checkout $DEPTHAI_VERSION_COMMIT
+git submodule update --init --recursive
+# patch
 sedinplace '/find_package(Git/d' CMakeLists.txt cmake/GitCommitHash.cmake shared/depthai-bootloader-shared.cmake shared/depthai-shared.cmake
 sedinplace '/protected:/d' include/depthai/pipeline/Node.hpp
 
@@ -41,63 +48,53 @@ fi
 export OpenCV_DIR="$OPENCV_PATH/lib/cmake/opencv4"
 
 case $PLATFORM in
-    linux-armhf)
-        cd ../libusb-$LIBUSB_VERSION
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+    android-arm)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/ -DANDROID_ABI=armeabi-v7a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'                 >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make install/strip
+        ;;
+    android-arm64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-arm64-v8a/ -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    android-x86)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/ -DANDROID_ABI=x86 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    android-x86_64)
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86_64/ -DANDROID_ABI=x86_64 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-armhf)
+        echo 'set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")'   >> custom_toolchain.cmake
+        echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> custom_toolchain.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/custom_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-arm64)
-        cd ../libusb-$LIBUSB_VERSION
-        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                 >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'               >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        echo 'set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")'   >> custom_toolchain.cmake
+        echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> custom_toolchain.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/custom_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86)
-        cd ../libusb-$LIBUSB_VERSION
-        CC="gcc -m32" CXX="g++ -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-m32 -std=gnu99")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++11")' >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        echo 'set(CMAKE_C_COMPILER "gcc")'            >> custom_toolchain.cmake
+        echo 'set(CMAKE_C_FLAGS "-m32")'              >> custom_toolchain.cmake
+        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> custom_toolchain.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-m32")'            >> custom_toolchain.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/custom_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86_64)
-        cd ../libusb-$LIBUSB_VERSION
-        CC="gcc -m64" CXX="g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-m64 -std=gnu99")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++11")' >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        echo 'set(CMAKE_C_COMPILER "gcc")'            >> custom_toolchain.cmake
+        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> custom_toolchain.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/custom_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
