@@ -1526,8 +1526,8 @@ EOF
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-w64-mingw32 # CFLAGS="-m32" CXXFLAGS="-m32"
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
         make -j $MAKEJ
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
@@ -1639,8 +1639,8 @@ EOF
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
         make -j $MAKEJ
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
