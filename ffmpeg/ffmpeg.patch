@@ -1,5 +1,5 @@
---- linux-x86_64/ffmpeg-5.0.orig/configure	2022-01-15 14:49:15.022054379 +1100
-+++ linux-x86_64/ffmpeg-5.0/configure	2022-01-15 14:52:15.648669638 +1100
+--- ffmpeg-5.0.orig/configure	2022-01-15 14:49:15.022054379 +1100
++++ ffmpeg-5.0/configure	2022-01-15 14:52:15.648669638 +1100
 @@ -6532,7 +6532,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig

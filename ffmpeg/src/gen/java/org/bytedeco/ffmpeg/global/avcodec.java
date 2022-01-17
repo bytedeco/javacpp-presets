@@ -846,6 +846,119 @@ public static final int
 // #endif // AVCODEC_CODEC_PAR_H
 
 
+// Parsed from <libavcodec/defs.h>
+
+/*
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_DEFS_H
+// #define AVCODEC_DEFS_H
+
+/**
+ * \file
+ * \ingroup libavc
+ * Misc types and constants that do not belong anywhere else.
+ */
+
+// #include <stdint.h>
+// #include <stdlib.h>
+
+/**
+ * \ingroup lavc_decoding
+ * Required number of additionally allocated bytes at the end of the input bitstream for decoding.
+ * This is mainly needed because some optimized bitstream readers read
+ * 32 or 64 bit at once and could read over the end.<br>
+ * Note: If the first 23 bits of the additional bytes are not 0, then damaged
+ * MPEG bitstreams could cause overread and segfault.
+ */
+public static final int AV_INPUT_BUFFER_PADDING_SIZE = 64;
+
+/**
+ * \ingroup lavc_decoding
+ */
+/** enum AVDiscard */
+public static final int
+    /* We leave some space between them for extensions (drop some
+     * keyframes for intra-only or drop just some bidir frames). */
+    /** discard nothing */
+    AVDISCARD_NONE    = -16,
+    /** discard useless packets like 0 size packets in avi */
+    AVDISCARD_DEFAULT = 0,
+    /** discard all non reference */
+    AVDISCARD_NONREF  = 8,
+    /** discard all bidirectional frames */
+    AVDISCARD_BIDIR   = 16,
+    /** discard all non intra frames */
+    AVDISCARD_NONINTRA = 24,
+    /** discard all frames except keyframes */
+    AVDISCARD_NONKEY  = 32,
+    /** discard all */
+    AVDISCARD_ALL     = 48;
+
+/** enum AVAudioServiceType */
+public static final int
+    AV_AUDIO_SERVICE_TYPE_MAIN              = 0,
+    AV_AUDIO_SERVICE_TYPE_EFFECTS           = 1,
+    AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
+    AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = 3,
+    AV_AUDIO_SERVICE_TYPE_DIALOGUE          = 4,
+    AV_AUDIO_SERVICE_TYPE_COMMENTARY        = 5,
+    AV_AUDIO_SERVICE_TYPE_EMERGENCY         = 6,
+    AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = 7,
+    AV_AUDIO_SERVICE_TYPE_KARAOKE           = 8,
+    /** Not part of ABI */
+    AV_AUDIO_SERVICE_TYPE_NB = 9;
+// Targeting ../avcodec/AVPanScan.java
+
+
+// Targeting ../avcodec/AVCPBProperties.java
+
+
+
+/**
+ * Allocate a CPB properties structure and initialize its fields to default
+ * values.
+ *
+ * @param size if non-NULL, the size of the allocated struct will be written
+ *             here. This is useful for embedding it in side data.
+ *
+ * @return the newly allocated struct or NULL on failure
+ */
+@NoException public static native AVCPBProperties av_cpb_properties_alloc(@Cast("size_t*") SizeTPointer size);
+// Targeting ../avcodec/AVProducerReferenceTime.java
+
+
+
+/**
+ * Encode extradata length to a buffer. Used by xiph codecs.
+ *
+ * @param s buffer to write to; must be at least (v/255+1) bytes long
+ * @param v size of extradata in bytes
+ * @return number of bytes written to the buffer.
+ */
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") BytePointer s, @Cast("unsigned int") int v);
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") ByteBuffer s, @Cast("unsigned int") int v);
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") byte[] s, @Cast("unsigned int") int v);
+
+// #endif // AVCODEC_DEFS_H
+
+
 // Parsed from <libavcodec/packet.h>
 
 /*
@@ -1483,119 +1596,6 @@ public static final int
  */
 
 // #endif // AVCODEC_PACKET_H
-
-
-// Parsed from <libavcodec/defs.h>
-
-/*
- *
- * This file is part of FFmpeg.
- *
- * FFmpeg is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * FFmpeg is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with FFmpeg; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
-
-// #ifndef AVCODEC_DEFS_H
-// #define AVCODEC_DEFS_H
-
-/**
- * \file
- * \ingroup libavc
- * Misc types and constants that do not belong anywhere else.
- */
-
-// #include <stdint.h>
-// #include <stdlib.h>
-
-/**
- * \ingroup lavc_decoding
- * Required number of additionally allocated bytes at the end of the input bitstream for decoding.
- * This is mainly needed because some optimized bitstream readers read
- * 32 or 64 bit at once and could read over the end.<br>
- * Note: If the first 23 bits of the additional bytes are not 0, then damaged
- * MPEG bitstreams could cause overread and segfault.
- */
-public static final int AV_INPUT_BUFFER_PADDING_SIZE = 64;
-
-/**
- * \ingroup lavc_decoding
- */
-/** enum AVDiscard */
-public static final int
-    /* We leave some space between them for extensions (drop some
-     * keyframes for intra-only or drop just some bidir frames). */
-    /** discard nothing */
-    AVDISCARD_NONE    = -16,
-    /** discard useless packets like 0 size packets in avi */
-    AVDISCARD_DEFAULT = 0,
-    /** discard all non reference */
-    AVDISCARD_NONREF  = 8,
-    /** discard all bidirectional frames */
-    AVDISCARD_BIDIR   = 16,
-    /** discard all non intra frames */
-    AVDISCARD_NONINTRA = 24,
-    /** discard all frames except keyframes */
-    AVDISCARD_NONKEY  = 32,
-    /** discard all */
-    AVDISCARD_ALL     = 48;
-
-/** enum AVAudioServiceType */
-public static final int
-    AV_AUDIO_SERVICE_TYPE_MAIN              = 0,
-    AV_AUDIO_SERVICE_TYPE_EFFECTS           = 1,
-    AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED = 2,
-    AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED  = 3,
-    AV_AUDIO_SERVICE_TYPE_DIALOGUE          = 4,
-    AV_AUDIO_SERVICE_TYPE_COMMENTARY        = 5,
-    AV_AUDIO_SERVICE_TYPE_EMERGENCY         = 6,
-    AV_AUDIO_SERVICE_TYPE_VOICE_OVER        = 7,
-    AV_AUDIO_SERVICE_TYPE_KARAOKE           = 8,
-    /** Not part of ABI */
-    AV_AUDIO_SERVICE_TYPE_NB = 9;
-// Targeting ../avcodec/AVPanScan.java
-
-
-// Targeting ../avcodec/AVCPBProperties.java
-
-
-
-/**
- * Allocate a CPB properties structure and initialize its fields to default
- * values.
- *
- * @param size if non-NULL, the size of the allocated struct will be written
- *             here. This is useful for embedding it in side data.
- *
- * @return the newly allocated struct or NULL on failure
- */
-@NoException public static native AVCPBProperties av_cpb_properties_alloc(@Cast("size_t*") SizeTPointer size);
-// Targeting ../avcodec/AVProducerReferenceTime.java
-
-
-
-/**
- * Encode extradata length to a buffer. Used by xiph codecs.
- *
- * @param s buffer to write to; must be at least (v/255+1) bytes long
- * @param v size of extradata in bytes
- * @return number of bytes written to the buffer.
- */
-@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") BytePointer s, @Cast("unsigned int") int v);
-@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") ByteBuffer s, @Cast("unsigned int") int v);
-@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") byte[] s, @Cast("unsigned int") int v);
-
-// #endif // AVCODEC_DEFS_H
 
 
 // Parsed from <libavcodec/bsf.h>
@@ -3540,6 +3540,77 @@ public static final int
  */
 
 // #endif /* AVCODEC_AVFFT_H */
+
+
+// Parsed from <libavcodec/version.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVCODEC_VERSION_H
+// #define AVCODEC_VERSION_H
+
+/**
+ * \file
+ * \ingroup libavc
+ * Libavcodec version macros.
+ */
+
+// #include "libavutil/version.h"
+
+public static final int LIBAVCODEC_VERSION_MAJOR =  59;
+public static final int LIBAVCODEC_VERSION_MINOR =  18;
+public static final int LIBAVCODEC_VERSION_MICRO = 100;
+
+public static native @MemberGetter int LIBAVCODEC_VERSION_INT();
+public static final int LIBAVCODEC_VERSION_INT = LIBAVCODEC_VERSION_INT();
+// #define LIBAVCODEC_VERSION      AV_VERSION(LIBAVCODEC_VERSION_MAJOR,
+//                                            LIBAVCODEC_VERSION_MINOR,
+//                                            LIBAVCODEC_VERSION_MICRO)
+public static final int LIBAVCODEC_BUILD =        LIBAVCODEC_VERSION_INT;
+
+public static native @MemberGetter String LIBAVCODEC_IDENT();
+public static final String LIBAVCODEC_IDENT = LIBAVCODEC_IDENT();
+
+/**
+ * FF_API_* defines may be placed below to indicate public API that will be
+ * dropped at a future version bump. The defines themselves are not part of
+ * the public API and may change, break or disappear at any time.
+ *
+ * \note, when bumping the major version it is recommended to manually
+ * disable each FF_API_* in its own commit instead of disabling them all
+ * at once through the bump. This improves the git bisect-ability of the change.
+ */
+
+public static final boolean FF_API_OPENH264_SLICE_MODE = (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_OPENH264_CABAC =      (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_UNUSED_CODEC_CAPS =   (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_THREAD_SAFE_CALLBACKS = (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_DEBUG_MV =          (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_GET_FRAME_CLASS =     (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_AUTO_THREADS =        (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_INIT_PACKET =         (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_AVCTX_TIMEBASE =    (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_MPEGVIDEO_OPTS =      (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_FLAG_TRUNCATED =      (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_SUB_TEXT_FORMAT =     (LIBAVCODEC_VERSION_MAJOR < 60);
+
+// #endif /* AVCODEC_VERSION_H */
 
 
 }
