@@ -99,7 +99,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.0 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.1 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
@@ -126,30 +126,30 @@ fi
 case $PLATFORM in
     linux-armhf)
         FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F77="aarch64-linux-gnu-gfortran" F90="$F77" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F77="aarch64-linux-gnu-gfortran" F90="$F77" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
-        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F77="powerpc64le-linux-gnu-gfortran" F90="$F77" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread install --prefix $INSTALL_PATH
+        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F77="powerpc64le-linux-gnu-gfortran" F90="$F77" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
-        ATLAS=None CC="gcc -m32 -D__STDC_NO_THREADS__" FFLAGS="-m32 -fPIC" LDFLAGS="-m32 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m32 -D__STDC_NO_THREADS__" FFLAGS="-m32 -fPIC" LDFLAGS="-m32 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     linux-x86_64)
-        ATLAS=None CC="gcc -m64 -D__STDC_NO_THREADS__" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m64 -D__STDC_NO_THREADS__" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
         export F77="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ -add_rpath @loader_path/../../../../ $f || true; done
         ;;

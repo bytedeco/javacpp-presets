@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.22.0-${project.parent.version}</version>
+      <version>1.22.1-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>

@@ -10,7 +10,7 @@
  * Map C++ JIT classes and functions of TorchScript in presets for PyTorch ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Synchronize `cachePackage()` and prevent repeated package caching in all presets ([pull #1071](https://github.com/bytedeco/javacpp-presets/pull/1071))
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
- * Upgrade presets for OpenCV 4.5.5, FFmpeg 4.4.1, librealsense2 2.50.0, Arrow 6.0.1, MKL 2022.0, DNNL 2.5.2, OpenBLAS 0.3.19, FFTW 3.3.10, CPython 3.10.1, NumPy 1.22.0, SciPy 1.8.0, Gym 0.21.0, LLVM 13.0.0, libpostal 1.1, Leptonica 1.82.0, Tesseract 5.0.1, CUDA 11.6.0, cuDNN 8.3.2, NCCL 2.11.4, MXNet 1.9.0, PyTorch 1.10.1, TensorFlow Lite 2.7.0, TensorRT 8.2.2.1, ALE 0.7.3, DepthAI 2.14.1, ONNX 1.10.2, ONNX Runtime 1.10.0, TVM 0.8.0, ModSecurity 3.0.6, and their dependencies
+ * Upgrade presets for OpenCV 4.5.5, FFmpeg 4.4.1, librealsense2 2.50.0, Arrow 6.0.1, MKL 2022.0, DNNL 2.5.2, OpenBLAS 0.3.19, FFTW 3.3.10, CPython 3.10.2, NumPy 1.22.1, SciPy 1.8.0, Gym 0.21.0, LLVM 13.0.0, libpostal 1.1, Leptonica 1.82.0, Tesseract 5.0.1, CUDA 11.6.0, cuDNN 8.3.2, NCCL 2.11.4, MXNet 1.9.0, PyTorch 1.10.1, TensorFlow Lite 2.7.0, TensorRT 8.2.2.1, ALE 0.7.3, DepthAI 2.14.1, ONNX 1.10.2, ONNX Runtime 1.10.0, TVM 0.8.0, ModSecurity 3.0.6, and their dependencies
 
 ### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))
