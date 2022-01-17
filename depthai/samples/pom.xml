@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>depthai-platform</artifactId>
-            <version>2.13.3-7abd507db16ea96b5f5a67d11f09f59b50d41827-1.5.7-SNAPSHOT</version>
+            <version>2.13.3-b83eac2e5b623e357f1ef5a424f00fb1d5d0ac12-1.5.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

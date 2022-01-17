@@ -7,14 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DEPTHAI_VERSION_COMMIT=7abd507db16ea96b5f5a67d11f09f59b50d41827
-DEPTHAI_VERSION=2.13.3-7abd507db16ea96b5f5a67d11f09f59b50d41827
+DEPTHAI_VERSION_COMMIT=b83eac2e5b623e357f1ef5a424f00fb1d5d0ac12
+DEPTHAI_VERSION=2.13.3-b83eac2e5b623e357f1ef5a424f00fb1d5d0ac12
 LIBUSB_VERSION=1.0.22
 
 # download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
 # download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
-# download https://github.com/luxonis/depthai-core/archive/7abd507db16ea96b5f5a67d11f09f59b50d41827.tar.gz depthai-core-$DEPTHAI_VERSION_COMMIT.tar.gz
+# download https://github.com/luxonis/depthai-core/archive/b83eac2e5b623e357f1ef5a424f00fb1d5d0ac12.tar.gz depthai-core-$DEPTHAI_VERSION_COMMIT.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
