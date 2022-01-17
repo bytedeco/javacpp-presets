@@ -103,11 +103,7 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // #endif
 
 public static final int XLINK_MAX_MX_ID_SIZE = 32;
-
-// #ifdef XLINK_USE_MX_ID_NAME
-public static final int XLINK_MAX_NAME_SIZE = (XLINK_MAX_MX_ID_SIZE + 16); // additional space for device name (see supportedDevices)
-// #else
-// #endif
+public static final int XLINK_MAX_NAME_SIZE = 64;
 
 public static final int XLINK_MAX_STREAMS = 32;
 public static final int XLINK_MAX_PACKETS_PER_STREAM = 64;
@@ -258,9 +254,12 @@ public static final int
 
 // #include <string>
 
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
 @Namespace("dai") public static native @Cast("bool") boolean initialize();
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo, @Cast("bool") boolean installSignalHandler/*=true*/, Pointer javavm/*=nullptr*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo, @Cast("bool") boolean installSignalHandler/*=true*/, Pointer javavm/*=nullptr*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(Pointer javavm);
 
   // namespace dai
 

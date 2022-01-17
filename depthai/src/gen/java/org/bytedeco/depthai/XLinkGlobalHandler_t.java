@@ -37,6 +37,7 @@ public class XLinkGlobalHandler_t extends Pointer {
 
     public native int profEnable(); public native XLinkGlobalHandler_t profEnable(int setter);
     public native @ByRef XLinkProf_t profilingData(); public native XLinkGlobalHandler_t profilingData(XLinkProf_t setter);
+    public native Pointer options(); public native XLinkGlobalHandler_t options(Pointer setter);
 
     //Deprecated fields. Begin.
     public native int loglevel(); public native XLinkGlobalHandler_t loglevel(int setter);
