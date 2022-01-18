@@ -49,6 +49,7 @@ public class swscale extends org.bytedeco.ffmpeg.presets.swscale {
 // #include <stdint.h>
 
 // #include "libavutil/avutil.h"
+// #include "libavutil/frame.h"
 // #include "libavutil/log.h"
 // #include "libavutil/pixfmt.h"
 // #include "version.h"
@@ -246,6 +247,97 @@ public static final int SWS_CS_BT2020 =         9;
               @Cast("uint8_t*const*") @ByPtrPtr byte[] dst, @Const int[] dstStride);
 
 /**
+ * Scale source data from src and write the output to dst.
+ *
+ * This is merely a convenience wrapper around
+ * - sws_frame_start()
+ * - sws_send_slice(0, src->height)
+ * - sws_receive_slice(0, dst->height)
+ * - sws_frame_end()
+ *
+ * @param dst The destination frame. See documentation for sws_frame_start() for
+ *            more details.
+ * @param src The source frame.
+ *
+ * @return 0 on success, a negative AVERROR code on failure
+ */
+@NoException public static native int sws_scale_frame(SwsContext c, AVFrame dst, @Const AVFrame src);
+
+/**
+ * Initialize the scaling process for a given pair of source/destination frames.
+ * Must be called before any calls to sws_send_slice() and sws_receive_slice().
+ *
+ * This function will retain references to src and dst, so they must both use
+ * refcounted buffers (if allocated by the caller, in case of dst).
+ *
+ * @param dst The destination frame.
+ *
+ *            The data buffers may either be already allocated by the caller or
+ *            left clear, in which case they will be allocated by the scaler.
+ *            The latter may have performance advantages - e.g. in certain cases
+ *            some output planes may be references to input planes, rather than
+ *            copies.
+ *
+ *            Output data will be written into this frame in successful
+ *            sws_receive_slice() calls.
+ * @param src The source frame. The data buffers must be allocated, but the
+ *            frame data does not have to be ready at this point. Data
+ *            availability is then signalled by sws_send_slice().
+ * @return 0 on success, a negative AVERROR code on failure
+ *
+ * @see sws_frame_end()
+ */
+@NoException public static native int sws_frame_start(SwsContext c, AVFrame dst, @Const AVFrame src);
+
+/**
+ * Finish the scaling process for a pair of source/destination frames previously
+ * submitted with sws_frame_start(). Must be called after all sws_send_slice()
+ * and sws_receive_slice() calls are done, before any new sws_frame_start()
+ * calls.
+ */
+@NoException public static native void sws_frame_end(SwsContext c);
+
+/**
+ * Indicate that a horizontal slice of input data is available in the source
+ * frame previously provided to sws_frame_start(). The slices may be provided in
+ * any order, but may not overlap. For vertically subsampled pixel formats, the
+ * slices must be aligned according to subsampling.
+ *
+ * @param slice_start first row of the slice
+ * @param slice_height number of rows in the slice
+ *
+ * @return a non-negative number on success, a negative AVERROR code on failure.
+ */
+@NoException public static native int sws_send_slice(SwsContext c, @Cast("unsigned int") int slice_start,
+                   @Cast("unsigned int") int slice_height);
+
+/**
+ * Request a horizontal slice of the output data to be written into the frame
+ * previously provided to sws_frame_start().
+ *
+ * @param slice_start first row of the slice; must be a multiple of
+ *                    sws_receive_slice_alignment()
+ * @param slice_height number of rows in the slice; must be a multiple of
+ *                     sws_receive_slice_alignment(), except for the last slice
+ *                     (i.e. when slice_start+slice_height is equal to output
+ *                     frame height)
+ *
+ * @return a non-negative number if the data was successfully written into the output
+ *         AVERROR(EAGAIN) if more input data needs to be provided before the
+ *                         output can be produced
+ *         another negative AVERROR code on other kinds of scaling failure
+ */
+@NoException public static native int sws_receive_slice(SwsContext c, @Cast("unsigned int") int slice_start,
+                      @Cast("unsigned int") int slice_height);
+
+/**
+ * @return alignment required for output slices requested with sws_receive_slice().
+ *         Slice offsets and sizes passed to sws_receive_slice() must be
+ *         multiples of the value returned from this function.
+ */
+@NoException public static native @Cast("unsigned int") int sws_receive_slice_alignment(@Const SwsContext c);
+
+/**
  * @param dstRange flag indicating the while-black range of the output (1=jpeg / 0=mpeg)
  * @param srcRange flag indicating the while-black range of the input (1=jpeg / 0=mpeg)
  * @param table the yuv2rgb coefficients describing the output yuv space, normally ff_yuv2rgb_coeffs[x]
@@ -253,7 +345,11 @@ public static final int SWS_CS_BT2020 =         9;
  * @param brightness 16.16 fixed point brightness correction
  * @param contrast 16.16 fixed point contrast correction
  * @param saturation 16.16 fixed point saturation correction
+#if LIBSWSCALE_VERSION_MAJOR > 6
+ * @return negative error code on error, non negative otherwise
+#else
  * @return -1 if not supported
+#endif
  */
 @NoException public static native int sws_setColorspaceDetails(SwsContext c, @Const IntPointer inv_table,
                              int srcRange, @Const IntPointer table, int dstRange,
@@ -266,7 +362,11 @@ public static final int SWS_CS_BT2020 =         9;
                              int brightness, int contrast, int saturation);
 
 /**
+#if LIBSWSCALE_VERSION_MAJOR > 6
+ * @return negative error code on error, non negative otherwise
+#else
  * @return -1 if not supported
+#endif
  */
 @NoException public static native int sws_getColorspaceDetails(SwsContext c, @Cast("int**") PointerPointer inv_table,
                              IntPointer srcRange, @Cast("int**") PointerPointer table, IntPointer dstRange,
@@ -301,17 +401,6 @@ public static final int SWS_CS_BT2020 =         9;
  * Scale all the coefficients of a so that their sum equals height.
  */
 @NoException public static native void sws_normalizeVec(SwsVector a, double height);
-
-// #if FF_API_SWS_VECTOR
-@NoException public static native @Deprecated SwsVector sws_getConstVec(double c, int length);
-@NoException public static native @Deprecated SwsVector sws_getIdentityVec();
-@NoException public static native @Deprecated void sws_convVec(SwsVector a, SwsVector b);
-@NoException public static native @Deprecated void sws_addVec(SwsVector a, SwsVector b);
-@NoException public static native @Deprecated void sws_subVec(SwsVector a, SwsVector b);
-@NoException public static native @Deprecated void sws_shiftVec(SwsVector a, int shift);
-@NoException public static native @Deprecated SwsVector sws_cloneVec(SwsVector a);
-@NoException public static native @Deprecated void sws_printVec2(SwsVector a, AVClass log_ctx, int log_level);
-// #endif
 
 @NoException public static native void sws_freeVec(SwsVector a);
 
@@ -390,6 +479,59 @@ public static final int SWS_CS_BT2020 =         9;
  */
 
 // #endif /* SWSCALE_SWSCALE_H */
+
+
+// Parsed from <libswscale/version.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef SWSCALE_VERSION_H
+// #define SWSCALE_VERSION_H
+
+/**
+ * \file
+ * swscale version macros
+ */
+
+// #include "libavutil/version.h"
+
+public static final int LIBSWSCALE_VERSION_MAJOR =   6;
+public static final int LIBSWSCALE_VERSION_MINOR =   4;
+public static final int LIBSWSCALE_VERSION_MICRO = 100;
+
+public static native @MemberGetter int LIBSWSCALE_VERSION_INT();
+public static final int LIBSWSCALE_VERSION_INT = LIBSWSCALE_VERSION_INT();
+// #define LIBSWSCALE_VERSION      AV_VERSION(LIBSWSCALE_VERSION_MAJOR,
+//                                            LIBSWSCALE_VERSION_MINOR,
+//                                            LIBSWSCALE_VERSION_MICRO)
+public static final int LIBSWSCALE_BUILD =        LIBSWSCALE_VERSION_INT;
+
+public static native @MemberGetter String LIBSWSCALE_IDENT();
+public static final String LIBSWSCALE_IDENT = LIBSWSCALE_IDENT();
+
+/**
+ * FF_API_* defines may be placed below to indicate public API that will be
+ * dropped at a future version bump. The defines themselves are not part of
+ * the public API and may change, break or disappear at any time.
+ */
+
+// #endif /* SWSCALE_VERSION_H */
 
 
 }

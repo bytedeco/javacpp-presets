@@ -34,7 +34,7 @@ public class AVCodecParserContext extends Pointer {
     }
 
     public native Pointer priv_data(); public native AVCodecParserContext priv_data(Pointer setter);
-    public native AVCodecParser parser(); public native AVCodecParserContext parser(AVCodecParser setter);
+    public native @Const AVCodecParser parser(); public native AVCodecParserContext parser(AVCodecParser setter);
     public native @Cast("int64_t") long frame_offset(); public native AVCodecParserContext frame_offset(long setter); /* offset of the current frame */
     public native @Cast("int64_t") long cur_offset(); public native AVCodecParserContext cur_offset(long setter); /* current offset
                            (incremented by each av_parser_parse()) */
@@ -87,13 +87,6 @@ public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
      * will be used.
      */
     public native int key_frame(); public native AVCodecParserContext key_frame(int setter);
-
-// #if FF_API_CONVERGENCE_DURATION
-    /**
-     * @deprecated unused
-     */
-    public native @Cast("int64_t") @Deprecated long convergence_duration(); public native AVCodecParserContext convergence_duration(long setter);
-// #endif
 
     // Timestamp generation support:
     /**

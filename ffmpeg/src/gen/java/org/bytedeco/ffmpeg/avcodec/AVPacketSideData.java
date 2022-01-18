@@ -34,9 +34,6 @@ public class AVPacketSideData extends Pointer {
     }
 
     public native @Cast("uint8_t*") BytePointer data(); public native AVPacketSideData data(BytePointer setter);
-// #if FF_API_BUFFER_SIZE_T
-    public native int size(); public native AVPacketSideData size(int setter);
-// #else
-// #endif
+    public native @Cast("size_t") long size(); public native AVPacketSideData size(long setter);
     public native @Cast("AVPacketSideDataType") int type(); public native AVPacketSideData type(int setter);
 }

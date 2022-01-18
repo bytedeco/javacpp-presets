@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.bytedeco.ffmpeg.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -36,11 +37,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.swresample",
     global = "org.bytedeco.ffmpeg.global.swresample",
     value = {
-        @Platform(cinclude = "<libswresample/swresample.h>", link = "swresample@.3"),
-        @Platform(value = "windows", preload = "swresample-3")
+        @Platform(cinclude = {"<libswresample/swresample.h>", "<libswresample/version.h>"}, link = "swresample@.4"),
+        @Platform(value = "windows", preload = "swresample-4")
     }
 )
 public class swresample implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("LIBSWRESAMPLE_VERSION").cppTypes())
+               .put(new Info("LIBSWRESAMPLE_VERSION_INT", "LIBSWRESAMPLE_IDENT").translate(false));
     }
 }

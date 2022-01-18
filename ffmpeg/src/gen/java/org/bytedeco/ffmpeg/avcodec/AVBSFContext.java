@@ -16,6 +16,11 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 
 /**
+ * \addtogroup lavc_core
+ * \{
+ */
+
+/**
  * The bitstream filter state.
  *
  * This struct must be allocated with av_bsf_alloc() and freed with
@@ -52,12 +57,6 @@ public class AVBSFContext extends Pointer {
      * The bitstream filter this context is an instance of.
      */
     public native @Const AVBitStreamFilter filter(); public native AVBSFContext filter(AVBitStreamFilter setter);
-
-    /**
-     * Opaque libavcodec internal data. Must not be touched by the caller in any
-     * way.
-     */
-    public native AVBSFInternal internal(); public native AVBSFContext internal(AVBSFInternal setter);
 
     /**
      * Opaque filter-specific private data. If filter->priv_class is non-NULL,

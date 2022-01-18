@@ -40,7 +40,7 @@ MFX_VERSION=1.35.1
 NVCODEC_VERSION=11.1.5.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.4.4
-FFMPEG_VERSION=4.4.1
+FFMPEG_VERSION=5.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -1526,8 +1526,8 @@ EOF
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=i686-w64-mingw32 # CFLAGS="-m32" CXXFLAGS="-m32"
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
         make -j $MAKEJ
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
@@ -1639,8 +1639,8 @@ EOF
         make -j $MAKEJ
         make install
         cd ../mfx_dispatch-$MFX_VERSION
-        autoreconf -fiv
-        PKG_CONFIG_PATH="../lib/pkgconfig" ./configure --prefix=$INSTALL_PATH --disable-shared --enable-static --enable-fast-install --with-pic --host=x86_64-w64-mingw32 # CFLAGS="-m64" CXXFLAGS="-m64"
+        sedinplace 's:${SOURCES}:${SOURCES} src/mfx_driver_store_loader.cpp:g' CMakeLists.txt
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .
         make -j $MAKEJ
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION

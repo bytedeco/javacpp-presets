@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,17 +37,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avcodec",
     global = "org.bytedeco.ffmpeg.global.avcodec",
     value = {
-        @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/packet.h>",
-                              "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>"},
-                  link = "avcodec@.58"),
+        @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/defs.h>", "<libavcodec/packet.h>",
+                              "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>", "<libavcodec/version.h>"},
+                  link = "avcodec@.59"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
-        @Platform(value = "windows", preload = "avcodec-58")
+        @Platform(value = "windows", preload = "avcodec-59")
     }
 )
 public class avcodec implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!FF_API_LOWRES", "!FF_API_DEBUG_MV").define(false))
                .put(new Info("CODEC_FLAG_CLOSED_GOP").translate().cppTypes("long"))
+               .put(new Info("LIBAVCODEC_VERSION").cppTypes())
+               .put(new Info("LIBAVCODEC_VERSION_INT", "LIBAVCODEC_IDENT").translate(false))
+               .put(new Info("FF_API_OPENH264_SLICE_MODE", "FF_API_OPENH264_CABAC", "FF_API_UNUSED_CODEC_CAPS", "FF_API_THREAD_SAFE_CALLBACKS",
+                             "FF_API_DEBUG_MV", "FF_API_GET_FRAME_CLASS", "FF_API_AUTO_THREADS", "FF_API_INIT_PACKET", "FF_API_AVCTX_TIMEBASE",
+                             "FF_API_MPEGVIDEO_OPTS", "FF_API_FLAG_TRUNCATED", "FF_API_SUB_TEXT_FORMAT").define().translate().cppTypes("bool"))
                .put(new Info("AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
                .put(new Info("AVCodec::hw_configs").skip())
                .putFirst(new Info("AVPanScan").pointerTypes("AVPanScan"))

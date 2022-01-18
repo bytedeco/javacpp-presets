@@ -108,7 +108,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
+@NoException public static native @Const AVInputFormat av_input_audio_device_next(@Const AVInputFormat d);
 
 /**
  * Video input devices iterator.
@@ -117,7 +117,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
+@NoException public static native @Const AVInputFormat av_input_video_device_next(@Const AVInputFormat d);
 
 /**
  * Audio output devices iterator.
@@ -126,7 +126,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
+@NoException public static native @Const AVOutputFormat av_output_audio_device_next(@Const AVOutputFormat d);
 
 /**
  * Video output devices iterator.
@@ -135,7 +135,7 @@ public class avdevice extends org.bytedeco.ffmpeg.presets.avdevice {
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-@NoException public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d);
+@NoException public static native @Const AVOutputFormat av_output_video_device_next(@Const AVOutputFormat d);
 // Targeting ../avdevice/AVDeviceRect.java
 
 
@@ -480,17 +480,17 @@ public static final int
  * @return count of autodetected devices, negative on error.
  * \note device argument takes precedence over device_name when both are set.
  */
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_input_sources(AVInputFormat device, String device_name,
+@NoException public static native int avdevice_list_input_sources(@Const AVInputFormat device, String device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
+@NoException public static native int avdevice_list_output_sinks(@Const AVOutputFormat device, String device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
 
 /**
@@ -498,6 +498,61 @@ public static final int
  */
 
 // #endif /* AVDEVICE_AVDEVICE_H */
+
+
+// Parsed from <libavdevice/version.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVDEVICE_VERSION_H
+// #define AVDEVICE_VERSION_H
+
+/**
+ * \file
+ * \ingroup lavd
+ * Libavdevice version macros
+ */
+
+// #include "libavutil/version.h"
+
+public static final int LIBAVDEVICE_VERSION_MAJOR =  59;
+public static final int LIBAVDEVICE_VERSION_MINOR =   4;
+public static final int LIBAVDEVICE_VERSION_MICRO = 100;
+
+public static native @MemberGetter int LIBAVDEVICE_VERSION_INT();
+public static final int LIBAVDEVICE_VERSION_INT = LIBAVDEVICE_VERSION_INT();
+// #define LIBAVDEVICE_VERSION     AV_VERSION(LIBAVDEVICE_VERSION_MAJOR,
+//                                            LIBAVDEVICE_VERSION_MINOR,
+//                                            LIBAVDEVICE_VERSION_MICRO)
+public static final int LIBAVDEVICE_BUILD =       LIBAVDEVICE_VERSION_INT;
+
+public static native @MemberGetter String LIBAVDEVICE_IDENT();
+public static final String LIBAVDEVICE_IDENT = LIBAVDEVICE_IDENT();
+
+/**
+ * FF_API_* defines may be placed below to indicate public API that will be
+ * dropped at a future version bump. The defines themselves are not part of
+ * the public API and may change, break or disappear at any time.
+ */
+public static final boolean FF_API_DEVICE_CAPABILITIES = (LIBAVDEVICE_VERSION_MAJOR < 60);
+
+// #endif /* AVDEVICE_VERSION_H */
 
 
 }

@@ -14,7 +14,6 @@ import static org.bytedeco.ffmpeg.global.swresample.*;
 
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
-// #endif
 
 @Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avcodec.class)
 public class MpegEncContext extends Pointer {
