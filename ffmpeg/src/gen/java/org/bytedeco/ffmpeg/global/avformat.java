@@ -164,27 +164,6 @@ public static final int
 @NoException public static native int avio_check(String url, int flags);
 
 /**
- * Move or rename a resource.
- *
- * \note url_src and url_dst should share the same protocol and authority.
- *
- * @param url_src url to resource to be moved
- * @param url_dst new url to resource if the operation succeeded
- * @return >=0 on success or negative on error.
- */
-@NoException public static native int avpriv_io_move(@Cast("const char*") BytePointer url_src, @Cast("const char*") BytePointer url_dst);
-@NoException public static native int avpriv_io_move(String url_src, String url_dst);
-
-/**
- * Delete a resource.
- *
- * @param url resource to be deleted.
- * @return >=0 on success or negative on error.
- */
-@NoException public static native int avpriv_io_delete(@Cast("const char*") BytePointer url);
-@NoException public static native int avpriv_io_delete(String url);
-
-/**
  * Open directory for reading.
  *
  * @param s       directory read context. Pointer to a NULL pointer must be passed.
@@ -1046,7 +1025,12 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
 
 // #include <time.h>
 // #include <stdio.h>  /* FILE */
-// #include "libavcodec/avcodec.h"
+
+// #include "libavcodec/codec.h"
+// #include "libavcodec/codec_par.h"
+// #include "libavcodec/defs.h"
+// #include "libavcodec/packet.h"
+
 // #include "libavutil/dict.h"
 // #include "libavutil/log.h"
 
@@ -1187,6 +1171,13 @@ public static final int AVPROBE_PADDING_SIZE = 32;
 public static final int AVFMT_NOFILE =        0x0001;
 /** Needs '%d' in filename. */
 public static final int AVFMT_NEEDNUMBER =    0x0002;
+/**
+ * The muxer/demuxer is experimental and should be used with caution.
+ *
+ * - demuxers: will not be selected automatically by probing, must be specified
+ *             explicitly.
+ */
+public static final int AVFMT_EXPERIMENTAL =  0x0004;
 /** Show format stream IDs numbers. */
 public static final int AVFMT_SHOW_IDS =      0x0008;
 /** Format wants global header. */
@@ -1256,25 +1247,56 @@ public static final int
 
 
 
-public static final int AV_DISPOSITION_DEFAULT =   0x0001;
-public static final int AV_DISPOSITION_DUB =       0x0002;
-public static final int AV_DISPOSITION_ORIGINAL =  0x0004;
-public static final int AV_DISPOSITION_COMMENT =   0x0008;
-public static final int AV_DISPOSITION_LYRICS =    0x0010;
-public static final int AV_DISPOSITION_KARAOKE =   0x0020;
+/**
+ * The stream should be chosen by default among other streams of the same type,
+ * unless the user has explicitly specified otherwise.
+ */
+public static final int AV_DISPOSITION_DEFAULT =              (1 << 0);
+/**
+ * The stream is not in original language.
+ *
+ * \note AV_DISPOSITION_ORIGINAL is the inverse of this disposition. At most
+ *       one of them should be set in properly tagged streams.
+ * \note This disposition may apply to any stream type, not just audio.
+ */
+public static final int AV_DISPOSITION_DUB =                  (1 << 1);
+/**
+ * The stream is in original language.
+ *
+ * @see the notes for AV_DISPOSITION_DUB
+ */
+public static final int AV_DISPOSITION_ORIGINAL =             (1 << 2);
+/**
+ * The stream is a commentary track.
+ */
+public static final int AV_DISPOSITION_COMMENT =              (1 << 3);
+/**
+ * The stream contains song lyrics.
+ */
+public static final int AV_DISPOSITION_LYRICS =               (1 << 4);
+/**
+ * The stream contains karaoke audio.
+ */
+public static final int AV_DISPOSITION_KARAOKE =              (1 << 5);
 
 /**
  * Track should be used during playback by default.
  * Useful for subtitle track that should be displayed
  * even when user did not explicitly ask for subtitles.
  */
-public static final int AV_DISPOSITION_FORCED =    0x0040;
-/** stream for hearing impaired audiences */
-public static final int AV_DISPOSITION_HEARING_IMPAIRED =  0x0080;
-/** stream for visual impaired audiences */
-public static final int AV_DISPOSITION_VISUAL_IMPAIRED =   0x0100;
-/** stream without voice */
-public static final int AV_DISPOSITION_CLEAN_EFFECTS =     0x0200;
+public static final int AV_DISPOSITION_FORCED =               (1 << 6);
+/**
+ * The stream is intended for hearing impaired audiences.
+ */
+public static final int AV_DISPOSITION_HEARING_IMPAIRED =     (1 << 7);
+/**
+ * The stream is intended for visually impaired audiences.
+ */
+public static final int AV_DISPOSITION_VISUAL_IMPAIRED =      (1 << 8);
+/**
+ * The audio stream contains music and sound effects without voice.
+ */
+public static final int AV_DISPOSITION_CLEAN_EFFECTS =        (1 << 9);
 /**
  * The stream is stored in the file as an attached picture/"cover art" (e.g.
  * APIC frame in ID3v2). The first (usually only) packet associated with it
@@ -1282,26 +1304,54 @@ public static final int AV_DISPOSITION_CLEAN_EFFECTS =     0x0200;
  * seeking takes place. It can also be accessed at any time in
  * AVStream.attached_pic.
  */
-public static final int AV_DISPOSITION_ATTACHED_PIC =      0x0400;
+public static final int AV_DISPOSITION_ATTACHED_PIC =         (1 << 10);
 /**
  * The stream is sparse, and contains thumbnail images, often corresponding
  * to chapter markers. Only ever used with AV_DISPOSITION_ATTACHED_PIC.
  */
-public static final int AV_DISPOSITION_TIMED_THUMBNAILS =  0x0800;
-// Targeting ../avformat/AVStreamInternal.java
-
-
+public static final int AV_DISPOSITION_TIMED_THUMBNAILS =     (1 << 11);
 
 /**
- * To specify text track kind (different from subtitles default).
+ * The subtitle stream contains captions, providing a transcription and possibly
+ * a translation of audio. Typically intended for hearing-impaired audiences.
  */
-public static final int AV_DISPOSITION_CAPTIONS =     0x10000;
-public static final int AV_DISPOSITION_DESCRIPTIONS = 0x20000;
-public static final int AV_DISPOSITION_METADATA =     0x40000;
-/** dependent audio stream (mix_type=0 in mpegts) */
-public static final int AV_DISPOSITION_DEPENDENT =    0x80000;
-/** still images in video stream (still_picture_flag=1 in mpegts) */
-public static final int AV_DISPOSITION_STILL_IMAGE = 0x100000;
+public static final int AV_DISPOSITION_CAPTIONS =             (1 << 16);
+/**
+ * The subtitle stream contains a textual description of the video content.
+ * Typically intended for visually-impaired audiences or for the cases where the
+ * video cannot be seen.
+ */
+public static final int AV_DISPOSITION_DESCRIPTIONS =         (1 << 17);
+/**
+ * The subtitle stream contains time-aligned metadata that is not intended to be
+ * directly presented to the user.
+ */
+public static final int AV_DISPOSITION_METADATA =             (1 << 18);
+/**
+ * The audio stream is intended to be mixed with another stream before
+ * presentation.
+ * Corresponds to mix_type=0 in mpegts.
+ */
+public static final int AV_DISPOSITION_DEPENDENT =            (1 << 19);
+/**
+ * The video stream contains still images.
+ */
+public static final int AV_DISPOSITION_STILL_IMAGE =          (1 << 20);
+
+/**
+ * @return The AV_DISPOSITION_* flag corresponding to disp or a negative error
+ *         code if disp does not correspond to a known stream disposition.
+ */
+@NoException public static native int av_disposition_from_string(@Cast("const char*") BytePointer disp);
+@NoException public static native int av_disposition_from_string(String disp);
+
+/**
+ * @param disposition a combination of AV_DISPOSITION_* values
+ * @return The string description corresponding to the lowest set bit in
+ *         disposition. NULL when the lowest set bit does not correspond
+ *         to a known disposition or when disposition is 0.
+ */
+@NoException public static native @Cast("const char*") BytePointer av_disposition_to_string(int disposition);
 
 /**
  * Options for behavior on timestamp wrap detection.
@@ -1315,21 +1365,6 @@ public static final int AV_PTS_WRAP_SUB_OFFSET =  -1;
 // Targeting ../avformat/AVStream.java
 
 
-
-// #if FF_API_FORMAT_GET_SET
-/**
- * Accessors for some AVStream fields. These used to be provided for ABI
- * compatibility, and do not need to be used anymore.
- */
-@NoException public static native @Deprecated @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
-@NoException public static native @Deprecated void av_stream_set_r_frame_rate(AVStream s, @ByVal AVRational r);
-// #if FF_API_LAVF_FFSERVER
-@NoException public static native @Cast("char*") @Deprecated BytePointer av_stream_get_recommended_encoder_configuration(@Const AVStream s);
-@NoException public static native @Deprecated void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") BytePointer configuration);
-@NoException public static native @Deprecated void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") ByteBuffer configuration);
-@NoException public static native @Deprecated void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") byte[] configuration);
-// #endif
-// #endif
 
 @NoException public static native AVCodecParserContext av_stream_get_parser(@Const AVStream s);
 
@@ -1376,38 +1411,9 @@ public static final int
     AVFMT_DURATION_FROM_STREAM = 1,
     /** Duration estimated from bitrate (less accurate) */
     AVFMT_DURATION_FROM_BITRATE = 2;
-// Targeting ../avformat/AVFormatInternal.java
-
-
 // Targeting ../avformat/AVFormatContext.java
 
 
-
-// #if FF_API_FORMAT_GET_SET
-/**
- * Accessors for some AVFormatContext fields. These used to be provided for ABI
- * compatibility, and do not need to be used anymore.
- */
-@NoException public static native @Deprecated int av_format_get_probe_score(@Const AVFormatContext s);
-@NoException public static native @Deprecated AVCodec av_format_get_video_codec(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_video_codec(AVFormatContext s, AVCodec c);
-@NoException public static native @Deprecated AVCodec av_format_get_audio_codec(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_audio_codec(AVFormatContext s, AVCodec c);
-@NoException public static native @Deprecated AVCodec av_format_get_subtitle_codec(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_subtitle_codec(AVFormatContext s, AVCodec c);
-@NoException public static native @Deprecated AVCodec av_format_get_data_codec(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_data_codec(AVFormatContext s, AVCodec c);
-@NoException public static native @Deprecated int av_format_get_metadata_header_padding(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_metadata_header_padding(AVFormatContext s, int c);
-@NoException public static native @Deprecated Pointer av_format_get_opaque(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_opaque(AVFormatContext s, Pointer opaque);
-@NoException public static native @Deprecated av_format_control_message av_format_get_control_message_cb(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_control_message_cb(AVFormatContext s, av_format_control_message callback);
-// #if FF_API_OLD_OPEN_CALLBACKS
-@NoException public static native @Deprecated AVOpenCallback av_format_get_open_cb(@Const AVFormatContext s);
-@NoException public static native @Deprecated void av_format_set_open_cb(AVFormatContext s, AVOpenCallback callback);
-// #endif
-// #endif
 
 /**
  * This function will cause global side data to be injected in the next packet
@@ -1446,21 +1452,6 @@ public static final int
  */
 @NoException public static native @Cast("const char*") BytePointer avformat_license();
 
-// #if FF_API_NEXT
-/**
- * Initialize libavformat and register all the muxers, demuxers and
- * protocols. If you do not call this function, then you can select
- * exactly which formats you want to support.
- *
- * @see av_register_input_format()
- * @see av_register_output_format()
- */
-@NoException public static native @Deprecated void av_register_all();
-
-@NoException public static native @Deprecated void av_register_input_format(AVInputFormat format);
-@NoException public static native @Deprecated void av_register_output_format(AVOutputFormat format);
-// #endif
-
 /**
  * Do global initialization of network libraries. This is optional,
  * and not recommended anymore.
@@ -1482,22 +1473,6 @@ public static final int
  * once for each time you called avformat_network_init.
  */
 @NoException public static native int avformat_network_deinit();
-
-// #if FF_API_NEXT
-/**
- * If f is NULL, returns the first registered input format,
- * if f is non-NULL, returns the next registered input format after f
- * or NULL if f is the last one.
- */
-@NoException public static native @Deprecated AVInputFormat av_iformat_next(@Const AVInputFormat f);
-
-/**
- * If f is NULL, returns the first registered output format,
- * if f is non-NULL, returns the next registered output format after f
- * or NULL if f is the last one.
- */
-@NoException public static native @Deprecated AVOutputFormat av_oformat_next(@Const AVOutputFormat f);
-// #endif
 
 /**
  * Iterate over all registered muxers.
@@ -1545,6 +1520,14 @@ public static final int
 @NoException public static native @Const AVClass avformat_get_class();
 
 /**
+ * Get the AVClass for AVStream. It can be used in combination with
+ * AV_OPT_SEARCH_FAKE_OBJ for examining options.
+ *
+ * @see av_opt_find().
+ */
+@NoException public static native @Const AVClass av_stream_get_class();
+
+/**
  * Add a new stream to a media file.
  *
  * When demuxing, it is called by the demuxer in read_header(). If the
@@ -1553,13 +1536,11 @@ public static final int
  *
  * When muxing, should be called by the user before avformat_write_header().
  *
- * User is required to call avcodec_close() and avformat_free_context() to
- * clean up the allocation by avformat_new_stream().
+ * User is required to call avformat_free_context() to clean up the allocation
+ * by avformat_new_stream().
  *
  * @param s media file handle
- * @param c If non-NULL, the AVCodecContext corresponding to the new stream
- * will be initialized to use this codec. This is needed for e.g. codec-specific
- * defaults to be set, so codec should be provided if it is known.
+ * @param c unused, does nothing
  *
  * @return newly created stream or NULL on error.
  */
@@ -1593,9 +1574,7 @@ public static final int
  * @return pointer to fresh allocated data or NULL otherwise
  */
 @NoException public static native @Cast("uint8_t*") BytePointer av_stream_new_side_data(AVStream stream,
-                                 @Cast("AVPacketSideDataType") int type, int size);
-// #else
-// #endif
+                                 @Cast("AVPacketSideDataType") int type, @Cast("size_t") long size);
 /**
  * Get side information from stream.
  *
@@ -1606,13 +1585,7 @@ public static final int
  * @return pointer to data if present or NULL otherwise
  */
 @NoException public static native @Cast("uint8_t*") BytePointer av_stream_get_side_data(@Const AVStream stream,
-                                 @Cast("AVPacketSideDataType") int type, IntPointer size);
-@NoException public static native @Cast("uint8_t*") ByteBuffer av_stream_get_side_data(@Const AVStream stream,
-                                 @Cast("AVPacketSideDataType") int type, IntBuffer size);
-@NoException public static native @Cast("uint8_t*") byte[] av_stream_get_side_data(@Const AVStream stream,
-                                 @Cast("AVPacketSideDataType") int type, int[] size);
-// #else
-// #endif
+                                 @Cast("AVPacketSideDataType") int type, @Cast("size_t*") SizeTPointer size);
 
 @NoException public static native AVProgram av_new_program(AVFormatContext s, int id);
 
@@ -1637,11 +1610,11 @@ public static final int
  * @return >= 0 in case of success, a negative AVERROR code in case of
  * failure
  */
-@NoException public static native int avformat_alloc_output_context2(@Cast("AVFormatContext**") PointerPointer ctx, AVOutputFormat oformat,
+@NoException public static native int avformat_alloc_output_context2(@Cast("AVFormatContext**") PointerPointer ctx, @Const AVOutputFormat oformat,
                                    @Cast("const char*") BytePointer format_name, @Cast("const char*") BytePointer filename);
-@NoException public static native int avformat_alloc_output_context2(@ByPtrPtr AVFormatContext ctx, AVOutputFormat oformat,
+@NoException public static native int avformat_alloc_output_context2(@ByPtrPtr AVFormatContext ctx, @Const AVOutputFormat oformat,
                                    @Cast("const char*") BytePointer format_name, @Cast("const char*") BytePointer filename);
-@NoException public static native int avformat_alloc_output_context2(@ByPtrPtr AVFormatContext ctx, AVOutputFormat oformat,
+@NoException public static native int avformat_alloc_output_context2(@ByPtrPtr AVFormatContext ctx, @Const AVOutputFormat oformat,
                                    String format_name, String filename);
 
 /**
@@ -1652,8 +1625,8 @@ public static final int
 /**
  * Find AVInputFormat based on the short name of the input format.
  */
-@NoException public static native AVInputFormat av_find_input_format(@Cast("const char*") BytePointer short_name);
-@NoException public static native AVInputFormat av_find_input_format(String short_name);
+@NoException public static native @Const AVInputFormat av_find_input_format(@Cast("const char*") BytePointer short_name);
+@NoException public static native @Const AVInputFormat av_find_input_format(String short_name);
 
 /**
  * Guess the file format.
@@ -1662,7 +1635,7 @@ public static final int
  * @param is_opened Whether the file is already opened; determines whether
  *                  demuxers with or without AVFMT_NOFILE are probed.
  */
-@NoException public static native AVInputFormat av_probe_input_format(AVProbeData pd, int is_opened);
+@NoException public static native @Const AVInputFormat av_probe_input_format(@Const AVProbeData pd, int is_opened);
 
 /**
  * Guess the file format.
@@ -1676,9 +1649,12 @@ public static final int
  *                  If the score is <= AVPROBE_SCORE_MAX / 4 it is recommended
  *                  to retry with a larger probe buffer.
  */
-@NoException public static native AVInputFormat av_probe_input_format2(AVProbeData pd, int is_opened, IntPointer score_max);
-@NoException public static native AVInputFormat av_probe_input_format2(AVProbeData pd, int is_opened, IntBuffer score_max);
-@NoException public static native AVInputFormat av_probe_input_format2(AVProbeData pd, int is_opened, int[] score_max);
+@NoException public static native @Const AVInputFormat av_probe_input_format2(@Const AVProbeData pd,
+                                            int is_opened, IntPointer score_max);
+@NoException public static native @Const AVInputFormat av_probe_input_format2(@Const AVProbeData pd,
+                                            int is_opened, IntBuffer score_max);
+@NoException public static native @Const AVInputFormat av_probe_input_format2(@Const AVProbeData pd,
+                                            int is_opened, int[] score_max);
 
 /**
  * Guess the file format.
@@ -1687,9 +1663,12 @@ public static final int
  *                  demuxers with or without AVFMT_NOFILE are probed.
  * @param score_ret The score of the best detection.
  */
-@NoException public static native AVInputFormat av_probe_input_format3(AVProbeData pd, int is_opened, IntPointer score_ret);
-@NoException public static native AVInputFormat av_probe_input_format3(AVProbeData pd, int is_opened, IntBuffer score_ret);
-@NoException public static native AVInputFormat av_probe_input_format3(AVProbeData pd, int is_opened, int[] score_ret);
+@NoException public static native @Const AVInputFormat av_probe_input_format3(@Const AVProbeData pd,
+                                            int is_opened, IntPointer score_ret);
+@NoException public static native @Const AVInputFormat av_probe_input_format3(@Const AVProbeData pd,
+                                            int is_opened, IntBuffer score_ret);
+@NoException public static native @Const AVInputFormat av_probe_input_format3(@Const AVProbeData pd,
+                                            int is_opened, int[] score_ret);
 
 /**
  * Probe a bytestream to determine the input format. Each time a probe returns
@@ -1707,26 +1686,26 @@ public static final int
  *         the maximal score is AVPROBE_SCORE_MAX
  * AVERROR code otherwise
  */
-@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @Cast("AVInputFormat**") PointerPointer fmt,
+@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @Cast("const AVInputFormat**") PointerPointer fmt,
                            @Cast("const char*") BytePointer url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
-@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
+@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @Const @ByPtrPtr AVInputFormat fmt,
                            @Cast("const char*") BytePointer url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
-@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
+@NoException public static native int av_probe_input_buffer2(AVIOContext pb, @Const @ByPtrPtr AVInputFormat fmt,
                            String url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 
 /**
  * Like av_probe_input_buffer2() but returns 0 on success
  */
-@NoException public static native int av_probe_input_buffer(AVIOContext pb, @Cast("AVInputFormat**") PointerPointer fmt,
+@NoException public static native int av_probe_input_buffer(AVIOContext pb, @Cast("const AVInputFormat**") PointerPointer fmt,
                           @Cast("const char*") BytePointer url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
-@NoException public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
+@NoException public static native int av_probe_input_buffer(AVIOContext pb, @Const @ByPtrPtr AVInputFormat fmt,
                           @Cast("const char*") BytePointer url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
-@NoException public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
+@NoException public static native int av_probe_input_buffer(AVIOContext pb, @Const @ByPtrPtr AVInputFormat fmt,
                           String url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 
@@ -1749,16 +1728,12 @@ public static final int
  *
  * \note If you want to use custom IO, preallocate the format context and set its pb field.
  */
-@NoException public static native int avformat_open_input(@Cast("AVFormatContext**") PointerPointer ps, @Cast("const char*") BytePointer url, AVInputFormat fmt, @Cast("AVDictionary**") PointerPointer options);
-@NoException public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, @Cast("const char*") BytePointer url, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
-@NoException public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, String url, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
-
-// #if FF_API_DEMUXER_OPEN
-/**
- * @deprecated Use an AVDictionary to pass options to a demuxer.
- */
-@NoException public static native @Deprecated int av_demuxer_open(AVFormatContext ic);
-// #endif
+@NoException public static native int avformat_open_input(@Cast("AVFormatContext**") PointerPointer ps, @Cast("const char*") BytePointer url,
+                        @Const AVInputFormat fmt, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, @Cast("const char*") BytePointer url,
+                        @Const AVInputFormat fmt, @ByPtrPtr AVDictionary options);
+@NoException public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, String url,
+                        @Const AVInputFormat fmt, @ByPtrPtr AVDictionary options);
 
 /**
  * Read packets of a media file to get stream information. This
@@ -1826,13 +1801,13 @@ public static final int
                         @Cast("AVMediaType") int type,
                         int wanted_stream_nb,
                         int related_stream,
-                        @Cast("AVCodec**") PointerPointer decoder_ret,
+                        @Cast("const AVCodec**") PointerPointer decoder_ret,
                         int flags);
 @NoException public static native int av_find_best_stream(AVFormatContext ic,
                         @Cast("AVMediaType") int type,
                         int wanted_stream_nb,
                         int related_stream,
-                        @ByPtrPtr AVCodec decoder_ret,
+                        @Const @ByPtrPtr AVCodec decoder_ret,
                         int flags);
 
 /**
@@ -2053,7 +2028,7 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  * Write a packet to an output media file ensuring correct interleaving.
  *
  * This function will buffer the packets internally as needed to make sure the
- * packets in the output file are properly interleaved in the order of
+ * packets in the output file are properly interleaved, usually ordered by
  * increasing dts. Callers doing their own interleaving should call
  * av_write_frame() instead of this function.
  *
@@ -2066,10 +2041,10 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  *            <br>
  *            If the packet is reference-counted, this function will take
  *            ownership of this reference and unreference it later when it sees
- *            fit.
- *            The caller must not access the data through this reference after
- *            this function returns. If the packet is not reference-counted,
- *            libavformat will make a copy.
+ *            fit. If the packet is not reference-counted, libavformat will
+ *            make a copy.
+ *            The returned packet will be blank (as if returned from
+ *            av_packet_alloc()), even on error.
  *            <br>
  *            This parameter can be NULL (at any time, not just at the end), to
  *            flush the interleaving queues.
@@ -2085,10 +2060,9 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  *            The dts for subsequent packets in one stream must be strictly
  *            increasing (unless the output format is flagged with the
  *            AVFMT_TS_NONSTRICT, then they merely have to be nondecreasing).
- *            \ref AVPacket.duration "duration") should also be set if known.
+ *            \ref AVPacket.duration "duration" should also be set if known.
  *
- * @return 0 on success, a negative AVERROR on error. Libavformat will always
- *         take care of freeing the packet, even if this function fails.
+ * @return 0 on success, a negative AVERROR on error.
  *
  * @see av_write_frame(), AVFormatContext.max_interleave_delta
  */
@@ -2155,22 +2129,22 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  * @param mime_type if non-NULL checks if mime_type matches with the
  * MIME type of the registered formats
  */
-@NoException public static native AVOutputFormat av_guess_format(@Cast("const char*") BytePointer short_name,
-                                @Cast("const char*") BytePointer filename,
-                                @Cast("const char*") BytePointer mime_type);
-@NoException public static native AVOutputFormat av_guess_format(String short_name,
-                                String filename,
-                                String mime_type);
+@NoException public static native @Const AVOutputFormat av_guess_format(@Cast("const char*") BytePointer short_name,
+                                      @Cast("const char*") BytePointer filename,
+                                      @Cast("const char*") BytePointer mime_type);
+@NoException public static native @Const AVOutputFormat av_guess_format(String short_name,
+                                      String filename,
+                                      String mime_type);
 
 /**
  * Guess the codec ID based upon muxer and filename.
  */
-@NoException public static native @Cast("AVCodecID") int av_guess_codec(AVOutputFormat fmt, @Cast("const char*") BytePointer short_name,
-                            @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer mime_type,
-                            @Cast("AVMediaType") int type);
-@NoException public static native @Cast("AVCodecID") int av_guess_codec(AVOutputFormat fmt, String short_name,
-                            String filename, String mime_type,
-                            @Cast("AVMediaType") int type);
+@NoException public static native @Cast("AVCodecID") int av_guess_codec(@Const AVOutputFormat fmt, @Cast("const char*") BytePointer short_name,
+                              @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer mime_type,
+                              @Cast("AVMediaType") int type);
+@NoException public static native @Cast("AVCodecID") int av_guess_codec(@Const AVOutputFormat fmt, String short_name,
+                              String filename, String mime_type,
+                              @Cast("AVMediaType") int type);
 
 /**
  * Get timing information for the data currently output.
@@ -2318,6 +2292,45 @@ public static final int AVSTREAM_INIT_IN_INIT_OUTPUT =  1;
  */
 @NoException public static native int av_index_search_timestamp(AVStream st, @Cast("int64_t") long timestamp, int flags);
 
+/**
+ * Get the index entry count for the given AVStream.
+ *
+ * @param st stream
+ * @return the number of index entries in the stream
+ */
+@NoException public static native int avformat_index_get_entries_count(@Const AVStream st);
+
+/**
+ * Get the AVIndexEntry corresponding to the given index.
+ *
+ * @param st          Stream containing the requested AVIndexEntry.
+ * @param idx         The desired index.
+ * @return A pointer to the requested AVIndexEntry if it exists, NULL otherwise.
+ *
+ * \note The pointer returned by this function is only guaranteed to be valid
+ *       until any function that takes the stream or the parent AVFormatContext
+ *       as input argument is called.
+ */
+@NoException public static native @Const AVIndexEntry avformat_index_get_entry(AVStream st, int idx);
+
+/**
+ * Get the AVIndexEntry corresponding to the given timestamp.
+ *
+ * @param st          Stream containing the requested AVIndexEntry.
+ * @param timestamp   Timestamp to retrieve the index entry for.
+ * @param flags       If AVSEEK_FLAG_BACKWARD then the returned entry will correspond
+ *                    to the timestamp which is <= the requested one, if backward
+ *                    is 0, then it will be >=
+ *                    if AVSEEK_FLAG_ANY seek to any frame, only keyframes otherwise.
+ * @return A pointer to the requested AVIndexEntry if it exists, NULL otherwise.
+ *
+ * \note The pointer returned by this function is only guaranteed to be valid
+ *       until any function that takes the stream or the parent AVFormatContext
+ *       as input argument is called.
+ */
+@NoException public static native @Const AVIndexEntry avformat_index_get_entry_from_timestamp(AVStream st,
+                                                            @Cast("int64_t") long wanted_timestamp,
+                                                            int flags);
 /**
  * Add an index entry into a sorted list. Update the entry if the list
  * already contains it.
@@ -2583,22 +2596,6 @@ public static final int AV_FRAME_FILENAME_FLAGS_MULTIPLE = 1;
 
 @NoException public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
-// #if FF_API_OLD_BSF
-/**
- * Apply a list of bitstream filters to a packet.
- *
- * @param codec AVCodecContext, usually from an AVStream
- * @param pkt the packet to apply filters to. If, on success, the returned
- *        packet has size == 0 and side_data_elems == 0, it indicates that
- *        the packet should be dropped
- * @param bsfc a NULL-terminated list of filters to apply
- * @return  >=0 on success;
- *          AVERROR code on failure
- */
-@NoException public static native @Deprecated int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
-                               AVBitStreamFilterContext bsfc);
-// #endif
-
 /** enum AVTimebaseSource */
 public static final int
     AVFMT_TBCF_AUTO = -1,
@@ -2634,6 +2631,77 @@ public static final int
  */
 
 // #endif /* AVFORMAT_AVFORMAT_H */
+
+
+// Parsed from <libavformat/version.h>
+
+/*
+ * Version macros.
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVFORMAT_VERSION_H
+// #define AVFORMAT_VERSION_H
+
+/**
+ * \file
+ * \ingroup libavf
+ * Libavformat version macros
+ */
+
+// #include "libavutil/version.h"
+
+// Major bumping may affect Ticket5467, 5421, 5451(compatibility with Chromium)
+// Also please add any ticket numbers that you believe might be affected here
+public static final int LIBAVFORMAT_VERSION_MAJOR =  59;
+public static final int LIBAVFORMAT_VERSION_MINOR =  16;
+public static final int LIBAVFORMAT_VERSION_MICRO = 100;
+
+public static native @MemberGetter int LIBAVFORMAT_VERSION_INT();
+public static final int LIBAVFORMAT_VERSION_INT = LIBAVFORMAT_VERSION_INT();
+// #define LIBAVFORMAT_VERSION     AV_VERSION(LIBAVFORMAT_VERSION_MAJOR,
+//                                            LIBAVFORMAT_VERSION_MINOR,
+//                                            LIBAVFORMAT_VERSION_MICRO)
+public static final int LIBAVFORMAT_BUILD =       LIBAVFORMAT_VERSION_INT;
+
+public static native @MemberGetter String LIBAVFORMAT_IDENT();
+public static final String LIBAVFORMAT_IDENT = LIBAVFORMAT_IDENT();
+
+/**
+ * FF_API_* defines may be placed below to indicate public API that will be
+ * dropped at a future version bump. The defines themselves are not part of
+ * the public API and may change, break or disappear at any time.
+ *
+ * \note, when bumping the major version it is recommended to manually
+ * disable each FF_API_* in its own commit instead of disabling them all
+ * at once through the bump. This improves the git bisect-ability of the change.
+ *
+ */
+public static final boolean FF_API_LAVF_PRIV_OPT =            (LIBAVFORMAT_VERSION_MAJOR < 60);
+public static final boolean FF_API_COMPUTE_PKT_FIELDS2 =      (LIBAVFORMAT_VERSION_MAJOR < 60);
+public static final boolean FF_API_AVIOCONTEXT_WRITTEN =      (LIBAVFORMAT_VERSION_MAJOR < 60);
+public static final boolean FF_HLS_TS_OPTIONS =               (LIBAVFORMAT_VERSION_MAJOR < 60);
+public static final boolean FF_API_AVSTREAM_CLASS =           (LIBAVFORMAT_VERSION_MAJOR > 59);
+public static final boolean FF_HTTP_CACHE_REDIRECT_DEFAULT =  (LIBAVFORMAT_VERSION_MAJOR < 60);
+
+
+public static final int FF_API_R_FRAME_RATE =            1;
+// #endif /* AVFORMAT_VERSION_H */
 
 
 }

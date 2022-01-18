@@ -46,8 +46,5 @@ public class AVBufferRef extends Pointer {
     /**
      * Size of data in bytes.
      */
-// #if FF_API_BUFFER_SIZE_T
-    public native int size(); public native AVBufferRef size(int setter);
-// #else
-// #endif
+    public native @Cast("size_t") long size(); public native AVBufferRef size(long setter);
 }

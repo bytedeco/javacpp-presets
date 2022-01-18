@@ -38,10 +38,7 @@ public class AVFrameSideData extends Pointer {
 
     public native @Cast("AVFrameSideDataType") int type(); public native AVFrameSideData type(int setter);
     public native @Cast("uint8_t*") BytePointer data(); public native AVFrameSideData data(BytePointer setter);
-// #if FF_API_BUFFER_SIZE_T
-    public native int size(); public native AVFrameSideData size(int setter);
-// #else
-// #endif
+    public native @Cast("size_t") long size(); public native AVFrameSideData size(long setter);
     public native AVDictionary metadata(); public native AVFrameSideData metadata(AVDictionary setter);
     public native AVBufferRef buf(); public native AVFrameSideData buf(AVBufferRef setter);
 }

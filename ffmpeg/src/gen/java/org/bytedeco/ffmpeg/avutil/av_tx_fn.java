@@ -23,7 +23,7 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * @param stride the input or output stride in bytes
  *
  * The out and in arrays must be aligned to the maximum required by the CPU
- * architecture.
+ * architecture unless the AV_TX_UNALIGNED flag was set in av_tx_init().
  * The stride must follow the constraints the transform type has specified.
  */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)

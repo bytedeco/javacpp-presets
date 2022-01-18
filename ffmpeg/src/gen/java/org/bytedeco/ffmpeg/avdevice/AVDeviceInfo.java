@@ -51,4 +51,8 @@ public class AVDeviceInfo extends Pointer {
     public native @Cast("char*") BytePointer device_name(); public native AVDeviceInfo device_name(BytePointer setter);
     /** human friendly name */
     public native @Cast("char*") BytePointer device_description(); public native AVDeviceInfo device_description(BytePointer setter);
+    /** array indicating what media types(s), if any, a device can provide. If null, cannot provide any */
+    public native @Cast("AVMediaType*") IntPointer media_types(); public native AVDeviceInfo media_types(IntPointer setter);
+    /** length of media_types array, 0 if device cannot provide any media types */
+    public native int nb_media_types(); public native AVDeviceInfo nb_media_types(int setter);
 }

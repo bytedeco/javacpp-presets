@@ -48,10 +48,6 @@ public class AVFilterGraph extends Pointer {
 
     /** sws options to use for the auto-inserted scale filters */
     public native @Cast("char*") BytePointer scale_sws_opts(); public native AVFilterGraph scale_sws_opts(BytePointer setter);
-// #if FF_API_LAVR_OPTS
-    /** libavresample options to use for the auto-inserted resample filters */
-    public native @Cast("char*") @Deprecated BytePointer resample_lavr_opts(); public native AVFilterGraph resample_lavr_opts(BytePointer setter);
-// #endif
 
     /**
      * Type of multithreading allowed for filters in this graph. A combination

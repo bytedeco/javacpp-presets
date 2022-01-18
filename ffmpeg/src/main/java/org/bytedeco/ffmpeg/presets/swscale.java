@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.bytedeco.ffmpeg.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -36,11 +37,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.swscale",
     global = "org.bytedeco.ffmpeg.global.swscale",
     value = {
-        @Platform(cinclude = "<libswscale/swscale.h>", link = "swscale@.5"),
-        @Platform(value = "windows", preload = "swscale-5")
+        @Platform(cinclude = {"<libswscale/swscale.h>", "<libswscale/version.h>"}, link = "swscale@.6"),
+        @Platform(value = "windows", preload = "swscale-6")
     }
 )
 public class swscale implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("LIBSWSCALE_VERSION").cppTypes())
+               .put(new Info("LIBSWSCALE_VERSION_INT", "LIBSWSCALE_IDENT").translate(false));
     }
 }

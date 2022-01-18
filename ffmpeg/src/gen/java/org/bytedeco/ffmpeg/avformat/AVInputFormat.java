@@ -89,10 +89,6 @@ public class AVInputFormat extends Pointer {
      * New public fields should be added right above.
      *****************************************************************
      */
-// #if FF_API_NEXT
-    public native AVInputFormat next(); public native AVInputFormat next(AVInputFormat setter);
-// #endif
-
     /**
      * Raw demuxers store their codec ID here.
      */
@@ -102,6 +98,11 @@ public class AVInputFormat extends Pointer {
      * Size of private data so that it can be allocated in the wrapper.
      */
     public native int priv_data_size(); public native AVInputFormat priv_data_size(int setter);
+
+    /**
+     * Internal flags. See FF_FMT_FLAG_* in internal.h.
+     */
+    public native int flags_internal(); public native AVInputFormat flags_internal(int setter);
 
     /**
      * Tell if a given file has a chance of being parsed as this format.
@@ -257,33 +258,4 @@ public class AVInputFormat extends Pointer {
     }
     public native Get_device_list_AVFormatContext_Pointer get_device_list(); public native AVInputFormat get_device_list(Get_device_list_AVFormatContext_Pointer setter);
 
-// #if LIBAVFORMAT_VERSION_MAJOR < 59
-    /**
-     * Initialize device capabilities submodule.
-     * @see avdevice_capabilities_create() for more details.
-     */
-    public static class Create_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Create_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
-        protected Create_device_capabilities_AVFormatContext_Pointer() { allocate(); }
-        private native void allocate();
-        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
-    }
-    public native Create_device_capabilities_AVFormatContext_Pointer create_device_capabilities(); public native AVInputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_Pointer setter);
-
-    /**
-     * Free device capabilities submodule.
-     * @see avdevice_capabilities_free() for more details.
-     */
-    public static class Free_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Free_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
-        protected Free_device_capabilities_AVFormatContext_Pointer() { allocate(); }
-        private native void allocate();
-        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
-    }
-    public native Free_device_capabilities_AVFormatContext_Pointer free_device_capabilities(); public native AVInputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_Pointer setter);
-// #endif
 }

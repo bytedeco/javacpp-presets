@@ -26,7 +26,6 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  *
  * @return an AVBufferRef referring to data on success, NULL on failure.
  */
-// #if FF_API_BUFFER_SIZE_T
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class Free_Pointer_BytePointer extends FunctionPointer {
     static { Loader.load(); }

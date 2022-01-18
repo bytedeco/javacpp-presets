@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,14 +37,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avdevice",
     global = "org.bytedeco.ffmpeg.global.avdevice",
     value = {
-        @Platform(cinclude = "<libavdevice/avdevice.h>", link = "avdevice@.58"),
-        @Platform(value = "windows", preload = "avdevice-58")
+        @Platform(cinclude = {"<libavdevice/avdevice.h>" , "<libavdevice/version.h>"}, link = "avdevice@.59"),
+        @Platform(value = "windows", preload = "avdevice-59")
     }
 )
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.putFirst(new Info("AVDeviceInfoList").pointerTypes("AVDeviceInfoList"))
                .putFirst(new Info("AVDeviceCapabilitiesQuery").pointerTypes("AVDeviceCapabilitiesQuery"))
+               .put(new Info("LIBAVDEVICE_VERSION").cppTypes())
+               .put(new Info("LIBAVDEVICE_VERSION_INT", "LIBAVDEVICE_IDENT").translate(false))
+               .put(new Info("FF_API_DEVICE_CAPABILITIES").define().translate().cppTypes("bool"))
                .put(new Info("av_device_capabilities").skip());
     }
 }

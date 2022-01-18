@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,13 +37,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avfilter",
     global = "org.bytedeco.ffmpeg.global.avfilter",
     value = {
-        @Platform(cinclude = {"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link = "avfilter@.7"),
-        @Platform(value = "windows", preload = "avfilter-7")
+        @Platform(cinclude = {"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>", "<libavfilter/version.h>"}, link = "avfilter@.8"),
+        @Platform(value = "windows", preload = "avfilter-8")
     }
 )
 public class avfilter implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts", "FFFrameQueue").cast().pointerTypes("Pointer"))
+               .put(new Info("LIBAVFILTER_VERSION").cppTypes())
+               .put(new Info("LIBAVFILTER_VERSION_INT", "LIBAVFILTER_IDENT").translate(false))
+               .put(new Info("FF_API_SWS_PARAM_OPTION", "FF_API_BUFFERSINK_ALLOC", "FF_API_PAD_COUNT").define().translate().cppTypes("bool"))
                .put(new Info("AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(true))
                .put(new Info("!FF_API_FOO_COUNT", "FF_INTERNAL_FIELDS").define(false));
     }
