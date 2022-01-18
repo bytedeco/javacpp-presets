@@ -569,4 +569,18 @@ public class Subgraph extends Pointer {
   // is linked to the program, calling this function will output memory usage
   // information about tenosrs and ops.
   public native void DumpMemoryPlannerDebugInfo();
+
+  // WARNING: This is an experimental API and subject to change.
+  // Force all intermediate dynamic tensors to be released once they are not
+  // used by the model. Please use this configuration with caution, since it
+  // might reduce the peak memory usage of the model at the cost of a slower
+  // inference speed. This API needs to be called before calling
+  // `AllocateTensors`.
+  public native void EnsureDynamicTensorsAreReleased();
+
+  // WARNING: This is an experimental API and subject to change.
+  // Remove unused inputs of the subgraph. It checks usage of inputs and mark it
+  // as kTfLiteOptionalTensor if the input is not used in graph execution.
+  // Currently, it's used to remove unused inputs of WHILE cond subgraphs.
+  public native @Cast("TfLiteStatus") int RemoveUnusedInputs();
 }

@@ -74,4 +74,6 @@ public class MutableOpResolver extends OpResolver {
    *  except that registrations made with {@code AddBuiltin} or {@code AddCustom} always
    *  take precedence over registrations made with {@code ChainOpResolver}. */
   public native void AddAll(@Const @ByRef MutableOpResolver other);
+
+  public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
 }
