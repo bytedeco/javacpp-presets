@@ -28,6 +28,9 @@ public class TfLiteRegistration extends Pointer {
     }
 
   // Initializes the op from serialized data.
+  // Called only *once* for the lifetime of the op, so any one-time allocations
+  // should be made here (unless they depend on tensor sizes).
+  //
   // If a built-in op:
   //   `buffer` is the op's params data (TfLiteLSTMParams*).
   //   `length` is zero.
@@ -66,6 +69,7 @@ public class TfLiteRegistration extends Pointer {
   // prepare is called when the inputs this node depends on have been resized.
   // context->ResizeTensor() can be called to request output tensors to be
   // resized.
+  // Can be called multiple times for the lifetime of the op.
   //
   // Returns kTfLiteOk on success.
   public static class Prepare_TfLiteContext_TfLiteNode extends FunctionPointer {

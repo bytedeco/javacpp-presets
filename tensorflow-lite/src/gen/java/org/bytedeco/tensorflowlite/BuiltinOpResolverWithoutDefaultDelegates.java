@@ -29,5 +29,4 @@ public class BuiltinOpResolverWithoutDefaultDelegates extends BuiltinOpResolver 
 
   public BuiltinOpResolverWithoutDefaultDelegates() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
 }
