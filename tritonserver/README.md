@@ -68,10 +68,18 @@ Now, this `models` directory will be our model repository.
  $ tar zxvf apache-maven-3.8.4-bin.tar.gz
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
  $ git clone https://github.com/bytedeco/javacpp-presets.git
- $ cd javacpp-presets/tritonserver/samples
+ $ cd javacpp-presets
+ $ mvn clean install --projects .,tritonserver
+ $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
+ $ cd tritonserver/samples
  $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
 This sample is the Java implementation of the simple example written for the [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api).
 
+### Steps to run any binary linked to Triton Inference Server using JavaCPP inside an NGC container
 
+ 1. Similar to the `pom.xml` for `Simple.java`:
+```bash
+ $ mvn compile exec:java
+```
