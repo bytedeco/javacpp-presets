@@ -79,7 +79,10 @@ This sample is the Java implementation of the simple example written for the [C 
 
 ### Steps to run any binary linked to Triton Inference Server using JavaCPP inside an NGC container
 
- 1. Similar to the `pom.xml` for `Simple.java`:
+To run your code, you will need to:
+
+ 1. Create `pom.xml` and `<your code>.java` source files, and
+ 2. Similar to the `pom.xml` for `Simple.java`, execute with:
 ```bash
  $ mvn compile exec:java
 ```
