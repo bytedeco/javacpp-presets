@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2020-2022 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -743,7 +743,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<c10::TensorImpl*>").pointerTypes("TensorImplVector").define())
                .put(new Info("std::vector<torch::autograd::Edge>", "torch::autograd::edge_list")
                        .valueTypes("@Cast({\"\", \"std::vector<torch::autograd::Edge>\"}) @StdMove EdgeVector").pointerTypes("EdgeVector").define())
-               .put(new Info("std::vector<at::Tensor>", "std::vector<torch::autograd::Variable>", "torch::autograd::variable_list")
+               .put(new Info("std::vector<at::Tensor>", "std::vector<at::Tensor,A>", "std::vector<torch::autograd::Variable>", "torch::autograd::variable_list")
                        .valueTypes("@Cast({\"\", \"std::vector<at::Tensor>\"}) @StdMove TensorVector").pointerTypes("TensorVector").define())
                .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
                .put(new Info("std::vector<c10::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
@@ -957,6 +957,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::ArrayRef<at::Scalar>", "at::ArrayRef<at::Scalar>").pointerTypes("ScalarArrayRef"))
                .put(new Info("c10::ArrayRef<at::Scalar>::iterator", "c10::ArrayRef<at::Scalar>::const_iterator").cast().pointerTypes("Scalar"))
                .put(new Info("c10::ArrayRef<at::Tensor>", "at::ArrayRef<at::Tensor>", "at::TensorList").pointerTypes("TensorArrayRef"))
+               .put(new Info("c10::ArrayRef<at::Tensor>(std::vector<at::Tensor,A>&)").javaText(
+                       "public TensorArrayRef(@ByRef TensorVector Vec) { super((Pointer)null); allocate(Vec); }\n"
+                     + "private native void allocate(@ByRef TensorVector Vec);"))
                .put(new Info("c10::ArrayRef<at::Tensor>::iterator", "c10::ArrayRef<at::Tensor>::const_iterator").cast().pointerTypes("Tensor"))
                .put(new Info("c10::ArrayRef<at::TensorArg>", "at::ArrayRef<at::TensorArg>").pointerTypes("TensorArgArrayRef"))
                .put(new Info("c10::ArrayRef<at::TensorArg>::iterator", "c10::ArrayRef<at::TensorArg>::const_iterator").cast().pointerTypes("TensorArg"))
