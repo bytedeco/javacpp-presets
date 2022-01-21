@@ -4,7 +4,7 @@
  * Add to `torch.Tensor` convenient `create()`, `createBuffer()`, and `createIndexer()` factory methods for PyTorch
  * Upgrade requirements to Android 7.0 for camera support in OpenCV and FFmpeg ([issue bytedeco/javacv#1692](https://github.com/bytedeco/javacv/issues/1692))
  * Include new `llvm-c/Transforms/PassBuilder.h` header file in presets for LLVM ([pull #1093](https://github.com/bytedeco/javacpp-presets/pull/1093))
- * Introduce `macosx-arm64` builds to presets for OpenBLAS, OpenCV ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
+ * Introduce `macosx-arm64` builds to presets for OpenCV, FFmpeg, OpenBLAS ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
  * Add presets for LZ4 1.9.3 ([pull #1094](https://github.com/bytedeco/javacpp-presets/pull/1094)), Triton Inference Server 2.17.0 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
  * Add presets for the NvToolsExt (NVTX) module of CUDA ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Increase the amount of function pointers available for callbacks in presets for Qt ([pull #1080](https://github.com/bytedeco/javacpp-presets/pull/1080))
