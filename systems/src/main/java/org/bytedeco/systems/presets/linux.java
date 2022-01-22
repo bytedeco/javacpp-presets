@@ -56,7 +56,8 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h", "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h",
                "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
                "bits/cpu-set.h", "bits/types/struct_sched_param.h", "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h",
-               "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
+               "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h",
+               "bits/ipctypes.h", "bits/ipc.h", "sys/ipc.h", "bits/shm.h", "sys/shm.h" },
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {

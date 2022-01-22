@@ -37,14 +37,16 @@ import org.bytedeco.javacpp.tools.Logger;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = javacpp.class, value = {@Platform(value = "macosx-x86", define = "__STDC_WANT_LIB_EXT1__ 1",
+@Properties(inherit = javacpp.class, value = {@Platform(value = "macosx-x86", define = "__STDC_WANT_LIB_EXT1__ 1 __DARWIN_UNIX03 1",
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "_xlocale.h", "xlocale.h", "_locale.h", "langinfo.h", "locale.h",
                "sys/uio.h", "sys/_types/_iovec_t.h", "sys/socket.h", "sys/errno.h", "string.h", "stdlib.h", /*"sys/types.h",*/
                "sys/_types/_timespec.h", "sys/_types/_timeval.h", "sys/time.h", "time.h", "utime.h",
                "sys/_types/_s_ifmt.h", "sys/_types/_filesec_t.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
                "sys/_types/_sigaltstack.h", "sys/signal.h", "signal.h", /*"sys/_types/_ucontext.h", "sys/ucontext.h", "ucontext.h",*/
                "sched.h", "mach/machine.h", "spawn.h", "sys/_types/_seek_set.h", "sys/unistd.h", "unistd.h",
-               "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
+               "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h",
+               "sys/_types/_uid_t.h", "sys/_types/_gid_t.h", "sys/_types/_mode_t.h", "sys/_types/_key_t.h", "sys/ipc.h",
+               "sys/_types/_pid_t.h", "sys/_types/_time_t.h", "sys/_types/_size_t.h", "sys/shm.h" },
     includepath = {"/usr/include/", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/",
                    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"})},
     target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
@@ -149,6 +151,9 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
-               .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np").skip());
+               .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np").skip())
+
+               .put(new Info("ipc_perm").pointerTypes("__ipc_perm_new"))
+               .put(new Info("shmid_ds").pointerTypes("__shmid_ds_new"));
     }
 }
