@@ -10610,41 +10610,6 @@ public static native @Cast("__pid_t") int wait4(@Cast("__pid_t") int __pid, Poin
 // #endif /* sys/wait.h  */
 
 
-// Parsed from bits/ipctypes.h
-
-/* bits/ipctypes.h -- Define some types used by SysV IPC/MSG/SHM.
-   Copyright (C) 2012 Free Software Foundation, Inc.
-   This file is part of the GNU C Library.
-
-   The GNU C Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   The GNU C Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
-
-// #ifndef _SYS_IPC_H
-// # error "Never use <bits/ipctypes.h> directly; include <sys/ipc.h> instead."
-// #endif
-
-// #ifndef _BITS_IPCTYPES_H
-public static final int _BITS_IPCTYPES_H =	1;
-
-/* Used in `struct shmid_ds'.  */
-// # ifdef __x86_64__
-// # else
-// # endif
-
-// #endif /* bits/ipctypes.h */
-
-
 // Parsed from bits/ipc.h
 
 /* Copyright (C) 1995-2012 Free Software Foundation, Inc.
@@ -10684,7 +10649,7 @@ public static final int IPC_INFO =	3;		/* See ipcs.  */
 // #endif
 
 /* Special key values.  */
-public static final int IPC_PRIVATE =	((__key_t) 0);
+public static final int IPC_PRIVATE =	((int) 0);
 // Targeting ../linux/ipc_perm.java
 
 
@@ -10739,8 +10704,8 @@ public static final int _SYS_IPC_H =	1;
 // #endif
 
 /* Generates key for System V style IPC.  */
-public static native @ByVal __key_t ftok(@Cast("const char*") BytePointer __pathname, int __proj_id);
-public static native @ByVal __key_t ftok(String __pathname, int __proj_id);
+public static native @Cast("key_t") int ftok(@Cast("const char*") BytePointer __pathname, int __proj_id);
+public static native @Cast("key_t") int ftok(String __pathname, int __proj_id);
 
 // #endif /* sys/ipc.h */
 
@@ -10869,7 +10834,7 @@ public static final int _SYS_SHM_H =	1;
 public static native int shmctl(int __shmid, int __cmd, shmid_ds __buf);
 
 /* Get shared memory segment.  */
-public static native int shmget(@ByVal __key_t __key, @Cast("size_t") long __size, int __shmflg);
+public static native int shmget(@Cast("key_t") int __key, @Cast("size_t") long __size, int __shmflg);
 
 /* Attach shared memory segment.  */
 public static native Pointer shmat(int __shmid, @Const Pointer __shmaddr, int __shmflg);

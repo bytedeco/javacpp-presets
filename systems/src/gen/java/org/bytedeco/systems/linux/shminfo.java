@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.systems.global.linux.*;
 	/* don't check for reservations */
 
-@Properties(inherit = org.bytedeco.systems.presets.linux.class)
+@Name("struct shminfo") @Properties(inherit = org.bytedeco.systems.presets.linux.class)
 public class shminfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

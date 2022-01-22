@@ -47,7 +47,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/uio.h", "bits/socket_type.h", "bits/socket.h", "bits/errno.h", "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h",
                "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h", "bits/siginfo.h", "bits/sigset.h", "bits/signum.h",
                "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "bits/cpu-set.h", "bits/types/struct_sched_param.h", "bits/sched.h",
-               "bits/confname.h", "bits/resource.h"},
+               "bits/confname.h", "bits/resource.h", "bits/ipc.h", "bits/shm.h" },
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/types/__locale_t.h", "bits/types/locale_t.h", "bits/locale.h", "langinfo.h", "locale.h",
                "bits/types/struct_tm.h", "bits/types/struct_timeval.h", "bits/types/struct_timespec.h", "bits/types/struct_itimerspec.h", "bits/types/timer_t.h",
                "bits/types/struct_iovec.h", "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket_type.h", "bits/socket.h", "sys/socket.h",
@@ -57,7 +57,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
                "bits/cpu-set.h", "bits/types/struct_sched_param.h", "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h",
                "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h",
-               "bits/ipctypes.h", "bits/ipc.h", "sys/ipc.h", "bits/shm.h", "sys/shm.h" },
+               "bits/ipc.h", "sys/ipc.h", "bits/shm.h", "sys/shm.h" },
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
@@ -246,8 +246,10 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "sigblock", "siggetmask", "sigsetmask", "sigreturn", "sigstack(sigstack*, sigstack*)",
                              "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state").skip())
 
-               .put(new Info("__key_t").pointerTypes("key_t"))
-               .put(new Info("key_t").pointerTypes("__key_t"));
-
+               .put(new Info("key_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("__key_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("__key").skip())
+               .put(new Info("struct shminfo").pointerTypes("shminfo"))
+               .put(new Info("struct shmid_ds").pointerTypes("shmid_ds"));
     }
 }
