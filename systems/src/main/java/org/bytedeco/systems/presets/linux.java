@@ -244,6 +244,9 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("cmsghdr").purify())
                .put(new Info("cmsghdr::__flexarr", "getwd", "getpw", "lchmod", "mktemp", "revoke", "setlogin",
                              "sigblock", "siggetmask", "sigsetmask", "sigreturn", "sigstack(sigstack*, sigstack*)",
-                             "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state").skip());
+                             "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state").skip())
+
+               .put(new Info("__key_t").valueTypes("key_t"));
+
     }
 }
