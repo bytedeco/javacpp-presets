@@ -10739,8 +10739,8 @@ public static final int _SYS_IPC_H =	1;
 // #endif
 
 /* Generates key for System V style IPC.  */
-public static native @ByVal key_t ftok(@Cast("const char*") BytePointer __pathname, int __proj_id);
-public static native @ByVal key_t ftok(String __pathname, int __proj_id);
+public static native @ByVal __key_t ftok(@Cast("const char*") BytePointer __pathname, int __proj_id);
+public static native @ByVal __key_t ftok(String __pathname, int __proj_id);
 
 // #endif /* sys/ipc.h */
 
@@ -10869,7 +10869,7 @@ public static final int _SYS_SHM_H =	1;
 public static native int shmctl(int __shmid, int __cmd, shmid_ds __buf);
 
 /* Get shared memory segment.  */
-public static native int shmget(@ByVal key_t __key, @Cast("size_t") long __size, int __shmflg);
+public static native int shmget(@ByVal __key_t __key, @Cast("size_t") long __size, int __shmflg);
 
 /* Attach shared memory segment.  */
 public static native Pointer shmat(int __shmid, @Const Pointer __shmaddr, int __shmflg);
