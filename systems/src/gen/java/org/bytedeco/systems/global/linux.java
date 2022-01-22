@@ -16,7 +16,7 @@ public class linux extends org.bytedeco.systems.presets.linux {
 // Parsed from cpuid.h
 
 /*
- * Copyright (C) 2007-2017 Free Software Foundation, Inc.
+ * Copyright (C) 2007-2013 Free Software Foundation, Inc.
  *
  * This file is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -64,7 +64,7 @@ public static final int bit_FXSAVE =	(1 << 24);
 public static final int bit_SSE =		(1 << 25);
 public static final int bit_SSE2 =	(1 << 26);
 
-/* Extended Features (%eax == 0x80000001) */
+/* Extended Features */
 /* %ecx */
 public static final int bit_LAHF_LM =	(1 << 0);
 public static final int bit_ABM =		(1 << 5);
@@ -74,7 +74,6 @@ public static final int bit_XOP =         (1 << 11);
 public static final int bit_LWP = 	(1 << 15);
 public static final int bit_FMA4 =        (1 << 16);
 public static final int bit_TBM =         (1 << 21);
-public static final int bit_MWAITX =      (1 << 29);
 
 /* %edx */
 public static final int bit_MMXEXT =	(1 << 22);
@@ -82,53 +81,22 @@ public static final int bit_LM =		(1 << 29);
 public static final int bit_3DNOWP =	(1 << 30);
 public static final int bit_3DNOW =	(1 << 31);
 
-/* %ebx  */
-public static final int bit_CLZERO =	(1 << 0);
-
 /* Extended Features (%eax == 7) */
-/* %ebx */
 public static final int bit_FSGSBASE =	(1 << 0);
-public static final int bit_SGX = (1 << 2);
 public static final int bit_BMI =	(1 << 3);
 public static final int bit_HLE =	(1 << 4);
 public static final int bit_AVX2 =	(1 << 5);
 public static final int bit_BMI2 =	(1 << 8);
 public static final int bit_RTM =	(1 << 11);
-public static final int bit_MPX =	(1 << 14);
-public static final int bit_AVX512F =	(1 << 16);
-public static final int bit_AVX512DQ =	(1 << 17);
 public static final int bit_RDSEED =	(1 << 18);
 public static final int bit_ADX =	(1 << 19);
-public static final int bit_AVX512IFMA =	(1 << 21);
-public static final int bit_CLFLUSHOPT =	(1 << 23);
-public static final int bit_CLWB =	(1 << 24);
-public static final int bit_AVX512PF =	(1 << 26);
-public static final int bit_AVX512ER =	(1 << 27);
-public static final int bit_AVX512CD =	(1 << 28);
-public static final int bit_SHA =		(1 << 29);
-public static final int bit_AVX512BW =	(1 << 30);
-public static final int bit_AVX512VL =	(1 << 31);
 
 /* %ecx */
-public static final int bit_PREFETCHWT1 =	  (1 << 0);
-public static final int bit_AVX512VBMI =	(1 << 1);
 public static final int bit_PKU =	(1 << 3);
 public static final int bit_OSPKE =	(1 << 4);
-public static final int bit_AVX512VPOPCNTDQ =	(1 << 14);
-public static final int bit_RDPID =	(1 << 22);
-
-/* %edx */
-public static final int bit_AVX5124VNNIW = (1 << 2);
-public static final int bit_AVX5124FMAPS = (1 << 3);
-
-/* XFEATURE_ENABLED_MASK register bits (%eax == 13, %ecx == 0) */
-public static final int bit_BNDREGS =     (1 << 3);
-public static final int bit_BNDCSR =      (1 << 4);
-
+ 
 /* Extended State Enumeration Sub-leaf (%eax == 13, %ecx == 1) */
 public static final int bit_XSAVEOPT =	(1 << 0);
-public static final int bit_XSAVEC =	(1 << 1);
-public static final int bit_XSAVES =	(1 << 3);
 
 /* Signatures for different CPU implementations as returned in uses
    of cpuid with level 0.  */
@@ -184,6 +152,9 @@ public static final int signature_VORTEX_ebx =	0x74726f56;
 public static final int signature_VORTEX_ecx =	0x436f5320;
 public static final int signature_VORTEX_edx =	0x36387865;
 
+// #if defined(__i386__) && defined(__PIC__)
+/* %ebx may be the PIC register.  */
+// #if __GNUC__ >= 3
 public static native void __cpuid(int level, @ByRef IntPointer a, @ByRef IntPointer b, @ByRef IntPointer c, @ByRef IntPointer d);
 public static native void __cpuid(int level, @ByRef IntBuffer a, @ByRef IntBuffer b, @ByRef IntBuffer c, @ByRef IntBuffer d);
 public static native void __cpuid(int level, @ByRef int[] a, @ByRef int[] b, @ByRef int[] c, @ByRef int[] d);
@@ -191,10 +162,17 @@ public static native void __cpuid(int level, @ByRef int[] a, @ByRef int[] b, @By
 public static native void __cpuid_count(int level, int count, @ByRef IntPointer a, @ByRef IntPointer b, @ByRef IntPointer c, @ByRef IntPointer d);
 public static native void __cpuid_count(int level, int count, @ByRef IntBuffer a, @ByRef IntBuffer b, @ByRef IntBuffer c, @ByRef IntBuffer d);
 public static native void __cpuid_count(int level, int count, @ByRef int[] a, @ByRef int[] b, @ByRef int[] c, @ByRef int[] d);
-
+// #else
+/* Host GCCs older than 3.0 weren't supporting Intel asm syntax
+   nor alternatives in i386 code.  */
+// #endif
+// #elif defined(__x86_64__) && (defined(__code_model_medium__) || defined(__code_model_large__)) && defined(__PIC__)
+/* %rbx may be the PIC register.  */
+// #else
+// #endif
 
 /* Return highest supported input value for cpuid instruction.  ext can
-   be either 0x0 or 0x80000000 to return highest supported value for
+   be either 0x0 or 0x8000000 to return highest supported value for
    basic or extended cpuid information.  Function returns 0 if cpuid
    is not supported or whatever cpuid returns in eax register.  If sig
    pointer is non-null, then first four bytes of the signature
@@ -204,32 +182,20 @@ public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned i
 public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned int") int arg0, @Cast("unsigned int*") IntBuffer __sig);
 public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned int") int arg0, @Cast("unsigned int*") int[] __sig);
 
-/* Return cpuid data for requested cpuid leaf, as found in returned
+/* Return cpuid data for requested cpuid level, as found in returned
    eax, ebx, ecx and edx registers.  The function checks if cpuid is
    supported and returns 1 for valid cpuid information or 0 for
-   unsupported cpuid leaf.  All pointers are required to be non-null.  */
+   unsupported cpuid level.  All pointers are required to be non-null.  */
 
-public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
+public static native int __get_cpuid(@Cast("unsigned int") int __level,
 	     @Cast("unsigned int*") IntPointer __eax, @Cast("unsigned int*") IntPointer __ebx,
 	     @Cast("unsigned int*") IntPointer __ecx, @Cast("unsigned int*") IntPointer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
+public static native int __get_cpuid(@Cast("unsigned int") int __level,
 	     @Cast("unsigned int*") IntBuffer __eax, @Cast("unsigned int*") IntBuffer __ebx,
 	     @Cast("unsigned int*") IntBuffer __ecx, @Cast("unsigned int*") IntBuffer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
+public static native int __get_cpuid(@Cast("unsigned int") int __level,
 	     @Cast("unsigned int*") int[] __eax, @Cast("unsigned int*") int[] __ebx,
 	     @Cast("unsigned int*") int[] __ecx, @Cast("unsigned int*") int[] __edx);
-
-/* Same as above, but sub-leaf can be specified.  */
-
-public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
-		   @Cast("unsigned int*") IntPointer __eax, @Cast("unsigned int*") IntPointer __ebx,
-		   @Cast("unsigned int*") IntPointer __ecx, @Cast("unsigned int*") IntPointer __edx);
-public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
-		   @Cast("unsigned int*") IntBuffer __eax, @Cast("unsigned int*") IntBuffer __ebx,
-		   @Cast("unsigned int*") IntBuffer __ecx, @Cast("unsigned int*") IntBuffer __edx);
-public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
-		   @Cast("unsigned int*") int[] __eax, @Cast("unsigned int*") int[] __ebx,
-		   @Cast("unsigned int*") int[] __ecx, @Cast("unsigned int*") int[] __edx);
 
 
 // Parsed from dlfcn.h
@@ -10177,7 +10143,7 @@ public static final int
   __RLIMIT_RTPRIO = 14;
 public static final int RLIMIT_RTPRIO = __RLIMIT_RTPRIO;
 
-  /* Maximum CPU time in ??s that a process scheduled under a real-time
+  /* Maximum CPU time in µs that a process scheduled under a real-time
      scheduling policy may consume without making a blocking system
      call before being forcibly descheduled.  */
 public static final int
@@ -10642,6 +10608,276 @@ public static native @Cast("__pid_t") int wait4(@Cast("__pid_t") int __pid, Poin
 
 
 // #endif /* sys/wait.h  */
+
+
+// Parsed from bits/ipctypes.h
+
+/* bits/ipctypes.h -- Define some types used by SysV IPC/MSG/SHM.
+   Copyright (C) 2012 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+// #ifndef _SYS_IPC_H
+// # error "Never use <bits/ipctypes.h> directly; include <sys/ipc.h> instead."
+// #endif
+
+// #ifndef _BITS_IPCTYPES_H
+public static final int _BITS_IPCTYPES_H =	1;
+
+/* Used in `struct shmid_ds'.  */
+// # ifdef __x86_64__
+// # else
+// # endif
+
+// #endif /* bits/ipctypes.h */
+
+
+// Parsed from bits/ipc.h
+
+/* Copyright (C) 1995-2012 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+// #ifndef _SYS_IPC_H
+// # error "Never use <bits/ipc.h> directly; include <sys/ipc.h> instead."
+// #endif
+
+// #include <bits/types.h>
+
+/* Mode bits for `msgget', `semget', and `shmget'.  */
+public static final int IPC_CREAT =	01000;		/* Create key if key does not exist. */
+public static final int IPC_EXCL =	02000;		/* Fail if key exists.  */
+public static final int IPC_NOWAIT =	04000;		/* Return error on wait.  */
+
+/* Control commands for `msgctl', `semctl', and `shmctl'.  */
+public static final int IPC_RMID =	0;		/* Remove identifier.  */
+public static final int IPC_SET =		1;		/* Set `ipc_perm' options.  */
+public static final int IPC_STAT =	2;		/* Get `ipc_perm' options.  */
+// #ifdef __USE_GNU
+public static final int IPC_INFO =	3;		/* See ipcs.  */
+// #endif
+
+/* Special key values.  */
+public static final int IPC_PRIVATE =	((__key_t) 0);
+// Targeting ../linux/ipc_perm.java
+
+
+
+
+// Parsed from sys/ipc.h
+
+/* Copyright (C) 1995,1996,1997,1999,2002,2012 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+// #ifndef _SYS_IPC_H
+public static final int _SYS_IPC_H =	1;
+
+// #include <features.h>
+
+// #if !defined __USE_SVID && !defined __USE_XOPEN && __GNUC__ >= 2
+// # warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
+// #endif
+
+/* Get system dependent definition of `struct ipc_perm' and more.  */
+// #include <bits/ipctypes.h>
+// #include <bits/ipc.h>
+
+// #ifndef __uid_t_defined
+// # define __uid_t_defined
+// #endif
+
+// #ifndef __gid_t_defined
+// # define __gid_t_defined
+// #endif
+
+// #ifndef __mode_t_defined
+// # define __mode_t_defined
+// #endif
+
+// #ifndef __key_t_defined
+// # define __key_t_defined
+// #endif
+
+/* Generates key for System V style IPC.  */
+public static native @ByVal key_t ftok(@Cast("const char*") BytePointer __pathname, int __proj_id);
+public static native @ByVal key_t ftok(String __pathname, int __proj_id);
+
+// #endif /* sys/ipc.h */
+
+
+// Parsed from bits/shm.h
+
+/* Copyright (C) 1995-2012 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+// #ifndef _SYS_SHM_H
+// # error "Never include <bits/shm.h> directly; use <sys/shm.h> instead."
+// #endif
+
+// #include <bits/types.h>
+
+/* Permission flag for shmget.  */
+public static final int SHM_R =		0400;		/* or S_IRUGO from <linux/stat.h> */
+public static final int SHM_W =		0200;		/* or S_IWUGO from <linux/stat.h> */
+
+/* Flags for `shmat'.  */
+public static final int SHM_RDONLY =	010000;		/* attach read-only else read-write */
+public static final int SHM_RND =		020000;		/* round attach address to SHMLBA */
+public static final int SHM_REMAP =	040000;		/* take-over region on attach */
+public static final int SHM_EXEC =	0100000;		/* execution access */
+
+/* Commands for `shmctl'.  */
+public static final int SHM_LOCK =	11;		/* lock segment (root only) */
+public static final int SHM_UNLOCK =	12;		/* unlock segment (root only) */
+
+/* Segment low boundary address multiple.  */
+public static native @MemberGetter int SHMLBA();
+public static final int SHMLBA = SHMLBA();
+public static native int __getpagesize();
+
+
+/* Type to count number of attaches.  */
+// Targeting ../linux/shmid_ds.java
+
+
+
+// #ifdef __USE_MISC
+
+/* ipcs ctl commands */
+public static final int SHM_STAT = 	13;
+public static final int SHM_INFO = 	14;
+public static final int SHM_STAT_ANY =	15;
+
+/* shm_mode upper byte flags */
+public static final int SHM_DEST =	01000;	/* segment will be destroyed on last detach */
+public static final int SHM_LOCKED =	02000;   /* segment will not be swapped */
+public static final int SHM_HUGETLB =	04000;	/* segment is mapped via hugetlb */
+public static final int SHM_NORESERVE =	010000;
+// Targeting ../linux/shminfo.java
+
+
+// Targeting ../linux/shm_info.java
+
+
+
+// #endif /* __USE_MISC */
+
+
+
+// Parsed from sys/shm.h
+
+/* Copyright (C) 1995-1999, 2000, 2002, 2012 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+// #ifndef _SYS_SHM_H
+public static final int _SYS_SHM_H =	1;
+
+// #include <features.h>
+
+// #define __need_size_t
+// #include <stddef.h>
+
+/* Get common definition of System V style IPC.  */
+// #include <sys/ipc.h>
+
+/* Get system dependent definition of `struct shmid_ds' and more.  */
+// #include <bits/shm.h>
+
+/* Define types required by the standard.  */
+// #define __need_time_t
+// #include <time.h>
+
+// #ifdef __USE_XOPEN
+// # ifndef __pid_t_defined
+// #  define __pid_t_defined
+// # endif
+// #endif	/* X/Open */
+
+
+/* The following System V style IPC functions implement a shared memory
+   facility.  The definition is found in XPG4.2.  */
+
+/* Shared memory control operation.  */
+public static native int shmctl(int __shmid, int __cmd, shmid_ds __buf);
+
+/* Get shared memory segment.  */
+public static native int shmget(@ByVal key_t __key, @Cast("size_t") long __size, int __shmflg);
+
+/* Attach shared memory segment.  */
+public static native Pointer shmat(int __shmid, @Const Pointer __shmaddr, int __shmflg);
+
+/* Detach shared memory segment.  */
+public static native int shmdt(@Const Pointer __shmaddr);
+
+// #endif /* sys/shm.h */
 
 
 // Parsed from linux/sysinfo.h
