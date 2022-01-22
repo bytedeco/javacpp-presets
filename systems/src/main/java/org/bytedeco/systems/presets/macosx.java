@@ -153,7 +153,8 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np").skip())
 
-               .put(new Info("ipc_perm").pointerTypes("__ipc_perm_new"))
-               .put(new Info("shmid_ds").pointerTypes("__shmid_ds_new"));
+                .put(new Info("__ipc_perm_new").skip())
+                .put(new Info("__shmid_ds_new").skip())
+                .put(new Info("shmid_ds").skip());
     }
 }
