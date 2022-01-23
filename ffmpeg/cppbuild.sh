@@ -1467,6 +1467,10 @@ EOF
         make -j $MAKEJ
         sedinplace '/HAS_AVX512/d' vpx_dsp_rtcd.h
         make install
+        cd ../libwebp-$WEBP_VERSION
+        CFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER="clang" .
+        make -j $MAKEJ V=0
+        make install
         cd ../freetype-$FREETYPE_VERSION
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ
