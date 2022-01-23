@@ -16,7 +16,7 @@ public class linux extends org.bytedeco.systems.presets.linux {
 // Parsed from cpuid.h
 
 /*
- * Copyright (C) 2007-2013 Free Software Foundation, Inc.
+ * Copyright (C) 2007-2018 Free Software Foundation, Inc.
  *
  * This file is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -64,7 +64,7 @@ public static final int bit_FXSAVE =	(1 << 24);
 public static final int bit_SSE =		(1 << 25);
 public static final int bit_SSE2 =	(1 << 26);
 
-/* Extended Features */
+/* Extended Features (%eax == 0x80000001) */
 /* %ecx */
 public static final int bit_LAHF_LM =	(1 << 0);
 public static final int bit_ABM =		(1 << 5);
@@ -74,6 +74,7 @@ public static final int bit_XOP =         (1 << 11);
 public static final int bit_LWP = 	(1 << 15);
 public static final int bit_FMA4 =        (1 << 16);
 public static final int bit_TBM =         (1 << 21);
+public static final int bit_MWAITX =      (1 << 29);
 
 /* %edx */
 public static final int bit_MMXEXT =	(1 << 22);
@@ -81,22 +82,64 @@ public static final int bit_LM =		(1 << 29);
 public static final int bit_3DNOWP =	(1 << 30);
 public static final int bit_3DNOW =	(1 << 31);
 
+/* %ebx  */
+public static final int bit_CLZERO =	(1 << 0);
+public static final int bit_WBNOINVD =	(1 << 9);
+
 /* Extended Features (%eax == 7) */
+/* %ebx */
 public static final int bit_FSGSBASE =	(1 << 0);
+public static final int bit_SGX = (1 << 2);
 public static final int bit_BMI =	(1 << 3);
 public static final int bit_HLE =	(1 << 4);
 public static final int bit_AVX2 =	(1 << 5);
 public static final int bit_BMI2 =	(1 << 8);
 public static final int bit_RTM =	(1 << 11);
+public static final int bit_MPX =	(1 << 14);
+public static final int bit_AVX512F =	(1 << 16);
+public static final int bit_AVX512DQ =	(1 << 17);
 public static final int bit_RDSEED =	(1 << 18);
 public static final int bit_ADX =	(1 << 19);
+public static final int bit_AVX512IFMA =	(1 << 21);
+public static final int bit_CLFLUSHOPT =	(1 << 23);
+public static final int bit_CLWB =	(1 << 24);
+public static final int bit_AVX512PF =	(1 << 26);
+public static final int bit_AVX512ER =	(1 << 27);
+public static final int bit_AVX512CD =	(1 << 28);
+public static final int bit_SHA =		(1 << 29);
+public static final int bit_AVX512BW =	(1 << 30);
+public static final int bit_AVX512VL =	(1 << 31);
 
 /* %ecx */
+public static final int bit_PREFETCHWT1 =	  (1 << 0);
+public static final int bit_AVX512VBMI =	(1 << 1);
 public static final int bit_PKU =	(1 << 3);
 public static final int bit_OSPKE =	(1 << 4);
- 
+public static final int bit_AVX512VBMI2 =	(1 << 6);
+public static final int bit_SHSTK =	(1 << 7);
+public static final int bit_GFNI =	(1 << 8);
+public static final int bit_VAES =	(1 << 9);
+public static final int bit_AVX512VNNI =	(1 << 11);
+public static final int bit_VPCLMULQDQ =	(1 << 10);
+public static final int bit_AVX512BITALG =	(1 << 12);
+public static final int bit_AVX512VPOPCNTDQ =	(1 << 14);
+public static final int bit_RDPID =	(1 << 22);
+public static final int bit_MOVDIRI =	(1 << 27);
+public static final int bit_MOVDIR64B =	(1 << 28);
+
+/* %edx */
+public static final int bit_AVX5124VNNIW = (1 << 2);
+public static final int bit_AVX5124FMAPS = (1 << 3);
+public static final int bit_IBT =	(1 << 20);
+public static final int bit_PCONFIG =	(1 << 18);
+/* XFEATURE_ENABLED_MASK register bits (%eax == 13, %ecx == 0) */
+public static final int bit_BNDREGS =     (1 << 3);
+public static final int bit_BNDCSR =      (1 << 4);
+
 /* Extended State Enumeration Sub-leaf (%eax == 13, %ecx == 1) */
 public static final int bit_XSAVEOPT =	(1 << 0);
+public static final int bit_XSAVEC =	(1 << 1);
+public static final int bit_XSAVES =	(1 << 3);
 
 /* Signatures for different CPU implementations as returned in uses
    of cpuid with level 0.  */
@@ -152,9 +195,6 @@ public static final int signature_VORTEX_ebx =	0x74726f56;
 public static final int signature_VORTEX_ecx =	0x436f5320;
 public static final int signature_VORTEX_edx =	0x36387865;
 
-// #if defined(__i386__) && defined(__PIC__)
-/* %ebx may be the PIC register.  */
-// #if __GNUC__ >= 3
 public static native void __cpuid(int level, @ByRef IntPointer a, @ByRef IntPointer b, @ByRef IntPointer c, @ByRef IntPointer d);
 public static native void __cpuid(int level, @ByRef IntBuffer a, @ByRef IntBuffer b, @ByRef IntBuffer c, @ByRef IntBuffer d);
 public static native void __cpuid(int level, @ByRef int[] a, @ByRef int[] b, @ByRef int[] c, @ByRef int[] d);
@@ -162,17 +202,10 @@ public static native void __cpuid(int level, @ByRef int[] a, @ByRef int[] b, @By
 public static native void __cpuid_count(int level, int count, @ByRef IntPointer a, @ByRef IntPointer b, @ByRef IntPointer c, @ByRef IntPointer d);
 public static native void __cpuid_count(int level, int count, @ByRef IntBuffer a, @ByRef IntBuffer b, @ByRef IntBuffer c, @ByRef IntBuffer d);
 public static native void __cpuid_count(int level, int count, @ByRef int[] a, @ByRef int[] b, @ByRef int[] c, @ByRef int[] d);
-// #else
-/* Host GCCs older than 3.0 weren't supporting Intel asm syntax
-   nor alternatives in i386 code.  */
-// #endif
-// #elif defined(__x86_64__) && (defined(__code_model_medium__) || defined(__code_model_large__)) && defined(__PIC__)
-/* %rbx may be the PIC register.  */
-// #else
-// #endif
+
 
 /* Return highest supported input value for cpuid instruction.  ext can
-   be either 0x0 or 0x8000000 to return highest supported value for
+   be either 0x0 or 0x80000000 to return highest supported value for
    basic or extended cpuid information.  Function returns 0 if cpuid
    is not supported or whatever cpuid returns in eax register.  If sig
    pointer is non-null, then first four bytes of the signature
@@ -182,20 +215,32 @@ public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned i
 public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned int") int arg0, @Cast("unsigned int*") IntBuffer __sig);
 public static native @Cast("unsigned int") int __get_cpuid_max(@Cast("unsigned int") int arg0, @Cast("unsigned int*") int[] __sig);
 
-/* Return cpuid data for requested cpuid level, as found in returned
+/* Return cpuid data for requested cpuid leaf, as found in returned
    eax, ebx, ecx and edx registers.  The function checks if cpuid is
    supported and returns 1 for valid cpuid information or 0 for
-   unsupported cpuid level.  All pointers are required to be non-null.  */
+   unsupported cpuid leaf.  All pointers are required to be non-null.  */
 
-public static native int __get_cpuid(@Cast("unsigned int") int __level,
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
 	     @Cast("unsigned int*") IntPointer __eax, @Cast("unsigned int*") IntPointer __ebx,
 	     @Cast("unsigned int*") IntPointer __ecx, @Cast("unsigned int*") IntPointer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __level,
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
 	     @Cast("unsigned int*") IntBuffer __eax, @Cast("unsigned int*") IntBuffer __ebx,
 	     @Cast("unsigned int*") IntBuffer __ecx, @Cast("unsigned int*") IntBuffer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __level,
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf,
 	     @Cast("unsigned int*") int[] __eax, @Cast("unsigned int*") int[] __ebx,
 	     @Cast("unsigned int*") int[] __ecx, @Cast("unsigned int*") int[] __edx);
+
+/* Same as above, but sub-leaf can be specified.  */
+
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
+		   @Cast("unsigned int*") IntPointer __eax, @Cast("unsigned int*") IntPointer __ebx,
+		   @Cast("unsigned int*") IntPointer __ecx, @Cast("unsigned int*") IntPointer __edx);
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
+		   @Cast("unsigned int*") IntBuffer __eax, @Cast("unsigned int*") IntBuffer __ebx,
+		   @Cast("unsigned int*") IntBuffer __ecx, @Cast("unsigned int*") IntBuffer __edx);
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf, @Cast("unsigned int") int __subleaf,
+		   @Cast("unsigned int*") int[] __eax, @Cast("unsigned int*") int[] __ebx,
+		   @Cast("unsigned int*") int[] __ecx, @Cast("unsigned int*") int[] __edx);
 
 
 // Parsed from dlfcn.h
@@ -10143,7 +10188,7 @@ public static final int
   __RLIMIT_RTPRIO = 14;
 public static final int RLIMIT_RTPRIO = __RLIMIT_RTPRIO;
 
-  /* Maximum CPU time in µs that a process scheduled under a real-time
+  /* Maximum CPU time in ??s that a process scheduled under a real-time
      scheduling policy may consume without making a blocking system
      call before being forcibly descheduled.  */
 public static final int
@@ -10323,74 +10368,6 @@ public static native int getpriority(@Cast("__priority_which_t") int __which, @C
 public static native int setpriority(@Cast("__priority_which_t") int __which, @Cast("id_t") int __who, int __prio);
 
 // #endif	/* sys/resource.h  */
-
-
-// Parsed from sys/sysctl.h
-
-/* Copyright (C) 1996, 1999, 2002, 2003, 2004 Free Software Foundation, Inc.
-   This file is part of the GNU C Library.
-
-   The GNU C Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   The GNU C Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
-
-// #ifndef	_SYS_SYSCTL_H
-public static final int _SYS_SYSCTL_H =	1;
-
-// #include <features.h>
-// #define __need_size_t
-// #include <stddef.h>
-/* Prevent more kernel headers than necessary to be included.  */
-// #ifndef _LINUX_KERNEL_H
-// # define _LINUX_KERNEL_H	1
-// # define __undef_LINUX_KERNEL_H
-// #endif
-// #ifndef _LINUX_TYPES_H
-public static final int _LINUX_TYPES_H =		1;
-// # define __undef_LINUX_TYPES_H
-// #endif
-// #ifndef _LINUX_LIST_H
-public static final int _LINUX_LIST_H =		1;
-// # define __undef_LINUX_LIST_H
-// #endif
-// #ifndef __LINUX_COMPILER_H
-public static final int __LINUX_COMPILER_H =	1;
-// # define __user
-// # define __undef__LINUX_COMPILER_H
-// #endif
-
-// #include <linux/sysctl.h>
-
-// #ifdef __undef_LINUX_KERNEL_H
-// #endif
-// #ifdef __undef_LINUX_TYPES_H
-// #endif
-// #ifdef __undef_LINUX_LIST_H
-// #endif
-// #ifdef __undef__LINUX_COMPILER_H
-// #endif
-
-// #include <bits/sysctl.h>
-
-/* Read or write system parameters.  */
-public static native int sysctl(@Cast("int*") IntPointer __name, int __nlen, Pointer __oldval,
-		   @Cast("size_t*") SizeTPointer __oldlenp, Pointer __newval, @Cast("size_t") long __newlen);
-public static native int sysctl(@Cast("int*") IntBuffer __name, int __nlen, Pointer __oldval,
-		   @Cast("size_t*") SizeTPointer __oldlenp, Pointer __newval, @Cast("size_t") long __newlen);
-public static native int sysctl(@Cast("int*") int[] __name, int __nlen, Pointer __oldval,
-		   @Cast("size_t*") SizeTPointer __oldlenp, Pointer __newval, @Cast("size_t") long __newlen);
-
-// #endif	/* _SYS_SYSCTL_H */
 
 
 // Parsed from bits/waitflags.h
