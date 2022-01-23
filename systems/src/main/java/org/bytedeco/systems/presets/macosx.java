@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 Samuel Audet
+ * Copyright (C) 2017-2022 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,9 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/_types/_s_ifmt.h", "sys/_types/_filesec_t.h", "sys/stat.h", "fcntl.h", "sys/file.h", "grp.h", "pwd.h",
                "sys/_types/_sigaltstack.h", "sys/signal.h", "signal.h", /*"sys/_types/_ucontext.h", "sys/ucontext.h", "ucontext.h",*/
                "sched.h", "mach/machine.h", "spawn.h", "sys/_types/_seek_set.h", "sys/unistd.h", "unistd.h",
-               "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
+               "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h",
+               "sys/_types/_uid_t.h", "sys/_types/_gid_t.h", "sys/_types/_mode_t.h", "sys/_types/_key_t.h", "sys/ipc.h",
+               "sys/_types/_pid_t.h", "sys/_types/_time_t.h", "sys/_types/_size_t.h", "sys/shm.h"},
     includepath = {"/usr/include/", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/",
                    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"})},
     target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
@@ -149,6 +151,7 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
-               .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np").skip());
+               .put(new Info("getwd", "mkstemp_dprotected_np", "posix_spawnattr_setsuidcredport_np",
+                             "__ipc_perm_new", "__shmid_ds_new", "shmid_ds").skip());
     }
 }
