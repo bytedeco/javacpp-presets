@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Samuel Audet
+ * Copyright (C) 2017-2022 Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/uio.h", "bits/socket_type.h", "bits/socket.h", "bits/errno.h", "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h",
                "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h", "bits/siginfo.h", "bits/sigset.h", "bits/signum.h",
                "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "bits/cpu-set.h", "bits/types/struct_sched_param.h", "bits/sched.h",
-               "bits/confname.h", "bits/resource.h"},
+               "bits/confname.h", "bits/resource.h", "bits/struct_stat.h", "bits/ipc-perm.h", "bits/ipc.h", "bits/shm.h", "bits/types/struct_shmid_ds.h"},
     include = {"cpuid.h", "dlfcn.h", "nl_types.h", "xlocale.h", "bits/types/__locale_t.h", "bits/types/locale_t.h", "bits/locale.h", "langinfo.h", "locale.h",
                "bits/types/struct_tm.h", "bits/types/struct_timeval.h", "bits/types/struct_timespec.h", "bits/types/struct_itimerspec.h", "bits/types/timer_t.h",
                "bits/types/struct_iovec.h", "bits/uio.h", "sys/uio.h", "bits/sockaddr.h", "bits/socket_type.h", "bits/socket.h", "sys/socket.h",
@@ -56,7 +56,8 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/types/siginfo_t.h", "bits/types/__sigset_t.h", "bits/types/sigset_t.h", "bits/types/__sigval_t.h", "bits/types/sigval_t.h", "bits/types/stack_t.h",
                "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
                "bits/cpu-set.h", "bits/types/struct_sched_param.h", "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h",
-               "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
+               "bits/confname.h", "unistd.h", "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", /*"sys/sysctl.h",*/ "bits/waitflags.h", "sys/wait.h",
+               "bits/struct_stat.h", "bits/ipc-perm.h", "bits/ipc.h", "sys/ipc.h", "bits/shm.h", "bits/types/struct_shmid_ds.h", "sys/shm.h"},
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
@@ -127,7 +128,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "defined __USE_XOPEN2K && !defined __USE_GNU",
                              "defined __GNUC__ && __GNUC__ >= 2 && defined __USE_EXTERN_INLINES",
                              "defined __USE_XOPEN_EXTENDED && !defined __USE_XOPEN2K8",
-                             "__GNUC_PREREQ (3, 0)",  "__SI_CLOCK_T",
+                             "__GNUC_PREREQ (3, 0)",  "__SI_CLOCK_T", "__TIMESIZE == 32",
                              "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "_LINUX_KERNEL_H",
                              "__HAVE_FLOAT16", "__HAVE_FLOAT16 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
                              "__HAVE_FLOAT32", "__HAVE_FLOAT32 && __GLIBC_USE (IEC_60559_TYPES_EXT)",
@@ -142,7 +143,8 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                              "__ext", "__extension__", "__mode__", "__nonnull", "__ss_aligntype", "__sysconf",
                              "__REDIRECT_NTH", "__REDIRECT", "__THROW", "__restrict", "__wur", "UIO_MAXIOV",
                              "__WAIT_STATUS", "__WAIT_STATUS_DEFN", "sched_priority", "__sched_priority", "sigcontext_struct",
-                             "sigev_notify_function", "sigev_notify_attributes", "sv_onstack", "__FUNCTION__").annotations().cppTypes())
+                             "sigev_notify_function", "sigev_notify_attributes", "sv_onstack", "__FUNCTION__",
+                             "st_atime", "st_mtime", "st_ctime").annotations().cppTypes())
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_BIND",
                              "_POSIX2_C_DEV", "_POSIX2_SW_DEV", "_POSIX2_LOCALEDEF").cppTypes("long"))
@@ -153,7 +155,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("socklen_t", "clockid_t", "useconds_t", "id_t", "gid_t", "uid_t", "pid_t", "mode_t",
                              "__socklen_t", "__clockid_t", "__useconds_t", "__id_t", "__gid_t", "__uid_t", "__pid_t", "__mode_t",
-                             "error_t", "__u32", "__uint32_t")
+                             "error_t", "__u32", "__uint32_t", "key_t", "__key_t")
                        .cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
 
                .put(new Info("clock_t", "dev_t", "off_t", "intptr_t", "rlim_t", "ssize_t",
@@ -185,6 +187,8 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("sigaltstack").pointerTypes("stack_t"))
                .put(new Info("ucontext").valueTypes("ucontext_t"))
                .put(new Info("__sighandler_t").valueTypes("__sighandler_t"))
+               .put(new Info("struct shminfo").pointerTypes("shminfo"))
+               .put(new Info("struct shmid_ds").pointerTypes("shmid_ds"))
 
                .put(new Info("siginfo_t").javaText("\n"
                      + "public static class siginfo_t extends Pointer {\n"
@@ -243,6 +247,6 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("cmsghdr").purify())
                .put(new Info("cmsghdr::__flexarr", "getwd", "getpw", "lchmod", "mktemp", "revoke", "setlogin",
                              "sigblock", "siggetmask", "sigsetmask", "sigreturn", "sigstack(sigstack*, sigstack*)",
-                             "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state").skip());
+                             "__sched_param", "_fpx_sw_bytes", "_xsave_hdr", "_xstate", "_ymmh_state", "__key").skip());
     }
 }
