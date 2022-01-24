@@ -1,5 +1,5 @@
---- ffmpeg-5.0.orig/configure	2022-01-15 14:49:15.022054379 +1100
-+++ ffmpeg-5.0/configure	2022-01-15 14:52:15.648669638 +1100
+--- ffmpeg-5.0.orig/configure	2022-01-15 05:45:39.000000000 +1100
++++ ffmpeg-5.0/configure	2022-01-19 13:18:21.151444791 +1100
 @@ -6532,7 +6532,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
@@ -72,11 +72,15 @@
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6645,12 +6633,12 @@
+@@ -6643,14 +6631,14 @@
+ }
+ 
  enabled libwebp           && {
-     enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
-     enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
+-    enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
+-    enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
 -enabled libx264           && { check_pkg_config libx264 x264 "stdint.h x264.h" x264_encoder_encode ||
++    enabled libwebp_encoder      && require libwebp webp/encode.h WebPGetEncoderVersion -lwebp
++    enabled libwebp_anim_encoder && require libwebp_anim_encoder webp/mux.h WebPAnimEncoderOptionsInit -lwebpmux -lwebp; }
 +enabled libx264           && {
                                 { require libx264 "stdint.h x264.h" x264_encoder_encode "-lx264 $pthreads_extralibs $libm_extralibs" &&
                                   warn "using libx264 without pkg-config"; } } &&
