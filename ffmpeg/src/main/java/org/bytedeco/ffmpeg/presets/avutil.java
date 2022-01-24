@@ -60,7 +60,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/hdr_dynamic_metadata.h>", "<libavutil/intfloat.h>", "<libavutil/intreadwrite.h>", "<libavutil/mastering_display_metadata.h>",
             "<libavutil/murmur3.h>", "<libavutil/parseutils.h>", "<libavutil/pixelutils.h>", "<libavutil/random_seed.h>", "<libavutil/replaygain.h>",
             "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
-            "<libavutil/tx.h>", "<libavutil/version.h>", "log_callback.h"},
+            "<libavutil/tx.h>", "<libavutil/version.h>", "<libavutil/macros.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
             link = "avutil@.57", compiler = {"default", "nodeprecated"}),
         @Platform(value = "linux-x86", preload = {"va@.1", "drm@.2", "va-drm@.1", "va-x11@.1"}, preloadpath = {"/usr/lib32/", "/usr/lib/"}),
