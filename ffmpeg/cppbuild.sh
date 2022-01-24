@@ -21,7 +21,7 @@ fi
 
 LIBXML_CONFIG="--enable-static --disable-shared --without-iconv --without-python --without-lzma --with-pic"
 SRT_CONFIG="-DENABLE_APPS:BOOL=OFF -DENABLE_ENCRYPTION:BOOL=ON -DENABLE_SHARED:BOOL=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
-WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBP_JS=OFF -DCMAKE_BUILD_TYPE=Release"
+WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBP_JS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib"
 
 NASM_VERSION=2.14
 ZLIB=zlib-1.2.11
@@ -85,7 +85,7 @@ tar --totals -xJf ../freetype-$FREETYPE_VERSION.tar.xz
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
-tar --totals -xvf ../libwebp-$WEBP_VERSION.tar.gz
+tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -226,7 +226,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24  -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -357,7 +357,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24  -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -485,7 +485,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -612,7 +612,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -726,7 +726,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        CC="gcc -m32" CFLAGS="-fPIC" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CC="gcc -m32 -fPIC" CXX="g++ -m32 -fPIC" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -851,7 +851,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        CC="gcc -m64" CFLAGS="-fPIC" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CC="gcc -m64 -fPIC" CXX="g++ -m64 -fPIC" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -871,7 +871,7 @@ EOF
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/ -L../lib64/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
         make -j $MAKEJ
         make install
         ;;
@@ -1028,7 +1028,7 @@ EOF
         cd ../libwebp-$WEBP_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabih .
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabih .
         else
           $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         fi
@@ -1163,7 +1163,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        $CMAKE -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ .
         make -j $MAKEJ V=0
         make install
         cd ../alsa-lib-$ALSA_VERSION/
@@ -1344,9 +1344,9 @@ EOF
         make install
         cd ../libwebp-$WEBP_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         else
-          CFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_C_FLAGS="-m64" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu .
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="$CXXFLAGS -m64 -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -m64 -fPIC" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu .
         fi
         make -j $MAKEJ V=0
         make install
@@ -1468,7 +1468,7 @@ EOF
         sedinplace '/HAS_AVX512/d' vpx_dsp_rtcd.h
         make install
         cd ../libwebp-$WEBP_VERSION
-        CFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER="clang" .
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER="clang" -DCMAKE_CXX_COMPILER="clang++" .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -1578,7 +1578,7 @@ EOF
         sedinplace '/HAS_AVX512/d' vpx_dsp_rtcd.h
         make install
         cd ../libwebp-$WEBP_VERSION
-        CFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"  $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -1689,7 +1689,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        CC="gcc -m32" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -1806,7 +1806,7 @@ EOF
         make -j $MAKEJ
         make install
         cd ../libwebp-$WEBP_VERSION
-        CC="gcc -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $WEBP_CONFIG .
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
