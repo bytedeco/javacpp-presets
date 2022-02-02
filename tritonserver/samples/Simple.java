@@ -819,8 +819,8 @@ public class Simple {
               "setting INPUT1 data in pinned memory");
         }
 
-        input0_base = use_cuda_memory ? input0_gpu : input0_data;
-        input1_base = use_cuda_memory ? input1_gpu : input1_data;
+        input0_base = input0_gpu;
+        input1_base = input1_gpu;
       }
 
       FAIL_IF_ERR(
