@@ -658,7 +658,7 @@ public class SimpleCPUOnly {
 
       // Modify some input data in place and then reuse the request
       // object.
-      if (requested_memory_type == TRITONSERVER_MEMORY_CPU) {
+      {
         if (is_int[0]) {
           new IntPointer(input0_data).put(0, 27);
         } else {
