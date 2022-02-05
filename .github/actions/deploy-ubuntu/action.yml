@@ -153,8 +153,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1AwYLuKDe0FBU0AftSH7Fy7m38VPUyGmm
-          tar -hxvf TensorRT-8.2.2.1.Ubuntu-20.04.aarch64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1i5K7NgKgxnziS7gLlhOk2gmiZ_C6XUE9
+          tar -hxvf TensorRT-8.2.3.0.Ubuntu-20.04.aarch64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

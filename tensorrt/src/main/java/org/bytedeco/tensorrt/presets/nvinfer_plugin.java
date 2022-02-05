@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = nvinfer.class,
     value = @Platform(
         include = {"NvInferPlugin.h", "NvInferPluginUtils.h"},
-        link = "nvinfer_plugin@.8"),
+        link = "nvinfer_plugin@.8.2.3"),
     target = "org.bytedeco.tensorrt.nvinfer_plugin",
     global = "org.bytedeco.tensorrt.global.nvinfer_plugin")
 public class nvinfer_plugin implements InfoMapper {
