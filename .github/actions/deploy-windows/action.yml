@@ -95,9 +95,9 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=1LM2ze7Ii1mzdsmBPaLb8OztsXyK0ThkB
-          unzip TensorRT-8.2.2.1.Windows10.x86_64.cuda-11.4.cudnn8.2.zip
-          move TensorRT-8.2.2.1 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1jR6H6Vc1jvziLKMrCEIGfbtpaJlge4GC
+          unzip TensorRT-8.2.3.0.Windows10.x86_64.cuda-11.4.cudnn8.2.zip
+          move TensorRT-8.2.3.0 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
