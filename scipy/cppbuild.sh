@@ -9,7 +9,7 @@ fi
 
 BOOST=1_75_0
 HIGHS=1.1.1
-SCIPY_VERSION=1.8.0rc4
+SCIPY_VERSION=1.8.0
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/ERGO-Code/HiGHS/archive/refs/tags/v$HIGHS.tar.gz HiGHS-$HIGHS.tar.gz
 download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
