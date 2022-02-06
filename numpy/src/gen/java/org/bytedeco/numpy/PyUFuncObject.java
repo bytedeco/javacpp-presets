@@ -119,7 +119,10 @@ public class PyUFuncObject extends Pointer {
          * but this was never implemented. (This is also why the above
          * selector is called the "legacy" selector.)
          */
-        public native vectorcallfunc vectorcall(); public native PyUFuncObject vectorcall(vectorcallfunc setter);
+//         #ifndef Py_LIMITED_API
+            public native vectorcallfunc vectorcall(); public native PyUFuncObject vectorcall(vectorcallfunc setter);
+//         #else
+//         #endif
 
         /* Was previously the `PyUFunc_MaskedInnerLoopSelectionFunc` */
         public native Pointer _always_null_previously_masked_innerloop_selector(); public native PyUFuncObject _always_null_previously_masked_innerloop_selector(Pointer setter);
