@@ -146,6 +146,7 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
+        	<fork>true</fork>
         </configuration>
         <executions>
           <execution>
