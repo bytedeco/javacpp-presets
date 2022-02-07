@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tritonserver</groupId>
     <artifactId>simple</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tritonserver-platform</artifactId>
-            <version>2.18-1.5.7-SNAPSHOT</version>
+            <version>2.18-1.5.7</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

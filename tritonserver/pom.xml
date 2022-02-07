@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver</artifactId>
   <version>2.18-${project.parent.version}</version>
-  <name>JavaCPP Presets for Tritonserver</name>
+  <name>JavaCPP Presets for Triton Inference Server</name>
 
   <dependencies>
     <dependency>

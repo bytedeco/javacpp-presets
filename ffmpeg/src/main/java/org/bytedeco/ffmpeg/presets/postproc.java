@@ -46,7 +46,7 @@ public class postproc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("QP_STORE_T").cppTypes().valueTypes("byte").pointerTypes("BytePointer"))
                .put(new Info("LIBPOSTPROC_VERSION").cppTypes())
-               .put(new Info("LIBPOSTPROC_VERSION_INT", "LIBPOSTPROC_IDENT").translate(false))
+               .put(new Info("LIBPOSTPROC_VERSION_INT", "LIBPOSTPROC_BUILD", "LIBPOSTPROC_IDENT").skip())
                .put(new Info("LIBPOSTPROC_VERSION_INT < (52<<16)").define(false));
     }
 }

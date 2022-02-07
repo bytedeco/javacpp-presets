@@ -34,7 +34,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$OPENCL_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DOPENCL_INCLUDE_DIR=$INSTALL_PATH/include -DOPENCL_LIB_DIR=$INSTALL_PATH/lib -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -48,7 +48,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$OPENCL_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DOPENCL_INCLUDE_DIR=$INSTALL_PATH/include -DOPENCL_LIB_DIR=$INSTALL_PATH/lib -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -62,7 +62,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$OPENCL_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DOPENCL_INCLUDE_DIR=$INSTALL_PATH/include -DOPENCL_LIB_DIR=$INSTALL_PATH/lib -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -78,7 +78,7 @@ case $PLATFORM in
         ninja -j $MAKEJ
         ninja install
         cd ../OpenCL-CLHPP-$OPENCL_VERSION
-        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DOPENCL_INCLUDE_DIR=$INSTALL_PATH/include -DOPENCL_LIB_DIR=$INSTALL_PATH/lib -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
         ninja -j $MAKEJ
         ninja install
         ;;
@@ -86,5 +86,7 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+rm $INSTALL_PATH/include/CL/CL || true
 
 cd ../..

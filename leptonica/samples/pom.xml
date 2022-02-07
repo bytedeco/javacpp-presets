@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.leptonica</groupId>
     <artifactId>sudokutest</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SudokuTest</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>leptonica-platform</artifactId>
-            <version>1.82.0-1.5.7-SNAPSHOT</version>
+            <version>1.82.0-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

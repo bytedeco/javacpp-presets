@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libffi</groupId>
     <artifactId>simpleexample</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SimpleExample</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.2-1.5.6</version>
+            <version>3.4.2-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

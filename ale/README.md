@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ale</groupId>
     <artifactId>sharedlibraryinterfaceexample</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SharedLibraryInterfaceExample</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.7.3-1.5.7-SNAPSHOT</version>
+            <version>0.7.3-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

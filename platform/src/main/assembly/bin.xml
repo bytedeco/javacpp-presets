@@ -13,14 +13,25 @@
         <include>CHANGELOG*</include>
         <include>**/README*</include>
         <include>**/APACHE*</include>
+        <include>**/ACKNOWLEDGMENTS*</include>
+        <include>**/Copyright*</include>
+        <include>**/COPYRIGHT*</include>
         <include>**/COPYING*</include>
+        <include>**/BOOST*</include>
+        <include>**/BSD*</include>
         <include>**/gpl*</include>
         <include>**/GPL*</include>
         <include>**/lgpl*</include>
         <include>**/LGPL*</include>
+        <include>**/MIT*</include>
+        <include>**/OFL*</include>
+        <include>**/License*</include>
         <include>**/LICENSE*</include>
         <include>**/*license*</include>
         <include>**/NOTICE*</include>
+        <include>**/third-party-programs*</include>
+        <include>**/THIRD-PARTY-PROGRAMS*</include>
+        <include>**/ThirdPartyNotices*</include>
         <include>**/samples/**</include>
       </includes>
       <excludes>
@@ -40,6 +51,7 @@
         <exclude>*-javadoc.jar</exclude>
         <exclude>*-sources.jar</exclude>
       </excludes>
+      <fileMode>0644</fileMode>
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}/site</directory>
