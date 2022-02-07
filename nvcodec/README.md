@@ -47,7 +47,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.nvcodec</groupId>
     <artifactId>sampleencodedecode</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SampleEncodeDecode</exec.mainClass>
     </properties>
@@ -55,14 +55,14 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>11.1.5-1.5.7-SNAPSHOT</version>
+            <version>11.1.5-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.7-SNAPSHOT</version>
+            <version>11.6-8.3-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

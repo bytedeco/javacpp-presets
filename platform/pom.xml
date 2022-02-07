@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -269,7 +269,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>nvcodec-platform</artifactId>
-      <version>11.1.5-${project.parent.version}</version>
+      <version>11.1.5-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

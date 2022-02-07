@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>Factorial</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,12 +12,12 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>13.0.1-1.5.7-SNAPSHOT</version>
+            <version>13.0.1-1.5.7</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.2-1.5.7-SNAPSHOT</version>
+            <version>3.4.2-1.5.7</version>
         </dependency>
     </dependencies>
     <repositories>

@@ -89,27 +89,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.6</version>
+    <version>${moduleVersion}-1.5.7</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.6'
+    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.7'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.6")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.7")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.6"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.7"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -167,7 +167,7 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.6  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.7  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 

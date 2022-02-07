@@ -54,7 +54,7 @@ To run this sample code, after creating the `pom.xml` and `Example.java` source 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libpostal</groupId>
     <artifactId>example</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -62,7 +62,7 @@ To run this sample code, after creating the `pom.xml` and `Example.java` source 
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libpostal-platform</artifactId>
-            <version>1.1-1.5.7-SNAPSHOT</version>
+            <version>1.1-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnxruntime</groupId>
     <artifactId>cxxapisample</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>CXXApiSample</exec.mainClass>
     </properties>
@@ -46,21 +46,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.10.0-1.5.7-SNAPSHOT</version>
+            <version>1.10.0-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform-gpu</artifactId>
-            <version>1.10.0-1.5.7-SNAPSHOT</version>
+            <version>1.10.0-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.7-SNAPSHOT</version>
+            <version>11.6-8.3-1.5.7</version>
         </dependency>
 
     </dependencies>

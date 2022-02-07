@@ -6,14 +6,14 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver-platform</artifactId>
   <version>2.18-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for Tritonserver</name>
+  <name>JavaCPP Presets Platform for Triton Inference Server</name>
 
   <properties>
     <javacpp.moduleId>tritonserver</javacpp.moduleId>
@@ -35,24 +35,24 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-arm64}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-arm64}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.windows-x86_64}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.windows-x86_64}</classifier>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -110,9 +110,9 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>
