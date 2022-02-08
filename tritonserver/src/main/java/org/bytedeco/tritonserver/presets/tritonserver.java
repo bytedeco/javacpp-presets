@@ -61,6 +61,9 @@ public class tritonserver implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.putFirst(new Info().enumerate(false))
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("boolean[]", "BoolPointer"))
+               .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
                              "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
