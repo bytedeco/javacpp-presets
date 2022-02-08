@@ -66,7 +66,7 @@ public class SimpleCPUOnly {
         System.err.println(msg);
       }
 
-      System.err.println("Usage: java " + Simple.class.getSimpleName() + " [options]");
+      System.err.println("Usage: java " + SimpleCPUOnly.class.getSimpleName() + " [options]");
       System.err.println("\t-v Enable verbose logging");
       System.err.println("\t-r [model repository absolute path]");
 

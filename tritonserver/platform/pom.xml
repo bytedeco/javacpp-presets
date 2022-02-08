@@ -21,16 +21,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>cuda-platform</artifactId>
-      <version>11.6-8.3-${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>tensorrt-platform</artifactId>
-      <version>8.2-${project.parent.version}</version>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
