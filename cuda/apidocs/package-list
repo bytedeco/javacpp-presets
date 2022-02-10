@@ -10,6 +10,7 @@ org.bytedeco.cuda.nccl
 org.bytedeco.cuda.nppc
 org.bytedeco.cuda.nppicc
 org.bytedeco.cuda.nppig
+org.bytedeco.cuda.nvToolsExt
 org.bytedeco.cuda.nvml
 org.bytedeco.cuda.nvrtc
 org.bytedeco.cuda.presets
