@@ -2,6 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tritonserver</groupId>
     <artifactId>tritonserver-uber</artifactId>
+    <version>1.5.7</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
