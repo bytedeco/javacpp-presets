@@ -3,4 +3,5 @@ module org.bytedeco.bullet {
   exports org.bytedeco.bullet.presets;
   exports org.bytedeco.bullet.LinearMath;
   exports org.bytedeco.bullet.BulletCollision;
+  exports org.bytedeco.bullet.BulletDynamics;
 }
