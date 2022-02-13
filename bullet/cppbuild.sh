@@ -16,12 +16,12 @@ cd $PLATFORM
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
-unzip -q ../bullet-$BULLET_VERSION.zip
+unzip -qo ../bullet-$BULLET_VERSION.zip
 
 case $PLATFORM in
     linux-x86_64)
         cd bullet3-$BULLET_VERSION
-        mkdir .build
+        [ -d .build ] || mkdir .build
         cd .build
         cmake \
             -DBUILD_BULLET2_DEMOS=OFF \
