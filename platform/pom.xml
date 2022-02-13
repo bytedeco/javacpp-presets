@@ -72,6 +72,7 @@
     <module>../cpu_features/platform</module>
     <module>../modsecurity/platform</module>
     <module>../systems/platform</module>
+    <module>../bullet/platform</module>
   </modules>
 
   <dependencies>
@@ -365,6 +366,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>systems-platform</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>bullet-platform</artifactId>
+      <version>3.21-${project.version}</version>
     </dependency>
   </dependencies>
 
