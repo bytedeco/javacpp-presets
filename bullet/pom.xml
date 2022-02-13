@@ -32,6 +32,11 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/bullet</includePath>
+          </includePaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
