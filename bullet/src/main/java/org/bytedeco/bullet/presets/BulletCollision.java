@@ -87,6 +87,7 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("btDbvtBroadphase::m_rayTestStacks").skip())
             .put(new Info("btDbvtProxy").skip())
             .put(new Info("DBVT_BP_PROFILE").define(false))
+            .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
             ;
     }
 }
