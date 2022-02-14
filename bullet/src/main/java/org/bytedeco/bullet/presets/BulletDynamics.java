@@ -39,7 +39,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "BulletDynamics"
         )
     },
-    target = "org.bytedeco.bullet.BulletDynamics"
+    target = "org.bytedeco.bullet.BulletDynamics",
+    global = "org.bytedeco.bullet.global.BulletDynamics"
 )
 public class BulletDynamics implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "bullet"); }

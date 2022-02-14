@@ -62,7 +62,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "BulletCollision"
         )
     },
-    target = "org.bytedeco.bullet.BulletCollision"
+    target = "org.bytedeco.bullet.BulletCollision",
+    global = "org.bytedeco.bullet.global.BulletCollision"
 )
 public class BulletCollision implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "bullet"); }

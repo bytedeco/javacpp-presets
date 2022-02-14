@@ -30,7 +30,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "LinearMath"
         )
     },
-    target = "org.bytedeco.bullet.LinearMath"
+    target = "org.bytedeco.bullet.LinearMath",
+    global = "org.bytedeco.bullet.global.LinearMath"
 )
 public class LinearMath implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "bullet"); }
