@@ -47,7 +47,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <buildCommand>
                 <program>bash</program>
-                <argument>${project.basedir}/postbuild.sh</argument>
+                <argument>postbuild.sh</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}</workingDirectory>
             </configuration>
