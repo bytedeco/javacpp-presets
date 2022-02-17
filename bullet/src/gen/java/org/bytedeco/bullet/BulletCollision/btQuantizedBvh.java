@@ -43,7 +43,7 @@ public class btQuantizedBvh extends Pointer {
 	///***************************************** expert/internal use only *************************
 	public native void setQuantizationValues(@Const @ByRef btVector3 bvhAabbMin, @Const @ByRef btVector3 bvhAabbMax, @Cast("btScalar") float quantizationMargin/*=btScalar(1.0)*/);
 	public native void setQuantizationValues(@Const @ByRef btVector3 bvhAabbMin, @Const @ByRef btVector3 bvhAabbMax);
-	public native @Cast("QuantizedNodeArray*") @ByRef btAlignedObjectArray_btVector3 getLeafNodeArray();
+	public native @Cast("QuantizedNodeArray*") @ByRef btAlignedObjectArray_bool getLeafNodeArray();
 	/**buildInternal is expert use only: assumes that setQuantizationValues and LeafNodeArray are initialized */
 	public native void buildInternal();
 	///***************************************** expert/internal use only *************************
@@ -67,9 +67,9 @@ public class btQuantizedBvh extends Pointer {
 	/**setTraversalMode let's you choose between stackless, recursive or stackless cache friendly tree traversal. Note this is only implemented for quantized trees. */
 	public native void setTraversalMode(@Cast("btQuantizedBvh::btTraversalMode") int traversalMode);
 
-	public native @Cast("QuantizedNodeArray*") @ByRef btAlignedObjectArray_btVector3 getQuantizedNodeArray();
+	public native @Cast("QuantizedNodeArray*") @ByRef btAlignedObjectArray_bool getQuantizedNodeArray();
 
-	public native @Cast("BvhSubtreeInfoArray*") @ByRef btAlignedObjectArray_btVector3 getSubtreeInfoArray();
+	public native @Cast("BvhSubtreeInfoArray*") @ByRef btAlignedObjectArray_bool getSubtreeInfoArray();
 
 	////////////////////////////////////////////////////////////////////
 

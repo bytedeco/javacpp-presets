@@ -26,6 +26,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btQuickprof.h",
                 "LinearMath/btMotionState.h",
                 "LinearMath/btDefaultMotionState.h",
+                "LinearMath/btSpatialAlgebra.h",
             },
             link = "LinearMath"
         )
@@ -83,8 +84,14 @@ public class LinearMath implements InfoMapper {
 
             // btAlignedObjectArray.h
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
-            .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btAlignedObjectArray_btVector3"))
+            .put(new Info("btAlignedObjectArray<bool>").pointerTypes("btAlignedObjectArray_bool"))
+            .put(new Info("btAlignedObjectArray<int>").pointerTypes("btAlignedObjectArray_int"))
             .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btAlignedObjectArray_btScalar"))
+            .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btAlignedObjectArray_btVector3"))
+            .put(new Info("btAlignedObjectArray<btVector4>").pointerTypes("btAlignedObjectArray_btVector4"))
+            .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btAlignedObjectArray_btMatrix3x3"))
+            .put(new Info("btAlignedObjectArray<btMatrix3x3>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btAlignedObjectArray_btQuaternion"))
             ;
     }
 }

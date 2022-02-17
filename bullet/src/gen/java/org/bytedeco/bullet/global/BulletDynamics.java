@@ -57,7 +57,7 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 // #ifdef BT_USE_PLACEMENT_NEW
 // #include <new>
-// Targeting ../BulletDynamics/btAlignedObjectArray_btRigidBodyPointer.java
+// Targeting ../BulletDynamics/btAlignedObjectArray_btRigidBody.java
 
 
 
@@ -249,9 +249,6 @@ subject to the following restrictions:
 
 // #include "btDynamicsWorld.h"
 // Targeting ../BulletDynamics/btSimulationIslandManager.java
-
-
-// Targeting ../BulletDynamics/btPersistentManifold.java
 
 
 // Targeting ../BulletDynamics/InplaceSolverIslandCallback.java
@@ -1065,6 +1062,279 @@ subject to the following restrictions:
 
 
 // #endif  //BT_RAYCASTVEHICLE_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyJointFeedback.h
+
+/*
+Copyright (c) 2015 Google Inc.
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_JOINT_FEEDBACK_H
+// #define BT_MULTIBODY_JOINT_FEEDBACK_H
+
+// #include "LinearMath/btSpatialAlgebra.h"
+// Targeting ../BulletDynamics/btMultiBodyJointFeedback.java
+
+
+
+// #endif  //BT_MULTIBODY_JOINT_FEEDBACK_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyLink.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_LINK_H
+// #define BT_MULTIBODY_LINK_H
+
+// #include "LinearMath/btQuaternion.h"
+// #include "LinearMath/btVector3.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+
+/** enum btMultiBodyLinkFlags */
+public static final int
+	BT_MULTIBODYLINKFLAGS_DISABLE_PARENT_COLLISION = 1,
+	BT_MULTIBODYLINKFLAGS_DISABLE_ALL_PARENT_COLLISION = 2;
+
+//both defines are now permanently enabled
+// #define BT_MULTIBODYLINK_INCLUDE_PLANAR_JOINTS
+// #define TEST_SPATIAL_ALGEBRA_LAYER
+
+//
+// Various spatial helper functions
+//
+
+//namespace {
+
+// #include "LinearMath/btSpatialAlgebra.h"
+// Targeting ../BulletDynamics/btMultibodyLink.java
+
+
+
+// #endif  //BT_MULTIBODY_LINK_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBody.h
+
+/*
+ * PURPOSE:
+ *   Class representing an articulated rigid body. Stores the body's
+ *   current state, allows forces and torques to be set, handles
+ *   timestepping and implements Featherstone's algorithm.
+ *   
+ * COPYRIGHT:
+ *   Copyright (C) Stephen Thompson, <stephen@solarflare.org.uk>, 2011-2013
+ *   Portions written By Erwin Coumans: connection to LCP solver, various multibody constraints, replacing Eigen math library by Bullet LinearMath and a dedicated 6x6 matrix inverse (solveImatrix)
+ *   Portions written By Jakub Stepien: support for multi-DOF constraints, introduction of spatial algebra and several other improvements
+
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ 
+ */
+
+// #ifndef BT_MULTIBODY_H
+// #define BT_MULTIBODY_H
+
+// #include "LinearMath/btScalar.h"
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btQuaternion.h"
+// #include "LinearMath/btMatrix3x3.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+
+/**serialization data, don't change them if you are not familiar with the details of the serialization mechanisms */
+// #ifdef BT_USE_DOUBLE_PRECISION
+// #else
+// #define btMultiBodyData btMultiBodyFloatData
+public static final String btMultiBodyDataName = "btMultiBodyFloatData";
+// #define btMultiBodyLinkData btMultiBodyLinkFloatData
+public static final String btMultiBodyLinkDataName = "btMultiBodyLinkFloatData";
+// #endif  //BT_USE_DOUBLE_PRECISION
+
+// #include "btMultiBodyLink.h"
+// Targeting ../BulletDynamics/btMultiBody.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyLinkDoubleData.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyLinkFloatData.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyDoubleData.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyFloatData.java
+
+
+
+// #endif
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyLinkCollider.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_FEATHERSTONE_LINK_COLLIDER_H
+// #define BT_FEATHERSTONE_LINK_COLLIDER_H
+
+// #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+
+// #include "btMultiBody.h"
+// #include "LinearMath/btSerializer.h"
+
+// #ifdef BT_USE_DOUBLE_PRECISION
+// #else
+// #define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData
+public static final String btMultiBodyLinkColliderDataName = "btMultiBodyLinkColliderFloatData";
+// Targeting ../BulletDynamics/btMultiBodyLinkCollider.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyLinkColliderFloatData.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyLinkColliderDoubleData.java
+
+
+
+// clang-format on
+
+
+
+
+
+// #endif  //BT_FEATHERSTONE_LINK_COLLIDER_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_CONSTRAINT_H
+// #define BT_MULTIBODY_CONSTRAINT_H
+
+// #include "LinearMath/btScalar.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "btMultiBody.h"
+
+
+//Don't change any of the existing enum values, so add enum types at the end for serialization compatibility
+/** enum btTypedMultiBodyConstraintType */
+public static final int
+	MULTIBODY_CONSTRAINT_LIMIT = 3,
+	MULTIBODY_CONSTRAINT_1DOF_JOINT_MOTOR = 4,
+	MULTIBODY_CONSTRAINT_GEAR = 5,
+	MULTIBODY_CONSTRAINT_POINT_TO_POINT = 6,
+	MULTIBODY_CONSTRAINT_SLIDER = 7,
+	MULTIBODY_CONSTRAINT_SPHERICAL_MOTOR = 8,
+	MULTIBODY_CONSTRAINT_FIXED = 9,
+	
+	MAX_MULTIBODY_CONSTRAINT_TYPE = 10;
+// Targeting ../BulletDynamics/btSolverInfo.java
+
+
+
+// #include "btMultiBodySolverConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyJacobianData.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_DYNAMICS_WORLD_H
+// #define BT_MULTIBODY_DYNAMICS_WORLD_H
+
+// #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyInplaceSolverIslandCallback.h"
+
+// #define BT_USE_VIRTUAL_CLEARFORCES_AND_GRAVITY
+// Targeting ../BulletDynamics/btMultiBodyConstraintSolver.java
+
+
+// Targeting ../BulletDynamics/MultiBodyInplaceSolverIslandCallback.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyDynamicsWorld.java
+
+
+// #endif  //BT_MULTIBODY_DYNAMICS_WORLD_H
 
 
 }

@@ -10,35 +10,35 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
 
-@Name("btAlignedObjectArray<btVector3>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
-public class btAlignedObjectArray_btVector3 extends Pointer {
+@Name("btAlignedObjectArray<btVector4>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
+public class btAlignedObjectArray_btVector4 extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btVector3(Pointer p) { super(p); }
+    public btAlignedObjectArray_btVector4(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btVector3(long size) { super((Pointer)null); allocateArray(size); }
+    public btAlignedObjectArray_btVector4(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btVector3 position(long position) {
-        return (btAlignedObjectArray_btVector3)super.position(position);
+    @Override public btAlignedObjectArray_btVector4 position(long position) {
+        return (btAlignedObjectArray_btVector4)super.position(position);
     }
-    @Override public btAlignedObjectArray_btVector3 getPointer(long i) {
-        return new btAlignedObjectArray_btVector3((Pointer)this).offsetAddress(i);
+    @Override public btAlignedObjectArray_btVector4 getPointer(long i) {
+        return new btAlignedObjectArray_btVector4((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btVector3 put(@Const @ByRef btAlignedObjectArray_btVector3 other);
-	public btAlignedObjectArray_btVector3() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btAlignedObjectArray_btVector4 put(@Const @ByRef btAlignedObjectArray_btVector4 other);
+	public btAlignedObjectArray_btVector4() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btVector3(@Const @ByRef btAlignedObjectArray_btVector3 otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btVector3 otherArray);
+	public btAlignedObjectArray_btVector4(@Const @ByRef btAlignedObjectArray_btVector4 otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btAlignedObjectArray_btVector4 otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btVector3 at(int n);
+	public native @ByRef btVector4 at(int n);
 
-	public native @ByRef @Name("operator []") btVector3 get(int n);
+	public native @ByRef @Name("operator []") btVector4 get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -49,14 +49,14 @@ public class btAlignedObjectArray_btVector3 extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btVector3()") btVector3 fillData);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btVector4()") btVector4 fillData);
 	public native void resize(int newsize);
-	public native @ByRef btVector3 expandNonInitializing();
+	public native @ByRef btVector4 expandNonInitializing();
 
-	public native @ByRef btVector3 expand(@Const @ByRef(nullValue = "btVector3()") btVector3 fillValue);
-	public native @ByRef btVector3 expand();
+	public native @ByRef btVector4 expand(@Const @ByRef(nullValue = "btVector4()") btVector4 fillValue);
+	public native @ByRef btVector4 expand();
 
-	public native void push_back(@Const @ByRef btVector3 _Val);
+	public native void push_back(@Const @ByRef btVector4 _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -68,19 +68,19 @@ public class btAlignedObjectArray_btVector3 extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@Const @ByRef btVector3 key);
+	public native int findBinarySearch(@Const @ByRef btVector4 key);
 
-	public native int findLinearSearch(@Const @ByRef btVector3 key);
+	public native int findLinearSearch(@Const @ByRef btVector4 key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@Const @ByRef btVector3 key);
+	public native int findLinearSearch2(@Const @ByRef btVector4 key);
 
 	public native void removeAtIndex(int index);
-	public native void remove(@Const @ByRef btVector3 key);
+	public native void remove(@Const @ByRef btVector4 key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btVector3 otherArray);
+	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btVector4 otherArray);
 }

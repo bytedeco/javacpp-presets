@@ -24,6 +24,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/BroadphaseCollision/btDbvtBroadphase.h",
                 "BulletCollision/NarrowPhaseCollision/btManifoldPoint.h",
                 "BulletCollision/NarrowPhaseCollision/btDiscreteCollisionDetectorInterface.h",
+                "BulletCollision/NarrowPhaseCollision/btPersistentManifold.h",
                 "BulletCollision/CollisionDispatch/btCollisionObject.h",
                 "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h",
                 "BulletCollision/CollisionDispatch/btCollisionDispatcher.h",
@@ -89,6 +90,12 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("btDbvtProxy").skip())
             .put(new Info("DBVT_BP_PROFILE").define(false))
             .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
+            .put(new Info("btPersistentManifoldData").cppText("#define btPersistentManifoldData btPersistentManifoldFloatData"))
+            .put(new Info("DEBUG_PERSISTENCY").define(false))
+            .put(new Info("gContactDestroyedCallback").skip())
+            .put(new Info("gContactProcessedCallback").skip())
+            .put(new Info("gContactStartedCallback").skip())
+            .put(new Info("gContactEndedCallback").skip())
             ;
     }
 }

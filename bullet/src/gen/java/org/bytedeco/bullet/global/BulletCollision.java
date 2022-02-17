@@ -136,9 +136,6 @@ subject to the following restrictions:
 // Targeting ../BulletCollision/btCollisionObjectWrapper.java
 
 
-// Targeting ../BulletCollision/btPersistentManifold.java
-
-
 // Targeting ../BulletCollision/btPoolAllocator.java
 
 
@@ -552,6 +549,82 @@ subject to the following restrictions:
 
 
 // #endif  //BT_DISCRETE_COLLISION_DETECTOR1_INTERFACE_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btPersistentManifold.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_PERSISTENT_MANIFOLD_H
+// #define BT_PERSISTENT_MANIFOLD_H
+
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btTransform.h"
+// #include "btManifoldPoint.h"
+// #include "LinearMath/btAlignedAllocator.h"
+// Targeting ../BulletCollision/btCollisionResult.java
+
+
+
+/**maximum contact breaking and merging threshold */
+public static native @Cast("btScalar") float gContactBreakingThreshold(); public static native void gContactBreakingThreshold(float setter);
+// Targeting ../BulletCollision/ContactDestroyedCallback.java
+
+
+// Targeting ../BulletCollision/ContactProcessedCallback.java
+
+
+// Targeting ../BulletCollision/ContactStartedCallback.java
+
+
+// Targeting ../BulletCollision/ContactEndedCallback.java
+
+
+
+
+
+
+// #endif  //SWIG
+
+//the enum starts at 1024 to avoid type conflicts with btTypedConstraint
+/** enum btContactManifoldTypes */
+public static final int
+	MIN_CONTACT_MANIFOLD_TYPE = 1024,
+	BT_PERSISTENT_MANIFOLD_TYPE = 1025;
+
+public static final int MANIFOLD_CACHE_SIZE = 4;
+// Targeting ../BulletCollision/btPersistentManifold.java
+
+
+// Targeting ../BulletCollision/btPersistentManifoldDoubleData.java
+
+
+// Targeting ../BulletCollision/btPersistentManifoldFloatData.java
+
+
+
+// clang-format on
+
+// #ifdef BT_USE_DOUBLE_PRECISION
+// #else
+// #define btPersistentManifoldData btPersistentManifoldFloatData
+public static final String btPersistentManifoldDataName = "btPersistentManifoldFloatData";
+// #endif  //BT_USE_DOUBLE_PRECISION
+
+// #endif  //BT_PERSISTENT_MANIFOLD_H
 
 
 // Parsed from BulletCollision/CollisionDispatch/btCollisionObject.h

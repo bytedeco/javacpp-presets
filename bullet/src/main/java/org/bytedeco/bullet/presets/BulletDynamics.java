@@ -35,6 +35,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Vehicle/btVehicleRaycaster.h",
                 "BulletDynamics/Vehicle/btWheelInfo.h",
                 "BulletDynamics/Vehicle/btRaycastVehicle.h",
+                "BulletDynamics/Featherstone/btMultiBodyJointFeedback.h",
+                "BulletDynamics/Featherstone/btMultiBodyLink.h",
+                "BulletDynamics/Featherstone/btMultiBody.h",
+                "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h",
+                "BulletDynamics/Featherstone/btMultiBodyConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h",
             },
             link = "BulletDynamics"
         )
@@ -51,8 +57,7 @@ public class BulletDynamics implements InfoMapper {
                 .cppText("#define btRigidBodyData btRigidBodyFloatData"))
             .put(new Info("defined(BT_CLAMP_VELOCITY_TO) && BT_CLAMP_VELOCITY_TO > 0")
                 .define(false))
-            .put(new Info("btAlignedObjectArray<btRigidBody*>")
-                .pointerTypes("btAlignedObjectArray_btRigidBodyPointer"))
+            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btAlignedObjectArray_btRigidBody"))
             .put(new Info("IN_PARALLELL_SOLVER").define(false))
             .put(new Info("BT_BACKWARDS_COMPATIBLE_SERIALIZATION").define(true))
             .put(new Info("btConstraintInfo1").skip())
@@ -100,6 +105,15 @@ public class BulletDynamics implements InfoMapper {
                 .cppText("#define btGearConstraintData btGearConstraintFloatData"))
             .put(new Info("btSingleConstraintRowSolver").skip())
             .put(new Info("btRaycastVehicle::m_wheelInfo").skip())
+            .put(new Info("btMultiBodyData")
+                .cppText("#define btMultiBodyData btMultiBodyFloatData"))
+            .put(new Info("btMultiBodyLinkData")
+                .cppText("#define btMultiBodyLinkData btMultiBodyLinkFloatData"))
+            .put(new Info("btMultiBodyLinkColliderData")
+                .cppText("#define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData"))
+            .put(new Info("btMultiBodyConstraint::createConstraintRows").skip())
+            .put(new Info("btMultiBodyJacobianData::m_solverBodyPool").skip())
+            .put(new Info("btMultiBodyDynamicsWorld::getAnalyticsData").skip())
             ;
     }
 }
