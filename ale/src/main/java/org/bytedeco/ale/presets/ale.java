@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Samuel Audet
+ * Copyright (C) 2017-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -39,8 +39,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp17", define = "UNIQUE_PTR_NAMESPACE std", link = "ale",
             include = {"emucore/Device.hxx", "emucore/Control.hxx", "emucore/Event.hxx", "emucore/Random.hxx", "common/Constants.h", "emucore/M6532.hxx",
                        "emucore/Cart.hxx", "emucore/Console.hxx", "emucore/Screen.hxx", "emucore/Sound.hxx", "emucore/Settings.hxx", "emucore/OSystem.hxx",
-                       "common/ColourPalette.hpp", "common/ScreenExporter.hpp", "environment/ale_ram.hpp", "environment/ale_screen.hpp",
-                       "environment/ale_state.hpp", "environment/stella_environment_wrapper.hpp", "environment/stella_environment.hpp", "ale_interface.hpp"}),
+                       "emucore/Props.hxx", "emucore/PropsSet.hxx", "common/ColourPalette.hpp", "common/ScreenExporter.hpp", "environment/ale_ram.hpp",
+                       "environment/ale_screen.hpp", "environment/ale_state.hpp", "environment/stella_environment_wrapper.hpp", "environment/stella_environment.hpp",
+                       "ale_interface.hpp"}),
         @Platform(value = "linux-x86",     preload = "SDL2-2.0@.0", preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64",  preload = "SDL2-2.0@.0", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "macosx-x86_64", preload = "SDL2-2.0@.0", preloadpath = "/usr/local/lib/"),
@@ -58,6 +59,8 @@ public class ale implements InfoMapper {
                .put(new Info("fs::path").annotations("@StdString").valueTypes("@Cast(\"const char*\") BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("std::optional<std::string>").pointerTypes("StringOptional").define())
+               .put(new Info("ale::stella::Properties").pointerTypes("StellaProperties"))
+               .put(new Info("ale::stella::PropertiesSet").pointerTypes("StellaPropertiesSet"))
                .put(new Info("ale::StellaEnvironmentWrapper::m_environment").javaText("public native @MemberGetter @ByRef StellaEnvironment m_environment();"))
                .put(new Info("ale::StellaEnvironment::getWrapper").javaText("public native @Name(\"getWrapper().get\") StellaEnvironmentWrapper getWrapper();"))
                .put(new Info("ale::ALEInterface::theOSystem").javaText("public native @Name(\"theOSystem.get\") OSystem theOSystem();"))
