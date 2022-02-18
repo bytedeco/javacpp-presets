@@ -127,6 +127,8 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedArtifactId>tritonserver-platform</shadedArtifactId>
             </configuration>
           </execution>
         </executions>
