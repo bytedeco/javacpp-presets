@@ -185,7 +185,7 @@ public class onnx implements InfoMapper {
                .put(new Info("onnx::RetrieveValues<std::string>").javaNames("RetrieveValuesString"))
                .put(new Info("onnx::ParseProtoFromBytes<google::protobuf::MessageLite>").javaNames("ParseProtoFromBytes"))
 
-               .put(new Info("onnx::checker::ValidationError").purify())
+               .put(new Info("onnx::checker::ValidationError", "onnx::version_conversion::GenericAdapter").purify())
 
                .put(new Info("std::function<bool(int)>").pointerTypes("BoolIntFn"))
                .put(new Info("std::function<bool(int,int)>").pointerTypes("BoolIntIntFn"))
