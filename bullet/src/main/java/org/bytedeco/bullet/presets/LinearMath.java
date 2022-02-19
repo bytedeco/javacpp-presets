@@ -27,6 +27,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btMotionState.h",
                 "LinearMath/btDefaultMotionState.h",
                 "LinearMath/btSpatialAlgebra.h",
+                "LinearMath/btPoolAllocator.h",
+                "LinearMath/btStackAlloc.h",
             },
             link = "LinearMath"
         )

@@ -12,10 +12,29 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btCollisionAlgorithmConstructionInfo extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btCollisionAlgorithmConstructionInfo() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btCollisionAlgorithmConstructionInfo(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public btCollisionAlgorithmConstructionInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public btCollisionAlgorithmConstructionInfo position(long position) {
+        return (btCollisionAlgorithmConstructionInfo)super.position(position);
+    }
+    @Override public btCollisionAlgorithmConstructionInfo getPointer(long i) {
+        return new btCollisionAlgorithmConstructionInfo((Pointer)this).offsetAddress(i);
+    }
+
+	public btCollisionAlgorithmConstructionInfo() { super((Pointer)null); allocate(); }
+	private native void allocate();
+	public btCollisionAlgorithmConstructionInfo(btDispatcher dispatcher, int temp) { super((Pointer)null); allocate(dispatcher, temp); }
+	private native void allocate(btDispatcher dispatcher, int temp);
+
+	public native btDispatcher m_dispatcher1(); public native btCollisionAlgorithmConstructionInfo m_dispatcher1(btDispatcher setter);
+	public native btPersistentManifold m_manifold(); public native btCollisionAlgorithmConstructionInfo m_manifold(btPersistentManifold setter);
+
+	//	int	getDispatcherId();
 }

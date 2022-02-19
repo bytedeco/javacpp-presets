@@ -14,10 +14,16 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletDynamics.class)
+
+/**Basic interface to allow actions such as vehicles and characters to be updated inside a btDynamicsWorld */
+@Properties(inherit = org.bytedeco.bullet.presets.BulletDynamics.class)
 public class btActionInterface extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btActionInterface() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btActionInterface(Pointer p) { super(p); }
+
+
+	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") float deltaTimeStep);
+
+	public native void debugDraw(btIDebugDraw debugDrawer);
 }

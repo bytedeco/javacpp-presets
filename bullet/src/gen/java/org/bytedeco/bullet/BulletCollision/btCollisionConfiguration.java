@@ -12,10 +12,23 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+
+/**btCollisionConfiguration allows to configure Bullet collision detection
+ * stack allocator size, default collision algorithms and persistent manifold pool size
+ * \todo: describe the meaning */
+@Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btCollisionConfiguration extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btCollisionConfiguration() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btCollisionConfiguration(Pointer p) { super(p); }
+
+
+	/**memory pools */
+	public native btPoolAllocator getPersistentManifoldPool();
+
+	public native btPoolAllocator getCollisionAlgorithmPool();
+
+	public native btCollisionAlgorithmCreateFunc getCollisionAlgorithmCreateFunc(int proxyType0, int proxyType1);
+
+	public native btCollisionAlgorithmCreateFunc getClosestPointsAlgorithmCreateFunc(int proxyType0, int proxyType1);
 }

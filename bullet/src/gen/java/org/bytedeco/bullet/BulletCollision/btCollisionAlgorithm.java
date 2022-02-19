@@ -13,10 +13,18 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+/**btCollisionAlgorithm is an collision interface that is compatible with the Broadphase and btDispatcher.
+ * It is persistent over frames */
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btCollisionAlgorithm extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btCollisionAlgorithm() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btCollisionAlgorithm(Pointer p) { super(p); }
+
+
+	public native void processCollision(@Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
+
+	public native @Cast("btScalar") float calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
+
+	public native void getAllContactManifolds(@Cast("btManifoldArray*") @ByRef btAlignedObjectArray_bool manifoldArray);
 }

@@ -12,10 +12,41 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btConvexPolyhedron extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btConvexPolyhedron() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btConvexPolyhedron(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public btConvexPolyhedron(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public btConvexPolyhedron position(long position) {
+        return (btConvexPolyhedron)super.position(position);
+    }
+    @Override public btConvexPolyhedron getPointer(long i) {
+        return new btConvexPolyhedron((Pointer)this).offsetAddress(i);
+    }
+
+
+	public btConvexPolyhedron() { super((Pointer)null); allocate(); }
+	private native void allocate();
+
+	public native @ByRef btAlignedObjectArray_btVector3 m_vertices(); public native btConvexPolyhedron m_vertices(btAlignedObjectArray_btVector3 setter);
+	
+	public native @ByRef btAlignedObjectArray_btVector3 m_uniqueEdges(); public native btConvexPolyhedron m_uniqueEdges(btAlignedObjectArray_btVector3 setter);
+
+	public native @ByRef btVector3 m_localCenter(); public native btConvexPolyhedron m_localCenter(btVector3 setter);
+	public native @ByRef btVector3 m_extents(); public native btConvexPolyhedron m_extents(btVector3 setter);
+	public native @Cast("btScalar") float m_radius(); public native btConvexPolyhedron m_radius(float setter);
+	public native @ByRef btVector3 mC(); public native btConvexPolyhedron mC(btVector3 setter);
+	public native @ByRef btVector3 mE(); public native btConvexPolyhedron mE(btVector3 setter);
+
+	public native void initialize();
+	public native void initialize2();
+	public native @Cast("bool") boolean testContainment();
+
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatPointer minProj, @Cast("btScalar*") @ByRef FloatPointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatBuffer minProj, @Cast("btScalar*") @ByRef FloatBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef float[] minProj, @Cast("btScalar*") @ByRef float[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
 }

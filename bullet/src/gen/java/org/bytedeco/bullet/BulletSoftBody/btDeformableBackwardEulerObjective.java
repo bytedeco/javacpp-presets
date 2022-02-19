@@ -16,10 +16,83 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
 public class btDeformableBackwardEulerObjective extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btDeformableBackwardEulerObjective() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableBackwardEulerObjective(Pointer p) { super(p); }
+
+	public native @Cast("btScalar") float m_dt(); public native btDeformableBackwardEulerObjective m_dt(float setter);
+	
+	public native @ByRef btAlignedObjectArray_btSoftBody m_softBodies(); public native btDeformableBackwardEulerObjective m_softBodies(btAlignedObjectArray_btSoftBody setter);
+	
+	
+	@MemberGetter public native @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 m_backupVelocity();
+	
+	public native @Cast("bool") boolean m_implicit(); public native btDeformableBackwardEulerObjective m_implicit(boolean setter);
+	
+	
+
+	public btDeformableBackwardEulerObjective(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v) { super((Pointer)null); allocate(softBodies, backup_v); }
+	private native void allocate(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v);
+
+	public native void initialize();
+
+	// compute the rhs for CG solve, i.e, add the dt scaled implicit force to residual
+	public native void computeResidual(@Cast("btScalar") float dt, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual);
+
+	// add explicit force to the velocity
+	public native void applyExplicitForce(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 force);
+
+	// apply force to velocity and optionally reset the force to zero
+	public native void applyForce(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 force, @Cast("bool") boolean setZero);
+
+	// compute the norm of the residual
+	public native @Cast("btScalar") float computeNorm(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual);
+
+	// compute one step of the solve (there is only one solve if the system is linear)
+	public native void computeStep(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual, @Cast("const btScalar") float dt);
+
+	// perform A*x = b
+	public native void multiply(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 x, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 b);
+
+	// set initial guess for CG solve
+	public native void initialGuess(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual);
+
+	// reset data structure and reset dt
+	public native void reinitialize(@Cast("bool") boolean nodeUpdated, @Cast("btScalar") float dt);
+
+	public native void setDt(@Cast("btScalar") float dt);
+
+	// add friction force to residual
+	public native void applyDynamicFriction(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 r);
+
+	// add dv to velocity
+	public native void updateVelocity(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv);
+
+	//set constraints as projections
+	public native void setConstraints(@Const @ByRef btContactSolverInfo infoGlobal);
+
+	// update the projections and project the residual
+	public native void project(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 r);
+
+	// perform precondition M^(-1) x = b
+	public native void precondition(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 x, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 b);
+
+	// reindex all the vertices
+	public native void updateId();
+
+	
+
+	public native void setImplicit(@Cast("bool") boolean implicit);
+
+	// Calculate the total potential energy in the system
+	public native @Cast("btScalar") float totalEnergy(@Cast("btScalar") float dt);
+
+	public native void addLagrangeMultiplier(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 vec, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 extended_vec);
+
+	public native void addLagrangeMultiplierRHS(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 m_dv, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 extended_residual);
+
+	public native void calculateContactForce(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 rhs, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 f);
 }

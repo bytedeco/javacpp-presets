@@ -14,6 +14,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             include = {
                 "LinearMath/btAlignedObjectArray.h",
+                "BulletDynamics/Dynamics/btActionInterface.h",
                 "BulletDynamics/Dynamics/btRigidBody.h",
                 "BulletDynamics/Dynamics/btDynamicsWorld.h",
                 "BulletDynamics/ConstraintSolver/btContactSolverInfo.h",
@@ -32,6 +33,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btFixedConstraint.h",
                 "BulletDynamics/ConstraintSolver/btConstraintSolver.h",
                 "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h",
+                "BulletDynamics/ConstraintSolver/btSolverConstraint.h",
+                "BulletDynamics/ConstraintSolver/btSolverBody.h",
+                "BulletDynamics/ConstraintSolver/btTypedConstraint.h",
                 "BulletDynamics/Vehicle/btVehicleRaycaster.h",
                 "BulletDynamics/Vehicle/btWheelInfo.h",
                 "BulletDynamics/Vehicle/btRaycastVehicle.h",
@@ -41,6 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h",
                 "BulletDynamics/Featherstone/btMultiBodyConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h",
+                "BulletDynamics/Featherstone/btMultiBodyConstraintSolver.h",
             },
             link = "BulletDynamics"
         )
@@ -114,6 +119,14 @@ public class BulletDynamics implements InfoMapper {
             .put(new Info("btMultiBodyConstraint::createConstraintRows").skip())
             .put(new Info("btMultiBodyJacobianData::m_solverBodyPool").skip())
             .put(new Info("btMultiBodyDynamicsWorld::getAnalyticsData").skip())
+            .put(new Info("InplaceSolverIslandCallback").skip())
+            .put(new Info("MultiBodyInplaceSolverIslandCallback").skip())
+            .put(new Info("DeformableBodyInplaceSolverIslandCallback").skip())
+            .put(new Info("btSolverInfo").skip())
+            .put(new Info("USE_SIMD").define(false))
+            .put(new Info("btSimdScalar").cppText("#define btSimdScalar btScalar"))
+            .put(new Info("btTypedConstraintData2").cppText("#define btTypedConstraintData2 btTypedConstraintFloatData"))
+            .put(new Info("btConstraintArray").skip())
             ;
     }
 }

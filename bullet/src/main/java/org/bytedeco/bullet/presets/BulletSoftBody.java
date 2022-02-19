@@ -27,6 +27,9 @@ import org.bytedeco.javacpp.Pointer;
                 "BulletSoftBody/btDeformableBodySolver.h",
                 "BulletSoftBody/btDeformableMultiBodyConstraintSolver.h",
                 "BulletSoftBody/btDeformableMultiBodyDynamicsWorld.h",
+                "BulletSoftBody/btSoftBodySolverVertexBuffer.h",
+                "BulletSoftBody/btDeformableBackwardEulerObjective.h",
+                "BulletSoftBody/btDeformableLagrangianForce.h",
             },
             link = "BulletSoftBody"
         )
@@ -75,6 +78,19 @@ public class BulletSoftBody implements InfoMapper {
                 ).skip())
             .put(new Info("btDeformableMultiBodyDynamicsWorld::setSolverCallback").skip())
             .put(new Info("btDeformableMultiBodyDynamicsWorld::rayTestSingle").skip())
+            .put(new Info("btCPUVertexBufferDescriptor::getBufferType").skip())
+            .put(new Info("btSoftBodyVertexData").skip())
+            .put(new Info("btSoftBodyTriangleData").skip())
+            .put(new Info("btSoftBodyLinkData").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_lf").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_nodes").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::getIndices").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_preconditioner").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_massPreconditioner").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_KKTPreconditioner").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::m_projection").skip())
+            .put(new Info("btDeformableLagrangianForce::m_nodes").skip())
+            .put(new Info("btDeformableLagrangianForce::setIndices").skip())
             ;
     }
 }

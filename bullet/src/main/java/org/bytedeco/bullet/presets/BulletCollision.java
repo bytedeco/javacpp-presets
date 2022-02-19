@@ -13,6 +13,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {
+                "BulletCollision/BroadphaseCollision/btDbvt.h",
+                "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h",
                 "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h",
                 "BulletCollision/BroadphaseCollision/btDispatcher.h",
                 "BulletCollision/BroadphaseCollision/btOverlappingPairCallback.h",
@@ -22,9 +24,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/BroadphaseCollision/btSimpleBroadphase.h",
                 "BulletCollision/BroadphaseCollision/btAxisSweep3.h",
                 "BulletCollision/BroadphaseCollision/btDbvtBroadphase.h",
+                "BulletCollision/NarrowPhaseCollision/btSimplexSolverInterface.h",
+                "BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.h",
+                "BulletCollision/NarrowPhaseCollision/btConvexPenetrationDepthSolver.h",
                 "BulletCollision/NarrowPhaseCollision/btManifoldPoint.h",
                 "BulletCollision/NarrowPhaseCollision/btDiscreteCollisionDetectorInterface.h",
                 "BulletCollision/NarrowPhaseCollision/btPersistentManifold.h",
+                "BulletCollision/NarrowPhaseCollision/btGjkEpaPenetrationDepthSolver.h",
+                "BulletCollision/CollisionDispatch/btCollisionConfiguration.h",
                 "BulletCollision/CollisionDispatch/btCollisionObject.h",
                 "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h",
                 "BulletCollision/CollisionDispatch/btCollisionDispatcher.h",
@@ -33,8 +40,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.h",
                 "BulletCollision/CollisionDispatch/btSphereSphereCollisionAlgorithm.h",
                 "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h",
+                "BulletCollision/CollisionDispatch/btSimulationIslandManager.h",
+                "BulletCollision/CollisionDispatch/btUnionFind.h",
                 "BulletCollision/CollisionShapes/btCollisionShape.h",
                 "BulletCollision/CollisionShapes/btConvexShape.h",
+                "BulletCollision/CollisionShapes/btConvexPolyhedron.h",
                 "BulletCollision/CollisionShapes/btPolyhedralConvexShape.h",
                 "BulletCollision/CollisionShapes/btConvexInternalShape.h",
                 "BulletCollision/CollisionShapes/btBoxShape.h",
@@ -91,11 +101,23 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("DBVT_BP_PROFILE").define(false))
             .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
             .put(new Info("btPersistentManifoldData").cppText("#define btPersistentManifoldData btPersistentManifoldFloatData"))
+            .put(new Info("btPersistentManifold.h").linePatterns("struct btCollisionResult;").skip())
             .put(new Info("DEBUG_PERSISTENCY").define(false))
             .put(new Info("gContactDestroyedCallback").skip())
             .put(new Info("gContactProcessedCallback").skip())
             .put(new Info("gContactStartedCallback").skip())
             .put(new Info("gContactEndedCallback").skip())
+            .put(new Info("NO_VIRTUAL_INTERFACE").define(false))
+            .put(new Info("btConvexPolyhedron::m_faces").skip())
+            .put(new Info("btDbvt::m_stkStack").skip())
+            .put(new Info("btDbvt::extractLeaves").skip())
+            .put(new Info("btDbvt::rayTestInternal").skip())
+            .put(new Info("btDbvt::allocate").skip())
+            .put(new Info("DBVT_PREFIX").skip())
+            .put(new Info("DBVT_IPOLICY").skip())
+            .put(new Info("DBVT_INLINE").cppTypes().annotations())
+            .put(new Info("DBVT_CHECKTYPE").skip())
+            .put(new Info("BT_DECLARE_STACK_ONLY_OBJECT").cppText("#define BT_DECLARE_STACK_ONLY_OBJECT"))
             ;
     }
 }

@@ -16,10 +16,45 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
 public class btVertexBufferDescriptor extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btVertexBufferDescriptor() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btVertexBufferDescriptor(Pointer p) { super(p); }
+
+	/** enum btVertexBufferDescriptor::BufferTypes */
+	public static final int
+		CPU_BUFFER = 0,
+		DX11_BUFFER = 1,
+		OPENGL_BUFFER = 2;
+
+	public native @Cast("bool") boolean hasVertexPositions();
+
+	public native @Cast("bool") boolean hasNormals();
+
+	/**
+	 * Return the type of the vertex buffer descriptor.
+	 */
+	public native @Cast("btVertexBufferDescriptor::BufferTypes") int getBufferType();
+
+	/**
+	 * Return the vertex offset in floats from the base pointer.
+	 */
+	public native int getVertexOffset();
+
+	/**
+	 * Return the vertex stride in number of floats between vertices.
+	 */
+	public native int getVertexStride();
+
+	/**
+	 * Return the vertex offset in floats from the base pointer.
+	 */
+	public native int getNormalOffset();
+
+	/**
+	 * Return the vertex stride in number of floats between vertices.
+	 */
+	public native int getNormalStride();
 }
