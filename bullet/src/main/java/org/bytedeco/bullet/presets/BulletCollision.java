@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h",
                 "BulletCollision/CollisionDispatch/btSimulationIslandManager.h",
                 "BulletCollision/CollisionDispatch/btUnionFind.h",
+                "BulletCollision/CollisionDispatch/btCollisionDispatcherMt.h",
                 "BulletCollision/CollisionShapes/btCollisionShape.h",
                 "BulletCollision/CollisionShapes/btConvexShape.h",
                 "BulletCollision/CollisionShapes/btConvexPolyhedron.h",

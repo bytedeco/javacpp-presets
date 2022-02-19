@@ -20,6 +20,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btContactSolverInfo.h",
                 "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h",
                 "BulletDynamics/Dynamics/btSimpleDynamicsWorld.h",
+                "BulletDynamics/ConstraintSolver/btConstraintSolver.h",
+                "BulletDynamics/Dynamics/btDiscreteDynamicsWorldMt.h",
+                "BulletDynamics/Dynamics/btSimulationIslandManagerMt.h",
                 "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h",
                 "BulletDynamics/ConstraintSolver/btHingeConstraint.h",
                 "BulletDynamics/ConstraintSolver/btConeTwistConstraint.h",
@@ -31,11 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btHinge2Constraint.h",
                 "BulletDynamics/ConstraintSolver/btGearConstraint.h",
                 "BulletDynamics/ConstraintSolver/btFixedConstraint.h",
-                "BulletDynamics/ConstraintSolver/btConstraintSolver.h",
                 "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h",
                 "BulletDynamics/ConstraintSolver/btSolverConstraint.h",
                 "BulletDynamics/ConstraintSolver/btSolverBody.h",
                 "BulletDynamics/ConstraintSolver/btTypedConstraint.h",
+                "BulletDynamics/ConstraintSolver/btBatchedConstraints.h",
+                "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h",
                 "BulletDynamics/Vehicle/btVehicleRaycaster.h",
                 "BulletDynamics/Vehicle/btWheelInfo.h",
                 "BulletDynamics/Vehicle/btRaycastVehicle.h",
@@ -127,6 +131,16 @@ public class BulletDynamics implements InfoMapper {
             .put(new Info("btSimdScalar").cppText("#define btSimdScalar btScalar"))
             .put(new Info("btTypedConstraintData2").cppText("#define btTypedConstraintData2 btTypedConstraintFloatData"))
             .put(new Info("btConstraintArray").skip())
+            .put(new Info("btSequentialImpulseConstraintSolverMt::internalConvertMultipleJoints").skip())
+            .put(new Info("btBatchedConstraints::m_batches").skip())
+            .put(new Info("btBatchedConstraints::m_phases").skip())
+            .put(new Info("btSimulationIslandManagerMt::Island::bodyArray").skip())
+            .put(new Info("btSimulationIslandManagerMt::Island::manifoldArray").skip())
+            .put(new Info("btSimulationIslandManagerMt::Island::constraintArray").skip())
+            .put(new Info("btSimulationIslandManagerMt::buildAndProcessIslands").skip())
+            .put(new Info("btSimulationIslandManagerMt::serialIslandDispatch").skip())
+            .put(new Info("btSimulationIslandManagerMt::parallelIslandDispatch").skip())
+            .put(new Info("btSimulationIslandManagerMt::IslandDispatchFunc").skip())
             ;
     }
 }

@@ -309,6 +309,109 @@ subject to the following restrictions:
 // #endif  //BT_SIMPLE_DYNAMICS_WORLD_H
 
 
+// Parsed from BulletDynamics/ConstraintSolver/btConstraintSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONSTRAINT_SOLVER_H
+// #define BT_CONSTRAINT_SOLVER_H
+
+// #include "LinearMath/btScalar.h"
+/** btConstraintSolver provides solver interface */
+
+/** enum btConstraintSolverType */
+public static final int
+	BT_SEQUENTIAL_IMPULSE_SOLVER = 1,
+	BT_MLCP_SOLVER = 2,
+	BT_NNCG_SOLVER = 4,
+	BT_MULTIBODY_SOLVER = 8,
+	BT_BLOCK_SOLVER = 16;
+// Targeting ../BulletDynamics/btConstraintSolver.java
+
+
+
+// #endif  //BT_CONSTRAINT_SOLVER_H
+
+
+// Parsed from BulletDynamics/Dynamics/btDiscreteDynamicsWorldMt.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2009 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_DISCRETE_DYNAMICS_WORLD_MT_H
+// #define BT_DISCRETE_DYNAMICS_WORLD_MT_H
+
+// #include "btDiscreteDynamicsWorld.h"
+// #include "btSimulationIslandManagerMt.h"
+
+
+///
+///
+///
+// #include "BulletDynamics/ConstraintSolver/btConstraintSolver.h"
+// Targeting ../BulletDynamics/btConstraintSolverPoolMt.java
+
+
+// Targeting ../BulletDynamics/btDiscreteDynamicsWorldMt.java
+
+
+
+// #endif  //BT_DISCRETE_DYNAMICS_WORLD_H
+
+
+// Parsed from BulletDynamics/Dynamics/btSimulationIslandManagerMt.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SIMULATION_ISLAND_MANAGER_MT_H
+// #define BT_SIMULATION_ISLAND_MANAGER_MT_H
+
+// #include "BulletCollision/CollisionDispatch/btSimulationIslandManager.h"
+// Targeting ../BulletDynamics/btSimulationIslandManagerMt.java
+
+
+
+// #endif  //BT_SIMULATION_ISLAND_MANAGER_H
+
+
 // Parsed from BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h
 
 /*
@@ -925,43 +1028,6 @@ subject to the following restrictions:
 // #endif  //BT_FIXED_CONSTRAINT_H
 
 
-// Parsed from BulletDynamics/ConstraintSolver/btConstraintSolver.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_CONSTRAINT_SOLVER_H
-// #define BT_CONSTRAINT_SOLVER_H
-
-// #include "LinearMath/btScalar.h"
-/** btConstraintSolver provides solver interface */
-
-/** enum btConstraintSolverType */
-public static final int
-	BT_SEQUENTIAL_IMPULSE_SOLVER = 1,
-	BT_MLCP_SOLVER = 2,
-	BT_NNCG_SOLVER = 4,
-	BT_MULTIBODY_SOLVER = 8,
-	BT_BLOCK_SOLVER = 16;
-// Targeting ../BulletDynamics/btConstraintSolver.java
-
-
-
-// #endif  //BT_CONSTRAINT_SOLVER_H
-
-
 // Parsed from BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h
 
 /*
@@ -1160,6 +1226,76 @@ public static native @Cast("btScalar") float btAdjustAngleToLimits(@Cast("btScal
 
 
 // #endif  //BT_TYPED_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/ConstraintSolver/btBatchedConstraints.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_BATCHED_CONSTRAINTS_H
+// #define BT_BATCHED_CONSTRAINTS_H
+
+// #include "LinearMath/btThreads.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "BulletDynamics/ConstraintSolver/btSolverBody.h"
+// #include "BulletDynamics/ConstraintSolver/btSolverConstraint.h"
+// Targeting ../BulletDynamics/btBatchedConstraints.java
+
+
+
+// #endif  // BT_BATCHED_CONSTRAINTS_H
+
+
+// Parsed from BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SEQUENTIAL_IMPULSE_CONSTRAINT_SOLVER_MT_H
+// #define BT_SEQUENTIAL_IMPULSE_CONSTRAINT_SOLVER_MT_H
+
+// #include "btSequentialImpulseConstraintSolver.h"
+// #include "btBatchedConstraints.h"
+
+
+///
+///
+///
+///
+///
+///
+///
+// #include "LinearMath/btThreads.h"
+// Targeting ../BulletDynamics/btSequentialImpulseConstraintSolverMt.java
+
+
+
+// #endif  //BT_SEQUENTIAL_IMPULSE_CONSTRAINT_SOLVER_MT_H
 
 
 // Parsed from BulletDynamics/Vehicle/btVehicleRaycaster.h

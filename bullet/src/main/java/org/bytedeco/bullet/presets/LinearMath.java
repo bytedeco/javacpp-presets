@@ -87,6 +87,7 @@ public class LinearMath implements InfoMapper {
             // btAlignedObjectArray.h
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
             .put(new Info("btAlignedObjectArray<bool>").pointerTypes("btAlignedObjectArray_bool"))
+            .put(new Info("btAlignedObjectArray<char>").pointerTypes("btAlignedObjectArray_char"))
             .put(new Info("btAlignedObjectArray<int>").pointerTypes("btAlignedObjectArray_int"))
             .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btAlignedObjectArray_btScalar"))
             .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btAlignedObjectArray_btVector3"))
