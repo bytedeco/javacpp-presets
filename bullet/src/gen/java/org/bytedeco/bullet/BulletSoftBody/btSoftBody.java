@@ -65,55 +65,8 @@ public class btSoftBody extends btCollisionObject {
 	}
 
 	/**eVSolver : velocities solvers */
-	public static class eVSolver extends Pointer {
-	    static { Loader.load(); }
-	    /** Default native constructor. */
-	    public eVSolver() { super((Pointer)null); allocate(); }
-	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-	    public eVSolver(long size) { super((Pointer)null); allocateArray(size); }
-	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-	    public eVSolver(Pointer p) { super(p); }
-	    private native void allocate();
-	    private native void allocateArray(long size);
-	    @Override public eVSolver position(long position) {
-	        return (eVSolver)super.position(position);
-	    }
-	    @Override public eVSolver getPointer(long i) {
-	        return new eVSolver((Pointer)this).offsetAddress(i);
-	    }
-	
-		/** enum btSoftBody::eVSolver::_ */
-		public static final int
-			Linear = 0,  /**Linear solver */
-			END = 1;
-	}
 
 	/**ePSolver : positions solvers */
-	public static class ePSolver extends Pointer {
-	    static { Loader.load(); }
-	    /** Default native constructor. */
-	    public ePSolver() { super((Pointer)null); allocate(); }
-	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-	    public ePSolver(long size) { super((Pointer)null); allocateArray(size); }
-	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-	    public ePSolver(Pointer p) { super(p); }
-	    private native void allocate();
-	    private native void allocateArray(long size);
-	    @Override public ePSolver position(long position) {
-	        return (ePSolver)super.position(position);
-	    }
-	    @Override public ePSolver getPointer(long i) {
-	        return new ePSolver((Pointer)this).offsetAddress(i);
-	    }
-	
-		/** enum btSoftBody::ePSolver::_ */
-		public static final int
-			Linear = 0,     /**Linear solver */
-			Anchors = 1,    /**Anchor solver */
-			RContacts = 2,  /**Rigid contacts solver */
-			SContacts = 3,  /**Soft contacts solver */
-			END = 4;
-	}
 
 	/**eSolverPresets */
 	public static class eSolverPresets extends Pointer {
@@ -174,70 +127,8 @@ public class btSoftBody extends btCollisionObject {
 	//
 
 	/**fCollision */
-	public static class fCollision extends Pointer {
-	    static { Loader.load(); }
-	    /** Default native constructor. */
-	    public fCollision() { super((Pointer)null); allocate(); }
-	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-	    public fCollision(long size) { super((Pointer)null); allocateArray(size); }
-	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-	    public fCollision(Pointer p) { super(p); }
-	    private native void allocate();
-	    private native void allocateArray(long size);
-	    @Override public fCollision position(long position) {
-	        return (fCollision)super.position(position);
-	    }
-	    @Override public fCollision getPointer(long i) {
-	        return new fCollision((Pointer)this).offsetAddress(i);
-	    }
-	
-		/** enum btSoftBody::fCollision::_ */
-		public static final int
-			RVSmask = 0x000f,  /**Rigid versus soft mask */
-			SDF_RS = 0x0001,   /**SDF based rigid vs soft */
-			CL_RS = 0x0002,    /**Cluster vs convex rigid vs soft */
-			SDF_RD = 0x0004,   /**rigid vs deformable */
-
-			SVSmask = 0x00f0,  /**Rigid versus soft mask */
-			VF_SS = 0x0010,    /**Vertex vs face soft vs soft handling */
-			CL_SS = 0x0020,    /**Cluster vs cluster soft vs soft handling */
-			CL_SELF = 0x0040,  /**Cluster soft body self collision */
-			VF_DD = 0x0080,    /**Vertex vs face soft vs soft handling */
-
-			RVDFmask = 0x0f00,  /** Rigid versus deformable face mask */
-			SDF_RDF = 0x0100,   /** GJK based Rigid vs. deformable face */
-			SDF_MDF = 0x0200,   /** GJK based Multibody vs. deformable face */
-			SDF_RDN = 0x0400,   /** SDF based Rigid vs. deformable node */
-			/* presets	*/
-			Default = SDF_RS,
-			END = SDF_RS + 1;
-	}
 
 	/**fMaterial */
-	public static class fMaterial extends Pointer {
-	    static { Loader.load(); }
-	    /** Default native constructor. */
-	    public fMaterial() { super((Pointer)null); allocate(); }
-	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-	    public fMaterial(long size) { super((Pointer)null); allocateArray(size); }
-	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-	    public fMaterial(Pointer p) { super(p); }
-	    private native void allocate();
-	    private native void allocateArray(long size);
-	    @Override public fMaterial position(long position) {
-	        return (fMaterial)super.position(position);
-	    }
-	    @Override public fMaterial getPointer(long i) {
-	        return new fMaterial((Pointer)this).offsetAddress(i);
-	    }
-	
-		/** enum btSoftBody::fMaterial::_ */
-		public static final int
-			DebugDraw = 0x0001,  /** Enable debug draw */
-			/* presets	*/
-			Default = DebugDraw,
-			END = DebugDraw + 1;
-	}
 
 	//
 	// API Types
@@ -1657,7 +1548,8 @@ public class btSoftBody extends btCollisionObject {
 	public static native void PSolve_SContacts(btSoftBody psb, @Cast("btScalar") float arg1, @Cast("btScalar") float ti);
 	public static native void PSolve_Links(btSoftBody psb, @Cast("btScalar") float kst, @Cast("btScalar") float ti);
 	public static native void VSolve_Links(btSoftBody psb, @Cast("btScalar") float kst);
-	public static native psolver_t getSolver(@Cast("btSoftBody::ePSolver::_") int solver);
+	
+	
 	public native void geometricCollisionHandler(btSoftBody psb);
 // #define SAFE_EPSILON SIMD_EPSILON * 100.0
 	

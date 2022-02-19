@@ -91,6 +91,12 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btDeformableBackwardEulerObjective::m_projection").skip())
             .put(new Info("btDeformableLagrangianForce::m_nodes").skip())
             .put(new Info("btDeformableLagrangianForce::setIndices").skip())
+
+            .put(new Info("btSoftBody::eVSolver").skip())
+            .put(new Info("btSoftBody::ePSolver").skip())
+            .put(new Info("btSoftBody::getSolver").skip())
+            .put(new Info("btSoftBody::fMaterial").skip())
+            .put(new Info("btSoftBody::fCollision").skip())
             ;
     }
 }
