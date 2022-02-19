@@ -271,7 +271,7 @@ public class btCollisionWorld extends Pointer {
 
 	public native void refreshBroadphaseProxy(btCollisionObject collisionObject);
 
-	public native @Cast("btCollisionObjectArray*") @ByRef btAlignedObjectArray_bool getCollisionObjectArray();
+	public native @Cast("btCollisionObjectArray*") @ByRef btAlignedObjectArray_btCollisionObjectPointer getCollisionObjectArray();
 
 	public native void removeCollisionObject(btCollisionObject collisionObject);
 

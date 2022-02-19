@@ -15,6 +15,62 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 public class BulletCollision extends org.bytedeco.bullet.presets.BulletCollision {
     static { Loader.load(); }
 
+// Parsed from LinearMath/btAlignedObjectArray.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_OBJECT_ARRAY__
+// #define BT_OBJECT_ARRAY__
+
+// #include "btScalar.h"  // has definitions like SIMD_FORCE_INLINE
+// #include "btAlignedAllocator.h"
+
+/**If the platform doesn't support placement new, you can disable BT_USE_PLACEMENT_NEW
+ * then the btAlignedObjectArray doesn't support objects with virtual methods, and non-trivial constructors/destructors
+ * You can enable BT_USE_MEMCPY, then swapping elements in the array will use memcpy instead of operator=
+ * see discussion here: https://bulletphysics.orgphpBB2/viewtopic.php?t=1231 and
+ * http://www.continuousphysics.com/Bullet/phpBB2/viewtopic.php?t=1240 */
+
+public static final int BT_USE_PLACEMENT_NEW = 1;
+//#define BT_USE_MEMCPY 1 //disable, because it is cumbersome to find out for each platform where memcpy is defined. It can be in <memory.h> or <string.h> or otherwise...
+// #define BT_ALLOW_ARRAY_COPY_OPERATOR  // enabling this can accidently perform deep copies of data if you are not careful
+
+// #ifdef BT_USE_MEMCPY
+// #include <memory.h>
+// #include <string.h>
+// #endif  //BT_USE_MEMCPY
+
+// #ifdef BT_USE_PLACEMENT_NEW
+// #include <new>
+// Targeting ../BulletCollision/btAlignedObjectArray_btCollisionObjectPointer.java
+
+
+// Targeting ../BulletCollision/btAlignedObjectArray_btPersistentManifoldPointer.java
+
+
+// Targeting ../BulletCollision/btAlignedObjectArray_btQuantizedBvhNode.java
+
+
+// Targeting ../BulletCollision/btAlignedObjectArray_btBvhSubtreeInfo.java
+
+
+
+// #endif  //BT_OBJECT_ARRAY__
+
+
 // Parsed from BulletCollision/BroadphaseCollision/btDbvt.h
 
 /*

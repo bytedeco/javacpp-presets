@@ -13,6 +13,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {
+                "LinearMath/btAlignedObjectArray.h",
                 "BulletCollision/BroadphaseCollision/btDbvt.h",
                 "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h",
                 "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h",
@@ -119,6 +120,20 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("DBVT_INLINE").cppTypes().annotations())
             .put(new Info("DBVT_CHECKTYPE").skip())
             .put(new Info("BT_DECLARE_STACK_ONLY_OBJECT").cppText("#define BT_DECLARE_STACK_ONLY_OBJECT"))
+            .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btAlignedObjectArray_btCollisionObjectPointer"))
+            .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btAlignedObjectArray_btPersistentManifoldPointer"))
+
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btAlignedObjectArray_btQuantizedBvhNode"))
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::remove").skip())
+
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>").pointerTypes("btAlignedObjectArray_btBvhSubtreeInfo"))
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::remove").skip())
             ;
     }
 }
