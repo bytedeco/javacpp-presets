@@ -92,6 +92,98 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btDeformableLagrangianForce::m_nodes").skip())
             .put(new Info("btDeformableLagrangianForce::setIndices").skip())
 
+            // typedef btAlignedObjectArray<Face> tFaceArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Face>").pointerTypes("btAlignedObjectArray_btSoftBody_Face"))
+            .put(new Info("btSoftBody::Face").pointerTypes("btSoftBody.Face"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Face>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Face>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Face>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Face>::remove").skip())
+
+            // typedef btAlignedObjectArray<Note> tNoteArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Note>").pointerTypes("btAlignedObjectArray_btSoftBody_Note"))
+            .put(new Info("btSoftBody::Note").pointerTypes("btSoftBody.Note"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Note>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Note>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Note>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Note>::remove").skip())
+
+            // typedef btAlignedObjectArray<Node> tNodeArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node>").pointerTypes("btAlignedObjectArray_btSoftBody_Node"))
+            .put(new Info("btSoftBody::Node").pointerTypes("btSoftBody.Node"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node>::remove").skip())
+
+            // typedef btAlignedObjectArray<RenderNode> tRenderNodeArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>").pointerTypes("btAlignedObjectArray_btSoftBody_RenderNode"))
+            .put(new Info("btSoftBody::RenderNode").pointerTypes("btSoftBody.RenderNode"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>::remove").skip())
+
+            // typedef btAlignedObjectArray<Cluster*> tClusterArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Cluster*>").pointerTypes("btAlignedObjectArray_btSoftBody_ClusterPointer"))
+            .put(new Info("btSoftBody::Cluster").pointerTypes("btSoftBody.Cluster"))
+
+            // typedef btAlignedObjectArray<Link> tLinkArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Link>").pointerTypes("btAlignedObjectArray_btSoftBody_Link"))
+            .put(new Info("btSoftBody::Link").pointerTypes("btSoftBody.Link"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Link>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Link>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Link>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Link>::remove").skip())
+
+            // typedef btAlignedObjectArray<RenderFace> tRenderFaceArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderFace>").pointerTypes("btAlignedObjectArray_btSoftBody_RenderFace"))
+            .put(new Info("btSoftBody::RenderFace").pointerTypes("btSoftBody.RenderFace"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderFace>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderFace>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderFace>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RenderFace>::remove").skip())
+
+            // typedef btAlignedObjectArray<Tetra> tTetraArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>").pointerTypes("btAlignedObjectArray_btSoftBody_Tetra"))
+            .put(new Info("btSoftBody::Tetra").pointerTypes("btSoftBody.Tetra"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>::remove").skip())
+
+            // typedef btAlignedObjectArray<Anchor> tAnchorArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>").pointerTypes("btAlignedObjectArray_btSoftBody_Anchor"))
+            .put(new Info("btSoftBody::Anchor").pointerTypes("btSoftBody.Anchor"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>::remove").skip())
+
+            // typedef btAlignedObjectArray<RContact> tRContactArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::RContact>").pointerTypes("btAlignedObjectArray_btSoftBody_RContact"))
+            .put(new Info("btSoftBody::RContact").pointerTypes("btSoftBody.RContact"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::RContact>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RContact>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RContact>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::RContact>::remove").skip())
+
+            // typedef btAlignedObjectArray<SContact> tSContactArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::SContact>").pointerTypes("btAlignedObjectArray_btSoftBody_SContact"))
+            .put(new Info("btSoftBody::SContact").pointerTypes("btSoftBody.SContact"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::SContact>::findBinarySearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::SContact>::findLinearSearch").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::SContact>::findLinearSearch2").skip())
+            .put(new Info("btAlignedObjectArray<btSoftBody::SContact>::remove").skip())
+
+            // typedef btAlignedObjectArray<Material*> tMaterialArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Material*>").pointerTypes("btAlignedObjectArray_btSoftBody_MaterialPointer"))
+            .put(new Info("btSoftBody::Material").pointerTypes("btSoftBody.Material"))
+
+            // typedef btAlignedObjectArray<Joint*> tJointArray;
+            .put(new Info("btAlignedObjectArray<btSoftBody::Joint*>").pointerTypes("btAlignedObjectArray_btSoftBody_JointPointer"))
+            .put(new Info("btSoftBody::Joint").pointerTypes("btSoftBody.Joint"))
+
             .put(new Info("btSoftBody::eVSolver").skip())
             .put(new Info("btSoftBody::ePSolver").skip())
             .put(new Info("btSoftBody::getSolver").skip())
