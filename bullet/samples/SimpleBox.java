@@ -39,6 +39,13 @@ public class SimpleBox {
             btVector3 position = box.getWorldTransform().getOrigin();
             System.out.println(position.y());
         }
+
+        System.out.println(
+            "\n" +
+            "This sample simulates falling of a rigid box, followed by \n" +
+            "an inelastic collision with a ground plane.\n" +
+            "The numbers show height of the box at each simulation step. \n" +
+            "It should start around 3.0 and end up around 1.0.\n");
     }
 
     private static void createEmptyDynamicsWorld()
