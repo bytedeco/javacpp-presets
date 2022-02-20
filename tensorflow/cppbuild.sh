@@ -29,11 +29,11 @@ export TF_NEED_MPI=0
 export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
-export TF_CUDA_VERSION=11.2
+export TF_CUDA_VERSION=11.6
 export TF_CUDNN_VERSION=8
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=2.8
-export TF_TENSORRT_VERSION=7.2
+export TF_NCCL_VERSION=2.11
+export TF_TENSORRT_VERSION=8.2
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
@@ -61,11 +61,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/python3.9/Python.h" ]]; then
+        if [[ -f "$P/include/python3.10/Python.h" ]]; then
             CPYTHON_PATH="$P"
-            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+            export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
         elif [[ -f "$P/include/Python.h" ]]; then
@@ -73,6 +74,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             export PYTHON_BIN_PATH="$CPYTHON_PATH/python.exe"
             export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
             export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+            export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
         elif [[ -f "$P/include/mkldnn.h" ]]; then
             MKLDNN_PATH="$P"
@@ -166,28 +168,28 @@ case $PLATFORM in
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-arm64)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86_64)
         sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "s/api_level=14/api_level=24/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     linux-x86)

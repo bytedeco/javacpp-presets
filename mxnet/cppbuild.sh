@@ -29,7 +29,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 fi
 
-MXNET_VERSION=1.8.0
+MXNET_VERSION=1.9.0
 download https://downloads.apache.org/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 #download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
@@ -66,6 +66,9 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
+# https://github.com/apache/incubator-mxnet/pull/20207
+patch -Np1 < ../../../mxnet.patch
+
 # upgrade MKL-DNN
 #sedinplace 's/0.18.1/0.19/g' 3rdparty/mkldnn/CMakeLists.txt
 #sedinplace 's/0.18/0.19/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
@@ -84,9 +87,9 @@ sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-
 sedinplace 's/-Xcompiler "$(CFLAGS)/"-Xcompiler=$(CFLAGS)/g' Makefile
 sedinplace '/CHECK(mshadow::DataType<DType>::kFlag == type_flag_)/{N;N;N;d;}' include/mxnet/tensor_blob.h
 sedinplace 's/std::pow/powf/g' src/operator/contrib/multi_lamb.cu
-sedinplace 's/round(/roundf(/g' src/operator/*.cu
-sedinplace 's/floor(/floorf(/g' src/operator/*.cu
-sedinplace 's/ceil(/ceilf(/g' src/operator/*.cu
+sedinplace 's/round(/roundf(/g' src/operator/*.cu src/operator/contrib/*.cu
+sedinplace 's/floor(/floorf(/g' src/operator/*.cu src/operator/contrib/*.cu
+sedinplace 's/ceil(/ceilf(/g' src/operator/*.cu src/operator/contrib/*.cu
 
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\

@@ -6,30 +6,24 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv</artifactId>
-  <version>4.5.2-${project.parent.version}</version>
+  <version>4.5.5-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
-
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.14-${project.parent.version}</version>
+      <version>0.3.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>1.20.2-${project.parent.version}</version>
+      <version>1.22.2-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -68,12 +62,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.20.2-${project.parent.version}</version>
+            <version>1.22.2-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -200,5 +194,32 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>linux-x86</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>linux-x86</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}</properties>
+              <compilerOptions>
+                <!-- Disable optimization for 32-bit builds as GCC crashes -->
+                <compilerOption>-O0</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+   </profile>
+  </profiles>
 
 </project>

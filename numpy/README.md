@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NumPy 1.20.2  http://www.numpy.org/
+ * NumPy 1.22.2  http://www.numpy.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -20,7 +20,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/numpy/apidocs/
 
-&lowast; Call `Py_AddPath(cachePackages())` before calling `Py_Initialize()`.
+&lowast; Call `Py_Initialize(cachePackages())` instead of just `Py_Initialize()`.
 
 
 Sample Usage
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.numpy</groupId>
     <artifactId>matmul</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>MatMul</exec.mainClass>
     </properties>
@@ -48,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.20.2-1.5.6-SNAPSHOT</version>
+            <version>1.22.2-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.2-1.5.6-SNAPSHOT</version>
+            <version>2022.0-1.5.7</version>
         </dependency>
 
     </dependencies>
@@ -79,8 +79,7 @@ public class MatMul {
         /* try to use MKL when available */
         System.setProperty("org.bytedeco.openblas.load", "mkl");
 
-        Py_AddPath(org.bytedeco.numpy.global.numpy.cachePackages());
-        Py_Initialize();
+        Py_Initialize(org.bytedeco.numpy.global.numpy.cachePackages());
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();

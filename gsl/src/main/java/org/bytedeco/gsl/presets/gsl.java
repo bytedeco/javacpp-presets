@@ -108,7 +108,7 @@ import org.bytedeco.openblas.presets.openblas;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"},
-     define = "__GSL_CBLAS_H__", link = "gsl@.25"),
+     define = {"__GSL_CBLAS_H__", "GSL_COMPLEX_LEGACY"}, link = "gsl@.25"),
     @Platform(value = "android", link = "gsl"),
     @Platform(value = "windows", preload = "libgsl-25") })
 @NoException
@@ -118,7 +118,13 @@ public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
                .put(new Info("FILE").pointerTypes("FILE"))
-               .put(new Info("INFINITY", "defined(HUGE_VAL)", "NAN", "defined(INFINITY)").define(false))
+               .put(new Info("INFINITY", "defined(HUGE_VAL)", "NAN", "defined(INFINITY)",
+                       " !defined(GSL_COMPLEX_LEGACY) &&"
+                     + "     defined(_Complex_I) &&"
+                     + "     defined(complex) &&"
+                     + "     defined(I) &&"
+                     + "     defined(__STDC__) && (__STDC__ == 1) &&"
+                     + "     defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)").define(false))
                .put(new Info("GSL_VAR", "__BEGIN_DECLS", "__END_DECLS", "INLINE_DECL", "INLINE_FUN", "GSL_RANGE_CHECK", "CBLAS_INDEX").cppTypes().annotations())
                .put(new Info("gsl_complex_packed_array", "gsl_complex_packed_ptr").cast().valueTypes("DoublePointer", "DoubleBuffer", "double[]"))
                .put(new Info("gsl_complex_packed_array_float").cast().valueTypes("FloatPointer", "FloatBuffer", "float[]"))
@@ -162,6 +168,8 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
                .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
                              "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
+                             "gsl_matrix_char_norm1", "gsl_matrix_uchar_norm1", "gsl_matrix_ushort_norm1", "gsl_matrix_uint_norm1", "gsl_matrix_ulong_norm1",
+                             "gsl_spmatrix_char_norm1", "gsl_spmatrix_uchar_norm1", "gsl_spmatrix_ushort_norm1", "gsl_spmatrix_ulong_norm1", "gsl_spmatrix_uint_norm1",
                              "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e", "gsl_spmatrix_cumsum").skip());
     }
 

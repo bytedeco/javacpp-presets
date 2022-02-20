@@ -6,22 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openpose</artifactId>
   <version>1.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenPose</name>
-
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.caffe.${javacpp.platform.module};
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-      requires org.bytedeco.hdf5.${javacpp.platform.module};
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -32,17 +23,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.5.2-${project.parent.version}</version>
+      <version>4.5.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5</artifactId>
-      <version>1.12.0-${project.parent.version}</version>
+      <version>1.12.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.14-${project.parent.version}</version>
+      <version>0.3.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -70,17 +61,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.12.0-${project.parent.version}</version>
+            <version>1.12.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -91,19 +82,19 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.12.0-${project.parent.version}</version>
+            <version>1.12.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>

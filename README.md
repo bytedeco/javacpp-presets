@@ -19,6 +19,7 @@ JavaCPP Presets
 [![arrow](https://github.com/bytedeco/javacpp-presets/workflows/arrow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aarrow)
 [![hdf5](https://github.com/bytedeco/javacpp-presets/workflows/hdf5/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahdf5)
 [![hyperscan](https://github.com/bytedeco/javacpp-presets/workflows/hyperscan/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ahyperscan)
+[![lz4](https://github.com/bytedeco/javacpp-presets/workflows/lz4/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alz4)
 [![mkl](https://github.com/bytedeco/javacpp-presets/workflows/mkl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl)
 [![mkl-dnn](https://github.com/bytedeco/javacpp-presets/workflows/mkl-dnn/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amkl-dnn)
 [![dnnl](https://github.com/bytedeco/javacpp-presets/workflows/dnnl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adnnl)
@@ -32,6 +33,7 @@ JavaCPP Presets
 [![scipy](https://github.com/bytedeco/javacpp-presets/workflows/scipy/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Ascipy)
 [![gym](https://github.com/bytedeco/javacpp-presets/workflows/gym/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Agym)
 [![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)
+[![libffi](https://github.com/bytedeco/javacpp-presets/workflows/libffi/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibffi)
 [![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)
 [![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)
 [![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)
@@ -43,8 +45,11 @@ JavaCPP Presets
 [![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)
 [![pytorch](https://github.com/bytedeco/javacpp-presets/workflows/pytorch/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Apytorch)
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
+[![tensorflow-lite](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow-lite/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow-lite)
 [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
+[![tritonserver](https://github.com/bytedeco/javacpp-presets/workflows/tritonserver/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atritonserver)
 [![ale](https://github.com/bytedeco/javacpp-presets/workflows/ale/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aale)
+[![depthai](https://github.com/bytedeco/javacpp-presets/workflows/depthai/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Adepthai)
 [![onnx](https://github.com/bytedeco/javacpp-presets/workflows/onnx/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnx)
 [![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)
 [![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)
@@ -59,7 +64,7 @@ JavaCPP Presets
 
 Introduction
 ------------
-The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
+The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which in turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
 
 For orientation purposes, the documentation of this repository can be thought of as being split into 2 levels:
 
@@ -84,27 +89,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.5</version>
+    <version>${moduleVersion}-1.5.7</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.5'
+    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.7'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.5")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.7")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.5"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.7"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -121,7 +126,7 @@ To use the JavaCPP Presets, you will need to download and install the following 
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
- * Android SDK API 21 or newer  http://developer.android.com/sdk/
+ * Android SDK API 24 or newer  http://developer.android.com/sdk/
 
 
 Manual Installation
@@ -138,7 +143,7 @@ Eclipse (Java SE 7 or newer):
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
 
-IntelliJ IDEA (Android 5.0 or newer):
+IntelliJ IDEA (Android 7.0 or newer):
 
  1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
  2. Copy all the JAR files into the `app/libs` subdirectory.
@@ -162,63 +167,68 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.5  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.7  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.2  https://opencv.org/releases.html
- * FFmpeg 4.4.x  http://ffmpeg.org/download.html
+ * OpenCV 4.5.5  https://opencv.org/releases.html
+ * FFmpeg 5.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
- * Spinnaker 1.27.x https://www.flir.com/products/spinnaker-sdk
+ * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense2 2.44.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.50.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  https://github.com/uricamic/flandmark
- * Arrow 3.0.0  https://arrow.apache.org/install/
- * HDF5 1.12.0  https://www.hdfgroup.org/downloads/
+ * Arrow 6.0.x  https://arrow.apache.org/install/
+ * HDF5 1.12.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
- * MKL 2021.x  https://software.intel.com/mkl
+ * LZ4 1.9.x  https://github.com/lz4/lz4
+ * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.2.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.14  http://www.openblas.net/
+ * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.19  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
- * FFTW 3.3.9  http://www.fftw.org/download.html
- * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.9.x  https://www.python.org/downloads/
- * NumPy 1.20.x  https://github.com/numpy/numpy
- * SciPy 1.6.x  https://github.com/scipy/scipy
- * Gym 0.18.x  https://github.com/openai/gym
- * LLVM 11.1.x  http://llvm.org/releases/download.html
- * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.80.0  http://www.leptonica.org/download.html
- * Tesseract 4.1.1  https://github.com/tesseract-ocr/tesseract
+ * FFTW 3.3.10  http://www.fftw.org/download.html
+ * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
+ * CPython 3.10.x  https://www.python.org/downloads/
+ * NumPy 1.22.x  https://github.com/numpy/numpy
+ * SciPy 1.8.x  https://github.com/scipy/scipy
+ * Gym 0.21.x  https://github.com/openai/gym
+ * LLVM 13.0.x  http://llvm.org/releases/download.html
+ * libffi 3.4.x  https://github.com/libffi/libffi
+ * libpostal 1.1  https://github.com/openvenues/libpostal
+ * Leptonica 1.82.x  http://www.leptonica.org/download.html
+ * Tesseract 5.0.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.2.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.1.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.8.x  https://developer.nvidia.com/nccl
- * NVIDIA Video Codec SDK 11.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
- * OpenCL 3.0  https://github.com/KhronosGroup/OpenCL-ICD-Loader
- * MXNet 1.8.0  https://github.com/apache/incubator-mxnet
- * PyTorch 1.8.x  https://github.com/pytorch/pytorch
+ * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.11.x  https://developer.nvidia.com/nccl
+ * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
+ * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
+ * PyTorch 1.10.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorRT 7.x  https://developer.nvidia.com/tensorrt
- * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.8.x  https://github.com/onnx/onnx
+ * TensorFlow Lite 2.8.x  https://github.com/tensorflow/tensorflow
+ * TensorRT 8.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.18.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * DepthAI 2.14.x  https://github.com/luxonis/depthai-core
+ * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.7.x  https://github.com/microsoft/onnxruntime
- * TVM 0.7.0  https://github.com/apache/tvm
+ * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.8.x  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
  * cpu_features 0.6.0  https://github.com/google/cpu_features
- * ModSecurity  https://github.com/SpiderLabs/ModSecurity
+ * ModSecurity 3.0.x  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

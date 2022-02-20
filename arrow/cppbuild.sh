@@ -12,11 +12,11 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=11.1.0
-OPENSSL_VERSION=1.1.1k
+LLVM_VERSION=13.0.1
+OPENSSL_VERSION=1.1.1m
 ZLIB_VERSION=1.2.11
-PROTO_VERSION=3.13.0
-ARROW_VERSION=3.0.0
+PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt
+ARROW_VERSION=6.0.1
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang-$LLVM_VERSION.src.tar.xz clang-$LLVM_VERSION.src.tar.xz
 download https://github.com/python/cpython-bin-deps/archive/openssl-bin.zip cpython-bin-deps-openssl-bin.zip
@@ -36,7 +36,9 @@ tar --totals -xzf ../openssl-$OPENSSL_VERSION.tar.gz
 tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../llvm-$LLVM_VERSION.src.tar.xz
 cd apache-arrow-$ARROW_VERSION
 patch -Np1 < ../../../arrow.patch
-sedinplace 's/ARROW_LLVM_VERSIONS "10"/ARROW_LLVM_VERSIONS "11" "10"/g' cpp/CMakeLists.txt
+sedinplace 's/PlatformToolset=v140/PlatformToolset=v142/g' cpp/cmake_modules/ThirdpartyToolchain.cmake
+sedinplace 's/set(ARROW_LLVM_VERSIONS/set(ARROW_LLVM_VERSIONS "13.0"/g' cpp/CMakeLists.txt
+sedinplace 's/message(FATAL_ERROR "Unsupported MSVC_VERSION=${MSVC_VERSION}")/set(FMS_COMPATIBILITY 19.20)/g' cpp/src/gandiva/precompiled/CMakeLists.txt
 cd ../llvm-$LLVM_VERSION.src
 sedinplace '/find_package(Git/d' cmake/modules/AddLLVM.cmake cmake/modules/VersionFromVCS.cmake
 mkdir -p build tools
@@ -221,5 +223,10 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+# work around link issues on Windows
+echo "extern template class arrow::Future<std::shared_ptr<arrow::RecordBatch> >;"  >> ../../include/arrow/dataset/scanner.h
+echo "extern template class arrow::Future<arrow::dataset::TaggedRecordBatch>;"     >> ../../include/arrow/dataset/scanner.h
+echo "extern template class arrow::Future<arrow::dataset::EnumeratedRecordBatch>;" >> ../../include/arrow/dataset/scanner.h
 
 cd ../../..

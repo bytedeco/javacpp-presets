@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl-platform-redist</artifactId>
-  <version>2021.2-${project.parent.version}</version>
+  <version>2022.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for MKL</name>
 
   <properties>

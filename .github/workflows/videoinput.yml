@@ -25,6 +25,6 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
     needs: [windows-x86, windows-x86_64]
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

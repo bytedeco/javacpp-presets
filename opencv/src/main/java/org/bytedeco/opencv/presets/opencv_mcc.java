@@ -31,10 +31,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_calib3d.class, opencv_dnn.class},
     value = {
-        @Platform(include = {"<opencv2/mcc.hpp>", "<opencv2/mcc/checker_model.hpp>", "<opencv2/mcc/checker_detector.hpp>"}, link = "opencv_mcc@.4.5"),
+        @Platform(include = {"<opencv2/mcc.hpp>", "<opencv2/mcc/checker_model.hpp>", "<opencv2/mcc/checker_detector.hpp>"}, link = "opencv_mcc@.405"),
         @Platform(value = "ios", preload = "libopencv_mcc"),
-        @Platform(value = "windows", link = "opencv_mcc452")
+        @Platform(value = "windows", link = "opencv_mcc455")
     },
+    target = "org.bytedeco.opencv.opencv_mcc",
     global = "org.bytedeco.opencv.global.opencv_mcc"
 )
 public class opencv_mcc implements InfoMapper {

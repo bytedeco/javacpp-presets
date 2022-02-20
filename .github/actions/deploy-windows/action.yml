@@ -8,8 +8,9 @@ runs:
         cd /d %USERPROFILE%
 
         echo Installing MSYS2
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar pkg-config unzip p7zip zip autoconf autoconf-archive automake make patch gnupg"
-        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL mingw-w64-x86_64-ragel"
+        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm pkg-config"
+        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
+        C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel"
         set "PATH=C:\msys64\usr\bin;%PATH%"
 
         echo Installing Windows SDK 8.1
@@ -17,7 +18,10 @@ runs:
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL and MSYS2
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/mingw64/bin/cmake.exe" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
+        rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
+        rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
 
         python -m pip install gdown || python -m pip install gdown
 
@@ -32,6 +36,7 @@ runs:
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
           echo Installing an older less buggy version of GCC
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-10.1-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-10.2.0-5-any.pkg.tar.zst
@@ -46,6 +51,7 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-10.1-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-10.2.0-5-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-10.2.0-5-any.pkg.tar.zst
@@ -66,33 +72,40 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_461.33_win10.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.1.1/cudnn-11.2-windows-x64-v8.1.1.33.zip
-          cuda_11.2.2_461.33_win10.exe -s
-          unzip cudnn-11.2-windows-x64-v8.1.1.33.zip
-          move cuda\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin"
-          move cuda\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include"
-          move cuda\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64"
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/cuda_11.6.0_511.23_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
+          cuda_11.6.0_511.23_windows.exe -s
+          unzip cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
+          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
+          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\include"
+          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\lib\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\lib\x64"
+
+          echo Applying hotfix to Visual Studio 2019 for CUDA
+          curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
+          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
+          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown.cli https://drive.google.com/uc?id=1cBohhcptNDSF5pxsQ7n4-qcGsgiWUxga
-          unzip Video_Codec_SDK_11.0.10.zip
-          move Video_Codec_SDK_11.0.10 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown.cli https://drive.google.com/uc?id=1dh3P5JLUUe9EXE0GSJj6VDWYlr7W89dO
+          unzip Video_Codec_SDK_11.1.5.zip
+          move Video_Codec_SDK_11.1.5 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=12r8CgDD66hIYB3WIX5JQix9zVeYVeHDR
-          unzip TensorRT-7.2.3.4.Windows10.x86_64.cuda-11.2.cudnn8.1.zip
-          move TensorRT-7.2.3.4 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1jR6H6Vc1jvziLKMrCEIGfbtpaJlge4GC
+          unzip TensorRT-8.2.3.0.Windows10.x86_64.cuda-11.4.cudnn8.2.zip
+          move TensorRT-8.2.3.0 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/17754/w_onemkl_p_2021.2.0.296_offline.exe
-          w_onemkl_p_2021.2.0.296_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18414/w_onemkl_p_2022.0.0.115_offline.exe
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18418/w_BaseKit_32bit_p_2022.1.0.37_offline.exe
+          w_onemkl_p_2022.0.0.115_offline.exe -s -a -s --eula accept
+          w_BaseKit_32bit_p_2022.1.0.37_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
@@ -111,20 +124,20 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
           echo Installing Spinnaker x86
-          python -m gdown.cli https://drive.google.com/uc?id=1kufOTKKEGXbaQemjRi8Zy2H98FkL-k6W
-          python -m gdown.cli https://drive.google.com/uc?id=1FNweWcn-keLqvy56xqz3Ve_T3adz43rW
+          python -m gdown.cli https://drive.google.com/uc?id=15i6tV-vahgm_uNWT96c_KX7tFdZxmev-
+          python -m gdown.cli https://drive.google.com/uc?id=1ikOyG-gVettvjoJGQWkHxOcBWuTrGyfz
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_Binaries_v140_x86.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_SourceCode_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if "%CI_DEPLOY_MODULE%"=="spinnaker" (
           echo Installing Spinnaker x64
-          python -m gdown.cli https://drive.google.com/uc?id=1xIqjBwl3Q9GnEPcs9JdZBJNmOSWD8gRE
-          python -m gdown.cli https://drive.google.com/uc?id=1l74LjV8rANk_P_CvXZOMSzi7J02YVkfD
+          python -m gdown.cli https://drive.google.com/uc?id=1NiMxxDflip1F5rJuf73xhfoI9vWUeUkQ
+          python -m gdown.cli https://drive.google.com/uc?id=1FKatuVsLIQLbDb9R9W2ax_tav8_7--HI
           rem We can get these msi files by starting the installation from the exe file
-          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_Binaries_v140_x64.msi ADDLOCAL=ALL"
-          cmd.exe /c "msiexec /quiet /i Spinnaker-1.27.0.48_SourceCode_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL"
+          cmd.exe /c "msiexec /quiet /i Spinnaker-2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL"
         )
 
         set GRADLE_TASK=publishToMavenLocal
@@ -167,12 +180,24 @@ runs:
           C:/msys64/mingw64/bin/bazel.exe version
         )
         if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2"
-          set "CUDA_PATH_V11_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2"
-          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\libnvvp;%PATH%"
-          echo CUDA Version 11.2.182>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.2\version.txt"
+          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
+          set "CUDA_PATH_V11_6=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
+          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;%PATH%"
+          echo CUDA Version 11.6.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
         )
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+
+        where bash
+        where git
+        where cl
+        where gcc
+        where cmake
+        where gradle
+        where mvn
+        where gpg
+        where python
+        where python3
+        where clang-cl
 
         bash --version
         git --version
@@ -182,6 +207,8 @@ runs:
         gradle --version
         call mvn -version
         gpg --version
+        python --version
+        clang-cl --version
         df -h
         wmic pagefile list /format:list
 
@@ -196,8 +223,8 @@ runs:
         if not "%CI_DEPLOY_NEED_GRADLE%"=="" (goto :gradle) else (goto :maven)
 
         :gradle
-        echo Executing Gradle %GRADLE_TASK% ${{ matrix.options }} on %MAKEJ% processors
-        set "GRADLE_OPTIONS=-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=%CI_DEPLOY_PLATFORM% -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} --info"
+        echo Executing Gradle %GRADLE_TASK% ${{ matrix.options }} %CI_DEPLOY_OPTIONS% on %MAKEJ% processors
+        set "GRADLE_OPTIONS=-Dorg.gradle.jvmargs=-Xmx2048m -PjavacppPlatform=%CI_DEPLOY_PLATFORM% -PjavacppPlatformExtension=${{ matrix.ext }} ${{ matrix.options }} %CI_DEPLOY_OPTIONS% --info"
         gradle clean build %GRADLE_OPTIONS% -b %CI_DEPLOY_MODULE%/build.gradle
         if ERRORLEVEL 1 exit /b
         echo Publishing only now to help avoid race conditions with Gradle
@@ -213,14 +240,16 @@ runs:
         echo ^</settings^> >> %USERPROFILE%\.m2\settings.xml
 
         set /a "SECONDS=%RANDOM% %% 300"
-        echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
-        timeout %SECONDS% > nul
+        if "%CI_DEPLOY_NEED_CUDA%"=="" (
+            echo Sleeping %SECONDS% seconds to help avoid race conditions with Maven
+            timeout %SECONDS% > nul
+        )
 
-        echo Executing Maven %MAVEN_PHASE% on %MAKEJ% processors
+        echo Executing Maven %MAVEN_PHASE% %CI_DEPLOY_OPTIONS% on %MAKEJ% processors
         set EXT=${{ matrix.ext }}
         if "%EXT%" == "" (set EXT2=) else (set EXT2=%EXT:~1%)
-        set "MAVEN_OPTS=-Xss2m"
-        set "MAVEN_OPTIONS=clean %MAVEN_PHASE% -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS%"
+        set "MAVEN_OPTS=-Xss2m -Xmx4g"
+        set "MAVEN_OPTIONS=clean %MAVEN_PHASE% -B -U -e -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Djavacpp.platform=%CI_DEPLOY_PLATFORM% -Djavacpp.platform.extension=%EXT% %MAVEN_OPTIONS% %CI_DEPLOY_OPTIONS%"
 
         setlocal enabledelayedexpansion
         for /l %%i in (1,1,5) do (set STATUS=0 & call mvn %MAVEN_OPTIONS% -pl .,%CI_DEPLOY_MODULE% && goto :done || set STATUS=!ERRORLEVEL! && timeout 60 > nul)

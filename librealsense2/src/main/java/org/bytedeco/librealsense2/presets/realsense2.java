@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "librealsense2/rs_advanced_mode.h",
                 "librealsense2/rsutil.h"
             },
-            link = "realsense2@.2.44"
+            link = "realsense2@.2.50"
         ),
         @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
         @Platform(value = {"linux-arm64", "linux-x86_64", "windows-x86_64"},
@@ -73,6 +73,12 @@ public class realsense2 implements InfoMapper {
         infoMap.put(new Info("rs2_camera_info", "rs2_stream").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("RS2_API_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
                .put(new Info("RS2_API_FULL_VERSION_STR").cppTypes("const char*").pointerTypes("String").translate(false))
-               .put(new Info("rs2_create_playback_device", "rs2_cah_trigger_to_string", "rs2_ambient_light_to_string", "rs2_digital_gain_to_string").skip());
+               .put(new Info("rs2_get_frame_data").javaText(
+                       "public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @Cast(\"rs2_error**\") PointerPointer error);\n"
+                     + "public static native @Const Pointer rs2_get_frame_data(@Const rs2_frame frame, @ByPtrPtr rs2_error error);\n"
+                     + "public static native @Cast(\"const void*\") @Name(\"rs2_get_frame_data\") long rs2_get_frame_data_address(@Const rs2_frame frame, @Cast(\"rs2_error**\") PointerPointer error);\n"
+                     + "public static native @Cast(\"const void*\") @Name(\"rs2_get_frame_data\") long rs2_get_frame_data_address(@Const rs2_frame frame, @ByPtrPtr rs2_error error);\n"))
+               .put(new Info("rs2_create_playback_device", "rs2_cah_trigger_to_string", "rs2_ambient_light_to_string", "rs2_digital_gain_to_string",
+                             "rs2_create_y411_decoder").skip());
     }
 }

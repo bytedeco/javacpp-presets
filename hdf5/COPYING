@@ -67,6 +67,12 @@ under Prime Contract No. DE-AC02-05CH11231.
 
 -----------------------------------------------------------------------------
 
+Portions of HDF5 were developed with support from Lawrence Livermore 
+National Laboratory and the United States Department of Energy under 
+Prime Contract No. DE-AC52-07NA27344.
+
+-----------------------------------------------------------------------------
+
 Portions of HDF5 were developed with support from the University of 
 California, Lawrence Livermore National Laboratory (UC LLNL).  
 The following statement applies to those portions of the product and must 
@@ -94,12 +100,6 @@ and/or accompanying materials:
    OPINIONS OF AUTHORS EXPRESSED HEREIN DO NOT NECESSARILY STATE OR REFLECT 
    THOSE OF THE UNITED STATES GOVERNMENT OR THE UNIVERSITY OF CALIFORNIA, 
    AND SHALL NOT BE USED FOR ADVERTISING OR PRODUCT ENDORSEMENT PURPOSES.
-
------------------------------------------------------------------------------
-
-HDF5 is available with the SZIP compression library but SZIP is not part 
-of HDF5 and has separate copyright and license terms. See SZIP Compression 
-in HDF Products (www.hdfgroup.org/doc_resource/SZIP/) for further details.
 
 -----------------------------------------------------------------------------
 

@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mkl-dnn</groupId>
     <artifactId>mkl-dnn</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SimpleNetInt8</exec.mainClass>
     </properties>
@@ -48,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.21.5-1.5.5</version>
+            <version>0.21.5-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2021.1-1.5.5</version>
+            <version>2022.0-1.5.7</version>
         </dependency>
 
     </dependencies>
@@ -254,7 +254,7 @@ public class SimpleNetInt8 {
     }
 
     public static void main(String[] args) throws Exception {
-        try {
+        try (PointerScope scope = new PointerScope()) {
             /* Notes:
              * On convolution creating: check for Intel(R) MKL dependency execution.
              * output: warning if not found. */

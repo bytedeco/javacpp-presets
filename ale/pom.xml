@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ale</artifactId>
-  <version>0.6.1-${project.parent.version}</version>
+  <version>0.7.4-${project.parent.version}</version>
   <name>JavaCPP Presets for ALE</name>
 
   <dependencies>
@@ -32,6 +32,12 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/ale/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
+          </includePaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -65,16 +71,6 @@
             <artifactId>javacpp</artifactId>
             <configuration>
               <properties>${javacpp.platform}-mingw</properties>
-              <compilerOptions>
-                <compilerOption>-static-libgcc</compilerOption>
-                <compilerOption>-static-libstdc++</compilerOption>
-                <compilerOption>-Wl,-Bstatic</compilerOption>
-                <compilerOption>-lstdc++</compilerOption>
-                <compilerOption>-lgcc</compilerOption>
-                <compilerOption>-lgcc_eh</compilerOption>
-                <compilerOption>-lpthread</compilerOption>
-                <compilerOption>-Wl,-Bdynamic</compilerOption>
-              </compilerOptions>
             </configuration>
           </plugin>
         </plugins>

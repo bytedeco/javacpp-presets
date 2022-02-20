@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.5.8-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.bytedeco</groupId>
+  <artifactId>tensorflow-lite</artifactId>
+  <version>${tensorflow.version}-${project.parent.version}</version>
+  <name>JavaCPP Presets for TensorFlow Lite</name>
+
+  <properties>
+    <javacpp.packageName>tensorflowlite</javacpp.packageName>
+    <tensorflow.version>2.8.0</tensorflow.version>
+    <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <properties>${javacpp.platform}</properties>
+          <includePaths>
+            <includePath>${tensorflow.path}/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/lite/</includePath>
+            <includePath>${tensorflow.path}/tensorflow/lite/c/</includePath>
+            <includePath>${tensorflow.path}/../build/flatbuffers/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${tensorflow.path}/../build/</linkPath>
+            <linkPath>${tensorflow.path}/../build/tensorflow-lite/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${tensorflow.path}/../build/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
+          </preloadPaths>
+          <compilerOptions>
+            <compilerOption>@${tensorflow.path}/../build/objs</compilerOption>
+          </compilerOptions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>msvc</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}</properties>
+              <compilerOptions>
+                <compilerOption>@${tensorflow.path}/../build/objs.dos</compilerOption>
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/FORCE:MULTIPLE</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

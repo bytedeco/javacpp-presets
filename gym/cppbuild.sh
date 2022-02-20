@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GYM_VERSION=0.18.0
+GYM_VERSION=0.22.0
 download https://github.com/openai/gym/archive/$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -47,14 +47,16 @@ cd gym-$GYM_VERSION
 
 # Remove Pillow since not an actual requirement
 sedinplace "s/'Pillow<=7.2.0',//g" setup.py
+sedinplace '/numpy/d' setup.py
 
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -66,28 +68,29 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
     export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
     export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/:$SCIPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0
 
 # setup.py install doesn't accept absolute paths on Windows
 PYTHONNOUSERSITE=1 "$PYTHON_BIN_PATH" setup.py install --prefix ..
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(cloudpickle future `#six` pyglet gym)
+export MODULES=(cloudpickle `#future six pyglet` gym)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE-*/$MODULE* ../python/
     cp -r $PYTHON_INSTALL_PATH/$MODULE-*/EGG-INFO/* ../python/$MODULE.egg-info/
 done
-cp -r $PYTHON_INSTALL_PATH/future-*/libfuturize ../python/
-cp -r $PYTHON_INSTALL_PATH/future-*/libpasteurize ../python/
-cp -r $PYTHON_INSTALL_PATH/future-*/past ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/libfuturize ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/libpasteurize ../python/
+#cp -r $PYTHON_INSTALL_PATH/future-*/past ../python/
 # Work around issues with pyglet
-sedinplace '/XEHeadOfExtensionList.argtypes/d' ../python/pyglet/libs/x11/xlib.py
+#sedinplace '/XEHeadOfExtensionList.argtypes/d' ../python/pyglet/libs/x11/xlib.py
 rm -Rf $(find ../ -iname __pycache__)
 
 cd ../..

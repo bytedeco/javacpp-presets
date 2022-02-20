@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -14,17 +14,11 @@
   <version>master-${project.parent.version}</version>
   <name>JavaCPP Presets for Chilitags</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.5.2-${project.parent.version}</version>
+      <version>4.5.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -47,23 +41,23 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>

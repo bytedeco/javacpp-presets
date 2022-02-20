@@ -62,8 +62,13 @@ import org.bytedeco.scipy.presets.*;
 public class tvm {
     static { Loader.checkVersion("org.bytedeco", "tvm"); }
 
-    /** Returns {@code Loader.cacheResource("/org/bytedeco/" + Loader.getPlatform() + extension + "/tvm/python/")}. */
-    public static File cachePackage() throws IOException {
+    private static File packageFile = null;
+
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/tvm/" + Loader.getPlatform() + extension + "/python/")}. */
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(tvm.class);
         if (path != null) {
@@ -72,9 +77,9 @@ public class tvm {
             int j = path.lastIndexOf("/");
             File f = Loader.cacheResource(path.substring(i, j) + "/python/");
             Loader.load(tvm_runtime.class);
-            return f;
+            packageFile = f;
         }
-        return null;
+        return packageFile;
     }
 
     /** Returns {@code {scipy.cachePackages(), tvm.cachePackage()}}. */

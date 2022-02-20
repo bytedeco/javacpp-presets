@@ -6,31 +6,24 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mxnet</artifactId>
-  <version>1.8.0-${project.parent.version}</version>
+  <version>1.9.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
-
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.5.2-${project.parent.version}</version>
+      <version>4.5.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.14-${project.parent.version}</version>
+      <version>0.3.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -45,13 +38,13 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.11</version>
+      <version>1.15</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.25</version>
+      <version>1.7.32</version>
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -81,23 +74,23 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
@@ -305,13 +298,13 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>opencv</artifactId>
-                <version>4.5.2-${project.parent.version}</version>
+                <version>4.5.5-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>openblas</artifactId>
-                <version>0.3.14-${project.parent.version}</version>
+                <version>0.3.19-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>

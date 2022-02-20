@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.1.1
+TESSERACT_VERSION=5.0.1
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -19,10 +19,9 @@ cd tesseract-$TESSERACT_VERSION
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
-# sedinplace '/tiff/d' src/api/Makefile.am
-# sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
-# bash autogen.sh
-patch -Np1 < ../../../tesseract-configure.patch || true
+sedinplace '/tiff/d' Makefile.am
+sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
+bash autogen.sh
 chmod 755 configure config/install-sh
 export AUTOCONF=:
 export AUTOHEADER=:
@@ -32,7 +31,7 @@ export ACLOCAL=:
 # Disable external dependencies on asciidoc, libarchive and libtiff
 sedinplace 's/ac_cv_prog_have_asciidoc="true"/ac_cv_prog_have_asciidoc="false"/g' configure
 sedinplace 's/"libarchive"//g' configure
-sedinplace 's/-ltiff//g' src/api/Makefile.in
+sedinplace 's/-ltiff//g' Makefile.in
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 

@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Spinnaker 1.27.0.48  https://www.flir.com/products/spinnaker-sdk
+ * Spinnaker 2.4.0.143  https://www.flir.com/products/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.spinnaker</groupId>
     <artifactId>acquisition_c</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>Acquisition_C</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>1.27.0.48-1.5.5</version>
+            <version>2.4.0.143-1.5.7</version>
         </dependency>
     </dependencies>
     <build>
@@ -89,7 +89,7 @@ public class Acquisition_C {
     private final static int MAX_BUFF_LEN = 256;
 
     private static String findErrorNameByValue(int value) {
-        for (_spinError v : _spinError.values()) {
+        for (spinError v : spinError.values()) {
             if (v.value == value) {
                 return v.name();
             }
@@ -98,7 +98,7 @@ public class Acquisition_C {
     }
 
     private static String findImageStatusNameByValue(int value) {
-        for (_spinImageStatus v : _spinImageStatus.values()) {
+        for (spinImageStatus v : spinImageStatus.values()) {
             if (v.value == value) {
                 return v.name();
             }
@@ -115,7 +115,7 @@ public class Acquisition_C {
      * @param message additional message to print.
      */
 
-    private static void exitOnError(_spinError err, String message) {
+    private static void exitOnError(spinError err, String message) {
         if (printOnError(err, message)) {
             System.out.println("Aborting.");
             System.exit(err.value);
@@ -130,8 +130,8 @@ public class Acquisition_C {
      * @param message additional message to print.
      * @return 'false' if err is not SPINNAKER_ERR_SUCCESS, or 'true' for any other 'err' value.
      */
-    private static boolean printOnError(_spinError err, String message) {
-        if (err.value != _spinError.SPINNAKER_ERR_SUCCESS.value) {
+    private static boolean printOnError(spinError err, String message) {
+        if (err.value != spinError.SPINNAKER_ERR_SUCCESS.value) {
             System.out.println(message);
             System.out.println("Error " + err.value + " " + findErrorNameByValue(err.value) + "\n");
             return true;
@@ -145,7 +145,7 @@ public class Acquisition_C {
      */
     private static boolean isAvailableAndReadable(spinNodeHandle hNode, String nodeName) {
         BytePointer pbAvailable = new BytePointer(1);
-        _spinError err;
+        spinError err;
         err = spinNodeIsAvailable(hNode, pbAvailable);
         printOnError(err, "Unable to retrieve node availability (" + nodeName + " node)");
 
@@ -160,7 +160,7 @@ public class Acquisition_C {
      */
     private static boolean isAvailableAndWritable(spinNodeHandle hNode, String nodeName) {
         BytePointer pbAvailable = new BytePointer(1);
-        _spinError err;
+        spinError err;
         err = spinNodeIsAvailable(hNode, pbAvailable);
         printOnError(err, "Unable to retrieve node availability (" + nodeName + " node).");
 
@@ -183,8 +183,8 @@ public class Acquisition_C {
      * layer; please see NodeMapInfo_C example for more in-depth comments on
      * printing device information from the nodemap.
      */
-    private static _spinError printDeviceInfo(spinNodeMapHandle hNodeMap) {
-        _spinError err;
+    private static spinError printDeviceInfo(spinNodeMapHandle hNodeMap) {
+        spinError err;
         System.out.println("\n*** DEVICE INFORMATION ***\n\n");
         // Retrieve device information category node
         spinNodeHandle hDeviceInformation = new spinNodeHandle();
@@ -198,7 +198,7 @@ public class Acquisition_C {
             printOnError(err, "Unable to retrieve number of nodes.");
         } else {
             printRetrieveNodeFailure("node", "DeviceInformation");
-            return _spinError.SPINNAKER_ERR_ACCESS_DENIED;
+            return spinError.SPINNAKER_ERR_ACCESS_DENIED;
         }
 
         // Iterate through nodes and print information
@@ -216,7 +216,7 @@ public class Acquisition_C {
                 featureName.putString("Unknown name");
             }
 
-            int[] featureType = {_spinNodeType.UnknownNode.value};
+            int[] featureType = {spinNodeType.UnknownNode.value};
             if (isAvailableAndReadable(hFeatureNode, featureName.getString())) {
                 err = spinNodeGetType(hFeatureNode, featureType);
                 if (printOnError(err, "Unable to retrieve node type.")) {
@@ -240,9 +240,9 @@ public class Acquisition_C {
     }
 
     // This function acquires and saves 10 images from a device.
-    private static _spinError acquireImages(spinCamera hCam, spinNodeMapHandle hNodeMap, spinNodeMapHandle hNodeMapTLDevice) {
+    private static spinError acquireImages(spinCamera hCam, spinNodeMapHandle hNodeMap, spinNodeMapHandle hNodeMapTLDevice) {
         System.out.println("\n*** IMAGE ACQUISITION ***\n");
-        _spinError err;
+        spinError err;
         //
         // Set acquisition mode to continuous
         //
@@ -287,7 +287,7 @@ public class Acquisition_C {
             }
         } else {
             printRetrieveNodeFailure("entry", "AcquisitionMode");
-            return _spinError.SPINNAKER_ERR_ACCESS_DENIED;
+            return spinError.SPINNAKER_ERR_ACCESS_DENIED;
         }
 
         // Retrieve integer from entry node
@@ -300,7 +300,7 @@ public class Acquisition_C {
             }
         } else {
             printRetrieveNodeFailure("entry", "AcquisitionMode 'Continuous'");
-            return _spinError.SPINNAKER_ERR_ACCESS_DENIED;
+            return spinError.SPINNAKER_ERR_ACCESS_DENIED;
         }
 
         // Set integer as new value of enumeration node
@@ -311,7 +311,7 @@ public class Acquisition_C {
             }
         } else {
             printRetrieveNodeFailure("entry", "AcquisitionMode");
-            return _spinError.SPINNAKER_ERR_ACCESS_DENIED;
+            return spinError.SPINNAKER_ERR_ACCESS_DENIED;
         }
 
         System.out.println("Acquisition mode set to continuous...");
@@ -473,7 +473,7 @@ public class Acquisition_C {
             if (printOnError(err, "Unable to create image. Non-fatal error.")) {
                 hasFailed = true;
             }
-            err = spinImageConvert(hResultImage, _spinPixelFormatEnums.PixelFormat_Mono8.value, hConvertedImage);
+            err = spinImageConvert(hResultImage, spinPixelFormatEnums.PixelFormat_Mono8, hConvertedImage);
             if (printOnError(err, "\"Unable to convert image. Non-fatal error.")) {
                 hasFailed = true;
             }
@@ -492,7 +492,7 @@ public class Acquisition_C {
                 // numbers to keep images of one device from overwriting those of
                 // another.
                 //
-                err = spinImageSave(hConvertedImage, new BytePointer(filename), _spinImageFileFormat.JPEG.value);
+                err = spinImageSave(hConvertedImage, new BytePointer(filename), spinImageFileFormat.JPEG);
                 if (!printOnError(err, "Unable to save image. Non-fatal error.")) {
                     System.out.println("Image saved at " + filename + "\n");
                 }
@@ -535,8 +535,8 @@ public class Acquisition_C {
      * This function acts as the body of the example; please see NodeMapInfo_C
      * example for more in-depth comments on setting up cameras.
      */
-    private static _spinError runSingleCamera(spinCamera hCam) {
-        _spinError err;
+    private static spinError runSingleCamera(spinCamera hCam) {
+        spinError err;
         // Retrieve TL device nodemap and print device information
         spinNodeMapHandle hNodeMapTLDevice = new spinNodeMapHandle();
         err = spinCameraGetTLDeviceNodeMap(hCam, hNodeMapTLDevice);
@@ -579,7 +579,7 @@ public class Acquisition_C {
     public static void main(String[] args) {
 
 
-        _spinError err;
+        spinError err;
 
         // Since this application saves images in the current folder
         // we must ensure that we have permission to write to this folder.

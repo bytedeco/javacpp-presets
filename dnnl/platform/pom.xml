@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>dnnl-platform</artifactId>
-  <version>2.2.1-${project.parent.version}</version>
+  <version>2.5.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for DNNL</name>
 
   <properties>
@@ -34,6 +34,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -65,7 +71,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -110,6 +116,7 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;

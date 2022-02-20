@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NVIDIA Video Codec SDK 11.0.10  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * NVIDIA Video Codec SDK 11.1.5  https://developer.nvidia.com/nvidia-video-codec-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -31,7 +31,7 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_11.0.10.zip` available at:
+Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_11.1.5.zip` available at:
 
  * https://developer.nvidia.com/nvidia-video-codec-sdk/download
 
@@ -47,7 +47,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.nvcodec</groupId>
     <artifactId>sampleencodedecode</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>SampleEncodeDecode</exec.mainClass>
     </properties>
@@ -55,14 +55,14 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>11.0.10-1.5.6-SNAPSHOT</version>
+            <version>11.1.5-1.5.7</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.2-8.1-1.5.6-SNAPSHOT</version>
+            <version>11.6-8.3-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

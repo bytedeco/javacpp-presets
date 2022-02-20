@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl</artifactId>
-  <version>2021.2-${project.parent.version}</version>
+  <version>2022.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL</name>
 
   <dependencies>
@@ -74,7 +74,12 @@
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_lp64.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_intel_thread.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sequential.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sycl.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_sycld.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_pgi_thread.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_pgi_threadd.lib</exclude>
                 <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_tbb_thread.lib</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/lib/mkl_tbb_threadd.lib</exclude>
               </excludes>
             </configuration>
           </execution>

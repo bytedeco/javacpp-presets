@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.5.2
+OPENCV_VERSION=4.5.5
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -40,16 +40,18 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
+export PYTHON2_EXECUTABLE=$(which python2)
 export PYTHON3_EXECUTABLE=
 export PYTHON3_INCLUDE_DIR=
 export PYTHON3_LIBRARY=
 export PYTHON3_PACKAGES_PATH=
-if [[ -f "$CPYTHON_PATH/include/python3.9/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
-    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.9"
-    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.9/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.9/"
-    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.9/site-packages/"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.10"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.10/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.10/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON3_EXECUTABLE"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -58,8 +60,9 @@ elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
     export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
     export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
-    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python39.lib"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python310.lib"
     export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
 fi
 export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
 
@@ -104,14 +107,14 @@ sedinplace 's/PythonInterp "${min_version}"/PythonInterp/g' cmake/OpenCVDetectPy
 sedinplace 's/PythonLibs "${_version_major_minor}.${_version_patch}" EXACT/PythonLibs/g' cmake/OpenCVDetectPython.cmake
 sedinplace '/if(PYTHONINTERP_FOUND)/a\
     if(" ${_python_version_major}" STREQUAL " 3")\
-      set(PYTHON_VERSION_STRING "3.9")\
+      set(PYTHON_VERSION_STRING "3.10")\
       set(PYTHON_VERSION_MAJOR "3")\
       set(PYTHON_VERSION_MINOR "8")\
     endif()\
 ' cmake/OpenCVDetectPython.cmake
 sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
 
-BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_objc=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DOPENCV_SKIP_PYTHON_LOADER=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
+BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_objc=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DOPENCV_SKIP_PYTHON_LOADER=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_sfm=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
 WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=ON -DENABLE_CXX11=ON"
@@ -197,7 +200,7 @@ fi
 
 case $PLATFORM in
     android-arm)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 -DANDROID_STL=c++_static -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -212,7 +215,7 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/armeabi-v7a/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-armeabi-v7a/OpenCVModules-release.cmake
         ;;
     android-arm64)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_TOOLCHAIN_NAME=aarch64-linux-android-4.9 -DANDROID_STL=c++_static -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -227,7 +230,7 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/arm64-v8a/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-arm64-v8a/OpenCVModules-release.cmake
         ;;
     android-x86)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_TOOLCHAIN_NAME=x86-4.9 -DANDROID_STL=c++_static -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -242,7 +245,7 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/x86/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-x86/OpenCVModules-release.cmake
         ;;
     android-x86_64)
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_TOOLCHAIN_NAME=x86_64-4.9 -DANDROID_STL=c++_static -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -279,7 +282,7 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.a ../lib
         ;;
     linux-x86)
-        CC="gcc -m32" CXX="g++ -std=c++11 -m32" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        CC="gcc -m32" CXX="g++ -std=c++11 -m32 -I/usr/lib/glib-2.0/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -303,7 +306,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm)
-        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X .
+        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -315,7 +318,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-armhf)
-        CC="arm-linux-gnueabihf-gcc -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CXX="arm-linux-gnueabihf-g++ -std=c++11 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X .
+        PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/ CC="arm-linux-gnueabihf-gcc -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="arm-linux-gnueabihf-g++ -std=c++11 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -327,7 +330,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm64)
-        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
+        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -341,10 +344,10 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I/usr/lib/jvm/default-java/include/" CXX="g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I/usr/lib/jvm/default-java/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X .
+          CC="gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" CXX="g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X .
         else
           echo "Not native ppc so assume cross compiling"
-          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CXX="powerpc64le-linux-gnu-g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
+          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" CXX="powerpc64le-linux-gnu-g++ -std=c++11 -m64 -mpower8-vector -DCV_CPU_COMPILE_VSX -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X .
         fi
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
@@ -368,14 +371,24 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.so ../lib
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
-    macosx-*)
+    macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
-        sedinplace '/HAVE_GCD/d' CMakeLists.txt
-        # remove spurious "lib" lib
-        sedinplace '/if.*(HAVE_CUDA)/a\
-            list(REMOVE_ITEM CUDA_LIBRARIES lib)\
-            ' CMakeLists.txt cmake/OpenCVModule.cmake cmake/OpenCVDetectCUDA.cmake
-        CC="clang" CXX="clang++" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
+        CC="clang -arch arm64" CXX="clang++ -arch arm64" $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
+        make -j $MAKEJ
+        make install/strip
+        cp ../share/java/opencv4/libopencv_java.dylib ../lib
+        sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
+        ;;
+    macosx-x86_64)
+        # also use pthreads on Mac for increased usability and more consistent behavior with Linux
+        sedinplace '/IF HAVE_GCD/d' CMakeLists.txt
+        CC="clang -arch x86_64" CXX="clang++ -arch x86_64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh

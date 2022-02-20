@@ -11,7 +11,7 @@ export DNNL_CPU_RUNTIME="OMP" # or TBB
 export DNNL_GPU_RUNTIME="OCL"
 
 TBB_VERSION=2020.3
-MKLDNN_VERSION=2.2.1
+MKLDNN_VERSION=2.5.2
 download https://github.com/oneapi-src/oneTBB/archive/v$TBB_VERSION.tar.gz oneTBB-$TBB_VERSION.tar.bz2
 download https://github.com/oneapi-src/oneDNN/archive/v$MKLDNN_VERSION.tar.gz oneDNN-$MKLDNN_VERSION.tar.bz2
 
@@ -50,6 +50,27 @@ if [[ -d "$OPENCL_PATH" ]]; then
 fi
 
 case $PLATFORM in
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc"
+        export CXX="aarch64-linux-gnu-g++"
+        if [[ "$DNNL_CPU_RUNTIME" == "TBB" ]]; then
+            cd ../oneTBB-$TBB_VERSION
+            make -j $MAKEJ tbb_os=linux
+            sedinplace 's/release/debug/g' Makefile
+            make -j $MAKEJ tbb_os=linux
+            cp -a include/* ../include
+            cp -a build/*release/libtbb.* ../lib
+            cp -a build/*debug/libtbb_debug.* ../lib
+            strip ../lib/libtbb.so.*
+            cd ../oneDNN-$MKLDNN_VERSION
+        fi
+        sedinplace 's/constexpr GRF     getBase/GRF getBase/g' src/gpu/jit/ngen/ngen_core.hpp
+        sedinplace 's/constexpr int32_t getDisp/int32_t getDisp/g' src/gpu/jit/ngen/ngen_core.hpp
+        sedinplace '/immintrin.h/d' src/gpu/jit/ngen/ngen_utils.hpp
+        "$CMAKE" -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=AARCH64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     linux-x86_64)
         if [[ "$DNNL_CPU_RUNTIME" == "TBB" ]]; then
             cd ../oneTBB-$TBB_VERSION
@@ -62,7 +83,7 @@ case $PLATFORM in
             strip ../lib/libtbb.so.*
             cd ../oneDNN-$MKLDNN_VERSION
         fi
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -83,7 +104,7 @@ case $PLATFORM in
             install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
         fi
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DOpenMP_C_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DOpenMP_CXX_FLAG="-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libdnnl.dylib
@@ -104,7 +125,7 @@ case $PLATFORM in
             cp -a build/*debug/tbb_debug.lib ../lib/intel64/vc14/
             cd ../oneDNN-$MKLDNN_VERSION
         fi
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DDNNL_BUILD_EXAMPLES=OFF -DDNNL_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=$DNNL_CPU_RUNTIME -DTBBROOT=$INSTALL_PATH -DDNNL_GPU_RUNTIME=$DNNL_GPU_RUNTIME .
         ninja -j $MAKEJ
         ninja install
         ;;

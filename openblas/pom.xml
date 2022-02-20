@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
-  <version>0.3.14-${project.parent.version}</version>
+  <version>0.3.19-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>
@@ -77,7 +77,7 @@
               <skip>${javacpp.compiler.skip}</skip>
               <buildCommand>
                 <program>bash</program>
-                <argument>${project.basedir}/postbuild.sh</argument>
+                <argument>postbuild.sh</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}</workingDirectory>
             </configuration>

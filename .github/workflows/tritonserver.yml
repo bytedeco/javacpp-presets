@@ -1,0 +1,22 @@
+name: tritonserver
+on:
+  push:
+    paths:
+      - tritonserver/**
+  pull_request:
+    paths:
+      - tritonserver/**
+  workflow_dispatch:
+env:
+  CI_DEPLOY_MODULE: ${{ github.workflow }}
+  CI_DEPLOY_PLATFORM: ${{ github.job }}
+  CI_DEPLOY_SETTINGS: ${{ secrets.CI_DEPLOY_SETTINGS }}
+  CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+  CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
+  STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
+jobs:
+  linux-x86_64:
+    runs-on: ubuntu-18.04
+    container: nvcr.io/nvidia/tritonserver:21.12-py3
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions

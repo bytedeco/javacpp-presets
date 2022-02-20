@@ -32,21 +32,28 @@ import org.bytedeco.javacpp.tools.*;
 @Properties(inherit = javacpp.class, target = "org.bytedeco.llvm.LLVM", global = "org.bytedeco.llvm.global.LLVM", value = {@Platform(
     value = {"linux", "macosx", "windows"}, define = {"__STDC_LIMIT_MACROS", "__STDC_CONSTANT_MACROS"},
     include = {"<llvm-c/DataTypes.h>", "<llvm-c/Types.h>", "<llvm-c/Support.h>", "<llvm-c/Core.h>", "<llvm-c/Analysis.h>", "<llvm-c/BitReader.h>", "<llvm-c/BitWriter.h>",
-               "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>", "<llvm-c/LinkTimeOptimizer.h>",
+               "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
-               "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/OrcBindings.h>", "<llvm-c/Remarks.h>",
-               "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
+               "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>",
+               "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", "<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>", "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
-               "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-11", "LTO@.11", "Remarks@.11"}, resource = {"include", "lib", "libexec", "share"}),
+               "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
+    compiler = "cpp14", link = {"LLVM-13", "LTO@.13", "Remarks@.13"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
+@NoException
 public class LLVM implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "llvm"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform())}. */
-    public static File cachePackage() throws IOException {
-        return Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform());
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
+        packageFile = Loader.cacheResource("/org/bytedeco/llvm/" + Loader.getPlatform());
+        return packageFile;
     }
 
     public void map(InfoMap infoMap) {
@@ -77,7 +84,6 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMComdat").pointerTypes("LLVMComdatRef"))
                .put(new Info("LLVMOpaqueDIBuilder").pointerTypes("LLVMDIBuilderRef"))
                .put(new Info("LLVMOpaqueError").pointerTypes("LLVMErrorRef"))
-               .put(new Info("LLVMOrcOpaqueJITStack").pointerTypes("LLVMOrcJITStackRef"))
                .put(new Info("LLVMRemarkOpaqueString").pointerTypes("LLVMRemarkStringRef"))
                .put(new Info("LLVMRemarkOpaqueDebugLoc").pointerTypes("LLVMRemarkDebugLocRef"))
                .put(new Info("LLVMRemarkOpaqueArg").pointerTypes("LLVMRemarkArgRef"))
@@ -92,6 +98,28 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaqueSymbolIterator").pointerTypes("LLVMSymbolIteratorRef"))
                .put(new Info("LLVMOpaqueRelocationIterator").pointerTypes("LLVMRelocationIteratorRef"))
                .put(new Info("LLVMOpaquePassManagerBuilder").pointerTypes("LLVMPassManagerBuilderRef"))
+               .put(new Info("LLVMOrcOpaqueSymbolStringPool").pointerTypes("LLVMOrcSymbolStringPoolRef"))
+               .put(new Info("LLVMOrcOpaqueDefinitionGenerator").pointerTypes("LLVMOrcDefinitionGeneratorRef"))
+               .put(new Info("LLVMOrcOpaqueResourceTracker").pointerTypes("LLVMOrcResourceTrackerRef"))
+               .put(new Info("LLVMOrcOpaqueLookupState").pointerTypes("LLVMOrcLookupStateRef"))
+               .put(new Info("LLVMOrcOpaqueSymbolStringPoolEntry").pointerTypes("LLVMOrcSymbolStringPoolEntryRef"))
+               .put(new Info("LLVMOrcOpaqueLLJIT").pointerTypes("LLVMOrcLLJITRef"))
+               .put(new Info("LLVMOrcOpaqueLLJITBuilder").pointerTypes("LLVMOrcLLJITBuilderRef"))
+               .put(new Info("LLVMOrcOpaqueMaterializationUnit").pointerTypes("LLVMOrcMaterializationUnitRef"))
+               .put(new Info("LLVMOrcOpaqueJITDylib").pointerTypes("LLVMOrcJITDylibRef"))
+               .put(new Info("LLVMOrcOpaqueLookupState").pointerTypes("LLVMOrcLookupStateRef"))
+               .put(new Info("LLVMOrcOpaqueThreadSafeContext").pointerTypes("LLVMOrcThreadSafeContextRef"))
+               .put(new Info("LLVMOrcOpaqueThreadSafeModule").pointerTypes("LLVMOrcThreadSafeModuleRef"))
+               .put(new Info("LLVMOrcOpaqueJITTargetMachineBuilder").pointerTypes("LLVMOrcJITTargetMachineBuilderRef"))
+               .put(new Info("LLVMOrcOpaqueObjectLayer").pointerTypes("LLVMOrcObjectLayerRef"))
+               .put(new Info("LLVMOrcOpaqueExecutionSession").pointerTypes("LLVMOrcExecutionSessionRef"))
+               .put(new Info("LLVMOrcOpaqueMaterializationResponsibility").pointerTypes("LLVMOrcMaterializationResponsibilityRef"))
+               .put(new Info("LLVMOrcOpaqueIRTransformLayer").pointerTypes("LLVMOrcIRTransformLayerRef"))
+               .put(new Info("LLVMOrcOpaqueObjectTransformLayer").pointerTypes("LLVMOrcObjectTransformLayerRef"))
+               .put(new Info("LLVMOrcOpaqueIndirectStubsManager").pointerTypes("LLVMOrcIndirectStubsManagerRef"))
+               .put(new Info("LLVMOrcOpaqueLazyCallThroughManager").pointerTypes("LLVMOrcLazyCallThroughManagerRef"))
+               .put(new Info("LLVMOrcOpaqueDumpObjects").pointerTypes("LLVMOrcDumpObjectsRef"))
+               .put(new Info("LLVMOpaquePassBuilderOptions").pointerTypes("LLVMPassBuilderOptionsRef"))
 
                .put(new Info("LLVMContextRef").valueTypes("LLVMContextRef").pointerTypes("@ByPtrPtr LLVMContextRef", "@Cast(\"LLVMContextRef*\") PointerPointer"))
                .put(new Info("LLVMModuleRef").valueTypes("LLVMModuleRef").pointerTypes("@ByPtrPtr LLVMModuleRef", "@Cast(\"LLVMModuleRef*\") PointerPointer"))
@@ -120,7 +148,6 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMComdatRef").valueTypes("LLVMComdatRef").pointerTypes("@ByPtrPtr LLVMComdatRef", "@Cast(\"LLVMComdatRef*\") PointerPointer"))
                .put(new Info("LLVMDIBuilderRef").valueTypes("LLVMDIBuilderRef").pointerTypes("@ByPtrPtr LLVMDIBuilderRef", "@Cast(\"LLVMDIBuilderRef*\") PointerPointer"))
                .put(new Info("LLVMErrorRef").valueTypes("LLVMErrorRef").pointerTypes("@ByPtrPtr LLVMErrorRef", "@Cast(\"LLVMErrorRef*\") PointerPointer"))
-               .put(new Info("LLVMOrcJITStackRef").valueTypes("LLVMOrcJITStackRef").pointerTypes("@ByPtrPtr LLVMOrcJITStackRef", "@Cast(\"LLVMOrcJITStackRef*\") PointerPointer"))
                .put(new Info("LLVMRemarkStringRef").valueTypes("LLVMRemarkStringRef").pointerTypes("@ByPtrPtr LLVMRemarkStringRef", "@Cast(\"LLVMRemarkStringRef*\") PointerPointer"))
                .put(new Info("LLVMRemarkDebugLocRef").valueTypes("LLVMRemarkDebugLocRef").pointerTypes("@ByPtrPtr LLVMRemarkDebugLocRef", "@Cast(\"LLVMRemarkDebugLocRef*\") PointerPointer"))
                .put(new Info("LLVMRemarkArgRef").valueTypes("LLVMRemarkArgRef").pointerTypes("@ByPtrPtr LLVMRemarkArgRef", "@Cast(\"LLVMRemarkArgRef*\") PointerPointer"))
@@ -135,6 +162,28 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMSymbolIteratorRef").valueTypes("LLVMSymbolIteratorRef").pointerTypes("@ByPtrPtr LLVMSymbolIteratorRef", "@Cast(\"LLVMSymbolIteratorRef*\") PointerPointer"))
                .put(new Info("LLVMRelocationIteratorRef").valueTypes("LLVMRelocationIteratorRef").pointerTypes("@ByPtrPtr LLVMRelocationIteratorRef", "@Cast(\"LLVMRelocationIteratorRef*\") PointerPointer"))
                .put(new Info("LLVMPassManagerBuilderRef").valueTypes("LLVMPassManagerBuilderRef").pointerTypes("@ByPtrPtr LLVMPassManagerBuilderRef", "@Cast(\"LLVMPassManagerBuilderRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcSymbolStringPoolRef").valueTypes("LLVMOrcSymbolStringPoolRef").pointerTypes("@ByPtrPtr LLVMOrcSymbolStringPoolRef", "@Cast(\"LLVMOrcSymbolStringPoolRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcDefinitionGeneratorRef").valueTypes("LLVMOrcDefinitionGeneratorRef").pointerTypes("@ByPtrPtr LLVMOrcDefinitionGeneratorRef", "@Cast(\"LLVMOrcDefinitionGeneratorRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcResourceTrackerRef").valueTypes("LLVMOrcResourceTrackerRef").pointerTypes("@ByPtrPtr LLVMOrcResourceTrackerRef", "@Cast(\"LLVMOrcResourceTrackerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLookupStateRef").valueTypes("LLVMOrcLookupStateRef").pointerTypes("@ByPtrPtr LLVMOrcLookupStateRef", "@Cast(\"LLVMOrcLookupStateRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcSymbolStringPoolEntryRef").valueTypes("LLVMOrcSymbolStringPoolEntryRef").pointerTypes("@ByPtrPtr LLVMOrcSymbolStringPoolEntryRef", "@Cast(\"LLVMOrcSymbolStringPoolEntryRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLLJITRef").valueTypes("LLVMOrcLLJITRef").pointerTypes("@ByPtrPtr LLVMOrcLLJITRef", "@Cast(\"LLVMOrcLLJITRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLLJITBuilderRef").valueTypes("LLVMOrcLLJITBuilderRef").pointerTypes("@ByPtrPtr LLVMOrcLLJITBuilderRef", "@Cast(\"LLVMOrcLLJITBuilderRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcMaterializationUnitRef").valueTypes("LLVMOrcMaterializationUnitRef").pointerTypes("@ByPtrPtr LLVMOrcMaterializationUnitRef", "@Cast(\"LLVMOrcMaterializationUnitRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcJITDylibRef").valueTypes("LLVMOrcJITDylibRef").pointerTypes("@ByPtrPtr LLVMOrcJITDylibRef", "@Cast(\"LLVMOrcJITDylibRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLookupStateRef").valueTypes("LLVMOrcLookupStateRef").pointerTypes("@ByPtrPtr LLVMOrcLookupStateRef", "@Cast(\"LLVMOrcLookupStateRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcThreadSafeContextRef").valueTypes("LLVMOrcThreadSafeContextRef").pointerTypes("@ByPtrPtr LLVMOrcThreadSafeContextRef", "@Cast(\"LLVMOrcThreadSafeContextRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcThreadSafeModuleRef").valueTypes("LLVMOrcThreadSafeModuleRef").pointerTypes("@ByPtrPtr LLVMOrcThreadSafeModuleRef", "@Cast(\"LLVMOrcThreadSafeModuleRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcJITTargetMachineBuilderRef").valueTypes("LLVMOrcJITTargetMachineBuilderRef").pointerTypes("@ByPtrPtr LLVMOrcJITTargetMachineBuilderRef", "@Cast(\"LLVMOrcJITTargetMachineBuilderRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcObjectLayerRef").valueTypes("LLVMOrcObjectLayerRef").pointerTypes("@ByPtrPtr LLVMOrcObjectLayerRef", "@Cast(\"LLVMOrcObjectLayerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcExecutionSessionRef").valueTypes("LLVMOrcExecutionSessionRef").pointerTypes("@ByPtrPtr LLVMOrcExecutionSessionRef", "@Cast(\"LLVMOrcExecutionSessionRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcMaterializationResponsibilityRef").valueTypes("LLVMOrcMaterializationResponsibilityRef").pointerTypes("@ByPtrPtr LLVMOrcMaterializationResponsibilityRef", "@Cast(\"LLVMOrcMaterializationResponsibilityRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcIRTransformLayerRef").valueTypes("LLVMOrcIRTransformLayerRef").pointerTypes("@ByPtrPtr LLVMOrcIRTransformLayerRef", "@Cast(\"LLVMOrcIRTransformLayerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcObjectTransformLayerRef").valueTypes("LLVMOrcObjectTransformLayerRef").pointerTypes("@ByPtrPtr LLVMOrcObjectTransformLayerRef", "@Cast(\"LLVMOrcObjectTransformLayerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcIndirectStubsManagerRef").valueTypes("LLVMOrcIndirectStubsManagerRef").pointerTypes("@ByPtrPtr LLVMOrcIndirectStubsManagerRef", "@Cast(\"LLVMOrcIndirectStubsManagerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcLazyCallThroughManagerRef").valueTypes("LLVMOrcLazyCallThroughManagerRef").pointerTypes("@ByPtrPtr LLVMOrcLazyCallThroughManagerRef", "@Cast(\"LLVMOrcLazyCallThroughManagerRef*\") PointerPointer"))
+               .put(new Info("LLVMOrcDumpObjectsRef").valueTypes("LLVMOrcDumpObjectsRef").pointerTypes("@ByPtrPtr LLVMOrcDumpObjectsRef", "@Cast(\"LLVMOrcDumpObjectsRef*\") PointerPointer"))
+               .put(new Info("LLVMPassBuilderOptionsRef").valueTypes("LLVMPassBuilderOptionsRef").pointerTypes("@ByPtrPtr LLVMPassBuilderOptionsRef", "@Cast(\"LLVMPassBuilderOptionsRef*\") PointerPointer"))
 
                .put(new Info("LLVM_C_EXTERN_C_BEGIN").cppText("#define LLVM_C_EXTERN_C_BEGIN").cppTypes())
                .put(new Info("LLVM_C_EXTERN_C_END").cppText("#define LLVM_C_EXTERN_C_END").cppTypes())
@@ -143,7 +192,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
                .put(new Info("GPU_CODEGEN").define(false))
-               .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener",
-                             "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer", "LLVMRemarkVersion").skip());
+               // These things were never actually implemented, see http://llvm.org/PR41362
+               .put(new Info("LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMOrcObjectLayerAddObjectFileWithRT").skip());
     }
 }

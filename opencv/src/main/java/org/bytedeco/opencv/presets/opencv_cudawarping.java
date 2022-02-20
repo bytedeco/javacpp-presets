@@ -33,12 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudawarping.hpp>",
-            link = "opencv_cudawarping@.4.5",
+            link = "opencv_cudawarping@.405",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudawarping452",
+            link = "opencv_cudawarping455",
             extension = "-gpu"
         )
     },

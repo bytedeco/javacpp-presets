@@ -43,9 +43,19 @@ import org.bytedeco.cuda.presets.cudart;
     inherit = cudart.class,
     value = {
         @Platform(
-            value = {"linux-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             include = {"cuviddec.h", "nvcuvid.h"},
             link = "nvcuvid"
+        ),
+        @Platform(
+            value = "linux-arm64",
+            includepath = {"/usr/include/aarch64-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
+            linkpath = {"/usr/lib/aarch64-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/aarch64/"}
+        ),
+        @Platform(
+            value = "linux-ppc64le",
+            includepath = {"/usr/include/powerpc64le-linux-gnu/", "/usr/local/videocodecsdk/Interface/"},
+            linkpath = {"/usr/lib/powerpc64le-linux-gnu/", "/usr/local/videocodecsdk/Lib/linux/stubs/ppc64le/"}
         ),
         @Platform(
             value = "linux-x86_64",
@@ -76,9 +86,9 @@ public class nvcuvid implements LoadEnabled, InfoMapper {
 
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.1" : "@.11";
+                lib += lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.2" : "@.11";
             } else if (platform.startsWith("windows")) {
-                lib += lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_111_0" : "64_11";
+                lib += lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_112_0" : "64_11";
             } else {
                 continue;
             }

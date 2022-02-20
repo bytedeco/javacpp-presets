@@ -14,7 +14,7 @@ INSTALL_PATH=`pwd`
 if [[ ! -d "ModSecurity" ]]; then
     git clone https://github.com/SpiderLabs/ModSecurity
     cd ModSecurity
-    git checkout origin/v3/master
+    git checkout v3.0.6
     git submodule init
     git submodule update
 else
@@ -30,6 +30,7 @@ case $PLATFORM in
         ;;
     macosx-x86_64)
         sh build.sh
+        sedinplace 's/\\\$rpath/@rpath/g' configure
         ./configure --prefix=$INSTALL_PATH
         make
         make install

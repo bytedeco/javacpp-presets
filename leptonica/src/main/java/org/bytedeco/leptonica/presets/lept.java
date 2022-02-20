@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = javacpp.class, target = "org.bytedeco.leptonica", global = "org.bytedeco.leptonica.global.lept", value = {
-    @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
+    @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/hashmap.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/rbtree.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/colorfill.h", "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
         "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"},
@@ -71,6 +71,8 @@ public class lept implements InfoMapper {
                .put(new Info("L_Bytea").pointerTypes("L_BYTEA"))
                .put(new Info("ByteBuffer").pointerTypes("BBUFFER"))
                .put(new Info("L_ByteBuffer").pointerTypes("L_BBUFFER"))
+               .put(new Info("L_Hashmap").pointerTypes("L_HASHMAP"))
+               .put(new Info("L_Hashitem").pointerTypes("L_HASHITEM"))
                .put(new Info("L_Heap").pointerTypes("L_HEAP"))
                .put(new Info("DoubleLinkedList").pointerTypes("DLLIST"))
                .put(new Info("L_Ptra").pointerTypes("L_PTRA"))

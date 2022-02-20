@@ -51,7 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 cinclude = "modsecurity/intervention.h",
                 linkpath = {"lib","include"},
                 includepath = {"lib","include"},
-                link = "modsecurity"),
+                link = "modsecurity@.3"),
         target = "org.bytedeco.modsecurity",
         global = "org.bytedeco.modsecurity.global.modsecurity")
 public class modsecurity implements InfoMapper {

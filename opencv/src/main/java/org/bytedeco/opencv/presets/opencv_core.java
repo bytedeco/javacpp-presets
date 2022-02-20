@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2020 Samuel Audet
+ * Copyright (C) 2013-2021 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -57,9 +57,9 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/utils/instrumentation.hpp>", "<opencv2/core/utils/tls.hpp>",
             "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.4.5", "opencv_imgproc@.4.5"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.405", "opencv_imgproc@.405"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
-            preload = {"opencv_cudev@.4.5"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
+            preload = {"opencv_cudev@.405"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
@@ -68,7 +68,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core452", "opencv_imgproc452"}, preload = {"opencv_cudev452"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core455", "opencv_imgproc455"}, preload = {"opencv_cudev455"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -122,7 +122,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func",
                              "CV__ErrorNoReturn", "CV__ErrorNoReturn_", "CV_ErrorNoReturn", "CV_ErrorNoReturn_", "CV_USRTYPE1", "CV_Assert_1").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_ALWAYS_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
-                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD").annotations().cppTypes())
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD", "CV_NODISCARD_STD").annotations().cppTypes())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
 
                .put(new Info("CV_DEPRECATED").cppText("#define CV_DEPRECATED deprecated").cppTypes())
@@ -222,6 +222,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("uchar").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<uchar> >").cast().pointerTypes("ByteVectorVector").define())
                .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define())
+               .put(new Info("std::vector<std::vector<float> >").pointerTypes("FloatVectorVector").define())
                .put(new Info("std::vector<cv::String>", "std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<cv::Point>").pointerTypes("PointVector").define())
                .put(new Info("std::vector<cv::Point2f>").pointerTypes("Point2fVector").define())
@@ -273,7 +274,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                              "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser",
                              "cv::cvStartWriteRawData_Base64", "cv::cvWriteRawData_Base64", "cv::cvEndWriteRawData_Base64",
                              "cv::cvWriteMat_Base64", "cv::cvWriteMatND_Base64", "cv::FileStorage::Impl").skip())
-               .put(new Info("cv::AutoBuffer<double>", "std::shared_ptr<void>").cast().pointerTypes("Pointer"))
+               .put(new Info("cv::AutoBuffer<double>", "std::shared_ptr<void>", "std::type_index").cast().pointerTypes("Pointer"))
 
                .put(new Info("cv::Mat").base("AbstractMat"))
                .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))
@@ -291,8 +292,8 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                      + "public Mat(int rows, int cols, int type, Pointer data, boolean copyData) { super((Pointer)null);\n"
                      + "    if (copyData) { allocate(rows, cols, type); data().put(data); } else { allocate(rows, cols, type, data, AUTO_STEP); this.pointer = data; }\n"
                      + "}\n"
-                     + "/** Calls {@link #Mat(int, int, int, Pointer, boolean) Mat(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData)}. */\n"
-                     + "public Mat(int type, Pointer data, boolean copyData) { this(1, (int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), type, data, copyData); }\n"
+                     + "/** Calls {@link #Mat(int, int, int, Pointer, boolean) Mat((int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), 1, type, data, copyData)}. */\n"
+                     + "public Mat(int type, Pointer data, boolean copyData) { this((int)Math.min(data.limit() - data.position(), Integer.MAX_VALUE), 1, type, data, copyData); }\n"
 
                      + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32SC2, points, copyData)}. */ public Mat(Point points, boolean copyData) { this(CV_32SC2, points, copyData); }\n"
                      + "/** Calls {@link #Mat(int, Pointer, boolean) Mat(CV_32FC2, points, copyData)}. */ public Mat(Point2f points, boolean copyData) { this(CV_32FC2, points, copyData); }\n"
@@ -313,11 +314,11 @@ public class opencv_core implements LoadEnabled, InfoMapper {
 
                      + "public Mat(byte ... b) { this(b, false); }\n"
                      + "public Mat(short ... s) { this(s, false); }\n"
-                     + "public Mat(byte[] b, boolean signed) { this(1, b.length, signed ? CV_8SC1 : CV_8UC1); data().put(b); }\n"
-                     + "public Mat(short[] s, boolean signed) { this(1, s.length, signed ? CV_16SC1 : CV_16UC1); new ShortPointer(data()).put(s); }\n"
-                     + "public Mat(int ... n) { this(1, n.length, CV_32SC1); new IntPointer(data()).put(n); }\n"
-                     + "public Mat(double ... d) { this(1, d.length, CV_64FC1); new DoublePointer(data()).put(d); }\n"
-                     + "public Mat(float ... f) { this(1, f.length, CV_32FC1); new FloatPointer(data()).put(f); }\n"
+                     + "public Mat(byte[] b, boolean signed) { this(b.length, 1, signed ? CV_8SC1 : CV_8UC1); data().put(b); }\n"
+                     + "public Mat(short[] s, boolean signed) { this(s.length, 1, signed ? CV_16SC1 : CV_16UC1); new ShortPointer(data()).put(s); }\n"
+                     + "public Mat(int ... n) { this(n.length, 1, CV_32SC1); new IntPointer(data()).put(n); }\n"
+                     + "public Mat(double ... d) { this(d.length, 1, CV_64FC1); new DoublePointer(data()).put(d); }\n"
+                     + "public Mat(float ... f) { this(f.length, 1, CV_32FC1); new FloatPointer(data()).put(f); }\n"
                      + "/** Calls {@link #Mat(BytePointer, boolean) Mat(p, false)}. */   public Mat(BytePointer p) { this(p, false); }\n"
                      + "/** Calls {@link #Mat(ShortPointer, boolean) Mat(p, false)}. */  public Mat(ShortPointer p) { this(p, false); }\n"
                      + "/** Calls {@link #Mat(BytePointer, boolean, boolean) Mat(p, signed, false)}. */  public Mat(BytePointer p, boolean signed) { this(p, signed, false); }\n"
@@ -339,7 +340,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native long step(int i);"))
                .put(new Info("cv::DefaultDeleter<CvMat>").pointerTypes("CvMatDefaultDeleter"))
 
-               .put(new Info("std::initializer_list", "_InputArray::KindFlag").skip())
+               .put(new Info("std::initializer_list", "std::lock_guard", "std::recursive_mutex", "_InputArray::KindFlag").skip())
                .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray")
                        .skip()./*cast().*/pointerTypes("Mat", "Mat", "Mat", "UMat", "UMat", "UMat", "GpuMat", "GpuMat", "GpuMat"))
                .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays")
@@ -427,7 +428,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Cast({"cv::Ptr"}) @Adapter("PtrAdapter") public @interface Ptr {
+    @Cast({"cv::Ptr", "&"}) @Adapter("PtrAdapter") public @interface Ptr {
         /** @return template type */
         String value() default "";
     }

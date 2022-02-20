@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.6
+GSL_VERSION=2.7
 download http://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -112,7 +112,8 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
-        patch -Np1 < ../../../gsl-macosx.patch
+        #patch -Np1 < ../../../gsl-macosx.patch
+        sedinplace 's/\\\$rpath/@rpath/g' aclocal.m4 configure
         ./configure --prefix=$INSTALL_PATH
         make -j $MAKEJ V=0
         make install-strip

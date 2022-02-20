@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -14,29 +14,21 @@
   <version>1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Caffe</name>
 
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.opencv.${javacpp.platform.module};
-      requires org.bytedeco.hdf5.${javacpp.platform.module};
-      requires org.bytedeco.openblas.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.5.2-${project.parent.version}</version>
+      <version>4.5.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5</artifactId>
-      <version>1.12.0-${project.parent.version}</version>
+      <version>1.12.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.14-${project.parent.version}</version>
+      <version>0.3.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -59,34 +51,34 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.12.0-${project.parent.version}</version>
+            <version>1.12.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.5.2-${project.parent.version}</version>
+            <version>4.5.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5</artifactId>
-            <version>1.12.0-${project.parent.version}</version>
+            <version>1.12.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.14-${project.parent.version}</version>
+            <version>0.3.19-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -167,15 +159,15 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <id>javacpp-${javacpp.platform}</id>
+            <id>javacpp-${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/include/boost/**</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.a</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.la</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.so*</exclude>
-                <exclude>org/bytedeco/caffe/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}${javacpp.platform.extension}/include/boost/**</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}${javacpp.platform.extension}/lib/*.la</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/caffe/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
               </excludes>
             </configuration>
           </execution>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -260,7 +260,7 @@ import java.util.List;
                 value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"},
                 extension = {"-gpu", "-python", "-python-gpu"},
                 link = "tensorflow_cc#",
-                preload = {"iomp5", "mklml", "mklml_intel", "python3.9@.1.0!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
+                preload = {"iomp5", "mklml", "mklml_intel", "python3.10@.1.0!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
                 resource = "python",
                 preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"}),
         @Platform(
@@ -271,7 +271,7 @@ import java.util.List;
 //                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
-                preload = {"msvcr120", "libiomp5md", "mklml", "python39"}),
+                preload = {"msvcr120", "libiomp5md", "mklml", "python310"}),
         @Platform(
                 value = "windows-x86_64",
                 extension = {"-gpu", "-python", "-python-gpu"},
@@ -284,9 +284,9 @@ import java.util.List;
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "cudart", "cudart_static", "cuda", "cublasLt", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
 //                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/extras/CUPTI/lib64/"}),
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/extras/CUPTI/lib64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -430,17 +430,22 @@ import java.util.List;
 public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorflow"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/tensorflow/" + Loader.getPlatform() + extension + "/python/")}. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(tensorflow.class);
         if (path != null) {
             path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/tensorflow/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
+            packageFile = Loader.cacheResource(path.substring(i, j) + "/python/");
         }
-        return null;
+        return packageFile;
     }
 
     /** Returns {@code {numpy.cachePackages(), tensorflow.cachePackage()}}. */
@@ -482,12 +487,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
         int i = 0;
         if (load.equals("mkl") || load.equals("mkl_rt")) {
-            String[] libs = {"iomp5", "libiomp5md", "mkl_core@.1", "mkl_avx@.1", "mkl_avx2@.1", "mkl_avx512@.1", "mkl_avx512_mic@.1",
-                             "mkl_def@.1", "mkl_mc@.1", "mkl_mc3@.1", "mkl_intel_lp64@.1", "mkl_intel_thread@.1", "mkl_gnu_thread@.1", "mkl_rt@.1"};
+            String[] libs = {"iomp5", "libiomp5md", "mkl_core@.2", "mkl_avx@.2", "mkl_avx2@.2", "mkl_avx512@.2", "mkl_avx512_mic@.2",
+                             "mkl_def@.2", "mkl_mc@.2", "mkl_mc3@.2", "mkl_intel_lp64@.2", "mkl_intel_thread@.2", "mkl_gnu_thread@.2", "mkl_rt@.2"};
             for (i = 0; i < libs.length; i++) {
                 preloads.add(i, libs[i] + "#" + libs[i]);
             }
-            load = "mkl_rt@.1";
+            load = "mkl_rt@.2";
             resources.add("/org/bytedeco/mkl/");
         }
 
@@ -871,9 +876,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::getTF_OutputDebugString",
                              "tensorflow::AttrValueMap::const_iterator",
                              "google::protobuf::Map<std::string,tensorflow::AttrValue>::const_iterator").skip())
-               .put(new Info("protobuf::Map<tensorflow::string,tensorflow::AttrValue>",
-                             "google::protobuf::Map<std::string,tensorflow::AttrValue>",
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>",
                              "google::protobuf::Map<std::string,::tensorflow::AttrValue>",
+                             "protobuf::Map<tensorflow::string,tensorflow::AttrValue>",
                              "tensorflow::protobuf::Map<tensorflow::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::FunctionDefHelper::AttrValueWrapper").pointerTypes("FunctionDefHelper.AttrValueWrapper"))
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >",
@@ -981,7 +986,13 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                           "tensorflow::Tensor", "tensorflow::TensorProto", "tensorflow::TensorShape",
                           "tensorflow::NameAttrList", "tensorflow::StringPiece"};
         for (int i = 0; i < attrs.length; i++) {
-            infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaNames("WithAttr"));
+            if ("std::string".equals(attrs[i])) {
+                infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaText(
+                        "public native @ByVal @Name(\"WithAttr<std::string>\") Options WithAttr(@StringPiece BytePointer attr_name, @StdString @Cast({\"char*\", \"std::string&&\"}) BytePointer value);\n"
+                      + "public native @ByVal @Name(\"WithAttr<std::string>\") Options WithAttr(@StringPiece String attr_name, @StdString @Cast({\"char*\", \"std::string&&\"}) String value);"));
+            } else if (!"tensorflow::StringPiece".equals(attrs[i])) {
+                infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaNames("WithAttr"));
+            }
             if (i < attrs.length - 2) {
                 infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<tensorflow::gtl::ArraySlice<" + attrs[i] + "> >").javaNames("WithAttr"));
             }

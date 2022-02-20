@@ -1,12 +1,9 @@
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.FloatPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.PointerPointer;
+import java.util.Random;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.libffi.*;
 import org.bytedeco.llvm.LLVM.*;
 
-import java.util.Random;
-
+import static org.bytedeco.libffi.global.ffi.*;
 import static org.bytedeco.llvm.global.LLVM.*;
 import static org.bytedeco.mkl.global.mkl_rt.*;
 
@@ -21,7 +18,7 @@ import static org.bytedeco.mkl.global.mkl_rt.*;
  * Note: This code is equivalent to this:
  * clang -O3 -march=native -mllvm -polly -mllvm -polly-vectorizer=stripmine
  *
- * Note: Instead of JNA, to obtain maximum performance, FunctionPointer should be used as shown here:
+ * Note: Instead of JNA or libffi, to obtain maximum performance, FunctionPointer should be used as shown here:
  * https://github.com/bytedeco/javacpp/blob/master/src/test/java/org/bytedeco/javacpp/PointerTest.java
  *
  * @author Yu Kobayashi
@@ -65,7 +62,9 @@ public class MatMulBenchmark {
             sgemm.call(jitter, A, B, C);
         }
         long end = System.nanoTime();
-        System.out.printf("MKL: %fms. c[0] = %f\n", (end - start) / (iterations * 1000d * 1000d), C.get(0));
+        C.get(c);
+        System.out.printf("MKL: %fms. c[0] = %f\n", (end - start) / (iterations * 1000d * 1000d), c[0]);
+        printArray(c);
 
         mkl_jit_destroy(jitter);
     }
@@ -138,10 +137,19 @@ public class MatMulBenchmark {
             jitCompile(engine, module);
 
             long fnAddr = LLVMGetFunctionAddress(engine, "matmul");
-            com.sun.jna.Function func = com.sun.jna.Function.getFunction(new com.sun.jna.Pointer(fnAddr));
+            // Using libffi directly reduces overhead, but we can also do the equivalent with JNA as follows:
+            //  com.sun.jna.Function func = com.sun.jna.Function.getFunction(new com.sun.jna.Pointer(fnAddr));
+            //  func.invoke(Void.class, new Object[]{a, b, c});
+            ffi_cif cif = new ffi_cif();
+            Pointer fn = new Pointer() {{ address = fnAddr; }};
+            PointerPointer<ffi_type> args = new PointerPointer<>(ffi_type_pointer(), ffi_type_pointer(), ffi_type_pointer());
+            PointerPointer<FloatPointer> pointers = new PointerPointer<>(a, b, c);
+            PointerPointer<PointerPointer> values = new PointerPointer<>(pointers.getPointer(0), pointers.getPointer(1), pointers.getPointer(2));
+            ffi_prep_cif(cif, FFI_DEFAULT_ABI(), 3, ffi_type_void(), args);
             long start = System.nanoTime();
-            func.invoke(Void.class, new Object[]{a, b, c});
+            ffi_call(cif, fn, null, values);
             long end = System.nanoTime();
+            pointers.get(FloatPointer.class, 2).get(c);
             System.out.printf("LLVM%s: %fms. c[0] = %f\n",
                     usePolly ? " with Polly" : " without Polly",
                     (end - start) / (1000d * 1000d),
@@ -268,8 +276,17 @@ public class MatMulBenchmark {
         return module;
     }
 
+    static void handleError(LLVMErrorRef e) {
+        if (e != null && !e.isNull()) {
+            BytePointer p = LLVMGetErrorMessage(e);
+            String s = p.getString();
+            LLVMDisposeErrorMessage(p);
+            throw new RuntimeException(s);
+        }
+    }
+
     static void optimize(LLVMModuleRef module) {
-        optimizeModule(module, cpu, 3, 0);
+        handleError(optimizeModule(module, cpu, 3, 0));
     }
 
     static void verify(LLVMModuleRef module, boolean dumpModule) {
@@ -287,7 +304,7 @@ public class MatMulBenchmark {
     }
 
     static void jitCompile(LLVMExecutionEngineRef engine, LLVMModuleRef module) {
-        createOptimizedJITCompilerForModule(engine, module, cpu, 3);
+        handleError(createOptimizedJITCompilerForModule(engine, module, cpu, 3));
     }
 
     static LLVMValueRef toConstInt(int v) {

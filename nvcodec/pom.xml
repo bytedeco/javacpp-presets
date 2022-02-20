@@ -6,25 +6,19 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>nvcodec</artifactId>
-  <version>11.0.10-${project.parent.version}</version>
+  <version>11.1.5-${project.parent.version}</version>
   <name>JavaCPP Presets for NVIDIA Video Codec SDK</name>
-
-  <properties>
-    <javacpp.nativeRequires>
-      requires org.bytedeco.cuda.${javacpp.platform.module};
-    </javacpp.nativeRequires>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>11.2-8.1-${project.parent.version}</version>
+      <version>11.6-8.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -50,7 +44,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>11.2-8.1-${project.parent.version}</version>
+            <version>11.6-8.3-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <executions>
@@ -68,6 +62,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

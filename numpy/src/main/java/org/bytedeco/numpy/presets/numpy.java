@@ -83,9 +83,15 @@ import org.bytedeco.openblas.presets.*;
 public class numpy implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "numpy"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/")}. */
-    public static File cachePackage() throws IOException {
-        return Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/");
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
+        packageFile = Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/");
+        return packageFile;
     }
 
     /** Returns {@code {python.cachePackages(), numpy.cachePackage()}}. */
@@ -98,7 +104,7 @@ public class numpy implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__multiarray_api.h").linePatterns("#define PyArray_GetNDArrayCVersion .*",
-                                                                "         PyArray_API\\[303\\]\\)").skip())
+                                                                "#define PyDataMem_DefaultHandler .*").skip())
                .put(new Info("__ufunc_api.h").linePatterns("#define PyUFunc_Type .*",
                                                            "         PyUFunc_API\\[42\\]\\)").skip())
 
@@ -152,7 +158,8 @@ public class numpy implements InfoMapper {
                              "defined(PY_ARRAY_UNIQUE_SYMBOL)", "defined(PY_UFUNC_UNIQUE_SYMBOL)").define(false))
 
                .put(new Info("NPY_BITSOF_LONG == 64", "NPY_BITSOF_LONGLONG == 64",
-                             "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16").define(true))
+                             "NPY_BITSOF_INT == 32", "NPY_BITSOF_SHORT == 16",
+                             "PY_VERSION_HEX >= 0x03080000").define(true))
 
                .put(new Info("NPY_MAX_INT", "INT_MIN", "NPY_MIN_INT", "NPY_MAX_UINT", "NPY_MAX_LONG", "NPY_MIN_LONG", "NPY_MAX_ULONG",
                              "NPY_INTP", "NPY_UINTP", "NPY_MAX_INTP", "NPY_MIN_INTP", "NPY_MAX_UINTP").translate(false).cppTypes("long"))

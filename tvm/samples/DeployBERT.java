@@ -28,9 +28,6 @@ public class DeployBERT {
         // Install in JavaCPP's cache GluonNLP and MXNet to download and import BERT model
         new ProcessBuilder(python, "-m", "pip", "install", "gluonnlp", "mxnet", "pytest").inheritIO().start().waitFor();
 
-        // Add TVM and its dependencies to Python path using C API to embed script in Java
-        Py_AddPath(org.bytedeco.tvm.presets.tvm.cachePackages());
-
         // Initialize the embedded Python interpreter inside the same process as the JVM
         Pointer program = Py_DecodeLocale(DeployBERT.class.getSimpleName(), null);
         if (program == null) {
@@ -38,7 +35,9 @@ public class DeployBERT {
             System.exit(1);
         }
         Py_SetProgramName(program);
-        Py_Initialize();
+
+        // Add TVM and its dependencies to Python path using C API to embed script in Java
+        Py_Initialize(org.bytedeco.tvm.presets.tvm.cachePackages());
         PySys_SetArgv(1, new PointerPointer(1).put(program));
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
@@ -176,7 +175,7 @@ public class DeployBERT {
     public static void DeployBERTRuntime() {
         System.out.println("Running BERT runtime...");
         // load in the library
-        DLContext ctx = new DLContext().device_type(kDLCPU).device_id(0);
+        DLDevice ctx = new DLDevice().device_type(kDLCPU).device_id(0);
         Module mod_factory = Module.LoadFromFile("lib/libbert.so");
         // create the BERT runtime module
         TVMValue values = new TVMValue(2);
@@ -193,10 +192,10 @@ public class DeployBERT {
         // Use the C++ API to create some random sequence
         int batch = 1, seq_length = 128;
         DLDataType dtype = new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1);
-        NDArray inputs = NDArray.Empty(new long[]{batch, seq_length}, dtype, ctx);
-        NDArray token_types = NDArray.Empty(new long[]{batch, seq_length}, dtype, ctx);
-        NDArray valid_length = NDArray.Empty(new long[]{batch}, dtype, ctx);
-        NDArray output = NDArray.Empty(new long[]{batch, 2}, dtype, ctx);
+        NDArray inputs = NDArray.Empty(new ShapeTuple(batch, seq_length), dtype, ctx);
+        NDArray token_types = NDArray.Empty(new ShapeTuple(batch, seq_length), dtype, ctx);
+        NDArray valid_length = NDArray.Empty(new ShapeTuple(batch), dtype, ctx);
+        NDArray output = NDArray.Empty(new ShapeTuple(batch, 2), dtype, ctx);
         FloatPointer inputs_data = new FloatPointer(inputs.accessDLTensor().data()).capacity(batch * seq_length);
         FloatPointer token_types_data = new FloatPointer(token_types.accessDLTensor().data()).capacity(batch * seq_length);
         FloatPointer valid_length_data = new FloatPointer(valid_length.accessDLTensor().data()).capacity(batch);

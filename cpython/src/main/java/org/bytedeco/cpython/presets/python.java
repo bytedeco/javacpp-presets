@@ -57,7 +57,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "pymacro.h",
 //                "pyatomic.h",
                 "pymath.h",
-                "pytime.h",
+                "cpython/pytime.h",
                 "pymem.h",
                 "cpython/pymem.h",
 
@@ -67,7 +67,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/objimpl.h",
                 "typeslots.h",
                 "pyhash.h",
-                "pydebug.h",
+                "cpython/pydebug.h",
 
                 "descrobject.h",
                 "bytearrayobject.h",
@@ -90,7 +90,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "dictobject.h",
                 "cpython/dictobject.h",
                 "structmember.h",
-                "odictobject.h",
+                "cpython/odictobject.h",
                 "enumobject.h",
                 "setobject.h",
                 "methodobject.h",
@@ -115,12 +115,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "weakrefobject.h",
                 "structseq.h",
                 "namespaceobject.h",
-                "picklebufobject.h",
+                "cpython/picklebufobject.h",
 
                 "codecs.h",
                 "pyerrors.h",
                 "cpython/pyerrors.h",
-                "pyarena.h",
+//                "internal/pycore_pyarena.h",
                 "pythread.h",
                 "pystate.h",
                 "context.h",
@@ -139,25 +139,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "abstract.h",
                 "cpython/abstract.h",
                 "bltinmodule.h",
-                "asdl.h",
-                "Python-ast.h",
-                "node.h",
+//                "internal/pycore_asdl.h",
+//                "internal/pycore_ast.h",
+//                "node.h",
                 "code.h",
                 "cpython/code.h",
                 "compile.h",
-                "symtable.h",
+                "cpython/compile.h",
+//                "internal/pycore_symtable.h",
                 "pythonrun.h",
+                "cpython/pythonrun.h",
                 "pylifecycle.h",
                 "cpython/pylifecycle.h",
                 "eval.h",
 
-                "pyctype.h",
+                "cpython/pyctype.h",
                 "pystrtod.h",
                 "pystrcmp.h",
 //                "dtoa.h",
                 "fileutils.h",
                 "cpython/fileutils.h",
-//                "pyfpe.h",
+                "cpython/pyfpe.h",
                 "tracemalloc.h",
 
                 "datetime.h",
@@ -184,10 +186,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/import.h",
                 "cpython/abstract.h",
                 "cpython/code.h",
+                "cpython/compile.h",
+                "cpython/pythonrun.h",
                 "cpython/pylifecycle.h",
                 "cpython/fileutils.h",
             },
-            link = "python3.9@.1.0!",
+            link = "python3.10@.1.0!",
             preload = {"ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
@@ -197,8 +201,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "macosx",  link = "python3.9!"),
-        @Platform(value = "windows", link = "python39"),
+        @Platform(value = "macosx",  link = "python3.10!"),
+        @Platform(value = "windows", link = "python310"),
     },
     target = "org.bytedeco.cpython",
     global = "org.bytedeco.cpython.global.python",
@@ -208,10 +212,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class python implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
+    private static File packageFile = null;
+
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform())} and monkey patches files accordingly. */
-    public static File cachePackage() throws IOException {
+    public static synchronized File cachePackage() throws IOException {
+        if (packageFile != null) {
+            return packageFile;
+        }
         File pythonFile = Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform());
-        File configDir = new File(pythonFile, "lib/python3.9/");
+        File configDir = new File(pythonFile, "lib/python3.10/");
         if (configDir.exists()) {
             String pythonPath = pythonFile.getAbsolutePath();
             Pattern pattern = Pattern.compile("'prefix': '(.*)'");
@@ -246,13 +255,14 @@ public class python implements InfoMapper {
                 }
             }
         }
+        packageFile = pythonFile;
         return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
+    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.10"), new File(f, "python3.10/lib-dynload"), new File(f, "python3.10/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
         File f = new File(cachePackage(), "lib");
-        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.9"), new File(f, "python3.9/lib-dynload"), new File(f, "python3.9/site-packages")};
+        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.10"), new File(f, "python3.10/lib-dynload"), new File(f, "python3.10/site-packages")};
     }
 
     public void map(InfoMap infoMap) {
@@ -305,6 +315,7 @@ public class python implements InfoMapper {
                              "Py_DEBUG", "Py_TRACE_REFS",
                              "defined(MS_WIN32) && !defined(HAVE_SNPRINTF)",
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
+                             "defined(Py_REF_DEBUG) && !(defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000)",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
                .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD", "PY_NO_SHORT_FLOAT_REPR").cppTypes().define(true))
@@ -325,6 +336,7 @@ public class python implements InfoMapper {
                .put(new Info("_traceback").cast().pointerTypes("PyTracebackObject"))
                .put(new Info("_err_stackitem").cast().pointerTypes("_PyErr_StackItem"))
                .put(new Info("_co_extra_state").cast().pointerTypes("__PyCodeExtraState"))
+               .put(new Info("_cframe").cast().pointerTypes("CFrame"))
                .put(new Info("_node").cast().pointerTypes("node"))
                .put(new Info("_is").cast().pointerTypes("PyInterpreterState"))
                .put(new Info("_ts").cast().pointerTypes("PyThreadState"))
@@ -344,7 +356,9 @@ public class python implements InfoMapper {
                              "_PyDict_KeysSize", "_PyDict_SizeOf", "_PyDict_Pop_KnownHash", "_PyDict_FromKeys",
                              "_PyObjectDict_SetItem", "_PyDict_LoadGlobal", "__PyCodeExtraState_Get",
                              "_Py_asdl_seq_new", "_Py_asdl_int_seq_new", "_Py_isabs", "_PyTime_MIN", "_PyTime_MAX",
-                             "_Py_InitializeFromWideArgs", "_Py_InitializeFromArgs", "_PyNode_FinalizeEndPos").skip())
+                             "_Py_InitializeFromWideArgs", "_Py_InitializeFromArgs", "_PyNode_FinalizeEndPos",
+                             "_PyCodec_Forget", "_PyCode_InitAddressRange", "_PyDict_GetItemHint", "PyLineTable_InitAddressRange",
+                             "PyLineTable_NextAddressRange", "PyLineTable_PreviousAddressRange").skip())
 
                .put(new Info("mod_ty").valueTypes("_mod").pointerTypes("@ByPtrPtr _mod"))
                .put(new Info("stmt_ty").valueTypes("_stmt").pointerTypes("@ByPtrPtr _stmt"))
