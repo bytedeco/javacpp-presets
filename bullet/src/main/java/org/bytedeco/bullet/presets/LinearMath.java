@@ -59,6 +59,7 @@ public class LinearMath implements InfoMapper {
             .put(new Info("SIMD_EPSILON").skip())
             .put(new Info("SIMD_INFINITY").skip())
             .put(new Info("ATTRIBUTE_ALIGNED16").cppText("#define ATTRIBUTE_ALIGNED16(x) x"))
+            .put(new Info("btInfMaskConverter").skip())
 
             // btVector3.h
             .put(new Info("BT_DECLARE_ALIGNED_ALLOCATOR").skip())

@@ -1590,6 +1590,7 @@
         <module>liquidfun</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1671,6 +1672,7 @@
         <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

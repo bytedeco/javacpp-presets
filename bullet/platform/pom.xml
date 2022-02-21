@@ -60,6 +60,18 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86_64}</classifier>
+    </dependency>
   </dependencies>
 
   <build>
@@ -79,6 +91,8 @@
                     ${javacpp.moduleId}-android-x86.jar
                     ${javacpp.moduleId}-android-x86_64.jar
                     ${javacpp.moduleId}-linux-x86_64.jar
+                    ${javacpp.moduleId}-windows-x86.jar
+                    ${javacpp.moduleId}-windows-x86_64.jar
                   </Class-Path>
                 </manifestEntries>
               </archive>
@@ -129,6 +143,8 @@
                       requires static org.bytedeco.${javacpp.moduleId}.android.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.android.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
+                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>

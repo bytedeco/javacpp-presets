@@ -120,10 +120,18 @@ public static native int btIsDoublePrecision();
 // #else
 	//keep BT_LARGE_FLOAT*BT_LARGE_FLOAT < FLT_MAX
 	public static final double BT_LARGE_FLOAT = 1e18f;
-// Targeting ../LinearMath/btInfMaskConverter.java
+// #endif
 
+// #ifdef BT_USE_SSE
+// #endif  //BT_USE_SSE
 
-	public static native @ByRef btInfMaskConverter btInfinityMask(); public static native void btInfinityMask(btInfMaskConverter setter);
+// #if defined(BT_USE_SSE)
+// #else//BT_USE_SSE
+
+// 	#ifdef BT_USE_NEON
+// 	#else  //BT_USE_NEON
+
+// 	#ifndef BT_INFINITY
 // 	#define BT_INFINITY (btInfinityMask.mask)
 	public static native int btGetInfinityMask();
 // 	#endif
