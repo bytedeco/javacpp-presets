@@ -1,4 +1,7 @@
 
+ * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
+ * Upgrade presets for Gym 0.22.0, ALE 0.7.4, ONNX 1.11.0, and their dependencies
+
 ### February 11, 2022 version 1.5.7
  * Build FFmpeg with WebP encoding support ([pull #1133](https://github.com/bytedeco/javacpp-presets/pull/1133))
  * Include `sys/ipc.h` and `sys/shm.h` for system APIs of Linux and Mac OS X ([pull #1132](https://github.com/bytedeco/javacpp-presets/pull/1132))

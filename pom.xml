@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.7</version>
+  <version>1.5.8-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -245,7 +245,7 @@
               <skip>${javacpp.cppbuild.skip}</skip>
               <buildCommand>
                 <program>bash</program>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>cppbuild.sh</argument>
                 <argument>install</argument>
                 <argument>${javacpp.moduleId}</argument>
                 <argument>-platform=${javacpp.platform}</argument>
@@ -267,7 +267,7 @@
               <skip>${javacpp.cppbuild.skip}</skip>
               <buildCommand>
                 <program>bash</program>
-                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>cppbuild.sh</argument>
                 <argument>clean</argument>
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
