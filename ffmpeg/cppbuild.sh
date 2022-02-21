@@ -177,7 +177,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=arm-linux
@@ -309,7 +309,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux
         make -j $MAKEJ V=0
@@ -440,7 +440,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm
@@ -568,7 +568,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux
         make -j $MAKEJ V=0

@@ -784,7 +784,7 @@
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
@@ -833,7 +833,7 @@
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
@@ -882,7 +882,7 @@
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86>
@@ -931,7 +931,7 @@
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
