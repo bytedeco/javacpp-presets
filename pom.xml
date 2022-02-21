@@ -779,6 +779,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -828,6 +829,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -877,6 +879,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -926,6 +929,7 @@
         <module>tesseract</module>
         <module>tensorflow</module>
         <module>cpu_features</module>
+        <module>bullet</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
