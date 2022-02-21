@@ -78,6 +78,7 @@ public class BulletSoftBody implements InfoMapper {
                 ).skip())
             .put(new Info("btDeformableMultiBodyDynamicsWorld::setSolverCallback").skip())
             .put(new Info("btDeformableMultiBodyDynamicsWorld::rayTestSingle").skip())
+            .put(new Info("btDeformableMultiBodyDynamicsWorld::solveMultiBodyConstraints").skip())
             .put(new Info("btCPUVertexBufferDescriptor::getBufferType").skip())
             .put(new Info("btSoftBodyVertexData").skip())
             .put(new Info("btSoftBodyTriangleData").skip())
@@ -89,6 +90,7 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btDeformableBackwardEulerObjective::m_massPreconditioner").skip())
             .put(new Info("btDeformableBackwardEulerObjective::m_KKTPreconditioner").skip())
             .put(new Info("btDeformableBackwardEulerObjective::m_projection").skip())
+            .put(new Info("btDeformableBackwardEulerObjective::computeStep").skip())
             .put(new Info("btDeformableLagrangianForce::m_nodes").skip())
             .put(new Info("btDeformableLagrangianForce::setIndices").skip())
 

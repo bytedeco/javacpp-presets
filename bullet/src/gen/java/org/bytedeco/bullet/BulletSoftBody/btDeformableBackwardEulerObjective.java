@@ -52,7 +52,7 @@ public class btDeformableBackwardEulerObjective extends Pointer {
 	public native @Cast("btScalar") float computeNorm(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual);
 
 	// compute one step of the solve (there is only one solve if the system is linear)
-	public native void computeStep(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 residual, @Cast("const btScalar") float dt);
+	
 
 	// perform A*x = b
 	public native void multiply(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 x, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 b);
