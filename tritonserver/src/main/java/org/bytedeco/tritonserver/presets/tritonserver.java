@@ -41,7 +41,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
-            exclude = {},
             link = "tritonserver",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include"},
             linkpath = {"/opt/tritonserver/lib/"}
@@ -63,7 +62,6 @@ public class tritonserver implements InfoMapper {
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("boolean[]", "BoolPointer"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
                              "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
