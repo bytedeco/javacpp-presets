@@ -28,8 +28,8 @@ cd build
 
 case $PLATFORM in
     linux-armhf)
-        export CC="arm-linux-gnueabihf-gcc -march=armv6 -mfpu=vfp -funsafe-math-optimizations"
-        export CXX="arm-linux-gnueabihf-g++ -march=armv6 -mfpu=vfp -funsafe-math-optimizations"
+        export CC="arm-linux-gnueabihf-gcc -funsafe-math-optimizations"
+        export CXX="arm-linux-gnueabihf-g++ -funsafe-math-optimizations"
         export CMAKE_FLAGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv6 -DTFLITE_ENABLE_XNNPACK=OFF $CMAKE_FLAGS"
         ;;
     linux-arm64)

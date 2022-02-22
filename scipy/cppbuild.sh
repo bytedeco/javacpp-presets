@@ -128,8 +128,7 @@ fi
 
 case $PLATFORM in
     linux-armhf)
-        FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="-fPIC" LDFLAGS="-shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)

@@ -272,7 +272,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-armhf)
-        export CFLAGS="-pthread -march=armv6 -marm -mfpu=vfp -mfloat-abi=hard -I$INSTALL_PATH/include/"
+        export CFLAGS="-pthread -I$INSTALL_PATH/include/"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"

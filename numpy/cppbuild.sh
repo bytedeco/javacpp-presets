@@ -93,7 +93,7 @@ fi
 
 case $PLATFORM in
     linux-armhf)
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 -march=armv6 -mfpu=vfp -mfloat-abi=hard" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)

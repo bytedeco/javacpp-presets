@@ -62,7 +62,7 @@ case $PLATFORM in
         make install
         ;;
     linux-armhf)
-        CXX="arm-linux-gnueabihf-g++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/ -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" .
+        CXX="arm-linux-gnueabihf-g++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/ .
         make -j $MAKEJ
         make install
         ;;
