@@ -23,15 +23,15 @@ public class SimpleBox {
 
         createRigidBody(0, groundTransform, groundShape);
 
-		btBoxShape colShape = new btBoxShape(new btVector3(1, 1, 1));
+        btBoxShape colShape = new btBoxShape(new btVector3(1, 1, 1));
         float mass = 1.0f;
 
         colShape.calculateLocalInertia(mass, new btVector3(0, 0, 0));
 
-		btTransform startTransform = new btTransform();
+        btTransform startTransform = new btTransform();
         startTransform.setIdentity();
-		startTransform.setOrigin(new btVector3(0, 3, 0));
-		btRigidBody box = createRigidBody(mass, startTransform, colShape);
+        startTransform.setOrigin(new btVector3(0, 3, 0));
+        btRigidBody box = createRigidBody(mass, startTransform, colShape);
 
         for (int i = 0; i < 10; ++ i)
         {
@@ -79,8 +79,8 @@ public class SimpleBox {
 
         btRigidBody body = new btRigidBody(cInfo);
 
-		body.setUserIndex(-1);
-		m_dynamicsWorld.addRigidBody(body);
+        body.setUserIndex(-1);
+        m_dynamicsWorld.addRigidBody(body);
 
         return body;
     }

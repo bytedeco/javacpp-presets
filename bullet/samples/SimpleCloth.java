@@ -11,15 +11,15 @@ public class SimpleCloth {
     private static btBroadphaseInterface m_broadphase;
     private static btConstraintSolver m_solver;
     private static btSoftRigidDynamicsWorld m_dynamicsWorld;
-	private static btSoftBodyWorldInfo softBodyWorldInfo;
+    private static btSoftBodyWorldInfo softBodyWorldInfo;
 
     public static void main(String[] args) {
         createEmptyDynamicsWorld();
 
-		final float s = 4;  //size of cloth patch
-		final int NUM_X = 31;  //vertices on X axis
-		final int NUM_Z = 31;  //vertices on Z axis
-		btSoftBody cloth = createSoftBody(s, NUM_X, NUM_Z, 1 + 2);
+        final float s = 4;  //size of cloth patch
+        final int NUM_X = 31;  //vertices on X axis
+        final int NUM_Z = 31;  //vertices on Z axis
+        btSoftBody cloth = createSoftBody(s, NUM_X, NUM_Z, 1 + 2);
 
         for (int i = 0; i < 50; ++ i)
         {
@@ -43,28 +43,28 @@ public class SimpleCloth {
             "and end up floating around 1.0.\n");
     }
 
-	private static void createEmptyDynamicsWorld()
-	{
-		m_collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
-		m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
+    private static void createEmptyDynamicsWorld()
+    {
+        m_collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
+        m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
 
-		m_broadphase = new btDbvtBroadphase();
+        m_broadphase = new btDbvtBroadphase();
 
-		m_solver = new btSequentialImpulseConstraintSolver();
+        m_solver = new btSequentialImpulseConstraintSolver();
 
-		m_dynamicsWorld = new btSoftRigidDynamicsWorld(
+        m_dynamicsWorld = new btSoftRigidDynamicsWorld(
             m_dispatcher,
             m_broadphase,
             m_solver,
             m_collisionConfiguration);
-		m_dynamicsWorld.setGravity(new btVector3(0, -10, 0));
+        m_dynamicsWorld.setGravity(new btVector3(0, -10, 0));
 
         softBodyWorldInfo = new btSoftBodyWorldInfo();
-		softBodyWorldInfo.m_broadphase(m_broadphase);
-		softBodyWorldInfo.m_dispatcher(m_dispatcher);
-		softBodyWorldInfo.m_gravity(m_dynamicsWorld.getGravity());
-		softBodyWorldInfo.m_sparsesdf().Initialize();
-	}
+        softBodyWorldInfo.m_broadphase(m_broadphase);
+        softBodyWorldInfo.m_dispatcher(m_dispatcher);
+        softBodyWorldInfo.m_gravity(m_dynamicsWorld.getGravity());
+        softBodyWorldInfo.m_sparsesdf().Initialize();
+    }
 
     public static btSoftBody createSoftBody(
         float s, int numX, int numY, int fixed)
