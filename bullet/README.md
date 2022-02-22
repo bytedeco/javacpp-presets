@@ -20,4 +20,4 @@ Java API documentation is available here:
 Sample Usage
 ------------
 
-See [bullet/samples/README.md].
+See [samples](samples).
