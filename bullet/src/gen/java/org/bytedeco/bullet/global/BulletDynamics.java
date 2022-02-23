@@ -57,7 +57,7 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 // #ifdef BT_USE_PLACEMENT_NEW
 // #include <new>
-// Targeting ../BulletDynamics/btAlignedObjectArray_btRigidBody.java
+// Targeting ../BulletDynamics/btAlignedObjectArray_btRigidBodyPointer.java
 
 
 

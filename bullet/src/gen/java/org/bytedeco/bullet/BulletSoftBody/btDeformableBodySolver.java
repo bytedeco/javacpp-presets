@@ -51,7 +51,7 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	public native void solveDeformableConstraints(@Cast("btScalar") float solverdt);
 
 	// resize/clear data structures
-	public native void reinitialize(@Const @ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("btScalar") float dt);
+	public native void reinitialize(@Const @ByRef btAlignedObjectArray_btSoftBodyPointer softBodies, @Cast("btScalar") float dt);
 
 	// set up contact constraints
 	public native void setConstraints(@Const @ByRef btContactSolverInfo infoGlobal);
@@ -128,8 +128,8 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	public native @Cast("btScalar") float kineticEnergy();
 
 	// unused functions
-	public native void optimize(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("bool") boolean forceUpdate/*=false*/);
-	public native void optimize(@ByRef btAlignedObjectArray_btSoftBody softBodies);
+	public native void optimize(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies, @Cast("bool") boolean forceUpdate/*=false*/);
+	public native void optimize(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies);
 	public native void solveConstraints(@Cast("btScalar") float dt);
 	public native @Cast("bool") boolean checkInitialized();
 	public native void copyBackToSoftBodies(@Cast("bool") boolean bMove/*=true*/);

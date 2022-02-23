@@ -48,8 +48,8 @@ public class btSoftBodySolver extends Pointer {
 	public native @Cast("bool") boolean checkInitialized();
 
 	/** Optimize soft bodies in this solver. */
-	public native void optimize(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("bool") boolean forceUpdate/*=false*/);
-	public native void optimize(@ByRef btAlignedObjectArray_btSoftBody softBodies);
+	public native void optimize(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies, @Cast("bool") boolean forceUpdate/*=false*/);
+	public native void optimize(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies);
 
 	/** Copy necessary data back to the original soft body source objects. */
 	public native void copyBackToSoftBodies(@Cast("bool") boolean bMove/*=true*/);

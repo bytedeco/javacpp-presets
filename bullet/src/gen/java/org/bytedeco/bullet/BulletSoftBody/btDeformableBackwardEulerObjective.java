@@ -25,7 +25,7 @@ public class btDeformableBackwardEulerObjective extends Pointer {
 
 	public native @Cast("btScalar") float m_dt(); public native btDeformableBackwardEulerObjective m_dt(float setter);
 	
-	public native @ByRef btAlignedObjectArray_btSoftBody m_softBodies(); public native btDeformableBackwardEulerObjective m_softBodies(btAlignedObjectArray_btSoftBody setter);
+	public native @ByRef btAlignedObjectArray_btSoftBodyPointer m_softBodies(); public native btDeformableBackwardEulerObjective m_softBodies(btAlignedObjectArray_btSoftBodyPointer setter);
 	
 	
 	@MemberGetter public native @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 m_backupVelocity();
@@ -34,8 +34,8 @@ public class btDeformableBackwardEulerObjective extends Pointer {
 	
 	
 
-	public btDeformableBackwardEulerObjective(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v) { super((Pointer)null); allocate(softBodies, backup_v); }
-	private native void allocate(@ByRef btAlignedObjectArray_btSoftBody softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v);
+	public btDeformableBackwardEulerObjective(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v) { super((Pointer)null); allocate(softBodies, backup_v); }
+	private native void allocate(@ByRef btAlignedObjectArray_btSoftBodyPointer softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btAlignedObjectArray_btVector3 backup_v);
 
 	public native void initialize();
 

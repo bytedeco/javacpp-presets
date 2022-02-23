@@ -23,7 +23,7 @@ public class btDeformableLagrangianForce extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableLagrangianForce(Pointer p) { super(p); }
 
-	public native @ByRef btAlignedObjectArray_btSoftBody m_softBodies(); public native btDeformableLagrangianForce m_softBodies(btAlignedObjectArray_btSoftBody setter);
+	public native @ByRef btAlignedObjectArray_btSoftBodyPointer m_softBodies(); public native btDeformableLagrangianForce m_softBodies(btAlignedObjectArray_btSoftBodyPointer setter);
 	
 
 	// add all forces

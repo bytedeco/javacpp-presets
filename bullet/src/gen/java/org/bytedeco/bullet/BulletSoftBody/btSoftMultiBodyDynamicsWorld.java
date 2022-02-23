@@ -46,7 +46,7 @@ public class btSoftMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld {
 
 	public native @Cast("btDynamicsWorldType") int getWorldType();
 
-	public native @Cast("btSoftBodyArray*") @ByRef btAlignedObjectArray_btSoftBody getSoftBodyArray();
+	public native @Cast("btSoftBodyArray*") @ByRef btAlignedObjectArray_btSoftBodyPointer getSoftBodyArray();
 
 	public native void rayTest(@Const @ByRef btVector3 rayFromWorld, @Const @ByRef btVector3 rayToWorld, @ByRef RayResultCallback resultCallback);
 

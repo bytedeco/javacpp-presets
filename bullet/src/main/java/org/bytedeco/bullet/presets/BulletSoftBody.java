@@ -46,7 +46,7 @@ public class BulletSoftBody implements InfoMapper {
 
             .put(new Info("btSoftBodySolver::SolverTypes").enumerate())
 
-            .put(new Info("btAlignedObjectArray<btSoftBody*>").pointerTypes("btAlignedObjectArray_btSoftBody"))
+            .put(new Info("btAlignedObjectArray<btSoftBody*>").pointerTypes("btAlignedObjectArray_btSoftBodyPointer"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>").pointerTypes("btAlignedObjectArray_btSoftBody_Anchor"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Cluster*>").pointerTypes("btAlignedObjectArray_btSoftBody_ClusterPointer"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Face>").pointerTypes("btAlignedObjectArray_btSoftBody_Face"))
