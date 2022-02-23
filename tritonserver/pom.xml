@@ -17,16 +17,6 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>cuda</artifactId>
-      <version>11.6-8.3-${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>tensorrt</artifactId>
-      <version>8.2-${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
   </dependencies>
@@ -45,18 +35,6 @@
         <configuration>
           <encoding>ISO-8859-1</encoding>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>11.6-8.3-${project.parent.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorrt</artifactId>
-            <version>8.2-${project.parent.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
