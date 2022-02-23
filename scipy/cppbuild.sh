@@ -148,7 +148,7 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
-        export F77="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export F77="$(ls -1 /usr/local/bin/gfortran-* | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH

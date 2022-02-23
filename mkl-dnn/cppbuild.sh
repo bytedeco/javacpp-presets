@@ -38,8 +38,8 @@ case $PLATFORM in
         download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION2/mklml_mac_$MKLML_VERSION.tgz mklml_mac_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_mac_$MKLML_VERSION.tgz -C external
-        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
-        export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
+        export CC="$(ls -1 /usr/local/bin/gcc-* | head -n 1)"
+        export CXX="$(ls -1 /usr/local/bin/g++-* | head -n 1)"
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
         make -j $MAKEJ

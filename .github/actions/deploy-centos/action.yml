@@ -139,8 +139,9 @@ runs:
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3* # not required for GCC 7+
+          rm -f /usr/lib/libgfortran.so.4* /usr/lib64/libgfortran.so.4* # not required for GCC 9+
         else
-          rm -f /usr/lib/libgfortran.so.4* /usr/lib64/libgfortran.so.4* # remove library from GCC 7+
+          rm -f /usr/lib/libgfortran.so.5* /usr/lib64/libgfortran.so.5* # remove library from GCC 9+
         fi
 
         GRADLE_TASK=publishToMavenLocal
