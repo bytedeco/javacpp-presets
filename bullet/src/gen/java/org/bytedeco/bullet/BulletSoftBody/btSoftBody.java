@@ -1070,10 +1070,7 @@ public class btSoftBody extends btCollisionObject {
 		public native int piterations(); public native Config piterations(int setter);            // Positions solver iterations
 		public native int diterations(); public native Config diterations(int setter);            // Drift solver iterations
 		public native int citerations(); public native Config citerations(int setter);            // Cluster solver iterations
-		public native int collisions(); public native Config collisions(int setter);             // Collisions flags
-		public native @ByRef @Cast("btSoftBody::tVSolverArray*") btAlignedObjectArray_btSoftBodyPointer m_vsequence(); public native Config m_vsequence(btAlignedObjectArray_btSoftBodyPointer setter);  // Velocity solvers sequence
-		public native @ByRef @Cast("btSoftBody::tPSolverArray*") btAlignedObjectArray_btSoftBodyPointer m_psequence(); public native Config m_psequence(btAlignedObjectArray_btSoftBodyPointer setter);  // Position solvers sequence
-		public native @ByRef @Cast("btSoftBody::tPSolverArray*") btAlignedObjectArray_btSoftBodyPointer m_dsequence(); public native Config m_dsequence(btAlignedObjectArray_btSoftBodyPointer setter);  // Drift solvers sequence
+		public native int collisions(); public native Config collisions(int setter);             // Collisions flags  // Velocity solvers sequence  // Position solvers sequence  // Drift solvers sequence
 		public native @Cast("btScalar") float drag(); public native Config drag(float setter);              // deformable air drag
 		public native @Cast("btScalar") float m_maxStress(); public native Config m_maxStress(float setter);       // Maximum principle first Piola stress
 	}

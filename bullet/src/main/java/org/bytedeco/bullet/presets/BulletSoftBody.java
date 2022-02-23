@@ -159,6 +159,8 @@ public class BulletSoftBody implements InfoMapper {
                     "btSoftBody::m_tetraScratches",
                     "btSoftBody::m_tetraScratchesTn",
                     "btSoftBody::solveClusters",
+                    "btSoftBody::tPSolverArray",
+                    "btSoftBody::tVSolverArray",
                     "btSoftBody::updateNode",
                     "btSoftBodyLinkData",
                     "btSoftBodyTriangleData",
