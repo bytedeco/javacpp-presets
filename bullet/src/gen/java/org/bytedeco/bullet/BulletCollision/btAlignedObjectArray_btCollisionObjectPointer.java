@@ -11,11 +11,7 @@ import org.bytedeco.bullet.LinearMath.*;
 import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
-  //for placement new
-// #endif          //BT_USE_PLACEMENT_NEW
 
-/**The btAlignedObjectArray template class uses a subset of the stl::vector interface for its methods
- * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
 @Name("btAlignedObjectArray<btCollisionObject*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btAlignedObjectArray_btCollisionObjectPointer extends Pointer {
     static { Loader.load(); }

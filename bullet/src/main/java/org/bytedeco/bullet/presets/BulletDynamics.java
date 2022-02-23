@@ -62,85 +62,74 @@ public class BulletDynamics implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("btRigidBodyData")
-                .cppText("#define btRigidBodyData btRigidBodyFloatData"))
-            .put(new Info("defined(BT_CLAMP_VELOCITY_TO) && BT_CLAMP_VELOCITY_TO > 0")
-                .define(false))
-            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btAlignedObjectArray_btRigidBody"))
-            .put(new Info("IN_PARALLELL_SOLVER").define(false))
-            .put(new Info("BT_BACKWARDS_COMPATIBLE_SERIALIZATION").define(true))
-            .put(new Info("btConstraintInfo1").skip())
-            .put(new Info("btConstraintInfo2").skip())
-            .put(new Info("btPoint2PointConstraintFloatData::m_typeConstraintData").skip())
-            .put(new Info("btPoint2PointConstraintDoubleData::m_typeConstraintData").skip())
-            .put(new Info("btPoint2PointConstraintDoubleData2::m_typeConstraintData").skip())
-            .put(new Info("btPoint2PointConstraintData2")
-                .cppText("#define btPoint2PointConstraintData2 " +
-                    "btPoint2PointConstraintDoubleData2"))
-            .put(new Info("btHingeConstraintFloatData::m_typeConstraintData").skip())
-            .put(new Info("btHingeConstraintDoubleData::m_typeConstraintData").skip())
-            .put(new Info("btHingeConstraintDoubleData2::m_typeConstraintData").skip())
-            .put(new Info("btHingeConstraintData")
-                .cppText("#define btHingeConstraintData " +
-                    "btHingeConstraintFloatData"))
-            .put(new Info("btConeTwistConstraint::solveConstraintObsolete").skip())
-            .put(new Info("btConeTwistConstraintData::m_typeConstraintData").skip())
-            .put(new Info("btConeTwistConstraintDoubleData::m_typeConstraintData").skip())
-            .put(new Info("btConeTwistConstraintData2")
-                .cppText("#define btConeTwistConstraintData2 " +
-                    "btConeTwistConstraintData"))
-            .put(new Info("btGeneric6DofConstraintData::m_typeConstraintData").skip())
-            .put(new Info("btGeneric6DofConstraintDoubleData2::m_typeConstraintData").skip())
-            .put(new Info("btGeneric6DofConstraintData2")
-                .cppText("#define btGeneric6DofConstraintData2 " +
-                    "btGeneric6DofConstraintDoubleData2"))
-            .put(new Info("btSliderConstraintData::m_typeConstraintData").skip())
-            .put(new Info("btSliderConstraintDoubleData::m_typeConstraintData").skip())
-            .put(new Info("btSliderConstraintData2")
-                .cppText("#define btSliderConstraintData2 " +
-                    "btSliderConstraintDoubleData2"))
-            .put(new Info("btGeneric6DofSpringConstraintData2")
-                .cppText("#define btGeneric6DofSpringConstraintData2 " +
-                    "btGeneric6DofSpringConstraintData"))
-            .put(new Info("btGeneric6DofSpring2ConstraintData::m_typeConstraintData").skip())
-            .put(new Info("btGeneric6DofSpring2ConstraintDoubleData2::" +
-                "m_typeConstraintData").skip())
-            .put(new Info("btGeneric6DofSpring2ConstraintData2")
-                .cppText("#define btGeneric6DofSpring2ConstraintData2 " +
-                    "btGeneric6DofSpring2ConstraintData"))
-            .put(new Info("btGearConstraintFloatData::m_typeConstraintData").skip())
-            .put(new Info("btGearConstraintDoubleData::m_typeConstraintData").skip())
-            .put(new Info("btGearConstraintData")
-                .cppText("#define btGearConstraintData btGearConstraintFloatData"))
-            .put(new Info("btSingleConstraintRowSolver").skip())
-            .put(new Info("btRaycastVehicle::m_wheelInfo").skip())
-            .put(new Info("btMultiBodyData")
-                .cppText("#define btMultiBodyData btMultiBodyFloatData"))
-            .put(new Info("btMultiBodyLinkData")
-                .cppText("#define btMultiBodyLinkData btMultiBodyLinkFloatData"))
-            .put(new Info("btMultiBodyLinkColliderData")
-                .cppText("#define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData"))
-            .put(new Info("btMultiBodyConstraint::createConstraintRows").skip())
-            .put(new Info("btMultiBodyJacobianData::m_solverBodyPool").skip())
-            .put(new Info("btMultiBodyDynamicsWorld::getAnalyticsData").skip())
-            .put(new Info("InplaceSolverIslandCallback").skip())
-            .put(new Info("MultiBodyInplaceSolverIslandCallback").skip())
-            .put(new Info("DeformableBodyInplaceSolverIslandCallback").skip())
-            .put(new Info("btSolverInfo").skip())
-            .put(new Info("USE_SIMD").define(false))
+            .put(new Info("btConeTwistConstraintData2").cppText("#define btConeTwistConstraintData2 btConeTwistConstraintData"))
+            .put(new Info("btGearConstraintData").cppText("#define btGearConstraintData btGearConstraintFloatData"))
+            .put(new Info("btGeneric6DofConstraintData2").cppText("#define btGeneric6DofConstraintData2 btGeneric6DofConstraintDoubleData2"))
+            .put(new Info("btGeneric6DofSpring2ConstraintData2").cppText("#define btGeneric6DofSpring2ConstraintData2 btGeneric6DofSpring2ConstraintData"))
+            .put(new Info("btGeneric6DofSpringConstraintData2").cppText("#define btGeneric6DofSpringConstraintData2 btGeneric6DofSpringConstraintData"))
+            .put(new Info("btHingeConstraintData").cppText("#define btHingeConstraintData btHingeConstraintFloatData"))
+            .put(new Info("btMultiBodyData").cppText("#define btMultiBodyData btMultiBodyFloatData"))
+            .put(new Info("btMultiBodyLinkColliderData").cppText("#define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData"))
+            .put(new Info("btMultiBodyLinkData").cppText("#define btMultiBodyLinkData btMultiBodyLinkFloatData"))
+            .put(new Info("btPoint2PointConstraintData2").cppText("#define btPoint2PointConstraintData2 btPoint2PointConstraintDoubleData2"))
+            .put(new Info("btRigidBodyData").cppText("#define btRigidBodyData btRigidBodyFloatData"))
             .put(new Info("btSimdScalar").cppText("#define btSimdScalar btScalar"))
+            .put(new Info("btSliderConstraintData2").cppText("#define btSliderConstraintData2 btSliderConstraintDoubleData2"))
             .put(new Info("btTypedConstraintData2").cppText("#define btTypedConstraintData2 btTypedConstraintFloatData"))
-            .put(new Info("btConstraintArray").skip())
-            .put(new Info("btSequentialImpulseConstraintSolverMt::internalConvertMultipleJoints").skip())
-            .put(new Info("btBatchedConstraints::m_batches").skip())
-            .put(new Info("btBatchedConstraints::m_phases").skip())
-            .put(new Info("btSimulationIslandManagerMt::Island::bodyArray").skip())
-            .put(new Info("btSimulationIslandManagerMt::Island::manifoldArray").skip())
-            .put(new Info("btSimulationIslandManagerMt::Island::constraintArray").skip())
-            .put(new Info("btSimulationIslandManagerMt::buildAndProcessIslands").skip())
-            .put(new Info("btSimulationIslandManagerMt::serialIslandDispatch").skip())
-            .put(new Info("btSimulationIslandManagerMt::parallelIslandDispatch").skip())
-            .put(new Info("btSimulationIslandManagerMt::IslandDispatchFunc").skip())
+
+            .put(new Info(
+                    "IN_PARALLELL_SOLVER",
+                    "USE_SIMD",
+                    "defined(BT_CLAMP_VELOCITY_TO) && BT_CLAMP_VELOCITY_TO > 0"
+                ).define(false))
+
+            .put(new Info(
+                    "BT_BACKWARDS_COMPATIBLE_SERIALIZATION"
+                ).define(true))
+
+            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btAlignedObjectArray_btRigidBody"))
+
+            .put(new Info(
+                    "DeformableBodyInplaceSolverIslandCallback",
+                    "InplaceSolverIslandCallback",
+                    "MultiBodyInplaceSolverIslandCallback",
+                    "btBatchedConstraints::m_batches",
+                    "btBatchedConstraints::m_phases",
+                    "btConeTwistConstraint::solveConstraintObsolete",
+                    "btConeTwistConstraintData::m_typeConstraintData",
+                    "btConeTwistConstraintDoubleData::m_typeConstraintData",
+                    "btConstraintArray",
+                    "btConstraintInfo1",
+                    "btConstraintInfo2",
+                    "btGearConstraintDoubleData::m_typeConstraintData",
+                    "btGearConstraintFloatData::m_typeConstraintData",
+                    "btGeneric6DofConstraintData::m_typeConstraintData",
+                    "btGeneric6DofConstraintDoubleData2::m_typeConstraintData",
+                    "btGeneric6DofSpring2ConstraintData::m_typeConstraintData",
+                    "btGeneric6DofSpring2ConstraintDoubleData2::m_typeConstraintData",
+                    "btHingeConstraintDoubleData2::m_typeConstraintData",
+                    "btHingeConstraintDoubleData::m_typeConstraintData",
+                    "btHingeConstraintFloatData::m_typeConstraintData",
+                    "btMultiBodyConstraint::createConstraintRows",
+                    "btMultiBodyDynamicsWorld::getAnalyticsData",
+                    "btMultiBodyJacobianData::m_solverBodyPool",
+                    "btPoint2PointConstraintDoubleData2::m_typeConstraintData",
+                    "btPoint2PointConstraintDoubleData::m_typeConstraintData",
+                    "btPoint2PointConstraintFloatData::m_typeConstraintData",
+                    "btRaycastVehicle::m_wheelInfo",
+                    "btSequentialImpulseConstraintSolverMt::internalConvertMultipleJoints",
+                    "btSimulationIslandManagerMt::Island::bodyArray",
+                    "btSimulationIslandManagerMt::Island::constraintArray",
+                    "btSimulationIslandManagerMt::Island::manifoldArray",
+                    "btSimulationIslandManagerMt::IslandDispatchFunc",
+                    "btSimulationIslandManagerMt::buildAndProcessIslands",
+                    "btSimulationIslandManagerMt::parallelIslandDispatch",
+                    "btSimulationIslandManagerMt::serialIslandDispatch",
+                    "btSingleConstraintRowSolver",
+                    "btSliderConstraintData::m_typeConstraintData",
+                    "btSliderConstraintDoubleData::m_typeConstraintData",
+                    "btSolverInfo"
+                ).skip())
             ;
     }
 }

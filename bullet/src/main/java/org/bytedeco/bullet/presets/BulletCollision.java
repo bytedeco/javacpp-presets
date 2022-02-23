@@ -84,56 +84,64 @@ public class BulletCollision implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("btCollisionObjectData").cppText("#define btCollisionObjectData btCollisionObjectFloatData"))
-            .put(new Info( "btOverlappingPairCache::getOverlappingPairArray").skip())
-            .put(new Info("btHashedOverlappingPairCache::getOverlappingPairArray").skip())
-            .put(new Info("btSortedOverlappingPairCache::getOverlappingPairArray").skip())
-            .put(new Info("btNullPairCache::getOverlappingPairArray").skip())
-            .put(new Info("btCollisionWorld::AllHitsRayResultCallback::m_collisionObjects").skip())
-            .put(new Info("PFX_USE_FREE_VECTORMATH").define(false))
-            .put(new Info("__SPU__").define(false))
-            .put(new Info("btQuantizedBvhData").cppText("#define btQuantizedBvhData btQuantizedBvhFloatData"))
-            .put(new Info("btOptimizedBvhNodeData").cppText("#define btOptimizedBvhNodeData btOptimizedBvhNodeFloatData"))
-            .put(new Info("btCompoundShapeChild::m_node").skip())
-            .put(new Info("btSphereSphereCollisionAlgorithm::getAllContactManifolds").skip())
-            .put(new Info("btAxisSweep3").base("btBroadphaseInterface"))
             .put(new Info("bt32BitAxisSweep3").base("btBroadphaseInterface"))
-            .put(new Info("btDbvtBroadphase::m_rayTestStacks").skip())
-            .put(new Info("btDbvtProxy").skip())
-            .put(new Info("DBVT_BP_PROFILE").define(false))
-            .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
-            .put(new Info("btPersistentManifoldData").cppText("#define btPersistentManifoldData btPersistentManifoldFloatData"))
-            .put(new Info("btPersistentManifold.h").linePatterns("struct btCollisionResult;").skip())
-            .put(new Info("DEBUG_PERSISTENCY").define(false))
-            .put(new Info("gContactDestroyedCallback").skip())
-            .put(new Info("gContactProcessedCallback").skip())
-            .put(new Info("gContactStartedCallback").skip())
-            .put(new Info("gContactEndedCallback").skip())
-            .put(new Info("NO_VIRTUAL_INTERFACE").define(false))
-            .put(new Info("btConvexPolyhedron::m_faces").skip())
-            .put(new Info("btDbvt::m_stkStack").skip())
-            .put(new Info("btDbvt::extractLeaves").skip())
-            .put(new Info("btDbvt::rayTestInternal").skip())
-            .put(new Info("btDbvt::allocate").skip())
-            .put(new Info("DBVT_PREFIX").skip())
-            .put(new Info("DBVT_IPOLICY").skip())
-            .put(new Info("DBVT_INLINE").cppTypes().annotations())
-            .put(new Info("DBVT_CHECKTYPE").skip())
-            .put(new Info("BT_DECLARE_STACK_ONLY_OBJECT").cppText("#define BT_DECLARE_STACK_ONLY_OBJECT"))
-            .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btAlignedObjectArray_btCollisionObjectPointer"))
-            .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btAlignedObjectArray_btPersistentManifoldPointer"))
+            .put(new Info("btAxisSweep3").base("btBroadphaseInterface"))
 
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btAlignedObjectArray_btQuantizedBvhNode"))
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findBinarySearch").skip())
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch").skip())
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch2").skip())
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>::remove").skip())
+            .put(new Info("BT_DECLARE_STACK_ONLY_OBJECT").cppText("#define BT_DECLARE_STACK_ONLY_OBJECT"))
+            .put(new Info("btCollisionObjectData").cppText("#define btCollisionObjectData btCollisionObjectFloatData"))
+            .put(new Info("btOptimizedBvhNodeData").cppText("#define btOptimizedBvhNodeData btOptimizedBvhNodeFloatData"))
+            .put(new Info("btPersistentManifoldData").cppText("#define btPersistentManifoldData btPersistentManifoldFloatData"))
+            .put(new Info("btQuantizedBvhData").cppText("#define btQuantizedBvhData btQuantizedBvhFloatData"))
+
+            .put(new Info("DBVT_INLINE").cppTypes().annotations())
+
+            .put(new Info(
+                    "DBVT_BP_PROFILE",
+                    "DEBUG_PERSISTENCY",
+                    "NO_VIRTUAL_INTERFACE",
+                    "PFX_USE_FREE_VECTORMATH",
+                    "__SPU__"
+                ).define(false))
 
             .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>").pointerTypes("btAlignedObjectArray_btBvhSubtreeInfo"))
-            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findBinarySearch").skip())
-            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch").skip())
-            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch2").skip())
-            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>::remove").skip())
+            .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btAlignedObjectArray_btCollisionObjectPointer"))
+            .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btAlignedObjectArray_btPersistentManifoldPointer"))
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btAlignedObjectArray_btQuantizedBvhNode"))
+
+            .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
+            .put(new Info("btPersistentManifold.h").linePatterns("struct btCollisionResult;").skip())
+
+            .put(new Info(
+                    "DBVT_CHECKTYPE",
+                    "DBVT_IPOLICY",
+                    "DBVT_PREFIX",
+                    "btAlignedObjectArray<btBvhSubtreeInfo>::findBinarySearch",
+                    "btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch",
+                    "btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch2",
+                    "btAlignedObjectArray<btBvhSubtreeInfo>::remove",
+                    "btAlignedObjectArray<btQuantizedBvhNode>::findBinarySearch",
+                    "btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch",
+                    "btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch2",
+                    "btAlignedObjectArray<btQuantizedBvhNode>::remove",
+                    "btCollisionWorld::AllHitsRayResultCallback::m_collisionObjects",
+                    "btCompoundShapeChild::m_node",
+                    "btConvexPolyhedron::m_faces",
+                    "btDbvt::allocate",
+                    "btDbvt::extractLeaves",
+                    "btDbvt::m_stkStack",
+                    "btDbvt::rayTestInternal",
+                    "btDbvtBroadphase::m_rayTestStacks",
+                    "btDbvtProxy",
+                    "btHashedOverlappingPairCache::getOverlappingPairArray",
+                    "btNullPairCache::getOverlappingPairArray",
+                    "btOverlappingPairCache::getOverlappingPairArray",
+                    "btSortedOverlappingPairCache::getOverlappingPairArray",
+                    "btSphereSphereCollisionAlgorithm::getAllContactManifolds",
+                    "gContactDestroyedCallback",
+                    "gContactEndedCallback",
+                    "gContactProcessedCallback",
+                    "gContactStartedCallback"
+                ).skip())
             ;
     }
 }

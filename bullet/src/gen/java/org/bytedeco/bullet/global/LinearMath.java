@@ -728,16 +728,16 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../LinearMath/btAlignedObjectArray_btScalar.java
 
 
-// Targeting ../LinearMath/btAlignedObjectArray_btVector3.java
-
-
-// Targeting ../LinearMath/btAlignedObjectArray_btVector4.java
-
-
 // Targeting ../LinearMath/btAlignedObjectArray_btMatrix3x3.java
 
 
 // Targeting ../LinearMath/btAlignedObjectArray_btQuaternion.java
+
+
+// Targeting ../LinearMath/btAlignedObjectArray_btVector3.java
+
+
+// Targeting ../LinearMath/btAlignedObjectArray_btVector4.java
 
 
 
