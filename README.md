@@ -233,6 +233,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/
    * Windows (Win32)  https://developer.microsoft.com/en-us/windows/
+ * Bullet Physics SDK 3.21 https://pybullet.org/wordpress
 
 Once everything installed and configured, simply execute
 ```bash
