@@ -105,6 +105,7 @@ public class BulletCollision implements InfoMapper {
 
             .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>").pointerTypes("btAlignedObjectArray_btBvhSubtreeInfo"))
             .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btAlignedObjectArray_btCollisionObjectPointer"))
+            .put(new Info("btAlignedObjectArray<btIndexedMesh>").pointerTypes("btAlignedObjectArray_btIndexedMesh"))
             .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btAlignedObjectArray_btPersistentManifoldPointer"))
             .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btAlignedObjectArray_btQuantizedBvhNode"))
 
@@ -119,6 +120,10 @@ public class BulletCollision implements InfoMapper {
                     "btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch",
                     "btAlignedObjectArray<btBvhSubtreeInfo>::findLinearSearch2",
                     "btAlignedObjectArray<btBvhSubtreeInfo>::remove",
+                    "btAlignedObjectArray<btIndexedMesh>::findBinarySearch",
+                    "btAlignedObjectArray<btIndexedMesh>::findLinearSearch",
+                    "btAlignedObjectArray<btIndexedMesh>::findLinearSearch2",
+                    "btAlignedObjectArray<btIndexedMesh>::remove",
                     "btAlignedObjectArray<btQuantizedBvhNode>::findBinarySearch",
                     "btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch",
                     "btAlignedObjectArray<btQuantizedBvhNode>::findLinearSearch2",

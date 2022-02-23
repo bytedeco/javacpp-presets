@@ -73,7 +73,7 @@ public class btTriangleIndexVertexArray extends btStridingMeshInterface {
 	 *  each subpart has a continuous array of vertices and indices */
 	public native int getNumSubParts();
 
-	public native @Cast("IndexedMeshArray*") @ByRef btAlignedObjectArray_btBvhSubtreeInfo getIndexedMeshArray();
+	public native @Cast("IndexedMeshArray*") @ByRef btAlignedObjectArray_btIndexedMesh getIndexedMeshArray();
 
 	public native void preallocateVertices(int numverts);
 	public native void preallocateIndices(int numindices);

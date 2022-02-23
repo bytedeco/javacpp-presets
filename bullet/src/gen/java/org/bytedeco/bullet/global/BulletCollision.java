@@ -61,6 +61,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../BulletCollision/btAlignedObjectArray_btCollisionObjectPointer.java
 
 
+// Targeting ../BulletCollision/btAlignedObjectArray_btIndexedMesh.java
+
+
 // Targeting ../BulletCollision/btAlignedObjectArray_btPersistentManifoldPointer.java
 
 
