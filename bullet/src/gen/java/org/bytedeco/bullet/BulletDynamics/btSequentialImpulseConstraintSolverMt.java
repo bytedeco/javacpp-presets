@@ -140,12 +140,12 @@ public class btSequentialImpulseConstraintSolverMt extends btSequentialImpulseCo
 	public btSequentialImpulseConstraintSolverMt() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @Cast("btScalar") float resolveMultipleJointConstraints(@Const @ByRef btAlignedObjectArray_int consIndices, int batchBegin, int batchEnd, int iteration);
-	public native @Cast("btScalar") float resolveMultipleContactConstraints(@Const @ByRef btAlignedObjectArray_int consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactSplitPenetrationImpulseConstraints(@Const @ByRef btAlignedObjectArray_int consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactFrictionConstraints(@Const @ByRef btAlignedObjectArray_int consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactRollingFrictionConstraints(@Const @ByRef btAlignedObjectArray_int consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactConstraintsInterleaved(@Const @ByRef btAlignedObjectArray_int contactIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") float resolveMultipleJointConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd, int iteration);
+	public native @Cast("btScalar") float resolveMultipleContactConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") float resolveMultipleContactSplitPenetrationImpulseConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") float resolveMultipleContactFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") float resolveMultipleContactRollingFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") float resolveMultipleContactConstraintsInterleaved(@Const @ByRef btIntArray contactIndices, int batchBegin, int batchEnd);
 
 	public native void internalCollectContactManifoldCachedInfo(btContactManifoldCachedInfo cachedInfoArray, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Const @ByRef btContactSolverInfo infoGlobal);
 	public native void internalCollectContactManifoldCachedInfo(btContactManifoldCachedInfo cachedInfoArray, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @Const @ByRef btContactSolverInfo infoGlobal);

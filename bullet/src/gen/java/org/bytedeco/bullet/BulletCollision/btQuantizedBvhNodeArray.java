@@ -12,35 +12,35 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Name("btAlignedObjectArray<btCollisionObject*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class btAlignedObjectArray_btCollisionObjectPointer extends Pointer {
+@Name("btAlignedObjectArray<btQuantizedBvhNode>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+public class btQuantizedBvhNodeArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btCollisionObjectPointer(Pointer p) { super(p); }
+    public btQuantizedBvhNodeArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btCollisionObjectPointer(long size) { super((Pointer)null); allocateArray(size); }
+    public btQuantizedBvhNodeArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btCollisionObjectPointer position(long position) {
-        return (btAlignedObjectArray_btCollisionObjectPointer)super.position(position);
+    @Override public btQuantizedBvhNodeArray position(long position) {
+        return (btQuantizedBvhNodeArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btCollisionObjectPointer getPointer(long i) {
-        return new btAlignedObjectArray_btCollisionObjectPointer((Pointer)this).offsetAddress(i);
+    @Override public btQuantizedBvhNodeArray getPointer(long i) {
+        return new btQuantizedBvhNodeArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btCollisionObjectPointer put(@Const @ByRef btAlignedObjectArray_btCollisionObjectPointer other);
-	public btAlignedObjectArray_btCollisionObjectPointer() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btQuantizedBvhNodeArray put(@Const @ByRef btQuantizedBvhNodeArray other);
+	public btQuantizedBvhNodeArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btCollisionObjectPointer(@Const @ByRef btAlignedObjectArray_btCollisionObjectPointer otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btCollisionObjectPointer otherArray);
+	public btQuantizedBvhNodeArray(@Const @ByRef btQuantizedBvhNodeArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btQuantizedBvhNodeArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByPtrRef btCollisionObject at(int n);
+	public native @ByRef btQuantizedBvhNode at(int n);
 
-	public native @ByPtrRef @Name("operator []") btCollisionObject get(int n);
+	public native @ByRef @Name("operator []") btQuantizedBvhNode get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -51,14 +51,14 @@ public class btAlignedObjectArray_btCollisionObjectPointer extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @ByPtrRef btCollisionObject fillData/*=btCollisionObject*()*/);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btQuantizedBvhNode()") btQuantizedBvhNode fillData);
 	public native void resize(int newsize);
-	public native @ByPtrRef btCollisionObject expandNonInitializing();
+	public native @ByRef btQuantizedBvhNode expandNonInitializing();
 
-	public native @ByPtrRef btCollisionObject expand(@ByPtrRef btCollisionObject fillValue/*=btCollisionObject*()*/);
-	public native @ByPtrRef btCollisionObject expand();
+	public native @ByRef btQuantizedBvhNode expand(@Const @ByRef(nullValue = "btQuantizedBvhNode()") btQuantizedBvhNode fillValue);
+	public native @ByRef btQuantizedBvhNode expand();
 
-	public native void push_back(@ByPtrRef btCollisionObject _Val);
+	public native void push_back(@Const @ByRef btQuantizedBvhNode _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -70,19 +70,19 @@ public class btAlignedObjectArray_btCollisionObjectPointer extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@ByPtrRef btCollisionObject key);
+	
 
-	public native int findLinearSearch(@ByPtrRef btCollisionObject key);
+	
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@ByPtrRef btCollisionObject key);
+	
 
 	public native void removeAtIndex(int index);
-	public native void remove(@ByPtrRef btCollisionObject key);
+	
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btCollisionObjectPointer otherArray);
+	public native void copyFromArray(@Const @ByRef btQuantizedBvhNodeArray otherArray);
 }

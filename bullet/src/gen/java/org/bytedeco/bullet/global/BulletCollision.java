@@ -55,19 +55,19 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 // #ifdef BT_USE_PLACEMENT_NEW
 // #include <new>
-// Targeting ../BulletCollision/btAlignedObjectArray_btBvhSubtreeInfo.java
+// Targeting ../BulletCollision/btBvhSubtreeInfoArray.java
 
 
-// Targeting ../BulletCollision/btAlignedObjectArray_btCollisionObjectPointer.java
+// Targeting ../BulletCollision/btCollisionObjectArray.java
 
 
-// Targeting ../BulletCollision/btAlignedObjectArray_btIndexedMesh.java
+// Targeting ../BulletCollision/btIndexedMeshArray.java
 
 
-// Targeting ../BulletCollision/btAlignedObjectArray_btPersistentManifoldPointer.java
+// Targeting ../BulletCollision/btPersistentManifoldArray.java
 
 
-// Targeting ../BulletCollision/btAlignedObjectArray_btQuantizedBvhNode.java
+// Targeting ../BulletCollision/btQuantizedBvhNodeArray.java
 
 
 

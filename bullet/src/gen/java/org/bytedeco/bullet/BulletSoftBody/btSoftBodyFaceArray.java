@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody::SContact>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_SContact extends Pointer {
+@Name("btAlignedObjectArray<btSoftBody::Face>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyFaceArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_SContact(Pointer p) { super(p); }
+    public btSoftBodyFaceArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_SContact(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyFaceArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_SContact position(long position) {
-        return (btAlignedObjectArray_btSoftBody_SContact)super.position(position);
+    @Override public btSoftBodyFaceArray position(long position) {
+        return (btSoftBodyFaceArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_SContact getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_SContact((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyFaceArray getPointer(long i) {
+        return new btSoftBodyFaceArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_SContact put(@Const @ByRef btAlignedObjectArray_btSoftBody_SContact other);
-	public btAlignedObjectArray_btSoftBody_SContact() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyFaceArray put(@Const @ByRef btSoftBodyFaceArray other);
+	public btSoftBodyFaceArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_SContact(@Const @ByRef btAlignedObjectArray_btSoftBody_SContact otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_SContact otherArray);
+	public btSoftBodyFaceArray(@Const @ByRef btSoftBodyFaceArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyFaceArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btSoftBody.SContact at(int n);
+	public native @ByRef btSoftBody.Face at(int n);
 
-	public native @ByRef @Name("operator []") btSoftBody.SContact get(int n);
+	public native @ByRef @Name("operator []") btSoftBody.Face get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btAlignedObjectArray_btSoftBody_SContact extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::SContact()") btSoftBody.SContact fillData);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::Face()") btSoftBody.Face fillData);
 	public native void resize(int newsize);
-	public native @ByRef btSoftBody.SContact expandNonInitializing();
+	public native @ByRef btSoftBody.Face expandNonInitializing();
 
-	public native @ByRef btSoftBody.SContact expand(@Const @ByRef(nullValue = "btSoftBody::SContact()") btSoftBody.SContact fillValue);
-	public native @ByRef btSoftBody.SContact expand();
+	public native @ByRef btSoftBody.Face expand(@Const @ByRef(nullValue = "btSoftBody::Face()") btSoftBody.Face fillValue);
+	public native @ByRef btSoftBody.Face expand();
 
-	public native void push_back(@Const @ByRef btSoftBody.SContact _Val);
+	public native void push_back(@Const @ByRef btSoftBody.Face _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -88,5 +88,5 @@ public class btAlignedObjectArray_btSoftBody_SContact extends Pointer {
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_SContact otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyFaceArray otherArray);
 }

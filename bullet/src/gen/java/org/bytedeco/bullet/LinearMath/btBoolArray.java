@@ -9,36 +9,40 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
+  //for placement new
+// #endif          //BT_USE_PLACEMENT_NEW
 
-@Name("btAlignedObjectArray<btQuaternion>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
-public class btAlignedObjectArray_btQuaternion extends Pointer {
+/**The btAlignedObjectArray template class uses a subset of the stl::vector interface for its methods
+ * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
+@Name("btAlignedObjectArray<bool>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
+public class btBoolArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btQuaternion(Pointer p) { super(p); }
+    public btBoolArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btQuaternion(long size) { super((Pointer)null); allocateArray(size); }
+    public btBoolArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btQuaternion position(long position) {
-        return (btAlignedObjectArray_btQuaternion)super.position(position);
+    @Override public btBoolArray position(long position) {
+        return (btBoolArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btQuaternion getPointer(long i) {
-        return new btAlignedObjectArray_btQuaternion((Pointer)this).offsetAddress(i);
+    @Override public btBoolArray getPointer(long i) {
+        return new btBoolArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btQuaternion put(@Const @ByRef btAlignedObjectArray_btQuaternion other);
-	public btAlignedObjectArray_btQuaternion() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btBoolArray put(@Const @ByRef btBoolArray other);
+	public btBoolArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btQuaternion(@Const @ByRef btAlignedObjectArray_btQuaternion otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btQuaternion otherArray);
+	public btBoolArray(@Const @ByRef btBoolArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btBoolArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btQuaternion at(int n);
+	public native @Cast("bool*") @ByRef BoolPointer at(int n);
 
-	public native @ByRef @Name("operator []") btQuaternion get(int n);
+	public native @Cast("bool*") @ByRef @Name("operator []") BoolPointer get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -49,14 +53,14 @@ public class btAlignedObjectArray_btQuaternion extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btQuaternion()") btQuaternion fillData);
+	public native void resize(int newsize, @Cast("const bool") boolean fillData/*=bool()*/);
 	public native void resize(int newsize);
-	public native @ByRef btQuaternion expandNonInitializing();
+	public native @Cast("bool*") @ByRef BoolPointer expandNonInitializing();
 
-	public native @ByRef btQuaternion expand(@Const @ByRef(nullValue = "btQuaternion()") btQuaternion fillValue);
-	public native @ByRef btQuaternion expand();
+	public native @Cast("bool*") @ByRef BoolPointer expand(@Cast("const bool") boolean fillValue/*=bool()*/);
+	public native @Cast("bool*") @ByRef BoolPointer expand();
 
-	public native void push_back(@Const @ByRef btQuaternion _Val);
+	public native void push_back(@Cast("const bool") boolean _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -68,19 +72,19 @@ public class btAlignedObjectArray_btQuaternion extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@Const @ByRef btQuaternion key);
+	public native int findBinarySearch(@Cast("const bool") boolean key);
 
-	public native int findLinearSearch(@Const @ByRef btQuaternion key);
+	public native int findLinearSearch(@Cast("const bool") boolean key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@Const @ByRef btQuaternion key);
+	public native int findLinearSearch2(@Cast("const bool") boolean key);
 
 	public native void removeAtIndex(int index);
-	public native void remove(@Const @ByRef btQuaternion key);
+	public native void remove(@Cast("const bool") boolean key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btQuaternion otherArray);
+	public native void copyFromArray(@Const @ByRef btBoolArray otherArray);
 }

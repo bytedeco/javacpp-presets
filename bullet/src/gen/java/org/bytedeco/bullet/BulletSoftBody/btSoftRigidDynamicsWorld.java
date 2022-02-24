@@ -45,7 +45,7 @@ public class btSoftRigidDynamicsWorld extends btDiscreteDynamicsWorld {
 
 	public native @Cast("btDynamicsWorldType") int getWorldType();
 
-	public native @Cast("btSoftBodyArray*") @ByRef btAlignedObjectArray_btSoftBodyPointer getSoftBodyArray();
+	public native @ByRef btSoftBodyArray getSoftBodyArray();
 
 	public native void rayTest(@Const @ByRef btVector3 rayFromWorld, @Const @ByRef btVector3 rayToWorld, @ByRef RayResultCallback resultCallback);
 

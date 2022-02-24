@@ -117,5 +117,5 @@ public class btDiscreteDynamicsWorld extends btDynamicsWorld {
 	public native void setLatencyMotionStateInterpolation(@Cast("bool") boolean latencyInterpolation);
 	public native @Cast("bool") boolean getLatencyMotionStateInterpolation();
     
-    public native @ByRef btAlignedObjectArray_btRigidBodyPointer getNonStaticRigidBodies();
+    public native @ByRef btRigidBodyArray getNonStaticRigidBodies();
 }

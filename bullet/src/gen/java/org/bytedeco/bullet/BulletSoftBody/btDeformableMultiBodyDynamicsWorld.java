@@ -44,7 +44,7 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 	public native void addSoftBody(btSoftBody body, int collisionFilterGroup/*=btBroadphaseProxy::DefaultFilter*/, int collisionFilterMask/*=btBroadphaseProxy::AllFilter*/);
 	public native void addSoftBody(btSoftBody body);
 
-	public native @Cast("btSoftBodyArray*") @ByRef btAlignedObjectArray_btSoftBodyPointer getSoftBodyArray();
+	public native @ByRef btSoftBodyArray getSoftBodyArray();
 
 	public native @ByRef btSoftBodyWorldInfo getWorldInfo();
 

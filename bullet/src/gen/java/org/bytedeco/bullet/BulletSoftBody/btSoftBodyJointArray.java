@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody::RContact>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_RContact extends Pointer {
+@Name("btAlignedObjectArray<btSoftBody::Joint*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyJointArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_RContact(Pointer p) { super(p); }
+    public btSoftBodyJointArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_RContact(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyJointArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_RContact position(long position) {
-        return (btAlignedObjectArray_btSoftBody_RContact)super.position(position);
+    @Override public btSoftBodyJointArray position(long position) {
+        return (btSoftBodyJointArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_RContact getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_RContact((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyJointArray getPointer(long i) {
+        return new btSoftBodyJointArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_RContact put(@Const @ByRef btAlignedObjectArray_btSoftBody_RContact other);
-	public btAlignedObjectArray_btSoftBody_RContact() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyJointArray put(@Const @ByRef btSoftBodyJointArray other);
+	public btSoftBodyJointArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_RContact(@Const @ByRef btAlignedObjectArray_btSoftBody_RContact otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_RContact otherArray);
+	public btSoftBodyJointArray(@Const @ByRef btSoftBodyJointArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyJointArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btSoftBody.RContact at(int n);
+	public native @ByPtrRef btSoftBody.Joint at(int n);
 
-	public native @ByRef @Name("operator []") btSoftBody.RContact get(int n);
+	public native @ByPtrRef @Name("operator []") btSoftBody.Joint get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btAlignedObjectArray_btSoftBody_RContact extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::RContact()") btSoftBody.RContact fillData);
+	public native void resize(int newsize, @ByPtrRef btSoftBody.Joint fillData/*=btSoftBody::Joint*()*/);
 	public native void resize(int newsize);
-	public native @ByRef btSoftBody.RContact expandNonInitializing();
+	public native @ByPtrRef btSoftBody.Joint expandNonInitializing();
 
-	public native @ByRef btSoftBody.RContact expand(@Const @ByRef(nullValue = "btSoftBody::RContact()") btSoftBody.RContact fillValue);
-	public native @ByRef btSoftBody.RContact expand();
+	public native @ByPtrRef btSoftBody.Joint expand(@ByPtrRef btSoftBody.Joint fillValue/*=btSoftBody::Joint*()*/);
+	public native @ByPtrRef btSoftBody.Joint expand();
 
-	public native void push_back(@Const @ByRef btSoftBody.RContact _Val);
+	public native void push_back(@ByPtrRef btSoftBody.Joint _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -74,19 +74,19 @@ public class btAlignedObjectArray_btSoftBody_RContact extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	
+	public native int findBinarySearch(@ByPtrRef btSoftBody.Joint key);
 
-	
+	public native int findLinearSearch(@ByPtrRef btSoftBody.Joint key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	
+	public native int findLinearSearch2(@ByPtrRef btSoftBody.Joint key);
 
 	public native void removeAtIndex(int index);
-	
+	public native void remove(@ByPtrRef btSoftBody.Joint key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_RContact otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyJointArray otherArray);
 }

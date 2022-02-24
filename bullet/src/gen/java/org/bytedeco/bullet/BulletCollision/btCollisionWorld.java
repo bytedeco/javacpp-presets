@@ -143,9 +143,9 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3 m_rayFromWorld(); public native AllHitsRayResultCallback m_rayFromWorld(btVector3 setter);  //used to calculate hitPointWorld from hitFraction
 		public native @ByRef btVector3 m_rayToWorld(); public native AllHitsRayResultCallback m_rayToWorld(btVector3 setter);
 
-		public native @ByRef btAlignedObjectArray_btVector3 m_hitNormalWorld(); public native AllHitsRayResultCallback m_hitNormalWorld(btAlignedObjectArray_btVector3 setter);
-		public native @ByRef btAlignedObjectArray_btVector3 m_hitPointWorld(); public native AllHitsRayResultCallback m_hitPointWorld(btAlignedObjectArray_btVector3 setter);
-		public native @ByRef btAlignedObjectArray_btScalar m_hitFractions(); public native AllHitsRayResultCallback m_hitFractions(btAlignedObjectArray_btScalar setter);
+		public native @ByRef btVector3Array m_hitNormalWorld(); public native AllHitsRayResultCallback m_hitNormalWorld(btVector3Array setter);
+		public native @ByRef btVector3Array m_hitPointWorld(); public native AllHitsRayResultCallback m_hitPointWorld(btVector3Array setter);
+		public native @ByRef btScalarArray m_hitFractions(); public native AllHitsRayResultCallback m_hitFractions(btScalarArray setter);
 
 		public native @Cast("btScalar") float addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
@@ -271,7 +271,7 @@ public class btCollisionWorld extends Pointer {
 
 	public native void refreshBroadphaseProxy(btCollisionObject collisionObject);
 
-	public native @Cast("btCollisionObjectArray*") @ByRef btAlignedObjectArray_btCollisionObjectPointer getCollisionObjectArray();
+	public native @ByRef btCollisionObjectArray getCollisionObjectArray();
 
 	public native void removeCollisionObject(btCollisionObject collisionObject);
 

@@ -306,9 +306,9 @@ public class btMultiBody extends Pointer {
 	//
 
 	public native void computeAccelerationsArticulatedBodyAlgorithmMultiDof(@Cast("btScalar") float dt,
-																  @ByRef btAlignedObjectArray_btScalar scratch_r,
-																  @ByRef btAlignedObjectArray_btVector3 scratch_v,
-																  @ByRef btAlignedObjectArray_btMatrix3x3 scratch_m,
+																  @ByRef btScalarArray scratch_r,
+																  @ByRef btVector3Array scratch_v,
+																  @ByRef btMatrix3x3Array scratch_m,
 																  @Cast("bool") boolean isConstraintPass,
 	                                                              @Cast("bool") boolean jointFeedbackInWorldSpace,
 	                                                              @Cast("bool") boolean jointFeedbackInJointFrame
@@ -331,14 +331,14 @@ public class btMultiBody extends Pointer {
 	// (existing contents of output array are replaced)
 	// calcAccelerationDeltasMultiDof must have been called first.
 	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") FloatPointer force, @Cast("btScalar*") FloatPointer output,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v);
 	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") FloatBuffer force, @Cast("btScalar*") FloatBuffer output,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v);
 	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") float[] force, @Cast("btScalar*") float[] output,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v);
 
 	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") FloatPointer delta_vee, @Cast("btScalar") float multiplier);
 	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") FloatBuffer delta_vee, @Cast("btScalar") float multiplier);
@@ -375,23 +375,23 @@ public class btMultiBody extends Pointer {
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
 										 @Cast("btScalar*") FloatPointer jac,
-										 @ByRef btAlignedObjectArray_btScalar scratch_r,
-										 @ByRef btAlignedObjectArray_btVector3 scratch_v,
-										 @ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+										 @ByRef btScalarArray scratch_r,
+										 @ByRef btVector3Array scratch_v,
+										 @ByRef btMatrix3x3Array scratch_m);
 	public native void fillContactJacobianMultiDof(int link,
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
 										 @Cast("btScalar*") FloatBuffer jac,
-										 @ByRef btAlignedObjectArray_btScalar scratch_r,
-										 @ByRef btAlignedObjectArray_btVector3 scratch_v,
-										 @ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+										 @ByRef btScalarArray scratch_r,
+										 @ByRef btVector3Array scratch_v,
+										 @ByRef btMatrix3x3Array scratch_m);
 	public native void fillContactJacobianMultiDof(int link,
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
 										 @Cast("btScalar*") float[] jac,
-										 @ByRef btAlignedObjectArray_btScalar scratch_r,
-										 @ByRef btAlignedObjectArray_btVector3 scratch_v,
-										 @ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+										 @ByRef btScalarArray scratch_r,
+										 @ByRef btVector3Array scratch_v,
+										 @ByRef btMatrix3x3Array scratch_m);
 
 	//a more general version of fillContactJacobianMultiDof which does not assume..
 	//.. that the constraint in question is contact or, to be more precise, constrains linear velocity only
@@ -400,25 +400,25 @@ public class btMultiBody extends Pointer {
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
 											@Cast("btScalar*") FloatPointer jac,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v,
-											@ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v,
+											@ByRef btMatrix3x3Array scratch_m);
 	public native void fillConstraintJacobianMultiDof(int link,
 											@Const @ByRef btVector3 contact_point,
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
 											@Cast("btScalar*") FloatBuffer jac,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v,
-											@ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v,
+											@ByRef btMatrix3x3Array scratch_m);
 	public native void fillConstraintJacobianMultiDof(int link,
 											@Const @ByRef btVector3 contact_point,
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
 											@Cast("btScalar*") float[] jac,
-											@ByRef btAlignedObjectArray_btScalar scratch_r,
-											@ByRef btAlignedObjectArray_btVector3 scratch_v,
-											@ByRef btAlignedObjectArray_btMatrix3x3 scratch_m);
+											@ByRef btScalarArray scratch_r,
+											@ByRef btVector3Array scratch_v,
+											@ByRef btMatrix3x3Array scratch_m);
 
 	//
 	// sleeping
@@ -478,12 +478,12 @@ public class btMultiBody extends Pointer {
 
 	//internalNeedsJointFeedback is for internal use only
 	public native @Cast("bool") boolean internalNeedsJointFeedback();
-	public native void forwardKinematics(@ByRef btAlignedObjectArray_btQuaternion world_to_local, @ByRef btAlignedObjectArray_btVector3 local_origin);
+	public native void forwardKinematics(@ByRef btQuaternionArray world_to_local, @ByRef btVector3Array local_origin);
 
 	public native void compTreeLinkVelocities(btVector3 omega, btVector3 vel);
 
-	public native void updateCollisionObjectWorldTransforms(@ByRef btAlignedObjectArray_btQuaternion world_to_local, @ByRef btAlignedObjectArray_btVector3 local_origin);
-    public native void updateCollisionObjectInterpolationWorldTransforms(@ByRef btAlignedObjectArray_btQuaternion world_to_local, @ByRef btAlignedObjectArray_btVector3 local_origin);
+	public native void updateCollisionObjectWorldTransforms(@ByRef btQuaternionArray world_to_local, @ByRef btVector3Array local_origin);
+    public native void updateCollisionObjectInterpolationWorldTransforms(@ByRef btQuaternionArray world_to_local, @ByRef btVector3Array local_origin);
 
 	public native int calculateSerializeBufferSize();
 

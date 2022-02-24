@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody::Link>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_Link extends Pointer {
+@Name("btAlignedObjectArray<btSoftBody::Node>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyNodeArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_Link(Pointer p) { super(p); }
+    public btSoftBodyNodeArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_Link(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyNodeArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_Link position(long position) {
-        return (btAlignedObjectArray_btSoftBody_Link)super.position(position);
+    @Override public btSoftBodyNodeArray position(long position) {
+        return (btSoftBodyNodeArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_Link getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_Link((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyNodeArray getPointer(long i) {
+        return new btSoftBodyNodeArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_Link put(@Const @ByRef btAlignedObjectArray_btSoftBody_Link other);
-	public btAlignedObjectArray_btSoftBody_Link() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyNodeArray put(@Const @ByRef btSoftBodyNodeArray other);
+	public btSoftBodyNodeArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_Link(@Const @ByRef btAlignedObjectArray_btSoftBody_Link otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_Link otherArray);
+	public btSoftBodyNodeArray(@Const @ByRef btSoftBodyNodeArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyNodeArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btSoftBody.Link at(int n);
+	public native @ByRef btSoftBody.Node at(int n);
 
-	public native @ByRef @Name("operator []") btSoftBody.Link get(int n);
+	public native @ByRef @Name("operator []") btSoftBody.Node get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btAlignedObjectArray_btSoftBody_Link extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::Link()") btSoftBody.Link fillData);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::Node()") btSoftBody.Node fillData);
 	public native void resize(int newsize);
-	public native @ByRef btSoftBody.Link expandNonInitializing();
+	public native @ByRef btSoftBody.Node expandNonInitializing();
 
-	public native @ByRef btSoftBody.Link expand(@Const @ByRef(nullValue = "btSoftBody::Link()") btSoftBody.Link fillValue);
-	public native @ByRef btSoftBody.Link expand();
+	public native @ByRef btSoftBody.Node expand(@Const @ByRef(nullValue = "btSoftBody::Node()") btSoftBody.Node fillValue);
+	public native @ByRef btSoftBody.Node expand();
 
-	public native void push_back(@Const @ByRef btSoftBody.Link _Val);
+	public native void push_back(@Const @ByRef btSoftBody.Node _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -88,5 +88,5 @@ public class btAlignedObjectArray_btSoftBody_Link extends Pointer {
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_Link otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyNodeArray otherArray);
 }

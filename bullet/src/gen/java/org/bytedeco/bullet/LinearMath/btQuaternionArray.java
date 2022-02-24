@@ -10,35 +10,35 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
 
-@Name("btAlignedObjectArray<int>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
-public class btAlignedObjectArray_int extends Pointer {
+@Name("btAlignedObjectArray<btQuaternion>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
+public class btQuaternionArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_int(Pointer p) { super(p); }
+    public btQuaternionArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_int(long size) { super((Pointer)null); allocateArray(size); }
+    public btQuaternionArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_int position(long position) {
-        return (btAlignedObjectArray_int)super.position(position);
+    @Override public btQuaternionArray position(long position) {
+        return (btQuaternionArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_int getPointer(long i) {
-        return new btAlignedObjectArray_int((Pointer)this).offsetAddress(i);
+    @Override public btQuaternionArray getPointer(long i) {
+        return new btQuaternionArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_int put(@Const @ByRef btAlignedObjectArray_int other);
-	public btAlignedObjectArray_int() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btQuaternionArray put(@Const @ByRef btQuaternionArray other);
+	public btQuaternionArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_int(@Const @ByRef btAlignedObjectArray_int otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_int otherArray);
+	public btQuaternionArray(@Const @ByRef btQuaternionArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btQuaternionArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef IntPointer at(int n);
+	public native @ByRef btQuaternion at(int n);
 
-	public native @ByRef @Name("operator []") IntPointer get(int n);
+	public native @ByRef @Name("operator []") btQuaternion get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -49,14 +49,14 @@ public class btAlignedObjectArray_int extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, int fillData/*=int()*/);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btQuaternion()") btQuaternion fillData);
 	public native void resize(int newsize);
-	public native @ByRef IntPointer expandNonInitializing();
+	public native @ByRef btQuaternion expandNonInitializing();
 
-	public native @ByRef IntPointer expand(int fillValue/*=int()*/);
-	public native @ByRef IntPointer expand();
+	public native @ByRef btQuaternion expand(@Const @ByRef(nullValue = "btQuaternion()") btQuaternion fillValue);
+	public native @ByRef btQuaternion expand();
 
-	public native void push_back(int _Val);
+	public native void push_back(@Const @ByRef btQuaternion _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -68,19 +68,19 @@ public class btAlignedObjectArray_int extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(int key);
+	public native int findBinarySearch(@Const @ByRef btQuaternion key);
 
-	public native int findLinearSearch(int key);
+	public native int findLinearSearch(@Const @ByRef btQuaternion key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(int key);
+	public native int findLinearSearch2(@Const @ByRef btQuaternion key);
 
 	public native void removeAtIndex(int index);
-	public native void remove(int key);
+	public native void remove(@Const @ByRef btQuaternion key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_int otherArray);
+	public native void copyFromArray(@Const @ByRef btQuaternionArray otherArray);
 }

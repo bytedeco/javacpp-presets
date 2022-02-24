@@ -729,8 +729,8 @@ public class btSoftBody extends btCollisionObject {
 		public native @Cast("bool") boolean m_bvolume(); public native Pose m_bvolume(boolean setter);       // Is valid
 		public native @Cast("bool") boolean m_bframe(); public native Pose m_bframe(boolean setter);        // Is frame
 		public native @Cast("btScalar") float m_volume(); public native Pose m_volume(float setter);    // Rest volume
-		public native @ByRef @Cast("btSoftBody::tVector3Array*") btAlignedObjectArray_btVector3 m_pos(); public native Pose m_pos(btAlignedObjectArray_btVector3 setter);  // Reference positions
-		public native @ByRef @Cast("btSoftBody::tScalarArray*") btAlignedObjectArray_btScalar m_wgh(); public native Pose m_wgh(btAlignedObjectArray_btScalar setter);   // Weights
+		public native @ByRef @Cast("btSoftBody::tVector3Array*") btVector3Array m_pos(); public native Pose m_pos(btVector3Array setter);  // Reference positions
+		public native @ByRef @Cast("btSoftBody::tScalarArray*") btScalarArray m_wgh(); public native Pose m_wgh(btScalarArray setter);   // Weights
 		public native @ByRef btVector3 m_com(); public native Pose m_com(btVector3 setter);      // COM
 		public native @ByRef btMatrix3x3 m_rot(); public native Pose m_rot(btMatrix3x3 setter);    // Rotation
 		public native @ByRef btMatrix3x3 m_scl(); public native Pose m_scl(btMatrix3x3 setter);    // Scale
@@ -751,9 +751,9 @@ public class btSoftBody extends btCollisionObject {
 	        return new Cluster((Pointer)this).offsetAddress(i);
 	    }
 	
-		public native @ByRef @Cast("btSoftBody::tScalarArray*") btAlignedObjectArray_btScalar m_masses(); public native Cluster m_masses(btAlignedObjectArray_btScalar setter);
+		public native @ByRef @Cast("btSoftBody::tScalarArray*") btScalarArray m_masses(); public native Cluster m_masses(btScalarArray setter);
 		
-		public native @ByRef @Cast("btSoftBody::tVector3Array*") btAlignedObjectArray_btVector3 m_framerefs(); public native Cluster m_framerefs(btAlignedObjectArray_btVector3 setter);
+		public native @ByRef @Cast("btSoftBody::tVector3Array*") btVector3Array m_framerefs(); public native Cluster m_framerefs(btVector3Array setter);
 		public native @ByRef btTransform m_framexform(); public native Cluster m_framexform(btTransform setter);
 		public native @Cast("btScalar") float m_idmass(); public native Cluster m_idmass(float setter);
 		public native @Cast("btScalar") float m_imass(); public native Cluster m_imass(float setter);
@@ -1130,24 +1130,24 @@ public class btSoftBody extends btCollisionObject {
 	public native @ByRef Pose m_pose(); public native btSoftBody m_pose(Pose setter);                       // Pose
 	public native Pointer m_tag(); public native btSoftBody m_tag(Pointer setter);                       // User data
 	public native btSoftBodyWorldInfo m_worldInfo(); public native btSoftBody m_worldInfo(btSoftBodyWorldInfo setter);  // World info
-	public native @ByRef @Cast("btSoftBody::tNoteArray*") btAlignedObjectArray_btSoftBody_Note m_notes(); public native btSoftBody m_notes(btAlignedObjectArray_btSoftBody_Note setter);                // Notes
-	public native @ByRef @Cast("btSoftBody::tNodeArray*") btAlignedObjectArray_btSoftBody_Node m_nodes(); public native btSoftBody m_nodes(btAlignedObjectArray_btSoftBody_Node setter);                // Nodes
-	public native @ByRef @Cast("btSoftBody::tRenderNodeArray*") btAlignedObjectArray_btSoftBody_RenderNode m_renderNodes(); public native btSoftBody m_renderNodes(btAlignedObjectArray_btSoftBody_RenderNode setter);    // Render Nodes
-	public native @ByRef @Cast("btSoftBody::tLinkArray*") btAlignedObjectArray_btSoftBody_Link m_links(); public native btSoftBody m_links(btAlignedObjectArray_btSoftBody_Link setter);                // Links
-	public native @ByRef @Cast("btSoftBody::tFaceArray*") btAlignedObjectArray_btSoftBody_Face m_faces(); public native btSoftBody m_faces(btAlignedObjectArray_btSoftBody_Face setter);                // Faces
-	public native @ByRef @Cast("btSoftBody::tRenderFaceArray*") btAlignedObjectArray_btSoftBody_RenderFace m_renderFaces(); public native btSoftBody m_renderFaces(btAlignedObjectArray_btSoftBody_RenderFace setter);          // Faces
-	public native @ByRef @Cast("btSoftBody::tTetraArray*") btAlignedObjectArray_btSoftBody_Tetra m_tetras(); public native btSoftBody m_tetras(btAlignedObjectArray_btSoftBody_Tetra setter);              // Tetras
+	public native @ByRef @Cast("btSoftBody::tNoteArray*") btSoftBodyNoteArray m_notes(); public native btSoftBody m_notes(btSoftBodyNoteArray setter);                // Notes
+	public native @ByRef @Cast("btSoftBody::tNodeArray*") btSoftBodyNodeArray m_nodes(); public native btSoftBody m_nodes(btSoftBodyNodeArray setter);                // Nodes
+	public native @ByRef @Cast("btSoftBody::tRenderNodeArray*") btSoftBodyRenderNodeArray m_renderNodes(); public native btSoftBody m_renderNodes(btSoftBodyRenderNodeArray setter);    // Render Nodes
+	public native @ByRef @Cast("btSoftBody::tLinkArray*") btSoftBodyLinkArray m_links(); public native btSoftBody m_links(btSoftBodyLinkArray setter);                // Links
+	public native @ByRef @Cast("btSoftBody::tFaceArray*") btSoftBodyFaceArray m_faces(); public native btSoftBody m_faces(btSoftBodyFaceArray setter);                // Faces
+	public native @ByRef @Cast("btSoftBody::tRenderFaceArray*") btSoftBodyRenderFaceArray m_renderFaces(); public native btSoftBody m_renderFaces(btSoftBodyRenderFaceArray setter);          // Faces
+	public native @ByRef @Cast("btSoftBody::tTetraArray*") btSoftBodyTetraArray m_tetras(); public native btSoftBody m_tetras(btSoftBodyTetraArray setter);              // Tetras
 	
 	
-	public native @ByRef @Cast("btSoftBody::tAnchorArray*") btAlignedObjectArray_btSoftBody_Anchor m_anchors(); public native btSoftBody m_anchors(btAlignedObjectArray_btSoftBody_Anchor setter);  // Anchors
+	public native @ByRef @Cast("btSoftBody::tAnchorArray*") btSoftBodyAnchorArray m_anchors(); public native btSoftBody m_anchors(btSoftBodyAnchorArray setter);  // Anchors
 	
-	public native @ByRef @Cast("btSoftBody::tRContactArray*") btAlignedObjectArray_btSoftBody_RContact m_rcontacts(); public native btSoftBody m_rcontacts(btAlignedObjectArray_btSoftBody_RContact setter);  // Rigid contacts
+	public native @ByRef @Cast("btSoftBody::tRContactArray*") btSoftBodyRContactArray m_rcontacts(); public native btSoftBody m_rcontacts(btSoftBodyRContactArray setter);  // Rigid contacts
 	
 	
 	
-	public native @ByRef @Cast("btSoftBody::tSContactArray*") btAlignedObjectArray_btSoftBody_SContact m_scontacts(); public native btSoftBody m_scontacts(btAlignedObjectArray_btSoftBody_SContact setter);     // Soft contacts
-	public native @ByRef @Cast("btSoftBody::tJointArray*") btAlignedObjectArray_btSoftBody_JointPointer m_joints(); public native btSoftBody m_joints(btAlignedObjectArray_btSoftBody_JointPointer setter);           // Joints
-	public native @ByRef @Cast("btSoftBody::tMaterialArray*") btAlignedObjectArray_btSoftBody_MaterialPointer m_materials(); public native btSoftBody m_materials(btAlignedObjectArray_btSoftBody_MaterialPointer setter);     // Materials
+	public native @ByRef @Cast("btSoftBody::tSContactArray*") btSoftBodySContactArray m_scontacts(); public native btSoftBody m_scontacts(btSoftBodySContactArray setter);     // Soft contacts
+	public native @ByRef @Cast("btSoftBody::tJointArray*") btSoftBodyJointArray m_joints(); public native btSoftBody m_joints(btSoftBodyJointArray setter);           // Joints
+	public native @ByRef @Cast("btSoftBody::tMaterialArray*") btSoftBodyMaterialArray m_materials(); public native btSoftBody m_materials(btSoftBodyMaterialArray setter);     // Materials
 	public native @Cast("btScalar") float m_timeacc(); public native btSoftBody m_timeacc(float setter);             // Time accumulator
 	public native @ByRef btVector3 m_bounds(int i); public native btSoftBody m_bounds(int i, btVector3 setter);
 	@MemberGetter public native btVector3 m_bounds();          // Spatial bounds
@@ -1156,23 +1156,23 @@ public class btSoftBody extends btCollisionObject {
 	public native @ByRef btDbvt m_fdbvt(); public native btSoftBody m_fdbvt(btDbvt setter);                 // Faces tree
 	          // Faces tree with normals
 	public native @ByRef btDbvt m_cdbvt(); public native btSoftBody m_cdbvt(btDbvt setter);                 // Clusters tree
-	public native @ByRef @Cast("btSoftBody::tClusterArray*") btAlignedObjectArray_btSoftBody_ClusterPointer m_clusters(); public native btSoftBody m_clusters(btAlignedObjectArray_btSoftBody_ClusterPointer setter);       // Clusters
+	public native @ByRef @Cast("btSoftBody::tClusterArray*") btSoftBodyClusterArray m_clusters(); public native btSoftBody m_clusters(btSoftBodyClusterArray setter);       // Clusters
 	public native @Cast("btScalar") float m_dampingCoefficient(); public native btSoftBody m_dampingCoefficient(float setter);  // Damping Coefficient
 	public native @Cast("btScalar") float m_sleepingThreshold(); public native btSoftBody m_sleepingThreshold(float setter);
 	public native @Cast("btScalar") float m_maxSpeedSquared(); public native btSoftBody m_maxSpeedSquared(float setter);
-	public native @ByRef btAlignedObjectArray_btVector3 m_quads(); public native btSoftBody m_quads(btAlignedObjectArray_btVector3 setter);  // quadrature points for collision detection
+	public native @ByRef btVector3Array m_quads(); public native btSoftBody m_quads(btVector3Array setter);  // quadrature points for collision detection
 	public native @Cast("btScalar") float m_repulsionStiffness(); public native btSoftBody m_repulsionStiffness(float setter);
 	public native @Cast("btScalar") float m_gravityFactor(); public native btSoftBody m_gravityFactor(float setter);
 	public native @Cast("bool") boolean m_cacheBarycenter(); public native btSoftBody m_cacheBarycenter(boolean setter);
-	public native @ByRef btAlignedObjectArray_btVector3 m_X(); public native btSoftBody m_X(btAlignedObjectArray_btVector3 setter);  // initial positions
+	public native @ByRef btVector3Array m_X(); public native btSoftBody m_X(btVector3Array setter);  // initial positions
 
-	public native @ByRef btAlignedObjectArray_btVector4 m_renderNodesInterpolationWeights(); public native btSoftBody m_renderNodesInterpolationWeights(btAlignedObjectArray_btVector4 setter);
+	public native @ByRef btVector4Array m_renderNodesInterpolationWeights(); public native btSoftBody m_renderNodesInterpolationWeights(btVector4Array setter);
 	
-	public native @ByRef btAlignedObjectArray_btScalar m_z(); public native btSoftBody m_z(btAlignedObjectArray_btScalar setter);  // vertical distance used in extrapolation
+	public native @ByRef btScalarArray m_z(); public native btSoftBody m_z(btScalarArray setter);  // vertical distance used in extrapolation
 	public native @Cast("bool") boolean m_useSelfCollision(); public native btSoftBody m_useSelfCollision(boolean setter);
 	public native @Cast("bool") boolean m_softSoftCollision(); public native btSoftBody m_softSoftCollision(boolean setter);
 
-	public native @ByRef btAlignedObjectArray_bool m_clusterConnectivity(); public native btSoftBody m_clusterConnectivity(btAlignedObjectArray_bool setter);  //cluster connectivity, for self-collision
+	public native @ByRef btBoolArray m_clusterConnectivity(); public native btSoftBody m_clusterConnectivity(btBoolArray setter);  //cluster connectivity, for self-collision
 
 	public native @ByRef btVector3 m_windVelocity(); public native btSoftBody m_windVelocity(btVector3 setter);
 
@@ -1199,7 +1199,7 @@ public class btSoftBody extends btCollisionObject {
 	/* dtor																	*/
 	/* Check for existing link												*/
 
-	public native @ByRef btAlignedObjectArray_int m_userIndexMapping(); public native btSoftBody m_userIndexMapping(btAlignedObjectArray_int setter);
+	public native @ByRef btIntArray m_userIndexMapping(); public native btSoftBody m_userIndexMapping(btIntArray setter);
 
 	public native btSoftBodyWorldInfo getWorldInfo();
 

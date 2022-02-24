@@ -26,5 +26,5 @@ public class btCollisionAlgorithm extends Pointer {
 
 	public native @Cast("btScalar") float calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
-	public native void getAllContactManifolds(@Cast("btManifoldArray*") @ByRef btAlignedObjectArray_btPersistentManifoldPointer manifoldArray);
+	public native void getAllContactManifolds(@Cast("btManifoldArray*") @ByRef btPersistentManifoldArray manifoldArray);
 }

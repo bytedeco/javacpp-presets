@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody::Note>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_Note extends Pointer {
+@Name("btAlignedObjectArray<btSoftBody::RenderNode>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyRenderNodeArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_Note(Pointer p) { super(p); }
+    public btSoftBodyRenderNodeArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_Note(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyRenderNodeArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_Note position(long position) {
-        return (btAlignedObjectArray_btSoftBody_Note)super.position(position);
+    @Override public btSoftBodyRenderNodeArray position(long position) {
+        return (btSoftBodyRenderNodeArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_Note getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_Note((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyRenderNodeArray getPointer(long i) {
+        return new btSoftBodyRenderNodeArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_Note put(@Const @ByRef btAlignedObjectArray_btSoftBody_Note other);
-	public btAlignedObjectArray_btSoftBody_Note() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyRenderNodeArray put(@Const @ByRef btSoftBodyRenderNodeArray other);
+	public btSoftBodyRenderNodeArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_Note(@Const @ByRef btAlignedObjectArray_btSoftBody_Note otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_Note otherArray);
+	public btSoftBodyRenderNodeArray(@Const @ByRef btSoftBodyRenderNodeArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyRenderNodeArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef btSoftBody.Note at(int n);
+	public native @ByRef btSoftBody.RenderNode at(int n);
 
-	public native @ByRef @Name("operator []") btSoftBody.Note get(int n);
+	public native @ByRef @Name("operator []") btSoftBody.RenderNode get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btAlignedObjectArray_btSoftBody_Note extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::Note()") btSoftBody.Note fillData);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::RenderNode()") btSoftBody.RenderNode fillData);
 	public native void resize(int newsize);
-	public native @ByRef btSoftBody.Note expandNonInitializing();
+	public native @ByRef btSoftBody.RenderNode expandNonInitializing();
 
-	public native @ByRef btSoftBody.Note expand(@Const @ByRef(nullValue = "btSoftBody::Note()") btSoftBody.Note fillValue);
-	public native @ByRef btSoftBody.Note expand();
+	public native @ByRef btSoftBody.RenderNode expand(@Const @ByRef(nullValue = "btSoftBody::RenderNode()") btSoftBody.RenderNode fillValue);
+	public native @ByRef btSoftBody.RenderNode expand();
 
-	public native void push_back(@Const @ByRef btSoftBody.Note _Val);
+	public native void push_back(@Const @ByRef btSoftBody.RenderNode _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -88,5 +88,5 @@ public class btAlignedObjectArray_btSoftBody_Note extends Pointer {
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_Note otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyRenderNodeArray otherArray);
 }

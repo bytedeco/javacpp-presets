@@ -33,12 +33,12 @@ public class btMultiBodyJacobianData extends Pointer {
         return new btMultiBodyJacobianData((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef btAlignedObjectArray_btScalar m_jacobians(); public native btMultiBodyJacobianData m_jacobians(btAlignedObjectArray_btScalar setter);
-	public native @ByRef btAlignedObjectArray_btScalar m_deltaVelocitiesUnitImpulse(); public native btMultiBodyJacobianData m_deltaVelocitiesUnitImpulse(btAlignedObjectArray_btScalar setter);  //holds the joint-space response of the corresp. tree to the test impulse in each constraint space dimension
-	public native @ByRef btAlignedObjectArray_btScalar m_deltaVelocities(); public native btMultiBodyJacobianData m_deltaVelocities(btAlignedObjectArray_btScalar setter);             //holds joint-space vectors of all the constrained trees accumulating the effect of corrective impulses applied in SI
-	public native @ByRef btAlignedObjectArray_btScalar scratch_r(); public native btMultiBodyJacobianData scratch_r(btAlignedObjectArray_btScalar setter);
-	public native @ByRef btAlignedObjectArray_btVector3 scratch_v(); public native btMultiBodyJacobianData scratch_v(btAlignedObjectArray_btVector3 setter);
-	public native @ByRef btAlignedObjectArray_btMatrix3x3 scratch_m(); public native btMultiBodyJacobianData scratch_m(btAlignedObjectArray_btMatrix3x3 setter);
+	public native @ByRef btScalarArray m_jacobians(); public native btMultiBodyJacobianData m_jacobians(btScalarArray setter);
+	public native @ByRef btScalarArray m_deltaVelocitiesUnitImpulse(); public native btMultiBodyJacobianData m_deltaVelocitiesUnitImpulse(btScalarArray setter);  //holds the joint-space response of the corresp. tree to the test impulse in each constraint space dimension
+	public native @ByRef btScalarArray m_deltaVelocities(); public native btMultiBodyJacobianData m_deltaVelocities(btScalarArray setter);             //holds joint-space vectors of all the constrained trees accumulating the effect of corrective impulses applied in SI
+	public native @ByRef btScalarArray scratch_r(); public native btMultiBodyJacobianData scratch_r(btScalarArray setter);
+	public native @ByRef btVector3Array scratch_v(); public native btMultiBodyJacobianData scratch_v(btVector3Array setter);
+	public native @ByRef btMatrix3x3Array scratch_m(); public native btMultiBodyJacobianData scratch_m(btMatrix3x3Array setter);
 	
 	public native int m_fixedBodyId(); public native btMultiBodyJacobianData m_fixedBodyId(int setter);
 }

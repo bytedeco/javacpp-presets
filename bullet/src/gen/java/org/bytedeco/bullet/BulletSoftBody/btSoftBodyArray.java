@@ -15,36 +15,40 @@ import org.bytedeco.bullet.BulletDynamics.*;
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
+  //for placement new
+// #endif          //BT_USE_PLACEMENT_NEW
 
-@Name("btAlignedObjectArray<btSoftBody::Material*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_MaterialPointer extends Pointer {
+/**The btAlignedObjectArray template class uses a subset of the stl::vector interface for its methods
+ * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
+@Name("btAlignedObjectArray<btSoftBody*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_MaterialPointer(Pointer p) { super(p); }
+    public btSoftBodyArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_MaterialPointer(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_MaterialPointer position(long position) {
-        return (btAlignedObjectArray_btSoftBody_MaterialPointer)super.position(position);
+    @Override public btSoftBodyArray position(long position) {
+        return (btSoftBodyArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_MaterialPointer getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_MaterialPointer((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyArray getPointer(long i) {
+        return new btSoftBodyArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_MaterialPointer put(@Const @ByRef btAlignedObjectArray_btSoftBody_MaterialPointer other);
-	public btAlignedObjectArray_btSoftBody_MaterialPointer() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyArray put(@Const @ByRef btSoftBodyArray other);
+	public btSoftBodyArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_MaterialPointer(@Const @ByRef btAlignedObjectArray_btSoftBody_MaterialPointer otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_MaterialPointer otherArray);
+	public btSoftBodyArray(@Const @ByRef btSoftBodyArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByPtrRef btSoftBody.Material at(int n);
+	public native @ByPtrRef btSoftBody at(int n);
 
-	public native @ByPtrRef @Name("operator []") btSoftBody.Material get(int n);
+	public native @ByPtrRef @Name("operator []") btSoftBody get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +59,14 @@ public class btAlignedObjectArray_btSoftBody_MaterialPointer extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @ByPtrRef btSoftBody.Material fillData/*=btSoftBody::Material*()*/);
+	public native void resize(int newsize, @ByPtrRef btSoftBody fillData/*=btSoftBody*()*/);
 	public native void resize(int newsize);
-	public native @ByPtrRef btSoftBody.Material expandNonInitializing();
+	public native @ByPtrRef btSoftBody expandNonInitializing();
 
-	public native @ByPtrRef btSoftBody.Material expand(@ByPtrRef btSoftBody.Material fillValue/*=btSoftBody::Material*()*/);
-	public native @ByPtrRef btSoftBody.Material expand();
+	public native @ByPtrRef btSoftBody expand(@ByPtrRef btSoftBody fillValue/*=btSoftBody*()*/);
+	public native @ByPtrRef btSoftBody expand();
 
-	public native void push_back(@ByPtrRef btSoftBody.Material _Val);
+	public native void push_back(@ByPtrRef btSoftBody _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -74,19 +78,19 @@ public class btAlignedObjectArray_btSoftBody_MaterialPointer extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@ByPtrRef btSoftBody.Material key);
+	public native int findBinarySearch(@ByPtrRef btSoftBody key);
 
-	public native int findLinearSearch(@ByPtrRef btSoftBody.Material key);
+	public native int findLinearSearch(@ByPtrRef btSoftBody key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@ByPtrRef btSoftBody.Material key);
+	public native int findLinearSearch2(@ByPtrRef btSoftBody key);
 
 	public native void removeAtIndex(int index);
-	public native void remove(@ByPtrRef btSoftBody.Material key);
+	public native void remove(@ByPtrRef btSoftBody key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_MaterialPointer otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyArray otherArray);
 }

@@ -32,9 +32,9 @@ public class btConvexPolyhedron extends Pointer {
 	public btConvexPolyhedron() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @ByRef btAlignedObjectArray_btVector3 m_vertices(); public native btConvexPolyhedron m_vertices(btAlignedObjectArray_btVector3 setter);
+	public native @ByRef btVector3Array m_vertices(); public native btConvexPolyhedron m_vertices(btVector3Array setter);
 	
-	public native @ByRef btAlignedObjectArray_btVector3 m_uniqueEdges(); public native btConvexPolyhedron m_uniqueEdges(btAlignedObjectArray_btVector3 setter);
+	public native @ByRef btVector3Array m_uniqueEdges(); public native btConvexPolyhedron m_uniqueEdges(btVector3Array setter);
 
 	public native @ByRef btVector3 m_localCenter(); public native btConvexPolyhedron m_localCenter(btVector3 setter);
 	public native @ByRef btVector3 m_extents(); public native btConvexPolyhedron m_extents(btVector3 setter);

@@ -23,26 +23,26 @@ public class btDeformableLagrangianForce extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableLagrangianForce(Pointer p) { super(p); }
 
-	public native @ByRef btAlignedObjectArray_btSoftBodyPointer m_softBodies(); public native btDeformableLagrangianForce m_softBodies(btAlignedObjectArray_btSoftBodyPointer setter);
+	public native @ByRef btSoftBodyArray m_softBodies(); public native btDeformableLagrangianForce m_softBodies(btSoftBodyArray setter);
 	
 
 	// add all forces
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 force);
+	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array force);
 
 	// add damping df
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 dv, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array df);
 
 	// build diagonal of A matrix
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array diagA);
 
 	// add elastic df
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 dx, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array df);
 
 	// add all forces that are explicit in explicit solve
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 force);
+	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array force);
 
 	// add all damping forces
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 force);
+	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array force);
 
 	public native void addScaledHessian(@Cast("btScalar") float scale);
 
@@ -61,7 +61,7 @@ public class btDeformableLagrangianForce extends Pointer {
 	
 
 	// Calculate the incremental deformable generated from the input dx
-	public native @ByVal btMatrix3x3 Ds(int id0, int id1, int id2, int id3, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btAlignedObjectArray_btVector3 dx);
+	public native @ByVal btMatrix3x3 Ds(int id0, int id1, int id2, int id3, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array dx);
 
 	// Calculate the incremental deformable generated from the current velocity
 	public native @ByVal btMatrix3x3 DsFromVelocity(@Const btSoftBody.Node n0, @Const btSoftBody.Node n1, @Const btSoftBody.Node n2, @Const btSoftBody.Node n3);

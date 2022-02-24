@@ -58,11 +58,11 @@ public class btBatchedConstraints extends Pointer {
 		private native void allocate(int _beg, int _end);
 	}
 
-	public native @ByRef btAlignedObjectArray_int m_constraintIndices(); public native btBatchedConstraints m_constraintIndices(btAlignedObjectArray_int setter);
+	public native @ByRef btIntArray m_constraintIndices(); public native btBatchedConstraints m_constraintIndices(btIntArray setter);
 	        // each batch is a range of indices in the m_constraintIndices array
 	         // each phase is range of indices in the m_batches array
-	public native @ByRef btAlignedObjectArray_char m_phaseGrainSize(); public native btBatchedConstraints m_phaseGrainSize(btAlignedObjectArray_char setter);  // max grain size for each phase
-	public native @ByRef btAlignedObjectArray_int m_phaseOrder(); public native btBatchedConstraints m_phaseOrder(btAlignedObjectArray_int setter);       // phases can be done in any order, so we can randomize the order here
+	public native @ByRef btCharArray m_phaseGrainSize(); public native btBatchedConstraints m_phaseGrainSize(btCharArray setter);  // max grain size for each phase
+	public native @ByRef btIntArray m_phaseOrder(); public native btBatchedConstraints m_phaseOrder(btIntArray setter);       // phases can be done in any order, so we can randomize the order here
 	public native btIDebugDraw m_debugDrawer(); public native btBatchedConstraints m_debugDrawer(btIDebugDraw setter);
 
 	public static native @Cast("bool") boolean s_debugDrawBatches(); public static native void s_debugDrawBatches(boolean setter);

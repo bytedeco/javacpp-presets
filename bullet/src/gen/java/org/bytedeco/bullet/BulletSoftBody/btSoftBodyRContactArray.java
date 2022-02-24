@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody::Cluster*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btAlignedObjectArray_btSoftBody_ClusterPointer extends Pointer {
+@Name("btAlignedObjectArray<btSoftBody::RContact>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btSoftBodyRContactArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btAlignedObjectArray_btSoftBody_ClusterPointer(Pointer p) { super(p); }
+    public btSoftBodyRContactArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btAlignedObjectArray_btSoftBody_ClusterPointer(long size) { super((Pointer)null); allocateArray(size); }
+    public btSoftBodyRContactArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btAlignedObjectArray_btSoftBody_ClusterPointer position(long position) {
-        return (btAlignedObjectArray_btSoftBody_ClusterPointer)super.position(position);
+    @Override public btSoftBodyRContactArray position(long position) {
+        return (btSoftBodyRContactArray)super.position(position);
     }
-    @Override public btAlignedObjectArray_btSoftBody_ClusterPointer getPointer(long i) {
-        return new btAlignedObjectArray_btSoftBody_ClusterPointer((Pointer)this).offsetAddress(i);
+    @Override public btSoftBodyRContactArray getPointer(long i) {
+        return new btSoftBodyRContactArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btAlignedObjectArray_btSoftBody_ClusterPointer put(@Const @ByRef btAlignedObjectArray_btSoftBody_ClusterPointer other);
-	public btAlignedObjectArray_btSoftBody_ClusterPointer() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btSoftBodyRContactArray put(@Const @ByRef btSoftBodyRContactArray other);
+	public btSoftBodyRContactArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btAlignedObjectArray_btSoftBody_ClusterPointer(@Const @ByRef btAlignedObjectArray_btSoftBody_ClusterPointer otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btAlignedObjectArray_btSoftBody_ClusterPointer otherArray);
+	public btSoftBodyRContactArray(@Const @ByRef btSoftBodyRContactArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btSoftBodyRContactArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByPtrRef btSoftBody.Cluster at(int n);
+	public native @ByRef btSoftBody.RContact at(int n);
 
-	public native @ByPtrRef @Name("operator []") btSoftBody.Cluster get(int n);
+	public native @ByRef @Name("operator []") btSoftBody.RContact get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btAlignedObjectArray_btSoftBody_ClusterPointer extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @ByPtrRef btSoftBody.Cluster fillData/*=btSoftBody::Cluster*()*/);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btSoftBody::RContact()") btSoftBody.RContact fillData);
 	public native void resize(int newsize);
-	public native @ByPtrRef btSoftBody.Cluster expandNonInitializing();
+	public native @ByRef btSoftBody.RContact expandNonInitializing();
 
-	public native @ByPtrRef btSoftBody.Cluster expand(@ByPtrRef btSoftBody.Cluster fillValue/*=btSoftBody::Cluster*()*/);
-	public native @ByPtrRef btSoftBody.Cluster expand();
+	public native @ByRef btSoftBody.RContact expand(@Const @ByRef(nullValue = "btSoftBody::RContact()") btSoftBody.RContact fillValue);
+	public native @ByRef btSoftBody.RContact expand();
 
-	public native void push_back(@ByPtrRef btSoftBody.Cluster _Val);
+	public native void push_back(@Const @ByRef btSoftBody.RContact _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -74,19 +74,19 @@ public class btAlignedObjectArray_btSoftBody_ClusterPointer extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@ByPtrRef btSoftBody.Cluster key);
+	
 
-	public native int findLinearSearch(@ByPtrRef btSoftBody.Cluster key);
+	
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@ByPtrRef btSoftBody.Cluster key);
+	
 
 	public native void removeAtIndex(int index);
-	public native void remove(@ByPtrRef btSoftBody.Cluster key);
+	
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btAlignedObjectArray_btSoftBody_ClusterPointer otherArray);
+	public native void copyFromArray(@Const @ByRef btSoftBodyRContactArray otherArray);
 }

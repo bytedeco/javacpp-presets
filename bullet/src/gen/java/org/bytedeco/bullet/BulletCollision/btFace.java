@@ -31,7 +31,7 @@ public class btFace extends Pointer {
         return new btFace((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef btAlignedObjectArray_int m_indices(); public native btFace m_indices(btAlignedObjectArray_int setter);
+	public native @ByRef btIntArray m_indices(); public native btFace m_indices(btIntArray setter);
 	//	btAlignedObjectArray<int>	m_connectedFaces;
 	public native @Cast("btScalar") float m_plane(int i); public native btFace m_plane(int i, float setter);
 	@MemberGetter public native @Cast("btScalar*") FloatPointer m_plane();
