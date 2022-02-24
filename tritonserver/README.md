@@ -69,9 +69,26 @@ Now, this `models` directory will be our model repository.
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets
+ ```
+3. There are two examples in the samples folder, `Simple.java` and `SimpleCPUOnly.java`. 
+`Simple.java` requires additional `CUDA` and `TensorRT` bindings (as well as `CUDA` and `TensorRT` libraries themselves)
+while `SimpleCPUOnly.java` can be run with only binaries build in tritonserver/platform. 
+The steps to run `Simple.java` are:
+```bash
  $ mvn clean install --projects .,tritonserver
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
  $ cd tritonserver/samples
+ $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
+```
+The steps to run `SimpleCPUOnly.java`, are: 
+```bash
+ $ mvn clean install --projects .,tritonserver
+ $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
+ $ cd tritonserver/samples
+ ```
+ Modify [tritonserver/samples/pom.xml](../tritonserver/samples/pom.xml#L7) to `SimpleCPUOnly.java`
+ and remove the dependencies related to `CUDA` and `TensorRT`. Then run:
+ ```bash
  $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
