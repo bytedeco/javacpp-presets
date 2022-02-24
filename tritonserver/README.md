@@ -86,8 +86,9 @@ The steps to run `SimpleCPUOnly.java`, are:
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
  $ cd tritonserver/samples
  ```
- Modify [tritonserver/samples/pom.xml](../tritonserver/samples/pom.xml#L7) to `SimpleCPUOnly.java`
- and remove the dependencies related to `CUDA` and `TensorRT`. Then run:
+Modify [tritonserver/samples/pom.xml](../tritonserver/samples/pom.xml#L7) from `Simple` to `SimpleCPUOnly`
+and remove the dependencies related to `CUDA` and `TensorRT` [here](../tritonserver/samples/pom.xml#L12-L21).
+Then run:
  ```bash
  $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
