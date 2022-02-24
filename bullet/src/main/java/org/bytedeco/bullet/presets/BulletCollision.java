@@ -103,11 +103,11 @@ public class BulletCollision implements InfoMapper {
                     "__SPU__"
                 ).define(false))
 
-            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>").pointerTypes("btAlignedObjectArray_btBvhSubtreeInfo"))
-            .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btAlignedObjectArray_btCollisionObjectPointer"))
-            .put(new Info("btAlignedObjectArray<btIndexedMesh>").pointerTypes("btAlignedObjectArray_btIndexedMesh"))
-            .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btAlignedObjectArray_btPersistentManifoldPointer"))
-            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btAlignedObjectArray_btQuantizedBvhNode"))
+            .put(new Info("btAlignedObjectArray<btBvhSubtreeInfo>").pointerTypes("btBvhSubtreeInfoArray"))
+            .put(new Info("btAlignedObjectArray<btCollisionObject*>").pointerTypes("btCollisionObjectArray"))
+            .put(new Info("btAlignedObjectArray<btIndexedMesh>").pointerTypes("btIndexedMeshArray"))
+            .put(new Info("btAlignedObjectArray<btPersistentManifold*>").pointerTypes("btPersistentManifoldArray"))
+            .put(new Info("btAlignedObjectArray<btQuantizedBvhNode>").pointerTypes("btQuantizedBvhNodeArray"))
 
             .put(new Info("btDispatcher.h").linePatterns("class btRigidBody;").skip())
             .put(new Info("btPersistentManifold.h").linePatterns("struct btCollisionResult;").skip())

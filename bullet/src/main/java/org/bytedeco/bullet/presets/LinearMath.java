@@ -71,14 +71,14 @@ public class LinearMath implements InfoMapper {
 
             .put(new Info("btDefaultSerializer").immutable(true))
 
-            .put(new Info("btAlignedObjectArray<bool>").pointerTypes("btAlignedObjectArray_bool"))
-            .put(new Info("btAlignedObjectArray<char>").pointerTypes("btAlignedObjectArray_char"))
-            .put(new Info("btAlignedObjectArray<int>").pointerTypes("btAlignedObjectArray_int"))
-            .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btAlignedObjectArray_btScalar"))
-            .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btAlignedObjectArray_btMatrix3x3"))
-            .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btAlignedObjectArray_btQuaternion"))
-            .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btAlignedObjectArray_btVector3"))
-            .put(new Info("btAlignedObjectArray<btVector4>").pointerTypes("btAlignedObjectArray_btVector4"))
+            .put(new Info("btAlignedObjectArray<bool>").pointerTypes("btBoolArray"))
+            .put(new Info("btAlignedObjectArray<char>").pointerTypes("btCharArray"))
+            .put(new Info("btAlignedObjectArray<int>").pointerTypes("btIntArray"))
+            .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btScalarArray"))
+            .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btMatrix3x3Array"))
+            .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btQuaternionArray"))
+            .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btVector3Array"))
+            .put(new Info("btAlignedObjectArray<btVector4>").pointerTypes("btVector4Array"))
             .put(new Info("btHashMap<btHashPtr,void*>").pointerTypes("btHashMap_btHashPtr_voidPointer"))
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())

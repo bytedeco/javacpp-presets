@@ -87,7 +87,7 @@ public class BulletDynamics implements InfoMapper {
                     "BT_BACKWARDS_COMPATIBLE_SERIALIZATION"
                 ).define(true))
 
-            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btAlignedObjectArray_btRigidBodyPointer"))
+            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btRigidBodyArray"))
 
             .put(new Info(
                     "DeformableBodyInplaceSolverIslandCallback",
