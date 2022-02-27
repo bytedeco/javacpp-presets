@@ -101,8 +101,15 @@ case $PLATFORM in
         export CXX="clang++"
         ;;
     windows-x86_64)
-        export CC="cl.exe"
-        export CXX="cl.exe"
+        if which ccache.exe; then
+            export CC="ccache.exe cl.exe"
+            export CXX="ccache.exe cl.exe"
+            export CUDAHOSTCC="cl.exe"
+            export CUDAHOSTCXX="cl.exe"
+        else
+            export CC="cl.exe"
+            export CXX="cl.exe"
+        fi
         export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
         ;;
     *)
@@ -111,9 +118,11 @@ case $PLATFORM in
         ;;
 esac
 
+# work around issues with the build system
 sedinplace '/Werror/d' CMakeLists.txt
 sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
+sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
 
 # work around some compiler bugs
 sedinplace 's/!defined(__INTEL_COMPILER))/!defined(__INTEL_COMPILER) \&\& (__GNUC__ < 11))/g' third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h

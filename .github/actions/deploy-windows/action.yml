@@ -18,7 +18,7 @@ runs:
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL and MSYS2
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
         rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
         rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
         rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
@@ -32,6 +32,16 @@ runs:
           echo Removing old versions of MSVC that interfere with Bazel
           bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' \( -name '14.1*' -or -name '14.2[01234567]*' \) -prune -exec rm -Rf {} \;"
           dir /s /a "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\14.*"
+        )
+
+        if not "%CI_DEPLOY_NEED_CACHE%"=="" (
+          echo Installing ccache
+          curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
+          unzip -j ccache-4.6-windows-64.zip -d C:/msys64/mingw64/bin/
+          mkdir ccache
+          echo max_size = 3.0G                                                                        > ccache\ccache.conf
+          echo hash_dir = false                                                                      >> ccache\ccache.conf
+          echo sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros >> ccache\ccache.conf
         )
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
@@ -86,7 +96,10 @@ runs:
           echo Applying hotfix to Visual Studio 2019 for CUDA
           curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
           bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
+          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
           bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
+          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
@@ -188,6 +201,7 @@ runs:
           set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;%PATH%"
           echo CUDA Version 11.6.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
         )
+        set "CCACHE_DIR=%USERPROFILE%\ccache"
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 
         where bash
@@ -201,6 +215,7 @@ runs:
         where python
         where python3
         where clang-cl
+        where ccache
 
         bash --version
         git --version
@@ -212,6 +227,7 @@ runs:
         gpg --version
         python --version
         clang-cl --version
+        ccache --version -sv
         df -h
         wmic pagefile list /format:list
 
@@ -266,6 +282,7 @@ runs:
           exit /b !STATUS!
         )
         :done3
+        ccache --version -sv
         df -h
         wmic pagefile list /format:list
 
