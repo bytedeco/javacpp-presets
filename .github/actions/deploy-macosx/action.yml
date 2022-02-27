@@ -6,6 +6,10 @@ runs:
       shell: bash
       run: |
         cd $HOME
+        mkdir -p .ccache
+        echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
+        echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
+        echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
         export MACOSX_DEPLOYMENT_TARGET=10.15
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
@@ -17,14 +21,9 @@ runs:
 
         brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
+        brew uninstall --force gcc gcc@7 gcc@8 gcc@9 gcc@11 gcc@12
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
-          brew uninstall --force gcc
-          brew uninstall --force gcc@7
-          brew uninstall --force gcc@8
-          brew uninstall --force gcc@9
-          brew uninstall --force gcc@11
-          brew uninstall --force gcc@12
           brew install gcc@10
           brew link --overwrite gcc@10
 
@@ -43,6 +42,8 @@ runs:
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
           otool -L /usr/local/lib/gcc/10/*.dylib
+        else
+          brew uninstall --force gcc@10
         fi
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
@@ -85,12 +86,13 @@ runs:
       run: |
         git --version
         clang --version
-        /usr/local/bin/gcc-* --version
+        /usr/local/bin/gcc-* --version || true
         cmake --version
         gradle --version
         mvn -version
         gpg --version
         python3 --version
+        ccache -s --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
