@@ -24,12 +24,13 @@ Java API documentation is available here:
 ### Special Mappings
 Mappings of `btAlignedObjectArray`'s instances for privitime types:
 
-| C++                              | Java            |
-|----------------------------------|-----------------|
-| `btAlignedObjectArray<bool>`     | `btBoolArray`   |
-| `btAlignedObjectArray<char>`     | `btCharArray`   |
-| `btAlignedObjectArray<int>`      | `btIntArray`    |
-| `btAlignedObjectArray<btScalar>` | `btScalarArray` |
+| C++                                  | Java            |
+|--------------------------------------|-----------------|
+| `btAlignedObjectArray<bool>`         | `btBoolArray`   |
+| `btAlignedObjectArray<char>`         | `btCharArray`   |
+| `btAlignedObjectArray<int>`          | `btIntArray`    |
+| `btAlignedObjectArray<unsigned int>` | `btUIntArray`   |
+| `btAlignedObjectArray<btScalar>`     | `btScalarArray` |
 
 Name of a Java class, corresponding to an instance of `btAlignedObjectArray`
 for a composite type, is constructed by adding `Array` suffix to the name of

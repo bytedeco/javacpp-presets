@@ -55,6 +55,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btSpatialAlgebra.h",
                 "LinearMath/btPoolAllocator.h",
                 "LinearMath/btStackAlloc.h",
+                "LinearMath/TaskScheduler/btThreadSupportInterface.h",
+                "LinearMath/btThreads.h",
+                "LinearMath/btAlignedAllocator.h",
+                "LinearMath/btConvexHull.h",
+                "LinearMath/btConvexHullComputer.h",
+                "LinearMath/btGeometryUtil.h",
+                "LinearMath/btMinMax.h",
+                "LinearMath/btTransformUtil.h",
             },
             link = "LinearMath@.3.20"
         )
@@ -68,6 +76,7 @@ public class LinearMath implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap
             .put(new Info("ATTRIBUTE_ALIGNED16").cppText("#define ATTRIBUTE_ALIGNED16(x) x"))
+            .put(new Info("BT_OVERRIDE").cppText("#define BT_OVERRIDE"))
             .put(new Info("btMatrix3x3Data").cppText("#define btMatrix3x3Data btMatrix3x3FloatData"))
             .put(new Info("btQuaternionData").cppText("#define btQuaternionData btQuaternionFloatData"))
             .put(new Info("btTransformData").cppText("#define btTransformData btTransformFloatData"))
@@ -78,6 +87,7 @@ public class LinearMath implements InfoMapper {
             .put(new Info(
                     "(defined (__APPLE__) && (!defined (BT_USE_DOUBLE_PRECISION)))",
                     "(defined(BT_USE_SSE_IN_API) && defined(BT_USE_SSE)) || defined(BT_USE_NEON)",
+                    "BT_DEBUG_MEMORY_ALLOCATIONS",
                     "BT_USE_DOUBLE_PRECISION",
                     "BT_USE_NEON",
                     "BT_USE_SSE",
@@ -100,12 +110,19 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btAlignedObjectArray<bool>").pointerTypes("btBoolArray"))
             .put(new Info("btAlignedObjectArray<char>").pointerTypes("btCharArray"))
             .put(new Info("btAlignedObjectArray<int>").pointerTypes("btIntArray"))
+            .put(new Info("btAlignedObjectArray<unsigned int>").pointerTypes("btUIntArray"))
             .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btScalarArray"))
             .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btMatrix3x3Array"))
             .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btQuaternionArray"))
             .put(new Info("btAlignedObjectArray<btVector3>").pointerTypes("btVector3Array"))
             .put(new Info("btAlignedObjectArray<btVector4>").pointerTypes("btVector4Array"))
+            .put(new Info("btAlignedObjectArray<btPlane>").pointerTypes("btPlaneArray"))
+            .put(new Info("btAlignedObjectArray<ConvexH::HalfEdge>").pointerTypes("btConvexHHalfEdgeArray"))
+            .put(new Info("ConvexH::HalfEdge").pointerTypes("ConvexH.HalfEdge"))
+            .put(new Info("btAlignedObjectArray<btConvexHullComputer::Edge>").pointerTypes("btConvexHullComputerEdgeArray"))
+            .put(new Info("btConvexHullComputer::Edge").pointerTypes("btConvexHullComputer.Edge"))
             .put(new Info("btHashMap<btHashPtr,void*>").pointerTypes("btHashMap_btHashPtr_voidPointer"))
+            .put(new Info("int4").pointerTypes("Int4"))
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 
@@ -115,7 +132,19 @@ public class LinearMath implements InfoMapper {
                     "BT_NAN",
                     "SIMD_EPSILON",
                     "SIMD_INFINITY",
+                    "btAlignedObjectArray<ConvexH::HalfEdge>::findBinarySearch",
+                    "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch",
+                    "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch2",
+                    "btAlignedObjectArray<ConvexH::HalfEdge>::remove",
+                    "btAlignedObjectArray<btConvexHullComputer::Edge>::findBinarySearch",
+                    "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch",
+                    "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch2",
+                    "btAlignedObjectArray<btConvexHullComputer::Edge>::remove",
                     "btAlignedObjectArray<btMatrix3x3>::findBinarySearch",
+                    "btAlignedObjectArray<btPlane>::findBinarySearch",
+                    "btAlignedObjectArray<btPlane>::findLinearSearch",
+                    "btAlignedObjectArray<btPlane>::findLinearSearch2",
+                    "btAlignedObjectArray<btPlane>::remove",
                     "btBulletSerializedArrays",
                     "btGetInfinityMask",
                     "btInfMaskConverter"
