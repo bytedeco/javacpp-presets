@@ -117,6 +117,7 @@ public class LinearMath implements InfoMapper {
                     "SIMD_INFINITY",
                     "btAlignedObjectArray<btMatrix3x3>::findBinarySearch",
                     "btBulletSerializedArrays",
+                    "btGetInfinityMask",
                     "btInfMaskConverter"
                 ).skip())
             ;

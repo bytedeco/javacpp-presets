@@ -133,7 +133,7 @@ public static native int btIsDoublePrecision();
 
 // 	#ifndef BT_INFINITY
 // 	#define BT_INFINITY (btInfinityMask.mask)
-	public static native int btGetInfinityMask();
+	
 // 	#endif
 // 	#endif  //BT_USE_NEON
 
