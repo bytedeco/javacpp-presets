@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Bullet Physics SDK 3.21  https://pybullet.org/wordpress
+ * Bullet Physics SDK 3.21  https://github.com/bulletphysics/bullet3
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
