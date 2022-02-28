@@ -66,6 +66,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btTypedConstraint.h",
                 "BulletDynamics/ConstraintSolver/btBatchedConstraints.h",
                 "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h",
+                "BulletDynamics/ConstraintSolver/btNNCGConstraintSolver.h",
                 "BulletDynamics/Vehicle/btVehicleRaycaster.h",
                 "BulletDynamics/Vehicle/btWheelInfo.h",
                 "BulletDynamics/Vehicle/btRaycastVehicle.h",
@@ -76,6 +77,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Featherstone/btMultiBodyConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h",
                 "BulletDynamics/Featherstone/btMultiBodyConstraintSolver.h",
+                "BulletDynamics/Featherstone/btMultiBodySolverConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyFixedConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyGearConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyJointLimitConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyJointMotor.h",
+                "BulletDynamics/Featherstone/btMultiBodyPoint2Point.h",
+                "BulletDynamics/Featherstone/btMultiBodySliderConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodySphericalJointMotor.h",
+                "BulletDynamics/Featherstone/btMultiBodyMLCPConstraintSolver.h",
+                "BulletDynamics/MLCPSolvers/btDantzigSolver.h",
+                "BulletDynamics/MLCPSolvers/btLemkeSolver.h",
+                "BulletDynamics/MLCPSolvers/btMLCPSolver.h",
+                "BulletDynamics/MLCPSolvers/btSolveProjectedGaussSeidel.h",
             },
             link = "BulletDynamics@.3.20"
         )
@@ -114,11 +128,16 @@ public class BulletDynamics implements InfoMapper {
                 ).define(true))
 
             .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btRigidBodyArray"))
+            .put(new Info("btAlignedObjectArray<btMultiBodySolverConstraint>").pointerTypes("btMultiBodySolverConstraintArray"))
 
             .put(new Info(
                     "DeformableBodyInplaceSolverIslandCallback",
                     "InplaceSolverIslandCallback",
                     "MultiBodyInplaceSolverIslandCallback",
+                    "btAlignedObjectArray<btMultiBodySolverConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btMultiBodySolverConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btMultiBodySolverConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btMultiBodySolverConstraint>::remove",
                     "btBatchedConstraints::m_batches",
                     "btBatchedConstraints::m_phases",
                     "btConeTwistConstraint::solveConstraintObsolete",

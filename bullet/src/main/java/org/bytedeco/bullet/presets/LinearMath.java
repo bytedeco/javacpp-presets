@@ -63,6 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btGeometryUtil.h",
                 "LinearMath/btMinMax.h",
                 "LinearMath/btTransformUtil.h",
+                "LinearMath/btMatrixX.h",
             },
             link = "LinearMath@.3.20"
         )
@@ -88,6 +89,7 @@ public class LinearMath implements InfoMapper {
                     "(defined (__APPLE__) && (!defined (BT_USE_DOUBLE_PRECISION)))",
                     "(defined(BT_USE_SSE_IN_API) && defined(BT_USE_SSE)) || defined(BT_USE_NEON)",
                     "BT_DEBUG_MEMORY_ALLOCATIONS",
+                    "BT_DEBUG_OSTREAM",
                     "BT_USE_DOUBLE_PRECISION",
                     "BT_USE_NEON",
                     "BT_USE_SSE",
@@ -111,6 +113,8 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btAlignedObjectArray<char>").pointerTypes("btCharArray"))
             .put(new Info("btAlignedObjectArray<int>").pointerTypes("btIntArray"))
             .put(new Info("btAlignedObjectArray<unsigned int>").pointerTypes("btUIntArray"))
+            .put(new Info("btAlignedObjectArray<float>").pointerTypes("btScalarArray"))
+            .put(new Info("btAlignedObjectArray<double>").pointerTypes("btDoubleArray"))
             .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btScalarArray"))
             .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btMatrix3x3Array"))
             .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btQuaternionArray"))
@@ -122,7 +126,14 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btAlignedObjectArray<btConvexHullComputer::Edge>").pointerTypes("btConvexHullComputerEdgeArray"))
             .put(new Info("btConvexHullComputer::Edge").pointerTypes("btConvexHullComputer.Edge"))
             .put(new Info("btHashMap<btHashPtr,void*>").pointerTypes("btHashMap_btHashPtr_voidPointer"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<int> >").javaNames("btIntArrayArray"))
             .put(new Info("int4").pointerTypes("Int4"))
+            .put(new Info("btVectorX<float>").pointerTypes("btVectorXf"))
+            .put(new Info("btVectorX<double>").pointerTypes("btVectorXd"))
+            .put(new Info("btMatrixX<float>").pointerTypes("btMatrixXf"))
+            .put(new Info("btMatrixX<double>").pointerTypes("btMatrixXd"))
+            .put(new Info("btVectorXu").cppText("#define btVectorXu btVectorXf"))
+            .put(new Info("btMatrixXu").cppText("#define btMatrixXu btMatrixXf"))
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 
@@ -136,6 +147,10 @@ public class LinearMath implements InfoMapper {
                     "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch",
                     "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch2",
                     "btAlignedObjectArray<ConvexH::HalfEdge>::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<int> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<int> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<int> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<int> >::remove",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findBinarySearch",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch2",
