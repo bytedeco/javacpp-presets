@@ -54,6 +54,7 @@ JavaCPP Presets
 [![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)
 [![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)
 [![tvm](https://github.com/bytedeco/javacpp-presets/workflows/tvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atvm)
+[![bullet](https://github.com/bytedeco/javacpp-presets/workflows/bullet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Abullet)
 [![liquidfun](https://github.com/bytedeco/javacpp-presets/workflows/liquidfun/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aliquidfun)
 [![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)
 [![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)
@@ -224,6 +225,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
+ * Bullet Physics SDK 3.21 https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
@@ -233,7 +235,6 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/
    * Windows (Win32)  https://developer.microsoft.com/en-us/windows/
- * Bullet Physics SDK 3.21 https://pybullet.org/wordpress
 
 Once everything installed and configured, simply execute
 ```bash

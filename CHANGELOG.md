@@ -1,4 +1,5 @@
 
+ * Add presets for Bullet Physics SDK 3.21 ([pull #1153](https://github.com/bytedeco/javacpp-presets/pull/1153))
  * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
  * Upgrade presets for Gym 0.22.0, ALE 0.7.4, ONNX 1.11.0, and their dependencies
 

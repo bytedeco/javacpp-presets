@@ -1,9 +1,8 @@
 #!/bin/bash
-
 # This file is meant to be included by the parent cppbuild.sh script
 if [[ -z "$PLATFORM" ]]; then
     pushd ..
-    bash cppbuild.sh "$@" opencl
+    bash cppbuild.sh "$@" bullet
     popd
     exit
 fi
@@ -14,13 +13,11 @@ download https://github.com/bulletphysics/bullet3/archive/refs/tags/$BULLET_VERS
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-
 echo "Decompressing archives..."
 unzip -qo ../bullet-$BULLET_VERSION.zip
-
 cd bullet3-$BULLET_VERSION
-[ -d .build ] || mkdir .build
-cd .build
+mkdir -p build
+cd build
 
 case $PLATFORM in
     android-arm)
@@ -119,7 +116,9 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
-    linux-x86_64)
+    linux-x86)
+        export CC="gcc -m32"
+        export CXX="g++ -m32"
         cmake \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
@@ -136,6 +135,51 @@ case $PLATFORM in
             -DUSE_DOUBLE_PRECISION=OFF \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
+            ..
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-x86_64)
+        export CC="gcc -m64"
+        export CXX="g++ -m64"
+        cmake \
+            -DBUILD_BULLET2_DEMOS=OFF \
+            -DBUILD_CLSOCKET=OFF \
+            -DBUILD_CPU_DEMOS=OFF \
+            -DBUILD_EGL=OFF \
+            -DBUILD_ENET=OFF \
+            -DBUILD_EXTRAS=OFF \
+            -DBUILD_OPENGL3_DEMOS=OFF \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBUILD_UNIT_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
+            -DENABLE_VHACD=OFF \
+            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_GLUT=OFF \
+            -DUSE_GRAPHICAL_BENCHMARK=OFF \
+            ..
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    macosx-x86_64)
+        cmake \
+            -DBUILD_BULLET2_DEMOS=OFF \
+            -DBUILD_CLSOCKET=OFF \
+            -DBUILD_CPU_DEMOS=OFF \
+            -DBUILD_EGL=OFF \
+            -DBUILD_ENET=OFF \
+            -DBUILD_EXTRAS=OFF \
+            -DBUILD_OPENGL3_DEMOS=OFF \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBUILD_UNIT_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
+            -DENABLE_VHACD=OFF \
+            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_GLUT=OFF \
+            -DUSE_GRAPHICAL_BENCHMARK=OFF \
+            -DCMAKE_MACOSX_RPATH=ON \
             ..
         make -j $MAKEJ
         make install/strip
