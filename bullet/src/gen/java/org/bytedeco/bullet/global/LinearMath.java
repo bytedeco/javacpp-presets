@@ -731,6 +731,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../LinearMath/btScalarArray.java
 
 
+// Targeting ../LinearMath/btDoubleArray.java
+
+
 // Targeting ../LinearMath/btMatrix3x3Array.java
 
 
@@ -750,6 +753,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 
 // Targeting ../LinearMath/btConvexHullComputerEdgeArray.java
+
+
+// Targeting ../LinearMath/btIntArrayArray.java
 
 
 
@@ -1502,6 +1508,63 @@ public static native @ByVal btVector3 btAabbSupport(@Const @ByRef btVector3 half
 
 
 // #endif  //BT_TRANSFORM_UTIL_H
+
+
+// Parsed from LinearMath/btMatrixX.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**original version written by Erwin Coumans, October 2013 */
+
+// #ifndef BT_MATRIX_X_H
+// #define BT_MATRIX_X_H
+
+// #include "LinearMath/btQuickprof.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include <stdio.h>
+// Targeting ../LinearMath/btIntSortPredicate.java
+
+
+// Targeting ../LinearMath/btVectorXf.java
+
+
+// Targeting ../LinearMath/btVectorXd.java
+
+
+// Targeting ../LinearMath/btMatrixXf.java
+
+
+// Targeting ../LinearMath/btMatrixXd.java
+
+
+
+// #ifdef BT_DEBUG_OSTREAM
+
+// #endif  //BT_DEBUG_OSTREAM
+
+public static native void setElem(@ByRef btMatrixXd mat, int row, int col, double val);
+
+public static native void setElem(@ByRef btMatrixXf mat, int row, int col, float val);
+
+// #ifdef BT_USE_DOUBLE_PRECISION
+// #else
+// #define btVectorXu btVectorXf
+// #define btMatrixXu btMatrixXf
+// #endif  //BT_USE_DOUBLE_PRECISION
+
+// #endif  //BT_MATRIX_H_H
 
 
 }

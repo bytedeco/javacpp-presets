@@ -10,35 +10,35 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
 
-@Name("btAlignedObjectArray<float>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
-public class btScalarArray extends Pointer {
+@Name("btAlignedObjectArray<btAlignedObjectArray<int> >") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
+public class btIntArrayArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btScalarArray(Pointer p) { super(p); }
+    public btIntArrayArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btScalarArray(long size) { super((Pointer)null); allocateArray(size); }
+    public btIntArrayArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btScalarArray position(long position) {
-        return (btScalarArray)super.position(position);
+    @Override public btIntArrayArray position(long position) {
+        return (btIntArrayArray)super.position(position);
     }
-    @Override public btScalarArray getPointer(long i) {
-        return new btScalarArray((Pointer)this).offsetAddress(i);
+    @Override public btIntArrayArray getPointer(long i) {
+        return new btIntArrayArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btScalarArray put(@Const @ByRef btScalarArray other);
-	public btScalarArray() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btIntArrayArray put(@Const @ByRef btIntArrayArray other);
+	public btIntArrayArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btScalarArray(@Const @ByRef btScalarArray otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btScalarArray otherArray);
+	public btIntArrayArray(@Const @ByRef btIntArrayArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btIntArrayArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef FloatPointer at(int n);
+	public native @ByRef btIntArray at(int n);
 
-	public native @ByRef @Name("operator []") FloatPointer get(int n);
+	public native @ByRef @Name("operator []") btIntArray get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -49,14 +49,14 @@ public class btScalarArray extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, float fillData/*=float()*/);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "btAlignedObjectArray<int>()") btIntArray fillData);
 	public native void resize(int newsize);
-	public native @ByRef FloatPointer expandNonInitializing();
+	public native @ByRef btIntArray expandNonInitializing();
 
-	public native @ByRef FloatPointer expand(float fillValue/*=float()*/);
-	public native @ByRef FloatPointer expand();
+	public native @ByRef btIntArray expand(@Const @ByRef(nullValue = "btAlignedObjectArray<int>()") btIntArray fillValue);
+	public native @ByRef btIntArray expand();
 
-	public native void push_back(float _Val);
+	public native void push_back(@Const @ByRef btIntArray _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -68,19 +68,19 @@ public class btScalarArray extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(float key);
+	
 
-	public native int findLinearSearch(float key);
+	
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(float key);
+	
 
 	public native void removeAtIndex(int index);
-	public native void remove(float key);
+	
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btScalarArray otherArray);
+	public native void copyFromArray(@Const @ByRef btIntArrayArray otherArray);
 }

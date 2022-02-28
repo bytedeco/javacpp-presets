@@ -60,6 +60,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../BulletDynamics/btRigidBodyArray.java
 
 
+// Targeting ../BulletDynamics/btMultiBodySolverConstraintArray.java
+
+
 
 // #endif  //BT_OBJECT_ARRAY__
 
@@ -1298,6 +1301,34 @@ subject to the following restrictions:
 // #endif  //BT_SEQUENTIAL_IMPULSE_CONSTRAINT_SOLVER_MT_H
 
 
+// Parsed from BulletDynamics/ConstraintSolver/btNNCGConstraintSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_NNCG_CONSTRAINT_SOLVER_H
+// #define BT_NNCG_CONSTRAINT_SOLVER_H
+
+// #include "btSequentialImpulseConstraintSolver.h"
+// Targeting ../BulletDynamics/btNNCGConstraintSolver.java
+
+
+
+// #endif  //BT_NNCG_CONSTRAINT_SOLVER_H
+
+
 // Parsed from BulletDynamics/Vehicle/btVehicleRaycaster.h
 
 /*
@@ -1674,6 +1705,398 @@ subject to the following restrictions:
 
 
 // #endif  //BT_MULTIBODY_CONSTRAINT_SOLVER_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodySolverConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_SOLVER_CONSTRAINT_H
+// #define BT_MULTIBODY_SOLVER_CONSTRAINT_H
+
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "BulletDynamics/ConstraintSolver/btSolverBody.h"
+// #include "BulletDynamics/ConstraintSolver/btContactSolverInfo.h"
+// Targeting ../BulletDynamics/btMultiBodySolverConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_SOLVER_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyFixedConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_FIXED_CONSTRAINT_H
+// #define BT_MULTIBODY_FIXED_CONSTRAINT_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyFixedConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_FIXED_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyGearConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_GEAR_CONSTRAINT_H
+// #define BT_MULTIBODY_GEAR_CONSTRAINT_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyGearConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_GEAR_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyJointLimitConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_JOINT_LIMIT_CONSTRAINT_H
+// #define BT_MULTIBODY_JOINT_LIMIT_CONSTRAINT_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyJointLimitConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_JOINT_LIMIT_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyJointMotor.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_JOINT_MOTOR_H
+// #define BT_MULTIBODY_JOINT_MOTOR_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyJointMotor.java
+
+
+
+// #endif  //BT_MULTIBODY_JOINT_MOTOR_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyPoint2Point.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_POINT2POINT_H
+// #define BT_MULTIBODY_POINT2POINT_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodyPoint2Point.java
+
+
+
+// #endif  //BT_MULTIBODY_POINT2POINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodySliderConstraint.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_SLIDER_CONSTRAINT_H
+// #define BT_MULTIBODY_SLIDER_CONSTRAINT_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodySliderConstraint.java
+
+
+
+// #endif  //BT_MULTIBODY_SLIDER_CONSTRAINT_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodySphericalJointMotor.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2018 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_MULTIBODY_SPHERICAL_JOINT_MOTOR_H
+// #define BT_MULTIBODY_SPHERICAL_JOINT_MOTOR_H
+
+// #include "btMultiBodyConstraint.h"
+// Targeting ../BulletDynamics/btMultiBodySphericalJointMotor.java
+
+
+
+// #endif  //BT_MULTIBODY_SPHERICAL_JOINT_MOTOR_H
+
+
+// Parsed from BulletDynamics/Featherstone/btMultiBodyMLCPConstraintSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2018 Google Inc. http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MULTIBODY_MLCP_CONSTRAINT_SOLVER_H
+// #define BT_MULTIBODY_MLCP_CONSTRAINT_SOLVER_H
+
+// #include "LinearMath/btMatrixX.h"
+// #include "LinearMath/btThreads.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraintSolver.h"
+// Targeting ../BulletDynamics/btMLCPSolverInterface.java
+
+
+// Targeting ../BulletDynamics/btMultiBodyMLCPConstraintSolver.java
+
+
+
+// #endif  // BT_MULTIBODY_MLCP_CONSTRAINT_SOLVER_H
+
+
+// Parsed from BulletDynamics/MLCPSolvers/btDantzigSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**original version written by Erwin Coumans, October 2013 */
+
+// #ifndef BT_DANTZIG_SOLVER_H
+// #define BT_DANTZIG_SOLVER_H
+
+// #include "btMLCPSolverInterface.h"
+// #include "btDantzigLCP.h"
+// Targeting ../BulletDynamics/btDantzigSolver.java
+
+
+
+// #endif  //BT_DANTZIG_SOLVER_H
+
+
+// Parsed from BulletDynamics/MLCPSolvers/btLemkeSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**original version written by Erwin Coumans, October 2013 */
+
+// #ifndef BT_LEMKE_SOLVER_H
+// #define BT_LEMKE_SOLVER_H
+
+// #include "btMLCPSolverInterface.h"
+// #include "btLemkeAlgorithm.h"
+// Targeting ../BulletDynamics/btLemkeSolver.java
+
+
+
+// #endif  //BT_LEMKE_SOLVER_H
+
+
+// Parsed from BulletDynamics/MLCPSolvers/btMLCPSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**original version written by Erwin Coumans, October 2013 */
+
+// #ifndef BT_MLCP_SOLVER_H
+// #define BT_MLCP_SOLVER_H
+
+// #include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
+// #include "LinearMath/btMatrixX.h"
+// #include "BulletDynamics/MLCPSolvers/btMLCPSolverInterface.h"
+// Targeting ../BulletDynamics/btMLCPSolver.java
+
+
+
+// #endif  //BT_MLCP_SOLVER_H
+
+
+// Parsed from BulletDynamics/MLCPSolvers/btSolveProjectedGaussSeidel.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**original version written by Erwin Coumans, October 2013 */
+
+// #ifndef BT_SOLVE_PROJECTED_GAUSS_SEIDEL_H
+// #define BT_SOLVE_PROJECTED_GAUSS_SEIDEL_H
+
+// #include "btMLCPSolverInterface.h"
+// Targeting ../BulletDynamics/btSolveProjectedGaussSeidel.java
+
+
+
+// #endif  //BT_SOLVE_PROJECTED_GAUSS_SEIDEL_H
 
 
 }
