@@ -1,4 +1,5 @@
 
+ * Harmonize string and buffer pointer types of function parameters from DepthAI ([issue #1155](https://github.com/bytedeco/javacpp-presets/issues/1155))
  * Bundle correctly OpenMP library for PyTorch builds on Mac as well
  * Remove dependency on CUDA from presets for Triton Inference Server ([pull #1151](https://github.com/bytedeco/javacpp-presets/pull/1151))
  * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))

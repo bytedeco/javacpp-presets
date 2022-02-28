@@ -178,11 +178,13 @@ public class depthai implements InfoMapper {
                .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(true))
                .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE").cppTypes().annotations())
 
+               .put(new Info("const char").valueTypes("@Cast(\"const char\") byte").pointerTypes("@Cast(\"const char*\") BytePointer", "@Cast(\"const char*\") ByteBuffer", "String"))
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("std::int16_t", "std::uint16_t").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("std::int32_t", "std::uint32_t", "dai::OpenVINO::Version").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::int64_t", "dai::Node::Id").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
+               .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "ByteBuffer", "String").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
 
                .put(new Info("basic/containers").cppTypes("tl::optional"))
                .put(new Info("dai::XLinkStream::read").annotations("@Function"))
