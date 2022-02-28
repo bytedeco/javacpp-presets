@@ -1070,6 +1070,558 @@ subject to the following restrictions:
 // #endif  // BT_GJP_EPA_PENETRATION_DEPTH_H
 
 
+// Parsed from BulletCollision/NarrowPhaseCollision/btConvexCast.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONVEX_CAST_H
+// #define BT_CONVEX_CAST_H
+
+// #include "LinearMath/btTransform.h"
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btScalar.h"
+// Targeting ../BulletCollision/btMinkowskiSumShape.java
+
+
+// #include "LinearMath/btIDebugDraw.h"
+
+// #ifdef BT_USE_DOUBLE_PRECISION
+// #else
+public static final int MAX_CONVEX_CAST_ITERATIONS = 32;
+public static native @MemberGetter double MAX_CONVEX_CAST_EPSILON();
+public static final double MAX_CONVEX_CAST_EPSILON = MAX_CONVEX_CAST_EPSILON();
+// Targeting ../BulletCollision/btConvexCast.java
+
+
+
+// #endif  //BT_CONVEX_CAST_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btContinuousConvexCollision.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONTINUOUS_COLLISION_CONVEX_CAST_H
+// #define BT_CONTINUOUS_COLLISION_CONVEX_CAST_H
+
+// #include "btConvexCast.h"
+// #include "btSimplexSolverInterface.h"
+// Targeting ../BulletCollision/btContinuousConvexCollision.java
+
+
+
+// #endif  //BT_CONTINUOUS_COLLISION_CONVEX_CAST_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btGjkConvexCast.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_GJK_CONVEX_CAST_H
+// #define BT_GJK_CONVEX_CAST_H
+
+// #include "BulletCollision/CollisionShapes/btCollisionMargin.h"
+
+// #include "LinearMath/btVector3.h"
+// #include "btConvexCast.h"
+// #include "btSimplexSolverInterface.h"
+// Targeting ../BulletCollision/btGjkConvexCast.java
+
+
+
+// #endif  //BT_GJK_CONVEX_CAST_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btGjkEpa2.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2008 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the
+use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software in a
+product, an acknowledgment in the product documentation would be appreciated
+but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/*
+GJK-EPA collision solver by Nathanael Presson, 2008
+*/
+// #ifndef BT_GJK_EPA2_H
+// #define BT_GJK_EPA2_H
+
+// #include "BulletCollision/CollisionShapes/btConvexShape.h"
+// Targeting ../BulletCollision/btGjkEpaSolver2.java
+
+
+
+// #endif  //BT_GJK_EPA2_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btGjkEpa3.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2014 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the
+use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+claim that you wrote the original software. If you use this software in a
+product, an acknowledgment in the product documentation would be appreciated
+but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/*
+Initial GJK-EPA collision solver by Nathanael Presson, 2008
+Improvements and refactoring by Erwin Coumans, 2008-2014
+*/
+// #ifndef BT_GJK_EPA3_H
+// #define BT_GJK_EPA3_H
+
+// #include "LinearMath/btTransform.h"
+// #include "btGjkCollisionDescription.h"
+// Targeting ../BulletCollision/btGjkEpaSolver3.java
+
+
+
+// #if defined(DEBUG) || defined(_DEBUG)
+// #include <stdio.h>  //for debug printf
+// #ifdef __SPU__
+// #endif  //__SPU__
+// #endif
+
+// Config
+
+/* GJK	*/
+public static final int GJK_MAX_ITERATIONS = 128;
+public static final double GJK_ACCURARY = ((float)0.0001);
+public static final double GJK_MIN_DISTANCE = ((float)0.0001);
+public static final double GJK_DUPLICATED_EPS = ((float)0.0001);
+public static final double GJK_SIMPLEX2_EPS = ((float)0.0);
+public static final double GJK_SIMPLEX3_EPS = ((float)0.0);
+public static final double GJK_SIMPLEX4_EPS = ((float)0.0);
+
+/* EPA	*/
+public static final int EPA_MAX_VERTICES = 64;
+public static final int EPA_MAX_FACES = (EPA_MAX_VERTICES * 2);
+public static final int EPA_MAX_ITERATIONS = 255;
+public static final double EPA_ACCURACY = ((float)0.0001);
+public static final double EPA_FALLBACK = (10 * EPA_ACCURACY);
+public static final double EPA_PLANE_EPS = ((float)0.00001);
+public static final double EPA_INSIDE_EPS = ((float)0.01);
+
+// Shorthands
+
+// MinkowskiDiff
+
+/** enum eGjkStatus */
+public static final int
+	eGjkValid = 0,
+	eGjkInside = 1,
+	eGjkFailed = 2;
+
+// GJK
+
+/** enum eEpaStatus */
+public static final int
+	eEpaValid = 0,
+	eEpaTouching = 1,
+	eEpaDegenerated = 2,
+	eEpaNonConvex = 3,
+	eEpaInvalidHull = 4,
+	eEpaOutOfFaces = 5,
+	eEpaOutOfVertices = 6,
+	eEpaAccuraryReached = 7,
+	eEpaFallBack = 8,
+	eEpaFailed = 9;
+
+// EPA
+
+//
+// Api
+//
+
+//
+
+// #if 0
+// #endif
+
+/* Symbols cleanup		*/
+
+// #undef GJK_MAX_ITERATIONS
+// #undef GJK_ACCURARY
+// #undef GJK_MIN_DISTANCE
+// #undef GJK_DUPLICATED_EPS
+// #undef GJK_SIMPLEX2_EPS
+// #undef GJK_SIMPLEX3_EPS
+// #undef GJK_SIMPLEX4_EPS
+
+// #undef EPA_MAX_VERTICES
+// #undef EPA_MAX_FACES
+// #undef EPA_MAX_ITERATIONS
+// #undef EPA_ACCURACY
+// #undef EPA_FALLBACK
+// #undef EPA_PLANE_EPS
+// #undef EPA_INSIDE_EPS
+
+// #endif  //BT_GJK_EPA3_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btGjkPairDetector.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_GJK_PAIR_DETECTOR_H
+// #define BT_GJK_PAIR_DETECTOR_H
+
+// #include "btDiscreteCollisionDetectorInterface.h"
+// #include "BulletCollision/CollisionShapes/btCollisionMargin.h"
+// #include "btSimplexSolverInterface.h"
+// Targeting ../BulletCollision/btGjkPairDetector.java
+
+
+
+// #endif  //BT_GJK_PAIR_DETECTOR_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_MINKOWSKI_PENETRATION_DEPTH_SOLVER_H
+// #define BT_MINKOWSKI_PENETRATION_DEPTH_SOLVER_H
+
+// #include "btConvexPenetrationDepthSolver.h"
+// Targeting ../BulletCollision/btMinkowskiPenetrationDepthSolver.java
+
+
+
+// #endif  //BT_MINKOWSKI_PENETRATION_DEPTH_SOLVER_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btMprPenetration.h
+
+
+/***
+ * ---------------------------------
+ * Copyright (c)2012 Daniel Fiser <danfis\danfis.cz>
+ *
+ *  This file was ported from mpr.c file, part of libccd.
+ *  The Minkoski Portal Refinement implementation was ported 
+ *  to OpenCL by Erwin Coumans for the Bullet 3 Physics library.
+ *  The original MPR idea and implementation is by Gary Snethen
+ *  in XenoCollide, see http://github.com/erwincoumans/xenocollide
+ *
+ *  Distributed under the OSI-approved BSD License (the "License");
+ *  see <http://www.opensource.org/licenses/bsd-license.php>.
+ *  This software is distributed WITHOUT ANY WARRANTY; without even the
+ *  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the License for more information.
+ */
+
+/**2014 Oct, Erwin Coumans, Use templates to avoid void* casts */
+
+// #ifndef BT_MPR_PENETRATION_H
+// #define BT_MPR_PENETRATION_H
+
+// #define BT_DEBUG_MPR1
+
+// #include "LinearMath/btTransform.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// Targeting ../BulletCollision/btMprCollisionDescription.java
+
+
+// Targeting ../BulletCollision/btMprDistanceInfo.java
+
+
+
+// #ifdef __cplusplus
+// #define BT_MPR_SQRT sqrtf
+// #else
+// #define BT_MPR_SQRT sqrt
+// #endif
+// #define BT_MPR_FMIN(x, y) ((x) < (y) ? (x) : (y))
+// #define BT_MPR_FABS fabs
+
+public static final double BT_MPR_TOLERANCE = 1E-6f;
+public static final int BT_MPR_MAX_ITERATIONS = 1000;
+// Targeting ../BulletCollision/_btMprSupport_t.java
+
+
+// Targeting ../BulletCollision/btMprSupport_t.java
+
+
+// Targeting ../BulletCollision/_btMprSimplex_t.java
+
+
+// Targeting ../BulletCollision/btMprSimplex_t.java
+
+
+
+public static native btMprSupport_t btMprSimplexPointW(btMprSimplex_t s, int idx);
+
+public static native void btMprSimplexSetSize(btMprSimplex_t s, int size);
+
+// #ifdef DEBUG_MPR
+// #endif  //DEBUG_MPR
+
+public static native int btMprSimplexSize(@Const btMprSimplex_t s);
+
+public static native @Const btMprSupport_t btMprSimplexPoint(@Const btMprSimplex_t s, int idx);
+
+public static native void btMprSupportCopy(btMprSupport_t d, @Const btMprSupport_t s);
+
+public static native void btMprSimplexSet(btMprSimplex_t s, @Cast("size_t") long pos, @Const btMprSupport_t a);
+
+public static native void btMprSimplexSwap(btMprSimplex_t s, @Cast("size_t") long pos1, @Cast("size_t") long pos2);
+
+public static native int btMprIsZero(float val);
+
+public static native int btMprEq(float _a, float _b);
+
+public static native int btMprVec3Eq(@Const btVector3 a, @Const btVector3 b);
+
+public static native void btMprVec3Set(btVector3 v, float x, float y, float z);
+
+public static native void btMprVec3Add(btVector3 v, @Const btVector3 w);
+
+public static native void btMprVec3Copy(btVector3 v, @Const btVector3 w);
+
+public static native void btMprVec3Scale(btVector3 d, float k);
+
+public static native float btMprVec3Dot(@Const btVector3 a, @Const btVector3 b);
+
+public static native float btMprVec3Len2(@Const btVector3 v);
+
+public static native void btMprVec3Normalize(btVector3 d);
+
+public static native void btMprVec3Cross(btVector3 d, @Const btVector3 a, @Const btVector3 b);
+
+public static native void btMprVec3Sub2(btVector3 d, @Const btVector3 v, @Const btVector3 w);
+
+public static native void btPortalDir(@Const btMprSimplex_t portal, btVector3 dir);
+
+public static native int portalEncapsulesOrigin(@Const btMprSimplex_t portal,
+								  @Const btVector3 dir);
+
+public static native int portalReachTolerance(@Const btMprSimplex_t portal,
+								@Const btMprSupport_t v4,
+								@Const btVector3 dir);
+
+public static native int portalCanEncapsuleOrigin(@Const btMprSimplex_t portal,
+									@Const btMprSupport_t v4,
+									@Const btVector3 dir);
+
+public static native void btExpandPortal(btMprSimplex_t portal,
+						   @Const btMprSupport_t v4);
+
+public static native void btFindPos(@Const btMprSimplex_t portal, btVector3 pos);
+
+public static native float btMprVec3Dist2(@Const btVector3 a, @Const btVector3 b);
+
+public static native float _btMprVec3PointSegmentDist2(@Const btVector3 P,
+										 @Const btVector3 x0,
+										 @Const btVector3 b,
+										 btVector3 witness);
+
+public static native float btMprVec3PointTriDist2(@Const btVector3 P,
+									@Const btVector3 x0, @Const btVector3 B,
+									@Const btVector3 C,
+									btVector3 witness);
+
+public static native void btFindPenetrTouch(btMprSimplex_t portal, FloatPointer depth, btVector3 dir, btVector3 pos);
+public static native void btFindPenetrTouch(btMprSimplex_t portal, FloatBuffer depth, btVector3 dir, btVector3 pos);
+public static native void btFindPenetrTouch(btMprSimplex_t portal, float[] depth, btVector3 dir, btVector3 pos);
+
+public static native void btFindPenetrSegment(btMprSimplex_t portal,
+								FloatPointer depth, btVector3 dir, btVector3 pos);
+public static native void btFindPenetrSegment(btMprSimplex_t portal,
+								FloatBuffer depth, btVector3 dir, btVector3 pos);
+public static native void btFindPenetrSegment(btMprSimplex_t portal,
+								float[] depth, btVector3 dir, btVector3 pos);
+
+// #endif  //BT_MPR_PENETRATION_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btPolyhedralContactClipping.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2011 Advanced Micro Devices, Inc.  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**This file was written by Erwin Coumans */
+
+// #ifndef BT_POLYHEDRAL_CONTACT_CLIPPING_H
+// #define BT_POLYHEDRAL_CONTACT_CLIPPING_H
+
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "LinearMath/btTransform.h"
+// #include "btDiscreteCollisionDetectorInterface.h"
+// Targeting ../BulletCollision/btPolyhedralContactClipping.java
+
+
+
+// #endif  // BT_POLYHEDRAL_CONTACT_CLIPPING_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btSubSimplexConvexCast.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SUBSIMPLEX_CONVEX_CAST_H
+// #define BT_SUBSIMPLEX_CONVEX_CAST_H
+
+// #include "btConvexCast.h"
+// #include "btSimplexSolverInterface.h"
+// Targeting ../BulletCollision/btSubsimplexConvexCast.java
+
+
+
+// #endif  //BT_SUBSIMPLEX_CONVEX_CAST_H
+
+
+// Parsed from BulletCollision/NarrowPhaseCollision/btRaycastCallback.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_RAYCAST_TRI_CALLBACK_H
+// #define BT_RAYCAST_TRI_CALLBACK_H
+
+// #include "BulletCollision/CollisionShapes/btTriangleCallback.h"
+// #include "LinearMath/btTransform.h"
+// Targeting ../BulletCollision/btTriangleRaycastCallback.java
+
+
+// Targeting ../BulletCollision/btTriangleConvexcastCallback.java
+
+
+
+// #endif  //BT_RAYCAST_TRI_CALLBACK_H
+
+
 // Parsed from BulletCollision/CollisionDispatch/btCollisionConfiguration.h
 
 /*
@@ -1534,6 +2086,143 @@ subject to the following restrictions:
 
 
 // #endif  //BT_COLLISION_DISPATCHER_MT_H
+
+
+// Parsed from BulletCollision/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_BOX_2D_BOX_2D__COLLISION_ALGORITHM_H
+// #define BT_BOX_2D_BOX_2D__COLLISION_ALGORITHM_H
+
+// #include "BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "BulletCollision/BroadphaseCollision/btDispatcher.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// Targeting ../BulletCollision/btBox2dBox2dCollisionAlgorithm.java
+
+
+
+// #endif  //BT_BOX_2D_BOX_2D__COLLISION_ALGORITHM_H
+
+
+// Parsed from BulletCollision/CollisionDispatch/btConvex2dConvex2dAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONVEX_2D_CONVEX_2D_ALGORITHM_H
+// #define BT_CONVEX_2D_CONVEX_2D_ALGORITHM_H
+
+// #include "BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.h"
+// #include "BulletCollision/NarrowPhaseCollision/btGjkPairDetector.h"
+// #include "BulletCollision/NarrowPhaseCollision/btPersistentManifold.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
+// #include "LinearMath/btTransformUtil.h"  //for btConvexSeparatingDistanceUtil
+// Targeting ../BulletCollision/btConvex2dConvex2dAlgorithm.java
+
+
+
+// #endif  //BT_CONVEX_2D_CONVEX_2D_ALGORITHM_H
+
+
+// Parsed from BulletCollision/CollisionDispatch/btEmptyCollisionAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_EMPTY_ALGORITH
+// #define BT_EMPTY_ALGORITH
+// #include "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h"
+// #include "btCollisionCreateFunc.h"
+// #include "btCollisionDispatcher.h"
+
+// #define ATTRIBUTE_ALIGNED(a)
+// Targeting ../BulletCollision/btEmptyAlgorithm.java
+
+
+
+// #endif  //BT_EMPTY_ALGORITH
+
+
+// Parsed from BulletCollision/CollisionDispatch/btInternalEdgeUtility.h
+
+
+// #ifndef BT_INTERNAL_EDGE_UTILITY_H
+// #define BT_INTERNAL_EDGE_UTILITY_H
+
+// #include "LinearMath/btHashMap.h"
+// #include "LinearMath/btVector3.h"
+
+// #include "BulletCollision/CollisionShapes/btTriangleInfoMap.h"
+
+/**The btInternalEdgeUtility helps to avoid or reduce artifacts due to wrong collision normals caused by internal edges.
+ * See also http://code.google.com/p/bullet/issues/detail?id=27 */
+
+/** enum btInternalEdgeAdjustFlags */
+public static final int
+	BT_TRIANGLE_CONVEX_BACKFACE_MODE = 1,
+	BT_TRIANGLE_CONCAVE_DOUBLE_SIDED = 2,  //double sided options are experimental, single sided is recommended
+	BT_TRIANGLE_CONVEX_DOUBLE_SIDED = 4;
+
+/**Call btGenerateInternalEdgeInfo to create triangle info, store in the shape 'userInfo' */
+public static native void btGenerateInternalEdgeInfo(btBvhTriangleMeshShape trimeshShape, btTriangleInfoMap triangleInfoMap);
+
+public static native void btGenerateInternalEdgeInfo(btHeightfieldTerrainShape trimeshShape, btTriangleInfoMap triangleInfoMap);
+
+/**Call the btFixMeshNormal to adjust the collision normal, using the triangle info map (generated using btGenerateInternalEdgeInfo)
+ * If this info map is missing, or the triangle is not store in this map, nothing will be done */
+public static native void btAdjustInternalEdgeContacts(@ByRef btManifoldPoint cp, @Const btCollisionObjectWrapper trimeshColObj0Wrap, @Const btCollisionObjectWrapper otherColObj1Wrap, int partId0, int index0, int normalAdjustFlags/*=0*/);
+public static native void btAdjustInternalEdgeContacts(@ByRef btManifoldPoint cp, @Const btCollisionObjectWrapper trimeshColObj0Wrap, @Const btCollisionObjectWrapper otherColObj1Wrap, int partId0, int index0);
+
+/**Enable the BT_INTERNAL_EDGE_DEBUG_DRAW define and call btSetDebugDrawer, to get visual info to see if the internal edge utility works properly.
+ * If the utility doesn't work properly, you might have to adjust the threshold values in btTriangleInfoMap */
+//#define BT_INTERNAL_EDGE_DEBUG_DRAW
+
+// #ifdef BT_INTERNAL_EDGE_DEBUG_DRAW
+// #endif  //BT_INTERNAL_EDGE_DEBUG_DRAW
+
+// #endif  //BT_INTERNAL_EDGE_UTILITY_H
 
 
 // Parsed from BulletCollision/CollisionShapes/btCollisionShape.h
@@ -2565,6 +3254,242 @@ subject to the following restrictions:
 
 
 // #endif  //BT_UNIFORM_SCALING_SHAPE_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btBox2dShape.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_OBB_BOX_2D_SHAPE_H
+// #define BT_OBB_BOX_2D_SHAPE_H
+
+// #include "BulletCollision/CollisionShapes/btPolyhedralConvexShape.h"
+// #include "BulletCollision/CollisionShapes/btCollisionMargin.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btMinMax.h"
+// Targeting ../BulletCollision/btBox2dShape.java
+
+
+
+// #endif  //BT_OBB_BOX_2D_SHAPE_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btConvex2dShape.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2009 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONVEX_2D_SHAPE_H
+// #define BT_CONVEX_2D_SHAPE_H
+
+// #include "BulletCollision/CollisionShapes/btConvexShape.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// Targeting ../BulletCollision/btConvex2dShape.java
+
+
+
+// #endif  //BT_CONVEX_2D_SHAPE_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2009 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_HEIGHTFIELD_TERRAIN_SHAPE_H
+// #define BT_HEIGHTFIELD_TERRAIN_SHAPE_H
+
+// #include "btConcaveShape.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+// Targeting ../BulletCollision/btHeightfieldTerrainShape.java
+
+
+
+// #endif  //BT_HEIGHTFIELD_TERRAIN_SHAPE_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btTriangleShape.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2009 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_OBB_TRIANGLE_MINKOWSKI_H
+// #define BT_OBB_TRIANGLE_MINKOWSKI_H
+
+// #include "btConvexShape.h"
+// #include "btBoxShape.h"
+// Targeting ../BulletCollision/btTriangleShape.java
+
+
+
+// #endif  //BT_OBB_TRIANGLE_MINKOWSKI_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btSdfCollisionShape.h
+
+// #ifndef BT_SDF_COLLISION_SHAPE_H
+// #define BT_SDF_COLLISION_SHAPE_H
+
+// #include "btConcaveShape.h"
+// Targeting ../BulletCollision/btSdfCollisionShape.java
+
+
+
+// #endif  //BT_SDF_COLLISION_SHAPE_H
+
+
+// Parsed from BulletCollision/CollisionShapes/btShapeHull.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2009 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**btShapeHull implemented by John McCutchan. */
+
+// #ifndef BT_SHAPE_HULL_H
+// #define BT_SHAPE_HULL_H
+
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "BulletCollision/CollisionShapes/btConvexShape.h"
+// Targeting ../BulletCollision/btShapeHull.java
+
+
+
+// #endif  //BT_SHAPE_HULL_H
+
+
+// Parsed from BulletCollision/Gimpact/btGImpactShape.h
+
+/** \file btGImpactShape.h
+@author Francisco Len N�jera
+*/
+/*
+This source file is part of GIMPACT Library.
+
+For the latest info, see http://gimpact.sourceforge.net/
+
+Copyright (c) 2007 Francisco Leon Najera. C.C. 80087371.
+email: projectileman@yahoo.com
+
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef GIMPACT_SHAPE_H
+// #define GIMPACT_SHAPE_H
+
+// #include "BulletCollision/CollisionShapes/btCollisionShape.h"
+// #include "BulletCollision/CollisionShapes/btTriangleShape.h"
+// #include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
+// #include "BulletCollision/CollisionShapes/btCollisionMargin.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
+// #include "BulletCollision/CollisionShapes/btConcaveShape.h"
+// #include "BulletCollision/CollisionShapes/btTetrahedronShape.h"
+// #include "LinearMath/btVector3.h"
+// #include "LinearMath/btTransform.h"
+// #include "LinearMath/btMatrix3x3.h"
+// #include "LinearMath/btAlignedObjectArray.h"
+
+// #include "btGImpactQuantizedBvh.h"  // box tree class
+
+/** declare Quantized trees, (you can change to float based trees) */
+
+/** enum eGIMPACT_SHAPE_TYPE */
+public static final int
+	CONST_GIMPACT_COMPOUND_SHAPE = 0,
+	CONST_GIMPACT_TRIMESH_SHAPE_PART = 1,
+	CONST_GIMPACT_TRIMESH_SHAPE = 2;
+// Targeting ../BulletCollision/btTetrahedronShapeEx.java
+
+
+// Targeting ../BulletCollision/btGImpactShapeInterface.java
+
+
+// Targeting ../BulletCollision/btGImpactCompoundShape.java
+
+
+// Targeting ../BulletCollision/btGImpactMeshShapePart.java
+
+
+// Targeting ../BulletCollision/btGImpactMeshShape.java
+
+
+// Targeting ../BulletCollision/btGImpactMeshShapeData.java
+
+
+
+
+
+// #endif  //GIMPACT_MESH_SHAPE_H
 
 
 }
