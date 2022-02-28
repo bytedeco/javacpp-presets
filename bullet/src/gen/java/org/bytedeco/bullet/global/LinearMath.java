@@ -725,6 +725,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../LinearMath/btIntArray.java
 
 
+// Targeting ../LinearMath/btUIntArray.java
+
+
 // Targeting ../LinearMath/btScalarArray.java
 
 
@@ -738,6 +741,15 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 
 // Targeting ../LinearMath/btVector4Array.java
+
+
+// Targeting ../LinearMath/btPlaneArray.java
+
+
+// Targeting ../LinearMath/btConvexHHalfEdgeArray.java
+
+
+// Targeting ../LinearMath/btConvexHullComputerEdgeArray.java
 
 
 
@@ -1117,6 +1129,379 @@ Nov.2006
 
 
 // #endif  //BT_STACK_ALLOC
+
+
+// Parsed from LinearMath/TaskScheduler/btThreadSupportInterface.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2018 Erwin Coumans  http://bulletphysics.com
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_THREAD_SUPPORT_INTERFACE_H
+// #define BT_THREAD_SUPPORT_INTERFACE_H
+// Targeting ../LinearMath/btCriticalSection.java
+
+
+// Targeting ../LinearMath/btThreadSupportInterface.java
+
+
+
+// #endif  //BT_THREAD_SUPPORT_INTERFACE_H
+
+
+// Parsed from LinearMath/btThreads.h
+
+/*
+Copyright (c) 2003-2014 Erwin Coumans  http://bullet.googlecode.com
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_THREADS_H
+// #define BT_THREADS_H
+
+// #include "btScalar.h"  // has definitions like SIMD_FORCE_INLINE
+
+// #if defined(_MSC_VER) && _MSC_VER >= 1600
+// give us a compile error if any signatures of overriden methods is changed
+// #define BT_OVERRIDE override
+// #endif
+
+// #ifndef BT_OVERRIDE
+// #define BT_OVERRIDE
+// #endif
+
+// Don't set this to larger than 64, without modifying btThreadSupportPosix
+// and btThreadSupportWin32. They use UINT64 bit-masks.
+@MemberGetter public static native @Cast("const unsigned int") int BT_MAX_THREAD_COUNT();  // only if BT_THREADSAFE is 1
+
+// for internal use only
+public static native @Cast("bool") boolean btIsMainThread();
+public static native @Cast("bool") boolean btThreadsAreRunning();
+public static native @Cast("unsigned int") int btGetCurrentThreadIndex();
+
+
+///
+///
+public static native void btResetThreadIndexCounter();
+// Targeting ../LinearMath/btSpinMutex.java
+
+
+
+//
+// NOTE: btMutex* is for internal Bullet use only
+//
+// If BT_THREADSAFE is undefined or 0, should optimize away to nothing.
+// This is good because for the single-threaded build of Bullet, any calls
+// to these functions will be optimized out.
+//
+// However, for users of the multi-threaded build of Bullet this is kind
+// of bad because if you call any of these functions from external code
+// (where BT_THREADSAFE is undefined) you will get unexpected race conditions.
+//
+public static native void btMutexLock(btSpinMutex mutex);
+
+public static native void btMutexUnlock(btSpinMutex mutex);
+
+public static native @Cast("bool") boolean btMutexTryLock(btSpinMutex mutex);
+// Targeting ../LinearMath/btIParallelForBody.java
+
+
+// Targeting ../LinearMath/btIParallelSumBody.java
+
+
+// Targeting ../LinearMath/btITaskScheduler.java
+
+
+
+// set the task scheduler to use for all calls to btParallelFor()
+// NOTE: you must set this prior to using any of the multi-threaded "Mt" classes
+public static native void btSetTaskScheduler(btITaskScheduler ts);
+
+// get the current task scheduler
+public static native btITaskScheduler btGetTaskScheduler();
+
+// get non-threaded task scheduler (always available)
+public static native btITaskScheduler btGetSequentialTaskScheduler();
+
+// create a default task scheduler (Win32 or pthreads based)
+public static native btITaskScheduler btCreateDefaultTaskScheduler();
+
+// get OpenMP task scheduler (if available, otherwise returns null)
+public static native btITaskScheduler btGetOpenMPTaskScheduler();
+
+// get Intel TBB task scheduler (if available, otherwise returns null)
+public static native btITaskScheduler btGetTBBTaskScheduler();
+
+// get PPL task scheduler (if available, otherwise returns null)
+public static native btITaskScheduler btGetPPLTaskScheduler();
+
+// btParallelFor -- call this to dispatch work like a for-loop
+//                 (iterations may be done out of order, so no dependencies are allowed)
+public static native void btParallelFor(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelForBody body);
+
+// btParallelSum -- call this to dispatch work like a for-loop, returns the sum of all iterations
+//                 (iterations may be done out of order, so no dependencies are allowed)
+public static native @Cast("btScalar") float btParallelSum(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelSumBody body);
+
+// #endif
+
+
+// Parsed from LinearMath/btAlignedAllocator.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_ALIGNED_ALLOCATOR
+// #define BT_ALIGNED_ALLOCATOR
+
+/**we probably replace this with our own aligned memory allocator
+ * so we replace _aligned_malloc and _aligned_free with our own
+ * that is better portable and more predictable */
+
+// #include "btScalar.h"
+
+/**BT_DEBUG_MEMORY_ALLOCATIONS preprocessor can be set in build system
+ * for regression tests to detect memory leaks
+ * #define BT_DEBUG_MEMORY_ALLOCATIONS 1 */
+// #ifdef BT_DEBUG_MEMORY_ALLOCATIONS
+
+// #else
+public static native Pointer btAlignedAllocInternal(@Cast("size_t") long size, int alignment);
+public static native void btAlignedFreeInternal(Pointer ptr);
+
+// #define btAlignedAlloc(size, alignment) btAlignedAllocInternal(size, alignment)
+// #define btAlignedFree(ptr) btAlignedFreeInternal(ptr)
+
+// #endif
+// Targeting ../LinearMath/btAlignedAllocFunc.java
+
+
+// Targeting ../LinearMath/btAlignedFreeFunc.java
+
+
+// Targeting ../LinearMath/btAllocFunc.java
+
+
+// Targeting ../LinearMath/btFreeFunc.java
+
+
+
+/**The developer can let all Bullet memory allocations go through a custom memory allocator, using btAlignedAllocSetCustom */
+public static native void btAlignedAllocSetCustom(btAllocFunc allocFunc, btFreeFunc freeFunc);
+/**If the developer has already an custom aligned allocator, then btAlignedAllocSetCustomAligned can be used. The default aligned allocator pre-allocates extra memory using the non-aligned allocator, and instruments it. */
+public static native void btAlignedAllocSetCustomAligned(btAlignedAllocFunc allocFunc, btAlignedFreeFunc freeFunc);
+
+/**The btAlignedAllocator is a portable class for aligned memory allocations.
+ * Default implementations for unaligned and aligned allocations can be overridden by a custom allocator using btAlignedAllocSetCustom and btAlignedAllocSetCustomAligned. */
+
+// #endif  //BT_ALIGNED_ALLOCATOR
+
+
+// Parsed from LinearMath/btConvexHull.h
+
+
+/*
+Stan Melax Convex Hull Computation
+Copyright (c) 2008 Stan Melax http://www.melax.com/
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+/**includes modifications/improvements by John Ratcliff, see BringOutYourDead below. */
+
+// #ifndef BT_CD_HULL_H
+// #define BT_CD_HULL_H
+
+// #include "btVector3.h"
+// #include "btAlignedObjectArray.h"
+// Targeting ../LinearMath/HullResult.java
+
+
+
+/** enum HullFlag */
+public static final int
+	QF_TRIANGLES = (1 << 0),      // report results as triangles, not polygons.
+	QF_REVERSE_ORDER = (1 << 1),  // reverse order of the triangle indices.
+	QF_DEFAULT = QF_TRIANGLES;
+// Targeting ../LinearMath/HullDesc.java
+
+
+
+/** enum HullError */
+public static final int
+	QE_OK = 0,   // success!
+	QE_FAIL = 1;  // failed.
+// Targeting ../LinearMath/btPlane.java
+
+
+// Targeting ../LinearMath/ConvexH.java
+
+
+// Targeting ../LinearMath/Int4.java
+
+
+// Targeting ../LinearMath/PHullResult.java
+
+
+// Targeting ../LinearMath/HullLibrary.java
+
+
+
+// #endif  //BT_CD_HULL_H
+
+
+// Parsed from LinearMath/btConvexHullComputer.h
+
+/*
+Copyright (c) 2011 Ole Kniemeyer, MAXON, www.maxon.net
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_CONVEX_HULL_COMPUTER_H
+// #define BT_CONVEX_HULL_COMPUTER_H
+
+// #include "btVector3.h"
+// #include "btAlignedObjectArray.h"
+// Targeting ../LinearMath/btConvexHullComputer.java
+
+
+
+// #endif  //BT_CONVEX_HULL_COMPUTER_H
+
+
+// Parsed from LinearMath/btGeometryUtil.h
+
+/*
+Copyright (c) 2003-2006 Gino van den Bergen / Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_GEOMETRY_UTIL_H
+// #define BT_GEOMETRY_UTIL_H
+
+// #include "btVector3.h"
+// #include "btAlignedObjectArray.h"
+// Targeting ../LinearMath/btGeometryUtil.java
+
+
+
+// #endif  //BT_GEOMETRY_UTIL_H
+
+
+// Parsed from LinearMath/btMinMax.h
+
+/*
+Copyright (c) 2003-2006 Gino van den Bergen / Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_GEN_MINMAX_H
+// #define BT_GEN_MINMAX_H
+
+// #include "btScalar.h"
+
+// #endif  //BT_GEN_MINMAX_H
+
+
+// Parsed from LinearMath/btTransformUtil.h
+
+/*
+Copyright (c) 2003-2006 Gino van den Bergen / Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_TRANSFORM_UTIL_H
+// #define BT_TRANSFORM_UTIL_H
+
+// #include "btTransform.h"
+public static native @MemberGetter double ANGULAR_MOTION_THRESHOLD();
+public static final double ANGULAR_MOTION_THRESHOLD = ANGULAR_MOTION_THRESHOLD();
+
+public static native @ByVal btVector3 btAabbSupport(@Const @ByRef btVector3 halfExtents, @Const @ByRef btVector3 supportDir);
+// Targeting ../LinearMath/btTransformUtil.java
+
+
+// Targeting ../LinearMath/btConvexSeparatingDistanceUtil.java
+
+
+
+// #endif  //BT_TRANSFORM_UTIL_H
 
 
 }
