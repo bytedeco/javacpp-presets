@@ -53,7 +53,7 @@ public class AssetManager extends Pointer {
     public native @SharedPtr @ByVal Asset set(@ByVal Asset asset);
 
     /**
-     * Adds or overwrites an asset object to AssetManager with a specificied key.
+     * Adds or overwrites an asset object to AssetManager with a specified key.
      * Key value will be assigned to an Asset as well
      *
      * @param key Key under which the asset should be stored

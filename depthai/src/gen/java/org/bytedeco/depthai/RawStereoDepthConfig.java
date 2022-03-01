@@ -309,7 +309,7 @@ public class RawStereoDepthConfig extends RawBuffer {
              */
             public native @Cast("std::int32_t") int minRange(); public native ThresholdFilter minRange(int setter);
             /**
-             * Minimum range in millimeters.
+             * Maximum range in millimeters.
              * Depth values over this value are invalidated.
              */
             public native @Cast("std::int32_t") int maxRange(); public native ThresholdFilter maxRange(int setter);

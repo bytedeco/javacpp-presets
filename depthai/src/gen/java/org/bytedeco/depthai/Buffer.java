@@ -41,6 +41,7 @@ public class Buffer extends ADatatype {
 
     // helpers
     /**
+     * \brief Get non-owning reference to internal buffer
      * @return Reference to internal buffer
      */
     public native @Cast("std::uint8_t*") @StdVector BytePointer getData();
@@ -51,4 +52,8 @@ public class Buffer extends ADatatype {
     public native void setData(@Cast("std::uint8_t*") @StdVector BytePointer data);
     public native void setData(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
     public native void setData(@Cast("std::uint8_t*") @StdVector byte[] data);
+
+    /**
+     * @param data Moves data to internal buffer
+     */
 }

@@ -89,7 +89,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @return Repesents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
+     * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -117,7 +117,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @return Repesents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
+     * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -149,7 +149,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @return Repesents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
+     * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -176,7 +176,7 @@ public class CalibrationHandler extends Pointer {
      * Get the Default Intrinsics object
      *
      * @param cameraId Uses the cameraId to identify which camera intrinsics to return
-     * @return Repesents the 3x3 intrinsics matrix of the respective camera along with width and height at which it was calibrated.
+     * @return Represents the 3x3 intrinsics matrix of the respective camera along with width and height at which it was calibrated.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -214,7 +214,7 @@ public class CalibrationHandler extends Pointer {
      *  Get the lens position of the given camera
      *
      * @param cameraId of the camera with lens position is requested.
-     * @return lens postion of the camera with given cameraId at which it was calibrated.
+     * @return lens position of the camera with given cameraId at which it was calibrated.
      */
     public native @Cast("uint8_t") byte getLensPosition(CameraBoardSocket cameraId);
     public native @Cast("uint8_t") byte getLensPosition(@Cast("dai::CameraBoardSocket") int cameraId);
@@ -223,10 +223,10 @@ public class CalibrationHandler extends Pointer {
      * Get the Camera Extrinsics object between two cameras from the calibration data if there is a linked connection
      *  between any two cameras then the relative rotation and translation (in centimeters) is returned by this function.
      *
-     * @param srcCamera Camera Id of the camera which will be considerd as origin.
+     * @param srcCamera Camera Id of the camera which will be considered as origin.
      * @param dstCamera  Camera Id of the destination camera to which we are fetching the rotation and translation from the SrcCamera
      * @param useSpecTranslation Enabling this bool uses the translation information from the board design data
-     * @return a transformationMatrix which is 4x4 in homogenious coordinate system
+     * @return a transformationMatrix which is 4x4 in homogeneous coordinate system
      *
      * Matrix representation of transformation matrix
      * <pre>{@code \[ \text{Transformation Matrix} = \left [ \begin{matrix}
@@ -245,7 +245,7 @@ public class CalibrationHandler extends Pointer {
     /**
      * Get the Camera translation vector between two cameras from the calibration data.
      *
-     * @param srcCamera Camera Id of the camera which will be considerd as origin.
+     * @param srcCamera Camera Id of the camera which will be considered as origin.
      * @param dstCamera  Camera Id of the destination camera to which we are fetching the translation vector from the SrcCamera
      * @param useSpecTranslation Disabling this bool uses the translation information from the calibration data (not the board design data)
      * @return a translation vector like [x, y, z] in centimeters
@@ -277,9 +277,9 @@ public class CalibrationHandler extends Pointer {
      * From the data loaded if there is a linked connection between IMU and the given camera then there relative rotation and translation from the camera to IMU
      * is returned.
      *
-     * @param cameraId Camera Id of the camera which will be considerd as origin. from which Transformation matrix to the IMU will be found
+     * @param cameraId Camera Id of the camera which will be considered as origin. from which Transformation matrix to the IMU will be found
      * @param useSpecTranslation Enabling this bool uses the translation information from the board design data
-     * @return Returns a transformationMatrix which is 4x4 in homogenious coordinate system
+     * @return Returns a transformationMatrix which is 4x4 in homogeneous coordinate system
      *
      * Matrix representation of transformation matrix
      * <pre>{@code \[ \text{Transformation Matrix} = \left [ \begin{matrix}
@@ -300,9 +300,9 @@ public class CalibrationHandler extends Pointer {
      * between IMU and the given camera then there relative rotation and translation from the IMU to Camera
      * is returned.
      *
-     * @param cameraId Camera Id of the camera which will be considerd as destination. To which Transformation matrix from the IMU will be found.
+     * @param cameraId Camera Id of the camera which will be considered as destination. To which Transformation matrix from the IMU will be found.
      * @param useSpecTranslation Enabling this bool uses the translation information from the board design data
-     * @return Returns a transformationMatrix which is 4x4 in homogenious coordinate system
+     * @return Returns a transformationMatrix which is 4x4 in homogeneous coordinate system
      *
      * Matrix representation of transformation matrix
      * <pre>{@code \[ \text{Transformation Matrix} = \left [ \begin{matrix}
@@ -373,7 +373,7 @@ public class CalibrationHandler extends Pointer {
      *
      * @param cameraId CameraId of the camera for which Camera intrinsics are being loaded
      * @param intrinsics 3x3 intrinsics matrix
-     * @param frameSize repesents the width and height of the image at which intrinsics are calculated.
+     * @param frameSize Represents the width and height of the image at which intrinsics are calculated.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -391,8 +391,8 @@ public class CalibrationHandler extends Pointer {
      *
      * @param cameraId CameraId of the camera for which Camera intrinsics are being loaded
      * @param intrinsics 3x3 intrinsics matrix
-     * @param width repesents the width of the image at which intrinsics are calculated.
-     * @param height repesents the height of the image at which intrinsics are calculated.
+     * @param width Represents the width of the image at which intrinsics are calculated.
+     * @param height Represents the height of the image at which intrinsics are calculated.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -410,7 +410,7 @@ public class CalibrationHandler extends Pointer {
      *
      * @param cameraId CameraId of the camera for which Camera intrinsics are being loaded
      * @param intrinsics 3x3 intrinsics matrix
-     * @param frameSize repesents the width and height of the image at which intrinsics are calculated.
+     * @param frameSize Represents the width and height of the image at which intrinsics are calculated.
      *
      * Matrix representation of intrinsic matrix
      * <pre>{@code \[ \text{Intrinsic Matrix} = \left [ \begin{matrix}
@@ -426,7 +426,7 @@ public class CalibrationHandler extends Pointer {
     /**
      * Sets the distortion Coefficients obtained from camera calibration
      *
-     * @param cameraId Camera Id of the camera for which distoriton coefficients are computed
+     * @param cameraId Camera Id of the camera for which distortion coefficients are computed
      * @param distortionCoefficients Distortion Coefficients of the respective Camera.
      */
     public native void setDistortionCoefficients(CameraBoardSocket cameraId, @StdVector FloatPointer distortionCoefficients);
@@ -466,8 +466,8 @@ public class CalibrationHandler extends Pointer {
     /**
      * Set the Camera Extrinsics object
      *
-     * @param srcCameraId Camera Id of the camera which will be considerd as relative origin.
-     * @param destCameraId Camera Id of the camera which will be considerd as destination from srcCameraId.
+     * @param srcCameraId Camera Id of the camera which will be considered as relative origin.
+     * @param destCameraId Camera Id of the camera which will be considered as destination from srcCameraId.
      * @param rotationMatrix Rotation between srcCameraId and destCameraId origins.
      * @param translation Translation between srcCameraId and destCameraId origins.
      * @param specTranslation Translation between srcCameraId and destCameraId origins from the design.
@@ -530,7 +530,7 @@ public class CalibrationHandler extends Pointer {
     /**
      * Set the Imu to Camera Extrinsics object
      *
-     * @param destCameraId Camera Id of the camera which will be considerd as destination from IMU.
+     * @param destCameraId Camera Id of the camera which will be considered as destination from IMU.
      * @param rotationMatrix Rotation between srcCameraId and destCameraId origins.
      * @param translation Translation between IMU and destCameraId origins.
      * @param specTranslation Translation between IMU and destCameraId origins from the design.

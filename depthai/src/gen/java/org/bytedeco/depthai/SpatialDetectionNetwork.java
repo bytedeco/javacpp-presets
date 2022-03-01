@@ -66,6 +66,12 @@ public class SpatialDetectionNetwork extends SpatialDetectionNetworkPropertiesNo
     @MemberGetter public native @ByRef Output passthroughDepth();
 
     /**
+     * Output of SpatialLocationCalculator node, which is used internally by SpatialDetectionNetwork.
+     * Suitable when extra information is required from SpatialLocationCalculator node, e.g. minimum, maximum distance.
+     */
+    @MemberGetter public native @ByRef Output spatialLocationCalculatorOutput();
+
+    /**
      * Specifies scale factor for detected bounding boxes.
      * @param scaleFactor Scale factor must be in the interval (0,1].
      */

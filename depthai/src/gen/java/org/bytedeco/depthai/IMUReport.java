@@ -57,5 +57,9 @@ public class IMUReport extends Pointer {
     /** Accuracy of sensor */
     public native @Name("accuracy") Accuracy reportAccuracy(); public native IMUReport reportAccuracy(Accuracy setter);
 
+    /** Generation timestamp, synced to host time */
     public native @ByRef Timestamp timestamp(); public native IMUReport timestamp(Timestamp setter);
+
+    /** Generation timestamp, direct device monotonic clock */
+    public native @ByRef Timestamp tsDevice(); public native IMUReport tsDevice(Timestamp setter);
 }
