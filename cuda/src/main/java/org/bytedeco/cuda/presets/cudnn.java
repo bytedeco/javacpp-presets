@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = cublas.class, value = {
     @Platform(include = {"<cudnn.h>", "<cudnn_version.h>", "<cudnn_ops_infer.h>", "<cudnn_ops_train.h>", "<cudnn_adv_infer.h>", "<cudnn_adv_train.h>", "<cudnn_cnn_infer.h>", "<cudnn_cnn_train.h>"},
         link = {"cudnn@.8", "cudnn_ops_infer@.8", "cudnn_ops_train@.8", "cudnn_adv_infer@.8", "cudnn_adv_train@.8", "cudnn_cnn_infer@.8", "cudnn_cnn_train@.8"}),
-    @Platform(value = "windows-x86_64", preload = {"cudnn64_8", "cudnn_ops_infer64_8", "cudnn_ops_train64_8", "cudnn_adv_infer64_8", "cudnn_adv_train64_8", "cudnn_cnn_infer64_8", "cudnn_cnn_train64_8"})},
+    @Platform(value = "windows-x86_64", preload = {"zlibwapi", "cudnn64_8", "cudnn_ops_infer64_8", "cudnn_ops_train64_8", "cudnn_adv_infer64_8", "cudnn_adv_train64_8", "cudnn_cnn_infer64_8", "cudnn_cnn_train64_8"})},
         target = "org.bytedeco.cuda.cudnn", global = "org.bytedeco.cuda.global.cudnn")
 @NoException
 public class cudnn implements InfoMapper {
