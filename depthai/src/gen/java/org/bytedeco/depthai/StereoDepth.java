@@ -80,7 +80,10 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * Outputs ImgFrame message that carries RAW8 / RAW16 encoded disparity data:
      * RAW8 encoded (0..95) for standard mode;
      * RAW8 encoded (0..190) for extended disparity mode;
-     * RAW16 encoded (0..3040) for subpixel disparity mode (32 subpixel levels on top of standard mode).
+     * RAW16 encoded for subpixel disparity mode:
+     * - 0..760 for 3 fractional bits (by default)
+     * - 0..1520 for 4 fractional bits
+     * - 0..3040 for 5 fractional bits
      */
     @MemberGetter public native @ByRef Output disparity();
 
@@ -145,9 +148,6 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * RGB alignment, left-right check or any postproccessing (e.g. median filter) is not performed on confidence map.
      */
     @MemberGetter public native @ByRef Output confidenceMap();
-
-// #if 0  // will be enabled when confidence map RGB alignment/LR-check support will be added
-// #endif
 
     /**
      * Specify local filesystem path to the calibration file
@@ -265,7 +265,7 @@ public class StereoDepth extends StereoDepthPropertiesNode {
     public native void setLeftRightCheck(@Cast("bool") boolean enable);
 
     /**
-     * Computes disparity with sub-pixel interpolation (5 fractional bits).
+     * Computes disparity with sub-pixel interpolation (3 fractional bits by default).
      *
      * Suitable for long range. Currently incompatible with extended disparity
      */
@@ -343,4 +343,10 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      */
     public native void setDefaultProfilePreset(PresetMode mode);
     public native void setDefaultProfilePreset(@Cast("dai::node::StereoDepth::PresetMode") int mode);
+
+    /**
+     * Sets a default preset based on specified option.
+     * @param mode Stereo depth preset mode
+     */
+    public native void setFocalLengthFromCalibration(@Cast("bool") boolean focalLengthFromCalibration);
 }

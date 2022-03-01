@@ -60,29 +60,29 @@ public class CameraControl extends Buffer {
     /**
      * Set a command to capture a still image
      */
-    public native void setCaptureStill(@Cast("bool") boolean capture);
+    public native @ByRef CameraControl setCaptureStill(@Cast("bool") boolean capture);
 
     /**
      * Set a command to start streaming
      */
-    public native void setStartStreaming();
+    public native @ByRef CameraControl setStartStreaming();
 
     /**
      * Set a command to stop streaming
      */
-    public native void setStopStreaming();
+    public native @ByRef CameraControl setStopStreaming();
 
     // Focus
     /**
      * Set a command to specify autofocus mode
      */
-    public native void setAutoFocusMode(RawCameraControl.AutoFocusMode mode);
-    public native void setAutoFocusMode(@Cast("dai::RawCameraControl::AutoFocusMode") byte mode);
+    public native @ByRef CameraControl setAutoFocusMode(RawCameraControl.AutoFocusMode mode);
+    public native @ByRef CameraControl setAutoFocusMode(@Cast("dai::RawCameraControl::AutoFocusMode") byte mode);
 
     /**
      * Set a command to trigger autofocus
      */
-    public native void setAutoFocusTrigger();
+    public native @ByRef CameraControl setAutoFocusTrigger();
 
     /**
      * Set a command to specify focus region in pixels
@@ -91,25 +91,25 @@ public class CameraControl extends Buffer {
      * @param width Region width
      * @param height Region height
      */
-    public native void setAutoFocusRegion(@Cast("uint16_t") short startX, @Cast("uint16_t") short startY, @Cast("uint16_t") short width, @Cast("uint16_t") short height);
+    public native @ByRef CameraControl setAutoFocusRegion(@Cast("uint16_t") short startX, @Cast("uint16_t") short startY, @Cast("uint16_t") short width, @Cast("uint16_t") short height);
 
     /**
      * Set a command to specify manual focus position
      * @param lensPosition specify lens position 0..255
      */
-    public native void setManualFocus(@Cast("uint8_t") byte lensPosition);
+    public native @ByRef CameraControl setManualFocus(@Cast("uint8_t") byte lensPosition);
 
     // Exposure
     /**
      * Set a command to enable auto exposure
      */
-    public native void setAutoExposureEnable();
+    public native @ByRef CameraControl setAutoExposureEnable();
 
     /**
      * Set a command to specify lock auto exposure
      * @param lock Auto exposure lock mode enabled or disabled
      */
-    public native void setAutoExposureLock(@Cast("bool") boolean lock);
+    public native @ByRef CameraControl setAutoExposureLock(@Cast("bool") boolean lock);
 
     /**
      * Set a command to specify auto exposure region in pixels
@@ -118,98 +118,98 @@ public class CameraControl extends Buffer {
      * @param width Region width
      * @param height Region height
      */
-    public native void setAutoExposureRegion(@Cast("uint16_t") short startX, @Cast("uint16_t") short startY, @Cast("uint16_t") short width, @Cast("uint16_t") short height);
+    public native @ByRef CameraControl setAutoExposureRegion(@Cast("uint16_t") short startX, @Cast("uint16_t") short startY, @Cast("uint16_t") short width, @Cast("uint16_t") short height);
 
     /**
      * Set a command to specify auto exposure compensation
      * @param compensation Compensation value between -9..9
      */
-    public native void setAutoExposureCompensation(int compensation);
+    public native @ByRef CameraControl setAutoExposureCompensation(int compensation);
 
     /**
      * Set a command to specify auto banding mode
      * @param mode Auto banding mode to use
      */
-    public native void setAntiBandingMode(RawCameraControl.AntiBandingMode mode);
-    public native void setAntiBandingMode(@Cast("dai::RawCameraControl::AntiBandingMode") byte mode);
+    public native @ByRef CameraControl setAntiBandingMode(RawCameraControl.AntiBandingMode mode);
+    public native @ByRef CameraControl setAntiBandingMode(@Cast("dai::RawCameraControl::AntiBandingMode") byte mode);
 
     /**
      * Set a command to manually specify exposure
      * @param exposureTimeUs Exposure time in microseconds
      * @param sensitivityIso Sensitivity as ISO value, usual range 100..1600
      */
-    public native void setManualExposure(@Cast("uint32_t") int exposureTimeUs, @Cast("uint32_t") int sensitivityIso);
+    public native @ByRef CameraControl setManualExposure(@Cast("uint32_t") int exposureTimeUs, @Cast("uint32_t") int sensitivityIso);
 
     // White Balance
     /**
      * Set a command to specify auto white balance mode
      * @param mode Auto white balance mode to use
      */
-    public native void setAutoWhiteBalanceMode(RawCameraControl.AutoWhiteBalanceMode mode);
-    public native void setAutoWhiteBalanceMode(@Cast("dai::RawCameraControl::AutoWhiteBalanceMode") byte mode);
+    public native @ByRef CameraControl setAutoWhiteBalanceMode(RawCameraControl.AutoWhiteBalanceMode mode);
+    public native @ByRef CameraControl setAutoWhiteBalanceMode(@Cast("dai::RawCameraControl::AutoWhiteBalanceMode") byte mode);
 
     /**
      * Set a command to specify auto white balance lock
      * @param lock Auto white balance lock mode enabled or disabled
      */
-    public native void setAutoWhiteBalanceLock(@Cast("bool") boolean lock);
+    public native @ByRef CameraControl setAutoWhiteBalanceLock(@Cast("bool") boolean lock);
 
     /**
      * Set a command to manually specify white-balance color correction
      * @param colorTemperatureK Light source color temperature in kelvins, range 1000..12000
      */
-    public native void setManualWhiteBalance(int colorTemperatureK);
+    public native @ByRef CameraControl setManualWhiteBalance(int colorTemperatureK);
 
     // Other image controls
     /**
      * Set a command to adjust image brightness
      * @param value Brightness, range -10..10
      */
-    public native void setBrightness(int value);
+    public native @ByRef CameraControl setBrightness(int value);
 
     /**
      * Set a command to adjust image contrast
      * @param value Contrast, range -10..10
      */
-    public native void setContrast(int value);
+    public native @ByRef CameraControl setContrast(int value);
 
     /**
      * Set a command to adjust image saturation
      * @param value Saturation, range -10..10
      */
-    public native void setSaturation(int value);
+    public native @ByRef CameraControl setSaturation(int value);
 
     /**
      * Set a command to adjust image sharpness
      * @param value Sharpness, range 0..4
      */
-    public native void setSharpness(int value);
+    public native @ByRef CameraControl setSharpness(int value);
 
     /**
      * Set a command to adjust luma denoise amount
      * @param value Luma denoise amount, range 0..4
      */
-    public native void setLumaDenoise(int value);
+    public native @ByRef CameraControl setLumaDenoise(int value);
 
     /**
      * Set a command to adjust chroma denoise amount
      * @param value Chroma denoise amount, range 0..4
      */
-    public native void setChromaDenoise(int value);
+    public native @ByRef CameraControl setChromaDenoise(int value);
 
     /**
      * Set a command to specify scene mode
      * @param mode Scene mode
      */
-    public native void setSceneMode(RawCameraControl.SceneMode mode);
-    public native void setSceneMode(@Cast("dai::RawCameraControl::SceneMode") byte mode);
+    public native @ByRef CameraControl setSceneMode(RawCameraControl.SceneMode mode);
+    public native @ByRef CameraControl setSceneMode(@Cast("dai::RawCameraControl::SceneMode") byte mode);
 
     /**
      * Set a command to specify effect mode
      * @param mode Effect mode
      */
-    public native void setEffectMode(RawCameraControl.EffectMode mode);
-    public native void setEffectMode(@Cast("dai::RawCameraControl::EffectMode") byte mode);
+    public native @ByRef CameraControl setEffectMode(RawCameraControl.EffectMode mode);
+    public native @ByRef CameraControl setEffectMode(@Cast("dai::RawCameraControl::EffectMode") byte mode);
 
     // Functions to retrieve properties
     /**

@@ -123,6 +123,7 @@ public class DataOutputQueue extends Pointer {
      * @return True if queue isn't empty and the first element is of type T, false otherwise
      */
     public native @Cast("bool") boolean has();
+    public native @Name("has<dai::AprilTagConfig>") @Cast("bool") boolean hasAprilTagConfig();
     public native @Name("has<dai::ImgFrame>") @Cast("bool") boolean hasImgFrame();
     public native @Name("has<dai::IMUData>") @Cast("bool") boolean hasIMUData();
     public native @Name("has<dai::SpatialLocationCalculatorConfig>") @Cast("bool") boolean hasSpatialLocationCalculatorConfig();
@@ -146,6 +147,7 @@ public class DataOutputQueue extends Pointer {
      */
     public native @SharedPtr @ByVal ADatatype tryGet();
     public native @Name("tryGet<dai::ADatatype>") void tryGetVoid();
+    public native @Name("tryGet<dai::AprilTagConfig>") @SharedPtr AprilTagConfig tryGetAprilTagConfig();
     public native @Name("tryGet<dai::ImgFrame>") @SharedPtr ImgFrame tryGetImgFrame();
     public native @Name("tryGet<dai::IMUData>") @SharedPtr IMUData tryGetIMUData();
     public native @Name("tryGet<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig tryGetSpatialLocationCalculatorConfig();
@@ -158,7 +160,7 @@ public class DataOutputQueue extends Pointer {
     public native @Name("tryGet<dai::SystemInformation>") @SharedPtr SystemInformation tryGetSystemInformation();
 
     /**
-     * Try to retrieve message from queue. If no message available, return immidiately with nullptr
+     * Try to retrieve message from queue. If no message available, return immediately with nullptr
      *
      * @return Message or nullptr if no message available
      */
@@ -170,6 +172,7 @@ public class DataOutputQueue extends Pointer {
      */
     public native @SharedPtr @ByVal ADatatype get();
     public native @Name("get<dai::ADatatype>") void getVoid();
+    public native @Name("get<dai::AprilTagConfig>") @SharedPtr AprilTagConfig getAprilTagConfig();
     public native @Name("get<dai::ImgFrame>") @SharedPtr ImgFrame getImgFrame();
     public native @Name("get<dai::IMUData>") @SharedPtr IMUData getIMUData();
     public native @Name("get<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig getSpatialLocationCalculatorConfig();
@@ -194,6 +197,7 @@ public class DataOutputQueue extends Pointer {
      */
     public native @SharedPtr @ByVal ADatatype front();
     public native @Name("front<dai::ADatatype>") void frontVoid();
+    public native @Name("front<dai::AprilTagConfig>") @SharedPtr AprilTagConfig frontAprilTagConfig();
     public native @Name("front<dai::ImgFrame>") @SharedPtr ImgFrame frontImgFrame();
     public native @Name("front<dai::IMUData>") @SharedPtr IMUData frontIMUData();
     public native @Name("front<dai::SpatialLocationCalculatorConfig>") @SharedPtr SpatialLocationCalculatorConfig frontSpatialLocationCalculatorConfig();
@@ -215,16 +219,16 @@ public class DataOutputQueue extends Pointer {
      * Block until a message is available with a timeout.
      *
      * @param timeout Duration for which the function should block
-     * @param hasTimedout [out] Outputs true if timeout occured, false otherwise
-     * @return Message of type T otherwise nullptr if message isn't type T or timeout occured
+     * @param hasTimedout [out] Outputs true if timeout occurred, false otherwise
+     * @return Message of type T otherwise nullptr if message isn't type T or timeout occurred
      */
 
     /**
      * Block until a message is available with a timeout.
      *
      * @param timeout Duration for which the function should block
-     * @param hasTimedout [out] Outputs true if timeout occured, false otherwise
-     * @return Message of type T otherwise nullptr if message isn't type T or timeout occured
+     * @param hasTimedout [out] Outputs true if timeout occurred, false otherwise
+     * @return Message of type T otherwise nullptr if message isn't type T or timeout occurred
      */
 
     /**
@@ -259,7 +263,7 @@ public class DataOutputQueue extends Pointer {
      * Block for maximum timeout duration.
      * Then return all messages from the queue.
      * @param timeout Maximum duration to block
-     * @param hasTimedout [out] Outputs true if timeout occured, false otherwise
+     * @param hasTimedout [out] Outputs true if timeout occurred, false otherwise
      * @return Vector of messages which can either be of type T or nullptr
      */
 
@@ -267,7 +271,7 @@ public class DataOutputQueue extends Pointer {
      * Block for maximum timeout duration.
      * Then return all messages from the queue.
      * @param timeout Maximum duration to block
-     * @param hasTimedout [out] Outputs true if timeout occured, false otherwise
+     * @param hasTimedout [out] Outputs true if timeout occurred, false otherwise
      * @return Vector of messages
      */
 }

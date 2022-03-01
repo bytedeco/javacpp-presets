@@ -59,10 +59,17 @@ public class DeviceBase extends Pointer {
         }
     
         public native @Cast("dai::OpenVINO::Version") int version(); public native Config version(int setter);
-        public native @ByRef PrebootConfig preboot(); public native Config preboot(PrebootConfig setter);
+        public native @ByRef BoardConfig board(); public native Config board(BoardConfig setter);
     }
 
     // static API
+
+    /**
+     * \brief Get the Default Search Time for finding devices
+     *
+     * @return Default search time in milliseconds
+     */
+    public static native @ByVal @Cast("std::chrono::milliseconds*") Pointer getDefaultSearchTime();
 
     /**
      * Waits for any available device with a timeout
@@ -82,6 +89,7 @@ public class DeviceBase extends Pointer {
      * Gets first available device. Device can be either in XLINK_UNBOOTED or XLINK_BOOTLOADER state
      * @return Tuple of bool and DeviceInfo. Bool specifies if device was found. DeviceInfo specifies the found device
      */
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getFirstAvailableDevice(@Cast("bool") boolean skipInvalidDevice/*=true*/);
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getFirstAvailableDevice();
 
     /**
@@ -407,6 +415,39 @@ public class DeviceBase extends Pointer {
      * @return Standard output printing severity
      */
     public native LogLevel getLogOutputLevel();
+
+    /**
+     * Sets the brightness of the IR Laser Dot Projector. Limits: up to 765mA at 30% duty cycle, up to 1200mA at 6% duty cycle.
+     * The duty cycle is controlled by {@code left} camera STROBE, aligned to start of exposure.
+     * The emitter is turned off by default
+     *
+     * @param mA Current in mA that will determine brightness, 0 or negative to turn off
+     * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
+     * @return True on success, false if not found or other failure
+     */
+    public native @Cast("bool") boolean setIrLaserDotProjectorBrightness(float mA, int mask/*=-1*/);
+    public native @Cast("bool") boolean setIrLaserDotProjectorBrightness(float mA);
+
+    /**
+     * Sets the brightness of the IR Flood Light. Limits: up to 1500mA at 30% duty cycle.
+     * The duty cycle is controlled by the {@code left} camera STROBE, aligned to start of exposure.
+     * If the dot projector is also enabled, its lower duty cycle limits take precedence.
+     * The emitter is turned off by default
+     *
+     * @param mA Current in mA that will determine brightness, 0 or negative to turn off
+     * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
+     * @return True on success, false if not found or other failure
+     */
+    public native @Cast("bool") boolean setIrFloodLightBrightness(float mA, int mask/*=-1*/);
+    public native @Cast("bool") boolean setIrFloodLightBrightness(float mA);
+
+    /**
+     * Retrieves detected IR laser/LED drivers.
+     *
+     * @return Vector of tuples containing: driver name, I2C bus, I2C address.
+     * For OAK-D-Pro it should be {@code [{"LM3644", 2, 0x63}]}
+     */
+    public native @StdVector StringIntIntTuple getIrDrivers();
 
     /**
      * Add a callback for device logging. The callback will be called from a separate thread with the LogMessage being passed.

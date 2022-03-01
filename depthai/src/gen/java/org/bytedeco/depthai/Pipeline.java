@@ -67,6 +67,7 @@ public class Pipeline extends Pointer {
      * Node is specified by template argument N
      */
     public native @Name("create<dai::node::IMU>") @SharedPtr IMU createIMU();
+    public native @Name("create<dai::node::AprilTag>") @SharedPtr AprilTagNode createAprilTag();
     public native @Name("create<dai::node::ColorCamera>") @SharedPtr ColorCamera createColorCamera();
     public native @Name("create<dai::node::ImageManip>") @SharedPtr ImageManip createImageManip();
     public native @Name("create<dai::node::MonoCamera>") @SharedPtr MonoCamera createMonoCamera();

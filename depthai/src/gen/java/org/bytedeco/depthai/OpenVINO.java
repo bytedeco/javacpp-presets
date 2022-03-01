@@ -40,6 +40,47 @@ public class OpenVINO extends Pointer {
     /** enum dai::OpenVINO::Version */
     public static final int VERSION_2020_3 = 0, VERSION_2020_4 = 1, VERSION_2021_1 = 2, VERSION_2021_2 = 3, VERSION_2021_3 = 4, VERSION_2021_4 = 5;
 
+    /** OpenVINO Blob */
+    @NoOffset public static class Blob extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Blob(Pointer p) { super(p); }
+    
+        /**
+         * \brief Construct a new Blob from data in memory
+         *
+         * @param data In memory blob
+         */
+        public Blob(@Cast("uint8_t*") @StdVector BytePointer data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@Cast("uint8_t*") @StdVector BytePointer data);
+        public Blob(@Cast("uint8_t*") @StdVector ByteBuffer data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@Cast("uint8_t*") @StdVector ByteBuffer data);
+        public Blob(@Cast("uint8_t*") @StdVector byte[] data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@Cast("uint8_t*") @StdVector byte[] data);
+        /**
+         * \brief Construct a new Blob by loading from a filesystem path
+         *
+         * @param path Filesystem path to the blob
+         */
+        public Blob(@StdString String path) { super((Pointer)null); allocate(path); }
+        private native void allocate(@StdString String path);
+
+        /** OpenVINO version */
+        public native @Cast("dai::OpenVINO::Version") int version(); public native Blob version(int setter);
+        /** Map of input names to additional information */
+        public native @ByRef StringTensorInfoMap networkInputs(); public native Blob networkInputs(StringTensorInfoMap setter);
+        /** Map of output names to additional information */
+        public native @ByRef StringTensorInfoMap networkOutputs(); public native Blob networkOutputs(StringTensorInfoMap setter);
+        /** Number of network stages */
+        public native @Cast("uint32_t") int stageCount(); public native Blob stageCount(int setter);
+        /** Number of shaves the blob was compiled for */
+        public native @Cast("uint32_t") int numShaves(); public native Blob numShaves(int setter);
+        /** Number of CMX slices the blob was compiled for */
+        public native @Cast("uint32_t") int numSlices(); public native Blob numSlices(int setter);
+        /** Blob data */
+        public native @Cast("uint8_t*") @StdVector BytePointer data(); public native Blob data(BytePointer setter);
+    }
+
     /** Main OpenVINO version */
     @MemberGetter public static native @Cast("const dai::OpenVINO::Version") int DEFAULT_VERSION();
     public static final int DEFAULT_VERSION = DEFAULT_VERSION();

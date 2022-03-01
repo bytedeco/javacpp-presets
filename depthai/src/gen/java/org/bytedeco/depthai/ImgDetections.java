@@ -43,4 +43,35 @@ public class ImgDetections extends Buffer {
 
     /** Detections */
     public native @StdVector ImgDetection detections(); public native ImgDetections detections(ImgDetection setter);
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef ImgDetections setTimestamp(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef ImgDetections setTimestampDevice(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @ByRef ImgDetections setSequenceNum(@Cast("int64_t") long sequenceNum);
+
+    /**
+     * Retrieves image timestamp related to dai::Clock::now()
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestamp();
+
+    /**
+     * Retrieves image timestamp directly captured from device's monotonic clock,
+     * not synchronized to host time. Used mostly for debugging
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @Cast("int64_t") long getSequenceNum();
 }

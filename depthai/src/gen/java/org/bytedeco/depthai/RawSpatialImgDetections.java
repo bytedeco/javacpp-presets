@@ -38,6 +38,11 @@ public class RawSpatialImgDetections extends RawBuffer {
 
     public native @StdVector SpatialImgDetection detections(); public native RawSpatialImgDetections detections(SpatialImgDetection setter);
 
+    // Related to input ImgFrame
+    public native @Cast("int64_t") long sequenceNum(); public native RawSpatialImgDetections sequenceNum(long setter);  // increments for each frame
+    public native @ByRef Timestamp ts(); public native RawSpatialImgDetections ts(Timestamp setter);        // generation timestamp, synced to host time
+    public native @ByRef Timestamp tsDevice(); public native RawSpatialImgDetections tsDevice(Timestamp setter);  // generation timestamp, direct device monotonic clock
+
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);

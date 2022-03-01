@@ -40,6 +40,11 @@ public class RawNNData extends RawBuffer {
     public native @StdVector TensorInfo tensors(); public native RawNNData tensors(TensorInfo setter);
     public native @Cast("unsigned int") int batchSize(); public native RawNNData batchSize(int setter);
 
+    // Related to input ImgFrame
+    public native @Cast("int64_t") long sequenceNum(); public native RawNNData sequenceNum(long setter);  // increments for each frame
+    public native @ByRef Timestamp ts(); public native RawNNData ts(Timestamp setter);        // generation timestamp, synced to host time
+    public native @ByRef Timestamp tsDevice(); public native RawNNData tsDevice(Timestamp setter);  // generation timestamp, direct device monotonic clock
+
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);

@@ -23,7 +23,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 11.6.0  https://developer.nvidia.com/cuda-zone
+ * CUDA 11.6.1  https://developer.nvidia.com/cuda-zone
  * cuDNN 8.3.2  https://developer.nvidia.com/cudnn
  * NCCL 2.11.4  https://developer.nvidia.com/nccl
 

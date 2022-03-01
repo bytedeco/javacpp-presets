@@ -293,12 +293,12 @@ public class Node extends Pointer {
         public native @Cast("bool") boolean getWaitForMessage();
 
         /**
-         * Equaivalent to setWaitForMessage but with inverted logic.
+         * Equivalent to setWaitForMessage but with inverted logic.
          */
         public native void setReusePreviousMessage(@Cast("bool") boolean reusePreviousMessage);
 
         /**
-         * Equaivalent to getWaitForMessage but with inverted logic.
+         * Equivalent to getWaitForMessage but with inverted logic.
          */
         public native @Cast("bool") boolean getReusePreviousMessage();
     }

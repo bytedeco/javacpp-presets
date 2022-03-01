@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ public class nppist implements InfoMapper {
                              "nppiHistogramRangeGetBufferSize_32f_C1R_Ctx", "nppiHistogramRangeGetBufferSize_32f_C3R_Ctx",
                              "nppiHistogramRangeGetBufferSize_32f_C4R_Ctx", "nppiHistogramRangeGetBufferSize_8u_AC4R_Ctx",
                              "nppiHistogramRangeGetBufferSize_8u_C1R_Ctx", "nppiHistogramRangeGetBufferSize_8u_C3R_Ctx",
-                             "nppiHistogramRangeGetBufferSize_8u_C4R_Ctx", "nppiNormRelInfGetBufferHostSize_32s_C1R").skip());
+                             "nppiHistogramRangeGetBufferSize_8u_C4R_Ctx", "nppiNormRelInfGetBufferHostSize_32s_C1R",
+                             "nppiCrossCorrValid_NormLevel_64f_AC4R_Ctx").skip());
     }
 }

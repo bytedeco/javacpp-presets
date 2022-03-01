@@ -40,6 +40,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 //     deserialize(data.data(), data.size(), obj);
 // }
 
+// NOLINTBEGIN
 @Namespace("dai::utility") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class VectorWriter extends Pointer {
     static { Loader.load(); }

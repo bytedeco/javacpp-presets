@@ -50,18 +50,18 @@ public class NNData extends Buffer {
      * @param name Name of the layer
      * @param data Data to store
      */
-    public native void setLayer(@StdString BytePointer name, @Cast("std::uint8_t*") @StdVector BytePointer data);
-    public native void setLayer(@StdString ByteBuffer name, @Cast("std::uint8_t*") @StdVector ByteBuffer data);
-    public native void setLayer(@StdString String name, @Cast("std::uint8_t*") @StdVector byte[] data);
+    public native @ByRef NNData setLayer(@StdString BytePointer name, @Cast("std::uint8_t*") @StdVector BytePointer data);
+    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @Cast("std::uint8_t*") @StdVector ByteBuffer data);
+    public native @ByRef NNData setLayer(@StdString String name, @Cast("std::uint8_t*") @StdVector byte[] data);
 
     /**
      * Set a layer with datatype U8. Integers are cast to bytes.
      * @param name Name of the layer
      * @param data Data to store
      */
-    public native void setLayer(@StdString BytePointer name, @Const @StdVector @ByRef IntPointer data);
-    public native void setLayer(@StdString ByteBuffer name, @Const @StdVector @ByRef IntBuffer data);
-    public native void setLayer(@StdString String name, @Const @StdVector @ByRef int[] data);
+    public native @ByRef NNData setLayer(@StdString BytePointer name, @Const @StdVector @ByRef IntPointer data);
+    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @Const @StdVector @ByRef IntBuffer data);
+    public native @ByRef NNData setLayer(@StdString String name, @Const @StdVector @ByRef int[] data);
 
     // fp16
     /**
@@ -69,18 +69,18 @@ public class NNData extends Buffer {
      * @param name Name of the layer
      * @param data Data to store
      */
-    public native void setLayer(@StdString BytePointer name, @StdVector FloatPointer data);
-    public native void setLayer(@StdString ByteBuffer name, @StdVector FloatBuffer data);
-    public native void setLayer(@StdString String name, @StdVector float[] data);
+    public native @ByRef NNData setLayer(@StdString BytePointer name, @StdVector FloatPointer data);
+    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @StdVector FloatBuffer data);
+    public native @ByRef NNData setLayer(@StdString String name, @StdVector float[] data);
 
     /**
      * Set a layer with datatype FP16. Double values are converted to FP16.
      * @param name Name of the layer
      * @param data Data to store
      */
-    public native void setLayer(@StdString BytePointer name, @StdVector DoublePointer data);
-    public native void setLayer(@StdString ByteBuffer name, @StdVector DoubleBuffer data);
-    public native void setLayer(@StdString String name, @StdVector double[] data);
+    public native @ByRef NNData setLayer(@StdString BytePointer name, @StdVector DoublePointer data);
+    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @StdVector DoubleBuffer data);
+    public native @ByRef NNData setLayer(@StdString String name, @StdVector double[] data);
 
     // getters
     /**
@@ -170,4 +170,35 @@ public class NNData extends Buffer {
      * @return INT32 data
      */
     public native @Cast("std::int32_t*") @StdVector IntPointer getFirstLayerInt32();
+
+    /**
+     * Retrieves image timestamp related to dai::Clock::now()
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestamp();
+
+    /**
+     * Retrieves image timestamp directly captured from device's monotonic clock,
+     * not synchronized to host time. Used mostly for debugging
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @Cast("int64_t") long getSequenceNum();
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef NNData setTimestamp(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef NNData setTimestampDevice(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @ByRef NNData setSequenceNum(@Cast("int64_t") long sequenceNum);
 }
