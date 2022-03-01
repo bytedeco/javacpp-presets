@@ -69,34 +69,25 @@ Now, this `models` directory will be our model repository.
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets
- ```
-3. Then you can compile the tritonserver project and tritonserver/platform with `Maven` which will generate the necessary bindings
+```
+
+3. Compile the `tritonserver` and `tritonserver/platform` modules with Maven, which will generate the necessary bindings:
 ```bash
  $ mvn clean install --projects .,tritonserver
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
 ```
-4. There are two examples in the samples folder, `Simple.java` and `SimpleCPUOnly.java`. 
-`Simple.java` requires additional `CUDA` and `TensorRT` bindings (as well as `CUDA` and `TensorRT` libraries themselves)
-while `SimpleCPUOnly.java` can be run with only binaries build in tritonserver/platform. 
-The steps to run `Simple.java` are:
+
+4. Execute either `Simple.java` or `SimpleCPUOnly.java`, respectively:
 ```bash
  $ cd tritonserver/samples
- $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
+ $ mvn compile exec:java -Dexec.mainClass=Simple -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
+ $ mvn compile exec:java -Dexec.mainClass=SimpleCPUOnly -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
-The steps to run `SimpleCPUOnly.java`, are: 
-```bash
- $ cd tritonserver/samples
- ```
-Modify [tritonserver/samples/pom.xml](../tritonserver/samples/pom.xml#L7) from `Simple` to `SimpleCPUOnly`
-and remove the dependencies related to `CUDA` and `TensorRT` [here](../tritonserver/samples/pom.xml#L12-L21).
-Then run:
- ```bash
- $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
-```
+`Simple.java` and `SimpleCPUOnly.java` are the two examples in the samples folder. `Simple.java` requires additional `CUDA` and `TensorRT` bindings (as well as `CUDA` and `TensorRT` libraries themselves) while `SimpleCPUOnly.java` can run with only binaries from `tritonserver/platform`, so we can remove the dependencies related to `CUDA` and `TensorRT` [here](samples/pom.xml#L12-L21).
 
 This sample is the Java implementation of the simple example written for the [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api).
 
-### Steps to run your *.java files with Triton Inference Server using JavaCPP inside an NGC container
+### Steps to run your *.java files with Triton Inference Server using Maven inside an NGC container
 
 To run your code, you will need to:
 
@@ -106,13 +97,10 @@ To run your code, you will need to:
  $ mvn compile exec:java
 ```
 
-### Steps to run your *.java files with Triton Inference Server using JavaCPP with .jar binaries
+### Steps to run your *.java files with Triton Inference Server using the "uber JAR" inside an NGC container
 
-The Tritonserver bindings `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` will be generated
-after [steps 1-3](#steps-to-run-this-sample-inside-an-ngc-container) above.
- You can then run:
- ```bash
+After generating `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` by following [steps 1 to 3](#steps-to-run-this-sample-inside-an-ngc-container) above, you can then execute the following to run directly your application:
+```bash
  $ cd tritonserver/samples
- $ java -cp tritonserver/platform/target/tritonserver-platform-<artifact ID>-shaded.jar SimpleCPUOnly.java -r /workspace/models
- ```
- to directly run your application.
+ $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar SimpleCPUOnly.java -r /workspace/models
+```
