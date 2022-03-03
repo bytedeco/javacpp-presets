@@ -58,6 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Common/shared/b3Int4.h",
                 "Bullet3Common/shared/b3Quat.h",
                 "Bullet3Common/shared/b3Mat3x3.h",
+                "Bullet3Common/shared/b3PlatformDefinitions.h",
             },
             link = "Bullet3Common@.3.20"
         )
@@ -73,14 +74,18 @@ public class Bullet3Common implements InfoMapper {
             .put(new Info("B3_ATTRIBUTE_ALIGNED16").cppText("#define B3_ATTRIBUTE_ALIGNED16(x) x"))
             .put(new Info("B3_DECLARE_ALIGNED_ALLOCATOR").cppText("#define B3_DECLARE_ALIGNED_ALLOCATOR()"))
             .put(new Info("B3_FORCE_INLINE").cppText("#define B3_FORCE_INLINE"))
-            .put(new Info("__global").cppText("#define __global"))
-            .put(new Info("__inline").cppText("#define __inline"))
 
             .put(new Info("B3_EPSILON").cppTypes("float"))
             .put(new Info("B3_INFINITY").cppTypes("float"))
             .put(new Info("B3_LARGE_FLOAT").cppTypes("float"))
 
             .put(new Info(
+                    "__global",
+                    "__inline"
+                ).cppTypes().annotations())
+
+            .put(new Info(
+                    "B3_STATIC",
                     "b3Cross3",
                     "b3Dot3F4",
                     "b3Float4",
@@ -106,12 +111,26 @@ public class Bullet3Common implements InfoMapper {
                     "defined(B3_USE_DOUBLE_PRECISION) || defined(B3_FORCE_DOUBLE_FUNCTIONS)",
                     "defined(B3_USE_DOUBLE_PRECISION)",
                     "defined(B3_USE_SSE) || defined(B3_USE_NEON)",
+                    "defined(B3_USE_SSE)",
                     "defined(B3_USE_SSE_IN_API) && defined(B3_USE_SSE)",
                     "defined(__SPU__) && defined(__CELLOS_LV2__)"
                 ).define(false))
             .put(new Info(
                     "__cplusplus"
                 ).define(true))
+
+            .put(new Info("b3AlignedObjectArray<int>").pointerTypes("b3IntArray"))
+            .put(new Info("b3AlignedObjectArray<b3Int4>").pointerTypes("b3Int4Array"))
+            .put(new Info("b3AlignedObjectArray<b3Vector3>").pointerTypes("b3Vector3Array"))
+
+            .put(new Info("b3AlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
+
+            .put(new Info(
+                    "b3AlignedObjectArray<b3Int4>::findBinarySearch",
+                    "b3AlignedObjectArray<b3Int4>::findLinearSearch",
+                    "b3AlignedObjectArray<b3Int4>::findLinearSearch2",
+                    "b3AlignedObjectArray<b3Int4>::remove"
+                ).skip())
             ;
     }
 }

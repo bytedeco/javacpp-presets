@@ -7,4 +7,5 @@ module org.bytedeco.bullet {
   exports org.bytedeco.bullet.BulletDynamics;
   exports org.bytedeco.bullet.BulletSoftBody;
   exports org.bytedeco.bullet.Bullet3Common;
+  exports org.bytedeco.bullet.Bullet3Collision;
 }
