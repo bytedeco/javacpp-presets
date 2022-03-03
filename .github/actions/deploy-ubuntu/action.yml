@@ -10,25 +10,27 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]]; then
           export ARCH=armhf
           export PREFIX=arm-linux-gnueabihf
+          export USERLAND_BUILDME="buildme"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
           export ARCH2=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.aarch64.rpm
           export CUDNN=cudnn-linux-sbsa-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.aarch64
+          export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH2=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.ppc64le.rpm
           export CUDNN=cudnn-linux-ppc64le-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
           export ARCH2=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-5-local-11.5.1_495.29.05-1.x86_64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.x86_64.rpm
           export CUDNN=cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.11.4-1+cuda11.5.x86_64
         fi
@@ -41,59 +43,32 @@ runs:
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
 
-        if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ -z ${CI_DEPLOY_NEED_NOTOOLS:-} ]]; then
-          echo Setting up tools for linux-armhf build
-          dpkg --add-architecture i386
-          if [[ ! "$ARCH" == "amd64" ]]; then
-            dpkg --add-architecture $ARCH
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
-          fi
-          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-          sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
-          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
-          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
-          apt-get update
-          apt-get -y install python3 python2.7 python3-minimal python2.7-minimal libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-          apt-get -y install pkg-config ccache clang openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
-          curl -LOJ https://github.com/raspberrypi/tools/archive/master.tar.gz
-          curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
-          mkdir -p tools userland
-          tar -xzf tools-master.tar.gz --strip-components=1 -C tools
-          tar -xzf userland-master.tar.gz --strip-components=1 -C userland
-          ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gfortran $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/
-          ln -s $(pwd)/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/libgfortran* $(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/
-          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++ -Djava.library.path=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/lib/"
-          export PATH=$(pwd)/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/:$PATH
-          echo "PATH=$PATH" >> $GITHUB_ENV
-
-          pushd userland
-          # https://github.com/raspberrypi/userland/issues/603
-          sed -i -e 's/"${INSTALL_TARGETS} vcilcs"/${INSTALL_TARGETS} vcilcs/g' interface/vmcs_host/CMakeLists.txt
-          bash buildme
-          popd
-        else
-          if [[ ! "$ARCH" == "amd64" ]]; then
-            dpkg --add-architecture $ARCH
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
-            echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
-            TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
-          fi
-          echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-          echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-          sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
-          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
-          apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
-          apt-get update
-          apt-get -y install python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-          apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
-          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/"
+        if [[ ! "$ARCH" == "amd64" ]]; then
+          dpkg --add-architecture $ARCH
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
+          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
+          TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
         fi
+        echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
+        echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
+        sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
+        apt-get update
+        apt-get -y install python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
+        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
+        if [[ -n ${USERLAND_BUILDME:-} ]]; then
+          curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
+          tar -xzf userland-master.tar.gz
+          pushd userland-master
+          bash $USERLAND_BUILDME
+          popd
+          export USERLAND_PATH=$(pwd)/userland-master/
+          echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
+        fi
+        export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
 
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
@@ -110,13 +85,13 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.5.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm
 
           rpm -i --force --ignorearch --nodeps $CUDA libnccl*.rpm
-          pushd /var/cuda-repo-rhel8-11-5-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          pushd /var/cuda-repo-rhel8-11-6-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           tar -hxvf $CUDNN --strip-components=1 -C /usr/local/cuda/
@@ -133,6 +108,7 @@ runs:
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
@@ -152,8 +128,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1AwYLuKDe0FBU0AftSH7Fy7m38VPUyGmm
-          tar -hxvf TensorRT-8.2.2.1.Ubuntu-20.04.aarch64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1i5K7NgKgxnziS7gLlhOk2gmiZ_C6XUE9
+          tar -hxvf TensorRT-8.2.3.0.Ubuntu-20.04.aarch64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

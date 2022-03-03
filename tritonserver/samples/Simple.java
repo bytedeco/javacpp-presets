@@ -1,4 +1,4 @@
-// Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -546,9 +546,6 @@ public class Simple {
       if (model_repository_path == null) {
         Usage("-r must be used to specify model repository path");
       }
-      if (enforce_memory_type && requested_memory_type != TRITONSERVER_MEMORY_CPU) {
-        Usage("-m can only be set to \"system\" without enabling GPU");
-      }
 
       // Check API version.
       int[] api_version_major = {0}, api_version_minor = {0};
@@ -785,7 +782,7 @@ public class Simple {
       CudaDataDeleter input1_gpu = new CudaDataDeleter();
       boolean use_cuda_memory =
           (enforce_memory_type &&
-           (requested_memory_type != TRITONSERVER_MEMORY_CPU));
+          (requested_memory_type != TRITONSERVER_MEMORY_CPU));
       if (use_cuda_memory) {
         FAIL_IF_CUDA_ERR(cudaSetDevice(0), "setting CUDA device to device 0");
         if (requested_memory_type != TRITONSERVER_MEMORY_CPU_PINNED) {
@@ -821,10 +818,10 @@ public class Simple {
               cudaMemcpy(dst, input1_data, input1_size, cudaMemcpyHostToHost),
               "setting INPUT1 data in pinned memory");
         }
-      }
 
-      input0_base = use_cuda_memory ? input0_gpu : input0_data;
-      input1_base = use_cuda_memory ? input1_gpu : input1_data;
+        input0_base = input0_gpu;
+        input1_base = input1_gpu;
+      }
 
       FAIL_IF_ERR(
           TRITONSERVER_InferenceRequestAppendInputData(

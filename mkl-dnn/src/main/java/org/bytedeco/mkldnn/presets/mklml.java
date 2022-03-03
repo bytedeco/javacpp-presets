@@ -53,7 +53,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             value = "macosx-x86_64",
             link = "mklml",
             preload = {"gcc_s@.1", "gomp@.1", "stdc++@.6", "iomp5"},
-            preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/",
+            preloadpath = {"/usr/local/lib/gcc/12/", "/usr/local/lib/gcc/11/", "/usr/local/lib/gcc/10/", "/usr/local/lib/gcc/9/",
+                           "/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/",
                            "/opt/intel/oneapi/mkl/latest/lib/", "/opt/intel/oneapi/compiler/latest/mac/compiler/lib/"}),
         @Platform(
             value = "windows-x86_64",

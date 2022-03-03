@@ -1,16 +1,27 @@
 
+ * Bundle `zlibwapi.dll` required by cuDNN in redist artifacts of presets for CUDA ([issue bytedeco/javacv#1767](https://github.com/bytedeco/javacv/issues/1767))
+ * Harmonize string and buffer pointer types of function parameters from DepthAI ([issue #1155](https://github.com/bytedeco/javacpp-presets/issues/1155))
+ * Bundle correctly OpenMP library for PyTorch builds on Mac as well
+ * Remove dependency on CUDA from presets for Triton Inference Server ([pull #1151](https://github.com/bytedeco/javacpp-presets/pull/1151))
+ * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
+ * Upgrade presets for Gym 0.22.0, CUDA 11.6.1, ALE 0.7.4, DepthAI 2.15.0, ONNX 1.11.0, and their dependencies
+
+### February 11, 2022 version 1.5.7
+ * Build FFmpeg with WebP encoding support ([pull #1133](https://github.com/bytedeco/javacpp-presets/pull/1133))
+ * Include `sys/ipc.h` and `sys/shm.h` for system APIs of Linux and Mac OS X ([pull #1132](https://github.com/bytedeco/javacpp-presets/pull/1132))
+ * Map `c10::ArrayRef<at::Tensor>(std::vector<at::Tensor>&)` constructor from PyTorch for convenience ([discussion #1128](https://github.com/bytedeco/javacpp-presets/discussions/1128))
  * Add `long rs2_get_frame_data_address()` to reduce garbage for real-time applications using librealsense2 ([discussion bytedeco/javacpp#532](https://github.com/bytedeco/javacpp/discussions/532))
  * Add to `torch.Tensor` convenient `create()`, `createBuffer()`, and `createIndexer()` factory methods for PyTorch
  * Upgrade requirements to Android 7.0 for camera support in OpenCV and FFmpeg ([issue bytedeco/javacv#1692](https://github.com/bytedeco/javacv/issues/1692))
  * Include new `llvm-c/Transforms/PassBuilder.h` header file in presets for LLVM ([pull #1093](https://github.com/bytedeco/javacpp-presets/pull/1093))
- * Introduce `macosx-arm64` builds to presets for OpenBLAS, OpenCV ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
- * Add presets for LZ4 1.9.3 ([pull #1094](https://github.com/bytedeco/javacpp-presets/pull/1094)), Triton Inference Server 2.17.0 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
+ * Introduce `macosx-arm64` builds to presets for OpenCV, FFmpeg, OpenBLAS ([issue #1069](https://github.com/bytedeco/javacpp-presets/issues/1069)), LLVM ([pull #1092](https://github.com/bytedeco/javacpp-presets/pull/1092))
+ * Add presets for LZ4 1.9.3 ([pull #1094](https://github.com/bytedeco/javacpp-presets/pull/1094)), Triton Inference Server 2.18.0 ([pull #1085](https://github.com/bytedeco/javacpp-presets/pull/1085))
  * Add presets for the NvToolsExt (NVTX) module of CUDA ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Increase the amount of function pointers available for callbacks in presets for Qt ([pull #1080](https://github.com/bytedeco/javacpp-presets/pull/1080))
  * Map C++ JIT classes and functions of TorchScript in presets for PyTorch ([issue #1068](https://github.com/bytedeco/javacpp-presets/issues/1068))
  * Synchronize `cachePackage()` and prevent repeated package caching in all presets ([pull #1071](https://github.com/bytedeco/javacpp-presets/pull/1071))
  * Build FFmpeg with VA-API enabled and bundle its libraries to avoid loading issues ([issue bytedeco/javacv#1188](https://github.com/bytedeco/javacv/issues/1188))
- * Upgrade presets for OpenCV 4.5.5, FFmpeg 4.4.1, librealsense2 2.50.0, Arrow 6.0.1, MKL 2022.0, DNNL 2.5.1, OpenBLAS 0.3.19, FFTW 3.3.10, CPython 3.10.1, NumPy 1.22.0, SciPy 1.8.0, Gym 0.21.0, LLVM 13.0.0, libpostal 1.1, Leptonica 1.82.0, Tesseract 5.0.1, CUDA 11.5.1, cuDNN 8.3.2, NCCL 2.11.4, MXNet 1.9.0, PyTorch 1.10.1, TensorFlow Lite 2.7.0, TensorRT 8.2.2.1, ALE 0.7.3, DepthAI 2.14.0, ONNX 1.10.2, ONNX Runtime 1.10.0, TVM 0.8.0, ModSecurity 3.0.6, and their dependencies
+ * Upgrade presets for OpenCV 4.5.5, FFmpeg 5.0 ([pull #1125](https://github.com/bytedeco/javacpp-presets/pull/1125)), librealsense2 2.50.0, Arrow 6.0.1, MKL 2022.0, DNNL 2.5.2, OpenBLAS 0.3.19, FFTW 3.3.10, CPython 3.10.2, NumPy 1.22.2, SciPy 1.8.0, Gym 0.21.0, LLVM 13.0.1, libpostal 1.1, Leptonica 1.82.0, Tesseract 5.0.1, CUDA 11.6.0, cuDNN 8.3.2, NCCL 2.11.4, MXNet 1.9.0, PyTorch 1.10.2, TensorFlow Lite 2.8.0, TensorRT 8.2.3.0, ALE 0.7.3, DepthAI 2.14.1, ONNX 1.10.2, ONNX Runtime 1.10.0, TVM 0.8.0, ModSecurity 3.0.6, and their dependencies
 
 ### August 2, 2021 version 1.5.6
  * Change `opencv_core.Mat` constructors to create column vectors out of arrays for consistency ([issue #1064](https://github.com/bytedeco/javacpp-presets/issues/1064))

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ale-platform</artifactId>
-  <version>0.7.3-${project.parent.version}</version>
+  <version>0.7.4-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ALE</name>
 
   <properties>

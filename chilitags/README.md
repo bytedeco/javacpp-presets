@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.chilitags</groupId>
     <artifactId>detectlive</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7</version>
     <properties>
         <exec.mainClass>DetectLive</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>chilitags-platform</artifactId>
-            <version>master-1.5.6</version>
+            <version>master-1.5.7</version>
         </dependency>
     </dependencies>
     <build>

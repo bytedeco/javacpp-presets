@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * DepthAI 2.14.0  https://luxonis.com/depthai
+ * DepthAI 2.15.0  https://luxonis.com/depthai
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.depthai</groupId>
     <artifactId>examples</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>CameraPreviewExample</exec.mainClass>
     </properties>
@@ -46,12 +46,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>depthai-platform</artifactId>
-            <version>2.14.0-1.5.7-SNAPSHOT</version>
+            <version>2.15.0-1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.5.5-1.5.7-SNAPSHOT</version>
+            <version>4.5.5-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

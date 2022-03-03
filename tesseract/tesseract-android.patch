@@ -58,6 +58,14 @@ diff -ruN tesseract-5.0.0-rc1/src/api/baseapi.cpp tesseract-5.0.0-rc1-android/sr
 diff -ruN tesseract-5.0.0-rc1/src/arch/simddetect.cpp tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp
 --- tesseract-5.0.0-rc1/src/arch/simddetect.cpp	2021-10-30 05:32:11.000000000 +0900
 +++ tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp	2021-11-05 11:18:31.426042560 +0900
+@@ -54,7 +54,6 @@
+ 
+ #if defined(HAVE_NEON) && !defined(__aarch64__)
+ #  ifdef ANDROID
+-#    include <cpu-features.h>
+ #  else
+ /* Assume linux */
+ #    include <asm/hwcap.h>
 @@ -211,11 +211,7 @@
  
  #if defined(HAVE_NEON) && !defined(__aarch64__)

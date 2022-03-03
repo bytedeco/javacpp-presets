@@ -19,7 +19,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.10.1
+PYTORCH_VERSION=1.10.2
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -33,6 +33,9 @@ git reset --hard
 git checkout v$PYTORCH_VERSION
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
+
+# https://github.com/pytorch/pytorch/pull/66219
+patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
@@ -94,12 +97,8 @@ case $PLATFORM in
         export CXX="g++ -m64"
         ;;
     macosx-*)
-        ln -sf pytorch/torch/lib ../lib
-        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
-        chmod +w ../lib/libiomp5.dylib
-        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        export CC="clang -L$INSTALL_PATH/lib -Wl,-rpath,$INSTALL_PATH/lib -liomp5 -Wno-unused-command-line-argument"
-        export CXX="clang++ -L$INSTALL_PATH/lib -Wl,-rpath,$INSTALL_PATH/lib -liomp5 -Wno-unused-command-line-argument"
+        export CC="clang"
+        export CXX="clang++"
         ;;
     windows-x86_64)
         export CC="cl.exe"
@@ -149,5 +148,15 @@ rm -Rf ../lib
 ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
+
+# fix library with correct rpath on Mac
+case $PLATFORM in
+    macosx-*)
+        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
+        chmod +w ../lib/libiomp5.dylib
+        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
+        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
+        ;;
+esac
 
 cd ../..

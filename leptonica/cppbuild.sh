@@ -72,7 +72,7 @@ case $PLATFORM in
         make install
         cd ../$LIBWEBP
         patch -Np1 < ../../../libwebp-arm.patch
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT" --disable-neon --enable-libwebpmux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --program-prefix=$ANDROID_PREFIX --with-sysroot="$ANDROID_ROOT" --disable-neon --enable-libwebpmux
         cd src
         make -j $MAKEJ
         make install
@@ -82,7 +82,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs --without-libopenjpeg
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --program-prefix=$ANDROID_PREFIX --disable-programs --without-libopenjpeg
         make -j $MAKEJ
         make install-strip
         ;;
@@ -111,7 +111,7 @@ case $PLATFORM in
         make install
         cd ../$LIBWEBP
         patch -Np1 < ../../../libwebp-arm.patch
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-android --with-sysroot="$ANDROID_ROOT" --disable-neon --enable-libwebpmux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-android --program-prefix=$ANDROID_PREFIX --with-sysroot="$ANDROID_ROOT" --disable-neon --enable-libwebpmux
         cd src
         make -j $MAKEJ
         make install
@@ -121,7 +121,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-android --disable-programs --without-libopenjpeg
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-android --program-prefix=$ANDROID_PREFIX --disable-programs --without-libopenjpeg
         make -j $MAKEJ
         make install-strip
         ;;
@@ -149,7 +149,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux-android --with-sysroot="$ANDROID_ROOT" --enable-libwebpmux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux-android --program-prefix=$ANDROID_PREFIX --with-sysroot="$ANDROID_ROOT" --enable-libwebpmux
         cd src
         make -j $MAKEJ
         make install
@@ -159,7 +159,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs --without-libopenjpeg
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --program-prefix=$ANDROID_PREFIX --disable-programs --without-libopenjpeg
         make -j $MAKEJ
         make install-strip
         ;;
@@ -187,7 +187,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux-android --with-sysroot="$ANDROID_ROOT" --enable-libwebpmux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux-android --program-prefix=$ANDROID_PREFIX --with-sysroot="$ANDROID_ROOT" --enable-libwebpmux
         cd src
         make -j $MAKEJ
         make install
@@ -197,7 +197,7 @@ case $PLATFORM in
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-android.patch
-        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=x86_64-linux-android --disable-programs --without-libopenjpeg
+        PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/ ./configure --prefix=$INSTALL_PATH --host=x86_64-linux-android --program-prefix=$ANDROID_PREFIX --disable-programs --without-libopenjpeg
         make -j $MAKEJ
         make install-strip
         ;;
@@ -272,7 +272,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-armhf)
-        export CFLAGS="-pthread -march=armv6 -marm -mfpu=vfp -mfloat-abi=hard -I$INSTALL_PATH/include/"
+        export CFLAGS="-pthread -I$INSTALL_PATH/include/"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"

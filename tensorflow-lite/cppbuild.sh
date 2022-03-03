@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.7.0
+TENSORFLOW_VERSION=2.8.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -21,15 +21,15 @@ INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
-patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
+# patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
 
 mkdir -p build
 cd build
 
 case $PLATFORM in
     linux-armhf)
-        export CC="arm-linux-gnueabihf-gcc -march=armv6 -mfpu=vfp -funsafe-math-optimizations"
-        export CXX="arm-linux-gnueabihf-g++ -march=armv6 -mfpu=vfp -funsafe-math-optimizations"
+        export CC="arm-linux-gnueabihf-gcc -funsafe-math-optimizations"
+        export CXX="arm-linux-gnueabihf-g++ -funsafe-math-optimizations"
         export CMAKE_FLAGS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=armv6 -DTFLITE_ENABLE_XNNPACK=OFF $CMAKE_FLAGS"
         ;;
     linux-arm64)
@@ -50,8 +50,8 @@ case $PLATFORM in
         export CXX="clang++"
         ;;
     windows-x86_64)
-        export CC="cl.exe"
-        export CXX="cl.exe"
+        export CC="cl.exe -D_USE_MATH_DEFINES"
+        export CXX="cl.exe -D_USE_MATH_DEFINES"
         export CMAKE_FLAGS="-G Ninja $CMAKE_FLAGS"
         ;;
     *)

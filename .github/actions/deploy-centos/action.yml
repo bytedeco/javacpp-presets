@@ -62,13 +62,13 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.5.1/local_installers/cuda-repo-rhel7-11-5-local-11.5.1_495.29.05-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/cuda-repo-rhel7-11-6-local-11.6.1_510.47.03-1.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.11.4-1+cuda11.5.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.11.4-1+cuda11.5.x86_64.rpm
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-5-local-11.5.1_495.29.05-1.x86_64.rpm libnccl*.rpm
-          pushd /var/cuda-repo-rhel7-11-5-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-6-local-11.6.1_510.47.03-1.x86_64.rpm libnccl*.rpm
+          pushd /var/cuda-repo-rhel7-11-6-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           tar -hxvf cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz --strip-components=1 -C /usr/local/cuda/
@@ -85,6 +85,7 @@ runs:
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
@@ -104,8 +105,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1vnKqIdev6Flc2ygyA-E-nEC9UjKQzVM_
-          tar -hxvf TensorRT-8.2.2.1.Linux.x86_64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1mWSoITLd2PvJFn71JkVug7Axo0NziWAf
+          tar -hxvf TensorRT-8.2.3.0.Linux.x86_64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
@@ -138,8 +139,9 @@ runs:
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3* # not required for GCC 7+
+          rm -f /usr/lib/libgfortran.so.4* /usr/lib64/libgfortran.so.4* # not required for GCC 9+
         else
-          rm -f /usr/lib/libgfortran.so.4* /usr/lib64/libgfortran.so.4* # remove library from GCC 7+
+          rm -f /usr/lib/libgfortran.so.5* /usr/lib64/libgfortran.so.5* # remove library from GCC 9+
         fi
 
         GRADLE_TASK=publishToMavenLocal
