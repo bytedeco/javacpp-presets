@@ -52,11 +52,16 @@ public static final int B3_USE_PLACEMENT_NEW = 1;
 // #endif  //B3_USE_MEMCPY
 
 // #ifdef B3_USE_PLACEMENT_NEW
-// #include <new>  //for placement new
-// #endif          //B3_USE_PLACEMENT_NEW
+// #include <new>
+// Targeting ../Bullet3Common/b3IntArray.java
 
-/**The b3AlignedObjectArray template class uses a subset of the stl::vector interface for its methods
- * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
+
+// Targeting ../Bullet3Common/b3Int4Array.java
+
+
+// Targeting ../Bullet3Common/b3Vector3Array.java
+
+
 
 // #endif  //B3_OBJECT_ARRAY__
 
@@ -1149,6 +1154,32 @@ public static native @ByVal b3Vector3 mtMul3(@Const @ByRef b3Vector3 a, @Const @
 // #endif
 
 // #endif  //B3_MAT3x3_H
+
+
+// Parsed from Bullet3Common/shared/b3PlatformDefinitions.h
+
+// #ifndef B3_PLATFORM_DEFINITIONS_H
+// #define B3_PLATFORM_DEFINITIONS_H
+// Targeting ../Bullet3Common/MyTest.java
+
+
+
+// #ifdef __cplusplus
+//#define b3ConstArray(a) const b3AlignedObjectArray<a>&
+// #define b3ConstArray(a) const a *
+// #define b3AtomicInc(a) ((*a)++)
+
+public static native int b3AtomicAdd(IntPointer p, int val);
+public static native int b3AtomicAdd(IntBuffer p, int val);
+public static native int b3AtomicAdd(int[] p, int val);
+
+// #define __global
+
+// #define B3_STATIC static
+// #else
+// #endif
+
+// #endif
 
 
 }
