@@ -363,392 +363,399 @@ public class SimpleCPUOnly {
     public static void
     main(String[] args) throws Exception
     {
-      String model_repository_path = null;
-      int verbose_level = 0;
+      try (PointerScope scope = new PointerScope()) {
+        String model_repository_path = null;
+        int verbose_level = 0;
 
-      // Parse commandline...
-      for (int i = 0; i < args.length; i++) {
-        switch (args[i]) {
-          case "-r":
-            model_repository_path = args[++i];
-            break;
-          case "-v":
-            verbose_level = 1;
-            break;
-          case "-?":
-            Usage(null);
-            break;
-        }
-      }
-
-      if (model_repository_path == null) {
-        Usage("-r must be used to specify model repository path");
-      }
-
-      // Check API version.
-      int[] api_version_major = {0}, api_version_minor = {0};
-      FAIL_IF_ERR(
-          TRITONSERVER_ApiVersion(api_version_major, api_version_minor),
-          "getting Triton API version");
-      if ((TRITONSERVER_API_VERSION_MAJOR != api_version_major[0]) ||
-          (TRITONSERVER_API_VERSION_MINOR > api_version_minor[0])) {
-        FAIL("triton server API version mismatch");
-      }
-
-      // Create the server...
-      TRITONSERVER_ServerOptions server_options = new TRITONSERVER_ServerOptions(null);
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsNew(server_options),
-          "creating server options");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsSetModelRepositoryPath(
-              server_options, model_repository_path),
-          "setting model repository path");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsSetLogVerbose(server_options, verbose_level),
-          "setting verbose logging level");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsSetBackendDirectory(
-              server_options, "/opt/tritonserver/backends"),
-          "setting backend directory");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsSetRepoAgentDirectory(
-              server_options, "/opt/tritonserver/repoagents"),
-          "setting repository agent directory");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsSetStrictModelConfig(server_options, true),
-          "setting strict model configuration");
-
-      TRITONSERVER_Server server_ptr = new TRITONSERVER_Server(null);
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerNew(server_ptr, server_options), "creating server");
-      FAIL_IF_ERR(
-          TRITONSERVER_ServerOptionsDelete(server_options),
-          "deleting server options");
-
-      TRITONSERVER_ServerDeleter server = new TRITONSERVER_ServerDeleter(server_ptr);
-
-      // Wait until the server is both live and ready.
-      int health_iters = 0;
-      while (true) {
-        boolean[] live = {false}, ready = {false};
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerIsLive(server, live),
-            "unable to get server liveness");
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerIsReady(server, ready),
-            "unable to get server readiness");
-        System.out.println("Server Health: live " + live[0] + ", ready " + ready[0]);
-        if (live[0] && ready[0]) {
-          break;
-        }
-
-        if (++health_iters >= 10) {
-          FAIL("failed to find healthy inference server");
-        }
-
-        Thread.sleep(500);
-      }
-
-      // Print status of the server.
-      {
-        TRITONSERVER_Message server_metadata_message = new TRITONSERVER_Message(null);
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerMetadata(server, server_metadata_message),
-            "unable to get server metadata message");
-        BytePointer buffer = new BytePointer((Pointer)null);
-        SizeTPointer byte_size = new SizeTPointer(1);
-        FAIL_IF_ERR(
-            TRITONSERVER_MessageSerializeToJson(
-                server_metadata_message, buffer, byte_size),
-            "unable to serialize server metadata message");
-
-        System.out.println("Server Status:");
-        System.out.println(buffer.limit(byte_size.get()).getString());
-
-        FAIL_IF_ERR(
-            TRITONSERVER_MessageDelete(server_metadata_message),
-            "deleting status metadata");
-      }
-
-      String model_name = "simple";
-
-      // Wait for the model to become available.
-      boolean[] is_torch_model = {false};
-      boolean[] is_int = {true};
-      boolean[] is_ready = {false};
-      health_iters = 0;
-      while (!is_ready[0]) {
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerModelIsReady(
-                server, model_name, 1, is_ready),
-            "unable to get model readiness");
-        if (!is_ready[0]) {
-          if (++health_iters >= 10) {
-            FAIL("model failed to be ready in 10 iterations");
-          }
-          Thread.sleep(500);
-          continue;
-        }
-
-        TRITONSERVER_Message model_metadata_message = new TRITONSERVER_Message(null);
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerModelMetadata(
-                server, model_name, 1, model_metadata_message),
-            "unable to get model metadata message");
-        BytePointer buffer = new BytePointer((Pointer)null);
-        SizeTPointer byte_size = new SizeTPointer(1);
-        FAIL_IF_ERR(
-            TRITONSERVER_MessageSerializeToJson(
-                model_metadata_message, buffer, byte_size),
-            "unable to serialize model status protobuf");
-
-        JsonParser parser = new JsonParser();
-        JsonObject model_metadata = null;
-        try {
-          model_metadata = parser.parse(buffer.limit(byte_size.get()).getString()).getAsJsonObject();
-        } catch (Exception e) {
-          FAIL("error: failed to parse model metadata from JSON: " + e);
-        }
-
-        FAIL_IF_ERR(
-            TRITONSERVER_MessageDelete(model_metadata_message),
-            "deleting status protobuf");
-
-        if (!model_metadata.get("name").getAsString().equals(model_name)) {
-          FAIL("unable to find metadata for model");
-        }
-
-        boolean found_version = false;
-        if (model_metadata.has("versions")) {
-          for (JsonElement version : model_metadata.get("versions").getAsJsonArray()) {
-            if (version.getAsString().equals("1")) {
-              found_version = true;
+        // Parse commandline...
+        for (int i = 0; i < args.length; i++) {
+          switch (args[i]) {
+            case "-r":
+              model_repository_path = args[++i];
               break;
+            case "-v":
+              verbose_level = 1;
+              break;
+            case "-?":
+              Usage(null);
+              break;
+          }
+        }
+
+        if (model_repository_path == null) {
+          Usage("-r must be used to specify model repository path");
+        }
+
+        // Check API version.
+        int[] api_version_major = {0}, api_version_minor = {0};
+        FAIL_IF_ERR(
+            TRITONSERVER_ApiVersion(api_version_major, api_version_minor),
+            "getting Triton API version");
+        if ((TRITONSERVER_API_VERSION_MAJOR != api_version_major[0]) ||
+            (TRITONSERVER_API_VERSION_MINOR > api_version_minor[0])) {
+          FAIL("triton server API version mismatch");
+        }
+
+        // Create the server...
+        TRITONSERVER_ServerOptions server_options = new TRITONSERVER_ServerOptions(null);
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsNew(server_options),
+            "creating server options");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsSetModelRepositoryPath(
+                server_options, model_repository_path),
+            "setting model repository path");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsSetLogVerbose(server_options, verbose_level),
+            "setting verbose logging level");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsSetBackendDirectory(
+                server_options, "/opt/tritonserver/backends"),
+            "setting backend directory");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsSetRepoAgentDirectory(
+                server_options, "/opt/tritonserver/repoagents"),
+            "setting repository agent directory");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsSetStrictModelConfig(server_options, true),
+            "setting strict model configuration");
+
+        TRITONSERVER_Server server_ptr = new TRITONSERVER_Server(null);
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerNew(server_ptr, server_options), "creating server");
+        FAIL_IF_ERR(
+            TRITONSERVER_ServerOptionsDelete(server_options),
+            "deleting server options");
+
+        TRITONSERVER_ServerDeleter server = new TRITONSERVER_ServerDeleter(server_ptr);
+
+        // Wait until the server is both live and ready.
+        int health_iters = 0;
+        while (true) {
+          boolean[] live = {false}, ready = {false};
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerIsLive(server, live),
+              "unable to get server liveness");
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerIsReady(server, ready),
+              "unable to get server readiness");
+          System.out.println("Server Health: live " + live[0] + ", ready " + ready[0]);
+          if (live[0] && ready[0]) {
+            break;
+          }
+
+          if (++health_iters >= 10) {
+            FAIL("failed to find healthy inference server");
+          }
+
+          Thread.sleep(500);
+        }
+
+        // Print status of the server.
+        {
+          TRITONSERVER_Message server_metadata_message = new TRITONSERVER_Message(null);
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerMetadata(server, server_metadata_message),
+              "unable to get server metadata message");
+          BytePointer buffer = new BytePointer((Pointer)null);
+          SizeTPointer byte_size = new SizeTPointer(1);
+          FAIL_IF_ERR(
+              TRITONSERVER_MessageSerializeToJson(
+                  server_metadata_message, buffer, byte_size),
+              "unable to serialize server metadata message");
+
+          System.out.println("Server Status:");
+          System.out.println(buffer.limit(byte_size.get()).getString());
+
+          FAIL_IF_ERR(
+              TRITONSERVER_MessageDelete(server_metadata_message),
+              "deleting status metadata");
+        }
+
+        String model_name = "simple";
+
+        // Wait for the model to become available.
+        boolean[] is_torch_model = {false};
+        boolean[] is_int = {true};
+        boolean[] is_ready = {false};
+        health_iters = 0;
+        while (!is_ready[0]) {
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerModelIsReady(
+                  server, model_name, 1, is_ready),
+              "unable to get model readiness");
+          if (!is_ready[0]) {
+            if (++health_iters >= 10) {
+              FAIL("model failed to be ready in 10 iterations");
+            }
+            Thread.sleep(500);
+            continue;
+          } 
+
+          TRITONSERVER_Message model_metadata_message = new TRITONSERVER_Message(null);
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerModelMetadata(
+                  server, model_name, 1, model_metadata_message),
+              "unable to get model metadata message");
+          BytePointer buffer = new BytePointer((Pointer)null);
+          SizeTPointer byte_size = new SizeTPointer(1);
+          FAIL_IF_ERR(
+              TRITONSERVER_MessageSerializeToJson(
+                  model_metadata_message, buffer, byte_size),
+              "unable to serialize model status protobuf");
+
+          JsonParser parser = new JsonParser();
+          JsonObject model_metadata = null;
+          try {
+            model_metadata = parser.parse(buffer.limit(byte_size.get()).getString()).getAsJsonObject();
+          } catch (Exception e) {
+            FAIL("error: failed to parse model metadata from JSON: " + e);
+          }
+
+          FAIL_IF_ERR(
+              TRITONSERVER_MessageDelete(model_metadata_message),
+              "deleting status protobuf");
+
+          if (!model_metadata.get("name").getAsString().equals(model_name)) {
+            FAIL("unable to find metadata for model");
+          }
+
+          boolean found_version = false;
+          if (model_metadata.has("versions")) {
+            for (JsonElement version : model_metadata.get("versions").getAsJsonArray()) {
+              if (version.getAsString().equals("1")) {
+                found_version = true;
+                break;
+              }
             }
           }
+          if (!found_version) {
+            FAIL("unable to find version 1 status for model");
+          }
+
+          FAIL_IF_ERR(
+              ParseModelMetadata(model_metadata, is_int, is_torch_model),
+              "parsing model metadata");
         }
-        if (!found_version) {
-          FAIL("unable to find version 1 status for model");
-        }
+
+        // Create the allocator that will be used to allocate buffers for
+        // the result tensors.
+        TRITONSERVER_ResponseAllocator allocator = new TRITONSERVER_ResponseAllocator(null);
+        FAIL_IF_ERR(
+            TRITONSERVER_ResponseAllocatorNew(
+                allocator, responseAlloc, responseRelease, null /* start_fn */),
+            "creating response allocator");
+
+        // Inference
+        TRITONSERVER_InferenceRequest irequest = new TRITONSERVER_InferenceRequest(null);
+        FAIL_IF_ERR(
+            TRITONSERVER_InferenceRequestNew(
+                irequest, server, model_name, -1 /* model_version */),
+            "creating inference request");
 
         FAIL_IF_ERR(
-            ParseModelMetadata(model_metadata, is_int, is_torch_model),
-            "parsing model metadata");
-      }
-
-      // Create the allocator that will be used to allocate buffers for
-      // the result tensors.
-      TRITONSERVER_ResponseAllocator allocator = new TRITONSERVER_ResponseAllocator(null);
-      FAIL_IF_ERR(
-          TRITONSERVER_ResponseAllocatorNew(
-              allocator, responseAlloc, responseRelease, null /* start_fn */),
-          "creating response allocator");
-
-      // Inference
-      TRITONSERVER_InferenceRequest irequest = new TRITONSERVER_InferenceRequest(null);
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestNew(
-              irequest, server, model_name, -1 /* model_version */),
-          "creating inference request");
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestSetId(irequest, "my_request_id"),
-          "setting ID for the request");
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestSetReleaseCallback(
-              irequest, inferRequestComplete, null /* request_release_userp */),
-          "setting request release callback");
-
-      // Inputs
-      String input0 = is_torch_model[0] ? "INPUT__0" : "INPUT0";
-      String input1 = is_torch_model[0] ? "INPUT__1" : "INPUT1";
-
-      long[] input0_shape = {1, 16};
-      long[] input1_shape = {1, 16};
-
-      int datatype =
-          (is_int[0]) ? TRITONSERVER_TYPE_INT32 : TRITONSERVER_TYPE_FP32;
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAddInput(
-              irequest, input0, datatype, input0_shape, input0_shape.length),
-          "setting input 0 meta-data for the request");
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAddInput(
-              irequest, input1, datatype, input1_shape, input1_shape.length),
-          "setting input 1 meta-data for the request");
-
-      String output0 = is_torch_model[0] ? "OUTPUT__0" : "OUTPUT0";
-      String output1 = is_torch_model[0] ? "OUTPUT__1" : "OUTPUT1";
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAddRequestedOutput(irequest, output0),
-          "requesting output 0 for the request");
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAddRequestedOutput(irequest, output1),
-          "requesting output 1 for the request");
-
-      // Create the data for the two input tensors. Initialize the first
-      // to unique values and the second to all ones.
-      BytePointer input0_data;
-      BytePointer input1_data;
-      if (is_int[0]) {
-        IntPointer[] p0 = {null}, p1 = {null};
-        GenerateInputData(p0, p1);
-        input0_data = p0[0].getPointer(BytePointer.class);
-        input1_data = p1[0].getPointer(BytePointer.class);
-      } else {
-        FloatPointer[] p0 = {null}, p1 = {null};
-        GenerateInputData(p0, p1);
-        input0_data = p0[0].getPointer(BytePointer.class);
-        input1_data = p1[0].getPointer(BytePointer.class);
-      }
-
-      long input0_size = input0_data.limit();
-      long input1_size = input1_data.limit();
-
-      Pointer input0_base = input0_data;
-      Pointer input1_base = input1_data;
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAppendInputData(
-              irequest, input0, input0_base, input0_size, requested_memory_type,
-              0 /* memory_type_id */),
-          "assigning INPUT0 data");
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestAppendInputData(
-              irequest, input1, input1_base, input1_size, requested_memory_type,
-              0 /* memory_type_id */),
-          "assigning INPUT1 data");
-
-      // Perform inference...
-      {
-        CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
-        futures.put(irequest, completed);
+            TRITONSERVER_InferenceRequestSetId(irequest, "my_request_id"),
+            "setting ID for the request");
 
         FAIL_IF_ERR(
-            TRITONSERVER_InferenceRequestSetResponseCallback(
-                irequest, allocator, null /* response_allocator_userp */,
-                inferResponseComplete, irequest),
-            "setting response callback");
+            TRITONSERVER_InferenceRequestSetReleaseCallback(
+                irequest, inferRequestComplete, null /* request_release_userp */),
+            "setting request release callback");
+
+        // Inputs
+        String input0 = is_torch_model[0] ? "INPUT__0" : "INPUT0";
+        String input1 = is_torch_model[0] ? "INPUT__1" : "INPUT1";
+
+        long[] input0_shape = {1, 16};
+        long[] input1_shape = {1, 16};
+
+        int datatype =
+            (is_int[0]) ? TRITONSERVER_TYPE_INT32 : TRITONSERVER_TYPE_FP32;
 
         FAIL_IF_ERR(
-            TRITONSERVER_ServerInferAsync(
-                server, irequest, null /* trace */),
-            "running inference");
+            TRITONSERVER_InferenceRequestAddInput(
+                irequest, input0, datatype, input0_shape, input0_shape.length),
+            "setting input 0 meta-data for the request");
+        FAIL_IF_ERR(
+            TRITONSERVER_InferenceRequestAddInput(
+                irequest, input1, datatype, input1_shape, input1_shape.length),
+            "setting input 1 meta-data for the request");
 
-        // Wait for the inference to complete.
-        TRITONSERVER_InferenceResponse completed_response = completed.get();
-        futures.remove(irequest);
+        String output0 = is_torch_model[0] ? "OUTPUT__0" : "OUTPUT0";
+        String output1 = is_torch_model[0] ? "OUTPUT__1" : "OUTPUT1";
 
         FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseError(completed_response),
-            "response status");
-
-        Check(
-            completed_response, input0_data, input1_data, output0, output1,
-            input0_size, datatype, is_int[0]);
-
+            TRITONSERVER_InferenceRequestAddRequestedOutput(irequest, output0),
+            "requesting output 0 for the request");
         FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseDelete(completed_response),
-            "deleting inference response");
-      }
+            TRITONSERVER_InferenceRequestAddRequestedOutput(irequest, output1),
+            "requesting output 1 for the request");
 
-      // Modify some input data in place and then reuse the request
-      // object.
-      {
+        // Create the data for the two input tensors. Initialize the first
+        // to unique values and the second to all ones.
+        BytePointer input0_data;
+        BytePointer input1_data;
         if (is_int[0]) {
-          new IntPointer(input0_data).put(0, 27);
+          IntPointer[] p0 = {null}, p1 = {null};
+          GenerateInputData(p0, p1);
+          input0_data = p0[0].getPointer(BytePointer.class);
+          input1_data = p1[0].getPointer(BytePointer.class);
         } else {
-          new FloatPointer(input0_data).put(0, 27.0f);
+          FloatPointer[] p0 = {null}, p1 = {null};
+          GenerateInputData(p0, p1);
+          input0_data = p0[0].getPointer(BytePointer.class);
+          input1_data = p1[0].getPointer(BytePointer.class);
         }
 
-        CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
-        futures.put(irequest, completed);
+        long input0_size = input0_data.limit();
+        long input1_size = input1_data.limit();
 
-        // Using a new promise so have to re-register the callback to set
-        // the promise as the userp.
-        FAIL_IF_ERR(
-            TRITONSERVER_InferenceRequestSetResponseCallback(
-                irequest, allocator, null /* response_allocator_userp */,
-                inferResponseComplete, irequest),
-            "setting response callback");
+        Pointer input0_base = input0_data;
+        Pointer input1_base = input1_data;
 
-        FAIL_IF_ERR(
-            TRITONSERVER_ServerInferAsync(
-                server, irequest, null /* trace */),
-            "running inference");
-
-        // Wait for the inference to complete.
-        TRITONSERVER_InferenceResponse completed_response = completed.get();
-        futures.remove(irequest);
-        FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseError(completed_response),
-            "response status");
-
-        Check(
-            completed_response, input0_data, input1_data, output0, output1,
-            input0_size, datatype, is_int[0]);
-
-        FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseDelete(completed_response),
-            "deleting inference response");
-      }
-
-      // Remove input data and then add back different data.
-      {
-        FAIL_IF_ERR(
-            TRITONSERVER_InferenceRequestRemoveAllInputData(irequest, input0),
-            "removing INPUT0 data");
         FAIL_IF_ERR(
             TRITONSERVER_InferenceRequestAppendInputData(
-                irequest, input0, input1_base, input1_size, requested_memory_type,
+                irequest, input0, input0_base, input0_size, requested_memory_type,
                 0 /* memory_type_id */),
-            "assigning INPUT1 data to INPUT0");
-
-        CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
-        futures.put(irequest, completed);
-
-        // Using a new promise so have to re-register the callback to set
-        // the promise as the userp.
+            "assigning INPUT0 data");
         FAIL_IF_ERR(
-            TRITONSERVER_InferenceRequestSetResponseCallback(
-                irequest, allocator, null /* response_allocator_userp */,
-                inferResponseComplete, irequest),
-            "setting response callback");
+            TRITONSERVER_InferenceRequestAppendInputData(
+                irequest, input1, input1_base, input1_size, requested_memory_type,
+                0 /* memory_type_id */),
+            "assigning INPUT1 data");
+
+        // Perform inference...
+        {
+          CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
+          futures.put(irequest, completed);
+
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceRequestSetResponseCallback(
+                  irequest, allocator, null /* response_allocator_userp */,
+                  inferResponseComplete, irequest),
+              "setting response callback");
+
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerInferAsync(
+                  server, irequest, null /* trace */),
+              "running inference");
+
+          // Wait for the inference to complete.
+          TRITONSERVER_InferenceResponse completed_response = completed.get();
+          futures.remove(irequest);
+
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseError(completed_response),
+              "response status");
+
+          try (PointerScope scope = new PointerScope()) {
+	    Check(
+                completed_response, input0_data, input1_data, output0, output1,
+                input0_size, datatype, is_int[0]);
+          }
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseDelete(completed_response),
+              "deleting inference response");
+        }
+
+        // Modify some input data in place and then reuse the request
+        // object.
+        {
+          if (is_int[0]) {
+            new IntPointer(input0_data).put(0, 27);
+          } else {
+            new FloatPointer(input0_data).put(0, 27.0f);
+          }
+
+          CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
+          futures.put(irequest, completed);
+
+          // Using a new promise so have to re-register the callback to set
+          // the promise as the userp.
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceRequestSetResponseCallback(
+                  irequest, allocator, null /* response_allocator_userp */,
+                  inferResponseComplete, irequest),
+              "setting response callback");
+
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerInferAsync(
+                  server, irequest, null /* trace */),
+              "running inference");
+
+          // Wait for the inference to complete.
+          TRITONSERVER_InferenceResponse completed_response = completed.get();
+          futures.remove(irequest);
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseError(completed_response),
+              "response status");
+
+          try (PointerScope scope = new PointerScope()) {
+	    Check(
+                completed_response, input0_data, input1_data, output0, output1,
+                input0_size, datatype, is_int[0]);
+          }
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseDelete(completed_response),
+              "deleting inference response");
+        }
+
+        // Remove input data and then add back different data.
+        {
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceRequestRemoveAllInputData(irequest, input0),
+              "removing INPUT0 data");
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceRequestAppendInputData(
+                  irequest, input0, input1_base, input1_size, requested_memory_type,
+                  0 /* memory_type_id */),
+              "assigning INPUT1 data to INPUT0");
+
+          CompletableFuture<TRITONSERVER_InferenceResponse> completed = new CompletableFuture<>();
+          futures.put(irequest, completed);
+
+          // Using a new promise so have to re-register the callback to set
+          // the promise as the userp.
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceRequestSetResponseCallback(
+                  irequest, allocator, null /* response_allocator_userp */,
+                  inferResponseComplete, irequest),
+              "setting response callback");
+
+          FAIL_IF_ERR(
+              TRITONSERVER_ServerInferAsync(
+                  server, irequest, null /* trace */),
+              "running inference");
+
+          // Wait for the inference to complete.
+          TRITONSERVER_InferenceResponse completed_response = completed.get();
+          futures.remove(irequest);
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseError(completed_response),
+              "response status");
+
+          // Both inputs are using input1_data...
+          try (PointerScope scope = new PointerScope()) {
+	    Check(
+                completed_response, input1_data, input1_data, output0, output1,
+                input0_size, datatype, is_int[0]);
+          }
+          FAIL_IF_ERR(
+              TRITONSERVER_InferenceResponseDelete(completed_response),
+              "deleting inference response");
+        }
 
         FAIL_IF_ERR(
-            TRITONSERVER_ServerInferAsync(
-                server, irequest, null /* trace */),
-            "running inference");
-
-        // Wait for the inference to complete.
-        TRITONSERVER_InferenceResponse completed_response = completed.get();
-        futures.remove(irequest);
-        FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseError(completed_response),
-            "response status");
-
-        // Both inputs are using input1_data...
-        Check(
-            completed_response, input1_data, input1_data, output0, output1,
-            input0_size, datatype, is_int[0]);
+            TRITONSERVER_InferenceRequestDelete(irequest),
+            "deleting inference request");
 
         FAIL_IF_ERR(
-            TRITONSERVER_InferenceResponseDelete(completed_response),
-            "deleting inference response");
+            TRITONSERVER_ResponseAllocatorDelete(allocator),
+            "deleting response allocator");
+      } catch (Exception e) {
+          System.err.println("exception: " + e);
       }
-
-      FAIL_IF_ERR(
-          TRITONSERVER_InferenceRequestDelete(irequest),
-          "deleting inference request");
-
-      FAIL_IF_ERR(
-          TRITONSERVER_ResponseAllocatorDelete(allocator),
-          "deleting response allocator");
-
+  
       System.exit(0);
     }
 }
