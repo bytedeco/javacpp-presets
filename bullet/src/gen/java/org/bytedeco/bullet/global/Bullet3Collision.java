@@ -85,6 +85,12 @@ public static final int B3_USE_PLACEMENT_NEW = 1;
 // Targeting ../Bullet3Collision/b3MyFaceArray.java
 
 
+// Targeting ../Bullet3Collision/b3RayHitArray.java
+
+
+// Targeting ../Bullet3Collision/b3RayInfoArray.java
+
+
 // Targeting ../Bullet3Collision/b3RigidBodyDataArray.java
 
 
