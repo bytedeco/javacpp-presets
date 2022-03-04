@@ -86,6 +86,7 @@ public class Bullet3Common implements InfoMapper {
 
             .put(new Info(
                     "B3_STATIC",
+                    "USE_SIMD",
                     "b3Cross3",
                     "b3Dot3F4",
                     "b3Float4",
@@ -96,6 +97,7 @@ public class Bullet3Common implements InfoMapper {
                     "b3Matrix3x3Data",
                     "b3Quat",
                     "b3QuatConstArg",
+                    "b3SimdScalar",
                     "b3TransformData",
                     "b3Vector3Data"
                 ).cppTypes().translate(false))

@@ -98,6 +98,8 @@ public class Bullet3Collision implements InfoMapper {
             .put(new Info("b3AlignedObjectArray<b3GpuChildShape>").pointerTypes("b3GpuChildShapeArray"))
             .put(new Info("b3AlignedObjectArray<b3GpuFace>").pointerTypes("b3GpuFaceArray"))
             .put(new Info("b3AlignedObjectArray<b3MyFace>").pointerTypes("b3MyFaceArray"))
+            .put(new Info("b3AlignedObjectArray<b3RayHit>").pointerTypes("b3RayHitArray"))
+            .put(new Info("b3AlignedObjectArray<b3RayInfo>").pointerTypes("b3RayInfoArray"))
             .put(new Info("b3AlignedObjectArray<b3RigidBodyData>").pointerTypes("b3RigidBodyDataArray"))
             .put(new Info("b3BvhSubtreeInfoData_t").pointerTypes("b3BvhSubtreeInfoData"))
             .put(new Info("b3Collidable_t").pointerTypes("b3Collidable"))
@@ -154,6 +156,14 @@ public class Bullet3Collision implements InfoMapper {
                     "b3AlignedObjectArray<b3MyFace>::findLinearSearch",
                     "b3AlignedObjectArray<b3MyFace>::findLinearSearch2",
                     "b3AlignedObjectArray<b3MyFace>::remove",
+                    "b3AlignedObjectArray<b3RayHit>::findBinarySearch",
+                    "b3AlignedObjectArray<b3RayHit>::findLinearSearch",
+                    "b3AlignedObjectArray<b3RayHit>::findLinearSearch2",
+                    "b3AlignedObjectArray<b3RayHit>::remove",
+                    "b3AlignedObjectArray<b3RayInfo>::findBinarySearch",
+                    "b3AlignedObjectArray<b3RayInfo>::findLinearSearch",
+                    "b3AlignedObjectArray<b3RayInfo>::findLinearSearch2",
+                    "b3AlignedObjectArray<b3RayInfo>::remove",
                     "b3AlignedObjectArray<b3RigidBodyData>::findBinarySearch",
                     "b3AlignedObjectArray<b3RigidBodyData>::findLinearSearch",
                     "b3AlignedObjectArray<b3RigidBodyData>::findLinearSearch2",
