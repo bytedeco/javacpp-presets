@@ -191,7 +191,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.19  http://www.openblas.net/
+ * OpenBLAS 0.3.20  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
@@ -199,12 +199,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.22.x  https://github.com/numpy/numpy
  * SciPy 1.8.x  https://github.com/scipy/scipy
- * Gym 0.21.x  https://github.com/openai/gym
+ * Gym 0.23.x  https://github.com/openai/gym
  * LLVM 13.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 5.0.x  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 5.1.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
