@@ -55,6 +55,12 @@ public static final int B3_USE_PLACEMENT_NEW = 1;
 
 // #ifdef B3_USE_PLACEMENT_NEW
 // #include <new>
+// Targeting ../Bullet3Collision/sStkNNArray.java
+
+
+// Targeting ../Bullet3Collision/sStkNPSArray.java
+
+
 // Targeting ../Bullet3Collision/b3AabbArray.java
 
 
@@ -68,12 +74,6 @@ public static final int B3_USE_PLACEMENT_NEW = 1;
 
 
 // Targeting ../Bullet3Collision/b3DbvtProxyArray.java
-
-
-// Targeting ../Bullet3Collision/sStkNNArray.java
-
-
-// Targeting ../Bullet3Collision/sStkNPSArray.java
 
 
 // Targeting ../Bullet3Collision/b3GpuChildShapeArray.java
@@ -352,7 +352,7 @@ public static native @ByVal b3Int4 b3MakeBroadphasePair(int xx, int yy);
 
 
 
-public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const b3BroadphasePair*") @ByRef b3Int4 a, @Cast("const b3BroadphasePair*") @ByRef b3Int4 b);
+public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef b3Int4 a, @Const @ByRef b3Int4 b);
 
 // #endif  //B3_OVERLAPPING_PAIR_H
 

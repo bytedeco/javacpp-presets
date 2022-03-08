@@ -32,10 +32,10 @@ public class b3NullPairCache extends b3OverlappingPairCache {
         return new b3NullPairCache((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("b3BroadphasePair*") b3Int4 getOverlappingPairArrayPtr();
-	public native @Cast("b3BroadphasePairArray*") @ByRef b3AabbArray getOverlappingPairArray();
+	public native b3Int4 getOverlappingPairArrayPtr();
+	public native @Cast("b3BroadphasePairArray*") @ByRef b3Int4Array getOverlappingPairArray();
 
-	public native void cleanOverlappingPair(@Cast("b3BroadphasePair*") @ByRef b3Int4 arg0, b3Dispatcher arg1);
+	public native void cleanOverlappingPair(@ByRef b3Int4 arg0, b3Dispatcher arg1);
 
 	public native int getNumOverlappingPairs();
 
@@ -45,7 +45,7 @@ public class b3NullPairCache extends b3OverlappingPairCache {
 
 	public native void processAllOverlappingPairs(b3OverlapCallback arg0, b3Dispatcher arg1);
 
-	public native @Cast("b3BroadphasePair*") b3Int4 findPair(int arg0, int arg1);
+	public native b3Int4 findPair(int arg0, int arg1);
 
 	public native @Cast("bool") boolean hasDeferredRemoval();
 
@@ -54,7 +54,7 @@ public class b3NullPairCache extends b3OverlappingPairCache {
 	//
 	//	}
 
-	public native @Cast("b3BroadphasePair*") b3Int4 addOverlappingPair(int arg0, int arg1);
+	public native b3Int4 addOverlappingPair(int arg0, int arg1);
 
 	public native Pointer removeOverlappingPair(int arg0, int arg1, b3Dispatcher arg2);
 

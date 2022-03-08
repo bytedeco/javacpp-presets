@@ -20,5 +20,5 @@ public class b3OverlapCallback extends Pointer {
     public b3OverlapCallback(Pointer p) { super(p); }
 
 	//return true for deletion of the pair
-	public native @Cast("bool") boolean processOverlap(@Cast("b3BroadphasePair*") @ByRef b3Int4 pair);
+	public native @Cast("bool") boolean processOverlap(@ByRef b3Int4 pair);
 }

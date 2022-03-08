@@ -40,19 +40,19 @@ public class b3HashedOverlappingPairCache extends b3OverlappingPairCache {
 
 	// Add a pair and return the new pair. If the pair already exists,
 	// no new pair is created and the old one is returned.
-	public native @Cast("b3BroadphasePair*") b3Int4 addOverlappingPair(int proxy0, int proxy1);
+	public native b3Int4 addOverlappingPair(int proxy0, int proxy1);
 
 	public native void cleanProxyFromPairs(int proxy, b3Dispatcher dispatcher);
 
 	public native void processAllOverlappingPairs(b3OverlapCallback arg0, b3Dispatcher dispatcher);
 
-	public native @Cast("b3BroadphasePair*") b3Int4 getOverlappingPairArrayPtr();
+	public native b3Int4 getOverlappingPairArrayPtr();
 
-	public native @Cast("b3BroadphasePairArray*") @ByRef b3AabbArray getOverlappingPairArray();
+	public native @Cast("b3BroadphasePairArray*") @ByRef b3Int4Array getOverlappingPairArray();
 
-	public native void cleanOverlappingPair(@Cast("b3BroadphasePair*") @ByRef b3Int4 pair, b3Dispatcher dispatcher);
+	public native void cleanOverlappingPair(@ByRef b3Int4 pair, b3Dispatcher dispatcher);
 
-	public native @Cast("b3BroadphasePair*") b3Int4 findPair(int proxy0, int proxy1);
+	public native b3Int4 findPair(int proxy0, int proxy1);
 
 	public native int GetCount();
 	//	b3BroadphasePair* GetPairs() { return m_pairs; }

@@ -53,7 +53,19 @@ public static final int B3_USE_PLACEMENT_NEW = 1;
 
 // #ifdef B3_USE_PLACEMENT_NEW
 // #include <new>
+// Targeting ../Bullet3Common/b3UnsignedCharArray.java
+
+
 // Targeting ../Bullet3Common/b3IntArray.java
+
+
+// Targeting ../Bullet3Common/b3UnsignedIntArray.java
+
+
+// Targeting ../Bullet3Common/b3FloatArray.java
+
+
+// Targeting ../Bullet3Common/b3Int2Array.java
 
 
 // Targeting ../Bullet3Common/b3Int4Array.java

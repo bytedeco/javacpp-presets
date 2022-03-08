@@ -38,5 +38,5 @@ public class b3BroadphasePairSortPredicate extends Pointer {
         return new b3BroadphasePairSortPredicate((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("bool") @Name("operator ()") boolean apply(@Cast("const b3BroadphasePair*") @ByRef b3Int4 a, @Cast("const b3BroadphasePair*") @ByRef b3Int4 b);
+	public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef b3Int4 a, @Const @ByRef b3Int4 b);
 }

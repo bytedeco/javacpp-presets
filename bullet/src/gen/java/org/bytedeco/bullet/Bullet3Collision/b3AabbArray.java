@@ -11,11 +11,7 @@ import org.bytedeco.bullet.Bullet3Common.*;
 import static org.bytedeco.bullet.global.Bullet3Common.*;
 
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
-  //for placement new
-// #endif          //B3_USE_PLACEMENT_NEW
 
-/**The b3AlignedObjectArray template class uses a subset of the stl::vector interface for its methods
- * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
 @Name("b3AlignedObjectArray<b3Aabb>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.Bullet3Collision.class)
 public class b3AabbArray extends Pointer {
     static { Loader.load(); }

@@ -22,11 +22,11 @@ public class b3OverlappingPairCache extends Pointer {
     public b3OverlappingPairCache(Pointer p) { super(p); }
   // this is needed so we can get to the derived class destructor
 
-	public native @Cast("b3BroadphasePair*") b3Int4 getOverlappingPairArrayPtr();
+	public native b3Int4 getOverlappingPairArrayPtr();
 
-	public native @Cast("b3BroadphasePairArray*") @ByRef b3AabbArray getOverlappingPairArray();
+	public native @Cast("b3BroadphasePairArray*") @ByRef b3Int4Array getOverlappingPairArray();
 
-	public native void cleanOverlappingPair(@Cast("b3BroadphasePair*") @ByRef b3Int4 pair, b3Dispatcher dispatcher);
+	public native void cleanOverlappingPair(@ByRef b3Int4 pair, b3Dispatcher dispatcher);
 
 	public native int getNumOverlappingPairs();
 
@@ -36,13 +36,13 @@ public class b3OverlappingPairCache extends Pointer {
 
 	public native void processAllOverlappingPairs(b3OverlapCallback arg0, b3Dispatcher dispatcher);
 
-	public native @Cast("b3BroadphasePair*") b3Int4 findPair(int proxy0, int proxy1);
+	public native b3Int4 findPair(int proxy0, int proxy1);
 
 	public native @Cast("bool") boolean hasDeferredRemoval();
 
 	//virtual	void	setInternalGhostPairCallback(b3OverlappingPairCallback* ghostPairCallback)=0;
 
-	public native @Cast("b3BroadphasePair*") b3Int4 addOverlappingPair(int proxy0, int proxy1);
+	public native b3Int4 addOverlappingPair(int proxy0, int proxy1);
 	public native Pointer removeOverlappingPair(int proxy0, int proxy1, b3Dispatcher dispatcher);
 	public native void removeOverlappingPairsContainingProxy(int arg0, b3Dispatcher arg1);
 

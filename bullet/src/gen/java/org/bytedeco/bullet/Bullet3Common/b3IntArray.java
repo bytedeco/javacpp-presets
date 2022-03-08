@@ -9,11 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.Bullet3Common.*;
-  //for placement new
-// #endif          //B3_USE_PLACEMENT_NEW
 
-/**The b3AlignedObjectArray template class uses a subset of the stl::vector interface for its methods
- * It is developed to replace stl::vector to avoid portability issues, including STL alignment issues to add SIMD/SSE data */
 @Name("b3AlignedObjectArray<int>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.Bullet3Common.class)
 public class b3IntArray extends Pointer {
     static { Loader.load(); }

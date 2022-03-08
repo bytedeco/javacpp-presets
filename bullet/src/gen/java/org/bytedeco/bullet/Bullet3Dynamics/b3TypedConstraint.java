@@ -107,7 +107,7 @@ public class b3TypedConstraint extends b3TypedObject {
 	public native void setOverrideNumSolverIterations(int overideNumIterations);
 
 	/**internal method used by the constraint solver, don't use them directly */
-	public native void setupSolverConstraint(@Cast("b3ConstraintArray*") @ByRef b3IntArray ca, int solverBodyA, int solverBodyB, @Cast("b3Scalar") float timeStep);
+	public native void setupSolverConstraint(@Cast("b3ConstraintArray*") @ByRef b3TypedConstraintArray ca, int solverBodyA, int solverBodyB, @Cast("b3Scalar") float timeStep);
 
 	/**internal method used by the constraint solver, don't use them directly */
 	public native void getInfo1(b3ConstraintInfo1 info, @Const b3RigidBodyData bodies);

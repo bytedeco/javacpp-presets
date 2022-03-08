@@ -17,6 +17,53 @@ import static org.bytedeco.bullet.global.Bullet3Collision.*;
 public class Bullet3Dynamics extends org.bytedeco.bullet.presets.Bullet3Dynamics {
     static { Loader.load(); }
 
+// Parsed from Bullet3Common/b3AlignedObjectArray.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2013 Erwin Coumans  http://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef B3_OBJECT_ARRAY__
+// #define B3_OBJECT_ARRAY__
+
+// #include "b3Scalar.h"  // has definitions like B3_FORCE_INLINE
+// #include "b3AlignedAllocator.h"
+
+/**If the platform doesn't support placement new, you can disable B3_USE_PLACEMENT_NEW
+ * then the b3AlignedObjectArray doesn't support objects with virtual methods, and non-trivial constructors/destructors
+ * You can enable B3_USE_MEMCPY, then swapping elements in the array will use memcpy instead of operator=
+ * see discussion here: https://bulletphysics.orgphpBB2/viewtopic.php?t=1231 and
+ * http://www.continuousphysics.com/Bullet/phpBB2/viewtopic.php?t=1240 */
+
+public static final int B3_USE_PLACEMENT_NEW = 1;
+//#define B3_USE_MEMCPY 1 //disable, because it is cumbersome to find out for each platform where memcpy is defined. It can be in <memory.h> or <string.h> or otherwise...
+// #define B3_ALLOW_ARRAY_COPY_OPERATOR  // enabling this can accidently perform deep copies of data if you are not careful
+
+// #ifdef B3_USE_MEMCPY
+// #include <memory.h>
+// #include <string.h>
+// #endif  //B3_USE_MEMCPY
+
+// #ifdef B3_USE_PLACEMENT_NEW
+// #include <new>
+// Targeting ../Bullet3Dynamics/b3TypedConstraintArray.java
+
+
+
+// #endif  //B3_OBJECT_ARRAY__
+
+
 // Parsed from Bullet3Dynamics/ConstraintSolver/b3ContactSolverInfo.h
 
 /*
