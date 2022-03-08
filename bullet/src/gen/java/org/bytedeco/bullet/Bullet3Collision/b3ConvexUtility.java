@@ -46,5 +46,5 @@ public class b3ConvexUtility extends Pointer {
 	public native @Cast("bool") boolean initializePolyhedralFeatures(@Const b3Vector3 orgVertices, int numVertices);
 
 	public native void initialize();
-	public native @Cast("bool") boolean testContainment();
+	
 }

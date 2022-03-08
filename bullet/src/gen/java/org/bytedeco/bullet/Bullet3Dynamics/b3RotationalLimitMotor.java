@@ -86,5 +86,5 @@ public class b3RotationalLimitMotor extends Pointer {
 	public native int testLimitValue(@Cast("b3Scalar") float test_value);
 
 	/** apply the correction impulses for two bodies */
-	public native @Cast("b3Scalar") float solveAngularLimits(@Cast("b3Scalar") float timeStep, @ByRef b3Vector3 axis, @Cast("b3Scalar") float jacDiagABInv, b3RigidBodyData body0, b3RigidBodyData body1);
+	
 }

@@ -30,7 +30,7 @@ public class b3GpuRigidBodyPipeline extends Pointer {
 	public native void integrate(float timeStep);
 	public native void setupGpuAabbsFull();
 
-	public native int registerConvexPolyhedron(b3ConvexUtility convex);
+	
 
 	//int		registerConvexPolyhedron(const float* vertices, int strideInBytes, int numVertices, const float* scaling);
 	//int		registerSphereShape(float radius);

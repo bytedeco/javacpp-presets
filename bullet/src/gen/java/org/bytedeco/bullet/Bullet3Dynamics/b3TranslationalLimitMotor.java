@@ -78,12 +78,5 @@ public class b3TranslationalLimitMotor extends Pointer {
 	public native @Cast("bool") boolean needApplyForce(int limitIndex);
 	public native int testLimitValue(int limitIndex, @Cast("b3Scalar") float test_value);
 
-	public native @Cast("b3Scalar") float solveLinearAxis(
-			@Cast("b3Scalar") float timeStep,
-			@Cast("b3Scalar") float jacDiagABInv,
-			@ByRef b3RigidBodyData body1, @Const @ByRef b3Vector3 pointInA,
-			@ByRef b3RigidBodyData body2, @Const @ByRef b3Vector3 pointInB,
-			int limit_index,
-			@Const @ByRef b3Vector3 axis_normal_on_a,
-			@Const @ByRef b3Vector3 anchorPos);
+	
 }

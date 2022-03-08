@@ -31,30 +31,24 @@ public class b3CpuRigidBodyPipeline extends Pointer {
 	public native void computeContactPoints();
 	public native void solveContactConstraints();
 
-	public native int registerConvexPolyhedron(b3ConvexUtility convex);
+	
 
 	public native int registerPhysicsInstance(float mass, @Const FloatPointer _position, @Const FloatPointer orientation, int collisionShapeIndex, int userData);
 	public native int registerPhysicsInstance(float mass, @Const FloatBuffer _position, @Const FloatBuffer orientation, int collisionShapeIndex, int userData);
 	public native int registerPhysicsInstance(float mass, @Const float[] _position, @Const float[] orientation, int collisionShapeIndex, int userData);
-	public native void writeAllInstancesToGpu();
-	public native void copyConstraintsToHost();
-	public native void setGravity(@Const FloatPointer grav);
-	public native void setGravity(@Const FloatBuffer grav);
-	public native void setGravity(@Const float[] grav);
-	public native void reset();
+	
+	
+	
+	
 
-	public native int createPoint2PointConstraint(int bodyA, int bodyB, @Const FloatPointer pivotInA, @Const FloatPointer pivotInB, float breakingThreshold);
-	public native int createPoint2PointConstraint(int bodyA, int bodyB, @Const FloatBuffer pivotInA, @Const FloatBuffer pivotInB, float breakingThreshold);
-	public native int createPoint2PointConstraint(int bodyA, int bodyB, @Const float[] pivotInA, @Const float[] pivotInB, float breakingThreshold);
-	public native int createFixedConstraint(int bodyA, int bodyB, @Const FloatPointer pivotInA, @Const FloatPointer pivotInB, @Const FloatPointer relTargetAB, float breakingThreshold);
-	public native int createFixedConstraint(int bodyA, int bodyB, @Const FloatBuffer pivotInA, @Const FloatBuffer pivotInB, @Const FloatBuffer relTargetAB, float breakingThreshold);
-	public native int createFixedConstraint(int bodyA, int bodyB, @Const float[] pivotInA, @Const float[] pivotInB, @Const float[] relTargetAB, float breakingThreshold);
-	public native void removeConstraintByUid(int uid);
+	
+	
+	
 
-	public native void addConstraint(b3TypedConstraint constraint);
-	public native void removeConstraint(b3TypedConstraint constraint);
+	
+	
 
-	public native void castRays(@Const @ByRef b3RayInfoArray rays, @ByRef b3RayHitArray hitResults);
+	
 
 	public native @Const b3RigidBodyData getBodyBuffer();
 

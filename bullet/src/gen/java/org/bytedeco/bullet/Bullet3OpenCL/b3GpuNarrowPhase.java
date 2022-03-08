@@ -46,9 +46,7 @@ public class b3GpuNarrowPhase extends Pointer {
 	public native int registerRigidBody(int collidableIndex, float mass, @Const FloatPointer _position, @Const FloatPointer orientation, @Const FloatPointer aabbMin, @Const FloatPointer aabbMax, @Cast("bool") boolean writeToGpu);
 	public native int registerRigidBody(int collidableIndex, float mass, @Const FloatBuffer _position, @Const FloatBuffer orientation, @Const FloatBuffer aabbMin, @Const FloatBuffer aabbMax, @Cast("bool") boolean writeToGpu);
 	public native int registerRigidBody(int collidableIndex, float mass, @Const float[] _position, @Const float[] orientation, @Const float[] aabbMin, @Const float[] aabbMax, @Cast("bool") boolean writeToGpu);
-	public native void setObjectTransform(@Const FloatPointer _position, @Const FloatPointer orientation, int bodyIndex);
-	public native void setObjectTransform(@Const FloatBuffer _position, @Const FloatBuffer orientation, int bodyIndex);
-	public native void setObjectTransform(@Const float[] _position, @Const float[] orientation, int bodyIndex);
+	
 
 	public native void writeAllBodiesToGpu();
 	public native void reset();

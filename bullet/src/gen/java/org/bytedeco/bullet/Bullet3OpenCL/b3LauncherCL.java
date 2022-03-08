@@ -40,9 +40,7 @@ public class b3LauncherCL extends Pointer {
 	public native int deserializeArgs(@Cast("unsigned char*") ByteBuffer buf, int bufSize, @ByVal cl_context ctx);
 	public native int deserializeArgs(@Cast("unsigned char*") byte[] buf, int bufSize, @ByVal cl_context ctx);
 
-	public native int validateResults(@Cast("unsigned char*") BytePointer goldBuffer, int goldBufferCapacity, @ByVal cl_context ctx);
-	public native int validateResults(@Cast("unsigned char*") ByteBuffer goldBuffer, int goldBufferCapacity, @ByVal cl_context ctx);
-	public native int validateResults(@Cast("unsigned char*") byte[] goldBuffer, int goldBufferCapacity, @ByVal cl_context ctx);
+	
 
 	public native int serializeArguments(@Cast("unsigned char*") BytePointer destBuffer, int destBufferCapacity);
 	public native int serializeArguments(@Cast("unsigned char*") ByteBuffer destBuffer, int destBufferCapacity);

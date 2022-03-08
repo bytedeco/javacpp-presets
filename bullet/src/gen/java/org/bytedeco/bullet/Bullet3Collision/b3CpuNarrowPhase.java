@@ -22,15 +22,13 @@ public class b3CpuNarrowPhase extends Pointer {
 	public b3CpuNarrowPhase(@Const @ByRef b3Config config) { super((Pointer)null); allocate(config); }
 	private native void allocate(@Const @ByRef b3Config config);
 
-	public native int registerSphereShape(float radius);
-	public native int registerPlaneShape(@Const @ByRef b3Vector3 planeNormal, float planeConstant);
+	
+	
 
-	public native int registerCompoundShape(b3GpuChildShapeArray childShapes);
-	public native int registerFace(@Const @ByRef b3Vector3 faceNormal, float faceConstant);
+	
+	
 
-	public native int registerConcaveMesh(b3Vector3Array vertices, b3IntArray indices, @Const FloatPointer scaling);
-	public native int registerConcaveMesh(b3Vector3Array vertices, b3IntArray indices, @Const FloatBuffer scaling);
-	public native int registerConcaveMesh(b3Vector3Array vertices, b3IntArray indices, @Const float[] scaling);
+	
 
 	//do they need to be merged?
 
@@ -40,36 +38,28 @@ public class b3CpuNarrowPhase extends Pointer {
 	public native int registerConvexHullShape(@Const float[] vertices, int strideInBytes, int numVertices, @Const float[] scaling);
 
 	//int registerRigidBody(int collidableIndex, float mass, const float* position, const float* orientation, const float* aabbMin, const float* aabbMax,bool writeToGpu);
-	public native void setObjectTransform(@Const FloatPointer _position, @Const FloatPointer orientation, int bodyIndex);
-	public native void setObjectTransform(@Const FloatBuffer _position, @Const FloatBuffer orientation, int bodyIndex);
-	public native void setObjectTransform(@Const float[] _position, @Const float[] orientation, int bodyIndex);
+	
 
-	public native void writeAllBodiesToGpu();
-	public native void reset();
-	public native void readbackAllBodiesToCpu();
-	public native @Cast("bool") boolean getObjectTransformFromCpu(FloatPointer _position, FloatPointer orientation, int bodyIndex);
-	public native @Cast("bool") boolean getObjectTransformFromCpu(FloatBuffer _position, FloatBuffer orientation, int bodyIndex);
-	public native @Cast("bool") boolean getObjectTransformFromCpu(float[] _position, float[] orientation, int bodyIndex);
+	
+	
+	
+	
 
-	public native void setObjectTransformCpu(FloatPointer _position, FloatPointer orientation, int bodyIndex);
-	public native void setObjectTransformCpu(FloatBuffer _position, FloatBuffer orientation, int bodyIndex);
-	public native void setObjectTransformCpu(float[] _position, float[] orientation, int bodyIndex);
-	public native void setObjectVelocityCpu(FloatPointer linVel, FloatPointer angVel, int bodyIndex);
-	public native void setObjectVelocityCpu(FloatBuffer linVel, FloatBuffer angVel, int bodyIndex);
-	public native void setObjectVelocityCpu(float[] linVel, float[] angVel, int bodyIndex);
+	
+	
 
 	//virtual void computeContacts(cl_mem broadphasePairs, int numBroadphasePairs, cl_mem aabbsWorldSpace, int numObjects);
 	public native void computeContacts(@ByRef b3Int4Array pairs, @ByRef b3AabbArray aabbsWorldSpace, @ByRef b3RigidBodyDataArray bodies);
 
-	public native @Const b3RigidBodyData getBodiesCpu();
+	
 	//struct b3RigidBodyData* getBodiesCpu();
 
-	public native int getNumBodiesGpu();
+	
 
-	public native int getNumBodyInertiasGpu();
+	
 
-	public native @Const b3Collidable getCollidablesCpu();
-	public native int getNumCollidablesGpu();
+	
+	
 
 	/*const struct b3Contact4* getContactsCPU() const;
 
@@ -79,7 +69,7 @@ public class b3CpuNarrowPhase extends Pointer {
 
 	public native @Const @ByRef b3Contact4DataArray getContacts();
 
-	public native int getNumRigidBodies();
+	
 
 	public native int allocateCollidable();
 
