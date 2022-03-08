@@ -88,19 +88,9 @@ public class Bullet3Collision implements InfoMapper {
             .put(new Info("_b3MprSimplex_t").pointerTypes("b3MprSimplex_t"))
             .put(new Info("_b3MprSupport_t").pointerTypes("b3MprSupport_t"))
             .put(new Info("b3Aabb_t").pointerTypes("b3Aabb"))
-            .put(new Info("b3AlignedObjectArray<b3Aabb>").pointerTypes("b3AabbArray"))
-            .put(new Info("b3AlignedObjectArray<b3Collidable>").pointerTypes("b3CollidableArray"))
-            .put(new Info("b3AlignedObjectArray<b3Contact4Data>").pointerTypes("b3Contact4DataArray"))
-            .put(new Info("b3AlignedObjectArray<b3ConvexPolyhedronData>").pointerTypes("b3ConvexPolyhedronDataArray"))
-            .put(new Info("b3AlignedObjectArray<b3DbvtProxy>").pointerTypes("b3DbvtProxyArray"))
             .put(new Info("b3AlignedObjectArray<b3DynamicBvh::sStkNN>").pointerTypes("sStkNNArray"))
             .put(new Info("b3AlignedObjectArray<b3DynamicBvh::sStkNPS>").pointerTypes("sStkNPSArray"))
-            .put(new Info("b3AlignedObjectArray<b3GpuChildShape>").pointerTypes("b3GpuChildShapeArray"))
-            .put(new Info("b3AlignedObjectArray<b3GpuFace>").pointerTypes("b3GpuFaceArray"))
-            .put(new Info("b3AlignedObjectArray<b3MyFace>").pointerTypes("b3MyFaceArray"))
-            .put(new Info("b3AlignedObjectArray<b3RayHit>").pointerTypes("b3RayHitArray"))
-            .put(new Info("b3AlignedObjectArray<b3RayInfo>").pointerTypes("b3RayInfoArray"))
-            .put(new Info("b3AlignedObjectArray<b3RigidBodyData>").pointerTypes("b3RigidBodyDataArray"))
+            .put(new Info("b3BroadphasePair").pointerTypes("b3Int4"))
             .put(new Info("b3BvhSubtreeInfoData_t").pointerTypes("b3BvhSubtreeInfoData"))
             .put(new Info("b3Collidable_t").pointerTypes("b3Collidable"))
             .put(new Info("b3Contact4Data_t").pointerTypes("b3Contact4Data"))
@@ -116,26 +106,6 @@ public class Bullet3Collision implements InfoMapper {
             .put(new Info("b3BroadphaseRayCallback").purify(true))
 
             .put(new Info(
-                    "b3AlignedObjectArray<b3Aabb>::findBinarySearch",
-                    "b3AlignedObjectArray<b3Aabb>::findLinearSearch",
-                    "b3AlignedObjectArray<b3Aabb>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3Aabb>::remove",
-                    "b3AlignedObjectArray<b3Collidable>::findBinarySearch",
-                    "b3AlignedObjectArray<b3Collidable>::findLinearSearch",
-                    "b3AlignedObjectArray<b3Collidable>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3Collidable>::remove",
-                    "b3AlignedObjectArray<b3Contact4Data>::findBinarySearch",
-                    "b3AlignedObjectArray<b3Contact4Data>::findLinearSearch",
-                    "b3AlignedObjectArray<b3Contact4Data>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3Contact4Data>::remove",
-                    "b3AlignedObjectArray<b3ConvexPolyhedronData>::findBinarySearch",
-                    "b3AlignedObjectArray<b3ConvexPolyhedronData>::findLinearSearch",
-                    "b3AlignedObjectArray<b3ConvexPolyhedronData>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3ConvexPolyhedronData>::remove",
-                    "b3AlignedObjectArray<b3DbvtProxy>::findBinarySearch",
-                    "b3AlignedObjectArray<b3DbvtProxy>::findLinearSearch",
-                    "b3AlignedObjectArray<b3DbvtProxy>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3DbvtProxy>::remove",
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNN>::findBinarySearch",
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNN>::findLinearSearch",
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNN>::findLinearSearch2",
@@ -144,34 +114,24 @@ public class Bullet3Collision implements InfoMapper {
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNPS>::findLinearSearch",
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNPS>::findLinearSearch2",
                     "b3AlignedObjectArray<b3DynamicBvh::sStkNPS>::remove",
-                    "b3AlignedObjectArray<b3GpuChildShape>::findBinarySearch",
-                    "b3AlignedObjectArray<b3GpuChildShape>::findLinearSearch",
-                    "b3AlignedObjectArray<b3GpuChildShape>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3GpuChildShape>::remove",
-                    "b3AlignedObjectArray<b3GpuFace>::findBinarySearch",
-                    "b3AlignedObjectArray<b3GpuFace>::findLinearSearch",
-                    "b3AlignedObjectArray<b3GpuFace>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3GpuFace>::remove",
-                    "b3AlignedObjectArray<b3MyFace>::findBinarySearch",
-                    "b3AlignedObjectArray<b3MyFace>::findLinearSearch",
-                    "b3AlignedObjectArray<b3MyFace>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3MyFace>::remove",
-                    "b3AlignedObjectArray<b3RayHit>::findBinarySearch",
-                    "b3AlignedObjectArray<b3RayHit>::findLinearSearch",
-                    "b3AlignedObjectArray<b3RayHit>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3RayHit>::remove",
-                    "b3AlignedObjectArray<b3RayInfo>::findBinarySearch",
-                    "b3AlignedObjectArray<b3RayInfo>::findLinearSearch",
-                    "b3AlignedObjectArray<b3RayInfo>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3RayInfo>::remove",
-                    "b3AlignedObjectArray<b3RigidBodyData>::findBinarySearch",
-                    "b3AlignedObjectArray<b3RigidBodyData>::findLinearSearch",
-                    "b3AlignedObjectArray<b3RigidBodyData>::findLinearSearch2",
-                    "b3AlignedObjectArray<b3RigidBodyData>::remove",
                     "b3CpuNarrowPhase::getInternalData",
                     "b3DynamicBvh::extractLeaves",
                     "b3DynamicBvh::m_rayTestStack"
                 ).skip())
             ;
+
+        Bullet3Common.mapArrays(infoMap,
+            "b3Aabb",
+            "b3Collidable",
+            "b3Contact4Data",
+            "b3ConvexPolyhedronData",
+            "b3DbvtProxy",
+            "b3GpuChildShape",
+            "b3GpuFace",
+            "b3MyFace",
+            "b3RayHit",
+            "b3RayInfo",
+            "b3RigidBodyData"
+        );
     }
 }

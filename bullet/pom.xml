@@ -34,7 +34,7 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <includePaths>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/bullet</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/bullet3-3.21/src</includePath>
           </includePaths>
         </configuration>
       </plugin>

@@ -9,4 +9,5 @@ module org.bytedeco.bullet {
   exports org.bytedeco.bullet.Bullet3Common;
   exports org.bytedeco.bullet.Bullet3Collision;
   exports org.bytedeco.bullet.Bullet3Dynamics;
+  exports org.bytedeco.bullet.Bullet3OpenCL;
 }

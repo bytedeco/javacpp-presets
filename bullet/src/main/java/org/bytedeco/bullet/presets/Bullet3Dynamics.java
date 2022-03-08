@@ -39,6 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = {
+                "Bullet3Common/b3AlignedObjectArray.h",
                 "Bullet3Dynamics/ConstraintSolver/b3ContactSolverInfo.h",
                 "Bullet3Dynamics/ConstraintSolver/b3SolverBody.h",
                 "Bullet3Dynamics/ConstraintSolver/b3SolverConstraint.h",
@@ -70,6 +71,7 @@ public class Bullet3Dynamics implements InfoMapper {
                     "b3Point2PointConstraintData"
                 ).cppTypes().translate(false))
 
+            .put(new Info("b3AlignedObjectArray<b3TypedConstraint*>").pointerTypes("b3TypedConstraintArray"))
             .put(new Info("b3ContactConstraint4_t").pointerTypes("b3ContactConstraint4"))
             ;
     }

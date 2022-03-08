@@ -69,6 +69,20 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class Bullet3Common implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "bullet"); }
 
+    public static void mapArrays(InfoMap infoMap, String... typeNames) {
+        for (String typeName: typeNames) {
+            String cppName = "b3AlignedObjectArray<" + typeName + ">";
+            String javaName = typeName + "Array";
+            infoMap.put(new Info(cppName).pointerTypes(javaName));
+            infoMap.put(new Info(
+                    cppName + "::findBinarySearch",
+                    cppName + "::findLinearSearch",
+                    cppName + "::findLinearSearch2",
+                    cppName + "::remove"
+                ).skip());
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap
             .put(new Info("B3_ATTRIBUTE_ALIGNED16").cppText("#define B3_ATTRIBUTE_ALIGNED16(x) x"))
@@ -121,13 +135,22 @@ public class Bullet3Common implements InfoMapper {
                     "__cplusplus"
                 ).define(true))
 
+            .put(new Info("b3AlignedObjectArray<unsigned char>").pointerTypes("b3UnsignedCharArray"))
             .put(new Info("b3AlignedObjectArray<int>").pointerTypes("b3IntArray"))
+            .put(new Info("b3AlignedObjectArray<unsigned int>").pointerTypes("b3UnsignedIntArray"))
+            .put(new Info("b3AlignedObjectArray<float>").pointerTypes("b3FloatArray"))
+            .put(new Info("b3AlignedObjectArray<b3Int2>").pointerTypes("b3Int2Array"))
             .put(new Info("b3AlignedObjectArray<b3Int4>").pointerTypes("b3Int4Array"))
             .put(new Info("b3AlignedObjectArray<b3Vector3>").pointerTypes("b3Vector3Array"))
+            .put(new Info("b3AlignedObjectArray<b3BroadphasePair>").pointerTypes("b3Int4Array"))
 
             .put(new Info("b3AlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 
             .put(new Info(
+                    "b3AlignedObjectArray<b3Int2>::findBinarySearch",
+                    "b3AlignedObjectArray<b3Int2>::findLinearSearch",
+                    "b3AlignedObjectArray<b3Int2>::findLinearSearch2",
+                    "b3AlignedObjectArray<b3Int2>::remove",
                     "b3AlignedObjectArray<b3Int4>::findBinarySearch",
                     "b3AlignedObjectArray<b3Int4>::findLinearSearch",
                     "b3AlignedObjectArray<b3Int4>::findLinearSearch2",
