@@ -1,7 +1,7 @@
-diff -ruN OpenBLAS-0.3.15/exports/Makefile OpenBLAS-0.3.15-macosx/exports/Makefile
---- OpenBLAS-0.3.15/exports/Makefile	2021-05-03 06:50:22.000000000 +0900
-+++ OpenBLAS-0.3.15-macosx/exports/Makefile	2021-05-11 19:11:48.316710867 +0900
-@@ -136,16 +136,7 @@
+diff -ruN OpenBLAS-0.3.20/exports/Makefile OpenBLAS-0.3.20-macosx/exports/Makefile
+--- OpenBLAS-0.3.20/exports/Makefile	2022-02-21 06:35:05.000000000 +0900
++++ OpenBLAS-0.3.20-macosx/exports/Makefile	2022-03-08 18:41:27.723900199 +0900
+@@ -136,20 +136,7 @@
  	$(OBJCONV) @objconv.def ../$(LIBNAME) ../$(LIBNAME).osx.renamed
  $(LIBDYNNAME) : ../$(LIBNAME).osx.renamed osx.def
  endif
@@ -12,16 +12,20 @@ diff -ruN OpenBLAS-0.3.15/exports/Makefile OpenBLAS-0.3.15-macosx/exports/Makefi
 -ifeq ($(F_COMPILER), INTEL)
 -	$(FC) $(FFLAGS) $(LDFLAGS) -all-load -headerpad_max_install_names -install_name "$(CURDIR)/../$(INTERNALNAME)" -dynamiclib -o ../$(LIBDYNNAME) $< -Wl,-exported_symbols_list,osx.def
 -else
+-ifeq ($(F_COMPILER), FLANG)
+-	$(FC) $(FFLAGS) $(LDFLAGS) -fno-fortran-main -Mnomain -all_load -headerpad_max_install_names -install_name "$(CURDIR)/../$(INTERNALNAME)" -dynamiclib -o ../$(LIBDYNNAME) $< -Wl,-exported_symbols_list,osx.def  $(FEXTRALIB)
+-else
 -	$(FC) $(FFLAGS) $(LDFLAGS) -all_load -headerpad_max_install_names -install_name "$(CURDIR)/../$(INTERNALNAME)" -dynamiclib -o ../$(LIBDYNNAME) $< -Wl,-exported_symbols_list,osx.def  $(FEXTRALIB)
+-endif
 -endif
 -endif
 +	$(CC) $(CFLAGS) $(LDFLAGS) -all_load -headerpad_max_install_names -install_name "$(CURDIR)/../$(INTERNALNAME)" -dynamiclib -o ../$(LIBDYNNAME) $< -Wl,-exported_symbols_list,osx.def
  
  dllinit.$(SUFFIX) : dllinit.c
  	$(CC) $(CFLAGS) -c -o $(@F) -s $<
-diff -ruN OpenBLAS-0.3.15/Makefile.install OpenBLAS-0.3.15-macosx/Makefile.install
---- OpenBLAS-0.3.15/Makefile.install	2021-05-03 06:50:22.000000000 +0900
-+++ OpenBLAS-0.3.15-macosx/Makefile.install	2021-05-11 16:57:11.009523603 +0900
+diff -ruN OpenBLAS-0.3.20/Makefile.install OpenBLAS-0.3.20-macosx/Makefile.install
+--- OpenBLAS-0.3.20/Makefile.install	2022-02-21 06:35:05.000000000 +0900
++++ OpenBLAS-0.3.20-macosx/Makefile.install	2022-03-08 18:40:04.697840342 +0900
 @@ -105,7 +105,7 @@
  endif
  ifeq ($(OSNAME), Darwin)
