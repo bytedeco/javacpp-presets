@@ -73,6 +73,22 @@ public class Bullet3Dynamics implements InfoMapper {
 
             .put(new Info("b3AlignedObjectArray<b3TypedConstraint*>").pointerTypes("b3TypedConstraintArray"))
             .put(new Info("b3ContactConstraint4_t").pointerTypes("b3ContactConstraint4"))
+
+            .put(new Info(
+                    "b3CpuRigidBodyPipeline::addConstraint",
+                    "b3CpuRigidBodyPipeline::castRays",
+                    "b3CpuRigidBodyPipeline::copyConstraintsToHost",
+                    "b3CpuRigidBodyPipeline::createFixedConstraint",
+                    "b3CpuRigidBodyPipeline::createPoint2PointConstraint",
+                    "b3CpuRigidBodyPipeline::registerConvexPolyhedron",
+                    "b3CpuRigidBodyPipeline::removeConstraint",
+                    "b3CpuRigidBodyPipeline::removeConstraintByUid",
+                    "b3CpuRigidBodyPipeline::reset",
+                    "b3CpuRigidBodyPipeline::setGravity",
+                    "b3CpuRigidBodyPipeline::writeAllInstancesToGpu",
+                    "b3RotationalLimitMotor::solveAngularLimits",
+                    "b3TranslationalLimitMotor::solveLinearAxis"
+                ).skip())
             ;
     }
 }

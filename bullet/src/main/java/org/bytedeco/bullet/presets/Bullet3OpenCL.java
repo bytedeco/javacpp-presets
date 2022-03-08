@@ -59,7 +59,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3OpenCL/BroadphaseCollision/b3GpuParallelLinearBvh.h",
                 "Bullet3OpenCL/BroadphaseCollision/b3GpuSapBroadphase.h",
                 "Bullet3OpenCL/NarrowphaseCollision/b3BvhInfo.h",
-                "Bullet3OpenCL/NarrowphaseCollision/b3ContactCache.h",
                 "Bullet3OpenCL/NarrowphaseCollision/b3ConvexHullContact.h",
                 "Bullet3OpenCL/NarrowphaseCollision/b3ConvexPolyhedronCL.h",
                 "Bullet3OpenCL/NarrowphaseCollision/b3GjkEpa.h",
@@ -154,7 +153,9 @@ public class Bullet3OpenCL implements InfoMapper {
                     "GpuSatCollision::m_sepNormals",
                     "GpuSatCollision::m_totalContactsOut",
                     "GpuSatCollision::m_unitSphereDirections",
+                    "b3GpuNarrowPhase::setObjectTransform",
                     "b3GpuPgsConstraintSolver::sortConstraintByBatch3",
+                    "b3GpuRigidBodyPipeline::registerConvexPolyhedron",
                     "b3GpuSapBroadphase::m_allAabbsGPU",
                     "b3GpuSapBroadphase::m_dst",
                     "b3GpuSapBroadphase::m_gpuSmallSortData",
@@ -165,6 +166,7 @@ public class Bullet3OpenCL implements InfoMapper {
                     "b3GpuSapBroadphase::m_smallAabbsMappingGPU",
                     "b3GpuSapBroadphase::m_sum",
                     "b3GpuSapBroadphase::m_sum2",
+                    "b3LauncherCL::validateResults",
                     "b3Solver::m_batchSizes",
                     "b3Solver::m_scan"
                 ).skip())
