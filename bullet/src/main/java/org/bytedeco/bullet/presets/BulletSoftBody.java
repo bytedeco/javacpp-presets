@@ -68,7 +68,7 @@ public class BulletSoftBody implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("btSoftBodyData").cppText("#define btSoftBodyData btSoftBodyFloatData"))
+            .put(new Info("btSoftBodyData").cppTypes().translate(false))
 
             .put(new Info("btSoftBodySolver::SolverTypes").enumerate())
 

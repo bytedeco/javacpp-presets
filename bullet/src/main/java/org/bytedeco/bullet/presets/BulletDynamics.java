@@ -102,24 +102,26 @@ public class BulletDynamics implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("btConeTwistConstraintData2").cppText("#define btConeTwistConstraintData2 btConeTwistConstraintData"))
-            .put(new Info("btGearConstraintData").cppText("#define btGearConstraintData btGearConstraintFloatData"))
-            .put(new Info("btGeneric6DofConstraintData2").cppText("#define btGeneric6DofConstraintData2 btGeneric6DofConstraintDoubleData2"))
-            .put(new Info("btGeneric6DofSpring2ConstraintData2").cppText("#define btGeneric6DofSpring2ConstraintData2 btGeneric6DofSpring2ConstraintData"))
-            .put(new Info("btGeneric6DofSpringConstraintData2").cppText("#define btGeneric6DofSpringConstraintData2 btGeneric6DofSpringConstraintData"))
-            .put(new Info("btHingeConstraintData").cppText("#define btHingeConstraintData btHingeConstraintFloatData"))
-            .put(new Info("btMultiBodyData").cppText("#define btMultiBodyData btMultiBodyFloatData"))
-            .put(new Info("btMultiBodyLinkColliderData").cppText("#define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData"))
-            .put(new Info("btMultiBodyLinkData").cppText("#define btMultiBodyLinkData btMultiBodyLinkFloatData"))
-            .put(new Info("btPoint2PointConstraintData2").cppText("#define btPoint2PointConstraintData2 btPoint2PointConstraintDoubleData2"))
-            .put(new Info("btRigidBodyData").cppText("#define btRigidBodyData btRigidBodyFloatData"))
             .put(new Info("btSimdScalar").cppText("#define btSimdScalar btScalar"))
-            .put(new Info("btSliderConstraintData2").cppText("#define btSliderConstraintData2 btSliderConstraintDoubleData2"))
-            .put(new Info("btTypedConstraintData2").cppText("#define btTypedConstraintData2 btTypedConstraintFloatData"))
+
+            .put(new Info(
+                    "btConeTwistConstraintData2",
+                    "btGearConstraintData",
+                    "btGeneric6DofConstraintData2",
+                    "btGeneric6DofSpring2ConstraintData2",
+                    "btGeneric6DofSpringConstraintData2",
+                    "btHingeConstraintData",
+                    "btMultiBodyData",
+                    "btMultiBodyLinkColliderData",
+                    "btMultiBodyLinkData",
+                    "btPoint2PointConstraintData2",
+                    "btRigidBodyData",
+                    "btSliderConstraintData2",
+                    "btTypedConstraintData2"
+                ).cppTypes().translate(false))
 
             .put(new Info(
                     "IN_PARALLELL_SOLVER",
-                    "USE_SIMD",
                     "defined(BT_CLAMP_VELOCITY_TO) && BT_CLAMP_VELOCITY_TO > 0"
                 ).define(false))
 

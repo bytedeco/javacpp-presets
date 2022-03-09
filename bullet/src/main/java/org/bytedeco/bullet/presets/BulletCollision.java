@@ -136,10 +136,13 @@ public class BulletCollision implements InfoMapper {
             .put(new Info("btAxisSweep3").base("btBroadphaseInterface"))
 
             .put(new Info("BT_DECLARE_STACK_ONLY_OBJECT").cppText("#define BT_DECLARE_STACK_ONLY_OBJECT"))
-            .put(new Info("btCollisionObjectData").cppText("#define btCollisionObjectData btCollisionObjectFloatData"))
-            .put(new Info("btOptimizedBvhNodeData").cppText("#define btOptimizedBvhNodeData btOptimizedBvhNodeFloatData"))
-            .put(new Info("btPersistentManifoldData").cppText("#define btPersistentManifoldData btPersistentManifoldFloatData"))
-            .put(new Info("btQuantizedBvhData").cppText("#define btQuantizedBvhData btQuantizedBvhFloatData"))
+
+            .put(new Info(
+                    "btCollisionObjectData",
+                    "btOptimizedBvhNodeData",
+                    "btPersistentManifoldData",
+                    "btQuantizedBvhData"
+                ).cppTypes().translate(false))
 
             .put(new Info("DBVT_INLINE").cppTypes().annotations())
 

@@ -95,6 +95,7 @@ public class LinearMath implements InfoMapper {
                     "BT_USE_SSE",
                     "ENABLE_INMEMORY_SERIALIZER",
                     "USE_LIBSPE2",
+                    "USE_SIMD",
                     "_WIN32",
                     "defined BT_USE_SSE",
                     "defined(BT_USE_DOUBLE_PRECISION)",
