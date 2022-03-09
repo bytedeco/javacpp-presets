@@ -105,251 +105,42 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // #endif  //BT_OBJECT_ARRAY__
 
 
-// Parsed from BulletSoftBody/btSparseSDF.h
+// Parsed from BulletSoftBody/btDeformableBackwardEulerObjective.h
 
 /*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it freely,
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-/**btSparseSdf implementation by Nathanael Presson */
-
-// #ifndef BT_SPARSE_SDF_H
-// #define BT_SPARSE_SDF_H
-
-// #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
-// #include "BulletCollision/NarrowPhaseCollision/btGjkEpa2.h"
-
-// Fast Hash
-
-// #if !defined(get16bits)
-// #define get16bits(d) ((((unsigned int)(((const unsigned char*)(d))[1])) << 8) + (unsigned int)(((const unsigned char*)(d))[0]))
-// #endif
-//
-// super hash function by Paul Hsieh
-//
-public static native @Cast("unsigned int") int HsiehHash(@Cast("const char*") BytePointer data, int len);
-public static native @Cast("unsigned int") int HsiehHash(String data, int len);
-// Targeting ../BulletSoftBody/btSparseSdf_3.java
-
-
-
-// #endif  //BT_SPARSE_SDF_H
-
-
-// Parsed from BulletSoftBody/btSoftBody.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it freely,
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-/**btSoftBody implementation by Nathanael Presson */
-
-// #ifndef _BT_SOFT_BODY_H
-// #define _BT_SOFT_BODY_H
-
-// #include "LinearMath/btAlignedObjectArray.h"
-// #include "LinearMath/btTransform.h"
-// #include "LinearMath/btIDebugDraw.h"
-// #include "LinearMath/btVector3.h"
-// #include "BulletDynamics/Dynamics/btRigidBody.h"
-
-// #include "BulletCollision/CollisionShapes/btConcaveShape.h"
-// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
-// #include "btSparseSDF.h"
-// #include "BulletCollision/BroadphaseCollision/btDbvt.h"
-// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
-// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
-//#ifdef BT_USE_DOUBLE_PRECISION
-//#define btRigidBodyData	btRigidBodyDoubleData
-//#define btRigidBodyDataName	"btRigidBodyDoubleData"
-//#else
-// #define btSoftBodyData btSoftBodyFloatData
-public static final String btSoftBodyDataName = "btSoftBodyFloatData";
-@MemberGetter public static native @Cast("const btScalar") float OVERLAP_REDUCTION_FACTOR();
-public static final float OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
-public static native @Cast("unsigned long") long seed(); public static native void seed(long setter);
-//#endif //BT_USE_DOUBLE_PRECISION
-// Targeting ../BulletSoftBody/btSoftBodyWorldInfo.java
-
-
-// Targeting ../BulletSoftBody/btSoftBody.java
-
-
-
-// #endif  //_BT_SOFT_BODY_H
-
-
-// Parsed from BulletSoftBody/btSoftRigidDynamicsWorld.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFT_RIGID_DYNAMICS_WORLD_H
-// #define BT_SOFT_RIGID_DYNAMICS_WORLD_H
-
-// #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
-// #include "btSoftBody.h"
-// Targeting ../BulletSoftBody/btSoftRigidDynamicsWorld.java
-
-
-
-// #endif  //BT_SOFT_RIGID_DYNAMICS_WORLD_H
-
-
-// Parsed from BulletSoftBody/btSoftBodyHelpers.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2008 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFT_BODY_HELPERS_H
-// #define BT_SOFT_BODY_HELPERS_H
-
-// #include "btSoftBody.h"
-// #include <fstream>
-// #include <string>
-// Targeting ../BulletSoftBody/fDrawFlags.java
-
-
-// Targeting ../BulletSoftBody/btSoftBodyHelpers.java
-
-
-
-// #endif  //BT_SOFT_BODY_HELPERS_H
-
-
-// Parsed from BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
-// #define BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
-
-// #include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
-// Targeting ../BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.java
-
-
-
-// #endif  //BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
-
-
-// Parsed from BulletSoftBody/btSoftBodySolvers.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFT_BODY_SOLVERS_H
-// #define BT_SOFT_BODY_SOLVERS_H
-
-// #include "BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h"
-// Targeting ../BulletSoftBody/btSoftBodySolver.java
-
-
-// Targeting ../BulletSoftBody/btSoftBodySolverOutput.java
-
-
-
-// #endif  // #ifndef BT_SOFT_BODY_SOLVERS_H
-
-
-// Parsed from BulletSoftBody/btSoftMultiBodyDynamicsWorld.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
-// #define BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
-
-// #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
-// #include "BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h"
-// #include "BulletSoftBody/btSoftBody.h"
-
-// #ifndef BT_SOFT_RIGID_DYNAMICS_WORLD_H
-// Targeting ../BulletSoftBody/btSoftMultiBodyDynamicsWorld.java
-
-
-
-// #endif  //BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_BACKWARD_EULER_OBJECTIVE_H
+// #define BT_BACKWARD_EULER_OBJECTIVE_H
+//#include "btConjugateGradient.h"
+// #include "btDeformableLagrangianForce.h"
+// #include "btDeformableMassSpringForce.h"
+// #include "btDeformableGravityForce.h"
+// #include "btDeformableCorotatedForce.h"
+// #include "btDeformableMousePickingForce.h"
+// #include "btDeformableLinearElasticityForce.h"
+// #include "btDeformableNeoHookeanForce.h"
+// #include "btDeformableContactProjection.h"
+// #include "btPreconditioner.h"
+// #include "btDeformableMultiBodyDynamicsWorld.h"
+// #include "LinearMath/btQuickprof.h"
+// Targeting ../BulletSoftBody/btDeformableBackwardEulerObjective.java
+
+
+
+// #endif /* btBackwardEulerObjective_h */
 
 
 // Parsed from BulletSoftBody/btDeformableBodySolver.h
@@ -387,6 +178,46 @@ subject to the following restrictions:
 
 
 // #endif /* btDeformableBodySolver_h */
+
+
+// Parsed from BulletSoftBody/btDeformableLagrangianForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_DEFORMABLE_LAGRANGIAN_FORCE_H
+// #define BT_DEFORMABLE_LAGRANGIAN_FORCE_H
+
+// #include "btSoftBody.h"
+// #include <LinearMath/btHashMap.h>
+// #include <iostream>
+
+/** enum btDeformableLagrangianForceType */
+public static final int
+	BT_GRAVITY_FORCE = 1,
+	BT_MASSSPRING_FORCE = 2,
+	BT_COROTATED_FORCE = 3,
+	BT_NEOHOOKEAN_FORCE = 4,
+	BT_LINEAR_ELASTICITY_FORCE = 5,
+	BT_MOUSE_PICKING_FORCE = 6;
+
+public static native double randomDouble(double low, double high);
+// Targeting ../BulletSoftBody/btDeformableLagrangianForce.java
+
+
+// #endif /* BT_DEFORMABLE_LAGRANGIAN_FORCE */
 
 
 // Parsed from BulletSoftBody/btDeformableMultiBodyConstraintSolver.h
@@ -453,6 +284,120 @@ subject to the following restrictions:
 // #endif  //BT_DEFORMABLE_MULTIBODY_DYNAMICS_WORLD_H
 
 
+// Parsed from BulletSoftBody/btSoftBody.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**btSoftBody implementation by Nathanael Presson */
+
+// #ifndef _BT_SOFT_BODY_H
+// #define _BT_SOFT_BODY_H
+
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "LinearMath/btTransform.h"
+// #include "LinearMath/btIDebugDraw.h"
+// #include "LinearMath/btVector3.h"
+// #include "BulletDynamics/Dynamics/btRigidBody.h"
+
+// #include "BulletCollision/CollisionShapes/btConcaveShape.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// #include "btSparseSDF.h"
+// #include "BulletCollision/BroadphaseCollision/btDbvt.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
+//#ifdef BT_USE_DOUBLE_PRECISION
+//#define btRigidBodyData	btRigidBodyDoubleData
+//#define btRigidBodyDataName	"btRigidBodyDoubleData"
+//#else
+// #define btSoftBodyData btSoftBodyFloatData
+public static final String btSoftBodyDataName = "btSoftBodyFloatData";
+@MemberGetter public static native @Cast("const btScalar") float OVERLAP_REDUCTION_FACTOR();
+public static final float OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
+public static native @Cast("unsigned long") long seed(); public static native void seed(long setter);
+//#endif //BT_USE_DOUBLE_PRECISION
+// Targeting ../BulletSoftBody/btSoftBodyWorldInfo.java
+
+
+// Targeting ../BulletSoftBody/btSoftBody.java
+
+
+
+// #endif  //_BT_SOFT_BODY_H
+
+
+// Parsed from BulletSoftBody/btSoftBodyHelpers.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2008 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_BODY_HELPERS_H
+// #define BT_SOFT_BODY_HELPERS_H
+
+// #include "btSoftBody.h"
+// #include <fstream>
+// #include <string>
+// Targeting ../BulletSoftBody/fDrawFlags.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyHelpers.java
+
+
+
+// #endif  //BT_SOFT_BODY_HELPERS_H
+
+
+// Parsed from BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
+// #define BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
+
+// #include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
+// Targeting ../BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.java
+
+
+
+// #endif  //BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
+
+
 // Parsed from BulletSoftBody/btSoftBodySolverVertexBuffer.h
 
 /*
@@ -482,82 +427,137 @@ subject to the following restrictions:
 // #endif  // #ifndef BT_SOFT_BODY_SOLVER_VERTEX_BUFFER_H
 
 
-// Parsed from BulletSoftBody/btDeformableBackwardEulerObjective.h
+// Parsed from BulletSoftBody/btSoftBodySolvers.h
 
 /*
- Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
- 
- Bullet Continuous Collision Detection and Physics Library
- Copyright (c) 2019 Google Inc. http://bulletphysics.org
- This software is provided 'as-is', without any express or implied warranty.
- In no event will the authors be held liable for any damages arising from the use of this software.
- Permission is granted to anyone to use this software for any purpose,
- including commercial applications, and to alter it and redistribute it freely,
- subject to the following restrictions:
- 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
- 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
- 3. This notice may not be removed or altered from any source distribution.
- */
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
 
-// #ifndef BT_BACKWARD_EULER_OBJECTIVE_H
-// #define BT_BACKWARD_EULER_OBJECTIVE_H
-//#include "btConjugateGradient.h"
-// #include "btDeformableLagrangianForce.h"
-// #include "btDeformableMassSpringForce.h"
-// #include "btDeformableGravityForce.h"
-// #include "btDeformableCorotatedForce.h"
-// #include "btDeformableMousePickingForce.h"
-// #include "btDeformableLinearElasticityForce.h"
-// #include "btDeformableNeoHookeanForce.h"
-// #include "btDeformableContactProjection.h"
-// #include "btPreconditioner.h"
-// #include "btDeformableMultiBodyDynamicsWorld.h"
-// #include "LinearMath/btQuickprof.h"
-// Targeting ../BulletSoftBody/btDeformableBackwardEulerObjective.java
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_BODY_SOLVERS_H
+// #define BT_SOFT_BODY_SOLVERS_H
+
+// #include "BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h"
+// Targeting ../BulletSoftBody/btSoftBodySolver.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodySolverOutput.java
 
 
 
-// #endif /* btBackwardEulerObjective_h */
+// #endif  // #ifndef BT_SOFT_BODY_SOLVERS_H
 
 
-// Parsed from BulletSoftBody/btDeformableLagrangianForce.h
+// Parsed from BulletSoftBody/btSoftMultiBodyDynamicsWorld.h
 
 /*
- Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
- 
- Bullet Continuous Collision Detection and Physics Library
- Copyright (c) 2019 Google Inc. http://bulletphysics.org
- This software is provided 'as-is', without any express or implied warranty.
- In no event will the authors be held liable for any damages arising from the use of this software.
- Permission is granted to anyone to use this software for any purpose,
- including commercial applications, and to alter it and redistribute it freely,
- subject to the following restrictions:
- 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
- 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
- 3. This notice may not be removed or altered from any source distribution.
- */
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
 
-// #ifndef BT_DEFORMABLE_LAGRANGIAN_FORCE_H
-// #define BT_DEFORMABLE_LAGRANGIAN_FORCE_H
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
 
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
+// #define BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
+
+// #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.h"
+// #include "BulletSoftBody/btSoftBody.h"
+
+// #ifndef BT_SOFT_RIGID_DYNAMICS_WORLD_H
+// Targeting ../BulletSoftBody/btSoftMultiBodyDynamicsWorld.java
+
+
+
+// #endif  //BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
+
+
+// Parsed from BulletSoftBody/btSoftRigidDynamicsWorld.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_RIGID_DYNAMICS_WORLD_H
+// #define BT_SOFT_RIGID_DYNAMICS_WORLD_H
+
+// #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
 // #include "btSoftBody.h"
-// #include <LinearMath/btHashMap.h>
-// #include <iostream>
-
-/** enum btDeformableLagrangianForceType */
-public static final int
-	BT_GRAVITY_FORCE = 1,
-	BT_MASSSPRING_FORCE = 2,
-	BT_COROTATED_FORCE = 3,
-	BT_NEOHOOKEAN_FORCE = 4,
-	BT_LINEAR_ELASTICITY_FORCE = 5,
-	BT_MOUSE_PICKING_FORCE = 6;
-
-public static native double randomDouble(double low, double high);
-// Targeting ../BulletSoftBody/btDeformableLagrangianForce.java
+// Targeting ../BulletSoftBody/btSoftRigidDynamicsWorld.java
 
 
-// #endif /* BT_DEFORMABLE_LAGRANGIAN_FORCE */
+
+// #endif  //BT_SOFT_RIGID_DYNAMICS_WORLD_H
+
+
+// Parsed from BulletSoftBody/btSparseSDF.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**btSparseSdf implementation by Nathanael Presson */
+
+// #ifndef BT_SPARSE_SDF_H
+// #define BT_SPARSE_SDF_H
+
+// #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+// #include "BulletCollision/NarrowPhaseCollision/btGjkEpa2.h"
+
+// Fast Hash
+
+// #if !defined(get16bits)
+// #define get16bits(d) ((((unsigned int)(((const unsigned char*)(d))[1])) << 8) + (unsigned int)(((const unsigned char*)(d))[0]))
+// #endif
+//
+// super hash function by Paul Hsieh
+//
+public static native @Cast("unsigned int") int HsiehHash(@Cast("const char*") BytePointer data, int len);
+public static native @Cast("unsigned int") int HsiehHash(String data, int len);
+// Targeting ../BulletSoftBody/btSparseSdf_3.java
+
+
+
+// #endif  //BT_SPARSE_SDF_H
 
 
 }
