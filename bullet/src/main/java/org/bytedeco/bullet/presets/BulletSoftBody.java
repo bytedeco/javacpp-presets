@@ -23,15 +23,12 @@
 package org.bytedeco.bullet.presets;
 
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.presets.javacpp;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-import org.bytedeco.javacpp.FunctionPointer;
-import org.bytedeco.javacpp.Pointer;
 
 /**
  *
