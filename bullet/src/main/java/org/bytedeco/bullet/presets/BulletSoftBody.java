@@ -43,19 +43,19 @@ import org.bytedeco.javacpp.Pointer;
         @Platform(
             include = {
                 "LinearMath/btAlignedObjectArray.h",
-                "BulletSoftBody/btSparseSDF.h",
-                "BulletSoftBody/btSoftBody.h",
-                "BulletSoftBody/btSoftRigidDynamicsWorld.h",
-                "BulletSoftBody/btSoftBodyHelpers.h",
-                "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h",
-                "BulletSoftBody/btSoftBodySolvers.h",
-                "BulletSoftBody/btSoftMultiBodyDynamicsWorld.h",
+                "BulletSoftBody/btDeformableBackwardEulerObjective.h",
                 "BulletSoftBody/btDeformableBodySolver.h",
+                "BulletSoftBody/btDeformableLagrangianForce.h",
                 "BulletSoftBody/btDeformableMultiBodyConstraintSolver.h",
                 "BulletSoftBody/btDeformableMultiBodyDynamicsWorld.h",
+                "BulletSoftBody/btSoftBody.h",
+                "BulletSoftBody/btSoftBodyHelpers.h",
+                "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h",
                 "BulletSoftBody/btSoftBodySolverVertexBuffer.h",
-                "BulletSoftBody/btDeformableBackwardEulerObjective.h",
-                "BulletSoftBody/btDeformableLagrangianForce.h",
+                "BulletSoftBody/btSoftBodySolvers.h",
+                "BulletSoftBody/btSoftMultiBodyDynamicsWorld.h",
+                "BulletSoftBody/btSoftRigidDynamicsWorld.h",
+                "BulletSoftBody/btSparseSDF.h",
             },
             link = "BulletSoftBody@.3.20"
         )
