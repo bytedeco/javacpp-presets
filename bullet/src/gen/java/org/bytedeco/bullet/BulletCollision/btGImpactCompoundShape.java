@@ -33,6 +33,37 @@ public class btGImpactCompoundShape extends btGImpactShapeInterface {
     }
 
 	/** compound primitive manager */
+	@NoOffset public static class CompoundPrimitiveManager extends btPrimitiveManagerBase {
+	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+	    public CompoundPrimitiveManager(Pointer p) { super(p); }
+	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+	    public CompoundPrimitiveManager(long size) { super((Pointer)null); allocateArray(size); }
+	    private native void allocateArray(long size);
+	    @Override public CompoundPrimitiveManager position(long position) {
+	        return (CompoundPrimitiveManager)super.position(position);
+	    }
+	    @Override public CompoundPrimitiveManager getPointer(long i) {
+	        return new CompoundPrimitiveManager((Pointer)this).offsetAddress(i);
+	    }
+	
+		public native btGImpactCompoundShape m_compoundShape(); public native CompoundPrimitiveManager m_compoundShape(btGImpactCompoundShape setter);
+
+		public CompoundPrimitiveManager(@Const @ByRef CompoundPrimitiveManager compound) { super((Pointer)null); allocate(compound); }
+		private native void allocate(@Const @ByRef CompoundPrimitiveManager compound);
+
+		public CompoundPrimitiveManager(btGImpactCompoundShape compoundShape) { super((Pointer)null); allocate(compoundShape); }
+		private native void allocate(btGImpactCompoundShape compoundShape);
+
+		public CompoundPrimitiveManager() { super((Pointer)null); allocate(); }
+		private native void allocate();
+
+		public native @Cast("bool") boolean is_trimesh();
+
+		public native int get_primitive_count();
+
+		public native void get_primitive_triangle(int prim_index, @ByRef btPrimitiveTriangle triangle);
+	}
 	public btGImpactCompoundShape(@Cast("bool") boolean children_has_transform/*=true*/) { super((Pointer)null); allocate(children_has_transform); }
 	private native void allocate(@Cast("bool") boolean children_has_transform/*=true*/);
 	public btGImpactCompoundShape() { super((Pointer)null); allocate(); }
@@ -42,8 +73,10 @@ public class btGImpactCompoundShape extends btGImpactShapeInterface {
 	public native @Cast("bool") boolean childrenHasTransform();
 
 	/** Obtains the primitive manager */
+	public native @Const btPrimitiveManagerBase getPrimitiveManager();
 
 	/** Obtains the compopund primitive manager */
+	public native CompoundPrimitiveManager getCompoundPrimitiveManager();
 
 	/** Gets the number of children */
 	public native int getNumChildShapes();
@@ -78,6 +111,8 @@ public class btGImpactCompoundShape extends btGImpactShapeInterface {
 
 	/** Determines if this shape has tetrahedrons */
 	public native @Cast("bool") boolean needsRetrieveTetrahedrons();
+
+	public native void getBulletTriangle(int prim_index, @ByRef btTriangleShapeEx triangle);
 
 	public native void getBulletTetrahedron(int prim_index, @ByRef btTetrahedronShapeEx tetrahedron);
 

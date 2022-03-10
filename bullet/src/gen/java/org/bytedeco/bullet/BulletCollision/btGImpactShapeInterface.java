@@ -59,11 +59,13 @@ public class btGImpactShapeInterface extends btConcaveShape {
 	public native @Cast("eGIMPACT_SHAPE_TYPE") int getGImpactShapeType();
 
 	/** gets boxset */
+	public native @Cast("const btGImpactBoxSet*") btGImpactQuantizedBvh getBoxSet();
 
 	/** Determines if this class has a hierarchy structure for sorting its primitives */
 	public native @Cast("bool") boolean hasBoxSet();
 
 	/** Obtains the primitive manager */
+	public native @Const btPrimitiveManagerBase getPrimitiveManager();
 
 	/** Gets the number of children */
 	public native int getNumChildShapes();
@@ -77,6 +79,8 @@ public class btGImpactShapeInterface extends btConcaveShape {
 	/** Determines if this shape has tetrahedrons */
 	public native @Cast("bool") boolean needsRetrieveTetrahedrons();
 
+	public native void getBulletTriangle(int prim_index, @ByRef btTriangleShapeEx triangle);
+
 	public native void getBulletTetrahedron(int prim_index, @ByRef btTetrahedronShapeEx tetrahedron);
 
 	/** call when reading child shapes */
@@ -85,7 +89,7 @@ public class btGImpactShapeInterface extends btConcaveShape {
 	public native void unlockChildShapes();
 
 	/** if this trimesh */
-	
+	public native void getPrimitiveTriangle(int index, @ByRef btPrimitiveTriangle triangle);
 
 	/** Retrieves the bound from a child
 	/**

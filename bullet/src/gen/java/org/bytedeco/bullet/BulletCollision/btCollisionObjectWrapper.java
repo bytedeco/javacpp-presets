@@ -12,10 +12,21 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btCollisionObjectWrapper extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public btCollisionObjectWrapper() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btCollisionObjectWrapper(Pointer p) { super(p); }
+
+	public native @Const btCollisionObjectWrapper m_parent(); public native btCollisionObjectWrapper m_parent(btCollisionObjectWrapper setter);
+	public native @Const btCollisionShape m_shape(); public native btCollisionObjectWrapper m_shape(btCollisionShape setter);
+	public native @Const btCollisionObject m_collisionObject(); public native btCollisionObjectWrapper m_collisionObject(btCollisionObject setter);
+	@MemberGetter public native @Const @ByRef btTransform m_worldTransform();
+    public native @Const btTransform m_preTransform(); public native btCollisionObjectWrapper m_preTransform(btTransform setter);
+	public native int m_partId(); public native btCollisionObjectWrapper m_partId(int setter);
+	public native int m_index(); public native btCollisionObjectWrapper m_index(int setter);
+
+	public native @Const @ByRef btTransform getWorldTransform();
+	public native @Const btCollisionObject getCollisionObject();
+	public native @Const btCollisionShape getCollisionShape();
 }

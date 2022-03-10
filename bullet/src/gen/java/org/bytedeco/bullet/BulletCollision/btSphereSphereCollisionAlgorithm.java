@@ -32,7 +32,7 @@ public class btSphereSphereCollisionAlgorithm extends btActivatingCollisionAlgor
 
 	public native @Cast("btScalar") float calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
-	
+	public native void getAllContactManifolds(@Cast("btManifoldArray*") @ByRef btPersistentManifoldArray manifoldArray);
 
 	public static class CreateFunc extends btCollisionAlgorithmCreateFunc {
 	    static { Loader.load(); }

@@ -20,7 +20,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 - You can handle deformable meshes with this shape, by calling postUpdate() every time when changing the mesh vertices.
 <p>
 */
-@Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+@NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
 public class btGImpactMeshShapePart extends btGImpactShapeInterface {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -39,6 +39,65 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 	/**
 	Manages the info from btStridingMeshInterface object and controls the Lock/Unlock mechanism
 	*/
+	@NoOffset public static class TrimeshPrimitiveManager extends btPrimitiveManagerBase {
+	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+	    public TrimeshPrimitiveManager(Pointer p) { super(p); }
+	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+	    public TrimeshPrimitiveManager(long size) { super((Pointer)null); allocateArray(size); }
+	    private native void allocateArray(long size);
+	    @Override public TrimeshPrimitiveManager position(long position) {
+	        return (TrimeshPrimitiveManager)super.position(position);
+	    }
+	    @Override public TrimeshPrimitiveManager getPointer(long i) {
+	        return new TrimeshPrimitiveManager((Pointer)this).offsetAddress(i);
+	    }
+	
+		public native @Cast("btScalar") float m_margin(); public native TrimeshPrimitiveManager m_margin(float setter);
+		public native btStridingMeshInterface m_meshInterface(); public native TrimeshPrimitiveManager m_meshInterface(btStridingMeshInterface setter);
+		public native @ByRef btVector3 m_scale(); public native TrimeshPrimitiveManager m_scale(btVector3 setter);
+		public native int m_part(); public native TrimeshPrimitiveManager m_part(int setter);
+		public native int m_lock_count(); public native TrimeshPrimitiveManager m_lock_count(int setter);
+		public native @Cast("const unsigned char*") BytePointer vertexbase(); public native TrimeshPrimitiveManager vertexbase(BytePointer setter);
+		public native int numverts(); public native TrimeshPrimitiveManager numverts(int setter);
+		public native @Cast("PHY_ScalarType") int type(); public native TrimeshPrimitiveManager type(int setter);
+		public native int stride(); public native TrimeshPrimitiveManager stride(int setter);
+		public native @Cast("const unsigned char*") BytePointer indexbase(); public native TrimeshPrimitiveManager indexbase(BytePointer setter);
+		public native int indexstride(); public native TrimeshPrimitiveManager indexstride(int setter);
+		public native int numfaces(); public native TrimeshPrimitiveManager numfaces(int setter);
+		public native @Cast("PHY_ScalarType") int indicestype(); public native TrimeshPrimitiveManager indicestype(int setter);
+
+		public TrimeshPrimitiveManager() { super((Pointer)null); allocate(); }
+		private native void allocate();
+
+		public TrimeshPrimitiveManager(@Const @ByRef TrimeshPrimitiveManager manager) { super((Pointer)null); allocate(manager); }
+		private native void allocate(@Const @ByRef TrimeshPrimitiveManager manager);
+
+		public TrimeshPrimitiveManager(
+					btStridingMeshInterface meshInterface, int part) { super((Pointer)null); allocate(meshInterface, part); }
+		private native void allocate(
+					btStridingMeshInterface meshInterface, int part);
+
+		public native void lock();
+
+		public native void unlock();
+
+		public native @Cast("bool") boolean is_trimesh();
+
+		public native int get_primitive_count();
+
+		public native int get_vertex_count();
+
+		public native void get_indices(int face_index, @Cast("unsigned int*") @ByRef IntPointer i0, @Cast("unsigned int*") @ByRef IntPointer i1, @Cast("unsigned int*") @ByRef IntPointer i2);
+		public native void get_indices(int face_index, @Cast("unsigned int*") @ByRef IntBuffer i0, @Cast("unsigned int*") @ByRef IntBuffer i1, @Cast("unsigned int*") @ByRef IntBuffer i2);
+		public native void get_indices(int face_index, @Cast("unsigned int*") @ByRef int[] i0, @Cast("unsigned int*") @ByRef int[] i1, @Cast("unsigned int*") @ByRef int[] i2);
+
+		public native void get_vertex(@Cast("unsigned int") int vertex_index, @ByRef btVector3 vertex);
+
+		public native void get_primitive_triangle(int prim_index, @ByRef btPrimitiveTriangle triangle);
+
+		public native void get_bullet_triangle(int prim_index, @ByRef btTriangleShapeEx triangle);
+	}
 	public btGImpactMeshShapePart() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
@@ -70,6 +129,9 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 	public native void setChildTransform(int index, @Const @ByRef btTransform transform);
 
 	/** Obtains the primitive manager */
+	public native @Const btPrimitiveManagerBase getPrimitiveManager();
+
+	public native TrimeshPrimitiveManager getTrimeshPrimitiveManager();
 
 	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
 
@@ -82,6 +144,8 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 
 	/** Determines if this shape has tetrahedrons */
 	public native @Cast("bool") boolean needsRetrieveTetrahedrons();
+
+	public native void getBulletTriangle(int prim_index, @ByRef btTriangleShapeEx triangle);
 
 	public native void getBulletTetrahedron(int prim_index, @ByRef btTetrahedronShapeEx tetrahedron);
 

@@ -188,7 +188,7 @@ public class btDbvt extends Pointer {
 	public native int m_leaves(); public native btDbvt m_leaves(int setter);
 	public native @Cast("unsigned") int m_opath(); public native btDbvt m_opath(int setter);
 
-	
+	public native @ByRef btDbvtStkNNArray m_stkStack(); public native btDbvt m_stkStack(btDbvtStkNNArray setter);
 
 	// Methods
 	public btDbvt() { super((Pointer)null); allocate(); }
@@ -225,10 +225,11 @@ public class btDbvt extends Pointer {
 	 * rayTest is slower than rayTestInternal, because it builds a local stack, using memory allocations, and it recomputes signs/rayDirectionInverses each time */
 	/**rayTestInternal is faster than rayTest, because it uses a persistent stack (to reduce dynamic memory allocations to a minimum) and it uses precomputed signs/rayInverseDirections
 	 * rayTestInternal is used by btDbvtBroadphase to accelerate world ray casts */
-	
 	// Helpers
 	public static native int nearest(@Const IntPointer i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
 	public static native int nearest(@Const IntBuffer i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
 	public static native int nearest(@Const int[] i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
-	
+	public static native @Name("allocate") int _allocate(@ByRef btIntArray ifree,
+										@ByRef btDbvtStkNPSArray stock,
+										@Const @ByRef sStkNPS value);
 }

@@ -24,7 +24,7 @@ public class btOverlappingPairCache extends btOverlappingPairCallback {
 
 	public native btBroadphasePair getOverlappingPairArrayPtr();
 
-	
+	public native @Cast("btBroadphasePairArray*") @ByRef BT_QUANTIZED_BVH_NODE_Array getOverlappingPairArray();
 
 	public native void cleanOverlappingPair(@ByRef btBroadphasePair pair, btDispatcher dispatcher);
 

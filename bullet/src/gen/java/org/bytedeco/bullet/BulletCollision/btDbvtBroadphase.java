@@ -39,7 +39,9 @@ public class btDbvtBroadphase extends btBroadphaseInterface {
 		STAGECOUNT = 2;   /* Number of stages		*/
 	/* Fields		*/
 	public native @ByRef btDbvt m_sets(int i); public native btDbvtBroadphase m_sets(int i, btDbvt setter);
-	@MemberGetter public native btDbvt m_sets();                           // Dbvt sets  // Stages list
+	@MemberGetter public native btDbvt m_sets();                           // Dbvt sets
+	public native btDbvtProxy m_stageRoots(int i); public native btDbvtBroadphase m_stageRoots(int i, btDbvtProxy setter);
+	@MemberGetter public native @Cast("btDbvtProxy**") PointerPointer m_stageRoots();  // Stages list
 	public native btOverlappingPairCache m_paircache(); public native btDbvtBroadphase m_paircache(btOverlappingPairCache setter);        // Pair cache
 	public native @Cast("btScalar") float m_prediction(); public native btDbvtBroadphase m_prediction(float setter);                      // Velocity prediction
 	public native int m_stageCurrent(); public native btDbvtBroadphase m_stageCurrent(int setter);                         // Current stage

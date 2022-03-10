@@ -38,5 +38,5 @@ public class btCompoundShapeChild extends Pointer {
 	public native btCollisionShape m_childShape(); public native btCompoundShapeChild m_childShape(btCollisionShape setter);
 	public native int m_childShapeType(); public native btCompoundShapeChild m_childShapeType(int setter);
 	public native @Cast("btScalar") float m_childMargin(); public native btCompoundShapeChild m_childMargin(float setter);
-	
+	public native btDbvtNode m_node(); public native btCompoundShapeChild m_node(btDbvtNode setter);
 }

@@ -170,9 +170,6 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
 // #include "btConjugateResidual.h"
 // #include "btConjugateGradient.h"
-// Targeting ../BulletSoftBody/btCollisionObjectWrapper.java
-
-
 // Targeting ../BulletSoftBody/btDeformableBodySolver.java
 
 

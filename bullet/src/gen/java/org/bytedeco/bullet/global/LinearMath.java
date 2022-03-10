@@ -758,6 +758,12 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../LinearMath/btIntArrayArray.java
 
 
+// Targeting ../LinearMath/btUnsignedIntArrayArray.java
+
+
+// Targeting ../LinearMath/btDoubleArrayArray.java
+
+
 
 // #endif  //BT_OBJECT_ARRAY__
 

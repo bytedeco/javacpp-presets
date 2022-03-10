@@ -49,9 +49,7 @@ public class btSortedOverlappingPairCache extends btOverlappingPairCache {
 
 	public native @Cast("bool") boolean needsBroadphaseCollision(btBroadphaseProxy proxy0, btBroadphaseProxy proxy1);
 
-	
-
-	
+	public native @Cast("btBroadphasePairArray*") @ByRef BT_QUANTIZED_BVH_NODE_Array getOverlappingPairArray();
 
 	public native btBroadphasePair getOverlappingPairArrayPtr();
 

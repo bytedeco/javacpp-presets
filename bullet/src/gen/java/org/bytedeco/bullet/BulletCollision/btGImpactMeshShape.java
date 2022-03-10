@@ -46,6 +46,7 @@ public class btGImpactMeshShape extends btGImpactShapeInterface {
 	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
 
 	/** Obtains the primitive manager */
+	public native @Const btPrimitiveManagerBase getPrimitiveManager();
 
 	/** Gets the number of children */
 	public native int getNumChildShapes();
@@ -58,6 +59,8 @@ public class btGImpactMeshShape extends btGImpactShapeInterface {
 
 	/** Determines if this shape has tetrahedrons */
 	public native @Cast("bool") boolean needsRetrieveTetrahedrons();
+
+	public native void getBulletTriangle(int prim_index, @ByRef btTriangleShapeEx triangle);
 
 	public native void getBulletTetrahedron(int prim_index, @ByRef btTetrahedronShapeEx tetrahedron);
 
