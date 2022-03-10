@@ -128,6 +128,8 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btConvexHullComputer::Edge").pointerTypes("btConvexHullComputer.Edge"))
             .put(new Info("btHashMap<btHashPtr,void*>").pointerTypes("btHashMap_btHashPtr_voidPointer"))
             .put(new Info("btAlignedObjectArray<btAlignedObjectArray<int> >").javaNames("btIntArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<unsigned int> >").javaNames("btUnsignedIntArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<double> >").javaNames("btDoubleArrayArray"))
             .put(new Info("int4").pointerTypes("Int4"))
             .put(new Info("btVectorX<float>").pointerTypes("btVectorXf"))
             .put(new Info("btVectorX<double>").pointerTypes("btVectorXd"))
@@ -148,10 +150,18 @@ public class LinearMath implements InfoMapper {
                     "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch",
                     "btAlignedObjectArray<ConvexH::HalfEdge>::findLinearSearch2",
                     "btAlignedObjectArray<ConvexH::HalfEdge>::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<double> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<double> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<double> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<double> >::remove",
                     "btAlignedObjectArray<btAlignedObjectArray<int> >::findBinarySearch",
                     "btAlignedObjectArray<btAlignedObjectArray<int> >::findLinearSearch",
                     "btAlignedObjectArray<btAlignedObjectArray<int> >::findLinearSearch2",
                     "btAlignedObjectArray<btAlignedObjectArray<int> >::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<unsigned int> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<unsigned int> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<unsigned int> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<unsigned int> >::remove",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findBinarySearch",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch",
                     "btAlignedObjectArray<btConvexHullComputer::Edge>::findLinearSearch2",
