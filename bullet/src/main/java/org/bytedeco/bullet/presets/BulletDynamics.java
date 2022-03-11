@@ -43,6 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btBatchedConstraints.h",
                 "BulletDynamics/ConstraintSolver/btConeTwistConstraint.h",
                 "BulletDynamics/ConstraintSolver/btConstraintSolver.h",
+                "BulletDynamics/ConstraintSolver/btContactConstraint.h",
                 "BulletDynamics/ConstraintSolver/btContactSolverInfo.h",
                 "BulletDynamics/ConstraintSolver/btFixedConstraint.h",
                 "BulletDynamics/ConstraintSolver/btGearConstraint.h",
@@ -51,11 +52,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h",
                 "BulletDynamics/ConstraintSolver/btHinge2Constraint.h",
                 "BulletDynamics/ConstraintSolver/btHingeConstraint.h",
+                "BulletDynamics/ConstraintSolver/btJacobianEntry.h",
                 "BulletDynamics/ConstraintSolver/btNNCGConstraintSolver.h",
                 "BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h",
                 "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h",
                 "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolverMt.h",
                 "BulletDynamics/ConstraintSolver/btSliderConstraint.h",
+                "BulletDynamics/ConstraintSolver/btSolve2LinearConstraint.h",
                 "BulletDynamics/ConstraintSolver/btSolverBody.h",
                 "BulletDynamics/ConstraintSolver/btSolverConstraint.h",
                 "BulletDynamics/Dynamics/btRigidBody.h",
@@ -77,6 +80,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Featherstone/btMultiBodySolverConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodyFixedConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodyGearConstraint.h",
+                "BulletDynamics/Featherstone/btMultiBodyInplaceSolverIslandCallback.h",
                 "BulletDynamics/Featherstone/btMultiBodyJointFeedback.h",
                 "BulletDynamics/Featherstone/btMultiBodyJointLimitConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodyJointMotor.h",
@@ -86,10 +90,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Featherstone/btMultiBodyPoint2Point.h",
                 "BulletDynamics/Featherstone/btMultiBodySliderConstraint.h",
                 "BulletDynamics/Featherstone/btMultiBodySphericalJointMotor.h",
+                "BulletDynamics/MLCPSolvers/btDantzigLCP.h",
                 "BulletDynamics/MLCPSolvers/btDantzigSolver.h",
+                "BulletDynamics/MLCPSolvers/btLemkeAlgorithm.h",
                 "BulletDynamics/MLCPSolvers/btLemkeSolver.h",
                 "BulletDynamics/MLCPSolvers/btMLCPSolver.h",
+                "BulletDynamics/MLCPSolvers/btMLCPSolverInterface.h",
                 "BulletDynamics/MLCPSolvers/btSolveProjectedGaussSeidel.h",
+                "BulletDynamics/Character/btCharacterControllerInterface.h",
+                "BulletDynamics/Character/btKinematicCharacterController.h",
             },
             link = "BulletDynamics@.3.20"
         )
@@ -129,53 +138,53 @@ public class BulletDynamics implements InfoMapper {
                     "BT_BACKWARDS_COMPATIBLE_SERIALIZATION"
                 ).define(true))
 
-            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btRigidBodyArray"))
+            .put(new Info("btAlignedObjectArray<btBatchedConstraints::Range>").pointerTypes("RangeArray"))
+            .put(new Info("btAlignedObjectArray<btMultiBodyConstraint*>").pointerTypes("btMultiBodyConstraintArray"))
             .put(new Info("btAlignedObjectArray<btMultiBodySolverConstraint>").pointerTypes("btMultiBodySolverConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btRigidBody*>").pointerTypes("btRigidBodyArray"))
+            .put(new Info("btAlignedObjectArray<btSequentialImpulseConstraintSolverMt::JointParams>").pointerTypes("JointParamsArray"))
+            .put(new Info("btAlignedObjectArray<btSimulationIslandManagerMt::Island*>").pointerTypes("IslandArray"))
+            .put(new Info("btAlignedObjectArray<btSolverAnalyticsData>").pointerTypes("btSolverAnalyticsDataArray"))
+            .put(new Info("btAlignedObjectArray<btSolverBody>").pointerTypes("btSolverBodyArray"))
+            .put(new Info("btAlignedObjectArray<btSolverConstraint>").pointerTypes("btSolverConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btTypedConstraint*>").pointerTypes("btTypedConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btWheelInfo>").pointerTypes("btWheelInfoArray"))
+            .put(new Info("btBatchedConstraints::Range").pointerTypes("btBatchedConstraints.Range"))
+            .put(new Info("btConstraintArray").pointerTypes("btSolverConstraintArray"))
+            .put(new Info("btMultiBodyConstraintArray").pointerTypes("btMultiBodySolverConstraintArray"))
+            .put(new Info("btSequentialImpulseConstraintSolverMt::JointParams").pointerTypes("btSequentialImpulseConstraintSolverMt.JointParams"))
+            .put(new Info("btSimulationIslandManagerMt::Island").pointerTypes("btSimulationIslandManagerMt.Island"))
 
             .put(new Info(
-                    "DeformableBodyInplaceSolverIslandCallback",
-                    "InplaceSolverIslandCallback",
-                    "MultiBodyInplaceSolverIslandCallback",
+                    "btAlignedObjectArray<btBatchedConstraints::Range>::findBinarySearch",
+                    "btAlignedObjectArray<btBatchedConstraints::Range>::findLinearSearch",
+                    "btAlignedObjectArray<btBatchedConstraints::Range>::findLinearSearch2",
+                    "btAlignedObjectArray<btBatchedConstraints::Range>::remove",
                     "btAlignedObjectArray<btMultiBodySolverConstraint>::findBinarySearch",
                     "btAlignedObjectArray<btMultiBodySolverConstraint>::findLinearSearch",
                     "btAlignedObjectArray<btMultiBodySolverConstraint>::findLinearSearch2",
                     "btAlignedObjectArray<btMultiBodySolverConstraint>::remove",
-                    "btBatchedConstraints::m_batches",
-                    "btBatchedConstraints::m_phases",
-                    "btConeTwistConstraint::solveConstraintObsolete",
-                    "btConeTwistConstraintData::m_typeConstraintData",
-                    "btConeTwistConstraintDoubleData::m_typeConstraintData",
-                    "btConstraintArray",
-                    "btConstraintInfo1",
-                    "btConstraintInfo2",
-                    "btGearConstraintDoubleData::m_typeConstraintData",
-                    "btGearConstraintFloatData::m_typeConstraintData",
-                    "btGeneric6DofConstraintData::m_typeConstraintData",
-                    "btGeneric6DofConstraintDoubleData2::m_typeConstraintData",
-                    "btGeneric6DofSpring2ConstraintData::m_typeConstraintData",
-                    "btGeneric6DofSpring2ConstraintDoubleData2::m_typeConstraintData",
-                    "btHingeConstraintDoubleData2::m_typeConstraintData",
-                    "btHingeConstraintDoubleData::m_typeConstraintData",
-                    "btHingeConstraintFloatData::m_typeConstraintData",
-                    "btMultiBodyConstraint::createConstraintRows",
-                    "btMultiBodyDynamicsWorld::getAnalyticsData",
-                    "btMultiBodyJacobianData::m_solverBodyPool",
-                    "btPoint2PointConstraintDoubleData2::m_typeConstraintData",
-                    "btPoint2PointConstraintDoubleData::m_typeConstraintData",
-                    "btPoint2PointConstraintFloatData::m_typeConstraintData",
-                    "btRaycastVehicle::m_wheelInfo",
-                    "btSequentialImpulseConstraintSolverMt::internalConvertMultipleJoints",
-                    "btSimulationIslandManagerMt::Island::bodyArray",
-                    "btSimulationIslandManagerMt::Island::constraintArray",
-                    "btSimulationIslandManagerMt::Island::manifoldArray",
-                    "btSimulationIslandManagerMt::IslandDispatchFunc",
-                    "btSimulationIslandManagerMt::buildAndProcessIslands",
-                    "btSimulationIslandManagerMt::parallelIslandDispatch",
-                    "btSimulationIslandManagerMt::serialIslandDispatch",
-                    "btSingleConstraintRowSolver",
-                    "btSliderConstraintData::m_typeConstraintData",
-                    "btSliderConstraintDoubleData::m_typeConstraintData",
-                    "btSolverInfo"
+                    "btAlignedObjectArray<btSequentialImpulseConstraintSolverMt::JointParams>::findBinarySearch",
+                    "btAlignedObjectArray<btSequentialImpulseConstraintSolverMt::JointParams>::findLinearSearch",
+                    "btAlignedObjectArray<btSequentialImpulseConstraintSolverMt::JointParams>::findLinearSearch2",
+                    "btAlignedObjectArray<btSequentialImpulseConstraintSolverMt::JointParams>::remove",
+                    "btAlignedObjectArray<btSolverAnalyticsData>::findBinarySearch",
+                    "btAlignedObjectArray<btSolverAnalyticsData>::findLinearSearch",
+                    "btAlignedObjectArray<btSolverAnalyticsData>::findLinearSearch2",
+                    "btAlignedObjectArray<btSolverAnalyticsData>::remove",
+                    "btAlignedObjectArray<btSolverBody>::findBinarySearch",
+                    "btAlignedObjectArray<btSolverBody>::findLinearSearch",
+                    "btAlignedObjectArray<btSolverBody>::findLinearSearch2",
+                    "btAlignedObjectArray<btSolverBody>::remove",
+                    "btAlignedObjectArray<btSolverConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btSolverConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btSolverConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btSolverConstraint>::remove",
+                    "btAlignedObjectArray<btWheelInfo>::findBinarySearch",
+                    "btAlignedObjectArray<btWheelInfo>::findLinearSearch",
+                    "btAlignedObjectArray<btWheelInfo>::findLinearSearch2",
+                    "btAlignedObjectArray<btWheelInfo>::remove",
+                    "btDantzigScratchMemory::Arows"
                 ).skip())
             ;
     }
