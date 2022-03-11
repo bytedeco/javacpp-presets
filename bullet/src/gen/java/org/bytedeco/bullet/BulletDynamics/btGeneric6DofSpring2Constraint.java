@@ -32,6 +32,8 @@ public class btGeneric6DofSpring2Constraint extends btTypedConstraint {
 	private native void allocate(@ByRef btRigidBody rbB, @Const @ByRef btTransform frameInB);
 
 	public native void buildJacobian();
+	public native void getInfo1(btConstraintInfo1 info);
+	public native void getInfo2(btConstraintInfo2 info);
 	public native int calculateSerializeBufferSize();
 	public native @Cast("const char*") BytePointer serialize(Pointer dataBuffer, btSerializer serializer);
 

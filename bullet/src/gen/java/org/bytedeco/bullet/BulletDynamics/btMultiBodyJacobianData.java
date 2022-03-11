@@ -39,6 +39,6 @@ public class btMultiBodyJacobianData extends Pointer {
 	public native @ByRef btScalarArray scratch_r(); public native btMultiBodyJacobianData scratch_r(btScalarArray setter);
 	public native @ByRef btVector3Array scratch_v(); public native btMultiBodyJacobianData scratch_v(btVector3Array setter);
 	public native @ByRef btMatrix3x3Array scratch_m(); public native btMultiBodyJacobianData scratch_m(btMatrix3x3Array setter);
-	
+	public native btSolverBodyArray m_solverBodyPool(); public native btMultiBodyJacobianData m_solverBodyPool(btSolverBodyArray setter);
 	public native int m_fixedBodyId(); public native btMultiBodyJacobianData m_fixedBodyId(int setter);
 }

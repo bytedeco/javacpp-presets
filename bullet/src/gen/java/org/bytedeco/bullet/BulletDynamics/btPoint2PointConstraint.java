@@ -36,6 +36,14 @@ public class btPoint2PointConstraint extends btTypedConstraint {
 
 	public native void buildJacobian();
 
+	public native void getInfo1(btConstraintInfo1 info);
+
+	public native void getInfo1NonVirtual(btConstraintInfo1 info);
+
+	public native void getInfo2(btConstraintInfo2 info);
+
+	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform body0_trans, @Const @ByRef btTransform body1_trans);
+
 	public native void updateRHS(@Cast("btScalar") float timeStep);
 
 	public native void setPivotA(@Const @ByRef btVector3 pivotA);

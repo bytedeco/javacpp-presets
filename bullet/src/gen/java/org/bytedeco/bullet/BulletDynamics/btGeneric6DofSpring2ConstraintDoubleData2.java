@@ -33,7 +33,7 @@ public class btGeneric6DofSpring2ConstraintDoubleData2 extends Pointer {
         return new btGeneric6DofSpring2ConstraintDoubleData2((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintDoubleData m_typeConstraintData(); public native btGeneric6DofSpring2ConstraintDoubleData2 m_typeConstraintData(btTypedConstraintDoubleData setter);
 	public native @ByRef btTransformDoubleData m_rbAFrame(); public native btGeneric6DofSpring2ConstraintDoubleData2 m_rbAFrame(btTransformDoubleData setter);
 	public native @ByRef btTransformDoubleData m_rbBFrame(); public native btGeneric6DofSpring2ConstraintDoubleData2 m_rbBFrame(btTransformDoubleData setter);
 

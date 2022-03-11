@@ -35,7 +35,7 @@ public class btConeTwistConstraintData extends Pointer {
         return new btConeTwistConstraintData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btConeTwistConstraintData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btTransformFloatData m_rbAFrame(); public native btConeTwistConstraintData m_rbAFrame(btTransformFloatData setter);
 	public native @ByRef btTransformFloatData m_rbBFrame(); public native btConeTwistConstraintData m_rbBFrame(btTransformFloatData setter);
 

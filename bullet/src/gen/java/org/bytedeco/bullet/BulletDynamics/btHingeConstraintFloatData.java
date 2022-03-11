@@ -33,7 +33,7 @@ public class btHingeConstraintFloatData extends Pointer {
         return new btHingeConstraintFloatData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btHingeConstraintFloatData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btTransformFloatData m_rbAFrame(); public native btHingeConstraintFloatData m_rbAFrame(btTransformFloatData setter);  // constraint axii. Assumes z is hinge axis.
 	public native @ByRef btTransformFloatData m_rbBFrame(); public native btHingeConstraintFloatData m_rbBFrame(btTransformFloatData setter);
 	public native int m_useReferenceFrameA(); public native btHingeConstraintFloatData m_useReferenceFrameA(int setter);

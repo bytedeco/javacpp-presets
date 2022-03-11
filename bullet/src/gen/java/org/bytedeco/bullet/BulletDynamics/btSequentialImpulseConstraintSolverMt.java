@@ -127,7 +127,8 @@ public class btSequentialImpulseConstraintSolverMt extends btSequentialImpulseCo
 	}
 	public native void internalInitMultipleJoints(@Cast("btTypedConstraint**") PointerPointer constraints, int iBegin, int iEnd);
 	public native void internalInitMultipleJoints(@ByPtrPtr btTypedConstraint constraints, int iBegin, int iEnd);
-	
+	public native void internalConvertMultipleJoints(@Const @ByRef JointParamsArray jointParamsArray, @Cast("btTypedConstraint**") PointerPointer constraints, int iBegin, int iEnd, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native void internalConvertMultipleJoints(@Const @ByRef JointParamsArray jointParamsArray, @ByPtrPtr btTypedConstraint constraints, int iBegin, int iEnd, @Const @ByRef btContactSolverInfo infoGlobal);
 
 	// parameters to control batching
 	public static native @Cast("bool") boolean s_allowNestedParallelForLoops(); public static native void s_allowNestedParallelForLoops(boolean setter);        // whether to allow nested parallel operations

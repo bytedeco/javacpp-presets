@@ -33,7 +33,7 @@ public class btConeTwistConstraintDoubleData extends Pointer {
         return new btConeTwistConstraintDoubleData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintDoubleData m_typeConstraintData(); public native btConeTwistConstraintDoubleData m_typeConstraintData(btTypedConstraintDoubleData setter);
 	public native @ByRef btTransformDoubleData m_rbAFrame(); public native btConeTwistConstraintDoubleData m_rbAFrame(btTransformDoubleData setter);
 	public native @ByRef btTransformDoubleData m_rbBFrame(); public native btConeTwistConstraintDoubleData m_rbBFrame(btTransformDoubleData setter);
 

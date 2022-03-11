@@ -82,7 +82,7 @@ public class btRaycastVehicle extends btActionInterface {
 
 	public native int getNumWheels();
 
-	
+	public native @ByRef btWheelInfoArray m_wheelInfo(); public native btRaycastVehicle m_wheelInfo(btWheelInfoArray setter);
 
 	public native @ByRef btWheelInfo getWheelInfo(int index);
 

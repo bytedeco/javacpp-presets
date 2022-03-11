@@ -36,7 +36,7 @@ public class btHingeConstraintDoubleData extends Pointer {
         return new btHingeConstraintDoubleData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btHingeConstraintDoubleData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btTransformDoubleData m_rbAFrame(); public native btHingeConstraintDoubleData m_rbAFrame(btTransformDoubleData setter);  // constraint axii. Assumes z is hinge axis.
 	public native @ByRef btTransformDoubleData m_rbBFrame(); public native btHingeConstraintDoubleData m_rbBFrame(btTransformDoubleData setter);
 	public native int m_useReferenceFrameA(); public native btHingeConstraintDoubleData m_useReferenceFrameA(int setter);

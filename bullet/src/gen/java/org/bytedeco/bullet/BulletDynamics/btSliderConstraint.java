@@ -30,6 +30,14 @@ public class btSliderConstraint extends btTypedConstraint {
 
 	// overrides
 
+	public native void getInfo1(btConstraintInfo1 info);
+
+	public native void getInfo1NonVirtual(btConstraintInfo1 info);
+
+	public native void getInfo2(btConstraintInfo2 info);
+
+	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 linVelA, @Const @ByRef btVector3 linVelB, @Cast("btScalar") float rbAinvMass, @Cast("btScalar") float rbBinvMass);
+
 	// access
 	public native @Const @ByRef btRigidBody getRigidBodyA();
 	public native @Const @ByRef btRigidBody getRigidBodyB();

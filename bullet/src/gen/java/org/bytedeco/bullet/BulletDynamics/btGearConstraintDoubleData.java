@@ -33,7 +33,7 @@ public class btGearConstraintDoubleData extends Pointer {
         return new btGearConstraintDoubleData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintDoubleData m_typeConstraintData(); public native btGearConstraintDoubleData m_typeConstraintData(btTypedConstraintDoubleData setter);
 
 	public native @ByRef btVector3DoubleData m_axisInA(); public native btGearConstraintDoubleData m_axisInA(btVector3DoubleData setter);
 	public native @ByRef btVector3DoubleData m_axisInB(); public native btGearConstraintDoubleData m_axisInB(btVector3DoubleData setter);

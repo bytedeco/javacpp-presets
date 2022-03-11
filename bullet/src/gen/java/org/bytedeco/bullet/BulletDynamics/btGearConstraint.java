@@ -30,8 +30,10 @@ public class btGearConstraint extends btTypedConstraint {
 	private native void allocate(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB);
 
 	/**internal method used by the constraint solver, don't use them directly */
+	public native void getInfo1(btConstraintInfo1 info);
 
 	/**internal method used by the constraint solver, don't use them directly */
+	public native void getInfo2(btConstraintInfo2 info);
 
 	public native void setAxisA(@ByRef btVector3 axisA);
 	public native void setAxisB(@ByRef btVector3 axisB);

@@ -34,7 +34,7 @@ public class btGearConstraintFloatData extends Pointer {
         return new btGearConstraintFloatData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintFloatData m_typeConstraintData(); public native btGearConstraintFloatData m_typeConstraintData(btTypedConstraintFloatData setter);
 
 	public native @ByRef btVector3FloatData m_axisInA(); public native btGearConstraintFloatData m_axisInA(btVector3FloatData setter);
 	public native @ByRef btVector3FloatData m_axisInB(); public native btGearConstraintFloatData m_axisInB(btVector3FloatData setter);

@@ -34,7 +34,7 @@ public class btPoint2PointConstraintDoubleData2 extends Pointer {
         return new btPoint2PointConstraintDoubleData2((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintDoubleData m_typeConstraintData(); public native btPoint2PointConstraintDoubleData2 m_typeConstraintData(btTypedConstraintDoubleData setter);
 	public native @ByRef btVector3DoubleData m_pivotInA(); public native btPoint2PointConstraintDoubleData2 m_pivotInA(btVector3DoubleData setter);
 	public native @ByRef btVector3DoubleData m_pivotInB(); public native btPoint2PointConstraintDoubleData2 m_pivotInB(btVector3DoubleData setter);
 }

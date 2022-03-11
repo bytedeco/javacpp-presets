@@ -94,6 +94,14 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 	/** performs Jacobian calculation, and also calculates angle differences and axis */
 	public native void buildJacobian();
 
+	public native void getInfo1(btConstraintInfo1 info);
+
+	public native void getInfo1NonVirtual(btConstraintInfo1 info);
+
+	public native void getInfo2(btConstraintInfo2 info);
+
+	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 linVelA, @Const @ByRef btVector3 linVelB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
+
 	public native void updateRHS(@Cast("btScalar") float timeStep);
 
 	/** Get the rotation axis in global coordinates
@@ -158,6 +166,13 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 	public native @Cast("bool") boolean isLimited(int limitIndex);
 
 	public native void calcAnchorPos();  // overridable
+
+	public native int get_limit_motor_info2(btRotationalLimitMotor limot,
+								  @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 linVelA, @Const @ByRef btVector3 linVelB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB,
+								  btConstraintInfo2 info, int row, @ByRef btVector3 ax1, int rotational, int rotAllowed/*=false*/);
+	public native int get_limit_motor_info2(btRotationalLimitMotor limot,
+								  @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 linVelA, @Const @ByRef btVector3 linVelB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB,
+								  btConstraintInfo2 info, int row, @ByRef btVector3 ax1, int rotational);
 
 	// access for UseFrameOffset
 	public native @Cast("bool") boolean getUseFrameOffset();

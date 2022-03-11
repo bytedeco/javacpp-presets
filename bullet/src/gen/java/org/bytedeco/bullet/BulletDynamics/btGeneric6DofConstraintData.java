@@ -33,7 +33,7 @@ public class btGeneric6DofConstraintData extends Pointer {
         return new btGeneric6DofConstraintData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btGeneric6DofConstraintData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btTransformFloatData m_rbAFrame(); public native btGeneric6DofConstraintData m_rbAFrame(btTransformFloatData setter);  // constraint axii. Assumes z is hinge axis.
 	public native @ByRef btTransformFloatData m_rbBFrame(); public native btGeneric6DofConstraintData m_rbBFrame(btTransformFloatData setter);
 

@@ -107,6 +107,7 @@ public class btTypedConstraint extends btTypedObject {
 	public native void buildJacobian();
 
 	/**internal method used by the constraint solver, don't use them directly */
+	public native void setupSolverConstraint(@ByRef btSolverConstraintArray ca, int solverBodyA, int solverBodyB, @Cast("btScalar") float timeStep);
 
 	/**internal method used by the constraint solver, don't use them directly */
 	public native void getInfo1(btConstraintInfo1 info);

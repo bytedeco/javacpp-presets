@@ -274,6 +274,9 @@ public static native double randomDouble(double low, double high);
 // #include "btSoftBodyHelpers.h"
 // #include "BulletCollision/CollisionDispatch/btSimulationIslandManager.h"
 // #include <functional>
+// Targeting ../BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.java
+
+
 // Targeting ../BulletSoftBody/btDeformableMultiBodyDynamicsWorld.java
 
 

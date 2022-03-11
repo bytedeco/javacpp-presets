@@ -29,7 +29,7 @@ public class btMultiBodyJointLimitConstraint extends btMultiBodyConstraint {
 	public native int getIslandIdA();
 	public native int getIslandIdB();
 
-	public native void createConstraintRows(@Cast("btMultiBodyConstraintArray*") @ByRef btMultiBodySolverConstraintArray constraintRows,
+	public native void createConstraintRows(@ByRef btMultiBodySolverConstraintArray constraintRows,
 										  @ByRef btMultiBodyJacobianData data,
 										  @Const @ByRef btContactSolverInfo infoGlobal);
 

@@ -31,7 +31,15 @@ public class btConeTwistConstraint extends btTypedConstraint {
 
 	public native void buildJacobian();
 
-	
+	public native void getInfo1(btConstraintInfo1 info);
+
+	public native void getInfo1NonVirtual(btConstraintInfo1 info);
+
+	public native void getInfo2(btConstraintInfo2 info);
+
+	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btMatrix3x3 invInertiaWorldA, @Const @ByRef btMatrix3x3 invInertiaWorldB);
+
+	public native void solveConstraintObsolete(@ByRef btSolverBody bodyA, @ByRef btSolverBody bodyB, @Cast("btScalar") float timeStep);
 
 	public native void updateRHS(@Cast("btScalar") float timeStep);
 

@@ -54,6 +54,8 @@ public class btGeneric6DofSpringConstraint extends btGeneric6DofConstraint {
 
 	public native void setAxis(@Const @ByRef btVector3 axis1, @Const @ByRef btVector3 axis2);
 
+	public native void getInfo2(btConstraintInfo2 info);
+
 	public native int calculateSerializeBufferSize();
 	/**fills the dataBuffer and returns the struct name (and 0 on failure) */
 	public native @Cast("const char*") BytePointer serialize(Pointer dataBuffer, btSerializer serializer);

@@ -58,9 +58,9 @@ public class btSimulationIslandManagerMt extends btSimulationIslandManager {
 	
 		// a simulation island consisting of bodies, manifolds and constraints,
 		// to be passed into a constraint solver.
-		
-		
-		
+		public native @ByRef btCollisionObjectArray bodyArray(); public native Island bodyArray(btCollisionObjectArray setter);
+		public native @ByRef btPersistentManifoldArray manifoldArray(); public native Island manifoldArray(btPersistentManifoldArray setter);
+		public native @ByRef btTypedConstraintArray constraintArray(); public native Island constraintArray(btTypedConstraintArray setter);
 		public native int id(); public native Island id(int setter);  // island id
 		public native @Cast("bool") boolean isSleeping(); public native Island isSleeping(boolean setter);
 
@@ -90,16 +90,30 @@ public class btSimulationIslandManagerMt extends btSimulationIslandManager {
 		public native btDispatcher m_dispatcher(); public native SolverParams m_dispatcher(btDispatcher setter);
 	}
 	public static native void solveIsland(btConstraintSolver solver, @ByRef Island island, @Const @ByRef SolverParams solverParams);
-	
-	
+
+	public static class IslandDispatchFunc extends FunctionPointer {
+	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+	    public    IslandDispatchFunc(Pointer p) { super(p); }
+	    protected IslandDispatchFunc() { allocate(); }
+	    private native void allocate();
+	    public native void call(IslandArray islands, @Const @ByRef SolverParams solverParams);
+	}
+	public static native void serialIslandDispatch(IslandArray islandsPtr, @Const @ByRef SolverParams solverParams);
+	public static native void parallelIslandDispatch(IslandArray islandsPtr, @Const @ByRef SolverParams solverParams);
 	public btSimulationIslandManagerMt() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	
+	public native void buildAndProcessIslands(btDispatcher dispatcher,
+											btCollisionWorld collisionWorld,
+											@ByRef btTypedConstraintArray constraints,
+											@Const @ByRef SolverParams solverParams);
 
 	public native void buildIslands(btDispatcher dispatcher, btCollisionWorld colWorld);
 
 	public native int getMinimumSolverBatchSize();
 	public native void setMinimumSolverBatchSize(int sz);
+	public native IslandDispatchFunc getIslandDispatchFunction();
 	// allow users to set their own dispatch function for multithreaded dispatch
+	public native void setIslandDispatchFunction(IslandDispatchFunc func);
 }

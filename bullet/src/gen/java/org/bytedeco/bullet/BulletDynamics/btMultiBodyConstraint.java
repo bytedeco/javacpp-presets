@@ -35,7 +35,9 @@ public class btMultiBodyConstraint extends Pointer {
 	public native int getIslandIdA();
 	public native int getIslandIdB();
 
-	
+	public native void createConstraintRows(@ByRef btMultiBodySolverConstraintArray constraintRows,
+										  @ByRef btMultiBodyJacobianData data,
+										  @Const @ByRef btContactSolverInfo infoGlobal);
 
 	public native int getNumRows();
 

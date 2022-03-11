@@ -59,8 +59,8 @@ public class btBatchedConstraints extends Pointer {
 	}
 
 	public native @ByRef btIntArray m_constraintIndices(); public native btBatchedConstraints m_constraintIndices(btIntArray setter);
-	        // each batch is a range of indices in the m_constraintIndices array
-	         // each phase is range of indices in the m_batches array
+	public native @ByRef RangeArray m_batches(); public native btBatchedConstraints m_batches(RangeArray setter);        // each batch is a range of indices in the m_constraintIndices array
+	public native @ByRef RangeArray m_phases(); public native btBatchedConstraints m_phases(RangeArray setter);         // each phase is range of indices in the m_batches array
 	public native @ByRef btCharArray m_phaseGrainSize(); public native btBatchedConstraints m_phaseGrainSize(btCharArray setter);  // max grain size for each phase
 	public native @ByRef btIntArray m_phaseOrder(); public native btBatchedConstraints m_phaseOrder(btIntArray setter);       // phases can be done in any order, so we can randomize the order here
 	public native btIDebugDraw m_debugDrawer(); public native btBatchedConstraints m_debugDrawer(btIDebugDraw setter);
@@ -69,4 +69,11 @@ public class btBatchedConstraints extends Pointer {
 
 	public btBatchedConstraints() { super((Pointer)null); allocate(); }
 	private native void allocate();
+	public native void setup(btSolverConstraintArray constraints,
+				   @Const @ByRef btSolverBodyArray bodies,
+				   @Cast("btBatchedConstraints::BatchingMethod") int batchingMethod,
+				   int minBatchSize,
+				   int maxBatchSize,
+				   btCharArray scratchMemory);
+	public native @Cast("bool") boolean validate(btSolverConstraintArray constraints, @Const @ByRef btSolverBodyArray bodies);
 }

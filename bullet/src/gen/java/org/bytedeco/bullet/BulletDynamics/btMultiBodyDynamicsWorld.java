@@ -63,7 +63,7 @@ public class btMultiBodyDynamicsWorld extends btDiscreteDynamicsWorld {
 	public native void serialize(btSerializer serializer);
 	public native void setMultiBodyConstraintSolver(btMultiBodyConstraintSolver solver);
 	public native void setConstraintSolver(btConstraintSolver solver);
-	
+	public native void getAnalyticsData(@ByRef btSolverAnalyticsDataArray m_islandAnalyticsData);
     
     public native void solveExternalForces(@ByRef btContactSolverInfo solverInfo);
     public native void solveInternalConstraints(@ByRef btContactSolverInfo solverInfo);

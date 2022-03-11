@@ -46,6 +46,17 @@ public class btHingeConstraint extends btTypedConstraint {
 
 	public native void buildJacobian();
 
+	public native void getInfo1(btConstraintInfo1 info);
+
+	public native void getInfo1NonVirtual(btConstraintInfo1 info);
+
+	public native void getInfo2(btConstraintInfo2 info);
+
+	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
+
+	public native void getInfo2Internal(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
+	public native void getInfo2InternalUsingFrameOffset(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
+
 	public native void updateRHS(@Cast("btScalar") float timeStep);
 
 	public native @ByRef btRigidBody getRigidBodyA();

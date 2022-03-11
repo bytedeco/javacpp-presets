@@ -35,7 +35,7 @@ public class btSliderConstraintData extends Pointer {
         return new btSliderConstraintData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btSliderConstraintData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btTransformFloatData m_rbAFrame(); public native btSliderConstraintData m_rbAFrame(btTransformFloatData setter);  // constraint axii. Assumes z is hinge axis.
 	public native @ByRef btTransformFloatData m_rbBFrame(); public native btSliderConstraintData m_rbBFrame(btTransformFloatData setter);
 

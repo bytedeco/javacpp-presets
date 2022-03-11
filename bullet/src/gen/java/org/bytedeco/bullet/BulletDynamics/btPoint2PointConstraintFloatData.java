@@ -34,7 +34,7 @@ public class btPoint2PointConstraintFloatData extends Pointer {
         return new btPoint2PointConstraintFloatData((Pointer)this).offsetAddress(i);
     }
 
-	
+	public native @ByRef btTypedConstraintData m_typeConstraintData(); public native btPoint2PointConstraintFloatData m_typeConstraintData(btTypedConstraintData setter);
 	public native @ByRef btVector3FloatData m_pivotInA(); public native btPoint2PointConstraintFloatData m_pivotInA(btVector3FloatData setter);
 	public native @ByRef btVector3FloatData m_pivotInB(); public native btPoint2PointConstraintFloatData m_pivotInB(btVector3FloatData setter);
 }
