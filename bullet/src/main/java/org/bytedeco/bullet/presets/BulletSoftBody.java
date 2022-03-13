@@ -261,6 +261,8 @@ public class BulletSoftBody implements InfoMapper {
                     "btAlignedObjectArray<btSoftBody::TetraScratch>::findLinearSearch",
                     "btAlignedObjectArray<btSoftBody::TetraScratch>::findLinearSearch2",
                     "btAlignedObjectArray<btSoftBody::TetraScratch>::remove",
+                    "btDeformableBackwardEulerObjective::computeStep",
+                    "btDeformableMultiBodyDynamicsWorld::solveMultiBodyConstraints",
                     "btDeformableMultiBodyDynamicsWorld::rayTestSingle",
                     "btSoftBody::AJoint::Type",
                     "btSoftBody::CJoint::Type",

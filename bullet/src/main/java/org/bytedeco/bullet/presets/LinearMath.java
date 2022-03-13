@@ -173,8 +173,10 @@ public class LinearMath implements InfoMapper {
                     "btAlignedObjectArray<btPlane>::findLinearSearch2",
                     "btAlignedObjectArray<btPlane>::remove",
                     "btBulletSerializedArrays",
+                    "btGeometryUtil::isInside",
                     "btGetInfinityMask",
-                    "btInfMaskConverter"
+                    "btInfMaskConverter",
+                    "btThreadSupportInterface::create"
                 ).skip())
             ;
     }

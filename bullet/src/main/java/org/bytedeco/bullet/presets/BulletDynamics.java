@@ -184,7 +184,11 @@ public class BulletDynamics implements InfoMapper {
                     "btAlignedObjectArray<btWheelInfo>::findLinearSearch",
                     "btAlignedObjectArray<btWheelInfo>::findLinearSearch2",
                     "btAlignedObjectArray<btWheelInfo>::remove",
-                    "btDantzigScratchMemory::Arows"
+                    "btDantzigScratchMemory::Arows",
+                    "btSequentialImpulseConstraintSolver::getSSE2ConstraintRowSolverGeneric",
+                    "btSequentialImpulseConstraintSolver::getSSE2ConstraintRowSolverLowerLimit",
+                    "btSequentialImpulseConstraintSolver::getSSE4_1ConstraintRowSolverGeneric",
+                    "btSequentialImpulseConstraintSolver::getSSE4_1ConstraintRowSolverLowerLimit"
                 ).skip())
             ;
     }
