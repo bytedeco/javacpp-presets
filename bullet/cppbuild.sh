@@ -215,4 +215,7 @@ case $PLATFORM in
         ;;
 esac
 
+sed -i "s/\(typedef.*btSolverCallback.*;\)/public: \1 private:/g" \
+    ${INSTALL_PATH}/include/bullet/BulletSoftBody/btDeformableMultiBodyDynamicsWorld.h
+
 cd ../../..

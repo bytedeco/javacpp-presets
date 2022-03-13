@@ -127,6 +127,7 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btAlignedObjectArray<btConvexHullComputer::Edge>").pointerTypes("btConvexHullComputerEdgeArray"))
             .put(new Info("btConvexHullComputer::Edge").pointerTypes("btConvexHullComputer.Edge"))
             .put(new Info("btHashMap<btHashPtr,void*>").pointerTypes("btHashMap_btHashPtr_voidPointer"))
+            .put(new Info("btHashMap<btHashInt,btAlignedObjectArray<btVector3> >").pointerTypes("btHashMap_btHashInt_btVector3Array"))
             .put(new Info("btAlignedObjectArray<btAlignedObjectArray<int> >").javaNames("btIntArrayArray"))
             .put(new Info("btAlignedObjectArray<btAlignedObjectArray<unsigned int> >").javaNames("btUnsignedIntArrayArray"))
             .put(new Info("btAlignedObjectArray<btAlignedObjectArray<double> >").javaNames("btDoubleArrayArray"))

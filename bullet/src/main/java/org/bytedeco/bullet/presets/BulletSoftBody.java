@@ -40,19 +40,39 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             include = {
                 "LinearMath/btAlignedObjectArray.h",
+                "BulletSoftBody/btSoftBody.h",
+                "BulletSoftBody/btCGProjection.h",
+                "BulletSoftBody/btConjugateGradient.h",
+                "BulletSoftBody/btConjugateResidual.h",
+                "BulletSoftBody/btDefaultSoftBodySolver.h",
                 "BulletSoftBody/btDeformableBackwardEulerObjective.h",
                 "BulletSoftBody/btDeformableBodySolver.h",
+                "BulletSoftBody/btDeformableContactConstraint.h",
+                "BulletSoftBody/btDeformableContactProjection.h",
                 "BulletSoftBody/btDeformableLagrangianForce.h",
+                "BulletSoftBody/btDeformableCorotatedForce.h",
+                "BulletSoftBody/btDeformableGravityForce.h",
+                "BulletSoftBody/btDeformableLinearElasticityForce.h",
+                "BulletSoftBody/btDeformableMassSpringForce.h",
+                "BulletSoftBody/btDeformableMousePickingForce.h",
                 "BulletSoftBody/btDeformableMultiBodyConstraintSolver.h",
                 "BulletSoftBody/btDeformableMultiBodyDynamicsWorld.h",
-                "BulletSoftBody/btSoftBody.h",
+                "BulletSoftBody/btDeformableNeoHookeanForce.h",
+                "BulletSoftBody/btKrylovSolver.h",
+                "BulletSoftBody/btPreconditioner.h",
+                "BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.h",
+                "BulletSoftBody/btSoftBodyData.h",
                 "BulletSoftBody/btSoftBodyHelpers.h",
+                "BulletSoftBody/btSoftBodyInternals.h",
                 "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h",
-                "BulletSoftBody/btSoftBodySolverVertexBuffer.h",
                 "BulletSoftBody/btSoftBodySolvers.h",
+                "BulletSoftBody/btSoftBodySolverVertexBuffer.h",
                 "BulletSoftBody/btSoftMultiBodyDynamicsWorld.h",
+                "BulletSoftBody/btSoftRigidCollisionAlgorithm.h",
                 "BulletSoftBody/btSoftRigidDynamicsWorld.h",
+                "BulletSoftBody/btSoftSoftCollisionAlgorithm.h",
                 "BulletSoftBody/btSparseSDF.h",
+                "BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.h",
             },
             link = "BulletSoftBody@.3.20"
         )
@@ -67,15 +87,41 @@ public class BulletSoftBody implements InfoMapper {
         infoMap
             .put(new Info("btSoftBodyData").cppTypes().translate(false))
 
-            .put(new Info("btSoftBodySolver::SolverTypes").enumerate())
+            .put(new Info(
+                    "USE_MGS"
+                ).define(false))
 
+            .put(new Info("btSoftBodySolver::SolverTypes").enumerate())
+            .put(new Info("btVertexBufferDescriptor::BufferTypes").enumerate())
+
+            .put(new Info("btDeformableBackwardEulerObjective").immutable(true))
+
+            .put(new Info("TVStack").pointerTypes("btVector3Array"))
+            .put(new Info("btAlignedObjectArray<LagrangeMultiplier>").pointerTypes("LagrangeMultiplierArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceNodeContactConstraint> >").pointerTypes("btDeformableFaceNodeContactConstraintArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceRigidContactConstraint> >").pointerTypes("btDeformableFaceRigidContactConstraintArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeAnchorConstraint> >").pointerTypes("btDeformableNodeAnchorConstraintArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeRigidContactConstraint> >").pointerTypes("btDeformableNodeRigidContactConstraintArrayArray"))
+            .put(new Info("btAlignedObjectArray<btAlignedObjectArray<btDeformableStaticConstraint> >").pointerTypes("btDeformableStaticConstraintArrayArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableContactConstraint*>").pointerTypes("btDeformableContactConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableFaceNodeContactConstraint>").pointerTypes("btDeformableFaceNodeContactConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableFaceRigidContactConstraint>").pointerTypes("btDeformableFaceRigidContactConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableLagrangianForce*>").pointerTypes("btDeformableLagrangianForceArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableNodeAnchorConstraint>").pointerTypes("btDeformableNodeAnchorConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableNodeRigidContactConstraint>").pointerTypes("btDeformableNodeRigidContactConstraintArray"))
+            .put(new Info("btAlignedObjectArray<btDeformableStaticConstraint>").pointerTypes("btDeformableStaticConstraintArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody*>").pointerTypes("btSoftBodyArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Anchor>").pointerTypes("btSoftBodyAnchorArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Cluster*>").pointerTypes("btSoftBodyClusterArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::DeformableFaceNodeContact>").pointerTypes("btSoftBodyDeformableFaceNodeContactArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::DeformableFaceRigidContact>").pointerTypes("btSoftBodyDeformableFaceRigidContactArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::DeformableNodeRigidAnchor>").pointerTypes("btSoftBodyDeformableNodeRigidAnchorArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::DeformableNodeRigidContact>").pointerTypes("btSoftBodyDeformableNodeRigidContactArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Face>").pointerTypes("btSoftBodyFaceArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Joint*>").pointerTypes("btSoftBodyJointArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Link>").pointerTypes("btSoftBodyLinkArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Material*>").pointerTypes("btSoftBodyMaterialArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::Node*>").pointerTypes("btSoftBodyNodePointerArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Node>").pointerTypes("btSoftBodyNodeArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Note>").pointerTypes("btSoftBodyNoteArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::RContact>").pointerTypes("btSoftBodyRContactArray"))
@@ -83,8 +129,15 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btAlignedObjectArray<btSoftBody::RenderNode>").pointerTypes("btSoftBodyRenderNodeArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::SContact>").pointerTypes("btSoftBodySContactArray"))
             .put(new Info("btAlignedObjectArray<btSoftBody::Tetra>").pointerTypes("btSoftBodyTetraArray"))
+            .put(new Info("btAlignedObjectArray<btSoftBody::TetraScratch>").pointerTypes("btSoftBodyTetraSratchArray"))
+            .put(new Info("btAlignedObjectArray<btSparseSdf<3>::Cell*>").pointerTypes("btSparseSdf3CellArray"))
+            .put(new Info("btDeformableBodySolver::TVStack").pointerTypes("btVector3Array"))
             .put(new Info("btSoftBody::Anchor").pointerTypes("btSoftBody.Anchor"))
             .put(new Info("btSoftBody::Cluster").pointerTypes("btSoftBody.Cluster"))
+            .put(new Info("btSoftBody::DeformableFaceNodeContact").pointerTypes("btSoftBody.DeformableFaceNodeContact"))
+            .put(new Info("btSoftBody::DeformableFaceRigidContact").pointerTypes("btSoftBody.DeformableFaceRigidContact"))
+            .put(new Info("btSoftBody::DeformableNodeRigidAnchor").pointerTypes("btSoftBody.DeformableNodeRigidAnchor"))
+            .put(new Info("btSoftBody::DeformableNodeRigidContact").pointerTypes("btSoftBody.DeformableNodeRigidContact"))
             .put(new Info("btSoftBody::Face").pointerTypes("btSoftBody.Face"))
             .put(new Info("btSoftBody::Joint").pointerTypes("btSoftBody.Joint"))
             .put(new Info("btSoftBody::Link").pointerTypes("btSoftBody.Link"))
@@ -96,14 +149,78 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btSoftBody::RenderNode").pointerTypes("btSoftBody.RenderNode"))
             .put(new Info("btSoftBody::SContact").pointerTypes("btSoftBody.SContact"))
             .put(new Info("btSoftBody::Tetra").pointerTypes("btSoftBody.Tetra"))
-            .put(new Info("btSparseSdf<3>").pointerTypes("btSparseSdf_3"))
+            .put(new Info("btSoftBody::TetraScratch").pointerTypes("btSoftBody.TetraScratch"))
+            .put(new Info("btSparseSdf<3>").pointerTypes("btSparseSdf3"))
+            .put(new Info("btSparseSdf<3>::Cell").pointerTypes("btSparseSdf3.Cell"))
+            .put(new Info("btSparseSdf<3>::IntFrac").pointerTypes("btSparseSdf3.IntFrac"))
 
             .put(new Info(
+                    "DeformableContactConstraint::m_contact",
                     "SAFE_EPSILON",
+                    "btAlignedObjectArray<LagrangeMultiplier>::findBinarySearch",
+                    "btAlignedObjectArray<LagrangeMultiplier>::findLinearSearch",
+                    "btAlignedObjectArray<LagrangeMultiplier>::findLinearSearch2",
+                    "btAlignedObjectArray<LagrangeMultiplier>::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceNodeContactConstraint> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceNodeContactConstraint> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceNodeContactConstraint> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceNodeContactConstraint> >::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceRigidContactConstraint> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceRigidContactConstraint> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceRigidContactConstraint> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableFaceRigidContactConstraint> >::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeAnchorConstraint> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeAnchorConstraint> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeAnchorConstraint> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeAnchorConstraint> >::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeRigidContactConstraint> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeRigidContactConstraint> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeRigidContactConstraint> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableNodeRigidContactConstraint> >::remove",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableStaticConstraint> >::findBinarySearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableStaticConstraint> >::findLinearSearch",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableStaticConstraint> >::findLinearSearch2",
+                    "btAlignedObjectArray<btAlignedObjectArray<btDeformableStaticConstraint> >::remove",
+                    "btAlignedObjectArray<btDeformableFaceNodeContactConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btDeformableFaceNodeContactConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btDeformableFaceNodeContactConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btDeformableFaceNodeContactConstraint>::remove",
+                    "btAlignedObjectArray<btDeformableFaceRigidContactConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btDeformableFaceRigidContactConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btDeformableFaceRigidContactConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btDeformableFaceRigidContactConstraint>::remove",
+                    "btAlignedObjectArray<btDeformableNodeAnchorConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btDeformableNodeAnchorConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btDeformableNodeAnchorConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btDeformableNodeAnchorConstraint>::remove",
+                    "btAlignedObjectArray<btDeformableNodeRigidContactConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btDeformableNodeRigidContactConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btDeformableNodeRigidContactConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btDeformableNodeRigidContactConstraint>::remove",
+                    "btAlignedObjectArray<btDeformableStaticConstraint>::findBinarySearch",
+                    "btAlignedObjectArray<btDeformableStaticConstraint>::findLinearSearch",
+                    "btAlignedObjectArray<btDeformableStaticConstraint>::findLinearSearch2",
+                    "btAlignedObjectArray<btDeformableStaticConstraint>::remove",
                     "btAlignedObjectArray<btSoftBody::Anchor>::findBinarySearch",
                     "btAlignedObjectArray<btSoftBody::Anchor>::findLinearSearch",
                     "btAlignedObjectArray<btSoftBody::Anchor>::findLinearSearch2",
                     "btAlignedObjectArray<btSoftBody::Anchor>::remove",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceNodeContact>::findBinarySearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceNodeContact>::findLinearSearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceNodeContact>::findLinearSearch2",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceNodeContact>::remove",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceRigidContact>::findBinarySearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceRigidContact>::findLinearSearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceRigidContact>::findLinearSearch2",
+                    "btAlignedObjectArray<btSoftBody::DeformableFaceRigidContact>::remove",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidAnchor>::findBinarySearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidAnchor>::findLinearSearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidAnchor>::findLinearSearch2",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidAnchor>::remove",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidContact>::findBinarySearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidContact>::findLinearSearch",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidContact>::findLinearSearch2",
+                    "btAlignedObjectArray<btSoftBody::DeformableNodeRigidContact>::remove",
                     "btAlignedObjectArray<btSoftBody::Face>::findBinarySearch",
                     "btAlignedObjectArray<btSoftBody::Face>::findLinearSearch",
                     "btAlignedObjectArray<btSoftBody::Face>::findLinearSearch2",
@@ -140,57 +257,16 @@ public class BulletSoftBody implements InfoMapper {
                     "btAlignedObjectArray<btSoftBody::Tetra>::findLinearSearch",
                     "btAlignedObjectArray<btSoftBody::Tetra>::findLinearSearch2",
                     "btAlignedObjectArray<btSoftBody::Tetra>::remove",
-                    "btCPUVertexBufferDescriptor::getBufferType",
-                    "btDeformableBackwardEulerObjective::computeStep",
-                    "btDeformableBackwardEulerObjective::getIndices",
-                    "btDeformableBackwardEulerObjective::m_KKTPreconditioner",
-                    "btDeformableBackwardEulerObjective::m_lf",
-                    "btDeformableBackwardEulerObjective::m_massPreconditioner",
-                    "btDeformableBackwardEulerObjective::m_nodes",
-                    "btDeformableBackwardEulerObjective::m_preconditioner",
-                    "btDeformableBackwardEulerObjective::m_projection",
-                    "btDeformableBodySolver::computeDescentStep",
-                    "btDeformableBodySolver::computeStep",
-                    "btDeformableLagrangianForce::m_nodes",
-                    "btDeformableLagrangianForce::setIndices",
+                    "btAlignedObjectArray<btSoftBody::TetraScratch>::findBinarySearch",
+                    "btAlignedObjectArray<btSoftBody::TetraScratch>::findLinearSearch",
+                    "btAlignedObjectArray<btSoftBody::TetraScratch>::findLinearSearch2",
+                    "btAlignedObjectArray<btSoftBody::TetraScratch>::remove",
                     "btDeformableMultiBodyDynamicsWorld::rayTestSingle",
-                    "btDeformableMultiBodyDynamicsWorld::setSolverCallback",
-                    "btDeformableMultiBodyDynamicsWorld::solveMultiBodyConstraints",
                     "btSoftBody::AJoint::Type",
                     "btSoftBody::CJoint::Type",
-                    "btSoftBody::Cluster::m_leaf",
-                    "btSoftBody::Cluster::m_nodes",
-                    "btSoftBody::Face::m_leaf",
-                    "btSoftBody::Joint::eType",
-                    "btSoftBody::Joint::eType::_",
                     "btSoftBody::LJoint::Type",
-                    "btSoftBody::Node::m_leaf",
-                    "btSoftBody::RayFromToCaster",
-                    "btSoftBody::Tetra::m_leaf",
-                    "btSoftBody::ePSolver",
-                    "btSoftBody::eVSolver",
-                    "btSoftBody::fCollision",
-                    "btSoftBody::fMaterial",
-                    "btSoftBody::getSolver",
                     "btSoftBody::m_collisionDisabledObjects",
-                    "btSoftBody::m_deformableAnchors",
-                    "btSoftBody::m_faceNodeContacts",
-                    "btSoftBody::m_faceRigidContacts",
-                    "btSoftBody::m_fdbvnt",
-                    "btSoftBody::m_nodeRigidContacts",
-                    "btSoftBody::m_renderNodesParents",
-                    "btSoftBody::m_tetraScratches",
-                    "btSoftBody::m_tetraScratchesTn",
-                    "btSoftBody::solveClusters",
-                    "btSoftBody::tPSolverArray",
-                    "btSoftBody::tVSolverArray",
-                    "btSoftBody::updateNode",
-                    "btSoftBodyLinkData",
-                    "btSoftBodyTriangleData",
-                    "btSoftBodyVertexData",
-                    "btSparseSdf<3>::Cell",
-                    "btSparseSdf<3>::IntFrac",
-                    "btSparseSdf<3>::cells"
+                    "btSoftBody::m_renderNodesParents"
                 ).skip())
             ;
     }
