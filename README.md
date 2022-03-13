@@ -213,7 +213,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
- * PyTorch 1.10.x  https://github.com/pytorch/pytorch
+ * PyTorch 1.11.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.8.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
@@ -227,7 +227,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia
- * cpu_features 0.6.0  https://github.com/google/cpu_features
+ * cpu_features 0.7.0  https://github.com/google/cpu_features
  * ModSecurity 3.0.x  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
