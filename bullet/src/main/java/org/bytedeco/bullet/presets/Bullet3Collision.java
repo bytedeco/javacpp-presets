@@ -62,10 +62,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Collision/NarrowPhaseCollision/shared/b3MprPenetration.h",
                 "Bullet3Collision/NarrowPhaseCollision/shared/b3QuantizedBvhNodeData.h",
                 "Bullet3Collision/NarrowPhaseCollision/shared/b3ReduceContacts.h",
-                "Bullet3Collision/NarrowPhaseCollision/shared/b3UpdateAabbs.h",
             },
             link = "Bullet3Collision@.3.20"
-        )
+        ),
+        @Platform(value = "windows", link = { "Bullet3Collision@.3.20", "Bullet3Geometry@.3.20" })
     },
     target = "org.bytedeco.bullet.Bullet3Collision",
     global = "org.bytedeco.bullet.global.Bullet3Collision"

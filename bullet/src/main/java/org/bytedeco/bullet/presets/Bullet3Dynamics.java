@@ -50,7 +50,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.h",
                 "Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.h",
                 "Bullet3Dynamics/shared/b3ContactConstraint4.h",
-                "Bullet3Dynamics/shared/b3ConvertConstraint4.h",
                 "Bullet3Dynamics/shared/b3Inertia.h",
                 "Bullet3Dynamics/shared/b3IntegrateTransforms.h",
                 "Bullet3Dynamics/b3CpuRigidBodyPipeline.h",
