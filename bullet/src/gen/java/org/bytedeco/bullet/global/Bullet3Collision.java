@@ -1236,18 +1236,4 @@ public static native int b3ReduceContacts(@Const b3Vector3 p, int nPoints, @Cons
 // #endif  //B3_REDUCE_CONTACTS_H
 
 
-// Parsed from Bullet3Collision/NarrowPhaseCollision/shared/b3UpdateAabbs.h
-
-// #ifndef B3_UPDATE_AABBS_H
-// #define B3_UPDATE_AABBS_H
-
-// #include "Bullet3Collision/BroadPhaseCollision/shared/b3Aabb.h"
-// #include "Bullet3Collision/NarrowPhaseCollision/shared/b3Collidable.h"
-// #include "Bullet3Collision/NarrowPhaseCollision/shared/b3RigidBodyData.h"
-
-public static native void b3ComputeWorldAabb(int bodyId, @Const b3RigidBodyData bodies, @Const b3Collidable collidables, @Const b3Aabb localShapeAABB, b3Aabb worldAabbs);
-
-// #endif  //B3_UPDATE_AABBS_H
-
-
 }

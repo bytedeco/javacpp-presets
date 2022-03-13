@@ -465,30 +465,6 @@ public static native float b3GetFrictionCoeff(b3ContactConstraint4 constraint);
 // #endif  //B3_CONTACT_CONSTRAINT5_H
 
 
-// Parsed from Bullet3Dynamics/shared/b3ConvertConstraint4.h
-
-
-
-// #include "Bullet3Collision/NarrowPhaseCollision/shared/b3Contact4Data.h"
-// #include "Bullet3Dynamics/shared/b3ContactConstraint4.h"
-// #include "Bullet3Collision/NarrowPhaseCollision/shared/b3RigidBodyData.h"
-
-public static native void b3PlaneSpace1(@Const @ByRef b3Vector3 n, b3Vector3 p, b3Vector3 q);
-
-public static native void setLinearAndAngular(@Const @ByRef b3Vector3 n, @Const @ByRef b3Vector3 r0, @Const @ByRef b3Vector3 r1, b3Vector3 linear, b3Vector3 angular0, b3Vector3 angular1);
-
-public static native float calcRelVel(@Const @ByRef b3Vector3 l0, @Const @ByRef b3Vector3 l1, @Const @ByRef b3Vector3 a0, @Const @ByRef b3Vector3 a1, @Const @ByRef b3Vector3 linVel0,
-				 @Const @ByRef b3Vector3 angVel0, @Const @ByRef b3Vector3 linVel1, @Const @ByRef b3Vector3 angVel1);
-
-public static native float calcJacCoeff(@Const @ByRef b3Vector3 linear0, @Const @ByRef b3Vector3 linear1, @Const @ByRef b3Vector3 angular0, @Const @ByRef b3Vector3 angular1,
-				   float invMass0, @Const b3Matrix3x3 invInertia0, float invMass1, @Const b3Matrix3x3 invInertia1);
-
-public static native void setConstraint4(@Const @ByRef b3Vector3 posA, @Const @ByRef b3Vector3 linVelA, @Const @ByRef b3Vector3 angVelA, float invMassA, @Const @ByRef b3Matrix3x3 invInertiaA,
-					@Const @ByRef b3Vector3 posB, @Const @ByRef b3Vector3 linVelB, @Const @ByRef b3Vector3 angVelB, float invMassB, @Const @ByRef b3Matrix3x3 invInertiaB,
-					b3Contact4Data src, float dt, float positionDrift, float positionConstraintCoeff,
-					b3ContactConstraint4 dstC);
-
-
 // Parsed from Bullet3Dynamics/shared/b3Inertia.h
 
 

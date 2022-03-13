@@ -14,7 +14,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-# unzip -qo ../bullet-$BULLET_VERSION.zip
+unzip -qo ../bullet-$BULLET_VERSION.zip
 cd bullet3-$BULLET_VERSION
 mkdir -p build
 cd build
