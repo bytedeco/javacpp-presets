@@ -50,7 +50,7 @@ public class btCPUVertexBufferDescriptor extends btVertexBufferDescriptor {
 	/**
 	 * Return the type of the vertex buffer descriptor.
 	 */
-	
+	public native @ByVal BufferTypes getBufferType();
 
 	/**
 	 * Return the base pointer in memory to the first vertex.

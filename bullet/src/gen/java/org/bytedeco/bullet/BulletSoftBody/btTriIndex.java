@@ -15,21 +15,21 @@ import org.bytedeco.bullet.BulletDynamics.*;
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
-
+  //for definition of MAX_NUM_PARTS_IN_BITS
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class DeformableBodyInplaceSolverIslandCallback extends MultiBodyInplaceSolverIslandCallback {
+public class btTriIndex extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeformableBodyInplaceSolverIslandCallback(Pointer p) { super(p); }
+    public btTriIndex(Pointer p) { super(p); }
 
-	public native btDeformableMultiBodyConstraintSolver m_deformableSolver(); public native DeformableBodyInplaceSolverIslandCallback m_deformableSolver(btDeformableMultiBodyConstraintSolver setter);
+	public native int m_PartIdTriangleIndex(); public native btTriIndex m_PartIdTriangleIndex(int setter);
+	public native btCollisionShape m_childShape(); public native btTriIndex m_childShape(btCollisionShape setter);
 
-	public DeformableBodyInplaceSolverIslandCallback(btDeformableMultiBodyConstraintSolver solver,
-												  btDispatcher dispatcher) { super((Pointer)null); allocate(solver, dispatcher); }
-	private native void allocate(btDeformableMultiBodyConstraintSolver solver,
-												  btDispatcher dispatcher);
+	public btTriIndex(int partId, int triangleIndex, btCollisionShape shape) { super((Pointer)null); allocate(partId, triangleIndex, shape); }
+	private native void allocate(int partId, int triangleIndex, btCollisionShape shape);
 
-	public native void processConstraints(int islandId/*=-1*/);
-	public native void processConstraints();
+	public native int getTriangleIndex();
+	public native int getPartId();
+	public native int getUid();
 }

@@ -24,7 +24,7 @@ public class btDeformableLagrangianForce extends Pointer {
     public btDeformableLagrangianForce(Pointer p) { super(p); }
 
 	public native @ByRef btSoftBodyArray m_softBodies(); public native btDeformableLagrangianForce m_softBodies(btSoftBodyArray setter);
-	
+	public native @Const btSoftBodyNodePointerArray m_nodes(); public native btDeformableLagrangianForce m_nodes(btSoftBodyNodePointerArray setter);
 
 	// add all forces
 	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array force);
@@ -58,7 +58,7 @@ public class btDeformableLagrangianForce extends Pointer {
 
 	public native void removeSoftBody(btSoftBody psb);
 
-	
+	public native void setIndices(@Const btSoftBodyNodePointerArray nodes);
 
 	// Calculate the incremental deformable generated from the input dx
 	public native @ByVal btMatrix3x3 Ds(int id0, int id1, int id2, int id3, @Cast("const btDeformableLagrangianForce::TVStack*") @ByRef btVector3Array dx);

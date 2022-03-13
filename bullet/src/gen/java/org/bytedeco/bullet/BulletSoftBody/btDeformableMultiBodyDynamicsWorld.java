@@ -22,7 +22,14 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableMultiBodyDynamicsWorld(Pointer p) { super(p); }
-
+ public static class btSolverCallback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    btSolverCallback(Pointer p) { super(p); }
+    protected btSolverCallback() { allocate(); }
+    private native void allocate();
+    public native void call(@Cast("btScalar") float time, btDeformableMultiBodyDynamicsWorld world);
+}
 	public btDeformableMultiBodyDynamicsWorld(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration, btDeformableBodySolver deformableBodySolver/*=0*/) { super((Pointer)null); allocate(dispatcher, pairCache, constraintSolver, collisionConfiguration, deformableBodySolver); }
 	private native void allocate(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration, btDeformableBodySolver deformableBodySolver/*=0*/);
 	public btDeformableMultiBodyDynamicsWorld(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration) { super((Pointer)null); allocate(dispatcher, pairCache, constraintSolver, collisionConfiguration); }
@@ -33,7 +40,7 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native void debugDrawWorld();
 
-	
+	public native void setSolverCallback(btSolverCallback cb);
 
 	public native btMultiBodyDynamicsWorld getMultiBodyDynamicsWorld();
 
@@ -73,7 +80,7 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native void performDeformableCollisionDetection();
 
-	
+	public native void solveMultiBodyConstraints();
 
 	public native void solveContactConstraints();
 

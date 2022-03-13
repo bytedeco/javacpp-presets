@@ -18,18 +18,15 @@ import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class DeformableBodyInplaceSolverIslandCallback extends MultiBodyInplaceSolverIslandCallback {
+public class MassPreconditioner extends Preconditioner {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DeformableBodyInplaceSolverIslandCallback(Pointer p) { super(p); }
+    public MassPreconditioner(Pointer p) { super(p); }
 
-	public native btDeformableMultiBodyConstraintSolver m_deformableSolver(); public native DeformableBodyInplaceSolverIslandCallback m_deformableSolver(btDeformableMultiBodyConstraintSolver setter);
+	public MassPreconditioner(@Const @ByRef btSoftBodyArray softBodies) { super((Pointer)null); allocate(softBodies); }
+	private native void allocate(@Const @ByRef btSoftBodyArray softBodies);
 
-	public DeformableBodyInplaceSolverIslandCallback(btDeformableMultiBodyConstraintSolver solver,
-												  btDispatcher dispatcher) { super((Pointer)null); allocate(solver, dispatcher); }
-	private native void allocate(btDeformableMultiBodyConstraintSolver solver,
-												  btDispatcher dispatcher);
+	public native void reinitialize(@Cast("bool") boolean nodeUpdated);
 
-	public native void processConstraints(int islandId/*=-1*/);
-	public native void processConstraints();
+	public native @Name("operator ()") void apply(@Const @ByRef btVector3Array x, @ByRef btVector3Array b);
 }

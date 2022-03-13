@@ -59,6 +59,45 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 // #ifdef BT_USE_PLACEMENT_NEW
 // #include <new>
+// Targeting ../BulletSoftBody/LagrangeMultiplierArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceNodeContactConstraintArrayArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceRigidContactConstraintArrayArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeAnchorConstraintArrayArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeRigidContactConstraintArrayArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableStaticConstraintArrayArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableContactConstraintArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceNodeContactConstraintArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceRigidContactConstraintArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableLagrangianForceArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeAnchorConstraintArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeRigidContactConstraintArray.java
+
+
+// Targeting ../BulletSoftBody/btDeformableStaticConstraintArray.java
+
+
 // Targeting ../BulletSoftBody/btSoftBodyArray.java
 
 
@@ -66,6 +105,18 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 
 // Targeting ../BulletSoftBody/btSoftBodyClusterArray.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyDeformableFaceNodeContactArray.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyDeformableFaceRigidContactArray.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyDeformableNodeRigidAnchorArray.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyDeformableNodeRigidContactArray.java
 
 
 // Targeting ../BulletSoftBody/btSoftBodyFaceArray.java
@@ -78,6 +129,9 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 
 
 // Targeting ../BulletSoftBody/btSoftBodyMaterialArray.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyNodePointerArray.java
 
 
 // Targeting ../BulletSoftBody/btSoftBodyNodeArray.java
@@ -101,8 +155,175 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../BulletSoftBody/btSoftBodyTetraArray.java
 
 
+// Targeting ../BulletSoftBody/btSoftBodyTetraSratchArray.java
+
+
+// Targeting ../BulletSoftBody/btSparseSdf3CellArray.java
+
+
 
 // #endif  //BT_OBJECT_ARRAY__
+
+
+// Parsed from BulletSoftBody/btSoftBody.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**btSoftBody implementation by Nathanael Presson */
+
+// #ifndef _BT_SOFT_BODY_H
+// #define _BT_SOFT_BODY_H
+
+// #include "LinearMath/btAlignedObjectArray.h"
+// #include "LinearMath/btTransform.h"
+// #include "LinearMath/btIDebugDraw.h"
+// #include "LinearMath/btVector3.h"
+// #include "BulletDynamics/Dynamics/btRigidBody.h"
+
+// #include "BulletCollision/CollisionShapes/btConcaveShape.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// #include "btSparseSDF.h"
+// #include "BulletCollision/BroadphaseCollision/btDbvt.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
+//#ifdef BT_USE_DOUBLE_PRECISION
+//#define btRigidBodyData	btRigidBodyDoubleData
+//#define btRigidBodyDataName	"btRigidBodyDoubleData"
+//#else
+// #define btSoftBodyData btSoftBodyFloatData
+public static final String btSoftBodyDataName = "btSoftBodyFloatData";
+@MemberGetter public static native @Cast("const btScalar") float OVERLAP_REDUCTION_FACTOR();
+public static final float OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
+public static native @Cast("unsigned long") long seed(); public static native void seed(long setter);
+//#endif //BT_USE_DOUBLE_PRECISION
+// Targeting ../BulletSoftBody/btSoftBodyWorldInfo.java
+
+
+// Targeting ../BulletSoftBody/btSoftBody.java
+
+
+
+// #endif  //_BT_SOFT_BODY_H
+
+
+// Parsed from BulletSoftBody/btCGProjection.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_CG_PROJECTION_H
+// #define BT_CG_PROJECTION_H
+
+// #include "btSoftBody.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
+// Targeting ../BulletSoftBody/DeformableContactConstraint.java
+
+
+// Targeting ../BulletSoftBody/btCGProjection.java
+
+
+
+// #endif /* btCGProjection_h */
+
+
+// Parsed from BulletSoftBody/btConjugateGradient.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_CONJUGATE_GRADIENT_H
+// #define BT_CONJUGATE_GRADIENT_H
+// #include "btKrylovSolver.h"
+// #endif /* btConjugateGradient_h */
+
+
+// Parsed from BulletSoftBody/btConjugateResidual.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_CONJUGATE_RESIDUAL_H
+// #define BT_CONJUGATE_RESIDUAL_H
+// #include "btKrylovSolver.h"
+// #endif /* btConjugateResidual_h */
+
+
+// Parsed from BulletSoftBody/btDefaultSoftBodySolver.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_BODY_DEFAULT_SOLVER_H
+// #define BT_SOFT_BODY_DEFAULT_SOLVER_H
+
+// #include "BulletSoftBody/btSoftBodySolvers.h"
+// #include "btSoftBodySolverVertexBuffer.h"
+// Targeting ../BulletSoftBody/btDefaultSoftBodySolver.java
+
+
+
+// #endif  // #ifndef BT_ACCELERATED_SOFT_BODY_CPU_SOLVER_H
 
 
 // Parsed from BulletSoftBody/btDeformableBackwardEulerObjective.h
@@ -177,6 +398,87 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // #endif /* btDeformableBodySolver_h */
 
 
+// Parsed from BulletSoftBody/btDeformableContactConstraint.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_DEFORMABLE_CONTACT_CONSTRAINT_H
+// #define BT_DEFORMABLE_CONTACT_CONSTRAINT_H
+// #include "btSoftBody.h"
+// Targeting ../BulletSoftBody/btDeformableContactConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableStaticConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeAnchorConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableRigidContactConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableNodeRigidContactConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceRigidContactConstraint.java
+
+
+// Targeting ../BulletSoftBody/btDeformableFaceNodeContactConstraint.java
+
+
+// #endif /* BT_DEFORMABLE_CONTACT_CONSTRAINT_H */
+
+
+// Parsed from BulletSoftBody/btDeformableContactProjection.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_CONTACT_PROJECTION_H
+// #define BT_CONTACT_PROJECTION_H
+// #include "btCGProjection.h"
+// #include "btSoftBody.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
+// #include "btDeformableContactConstraint.h"
+// #include "LinearMath/btHashMap.h"
+// #include "LinearMath/btReducedVector.h"
+// #include "LinearMath/btModifiedGramSchmidt.h"
+// #include <vector>
+// Targeting ../BulletSoftBody/LagrangeMultiplier.java
+
+
+// Targeting ../BulletSoftBody/btDeformableContactProjection.java
+
+
+// #endif /* btDeformableContactProjection_h */
+
+
 // Parsed from BulletSoftBody/btDeformableLagrangianForce.h
 
 /*
@@ -215,6 +517,150 @@ public static native double randomDouble(double low, double high);
 
 
 // #endif /* BT_DEFORMABLE_LAGRANGIAN_FORCE */
+
+
+// Parsed from BulletSoftBody/btDeformableCorotatedForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_COROTATED_H
+// #define BT_COROTATED_H
+
+// #include "btDeformableLagrangianForce.h"
+// #include "LinearMath/btPolarDecomposition.h"
+
+public static native int PolarDecomposition(@Const @ByRef btMatrix3x3 m, @ByRef btMatrix3x3 q, @ByRef btMatrix3x3 s);
+// Targeting ../BulletSoftBody/btDeformableCorotatedForce.java
+
+
+
+// #endif /* btCorotated_h */
+
+
+// Parsed from BulletSoftBody/btDeformableGravityForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_DEFORMABLE_GRAVITY_FORCE_H
+// #define BT_DEFORMABLE_GRAVITY_FORCE_H
+
+// #include "btDeformableLagrangianForce.h"
+// Targeting ../BulletSoftBody/btDeformableGravityForce.java
+
+
+// #endif /* BT_DEFORMABLE_GRAVITY_FORCE_H */
+
+
+// Parsed from BulletSoftBody/btDeformableLinearElasticityForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_LINEAR_ELASTICITY_H
+// #define BT_LINEAR_ELASTICITY_H
+
+// #include "btDeformableLagrangianForce.h"
+// #include "LinearMath/btQuickprof.h"
+// #include "btSoftBodyInternals.h"
+public static final double TETRA_FLAT_THRESHOLD = 0.01;
+// Targeting ../BulletSoftBody/btDeformableLinearElasticityForce.java
+
+
+// #endif /* BT_LINEAR_ELASTICITY_H */
+
+
+// Parsed from BulletSoftBody/btDeformableMassSpringForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_MASS_SPRING_H
+// #define BT_MASS_SPRING_H
+
+// #include "btDeformableLagrangianForce.h"
+// Targeting ../BulletSoftBody/btDeformableMassSpringForce.java
+
+
+
+// #endif /* btMassSpring_h */
+
+
+// Parsed from BulletSoftBody/btDeformableMousePickingForce.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_MOUSE_PICKING_FORCE_H
+// #define BT_MOUSE_PICKING_FORCE_H
+
+// #include "btDeformableLagrangianForce.h"
+// Targeting ../BulletSoftBody/btDeformableMousePickingForce.java
+
+
+
+// #endif /* btMassSpring_h */
 
 
 // Parsed from BulletSoftBody/btDeformableMultiBodyConstraintSolver.h
@@ -274,9 +720,6 @@ public static native double randomDouble(double low, double high);
 // #include "btSoftBodyHelpers.h"
 // #include "BulletCollision/CollisionDispatch/btSimulationIslandManager.h"
 // #include <functional>
-// Targeting ../BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.java
-
-
 // Targeting ../BulletSoftBody/btDeformableMultiBodyDynamicsWorld.java
 
 
@@ -284,7 +727,144 @@ public static native double randomDouble(double low, double high);
 // #endif  //BT_DEFORMABLE_MULTIBODY_DYNAMICS_WORLD_H
 
 
-// Parsed from BulletSoftBody/btSoftBody.h
+// Parsed from BulletSoftBody/btDeformableNeoHookeanForce.h
+
+/*
+Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2019 Google Inc. http://bulletphysics.org
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_NEOHOOKEAN_H
+// #define BT_NEOHOOKEAN_H
+
+// #include "btDeformableLagrangianForce.h"
+// #include "LinearMath/btQuickprof.h"
+// #include "LinearMath/btImplicitQRSVD.h"
+// Targeting ../BulletSoftBody/btDeformableNeoHookeanForce.java
+
+
+// #endif /* BT_NEOHOOKEAN_H */
+
+
+// Parsed from BulletSoftBody/btKrylovSolver.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_KRYLOV_SOLVER_H
+// #define BT_KRYLOV_SOLVER_H
+// #include <iostream>
+// #include <cmath>
+// #include <limits>
+// #include <LinearMath/btAlignedObjectArray.h>
+// #include <LinearMath/btVector3.h>
+// #include <LinearMath/btScalar.h>
+// #include "LinearMath/btQuickprof.h"
+// #endif /* BT_KRYLOV_SOLVER_H */
+
+
+// Parsed from BulletSoftBody/btPreconditioner.h
+
+/*
+ Written by Xuchen Han <xuchenhan2015@u.northwestern.edu>
+ 
+ Bullet Continuous Collision Detection and Physics Library
+ Copyright (c) 2019 Google Inc. http://bulletphysics.org
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from the use of this software.
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it freely,
+ subject to the following restrictions:
+ 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+ */
+
+// #ifndef BT_PRECONDITIONER_H
+// #define BT_PRECONDITIONER_H
+// Targeting ../BulletSoftBody/Preconditioner.java
+
+
+// Targeting ../BulletSoftBody/DefaultPreconditioner.java
+
+
+// Targeting ../BulletSoftBody/MassPreconditioner.java
+
+
+// Targeting ../BulletSoftBody/KKTPreconditioner.java
+
+
+
+// #endif /* BT_PRECONDITIONER_H */
+
+
+// Parsed from BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_BODY_CONCAVE_COLLISION_ALGORITHM_H
+// #define BT_SOFT_BODY_CONCAVE_COLLISION_ALGORITHM_H
+
+// #include "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h"
+// #include "BulletCollision/BroadphaseCollision/btDispatcher.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseInterface.h"
+// #include "BulletCollision/CollisionShapes/btTriangleCallback.h"
+// #include "BulletCollision/NarrowPhaseCollision/btPersistentManifold.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+
+// #include "LinearMath/btHashMap.h"
+
+// #include "BulletCollision/BroadphaseCollision/btQuantizedBvh.h"
+// Targeting ../BulletSoftBody/btTriIndex.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyTriangleCallback.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.java
+
+
+
+// #endif  //BT_SOFT_BODY_CONCAVE_COLLISION_ALGORITHM_H
+
+
+// Parsed from BulletSoftBody/btSoftBodyData.h
 
 /*
 Bullet Continuous Collision Detection and Physics Library
@@ -300,41 +880,53 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
-/**btSoftBody implementation by Nathanael Presson */
 
-// #ifndef _BT_SOFT_BODY_H
-// #define _BT_SOFT_BODY_H
+// #ifndef BT_SOFTBODY_FLOAT_DATA
+// #define BT_SOFTBODY_FLOAT_DATA
 
-// #include "LinearMath/btAlignedObjectArray.h"
-// #include "LinearMath/btTransform.h"
-// #include "LinearMath/btIDebugDraw.h"
-// #include "LinearMath/btVector3.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 // #include "BulletDynamics/Dynamics/btRigidBody.h"
-
-// #include "BulletCollision/CollisionShapes/btConcaveShape.h"
-// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
-// #include "btSparseSDF.h"
-// #include "BulletCollision/BroadphaseCollision/btDbvt.h"
-// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
-// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
-//#ifdef BT_USE_DOUBLE_PRECISION
-//#define btRigidBodyData	btRigidBodyDoubleData
-//#define btRigidBodyDataName	"btRigidBodyDoubleData"
-//#else
-// #define btSoftBodyData btSoftBodyFloatData
-public static final String btSoftBodyDataName = "btSoftBodyFloatData";
-@MemberGetter public static native @Cast("const btScalar") float OVERLAP_REDUCTION_FACTOR();
-public static final float OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
-public static native @Cast("unsigned long") long seed(); public static native void seed(long setter);
-//#endif //BT_USE_DOUBLE_PRECISION
-// Targeting ../BulletSoftBody/btSoftBodyWorldInfo.java
+// Targeting ../BulletSoftBody/SoftBodyMaterialData.java
 
 
-// Targeting ../BulletSoftBody/btSoftBody.java
+// Targeting ../BulletSoftBody/SoftBodyNodeData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyLinkData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyFaceData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyTetraData.java
+
+
+// Targeting ../BulletSoftBody/SoftRigidAnchorData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyConfigData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyPoseData.java
+
+
+// Targeting ../BulletSoftBody/SoftBodyClusterData.java
 
 
 
-// #endif  //_BT_SOFT_BODY_H
+/** enum btSoftJointBodyType */
+public static final int
+	BT_JOINT_SOFT_BODY_CLUSTER = 1,
+	BT_JOINT_RIGID_BODY = 2,
+	BT_JOINT_COLLISION_OBJECT = 3;
+// Targeting ../BulletSoftBody/btSoftBodyJointData.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyFloatData.java
+
+
+
+// #endif  //BT_SOFTBODY_FLOAT_DATA
 
 
 // Parsed from BulletSoftBody/btSoftBodyHelpers.h
@@ -370,6 +962,305 @@ subject to the following restrictions:
 // #endif  //BT_SOFT_BODY_HELPERS_H
 
 
+// Parsed from BulletSoftBody/btSoftBodyInternals.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+/**btSoftBody implementation by Nathanael Presson */
+
+// #ifndef _BT_SOFT_BODY_INTERNALS_H
+// #define _BT_SOFT_BODY_INTERNALS_H
+
+// #include "btSoftBody.h"
+// #include "LinearMath/btQuickprof.h"
+// #include "LinearMath/btPolarDecomposition.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseInterface.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
+// #include "BulletCollision/CollisionShapes/btConvexInternalShape.h"
+// #include "BulletCollision/NarrowPhaseCollision/btGjkEpa2.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyLinkCollider.h"
+// #include "BulletDynamics/Featherstone/btMultiBodyConstraint.h"
+// #include <string.h>  //for memset
+// #include <cmath>
+// #include "poly34.h"
+
+// Given a multibody link, a contact point and a contact direction, fill in the jacobian data needed to calculate the velocity change given an impulse in the contact direction
+public static native void findJacobian(@Const btMultiBodyLinkCollider multibodyLinkCol,
+										   @ByRef btMultiBodyJacobianData jacobianData,
+										   @Const @ByRef btVector3 contact_point,
+										   @Const @ByRef btVector3 dir);
+public static native @ByVal btVector3 generateUnitOrthogonalVector(@Const @ByRef btVector3 u);
+
+public static native @Cast("bool") boolean proximityTest(@Const @ByRef btVector3 x1, @Const @ByRef btVector3 x2, @Const @ByRef btVector3 x3, @Const @ByRef btVector3 x4, @Const @ByRef btVector3 normal, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
+@MemberGetter public static native int KDOP_COUNT();
+public static final int KDOP_COUNT = KDOP_COUNT();
+public static native @ByRef btVector3 dop(int i); public static native void dop(int i, btVector3 setter);
+@MemberGetter public static native btVector3 dop();
+
+public static native int getSign(@Const @ByRef btVector3 n, @Const @ByRef btVector3 x);
+
+public static native @Cast("bool") boolean hasSeparatingPlane(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+
+public static native @Cast("bool") boolean nearZero(@Cast("const btScalar") float a);
+public static native @Cast("bool") boolean sameSign(@Cast("const btScalar") float a, @Cast("const btScalar") float b);
+public static native @Cast("bool") boolean diffSign(@Cast("const btScalar") float a, @Cast("const btScalar") float b);
+public static native @Cast("btScalar") float evaluateBezier2(@Cast("const btScalar") float p0, @Cast("const btScalar") float p1, @Cast("const btScalar") float p2, @Cast("const btScalar") float t, @Cast("const btScalar") float s);
+public static native @Cast("btScalar") float evaluateBezier(@Cast("const btScalar") float p0, @Cast("const btScalar") float p1, @Cast("const btScalar") float p2, @Cast("const btScalar") float p3, @Cast("const btScalar") float t, @Cast("const btScalar") float s);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef FloatPointer lt0, @Cast("btScalar*") @ByRef FloatPointer lt1);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef FloatBuffer lt0, @Cast("btScalar*") @ByRef FloatBuffer lt1);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef float[] lt0, @Cast("btScalar*") @ByRef float[] lt1);
+
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatPointer k0, @Cast("btScalar*") @ByRef FloatPointer k1, @Cast("btScalar*") @ByRef FloatPointer k2, @Cast("btScalar*") @ByRef FloatPointer k3);
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatBuffer k0, @Cast("btScalar*") @ByRef FloatBuffer k1, @Cast("btScalar*") @ByRef FloatBuffer k2, @Cast("btScalar*") @ByRef FloatBuffer k3);
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef float[] k0, @Cast("btScalar*") @ByRef float[] k1, @Cast("btScalar*") @ByRef float[] k2, @Cast("btScalar*") @ByRef float[] k3);
+
+public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef FloatPointer u0, @Cast("btScalar*") @ByRef FloatPointer u1, @Cast("btScalar*") @ByRef FloatPointer v0, @Cast("btScalar*") @ByRef FloatPointer v1);
+public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef FloatBuffer u0, @Cast("btScalar*") @ByRef FloatBuffer u1, @Cast("btScalar*") @ByRef FloatBuffer v0, @Cast("btScalar*") @ByRef FloatBuffer v1);
+public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef float[] u0, @Cast("btScalar*") @ByRef float[] u1, @Cast("btScalar*") @ByRef float[] v0, @Cast("btScalar*") @ByRef float[] v1);
+
+public static native @Cast("bool") boolean rootFindingLemma(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3);
+
+public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatPointer j0, @Cast("btScalar*") @ByRef FloatPointer j1, @Cast("btScalar*") @ByRef FloatPointer j2);
+public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatBuffer j0, @Cast("btScalar*") @ByRef FloatBuffer j1, @Cast("btScalar*") @ByRef FloatBuffer j2);
+public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef float[] j0, @Cast("btScalar*") @ByRef float[] j1, @Cast("btScalar*") @ByRef float[] j2);
+
+public static native @Cast("bool") boolean signDetermination1Internal(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float u0, @Cast("const btScalar") float u1, @Cast("const btScalar") float v0, @Cast("const btScalar") float v1);
+
+public static native @Cast("bool") boolean signDetermination2Internal(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("const btScalar") float u0, @Cast("const btScalar") float u1, @Cast("const btScalar") float v0, @Cast("const btScalar") float v1);
+
+public static native @Cast("bool") boolean signDetermination1(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+
+public static native @Cast("bool") boolean signDetermination2(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+
+public static native @Cast("bool") boolean coplanarAndInsideTest(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+public static native @Cast("bool") boolean conservativeCulling(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float mrg);
+
+public static native @Cast("bool") boolean bernsteinVFTest(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float mrg, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+
+public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef FloatPointer k10, @Cast("btScalar*") @ByRef FloatPointer k20, @Cast("btScalar*") @ByRef FloatPointer k30, @Cast("btScalar*") @ByRef FloatPointer k21, @Cast("btScalar*") @ByRef FloatPointer k12);
+public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef FloatBuffer k10, @Cast("btScalar*") @ByRef FloatBuffer k20, @Cast("btScalar*") @ByRef FloatBuffer k30, @Cast("btScalar*") @ByRef FloatBuffer k21, @Cast("btScalar*") @ByRef FloatBuffer k12);
+public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef float[] k10, @Cast("btScalar*") @ByRef float[] k20, @Cast("btScalar*") @ByRef float[] k30, @Cast("btScalar*") @ByRef float[] k21, @Cast("btScalar*") @ByRef float[] k12);
+public static native @Cast("bool") boolean bernsteinVFTest(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg);
+
+public static native @Cast("bool") boolean continuousCollisionDetection(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
+public static native @Cast("bool") boolean bernsteinCCD(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
+
+//
+// btSymMatrix
+//
+// Targeting ../BulletSoftBody/btSoftBodyCollisionShape.java
+
+
+// Targeting ../BulletSoftBody/btSoftClusterCollisionShape.java
+
+
+
+//
+// Inline's
+//
+
+//
+//
+//
+//
+//
+//
+public static native @ByVal btMatrix3x3 Lerp(@Const @ByRef btMatrix3x3 a,
+							   @Const @ByRef btMatrix3x3 b,
+							   @Cast("btScalar") float t);
+//
+public static native @ByVal btVector3 Clamp(@Const @ByRef btVector3 v, @Cast("btScalar") float maxlength);
+//
+//
+//
+//
+//
+//
+public static native @Cast("btScalar") float ClusterMetric(@Const @ByRef btVector3 x, @Const @ByRef btVector3 y);
+//
+public static native @ByVal btMatrix3x3 ScaleAlongAxis(@Const @ByRef btVector3 a, @Cast("btScalar") float s);
+//
+public static native @ByVal btMatrix3x3 Cross(@Const @ByRef btVector3 v);
+//
+public static native @ByVal btMatrix3x3 Diagonal(@Cast("btScalar") float x);
+
+public static native @ByVal btMatrix3x3 Diagonal(@Const @ByRef btVector3 v);
+
+public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") FloatPointer a, @Cast("const btScalar*") FloatPointer b, int ndof);
+public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") FloatBuffer a, @Cast("const btScalar*") FloatBuffer b, int ndof);
+public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") float[] a, @Cast("const btScalar*") float[] b, int ndof);
+
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") FloatPointer v1, @Cast("const btScalar*") FloatPointer v2, @Cast("const btScalar*") FloatPointer v3,
+									   @Cast("const btScalar*") FloatPointer u1, @Cast("const btScalar*") FloatPointer u2, @Cast("const btScalar*") FloatPointer u3, int ndof);
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") FloatBuffer v1, @Cast("const btScalar*") FloatBuffer v2, @Cast("const btScalar*") FloatBuffer v3,
+									   @Cast("const btScalar*") FloatBuffer u1, @Cast("const btScalar*") FloatBuffer u2, @Cast("const btScalar*") FloatBuffer u3, int ndof);
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") float[] v1, @Cast("const btScalar*") float[] v2, @Cast("const btScalar*") float[] v3,
+									   @Cast("const btScalar*") float[] u1, @Cast("const btScalar*") float[] u2, @Cast("const btScalar*") float[] u3, int ndof);
+
+public static native @ByVal btMatrix3x3 OuterProduct(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
+
+//
+public static native @ByVal btMatrix3x3 Add(@Const @ByRef btMatrix3x3 a,
+							  @Const @ByRef btMatrix3x3 b);
+//
+public static native @ByVal btMatrix3x3 Sub(@Const @ByRef btMatrix3x3 a,
+							  @Const @ByRef btMatrix3x3 b);
+//
+public static native @ByVal btMatrix3x3 Mul(@Const @ByRef btMatrix3x3 a,
+							  @Cast("btScalar") float b);
+//
+public static native void Orthogonalize(@ByRef btMatrix3x3 m);
+//
+public static native @ByVal btMatrix3x3 MassMatrix(@Cast("btScalar") float im, @Const @ByRef btMatrix3x3 iwi, @Const @ByRef btVector3 r);
+
+//
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float dt,
+										@Cast("btScalar") float ima,
+										@Cast("btScalar") float imb,
+										@Const @ByRef btMatrix3x3 iwi,
+										@Const @ByRef btVector3 r);
+
+//
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float dt,
+										@Const @ByRef btMatrix3x3 effective_mass_inv,
+										@Cast("btScalar") float imb,
+										@Const @ByRef btMatrix3x3 iwi,
+										@Const @ByRef btVector3 r);
+
+//
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float ima, @Const @ByRef btMatrix3x3 iia, @Const @ByRef btVector3 ra,
+										@Cast("btScalar") float imb, @Const @ByRef btMatrix3x3 iib, @Const @ByRef btVector3 rb);
+
+//
+public static native @ByVal btMatrix3x3 AngularImpulseMatrix(@Const @ByRef btMatrix3x3 iia,
+											   @Const @ByRef btMatrix3x3 iib);
+
+//
+public static native @ByVal btVector3 ProjectOnAxis(@Const @ByRef btVector3 v,
+									  @Const @ByRef btVector3 a);
+//
+public static native @ByVal btVector3 ProjectOnPlane(@Const @ByRef btVector3 v,
+									   @Const @ByRef btVector3 a);
+
+//
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef FloatPointer sqd);
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef FloatBuffer sqd);
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef float[] sqd);
+//
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @Const @ByRef btVector3 c,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef FloatPointer sqd);
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @Const @ByRef btVector3 c,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef FloatBuffer sqd);
+public static native void ProjectOrigin(@Const @ByRef btVector3 a,
+								 @Const @ByRef btVector3 b,
+								 @Const @ByRef btVector3 c,
+								 @ByRef btVector3 prj,
+								 @Cast("btScalar*") @ByRef float[] sqd);
+
+//
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef FloatPointer t);
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef FloatBuffer t);
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef float[] t);
+
+public static native @Cast("bool") boolean lineIntersectsTriangle(@Const @ByRef btVector3 rayStart, @Const @ByRef btVector3 rayEnd, @Const @ByRef btVector3 p1, @Const @ByRef btVector3 p2, @Const @ByRef btVector3 p3, @ByRef btVector3 sect, @ByRef btVector3 normal);
+
+//
+//
+public static native @ByVal btVector3 BaryCoord(@Const @ByRef btVector3 a,
+								  @Const @ByRef btVector3 b,
+								  @Const @ByRef btVector3 c,
+								  @Const @ByRef btVector3 p);
+
+//
+public static native @Cast("btScalar") float ImplicitSolve(btSoftBody.ImplicitFn fn,
+									 @Const @ByRef btVector3 a,
+									 @Const @ByRef btVector3 b,
+									 @Cast("const btScalar") float accuracy,
+									 int maxiterations/*=256*/);
+public static native @Cast("btScalar") float ImplicitSolve(btSoftBody.ImplicitFn fn,
+									 @Const @ByRef btVector3 a,
+									 @Const @ByRef btVector3 b,
+									 @Cast("const btScalar") float accuracy);
+
+public static native void EvaluateMedium(@Const btSoftBodyWorldInfo wfi,
+								  @Const @ByRef btVector3 x,
+								  @ByRef btSoftBody.sMedium medium);
+
+//
+public static native @ByVal btVector3 NormalizeAny(@Const @ByRef btVector3 v);
+
+//
+public static native @ByVal @Cast("btDbvtVolume*") btDbvtAabbMm VolumeOf(@Const @ByRef btSoftBody.Face f,
+									@Cast("btScalar") float margin);
+
+//
+public static native @ByVal btVector3 CenterOf(@Const @ByRef btSoftBody.Face f);
+
+//
+public static native @Cast("btScalar") float AreaOf(@Const @ByRef btVector3 x0,
+							  @Const @ByRef btVector3 x1,
+							  @Const @ByRef btVector3 x2);
+
+//
+public static native @Cast("btScalar") float VolumeOf(@Const @ByRef btVector3 x0,
+								@Const @ByRef btVector3 x1,
+								@Const @ByRef btVector3 x2,
+								@Const @ByRef btVector3 x3);
+
+//
+
+//
+public static native void ApplyClampedForce(@ByRef btSoftBody.Node n,
+									 @Const @ByRef btVector3 f,
+									 @Cast("btScalar") float dt);
+
+//
+public static native int MatchEdge(@Const btSoftBody.Node a,
+							@Const btSoftBody.Node b,
+							@Const btSoftBody.Node ma,
+							@Const btSoftBody.Node mb);
+// Targeting ../BulletSoftBody/btEigen.java
+
+
+
+//
+// Polar decomposition,
+// "Computing the Polar Decomposition with Applications", Nicholas J. Higham, 1986.
+//
+public static native int PolarDecompose(@Const @ByRef btMatrix3x3 m, @ByRef btMatrix3x3 q, @ByRef btMatrix3x3 s);
+// Targeting ../BulletSoftBody/btSoftColliders.java
+
+
+// #endif  //_BT_SOFT_BODY_INTERNALS_H
+
+
 // Parsed from BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h
 
 /*
@@ -396,6 +1287,46 @@ subject to the following restrictions:
 
 
 // #endif  //BT_SOFTBODY_RIGIDBODY_COLLISION_CONFIGURATION
+
+
+// Parsed from BulletSoftBody/btSoftBodySolvers.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_BODY_SOLVERS_H
+// #define BT_SOFT_BODY_SOLVERS_H
+
+// #include "BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h"
+// Targeting ../BulletSoftBody/btSoftBodyTriangleData.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyLinkData.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodyVertexData.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodySolver.java
+
+
+// Targeting ../BulletSoftBody/btSoftBodySolverOutput.java
+
+
+
+// #endif  // #ifndef BT_SOFT_BODY_SOLVERS_H
 
 
 // Parsed from BulletSoftBody/btSoftBodySolverVertexBuffer.h
@@ -425,37 +1356,6 @@ subject to the following restrictions:
 
 
 // #endif  // #ifndef BT_SOFT_BODY_SOLVER_VERTEX_BUFFER_H
-
-
-// Parsed from BulletSoftBody/btSoftBodySolvers.h
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-// #ifndef BT_SOFT_BODY_SOLVERS_H
-// #define BT_SOFT_BODY_SOLVERS_H
-
-// #include "BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h"
-// Targeting ../BulletSoftBody/btSoftBodySolver.java
-
-
-// Targeting ../BulletSoftBody/btSoftBodySolverOutput.java
-
-
-
-// #endif  // #ifndef BT_SOFT_BODY_SOLVERS_H
 
 
 // Parsed from BulletSoftBody/btSoftMultiBodyDynamicsWorld.h
@@ -490,6 +1390,39 @@ subject to the following restrictions:
 // #endif  //BT_SOFT_MULTIBODY_DYNAMICS_WORLD_H
 
 
+// Parsed from BulletSoftBody/btSoftRigidCollisionAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_RIGID_COLLISION_ALGORITHM_H
+// #define BT_SOFT_RIGID_COLLISION_ALGORITHM_H
+
+// #include "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
+
+// #include "LinearMath/btVector3.h"
+// Targeting ../BulletSoftBody/btSoftRigidCollisionAlgorithm.java
+
+
+
+// #endif  //BT_SOFT_RIGID_COLLISION_ALGORITHM_H
+
+
 // Parsed from BulletSoftBody/btSoftRigidDynamicsWorld.h
 
 /*
@@ -517,6 +1450,37 @@ subject to the following restrictions:
 
 
 // #endif  //BT_SOFT_RIGID_DYNAMICS_WORLD_H
+
+
+// Parsed from BulletSoftBody/btSoftSoftCollisionAlgorithm.h
+
+/*
+Bullet Continuous Collision Detection and Physics Library
+Copyright (c) 2003-2006 Erwin Coumans  https://bulletphysics.org
+
+This software is provided 'as-is', without any express or implied warranty.
+In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, 
+including commercial applications, and to alter it and redistribute it freely, 
+subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+*/
+
+// #ifndef BT_SOFT_SOFT_COLLISION_ALGORITHM_H
+// #define BT_SOFT_SOFT_COLLISION_ALGORITHM_H
+
+// #include "BulletCollision/BroadphaseCollision/btCollisionAlgorithm.h"
+// #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
+// #include "BulletCollision/BroadphaseCollision/btDispatcher.h"
+// #include "BulletCollision/CollisionDispatch/btCollisionCreateFunc.h"
+// Targeting ../BulletSoftBody/btSoftSoftCollisionAlgorithm.java
+
+
+
+// #endif  //BT_SOFT_SOFT_COLLISION_ALGORITHM_H
 
 
 // Parsed from BulletSoftBody/btSparseSDF.h
@@ -553,11 +1517,29 @@ subject to the following restrictions:
 //
 public static native @Cast("unsigned int") int HsiehHash(@Cast("const char*") BytePointer data, int len);
 public static native @Cast("unsigned int") int HsiehHash(String data, int len);
-// Targeting ../BulletSoftBody/btSparseSdf_3.java
+// Targeting ../BulletSoftBody/btSparseSdf3.java
 
 
 
 // #endif  //BT_SPARSE_SDF_H
+
+
+// Parsed from BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.h
+
+//
+//  DeformableBodyInplaceSolverIslandCallback.h
+//  BulletSoftBody
+//
+//  Created by Xuchen Han on 12/16/19.
+//
+
+// #ifndef DeformableBodyInplaceSolverIslandCallback_h
+// #define DeformableBodyInplaceSolverIslandCallback_h
+// Targeting ../BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.java
+
+
+
+// #endif /* DeformableBodyInplaceSolverIslandCallback_h */
 
 
 }

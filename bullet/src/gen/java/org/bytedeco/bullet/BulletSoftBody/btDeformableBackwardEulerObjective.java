@@ -23,16 +23,16 @@ public class btDeformableBackwardEulerObjective extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableBackwardEulerObjective(Pointer p) { super(p); }
 
-	public native @Cast("btScalar") float m_dt(); public native btDeformableBackwardEulerObjective m_dt(float setter);
-	
-	public native @ByRef btSoftBodyArray m_softBodies(); public native btDeformableBackwardEulerObjective m_softBodies(btSoftBodyArray setter);
-	
-	
+	@MemberGetter public native @Cast("btScalar") float m_dt();
+	@MemberGetter public native @ByRef btDeformableLagrangianForceArray m_lf();
+	@MemberGetter public native @ByRef btSoftBodyArray m_softBodies();
+	@MemberGetter public native Preconditioner m_preconditioner();
+	@MemberGetter public native @ByRef btDeformableContactProjection m_projection();
 	@MemberGetter public native @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array m_backupVelocity();
-	
-	public native @Cast("bool") boolean m_implicit(); public native btDeformableBackwardEulerObjective m_implicit(boolean setter);
-	
-	
+	@MemberGetter public native @ByRef btSoftBodyNodePointerArray m_nodes();
+	@MemberGetter public native @Cast("bool") boolean m_implicit();
+	@MemberGetter public native MassPreconditioner m_massPreconditioner();
+	@MemberGetter public native KKTPreconditioner m_KKTPreconditioner();
 
 	public btDeformableBackwardEulerObjective(@ByRef btSoftBodyArray softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array backup_v) { super((Pointer)null); allocate(softBodies, backup_v); }
 	private native void allocate(@ByRef btSoftBodyArray softBodies, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array backup_v);
@@ -52,7 +52,7 @@ public class btDeformableBackwardEulerObjective extends Pointer {
 	public native @Cast("btScalar") float computeNorm(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array residual);
 
 	// compute one step of the solve (there is only one solve if the system is linear)
-	
+	public native void computeStep(@Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array dv, @Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array residual, @Cast("const btScalar") float dt);
 
 	// perform A*x = b
 	public native void multiply(@Cast("const btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array x, @Cast("btDeformableBackwardEulerObjective::TVStack*") @ByRef btVector3Array b);
@@ -83,7 +83,7 @@ public class btDeformableBackwardEulerObjective extends Pointer {
 	// reindex all the vertices
 	public native void updateId();
 
-	
+	public native @Const btSoftBodyNodePointerArray getIndices();
 
 	public native void setImplicit(@Cast("bool") boolean implicit);
 

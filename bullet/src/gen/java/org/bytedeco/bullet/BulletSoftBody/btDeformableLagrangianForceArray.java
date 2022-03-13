@@ -16,35 +16,35 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
-@Name("btAlignedObjectArray<btSoftBody*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
-public class btSoftBodyArray extends Pointer {
+@Name("btAlignedObjectArray<btDeformableLagrangianForce*>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
+public class btDeformableLagrangianForceArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public btSoftBodyArray(Pointer p) { super(p); }
+    public btDeformableLagrangianForceArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public btSoftBodyArray(long size) { super((Pointer)null); allocateArray(size); }
+    public btDeformableLagrangianForceArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public btSoftBodyArray position(long position) {
-        return (btSoftBodyArray)super.position(position);
+    @Override public btDeformableLagrangianForceArray position(long position) {
+        return (btDeformableLagrangianForceArray)super.position(position);
     }
-    @Override public btSoftBodyArray getPointer(long i) {
-        return new btSoftBodyArray((Pointer)this).offsetAddress(i);
+    @Override public btDeformableLagrangianForceArray getPointer(long i) {
+        return new btDeformableLagrangianForceArray((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") btSoftBodyArray put(@Const @ByRef btSoftBodyArray other);
-	public btSoftBodyArray() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") btDeformableLagrangianForceArray put(@Const @ByRef btDeformableLagrangianForceArray other);
+	public btDeformableLagrangianForceArray() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public btSoftBodyArray(@Const @ByRef btSoftBodyArray otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef btSoftBodyArray otherArray);
+	public btDeformableLagrangianForceArray(@Const @ByRef btDeformableLagrangianForceArray otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef btDeformableLagrangianForceArray otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByPtrRef btSoftBody at(int n);
+	public native @ByPtrRef btDeformableLagrangianForce at(int n);
 
-	public native @ByPtrRef @Name("operator []") btSoftBody get(int n);
+	public native @ByPtrRef @Name("operator []") btDeformableLagrangianForce get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -55,14 +55,14 @@ public class btSoftBodyArray extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @ByPtrRef btSoftBody fillData/*=btSoftBody*()*/);
+	public native void resize(int newsize, @ByPtrRef btDeformableLagrangianForce fillData/*=btDeformableLagrangianForce*()*/);
 	public native void resize(int newsize);
-	public native @ByPtrRef btSoftBody expandNonInitializing();
+	public native @ByPtrRef btDeformableLagrangianForce expandNonInitializing();
 
-	public native @ByPtrRef btSoftBody expand(@ByPtrRef btSoftBody fillValue/*=btSoftBody*()*/);
-	public native @ByPtrRef btSoftBody expand();
+	public native @ByPtrRef btDeformableLagrangianForce expand(@ByPtrRef btDeformableLagrangianForce fillValue/*=btDeformableLagrangianForce*()*/);
+	public native @ByPtrRef btDeformableLagrangianForce expand();
 
-	public native void push_back(@ByPtrRef btSoftBody _Val);
+	public native void push_back(@ByPtrRef btDeformableLagrangianForce _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -74,19 +74,19 @@ public class btSoftBodyArray extends Pointer {
 	public native void swap(int index0, int index1);
 
 	/**non-recursive binary search, assumes sorted array */
-	public native int findBinarySearch(@ByPtrRef btSoftBody key);
+	public native int findBinarySearch(@ByPtrRef btDeformableLagrangianForce key);
 
-	public native int findLinearSearch(@ByPtrRef btSoftBody key);
+	public native int findLinearSearch(@ByPtrRef btDeformableLagrangianForce key);
 
 	// If the key is not in the array, return -1 instead of 0,
 	// since 0 also means the first element in the array.
-	public native int findLinearSearch2(@ByPtrRef btSoftBody key);
+	public native int findLinearSearch2(@ByPtrRef btDeformableLagrangianForce key);
 
 	public native void removeAtIndex(int index);
-	public native void remove(@ByPtrRef btSoftBody key);
+	public native void remove(@ByPtrRef btDeformableLagrangianForce key);
 
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef btSoftBodyArray otherArray);
+	public native void copyFromArray(@Const @ByRef btDeformableLagrangianForceArray otherArray);
 }

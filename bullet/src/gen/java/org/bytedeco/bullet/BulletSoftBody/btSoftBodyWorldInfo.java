@@ -41,7 +41,7 @@ public class btSoftBodyWorldInfo extends Pointer {
 	public native btBroadphaseInterface m_broadphase(); public native btSoftBodyWorldInfo m_broadphase(btBroadphaseInterface setter);
 	public native btDispatcher m_dispatcher(); public native btSoftBodyWorldInfo m_dispatcher(btDispatcher setter);
 	public native @ByRef btVector3 m_gravity(); public native btSoftBodyWorldInfo m_gravity(btVector3 setter);
-	public native @ByRef btSparseSdf_3 m_sparsesdf(); public native btSoftBodyWorldInfo m_sparsesdf(btSparseSdf_3 setter);
+	public native @ByRef btSparseSdf3 m_sparsesdf(); public native btSoftBodyWorldInfo m_sparsesdf(btSparseSdf3 setter);
 
 	public btSoftBodyWorldInfo() { super((Pointer)null); allocate(); }
 	private native void allocate();

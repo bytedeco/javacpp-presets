@@ -23,11 +23,17 @@ public class btVertexBufferDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btVertexBufferDescriptor(Pointer p) { super(p); }
 
-	/** enum btVertexBufferDescriptor::BufferTypes */
-	public static final int
-		CPU_BUFFER = 0,
-		DX11_BUFFER = 1,
-		OPENGL_BUFFER = 2;
+	public enum BufferTypes {
+		CPU_BUFFER(0),
+		DX11_BUFFER(1),
+		OPENGL_BUFFER(2);
+
+	    public final int value;
+	    private BufferTypes(int v) { this.value = v; }
+	    private BufferTypes(BufferTypes e) { this.value = e.value; }
+	    public BufferTypes intern() { for (BufferTypes e : values()) if (e.value == value) return e; return this; }
+	    @Override public String toString() { return intern().name(); }
+	}
 
 	public native @Cast("bool") boolean hasVertexPositions();
 
@@ -36,7 +42,7 @@ public class btVertexBufferDescriptor extends Pointer {
 	/**
 	 * Return the type of the vertex buffer descriptor.
 	 */
-	public native @Cast("btVertexBufferDescriptor::BufferTypes") int getBufferType();
+	public native BufferTypes getBufferType();
 
 	/**
 	 * Return the vertex offset in floats from the base pointer.

@@ -804,6 +804,9 @@ subject to the following restrictions:
 // Targeting ../LinearMath/btHashMap_btHashPtr_voidPointer.java
 
 
+// Targeting ../LinearMath/btHashMap_btHashInt_btVector3Array.java
+
+
 
 // #endif  //BT_HASH_MAP_H
 

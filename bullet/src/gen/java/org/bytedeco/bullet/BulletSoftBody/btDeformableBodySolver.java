@@ -79,10 +79,11 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	public native @Cast("bool") boolean updateNodes();
 
 	// calculate the change in dv resulting from the momentum solve
-	
+	public native void computeStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual);
 
 	// calculate the change in dv resulting from the momentum solve when line search is turned on
-	
+	public native @Cast("btScalar") float computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual, @Cast("bool") boolean verbose/*=false*/);
+	public native @Cast("btScalar") float computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual);
 
 	public native void copySoftBodyToVertexBuffer(@Const btSoftBody softBody, btVertexBufferDescriptor vertexBuffer);
 
