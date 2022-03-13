@@ -14,7 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 
 @Opaque @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class GIM_BVH_TREE_NODE_ARRAY extends GIM_BVH_TREE_NODE_Array {
+public class GIM_BVH_TREE_NODE_ARRAY extends GIM_BVH_TREE_NODE_Array_ {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public GIM_BVH_TREE_NODE_ARRAY() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -14,7 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 
 @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class btContactArray extends GIM_CONTACT_Array {
+public class btContactArray extends GIM_CONTACT_Array_ {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btContactArray(Pointer p) { super(p); }

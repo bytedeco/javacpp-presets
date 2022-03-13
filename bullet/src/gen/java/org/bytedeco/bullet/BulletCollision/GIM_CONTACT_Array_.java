@@ -12,35 +12,35 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
-@Name("btAlignedObjectArray<GIM_BVH_TREE_NODE>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class GIM_BVH_TREE_NODE_Array extends Pointer {
+@Name("btAlignedObjectArray<GIM_CONTACT>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
+public class GIM_CONTACT_Array_ extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public GIM_BVH_TREE_NODE_Array(Pointer p) { super(p); }
+    public GIM_CONTACT_Array_(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GIM_BVH_TREE_NODE_Array(long size) { super((Pointer)null); allocateArray(size); }
+    public GIM_CONTACT_Array_(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public GIM_BVH_TREE_NODE_Array position(long position) {
-        return (GIM_BVH_TREE_NODE_Array)super.position(position);
+    @Override public GIM_CONTACT_Array_ position(long position) {
+        return (GIM_CONTACT_Array_)super.position(position);
     }
-    @Override public GIM_BVH_TREE_NODE_Array getPointer(long i) {
-        return new GIM_BVH_TREE_NODE_Array((Pointer)this).offsetAddress(i);
+    @Override public GIM_CONTACT_Array_ getPointer(long i) {
+        return new GIM_CONTACT_Array_((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") GIM_BVH_TREE_NODE_Array put(@Const @ByRef GIM_BVH_TREE_NODE_Array other);
-	public GIM_BVH_TREE_NODE_Array() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") GIM_CONTACT_Array_ put(@Const @ByRef GIM_CONTACT_Array_ other);
+	public GIM_CONTACT_Array_() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public GIM_BVH_TREE_NODE_Array(@Const @ByRef GIM_BVH_TREE_NODE_Array otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef GIM_BVH_TREE_NODE_Array otherArray);
+	public GIM_CONTACT_Array_(@Const @ByRef GIM_CONTACT_Array_ otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef GIM_CONTACT_Array_ otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
 
-	public native @ByRef GIM_BVH_TREE_NODE at(int n);
+	public native @ByRef GIM_CONTACT at(int n);
 
-	public native @ByRef @Name("operator []") GIM_BVH_TREE_NODE get(int n);
+	public native @ByRef @Name("operator []") GIM_CONTACT get(int n);
 
 	/**clear the array, deallocated memory. Generally it is better to use array.resize(0), to reduce performance overhead of run-time memory (de)allocations. */
 	public native void clear();
@@ -51,14 +51,14 @@ public class GIM_BVH_TREE_NODE_Array extends Pointer {
 	 * when the new number of elements is smaller, the destructor will be called, but memory will not be freed, to reduce performance overhead of run-time memory (de)allocations. */
 	public native void resizeNoInitialize(int newsize);
 
-	public native void resize(int newsize, @Const @ByRef(nullValue = "GIM_BVH_TREE_NODE()") GIM_BVH_TREE_NODE fillData);
+	public native void resize(int newsize, @Const @ByRef(nullValue = "GIM_CONTACT()") GIM_CONTACT fillData);
 	public native void resize(int newsize);
-	public native @ByRef GIM_BVH_TREE_NODE expandNonInitializing();
+	public native @ByRef GIM_CONTACT expandNonInitializing();
 
-	public native @ByRef GIM_BVH_TREE_NODE expand(@Const @ByRef(nullValue = "GIM_BVH_TREE_NODE()") GIM_BVH_TREE_NODE fillValue);
-	public native @ByRef GIM_BVH_TREE_NODE expand();
+	public native @ByRef GIM_CONTACT expand(@Const @ByRef(nullValue = "GIM_CONTACT()") GIM_CONTACT fillValue);
+	public native @ByRef GIM_CONTACT expand();
 
-	public native void push_back(@Const @ByRef GIM_BVH_TREE_NODE _Val);
+	public native void push_back(@Const @ByRef GIM_CONTACT _Val);
 
 	/** return the pre-allocated (reserved) elements, this is at least as large as the total number of elements,see size() and reserve() */
 	public native @Name("capacity") int _capacity();
@@ -84,5 +84,5 @@ public class GIM_BVH_TREE_NODE_Array extends Pointer {
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef GIM_BVH_TREE_NODE_Array otherArray);
+	public native void copyFromArray(@Const @ByRef GIM_CONTACT_Array_ otherArray);
 }

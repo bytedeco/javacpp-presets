@@ -15,7 +15,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 /** A pairset array */
 @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class btPairSet extends GIM_PAIR_Array {
+public class btPairSet extends GIM_PAIR_Array_ {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btPairSet(Pointer p) { super(p); }

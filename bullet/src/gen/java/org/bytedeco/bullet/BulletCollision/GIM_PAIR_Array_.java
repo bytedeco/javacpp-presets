@@ -13,27 +13,27 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
 @Name("btAlignedObjectArray<GIM_PAIR>") @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)
-public class GIM_PAIR_Array extends Pointer {
+public class GIM_PAIR_Array_ extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public GIM_PAIR_Array(Pointer p) { super(p); }
+    public GIM_PAIR_Array_(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GIM_PAIR_Array(long size) { super((Pointer)null); allocateArray(size); }
+    public GIM_PAIR_Array_(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public GIM_PAIR_Array position(long position) {
-        return (GIM_PAIR_Array)super.position(position);
+    @Override public GIM_PAIR_Array_ position(long position) {
+        return (GIM_PAIR_Array_)super.position(position);
     }
-    @Override public GIM_PAIR_Array getPointer(long i) {
-        return new GIM_PAIR_Array((Pointer)this).offsetAddress(i);
+    @Override public GIM_PAIR_Array_ getPointer(long i) {
+        return new GIM_PAIR_Array_((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef @Name("operator =") GIM_PAIR_Array put(@Const @ByRef GIM_PAIR_Array other);
-	public GIM_PAIR_Array() { super((Pointer)null); allocate(); }
+	public native @ByRef @Name("operator =") GIM_PAIR_Array_ put(@Const @ByRef GIM_PAIR_Array_ other);
+	public GIM_PAIR_Array_() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	/**Generally it is best to avoid using the copy constructor of an btAlignedObjectArray, and use a (const) reference to the array instead. */
-	public GIM_PAIR_Array(@Const @ByRef GIM_PAIR_Array otherArray) { super((Pointer)null); allocate(otherArray); }
-	private native void allocate(@Const @ByRef GIM_PAIR_Array otherArray);
+	public GIM_PAIR_Array_(@Const @ByRef GIM_PAIR_Array_ otherArray) { super((Pointer)null); allocate(otherArray); }
+	private native void allocate(@Const @ByRef GIM_PAIR_Array_ otherArray);
 
 	/** return the number of elements in the array */
 	public native int size();
@@ -84,5 +84,5 @@ public class GIM_PAIR_Array extends Pointer {
 	//PCK: whole function
 	public native void initializeFromBuffer(Pointer buffer, int size, int _capacity);
 
-	public native void copyFromArray(@Const @ByRef GIM_PAIR_Array otherArray);
+	public native void copyFromArray(@Const @ByRef GIM_PAIR_Array_ otherArray);
 }

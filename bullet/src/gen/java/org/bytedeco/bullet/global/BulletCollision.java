@@ -58,16 +58,16 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../BulletCollision/BT_QUANTIZED_BVH_NODE_Array.java
 
 
-// Targeting ../BulletCollision/GIM_BVH_DATA_Array.java
+// Targeting ../BulletCollision/GIM_BVH_DATA_Array_.java
 
 
-// Targeting ../BulletCollision/GIM_BVH_TREE_NODE_Array.java
+// Targeting ../BulletCollision/GIM_BVH_TREE_NODE_Array_.java
 
 
-// Targeting ../BulletCollision/GIM_CONTACT_Array.java
+// Targeting ../BulletCollision/GIM_CONTACT_Array_.java
 
 
-// Targeting ../BulletCollision/GIM_PAIR_Array.java
+// Targeting ../BulletCollision/GIM_PAIR_Array_.java
 
 
 // Targeting ../BulletCollision/btCell32ArrayArray.java
