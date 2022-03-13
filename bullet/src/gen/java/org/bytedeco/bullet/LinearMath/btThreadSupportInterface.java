@@ -67,5 +67,5 @@ public class btThreadSupportInterface extends Pointer {
 		public native int m_threadStackSize(); public native ConstructionInfo m_threadStackSize(int setter);
 	}
 
-	public static native btThreadSupportInterface create(@Const @ByRef ConstructionInfo info);
+	
 }

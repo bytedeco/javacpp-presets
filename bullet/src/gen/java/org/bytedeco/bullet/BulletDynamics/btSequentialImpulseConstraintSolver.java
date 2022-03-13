@@ -59,12 +59,12 @@ public class btSequentialImpulseConstraintSolver extends btConstraintSolver {
 
 	/**Various implementations of solving a single constraint row using a generic equality constraint, using scalar reference, SSE2 or SSE4 */
 	public native btSingleConstraintRowSolver getScalarConstraintRowSolverGeneric();
-	public native btSingleConstraintRowSolver getSSE2ConstraintRowSolverGeneric();
-	public native btSingleConstraintRowSolver getSSE4_1ConstraintRowSolverGeneric();
+	
+	
 
 	/**Various implementations of solving a single constraint row using an inequality (lower limit) constraint, using scalar reference, SSE2 or SSE4 */
 	public native btSingleConstraintRowSolver getScalarConstraintRowSolverLowerLimit();
-	public native btSingleConstraintRowSolver getSSE2ConstraintRowSolverLowerLimit();
-	public native btSingleConstraintRowSolver getSSE4_1ConstraintRowSolverLowerLimit();
+	
+	
 	public native @ByRef btSolverAnalyticsData m_analyticsData(); public native btSequentialImpulseConstraintSolver m_analyticsData(btSolverAnalyticsData setter);
 }

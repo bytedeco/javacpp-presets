@@ -34,7 +34,7 @@ public class btGeometryUtil extends Pointer {
 
 	public static native void getVerticesFromPlaneEquations(@Const @ByRef btVector3Array planeEquations, @ByRef btVector3Array verticesOut);
 
-	public static native @Cast("bool") boolean isInside(@Const @ByRef btVector3Array vertices, @Const @ByRef btVector3 planeNormal, @Cast("btScalar") float margin);
+	
 
 	public static native @Cast("bool") boolean isPointInsidePlanes(@Const @ByRef btVector3Array planeEquations, @Const @ByRef btVector3 point, @Cast("btScalar") float margin);
 

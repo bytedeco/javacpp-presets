@@ -80,7 +80,7 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native void performDeformableCollisionDetection();
 
-	public native void solveMultiBodyConstraints();
+	
 
 	public native void solveContactConstraints();
 
