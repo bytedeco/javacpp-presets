@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 Samuel Audet
+ * Copyright (C) 2019-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -52,6 +52,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "cpu_features",
             resource = {"include", "lib"}
         ),
+        @Platform(
+            value = "android",
+            link = {"cpu_features", "ndk_compat"}
+        ),
     },
     target = "org.bytedeco.cpu_features",
     global = "org.bytedeco.cpu_features.global.cpu_features"
@@ -70,6 +74,11 @@ public class cpu_features implements InfoMapper {
                              "CPU_FEATURES_COMPILED_X86_SSE4_1", "CPU_FEATURES_COMPILED_X86_SSE4_2",
                              "CPU_FEATURES_COMPILED_X86_AVX", "CPU_FEATURES_COMPILED_x86_AVX2",
                              "CPU_FEATURES_COMPILED_ANY_ARM_NEON", "CPU_FEATURES_COMPILED_MIPS_MSA").cppTypes().annotations())
-               .put(new Info("cpu_features::CpuFeatures_IsHwCapsSet").skip());
+               .put(new Info("CPU_FEATURES_DEPRECATED").cppText("#define CPU_FEATURES_DEPRECATED(message) deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+               .put(new Info("cpu_features::CpuFeatures_GetHardwareCapabilities",
+                             "cpu_features::CpuFeatures_IsHwCapsSet",
+                             "cpu_features::CpuFeatures_GetPlatformPointer",
+                             "cpu_features::CpuFeatures_GetBasePlatformPointer").annotations("@Platform(not=\"windows\")"));
     }
 }

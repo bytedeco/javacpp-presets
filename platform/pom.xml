@@ -224,7 +224,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.23.0-${project.version}</version>
+      <version>0.23.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -284,7 +284,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>pytorch-platform</artifactId>
-      <version>1.10.2-${project.version}</version>
+      <version>1.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -354,7 +354,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.6.0-${project.version}</version>
+      <version>0.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

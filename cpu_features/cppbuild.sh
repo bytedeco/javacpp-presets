@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-CPU_FEATURES_VERSION=0.6.0
+CPU_FEATURES_VERSION=0.7.0
 download https://github.com/google/cpu_features/archive/v$CPU_FEATURES_VERSION.tar.gz cpu_features-$CPU_FEATURES_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -48,13 +48,13 @@ case $PLATFORM in
         ;;
     linux-x86)
         sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
-        CC="gcc -m32 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        CC="gcc -m32 -fPIC" CXX="g++ -m32 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
     linux-x86_64)
         sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
-        CC="gcc -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        CC="gcc -m64 -fPIC" CXX="g++ -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
@@ -63,8 +63,8 @@ case $PLATFORM in
         sedinplace 's/GetXCR0Eax(void);/GetXCR0Eax(void) { }/g' include/internal/cpuid_x86.h
         sedinplace 's/set(PROCESSOR_IS_ARM FALSE)/set(PROCESSOR_IS_ARM TRUE)/g' CMakeLists.txt
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
-        sedinplace 's/(HardwareCapabilities)//g' src/define_tables.h
-        CC="arm-linux-gnueabihf-gcc -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+#        sedinplace 's/(HardwareCapabilities)//g' src/define_tables.h
+        CC="arm-linux-gnueabihf-gcc -fPIC" CXX="arm-linux-gnueabihf-g++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
@@ -73,7 +73,7 @@ case $PLATFORM in
         sedinplace 's/GetXCR0Eax(void);/GetXCR0Eax(void) { }/g' include/internal/cpuid_x86.h
         sedinplace 's/set(PROCESSOR_IS_AARCH64 FALSE)/set(PROCESSOR_IS_AARCH64 TRUE)/g' CMakeLists.txt
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
-        CC="aarch64-linux-gnu-gcc -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        CC="aarch64-linux-gnu-gcc -fPIC" CXX="aarch64-linux-gnu-g++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
@@ -84,9 +84,9 @@ case $PLATFORM in
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+          CC="gcc -m64 -fPIC" CXX="g++ -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         else
-          CC="powerpc64le-linux-gnu-gcc -fPIC" CMAKE_C_COMPILER=$CC $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+          CC="powerpc64le-linux-gnu-gcc -fPIC" CXX="powerpc64le-linux-gnu-g++ -fPIC" $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         fi
         make -j $MAKEJ
         make install
@@ -96,12 +96,12 @@ case $PLATFORM in
         sedinplace 's/GetXCR0Eax(void);/GetXCR0Eax(void) { }/g' include/internal/cpuid_x86.h
         sedinplace 's/set(PROCESSOR_IS_MIPS FALSE)/set(PROCESSOR_IS_MIPS TRUE)/g' CMakeLists.txt
         sedinplace 's/set(PROCESSOR_IS_X86 TRUE)/set(PROCESSOR_IS_X86 FALSE)/g' CMakeLists.txt
-        CC="gcc -mabi=64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        CC="gcc -mabi=64 -fPIC" CXX="g++ -mabi=64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
     macosx-*)
-        CC="clang -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
+        CC="clang -fPIC" CXX="clang++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j $MAKEJ
         make install
         ;;
