@@ -13,6 +13,7 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
+import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -44,7 +45,7 @@ public class b3OpenCLDeviceInfo extends Pointer {
 	public native @Cast("char") byte m_deviceExtensions(int i); public native b3OpenCLDeviceInfo m_deviceExtensions(int i, byte setter);
 	@MemberGetter public native @Cast("char*") BytePointer m_deviceExtensions();
 
-	public native int m_deviceType(); public native b3OpenCLDeviceInfo m_deviceType(int setter);
+	public native @Cast("cl_device_type") long m_deviceType(); public native b3OpenCLDeviceInfo m_deviceType(long setter);
 	public native @Cast("unsigned int") int m_computeUnits(); public native b3OpenCLDeviceInfo m_computeUnits(int setter);
 	public native @Cast("size_t") long m_workitemDims(); public native b3OpenCLDeviceInfo m_workitemDims(long setter);
 	public native @Cast("size_t") long m_workItemSize(int i); public native b3OpenCLDeviceInfo m_workItemSize(int i, long setter);
@@ -60,13 +61,13 @@ public class b3OpenCLDeviceInfo extends Pointer {
 	public native @Cast("unsigned long") long m_localMemSize(); public native b3OpenCLDeviceInfo m_localMemSize(long setter);
 	public native @Cast("unsigned long") long m_globalMemSize(); public native b3OpenCLDeviceInfo m_globalMemSize(long setter);
 	public native @Cast("bool") boolean m_errorCorrectionSupport(); public native b3OpenCLDeviceInfo m_errorCorrectionSupport(boolean setter);
-	public native int m_localMemType(); public native b3OpenCLDeviceInfo m_localMemType(int setter);
+	public native @Cast("cl_device_local_mem_type") int m_localMemType(); public native b3OpenCLDeviceInfo m_localMemType(int setter);
 	public native @Cast("unsigned int") int m_maxReadImageArgs(); public native b3OpenCLDeviceInfo m_maxReadImageArgs(int setter);
 	public native @Cast("unsigned int") int m_maxWriteImageArgs(); public native b3OpenCLDeviceInfo m_maxWriteImageArgs(int setter);
 
 	public native @Cast("unsigned int") int m_addressBits(); public native b3OpenCLDeviceInfo m_addressBits(int setter);
 	public native @Cast("unsigned long") long m_maxMemAllocSize(); public native b3OpenCLDeviceInfo m_maxMemAllocSize(long setter);
-	public native int m_queueProperties(); public native b3OpenCLDeviceInfo m_queueProperties(int setter);
+	public native @Cast("cl_command_queue_properties") long m_queueProperties(); public native b3OpenCLDeviceInfo m_queueProperties(long setter);
 	public native @Cast("bool") boolean m_imageSupport(); public native b3OpenCLDeviceInfo m_imageSupport(boolean setter);
 	public native @Cast("unsigned int") int m_vecWidthChar(); public native b3OpenCLDeviceInfo m_vecWidthChar(int setter);
 	public native @Cast("unsigned int") int m_vecWidthShort(); public native b3OpenCLDeviceInfo m_vecWidthShort(int setter);

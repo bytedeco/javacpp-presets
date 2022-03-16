@@ -13,6 +13,7 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
+import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -38,12 +39,12 @@ public class b3OpenCLUtils extends Pointer {
 
 	/** CL Context optionally takes a GL context. This is a generic type because we don't really want this code
 	 *  to have to understand GL types. It is a HGLRC in _WIN32 or a GLXContext otherwise. */
-	public static native @ByVal cl_context createContextFromType(int deviceType, IntPointer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
-	public static native @ByVal cl_context createContextFromType(int deviceType, IntPointer pErrNum);
-	public static native @ByVal cl_context createContextFromType(int deviceType, IntBuffer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
-	public static native @ByVal cl_context createContextFromType(int deviceType, IntBuffer pErrNum);
-	public static native @ByVal cl_context createContextFromType(int deviceType, int[] pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
-	public static native @ByVal cl_context createContextFromType(int deviceType, int[] pErrNum);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, IntPointer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, IntPointer pErrNum);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, IntBuffer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, IntBuffer pErrNum);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, int[] pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/, cl_platform_id platformId/*=0*/);
+	public static native @ByVal cl_context createContextFromType(@Cast("cl_device_type") long deviceType, int[] pErrNum);
 
 	public static native int getNumDevices(@ByVal cl_context cxMainContext);
 	public static native @ByVal cl_device_id getDevice(@ByVal cl_context cxMainContext, int nr);
@@ -87,12 +88,12 @@ public class b3OpenCLUtils extends Pointer {
 	public static native void printPlatformInfo(@ByVal cl_platform_id platform);
 
 	public static native @Cast("const char*") BytePointer getSdkVendorName();
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, IntPointer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, IntPointer pErrNum);
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, IntBuffer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, IntBuffer pErrNum);
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, int[] pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
-	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, int deviceType, int[] pErrNum);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntPointer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntPointer pErrNum);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntBuffer pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntBuffer pErrNum);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, int[] pErrNum, Pointer pGLCtx/*=0*/, Pointer pGLDC/*=0*/, int preferredDeviceIndex/*=-1*/, int preferredPlatformIndex/*=-1*/);
+	public static native @ByVal cl_context createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, int[] pErrNum);
 	public static native void setCachePath(@Cast("const char*") BytePointer path);
 	public static native void setCachePath(String path);
 }
