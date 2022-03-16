@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Andrey Krainyak
  */
 @Properties(
-    inherit = Bullet3Dynamics.class,
+    inherit = {Bullet3Dynamics.class, clew.class},
     value = {
         @Platform(
             define = {
@@ -104,22 +104,6 @@ public class Bullet3OpenCL implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
-            .put(new Info("cl_bool").cppTypes("bool"))
-            .put(new Info("cl_command_queue").cppTypes("cl_command_queue"))
-            .put(new Info("cl_command_queue_properties").cppTypes("int"))
-            .put(new Info("cl_context").pointerTypes("cl_context"))
-            .put(new Info("cl_device_id").pointerTypes("cl_device_id"))
-            .put(new Info("cl_device_local_mem_type").cppTypes("int"))
-            .put(new Info("cl_device_type").cppTypes("int"))
-            .put(new Info("cl_int").cppTypes("int"))
-            .put(new Info("cl_kernel").pointerTypes("cl_kernel"))
-            .put(new Info("cl_long").cppTypes("long"))
-            .put(new Info("cl_mem").pointerTypes("cl_mem"))
-            .put(new Info("cl_platform_id").pointerTypes("cl_platform_id"))
-            .put(new Info("cl_program").pointerTypes("cl_program"))
-            .put(new Info("cl_uint").cppTypes("unsigned int"))
-            .put(new Info("cl_ulong").cppTypes("unsigned long"))
-
             .put(new Info(
                     "DEBUG_CHECK_DEQUANTIZATION",
                     "b3Int64",
@@ -207,40 +191,5 @@ public class Bullet3OpenCL implements InfoMapper {
             "b3SortData",
             "b3Vector3"
         );
-    }
-
-    public static class cl_command_queue extends Pointer {
-        public cl_command_queue() { super((Pointer)null); }
-        public cl_command_queue(Pointer p) { super(p); }
-    }
-
-    public static class cl_context extends Pointer {
-        public cl_context() { super((Pointer)null); }
-        public cl_context(Pointer p) { super(p); }
-    }
-
-    public static class cl_device_id extends Pointer {
-        public cl_device_id() { super((Pointer)null); }
-        public cl_device_id(Pointer p) { super(p); }
-    }
-
-    public static class cl_kernel extends Pointer {
-        public cl_kernel() { super((Pointer)null); }
-        public cl_kernel(Pointer p) { super(p); }
-    }
-
-    public static class cl_mem extends Pointer {
-        public cl_mem() { super((Pointer)null); }
-        public cl_mem(Pointer p) { super(p); }
-    }
-
-    public static class cl_platform_id extends Pointer {
-        public cl_platform_id() { super((Pointer)null); }
-        public cl_platform_id(Pointer p) { super(p); }
-    }
-
-    public static class cl_program extends Pointer {
-        public cl_program() { super((Pointer)null); }
-        public cl_program(Pointer p) { super(p); }
     }
 }
