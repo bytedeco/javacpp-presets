@@ -507,46 +507,8 @@ public class Simple {
     }
 
     public static void
-    main(String[] args) throws Exception
+    RunInference(String model_repository_path, int verbose_level) throws Exception
     {
-      String model_repository_path = null;
-      int verbose_level = 0;
-
-      // Parse commandline...
-      for (int i = 0; i < args.length; i++) {
-        switch (args[i]) {
-          case "-m": {
-            enforce_memory_type = true;
-            i++;
-            if (args[i].equals("system")) {
-              requested_memory_type = TRITONSERVER_MEMORY_CPU;
-            } else if (args[i].equals("pinned")) {
-              requested_memory_type = TRITONSERVER_MEMORY_CPU_PINNED;
-            } else if (args[i].equals("gpu")) {
-              requested_memory_type = TRITONSERVER_MEMORY_GPU;
-            } else {
-              Usage(
-                  "-m must be used to specify one of the following types:" +
-                  " <\"system\"|\"pinned\"|gpu>");
-            }
-            break;
-          }
-          case "-r":
-            model_repository_path = args[++i];
-            break;
-          case "-v":
-            verbose_level = 1;
-            break;
-          case "-?":
-            Usage(null);
-            break;
-        }
-      }
-
-      if (model_repository_path == null) {
-        Usage("-r must be used to specify model repository path");
-      }
-
       // Check API version.
       int[] api_version_major = {0}, api_version_minor = {0};
       FAIL_IF_ERR(
@@ -961,6 +923,53 @@ public class Simple {
       FAIL_IF_ERR(
           TRITONSERVER_ResponseAllocatorDelete(allocator),
           "deleting response allocator");
+
+    }
+
+    public static void
+    main(String[] args) throws Exception
+    {
+      String model_repository_path = null;
+      int verbose_level = 0;
+
+      // Parse commandline...
+      for (int i = 0; i < args.length; i++) {
+        switch (args[i]) {
+          case "-m": {
+            enforce_memory_type = true;
+            i++;
+            if (args[i].equals("system")) {
+              requested_memory_type = TRITONSERVER_MEMORY_CPU;
+            } else if (args[i].equals("pinned")) {
+              requested_memory_type = TRITONSERVER_MEMORY_CPU_PINNED;
+            } else if (args[i].equals("gpu")) {
+              requested_memory_type = TRITONSERVER_MEMORY_GPU;
+            } else {
+              Usage(
+                  "-m must be used to specify one of the following types:" +
+                  " <\"system\"|\"pinned\"|gpu>");
+            }
+            break;
+          }
+          case "-r":
+            model_repository_path = args[++i];
+            break;
+          case "-v":
+            verbose_level = 1;
+            break;
+          case "-?":
+            Usage(null);
+            break;
+        }
+      }
+
+      if (model_repository_path == null) {
+        Usage("-r must be used to specify model repository path");
+      }
+
+      try (PointerScope scope = new PointerScope()) {
+        RunInference(model_repository_path, verbose_level);
+      }
 
       System.exit(0);
     }
