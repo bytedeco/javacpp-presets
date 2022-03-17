@@ -509,10 +509,6 @@ public class Simple {
     public static void
     RunInference(String model_repository_path, int verbose_level) throws Exception
     {
-      if (model_repository_path == null) {
-        Usage("-r must be used to specify model repository path");
-      }
-
       // Check API version.
       int[] api_version_major = {0}, api_version_minor = {0};
       FAIL_IF_ERR(
@@ -929,7 +925,7 @@ public class Simple {
           "deleting response allocator");
 
     }
-		
+
     public static void
     main(String[] args) throws Exception
     {
@@ -967,10 +963,14 @@ public class Simple {
         }
       }
 
+      if (model_repository_path == null) {
+        Usage("-r must be used to specify model repository path");
+      }
+
       try (PointerScope scope = new PointerScope()) {
-	  	RunInference(model_repository_path, verbose_level);
-      } 
-	  
+        RunInference(model_repository_path, verbose_level);
+      }
+
       System.exit(0);
     }
 }

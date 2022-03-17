@@ -363,10 +363,6 @@ public class SimpleCPUOnly {
     public static void
     RunInference(String model_repository_path, int verbose_level) throws Exception
     {
-      if (model_repository_path == null) {
-        Usage("-r must be used to specify model repository path");
-      }
-
       // Check API version.
       int[] api_version_major = {0}, api_version_minor = {0};
       FAIL_IF_ERR(
@@ -471,7 +467,7 @@ public class SimpleCPUOnly {
           }
           Thread.sleep(500);
           continue;
-        } 
+        }
 
         TRITONSERVER_Message model_metadata_message = new TRITONSERVER_Message(null);
         FAIL_IF_ERR(
@@ -629,10 +625,10 @@ public class SimpleCPUOnly {
             TRITONSERVER_InferenceResponseError(completed_response),
             "response status");
 
-	    Check(
+        Check(
             completed_response, input0_data, input1_data, output0, output1,
             input0_size, datatype, is_int[0]);
-          
+
         FAIL_IF_ERR(
             TRITONSERVER_InferenceResponseDelete(completed_response),
             "deleting inference response");
@@ -670,10 +666,10 @@ public class SimpleCPUOnly {
             TRITONSERVER_InferenceResponseError(completed_response),
             "response status");
 
-	    Check(
+        Check(
             completed_response, input0_data, input1_data, output0, output1,
             input0_size, datatype, is_int[0]);
-          
+
         FAIL_IF_ERR(
             TRITONSERVER_InferenceResponseDelete(completed_response),
             "deleting inference response");
@@ -714,10 +710,10 @@ public class SimpleCPUOnly {
             "response status");
 
         // Both inputs are using input1_data...
-	    Check(
+        Check(
             completed_response, input1_data, input1_data, output0, output1,
             input0_size, datatype, is_int[0]);
-        
+
         FAIL_IF_ERR(
             TRITONSERVER_InferenceResponseDelete(completed_response),
             "deleting inference response");
@@ -735,7 +731,6 @@ public class SimpleCPUOnly {
     public static void
     main(String[] args) throws Exception
     {
-      
       String model_repository_path = null;
       int verbose_level = 0;
 
@@ -753,11 +748,15 @@ public class SimpleCPUOnly {
             break;
         }
       }
-		
+
+      if (model_repository_path == null) {
+        Usage("-r must be used to specify model repository path");
+      }
+
       try (PointerScope scope = new PointerScope()) {
-	  	RunInference(model_repository_path, verbose_level);
-      }    
-  
+        RunInference(model_repository_path, verbose_level);
+      }
+
       System.exit(0);
     }
 }
