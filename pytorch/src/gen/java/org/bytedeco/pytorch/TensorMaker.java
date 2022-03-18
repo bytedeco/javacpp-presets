@@ -39,9 +39,13 @@ public class TensorMaker extends Pointer {
   public native @ByRef @NoException(true) TensorMaker storage_offset(@ByVal LongOptional value);
 
   public native @ByRef @NoException(true) TensorMaker deleter(@ByVal Deleter value);
+  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") Pointer value);
+  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") long value);
 
   public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") Deleter deleter/*=nullptr*/);
   public native @ByRef @NoException(true) TensorMaker context(Pointer value);
+  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") Pointer deleter/*=nullptr*/);
+  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") long deleter/*=nullptr*/);
 
   public native @ByRef @NoException(true) TensorMaker target_device(@ByVal DeviceOptional value);
 

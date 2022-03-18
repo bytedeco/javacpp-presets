@@ -2552,9 +2552,9 @@ public class torch implements LoadEnabled, InfoMapper {
                        "public native @ByVal Tensor step(@ByVal(nullValue = \"torch::optim::Optimizer::LossClosure(nullptr)\") LossClosure closure);\n"
                      + "public native @ByVal Tensor step();\n"))
 
-               .put(new Info("c10::DeleterFnPtr").valueTypes("Deleter"))
+               .put(new Info("c10::DeleterFnPtr").cast().valueTypes("Deleter", "Pointer", "long"))
+               .put(new Info("std::function<void(void*)>").pointerTypes("Deleter", "@Cast(\"void(*)(void*)\") Pointer", "@Cast(\"void(*)(void*)\") long"))
                .put(new Info("std::function<void()>").pointerTypes("Func"))
-               .put(new Info("std::function<void(void*)>").pointerTypes("Deleter"))
                .put(new Info("std::function<std::string(void)>").pointerTypes("Fetcher"))
                .put(new Info("std::function<void(const std::string&)>").pointerTypes("Logger"))
                .put(new Info("std::function<void(const c10::DDPLoggingData&)>",
