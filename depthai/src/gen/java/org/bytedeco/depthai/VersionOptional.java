@@ -27,6 +27,7 @@ public class VersionOptional extends Pointer {
     public native @Name("operator =") @ByRef VersionOptional put(@ByRef VersionOptional x);
 
 
+    public native boolean has_value();
     @Name("value") public native @Cast("dai::OpenVINO::Version") int get();
     @ValueSetter public native VersionOptional put(@Cast("dai::OpenVINO::Version") int value);
 }

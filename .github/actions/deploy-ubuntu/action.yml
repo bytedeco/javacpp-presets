@@ -62,17 +62,7 @@ runs:
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         apt-get update
         apt-get -y install python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl cmake libffi-dev libbz2-dev zlib1g-dev
-        if [[ -n ${USERLAND_BUILDME:-} ]]; then
-          curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
-          tar -xzf userland-master.tar.gz
-          pushd userland-master
-          bash $USERLAND_BUILDME
-          popd
-          export USERLAND_PATH=$(pwd)/userland-master/
-          echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
-        fi
-        export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
+        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libffi-dev libbz2-dev zlib1g-dev
 
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
@@ -86,6 +76,17 @@ runs:
         ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
 
         python3 -m pip install gdown || python3 -m pip install gdown
+
+        if [[ -n ${USERLAND_BUILDME:-} ]]; then
+          curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
+          tar -xzf userland-master.tar.gz
+          pushd userland-master
+          bash $USERLAND_BUILDME
+          popd
+          export USERLAND_PATH=$(pwd)/userland-master/
+          echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
+        fi
+        export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
