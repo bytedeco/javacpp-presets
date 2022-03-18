@@ -44,8 +44,12 @@ public class DataPtr extends Pointer {
   private native void allocate();
   public DataPtr(Pointer data, @ByVal Device device) { super((Pointer)null); allocate(data, device); }
   private native void allocate(Pointer data, @ByVal Device device);
-  public DataPtr(Pointer data, Pointer ctx, Deleter ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
-  private native void allocate(Pointer data, Pointer ctx, Deleter ctx_deleter, @ByVal Device device);
+  public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Deleter ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
+  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Deleter ctx_deleter, @ByVal Device device);
+  public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
+  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter, @ByVal Device device);
+  public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") long ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
+  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") long ctx_deleter, @ByVal Device device);
   public native @Name("operator ->") Pointer access();
   public native void clear();
   public native Pointer get();
@@ -53,7 +57,7 @@ public class DataPtr extends Pointer {
   public native Pointer release_context();
   
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
-  public native Deleter get_deleter();
+  public native @Cast("c10::DeleterFnPtr") Deleter get_deleter();
   /**
    * Compare the deleter in a DataPtr to expected_deleter.
    * If it matches, replace the deleter with new_deleter
@@ -92,8 +96,14 @@ public class DataPtr extends Pointer {
    * in question to confirm this.
    */
   public native @Cast("bool") boolean compare_exchange_deleter(
-        Deleter expected_deleter,
-        Deleter new_deleter);
+        @Cast("c10::DeleterFnPtr") Deleter expected_deleter,
+        @Cast("c10::DeleterFnPtr") Deleter new_deleter);
+  public native @Cast("bool") boolean compare_exchange_deleter(
+        @Cast("c10::DeleterFnPtr") Pointer expected_deleter,
+        @Cast("c10::DeleterFnPtr") Pointer new_deleter);
+  public native @Cast("bool") boolean compare_exchange_deleter(
+        @Cast("c10::DeleterFnPtr") long expected_deleter,
+        @Cast("c10::DeleterFnPtr") long new_deleter);
   public native @ByVal Device device();
   // Unsafely mutates the device on a DataPtr.  Under normal use,
   // you should never actually need to call this function.

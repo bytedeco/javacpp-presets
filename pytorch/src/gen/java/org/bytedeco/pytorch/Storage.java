@@ -126,10 +126,18 @@ public class Storage extends Pointer {
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long _capacity,
-        Deleter d/*=nullptr*/);
+        @Cast("c10::DeleterFnPtr") Deleter d/*=nullptr*/);
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long _capacity);
+  public native void UniqueStorageShareExternalPointer(
+        Pointer src,
+        @Cast("size_t") long _capacity,
+        @Cast("c10::DeleterFnPtr") Pointer d/*=nullptr*/);
+  public native void UniqueStorageShareExternalPointer(
+        Pointer src,
+        @Cast("size_t") long _capacity,
+        @Cast("c10::DeleterFnPtr") long d/*=nullptr*/);
 
   public native void UniqueStorageShareExternalPointer(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,

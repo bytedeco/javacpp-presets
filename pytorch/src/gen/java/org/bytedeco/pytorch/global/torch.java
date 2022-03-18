@@ -20323,6 +20323,30 @@ body of your function, only data pointers.
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") long deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") long deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
     @Const @ByRef Deleter deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
     @Const @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional target_device);
@@ -20331,6 +20355,30 @@ body of your function, only data pointers.
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
     @Const @ByRef Deleter deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") long deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") long deleter);
 
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
@@ -20344,12 +20392,48 @@ body of your function, only data pointers.
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByRef @Cast("void(*)(void*)") long deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByRef @Cast("void(*)(void*)") long deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
     @Const @ByRef Deleter deleter,
     @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
     @Const @ByRef Deleter deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByRef @Cast("void(*)(void*)") long deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByRef @Cast("void(*)(void*)") long deleter);
 
 @Namespace("at") public static native @ByVal Tensor from_blob(
     Pointer data,
@@ -60228,7 +60312,31 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     Pointer data,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "at::TensorOptions()") TensorOptions options);
+@Namespace("torch") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") long deleter,
+    @Const @ByRef(nullValue = "at::TensorOptions()") TensorOptions options);
+@Namespace("torch") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
     @Const @ByRef Deleter deleter,
+    @Const @ByRef(nullValue = "at::TensorOptions()") TensorOptions options);
+@Namespace("torch") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes,
+    @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides,
+    @ByRef @Cast("void(*)(void*)") Pointer deleter,
+    @Const @ByRef(nullValue = "at::TensorOptions()") TensorOptions options);
+@Namespace("torch") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+    @ByRef @Cast("void(*)(void*)") long deleter,
     @Const @ByRef(nullValue = "at::TensorOptions()") TensorOptions options);
 
 /** Exposes the given {@code data} as a {@code Tensor} without taking ownership of the

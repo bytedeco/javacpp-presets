@@ -124,10 +124,18 @@ public class StorageImpl extends Pointer {
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long size_bytes,
-        Deleter d/*=nullptr*/);
+        @Cast("c10::DeleterFnPtr") Deleter d/*=nullptr*/);
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long size_bytes);
+  public native void UniqueStorageShareExternalPointer(
+        Pointer src,
+        @Cast("size_t") long size_bytes,
+        @Cast("c10::DeleterFnPtr") Pointer d/*=nullptr*/);
+  public native void UniqueStorageShareExternalPointer(
+        Pointer src,
+        @Cast("size_t") long size_bytes,
+        @Cast("c10::DeleterFnPtr") long d/*=nullptr*/);
 
   /**
    * Can only be called when use_count is 1
