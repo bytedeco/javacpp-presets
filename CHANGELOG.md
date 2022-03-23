@@ -1,4 +1,5 @@
 
+ * Enable DNNL codegen as BYOC backend in presets for TVM
  * Allow passing raw pointer as deleter to `from_blob()`, etc functions of PyTorch ([discussion #1160](https://github.com/bytedeco/javacpp-presets/discussions/1160))
  * Include `cudnn_backend.h` header file in presets for CUDA ([issue #1158](https://github.com/bytedeco/javacpp-presets/issues/1158))
  * Bundle `zlibwapi.dll` required by cuDNN in redist artifacts of presets for CUDA ([issue bytedeco/javacv#1767](https://github.com/bytedeco/javacv/issues/1767))

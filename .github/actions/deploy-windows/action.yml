@@ -23,6 +23,9 @@ runs:
         rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
         rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
 
+        choco uninstall maven
+        choco install maven --version 3.6.3 --force
+
         python -m pip install gdown || python -m pip install gdown
 
         if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
@@ -202,7 +205,7 @@ runs:
           echo CUDA Version 11.6.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
         )
         set "CCACHE_DIR=%USERPROFILE%\ccache"
-        set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+        set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"
 
         where bash
         where git
