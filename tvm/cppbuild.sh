@@ -78,6 +78,7 @@ sedinplace '/scipy/d' python/gen_requirements.py
 
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
+sedinplace 's/bias\[OC\]/bias\[256\]/g' src/runtime/contrib/dnnl/dnnl_json_runtime.cc
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
@@ -139,7 +140,7 @@ $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0
 
 case $PLATFORM in
     linux-x86_64)
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so -DCMAKE_C_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so -DCMAKE_C_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -152,7 +153,7 @@ case $PLATFORM in
         cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
         chmod +w ../lib/libiomp5.dylib
         install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -164,7 +165,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY= .
+        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY= .
         ninja -j $MAKEJ
         ninja install
         cd python
