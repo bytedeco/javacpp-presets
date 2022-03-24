@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DEPTHAI_VERSION=2.14.1
+DEPTHAI_VERSION=2.15.1
 LIBUSB_VERSION=1.0.22
 download https://github.com/luxonis/depthai-core/releases/download/v$DEPTHAI_VERSION/depthai-core-v$DEPTHAI_VERSION.tar.gz depthai-core-v$DEPTHAI_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
@@ -50,9 +50,9 @@ case $PLATFORM in
         echo 'set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")'   >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                   >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'                 >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'                 >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -65,9 +65,9 @@ case $PLATFORM in
         echo 'set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")'   >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                 >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++11")'               >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'               >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -80,9 +80,9 @@ case $PLATFORM in
         echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_C_FLAGS "-m32 -std=gnu99")'   >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++11")' >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++14")' >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -95,9 +95,9 @@ case $PLATFORM in
         echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_C_FLAGS "-m64 -std=gnu99")'   >> cmake/toolchain/pic.cmake
         echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++11")' >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++14")' >> cmake/toolchain/pic.cmake
         sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         ;;

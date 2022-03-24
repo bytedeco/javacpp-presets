@@ -18,10 +18,13 @@ runs:
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL and MSYS2
-        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
+        rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
         rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
         rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
         rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
+
+        choco uninstall maven
+        choco install maven --version 3.6.3 --force
 
         python -m pip install gdown || python -m pip install gdown
 
@@ -32,6 +35,16 @@ runs:
           echo Removing old versions of MSVC that interfere with Bazel
           bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' \( -name '14.1*' -or -name '14.2[01234567]*' \) -prune -exec rm -Rf {} \;"
           dir /s /a "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\14.*"
+        )
+
+        if not "%CI_DEPLOY_NEED_CACHE%"=="" (
+          echo Installing ccache
+          curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
+          unzip -j ccache-4.6-windows-64.zip -d C:/msys64/mingw64/bin/
+          mkdir ccache
+          echo max_size = 3.0G                                                                        > ccache\ccache.conf
+          echo hash_dir = false                                                                      >> ccache\ccache.conf
+          echo sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros >> ccache\ccache.conf
         )
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
@@ -72,18 +85,24 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/cuda_11.6.0_511.23_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/cuda_11.6.1_511.65_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
-          cuda_11.6.0_511.23_windows.exe -s
+          curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
+          cuda_11.6.1_511.65_windows.exe -s
           unzip cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
+          unzip zlib123dllx64.zip
           move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
           move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\include"
           move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\lib\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\lib\x64"
+          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
 
           echo Applying hotfix to Visual Studio 2019 for CUDA
           curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
           bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
+          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
           bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
+          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
@@ -183,9 +202,10 @@ runs:
           set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
           set "CUDA_PATH_V11_6=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
           set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;%PATH%"
-          echo CUDA Version 11.6.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
+          echo CUDA Version 11.6.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
         )
-        set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+        set "CCACHE_DIR=%USERPROFILE%\ccache"
+        set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"
 
         where bash
         where git
@@ -198,6 +218,7 @@ runs:
         where python
         where python3
         where clang-cl
+        where ccache
 
         bash --version
         git --version
@@ -209,6 +230,7 @@ runs:
         gpg --version
         python --version
         clang-cl --version
+        ccache --version -sv
         df -h
         wmic pagefile list /format:list
 
@@ -263,6 +285,7 @@ runs:
           exit /b !STATUS!
         )
         :done3
+        ccache --version -sv
         df -h
         wmic pagefile list /format:list
 

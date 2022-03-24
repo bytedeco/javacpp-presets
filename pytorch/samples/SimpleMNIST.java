@@ -20,9 +20,9 @@ public class SimpleMNIST {
         Tensor forward(Tensor x) {
             // Use one of many tensor manipulation functions.
             x = relu(fc1.forward(x.reshape(x.size(0), 784)));
-            x = dropout(x, /*p=*/0.5, /*train=*/is_training());
+            x = dropout(x, /*p=*/0.5, /*train=*/is_training(), false);
             x = relu(fc2.forward(x));
-            x = log_softmax(fc3.forward(x), /*dim=*/1);
+            x = log_softmax(fc3.forward(x), new LogSoftmaxFuncOptions(/*dim=*/1));
             return x;
         }
 

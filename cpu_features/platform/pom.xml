@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpu_features-platform</artifactId>
-  <version>0.6.0-${project.parent.version}</version>
+  <version>0.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for cpu_features</name>
 
   <properties>
