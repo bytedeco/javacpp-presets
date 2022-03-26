@@ -17,7 +17,7 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
 
 // Parsed from <npp.h>
 
- /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+ /* Copyright 2009-2022 NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
   *
   * NOTICE TO LICENSEE:
   *
@@ -75,8 +75,8 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
 
 public static final int NPP_VER_MAJOR = 11;
 public static final int NPP_VER_MINOR = 6;
-public static final int NPP_VER_PATCH = 0;
-public static final int NPP_VER_BUILD = 55;
+public static final int NPP_VER_PATCH = 3;
+public static final int NPP_VER_BUILD = 9;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     

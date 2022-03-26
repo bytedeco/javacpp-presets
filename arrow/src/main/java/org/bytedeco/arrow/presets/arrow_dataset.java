@@ -209,21 +209,21 @@ public class arrow_dataset implements InfoMapper {
                              "arrow::dataset::WritePlan::fragment_or_partition_expressions", "arrow::dataset::string_literals::operator \"\"_")/*.javaNames("quote")*/.skip())
 
                .put(new Info("std::function<arrow::Result<std::shared_ptr<arrow::io::RandomAccessFile> >(arrow::Compression::type)>",
-                             "std::function<arrow::Result<std::shared_ptr<io::RandomAccessFile> >(Compression::type)>").pointerTypes("CustomOpenWithCompression").define())
+                             "std::function<arrow::Result<std::shared_ptr<io::RandomAccessFile> >(Compression::type)>").pointerTypes("CustomOpenWithCompression"))
 //               .put(new Info("std::function<arrow::Status(const arrow::dataset::Expression&)>",
-//                             "std::function<arrow::Status(const Expression&)>").pointerTypes("ExpressionVisitor").define())
+//                             "std::function<arrow::Status(const Expression&)>").pointerTypes("ExpressionVisitor"))
                .put(new Info("std::function<arrow::Status(arrow::dataset::FileWriter*)>",
-                             "std::function<arrow::Status(FileWriter*)>").pointerTypes("FileWriterVisitor").define())
+                             "std::function<arrow::Status(FileWriter*)>").pointerTypes("FileWriterVisitor"))
                .put(new Info("std::function<arrow::Status(std::shared_ptr<RecordBatch>)>",
-                             "std::function<arrow::Status(std::shared_ptr<arrow::RecordBatch>)>").pointerTypes("RecordBatchVisitor").define())
+                             "std::function<arrow::Status(std::shared_ptr<arrow::RecordBatch>)>").pointerTypes("RecordBatchVisitor"))
                .put(new Info("std::function<arrow::Status(arrow::dataset::TaggedRecordBatch)>",
-                             "std::function<arrow::Status(TaggedRecordBatch)>").pointerTypes("TaggedRecordBatchVisitor").define())
+                             "std::function<arrow::Status(TaggedRecordBatch)>").pointerTypes("TaggedRecordBatchVisitor"))
                .put(new Info("std::function<arrow::Future<std::shared_ptr<RecordBatch> >()>",
-                             "std::function<arrow::Future<std::shared_ptr<arrow::RecordBatch> >()>").pointerTypes("RecordBatchGenerator").define())
+                             "std::function<arrow::Future<std::shared_ptr<arrow::RecordBatch> >()>").pointerTypes("RecordBatchGenerator"))
                .put(new Info("std::function<arrow::Future<TaggedRecordBatchGenerator>()>",
-                             "std::function<arrow::Future<arrow::dataset::TaggedRecordBatchGenerator>()>").pointerTypes("TaggedRecordBatchGenerator").define())
+                             "std::function<arrow::Future<arrow::dataset::TaggedRecordBatchGenerator>()>").pointerTypes("TaggedRecordBatchGenerator"))
                .put(new Info("std::function<arrow::Future<EnumeratedRecordBatch>()>",
-                             "std::function<arrow::Future<arrow::dataset::EnumeratedRecordBatch>()>").pointerTypes("EnumeratedRecordBatchGenerator").define())
+                             "std::function<arrow::Future<arrow::dataset::EnumeratedRecordBatch>()>").pointerTypes("EnumeratedRecordBatchGenerator"))
         ;
     }
 
