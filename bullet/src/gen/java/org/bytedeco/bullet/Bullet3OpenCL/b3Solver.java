@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,23 +23,23 @@ public class b3Solver extends b3SolverBase {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3Solver(Pointer p) { super(p); }
 
-	public native @ByRef cl_context m_context(); public native b3Solver m_context(cl_context setter);
-	public native @ByRef cl_device_id m_device(); public native b3Solver m_device(cl_device_id setter);
-	public native @ByRef cl_command_queue m_queue(); public native b3Solver m_queue(cl_command_queue setter);
+	public native @Cast("cl_context") Pointer m_context(); public native b3Solver m_context(Pointer setter);
+	public native @Cast("cl_device_id") Pointer m_device(); public native b3Solver m_device(Pointer setter);
+	public native @Cast("cl_command_queue") Pointer m_queue(); public native b3Solver m_queue(Pointer setter);
 
 	public native b3UnsignedIntOCLArray m_numConstraints(); public native b3Solver m_numConstraints(b3UnsignedIntOCLArray setter);
 	public native b3UnsignedIntOCLArray m_offsets(); public native b3Solver m_offsets(b3UnsignedIntOCLArray setter);
 	
 
 	public native int m_nIterations(); public native b3Solver m_nIterations(int setter);
-	public native @ByRef cl_kernel m_batchingKernel(); public native b3Solver m_batchingKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_batchingKernelNew(); public native b3Solver m_batchingKernelNew(cl_kernel setter);
-	public native @ByRef cl_kernel m_solveContactKernel(); public native b3Solver m_solveContactKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_solveFrictionKernel(); public native b3Solver m_solveFrictionKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_contactToConstraintKernel(); public native b3Solver m_contactToConstraintKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_setSortDataKernel(); public native b3Solver m_setSortDataKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_reorderContactKernel(); public native b3Solver m_reorderContactKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_copyConstraintKernel(); public native b3Solver m_copyConstraintKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_batchingKernel(); public native b3Solver m_batchingKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_batchingKernelNew(); public native b3Solver m_batchingKernelNew(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_solveContactKernel(); public native b3Solver m_solveContactKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_solveFrictionKernel(); public native b3Solver m_solveFrictionKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_contactToConstraintKernel(); public native b3Solver m_contactToConstraintKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_setSortDataKernel(); public native b3Solver m_setSortDataKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_reorderContactKernel(); public native b3Solver m_reorderContactKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_copyConstraintKernel(); public native b3Solver m_copyConstraintKernel(Pointer setter);
 
 	public native b3RadixSort32CL m_sort32(); public native b3Solver m_sort32(b3RadixSort32CL setter);
 	public native b3BoundSearchCL m_search(); public native b3Solver m_search(b3BoundSearchCL setter);
@@ -53,8 +52,8 @@ public class b3Solver extends b3SolverBase {
 	public static final int
 		DYNAMIC_CONTACT_ALLOCATION_THRESHOLD = 2000000;
 
-	public b3Solver(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int pairCapacity) { super((Pointer)null); allocate(ctx, device, queue, pairCapacity); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int pairCapacity);
+	public b3Solver(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int pairCapacity) { super((Pointer)null); allocate(ctx, device, queue, pairCapacity); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int pairCapacity);
 
 	public native void solveContactConstraint(@Const b3RigidBodyDataOCLArray bodyBuf, @Const b3InertiaDataOCLArray inertiaBuf,
 									b3GpuConstraint4OCLArray constraint, Pointer additionalData, int n, int maxNumBatches);

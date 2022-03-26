@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,10 +23,10 @@ public class b3PrefixScanFloat4CL extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3PrefixScanFloat4CL(Pointer p) { super(p); }
 
-	public b3PrefixScanFloat4CL(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int size/*=0*/) { super((Pointer)null); allocate(ctx, device, queue, size); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int size/*=0*/);
-	public b3PrefixScanFloat4CL(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(ctx, device, queue); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public b3PrefixScanFloat4CL(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int size/*=0*/) { super((Pointer)null); allocate(ctx, device, queue, size); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int size/*=0*/);
+	public b3PrefixScanFloat4CL(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(ctx, device, queue); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 
 	public native void execute(@ByRef b3Vector3OCLArray src, @ByRef b3Vector3OCLArray dst, int n, b3Vector3 sum/*=0*/);
 	public native void execute(@ByRef b3Vector3OCLArray src, @ByRef b3Vector3OCLArray dst, int n);

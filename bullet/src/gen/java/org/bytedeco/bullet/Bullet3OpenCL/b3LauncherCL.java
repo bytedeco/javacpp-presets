@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -26,20 +25,20 @@ public class b3LauncherCL extends Pointer {
 
 	public native @ByRef b3UnsignedCharOCLArrayArray m_arrays(); public native b3LauncherCL m_arrays(b3UnsignedCharOCLArrayArray setter);
 
-	public b3LauncherCL(@ByVal cl_command_queue queue, @ByVal cl_kernel kernel, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(queue, kernel, name); }
-	private native void allocate(@ByVal cl_command_queue queue, @ByVal cl_kernel kernel, @Cast("const char*") BytePointer name);
-	public b3LauncherCL(@ByVal cl_command_queue queue, @ByVal cl_kernel kernel, String name) { super((Pointer)null); allocate(queue, kernel, name); }
-	private native void allocate(@ByVal cl_command_queue queue, @ByVal cl_kernel kernel, String name);
+	public b3LauncherCL(@Cast("cl_command_queue") Pointer queue, @Cast("cl_kernel") Pointer kernel, @Cast("const char*") BytePointer name) { super((Pointer)null); allocate(queue, kernel, name); }
+	private native void allocate(@Cast("cl_command_queue") Pointer queue, @Cast("cl_kernel") Pointer kernel, @Cast("const char*") BytePointer name);
+	public b3LauncherCL(@Cast("cl_command_queue") Pointer queue, @Cast("cl_kernel") Pointer kernel, String name) { super((Pointer)null); allocate(queue, kernel, name); }
+	private native void allocate(@Cast("cl_command_queue") Pointer queue, @Cast("cl_kernel") Pointer kernel, String name);
 
-	public native void setBuffer(@ByVal cl_mem clBuffer);
+	public native void setBuffer(@Cast("cl_mem") Pointer clBuffer);
 
 	public native void setBuffers(b3BufferInfoCL buffInfo, int n);
 
 	public native int getSerializationBufferSize();
 
-	public native int deserializeArgs(@Cast("unsigned char*") BytePointer buf, int bufSize, @ByVal cl_context ctx);
-	public native int deserializeArgs(@Cast("unsigned char*") ByteBuffer buf, int bufSize, @ByVal cl_context ctx);
-	public native int deserializeArgs(@Cast("unsigned char*") byte[] buf, int bufSize, @ByVal cl_context ctx);
+	public native int deserializeArgs(@Cast("unsigned char*") BytePointer buf, int bufSize, @Cast("cl_context") Pointer ctx);
+	public native int deserializeArgs(@Cast("unsigned char*") ByteBuffer buf, int bufSize, @Cast("cl_context") Pointer ctx);
+	public native int deserializeArgs(@Cast("unsigned char*") byte[] buf, int bufSize, @Cast("cl_context") Pointer ctx);
 
 	
 

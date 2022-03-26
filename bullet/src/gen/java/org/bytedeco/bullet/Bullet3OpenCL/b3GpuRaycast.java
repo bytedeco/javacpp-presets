@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuRaycast extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuRaycast(Pointer p) { super(p); }
 
-	public b3GpuRaycast(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q) { super((Pointer)null); allocate(ctx, device, q); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public b3GpuRaycast(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q) { super((Pointer)null); allocate(ctx, device, q); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
 	public native void castRaysHost(@Const @ByRef b3RayInfoArray raysIn, @ByRef b3RayHitArray hitResults,
 						  int numBodies, @Const b3RigidBodyData bodies, int numCollidables, @Const b3Collidable collidables,

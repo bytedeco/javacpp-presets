@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuParallelLinearBvhBroadphase extends b3GpuBroadphaseInterface {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuParallelLinearBvhBroadphase(Pointer p) { super(p); }
 
-	public b3GpuParallelLinearBvhBroadphase(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(context, device, queue); }
-	private native void allocate(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public b3GpuParallelLinearBvhBroadphase(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(context, device, queue); }
+	private native void allocate(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 
 	public native void createProxy(@Const @ByRef b3Vector3 aabbMin, @Const @ByRef b3Vector3 aabbMax, int userPtr, int collisionFilterGroup, int collisionFilterMask);
 	public native void createLargeProxy(@Const @ByRef b3Vector3 aabbMin, @Const @ByRef b3Vector3 aabbMax, int userPtr, int collisionFilterGroup, int collisionFilterMask);
@@ -37,9 +36,9 @@ public class b3GpuParallelLinearBvhBroadphase extends b3GpuBroadphaseInterface {
 	public native void writeAabbsToGpu();
 
 	public native int getNumOverlap();
-	public native @ByVal cl_mem getOverlappingPairBuffer();
+	public native @Cast("cl_mem") Pointer getOverlappingPairBuffer();
 
-	public native @ByVal cl_mem getAabbBufferWS();
+	public native @Cast("cl_mem") Pointer getAabbBufferWS();
 	public native @ByRef b3SapAabbOCLArray getAllAabbsGPU();
 
 	public native @ByRef b3Int4OCLArray getOverlappingPairsGPU();
@@ -48,5 +47,5 @@ public class b3GpuParallelLinearBvhBroadphase extends b3GpuBroadphaseInterface {
 
 	public native @ByRef b3SapAabbArray getAllAabbsCPU();
 
-	public static native b3GpuBroadphaseInterface CreateFunc(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public static native b3GpuBroadphaseInterface CreateFunc(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 }

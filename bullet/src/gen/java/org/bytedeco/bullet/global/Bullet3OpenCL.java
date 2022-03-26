@@ -15,7 +15,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 public class Bullet3OpenCL extends org.bytedeco.bullet.presets.Bullet3OpenCL {
     static { Loader.load(); }
@@ -138,42 +137,42 @@ subject to the following restrictions:
 	 <p>
 	 *  CL Context optionally takes a GL context. This is a generic type because we don't really want this code
 	 *  to have to understand GL types. It is a HGLRC in _WIN32 or a GLXContext otherwise. */
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, IntPointer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, cl_platform_id platformId);
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, IntBuffer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, cl_platform_id platformId);
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, int[] pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, cl_platform_id platformId);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, @Cast("cl_int*") IntPointer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, @Cast("cl_platform_id*") PointerPointer platformId);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, @Cast("cl_int*") IntBuffer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, @Cast("cl_platform_id*") PointerPointer platformId);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromType(@Cast("cl_device_type") long deviceType, @Cast("cl_int*") int[] pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex, @Cast("cl_platform_id*") PointerPointer platformId);
 
-	public static native int b3OpenCLUtils_getNumDevices(@ByVal cl_context cxMainContext);
+	public static native int b3OpenCLUtils_getNumDevices(@Cast("cl_context") Pointer cxMainContext);
 
-	public static native @ByVal cl_device_id b3OpenCLUtils_getDevice(@ByVal cl_context cxMainContext, int nr);
+	public static native @Cast("cl_device_id") Pointer b3OpenCLUtils_getDevice(@Cast("cl_context") Pointer cxMainContext, int nr);
 
-	public static native void b3OpenCLUtils_printDeviceInfo(@ByVal cl_device_id device);
+	public static native void b3OpenCLUtils_printDeviceInfo(@Cast("cl_device_id") Pointer device);
 
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, IntPointer pErrNum, @ByVal cl_program prog, @Cast("const char*") BytePointer additionalMacros);
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, String kernelName, IntBuffer pErrNum, @ByVal cl_program prog, String additionalMacros);
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, int[] pErrNum, @ByVal cl_program prog, @Cast("const char*") BytePointer additionalMacros);
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, String kernelName, IntPointer pErrNum, @ByVal cl_program prog, String additionalMacros);
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, IntBuffer pErrNum, @ByVal cl_program prog, @Cast("const char*") BytePointer additionalMacros);
-	public static native @ByVal cl_kernel b3OpenCLUtils_compileCLKernelFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, String kernelName, int[] pErrNum, @ByVal cl_program prog, String additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, @Cast("cl_int*") IntPointer pErrNum, @Cast("cl_program") Pointer prog, @Cast("const char*") BytePointer additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, String kernelName, @Cast("cl_int*") IntBuffer pErrNum, @Cast("cl_program") Pointer prog, String additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, @Cast("cl_int*") int[] pErrNum, @Cast("cl_program") Pointer prog, @Cast("const char*") BytePointer additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, String kernelName, @Cast("cl_int*") IntPointer pErrNum, @Cast("cl_program") Pointer prog, String additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("const char*") BytePointer kernelName, @Cast("cl_int*") IntBuffer pErrNum, @Cast("cl_program") Pointer prog, @Cast("const char*") BytePointer additionalMacros);
+	public static native @Cast("cl_kernel") Pointer b3OpenCLUtils_compileCLKernelFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, String kernelName, @Cast("cl_int*") int[] pErrNum, @Cast("cl_program") Pointer prog, String additionalMacros);
 
 	//optional
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, IntPointer pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, IntBuffer pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, int[] pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, IntPointer pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, @Cast("const char*") BytePointer kernelSource, IntBuffer pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
-	public static native @ByVal cl_program b3OpenCLUtils_compileCLProgramFromString(@ByVal cl_context clContext, @ByVal cl_device_id device, String kernelSource, int[] pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("cl_int*") IntPointer pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, @Cast("cl_int*") IntBuffer pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("cl_int*") int[] pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, @Cast("cl_int*") IntPointer pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, @Cast("const char*") BytePointer kernelSource, @Cast("cl_int*") IntBuffer pErrNum, @Cast("const char*") BytePointer additionalMacros, @Cast("const char*") BytePointer srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
+	public static native @Cast("cl_program") Pointer b3OpenCLUtils_compileCLProgramFromString(@Cast("cl_context") Pointer clContext, @Cast("cl_device_id") Pointer device, String kernelSource, @Cast("cl_int*") int[] pErrNum, String additionalMacros, String srcFileNameForCaching, @Cast("bool") boolean disableBinaryCaching);
 
 	//the following optional APIs provide access using specific platform information
-	public static native int b3OpenCLUtils_getNumPlatforms(IntPointer pErrNum);
-	public static native int b3OpenCLUtils_getNumPlatforms(IntBuffer pErrNum);
-	public static native int b3OpenCLUtils_getNumPlatforms(int[] pErrNum);
+	public static native int b3OpenCLUtils_getNumPlatforms(@Cast("cl_int*") IntPointer pErrNum);
+	public static native int b3OpenCLUtils_getNumPlatforms(@Cast("cl_int*") IntBuffer pErrNum);
+	public static native int b3OpenCLUtils_getNumPlatforms(@Cast("cl_int*") int[] pErrNum);
 
 	/**get the nr'th platform, where nr is in the range [0..getNumPlatforms) */
-	public static native @ByVal cl_platform_id b3OpenCLUtils_getPlatform(int nr, IntPointer pErrNum);
-	public static native @ByVal cl_platform_id b3OpenCLUtils_getPlatform(int nr, IntBuffer pErrNum);
-	public static native @ByVal cl_platform_id b3OpenCLUtils_getPlatform(int nr, int[] pErrNum);
+	public static native @Cast("cl_platform_id") Pointer b3OpenCLUtils_getPlatform(int nr, @Cast("cl_int*") IntPointer pErrNum);
+	public static native @Cast("cl_platform_id") Pointer b3OpenCLUtils_getPlatform(int nr, @Cast("cl_int*") IntBuffer pErrNum);
+	public static native @Cast("cl_platform_id") Pointer b3OpenCLUtils_getPlatform(int nr, @Cast("cl_int*") int[] pErrNum);
 
-	public static native void b3OpenCLUtils_printPlatformInfo(@ByVal cl_platform_id platform);
+	public static native void b3OpenCLUtils_printPlatformInfo(@Cast("cl_platform_id") Pointer platform);
 
 	public static native @Cast("const char*") BytePointer b3OpenCLUtils_getSdkVendorName();
 
@@ -181,9 +180,9 @@ subject to the following restrictions:
 	public static native void b3OpenCLUtils_setCachePath(@Cast("const char*") BytePointer path);
 	public static native void b3OpenCLUtils_setCachePath(String path);
 
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntPointer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, IntBuffer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
-	public static native @ByVal cl_context b3OpenCLUtils_createContextFromPlatform(@ByVal cl_platform_id platform, @Cast("cl_device_type") long deviceType, int[] pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromPlatform(@Cast("cl_platform_id") Pointer platform, @Cast("cl_device_type") long deviceType, @Cast("cl_int*") IntPointer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromPlatform(@Cast("cl_platform_id") Pointer platform, @Cast("cl_device_type") long deviceType, @Cast("cl_int*") IntBuffer pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
+	public static native @Cast("cl_context") Pointer b3OpenCLUtils_createContextFromPlatform(@Cast("cl_platform_id") Pointer platform, @Cast("cl_device_type") long deviceType, @Cast("cl_int*") int[] pErrNum, Pointer pGLCtx, Pointer pGLDC, int preferredDeviceIndex, int preferredPlatformIndex);
 
 // #ifdef __cplusplus
 

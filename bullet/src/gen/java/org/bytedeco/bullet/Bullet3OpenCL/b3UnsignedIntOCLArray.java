@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,13 +23,13 @@ public class b3UnsignedIntOCLArray extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3UnsignedIntOCLArray(Pointer p) { super(p); }
 
-	public b3UnsignedIntOCLArray(@ByVal cl_context ctx, @ByVal cl_command_queue queue, @Cast("size_t") long initialCapacity/*=0*/, @Cast("bool") boolean allowGrowingCapacity/*=true*/) { super((Pointer)null); allocate(ctx, queue, initialCapacity, allowGrowingCapacity); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_command_queue queue, @Cast("size_t") long initialCapacity/*=0*/, @Cast("bool") boolean allowGrowingCapacity/*=true*/);
-	public b3UnsignedIntOCLArray(@ByVal cl_context ctx, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(ctx, queue); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_command_queue queue);
+	public b3UnsignedIntOCLArray(@Cast("cl_context") Pointer ctx, @Cast("cl_command_queue") Pointer queue, @Cast("size_t") long initialCapacity/*=0*/, @Cast("bool") boolean allowGrowingCapacity/*=true*/) { super((Pointer)null); allocate(ctx, queue, initialCapacity, allowGrowingCapacity); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_command_queue") Pointer queue, @Cast("size_t") long initialCapacity/*=0*/, @Cast("bool") boolean allowGrowingCapacity/*=true*/);
+	public b3UnsignedIntOCLArray(@Cast("cl_context") Pointer ctx, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(ctx, queue); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_command_queue") Pointer queue);
 
 	/**this is an error-prone method with no error checking, be careful! */
-	public native void setFromOpenCLBuffer(@ByVal cl_mem buffer, @Cast("size_t") long sizeInElements);
+	public native void setFromOpenCLBuffer(@Cast("cl_mem") Pointer buffer, @Cast("size_t") long sizeInElements);
 
 	// we could enable this assignment, but need to make sure to avoid accidental deep copies
 	//	b3OpenCLArray<T>& operator=(const b3AlignedObjectArray<T>& src)
@@ -39,7 +38,7 @@ public class b3UnsignedIntOCLArray extends Pointer {
 	//		return *this;
 	//	}
 
-	public native @ByVal cl_mem getBufferCL();
+	public native @Cast("cl_mem") Pointer getBufferCL();
 
 	public native @Cast("bool") boolean push_back(@Cast("const unsigned int") int _Val, @Cast("bool") boolean waitForCompletion/*=true*/);
 	public native @Cast("bool") boolean push_back(@Cast("const unsigned int") int _Val);
@@ -58,8 +57,8 @@ public class b3UnsignedIntOCLArray extends Pointer {
 	public native @Cast("bool") boolean reserve(@Cast("size_t") long _Count, @Cast("bool") boolean copyOldContents/*=true*/);
 	public native @Cast("bool") boolean reserve(@Cast("size_t") long _Count);
 
-	public native void copyToCL(@ByVal cl_mem destination, @Cast("size_t") long numElements, @Cast("size_t") long firstElem/*=0*/, @Cast("size_t") long dstOffsetInElems/*=0*/);
-	public native void copyToCL(@ByVal cl_mem destination, @Cast("size_t") long numElements);
+	public native void copyToCL(@Cast("cl_mem") Pointer destination, @Cast("size_t") long numElements, @Cast("size_t") long firstElem/*=0*/, @Cast("size_t") long dstOffsetInElems/*=0*/);
+	public native void copyToCL(@Cast("cl_mem") Pointer destination, @Cast("size_t") long numElements);
 
 	public native void copyFromHost(@Const @ByRef b3UnsignedIntArray srcArray, @Cast("bool") boolean waitForCompletion/*=true*/);
 	public native void copyFromHost(@Const @ByRef b3UnsignedIntArray srcArray);

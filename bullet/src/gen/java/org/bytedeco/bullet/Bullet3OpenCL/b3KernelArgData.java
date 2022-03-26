@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -39,7 +38,7 @@ public class b3KernelArgData extends Pointer {
 	public native int m_argIndex(); public native b3KernelArgData m_argIndex(int setter);
 	public native int m_argSizeInBytes(); public native b3KernelArgData m_argSizeInBytes(int setter);
 	public native int m_unusedPadding(); public native b3KernelArgData m_unusedPadding(int setter);
-		public native @ByRef cl_mem m_clBuffer(); public native b3KernelArgData m_clBuffer(cl_mem setter);
+		public native @Cast("cl_mem") Pointer m_clBuffer(); public native b3KernelArgData m_clBuffer(Pointer setter);
 		public native @Cast("unsigned char") byte m_argData(int i); public native b3KernelArgData m_argData(int i, byte setter);
 		@MemberGetter public native @Cast("unsigned char*") BytePointer m_argData();
 }

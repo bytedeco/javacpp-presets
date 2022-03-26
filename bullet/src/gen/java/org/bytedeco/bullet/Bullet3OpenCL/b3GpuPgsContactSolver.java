@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuPgsContactSolver extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuPgsContactSolver(Pointer p) { super(p); }
 
-	public b3GpuPgsContactSolver(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, int pairCapacity) { super((Pointer)null); allocate(ctx, device, q, pairCapacity); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, int pairCapacity);
+	public b3GpuPgsContactSolver(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, int pairCapacity) { super((Pointer)null); allocate(ctx, device, q, pairCapacity); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, int pairCapacity);
 
-	public native void solveContacts(int numBodies, @ByVal cl_mem bodyBuf, @ByVal cl_mem inertiaBuf, int numContacts, @ByVal cl_mem contactBuf, @Const @ByRef b3Config config, int static0Index);
+	public native void solveContacts(int numBodies, @Cast("cl_mem") Pointer bodyBuf, @Cast("cl_mem") Pointer inertiaBuf, int numContacts, @Cast("cl_mem") Pointer contactBuf, @Const @ByRef b3Config config, int static0Index);
 }

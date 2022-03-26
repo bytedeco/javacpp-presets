@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -58,18 +57,18 @@ public class b3GpuSapBroadphase extends b3GpuBroadphaseInterface {
 		B3_GPU_SAP_KERNEL_BARRIER = 4,
 		B3_GPU_SAP_KERNEL_LOCAL_SHARED_MEMORY = 5;
 
-	public b3GpuSapBroadphase(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, @Cast("b3GpuSapBroadphase::b3GpuSapKernelType") int kernelType/*=b3GpuSapBroadphase::B3_GPU_SAP_KERNEL_LOCAL_SHARED_MEMORY*/) { super((Pointer)null); allocate(ctx, device, q, kernelType); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, @Cast("b3GpuSapBroadphase::b3GpuSapKernelType") int kernelType/*=b3GpuSapBroadphase::B3_GPU_SAP_KERNEL_LOCAL_SHARED_MEMORY*/);
-	public b3GpuSapBroadphase(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q) { super((Pointer)null); allocate(ctx, device, q); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public b3GpuSapBroadphase(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, @Cast("b3GpuSapBroadphase::b3GpuSapKernelType") int kernelType/*=b3GpuSapBroadphase::B3_GPU_SAP_KERNEL_LOCAL_SHARED_MEMORY*/) { super((Pointer)null); allocate(ctx, device, q, kernelType); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, @Cast("b3GpuSapBroadphase::b3GpuSapKernelType") int kernelType/*=b3GpuSapBroadphase::B3_GPU_SAP_KERNEL_LOCAL_SHARED_MEMORY*/);
+	public b3GpuSapBroadphase(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q) { super((Pointer)null); allocate(ctx, device, q); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
-	public static native b3GpuBroadphaseInterface CreateFuncBruteForceCpu(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public static native b3GpuBroadphaseInterface CreateFuncBruteForceCpu(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
-	public static native b3GpuBroadphaseInterface CreateFuncBruteForceGpu(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public static native b3GpuBroadphaseInterface CreateFuncBruteForceGpu(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
-	public static native b3GpuBroadphaseInterface CreateFuncOriginal(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
-	public static native b3GpuBroadphaseInterface CreateFuncBarrier(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
-	public static native b3GpuBroadphaseInterface CreateFuncLocalMemory(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public static native b3GpuBroadphaseInterface CreateFuncOriginal(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
+	public static native b3GpuBroadphaseInterface CreateFuncBarrier(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
+	public static native b3GpuBroadphaseInterface CreateFuncLocalMemory(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
 	public native void calculateOverlappingPairs(int maxPairs);
 	public native void calculateOverlappingPairsHost(int maxPairs);
@@ -85,9 +84,9 @@ public class b3GpuSapBroadphase extends b3GpuBroadphaseInterface {
 	//call writeAabbsToGpu after done making all changes (createProxy etc)
 	public native void writeAabbsToGpu();
 
-	public native @ByVal cl_mem getAabbBufferWS();
+	public native @Cast("cl_mem") Pointer getAabbBufferWS();
 	public native int getNumOverlap();
-	public native @ByVal cl_mem getOverlappingPairBuffer();
+	public native @Cast("cl_mem") Pointer getOverlappingPairBuffer();
 
 	public native @ByRef b3Int4OCLArray getOverlappingPairsGPU();
 	public native @ByRef b3IntOCLArray getSmallAabbIndicesGPU();

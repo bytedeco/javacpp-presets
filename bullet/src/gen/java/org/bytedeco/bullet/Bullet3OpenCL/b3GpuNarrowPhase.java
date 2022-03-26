@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuNarrowPhase extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuNarrowPhase(Pointer p) { super(p); }
 
-	public b3GpuNarrowPhase(@ByVal cl_context vtx, @ByVal cl_device_id dev, @ByVal cl_command_queue q, @Const @ByRef b3Config config) { super((Pointer)null); allocate(vtx, dev, q, config); }
-	private native void allocate(@ByVal cl_context vtx, @ByVal cl_device_id dev, @ByVal cl_command_queue q, @Const @ByRef b3Config config);
+	public b3GpuNarrowPhase(@Cast("cl_context") Pointer vtx, @Cast("cl_device_id") Pointer dev, @Cast("cl_command_queue") Pointer q, @Const @ByRef b3Config config) { super((Pointer)null); allocate(vtx, dev, q, config); }
+	private native void allocate(@Cast("cl_context") Pointer vtx, @Cast("cl_device_id") Pointer dev, @Cast("cl_command_queue") Pointer q, @Const @ByRef b3Config config);
 
 	public native int registerSphereShape(float radius);
 	public native int registerPlaneShape(@Const @ByRef b3Vector3 planeNormal, float planeConstant);
@@ -63,18 +62,18 @@ public class b3GpuNarrowPhase extends Pointer {
 	public native void setObjectVelocityCpu(FloatBuffer linVel, FloatBuffer angVel, int bodyIndex);
 	public native void setObjectVelocityCpu(float[] linVel, float[] angVel, int bodyIndex);
 
-	public native void computeContacts(@ByVal cl_mem broadphasePairs, int numBroadphasePairs, @ByVal cl_mem aabbsWorldSpace, int numObjects);
+	public native void computeContacts(@Cast("cl_mem") Pointer broadphasePairs, int numBroadphasePairs, @Cast("cl_mem") Pointer aabbsWorldSpace, int numObjects);
 
-	public native @ByVal cl_mem getBodiesGpu();
+	public native @Cast("cl_mem") Pointer getBodiesGpu();
 	public native @Const b3RigidBodyData getBodiesCpu();
 	//struct b3RigidBodyData* getBodiesCpu();
 
 	public native int getNumBodiesGpu();
 
-	public native @ByVal cl_mem getBodyInertiasGpu();
+	public native @Cast("cl_mem") Pointer getBodyInertiasGpu();
 	public native int getNumBodyInertiasGpu();
 
-	public native @ByVal cl_mem getCollidablesGpu();
+	public native @Cast("cl_mem") Pointer getCollidablesGpu();
 	public native @Const b3Collidable getCollidablesCpu();
 	public native int getNumCollidablesGpu();
 
@@ -82,10 +81,10 @@ public class b3GpuNarrowPhase extends Pointer {
 
 	public native @Const b3Contact4 getContactsCPU();
 
-	public native @ByVal cl_mem getContactsGpu();
+	public native @Cast("cl_mem") Pointer getContactsGpu();
 	public native int getNumContactsGpu();
 
-	public native @ByVal cl_mem getAabbLocalSpaceBufferGpu();
+	public native @Cast("cl_mem") Pointer getAabbLocalSpaceBufferGpu();
 
 	public native int getNumRigidBodies();
 

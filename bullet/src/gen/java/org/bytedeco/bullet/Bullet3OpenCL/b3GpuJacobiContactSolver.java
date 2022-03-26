@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -23,10 +22,10 @@ public class b3GpuJacobiContactSolver extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuJacobiContactSolver(Pointer p) { super(p); }
 
-	public b3GpuJacobiContactSolver(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int pairCapacity) { super((Pointer)null); allocate(ctx, device, queue, pairCapacity); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int pairCapacity);
+	public b3GpuJacobiContactSolver(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int pairCapacity) { super((Pointer)null); allocate(ctx, device, queue, pairCapacity); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int pairCapacity);
 
-	public native void solveContacts(int numBodies, @ByVal cl_mem bodyBuf, @ByVal cl_mem inertiaBuf, int numContacts, @ByVal cl_mem contactBuf, @Const @ByRef b3Config config, int static0Index);
+	public native void solveContacts(int numBodies, @Cast("cl_mem") Pointer bodyBuf, @Cast("cl_mem") Pointer inertiaBuf, int numContacts, @Cast("cl_mem") Pointer contactBuf, @Const @ByRef b3Config config, int static0Index);
 	public native void solveGroupHost(b3RigidBodyData bodies, b3InertiaData inertias, int numBodies, b3Contact4 manifoldPtr, int numManifolds, @Const @ByRef b3JacobiSolverInfo solverInfo);
 	//void  solveGroupHost(btRigidBodyCL* bodies,b3InertiaData* inertias,int numBodies,btContact4* manifoldPtr, int numManifolds,btTypedConstraint** constraints,int numConstraints,const btJacobiSolverInfo& solverInfo);
 

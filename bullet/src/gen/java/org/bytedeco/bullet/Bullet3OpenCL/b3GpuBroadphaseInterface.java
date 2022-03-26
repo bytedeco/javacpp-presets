@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -34,9 +33,9 @@ public class b3GpuBroadphaseInterface extends Pointer {
 	//call writeAabbsToGpu after done making all changes (createProxy etc)
 	public native void writeAabbsToGpu();
 
-	public native @ByVal cl_mem getAabbBufferWS();
+	public native @Cast("cl_mem") Pointer getAabbBufferWS();
 	public native int getNumOverlap();
-	public native @ByVal cl_mem getOverlappingPairBuffer();
+	public native @Cast("cl_mem") Pointer getOverlappingPairBuffer();
 
 	public native @ByRef b3SapAabbOCLArray getAllAabbsGPU();
 	public native @ByRef b3SapAabbArray getAllAabbsCPU();

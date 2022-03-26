@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -36,13 +35,13 @@ public class b3GpuRigidBodyPipelineInternalData extends Pointer {
         return new b3GpuRigidBodyPipelineInternalData((Pointer)this).offsetAddress(i);
     }
 
-	public native @ByRef cl_context m_context(); public native b3GpuRigidBodyPipelineInternalData m_context(cl_context setter);
-	public native @ByRef cl_device_id m_device(); public native b3GpuRigidBodyPipelineInternalData m_device(cl_device_id setter);
-	public native @ByRef cl_command_queue m_queue(); public native b3GpuRigidBodyPipelineInternalData m_queue(cl_command_queue setter);
+	public native @Cast("cl_context") Pointer m_context(); public native b3GpuRigidBodyPipelineInternalData m_context(Pointer setter);
+	public native @Cast("cl_device_id") Pointer m_device(); public native b3GpuRigidBodyPipelineInternalData m_device(Pointer setter);
+	public native @Cast("cl_command_queue") Pointer m_queue(); public native b3GpuRigidBodyPipelineInternalData m_queue(Pointer setter);
 
-	public native @ByRef cl_kernel m_integrateTransformsKernel(); public native b3GpuRigidBodyPipelineInternalData m_integrateTransformsKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_updateAabbsKernel(); public native b3GpuRigidBodyPipelineInternalData m_updateAabbsKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_clearOverlappingPairsKernel(); public native b3GpuRigidBodyPipelineInternalData m_clearOverlappingPairsKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_integrateTransformsKernel(); public native b3GpuRigidBodyPipelineInternalData m_integrateTransformsKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_updateAabbsKernel(); public native b3GpuRigidBodyPipelineInternalData m_updateAabbsKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_clearOverlappingPairsKernel(); public native b3GpuRigidBodyPipelineInternalData m_clearOverlappingPairsKernel(Pointer setter);
 
 	public native b3PgsJacobiSolver m_solver(); public native b3GpuRigidBodyPipelineInternalData m_solver(b3PgsJacobiSolver setter);
 

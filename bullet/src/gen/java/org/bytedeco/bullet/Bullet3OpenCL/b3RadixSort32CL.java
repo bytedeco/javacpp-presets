@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -58,10 +57,10 @@ public class b3RadixSort32CL extends Pointer {
 		NUM_WGS = 20 * 6;  //	cypress
 						   //			NUM_WGS = 24*6,	//	cayman
 						   //			NUM_WGS = 32*4,	//	nv
-	public b3RadixSort32CL(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int initialCapacity/*=0*/) { super((Pointer)null); allocate(ctx, device, queue, initialCapacity); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int initialCapacity/*=0*/);
-	public b3RadixSort32CL(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(ctx, device, queue); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public b3RadixSort32CL(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int initialCapacity/*=0*/) { super((Pointer)null); allocate(ctx, device, queue, initialCapacity); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int initialCapacity/*=0*/);
+	public b3RadixSort32CL(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(ctx, device, queue); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 
 	public native void execute(@ByRef b3UnsignedIntOCLArray keysIn, @ByRef b3UnsignedIntOCLArray keysOut, @ByRef b3UnsignedIntOCLArray valuesIn,
 					 @ByRef b3UnsignedIntOCLArray valuesOut, int n, int sortBits/*=32*/);

@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
   //for b3SortData (perhaps move it?)
@@ -29,13 +28,13 @@ public class b3BoundSearchCL extends Pointer {
 		BOUND_UPPER = 1,
 		COUNT = 2;
 
-	public native @ByRef cl_context m_context(); public native b3BoundSearchCL m_context(cl_context setter);
-	public native @ByRef cl_device_id m_device(); public native b3BoundSearchCL m_device(cl_device_id setter);
-	public native @ByRef cl_command_queue m_queue(); public native b3BoundSearchCL m_queue(cl_command_queue setter);
+	public native @Cast("cl_context") Pointer m_context(); public native b3BoundSearchCL m_context(Pointer setter);
+	public native @Cast("cl_device_id") Pointer m_device(); public native b3BoundSearchCL m_device(Pointer setter);
+	public native @Cast("cl_command_queue") Pointer m_queue(); public native b3BoundSearchCL m_queue(Pointer setter);
 
-	public native @ByRef cl_kernel m_lowerSortDataKernel(); public native b3BoundSearchCL m_lowerSortDataKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_upperSortDataKernel(); public native b3BoundSearchCL m_upperSortDataKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_subtractKernel(); public native b3BoundSearchCL m_subtractKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_lowerSortDataKernel(); public native b3BoundSearchCL m_lowerSortDataKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_upperSortDataKernel(); public native b3BoundSearchCL m_upperSortDataKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_subtractKernel(); public native b3BoundSearchCL m_subtractKernel(Pointer setter);
 
 	public native b3Int4OCLArray m_constbtOpenCLArray(); public native b3BoundSearchCL m_constbtOpenCLArray(b3Int4OCLArray setter);
 	public native b3UnsignedIntOCLArray m_lower(); public native b3BoundSearchCL m_lower(b3UnsignedIntOCLArray setter);
@@ -43,8 +42,8 @@ public class b3BoundSearchCL extends Pointer {
 
 	public native b3FillCL m_filler(); public native b3BoundSearchCL m_filler(b3FillCL setter);
 
-	public b3BoundSearchCL(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int size) { super((Pointer)null); allocate(context, device, queue, size); }
-	private native void allocate(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue, int size);
+	public b3BoundSearchCL(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int size) { super((Pointer)null); allocate(context, device, queue, size); }
+	private native void allocate(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, int size);
 
 	//	src has to be src[i].m_key <= src[i+1].m_key
 	public native void execute(@ByRef b3SortDataOCLArray src, int nSrc, @ByRef b3UnsignedIntOCLArray dst, int nDst, @Cast("b3BoundSearchCL::Option") int option/*=b3BoundSearchCL::BOUND_LOWER*/);

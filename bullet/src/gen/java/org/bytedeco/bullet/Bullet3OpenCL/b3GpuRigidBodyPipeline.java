@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuRigidBodyPipeline extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuRigidBodyPipeline(Pointer p) { super(p); }
 
-	public b3GpuRigidBodyPipeline(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, b3GpuNarrowPhase narrowphase, b3GpuBroadphaseInterface broadphaseSap, b3DynamicBvhBroadphase broadphaseDbvt, @Const @ByRef b3Config config) { super((Pointer)null); allocate(ctx, device, q, narrowphase, broadphaseSap, broadphaseDbvt, config); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q, b3GpuNarrowPhase narrowphase, b3GpuBroadphaseInterface broadphaseSap, b3DynamicBvhBroadphase broadphaseDbvt, @Const @ByRef b3Config config);
+	public b3GpuRigidBodyPipeline(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, b3GpuNarrowPhase narrowphase, b3GpuBroadphaseInterface broadphaseSap, b3DynamicBvhBroadphase broadphaseDbvt, @Const @ByRef b3Config config) { super((Pointer)null); allocate(ctx, device, q, narrowphase, broadphaseSap, broadphaseDbvt, config); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q, b3GpuNarrowPhase narrowphase, b3GpuBroadphaseInterface broadphaseSap, b3DynamicBvhBroadphase broadphaseDbvt, @Const @ByRef b3Config config);
 
 	public native void stepSimulation(float deltaTime);
 	public native void integrate(float timeStep);
@@ -64,7 +63,7 @@ public class b3GpuRigidBodyPipeline extends Pointer {
 
 	public native void castRays(@Const @ByRef b3RayInfoArray rays, @ByRef b3RayHitArray hitResults);
 
-	public native @ByVal cl_mem getBodyBuffer();
+	public native @Cast("cl_mem") Pointer getBodyBuffer();
 
 	public native int getNumBodies();
 }

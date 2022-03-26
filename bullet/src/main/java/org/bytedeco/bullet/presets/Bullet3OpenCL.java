@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Andrey Krainyak
  */
 @Properties(
-    inherit = {Bullet3Dynamics.class, clew.class},
+    inherit = Bullet3Dynamics.class,
     value = {
         @Platform(
             define = {
@@ -104,6 +104,29 @@ public class Bullet3OpenCL implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap
+            .put(new Info(
+                    "cl_int",
+                    "cl_uint",
+                    "cl_bool",
+                    "cl_device_local_mem_type"
+                ).cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+
+            .put(new Info(
+                    "cl_ulong",
+                    "cl_device_type",
+                    "cl_command_queue_properties"
+                ).cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+
+            .put(new Info(
+                    "cl_platform_id",
+                    "cl_device_id",
+                    "cl_context",
+                    "cl_command_queue",
+                    "cl_mem",
+                    "cl_program",
+                    "cl_kernel"
+                ).cast().valueTypes("Pointer").pointerTypes("PointerPointer"))
+
             .put(new Info(
                     "DEBUG_CHECK_DEQUANTIZATION",
                     "b3Int64",

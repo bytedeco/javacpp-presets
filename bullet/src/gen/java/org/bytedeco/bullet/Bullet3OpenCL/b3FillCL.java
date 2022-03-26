@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -48,8 +47,8 @@ public class b3FillCL extends Pointer {
 		public native int m_padding(int i); public native b3ConstData m_padding(int i, int setter);
 		@MemberGetter public native IntPointer m_padding();
 	}
-	public b3FillCL(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(ctx, device, queue); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public b3FillCL(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(ctx, device, queue); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 
 	public native void execute(@ByRef b3UnsignedIntOCLArray src, @Cast("const unsigned int") int value, int n, int offset/*=0*/);
 	public native void execute(@ByRef b3UnsignedIntOCLArray src, @Cast("const unsigned int") int value, int n);

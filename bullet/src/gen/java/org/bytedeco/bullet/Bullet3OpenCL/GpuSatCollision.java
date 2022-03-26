@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -26,44 +25,44 @@ public class GpuSatCollision extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GpuSatCollision(Pointer p) { super(p); }
 
-	public native @ByRef cl_context m_context(); public native GpuSatCollision m_context(cl_context setter);
-	public native @ByRef cl_device_id m_device(); public native GpuSatCollision m_device(cl_device_id setter);
-	public native @ByRef cl_command_queue m_queue(); public native GpuSatCollision m_queue(cl_command_queue setter);
-	public native @ByRef cl_kernel m_findSeparatingAxisKernel(); public native GpuSatCollision m_findSeparatingAxisKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_mprPenetrationKernel(); public native GpuSatCollision m_mprPenetrationKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_findSeparatingAxisUnitSphereKernel(); public native GpuSatCollision m_findSeparatingAxisUnitSphereKernel(cl_kernel setter);
+	public native @Cast("cl_context") Pointer m_context(); public native GpuSatCollision m_context(Pointer setter);
+	public native @Cast("cl_device_id") Pointer m_device(); public native GpuSatCollision m_device(Pointer setter);
+	public native @Cast("cl_command_queue") Pointer m_queue(); public native GpuSatCollision m_queue(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findSeparatingAxisKernel(); public native GpuSatCollision m_findSeparatingAxisKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_mprPenetrationKernel(); public native GpuSatCollision m_mprPenetrationKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findSeparatingAxisUnitSphereKernel(); public native GpuSatCollision m_findSeparatingAxisUnitSphereKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_findSeparatingAxisVertexFaceKernel(); public native GpuSatCollision m_findSeparatingAxisVertexFaceKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_findSeparatingAxisEdgeEdgeKernel(); public native GpuSatCollision m_findSeparatingAxisEdgeEdgeKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_findSeparatingAxisVertexFaceKernel(); public native GpuSatCollision m_findSeparatingAxisVertexFaceKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findSeparatingAxisEdgeEdgeKernel(); public native GpuSatCollision m_findSeparatingAxisEdgeEdgeKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_findConcaveSeparatingAxisKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_findConcaveSeparatingAxisVertexFaceKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisVertexFaceKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_findConcaveSeparatingAxisEdgeEdgeKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisEdgeEdgeKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_findConcaveSeparatingAxisKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findConcaveSeparatingAxisVertexFaceKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisVertexFaceKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findConcaveSeparatingAxisEdgeEdgeKernel(); public native GpuSatCollision m_findConcaveSeparatingAxisEdgeEdgeKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_findCompoundPairsKernel(); public native GpuSatCollision m_findCompoundPairsKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_processCompoundPairsKernel(); public native GpuSatCollision m_processCompoundPairsKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_findCompoundPairsKernel(); public native GpuSatCollision m_findCompoundPairsKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_processCompoundPairsKernel(); public native GpuSatCollision m_processCompoundPairsKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_clipHullHullKernel(); public native GpuSatCollision m_clipHullHullKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_clipCompoundsHullHullKernel(); public native GpuSatCollision m_clipCompoundsHullHullKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_clipHullHullKernel(); public native GpuSatCollision m_clipHullHullKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_clipCompoundsHullHullKernel(); public native GpuSatCollision m_clipCompoundsHullHullKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_clipFacesAndFindContacts(); public native GpuSatCollision m_clipFacesAndFindContacts(cl_kernel setter);
-	public native @ByRef cl_kernel m_findClippingFacesKernel(); public native GpuSatCollision m_findClippingFacesKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_clipFacesAndFindContacts(); public native GpuSatCollision m_clipFacesAndFindContacts(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findClippingFacesKernel(); public native GpuSatCollision m_findClippingFacesKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_clipHullHullConcaveConvexKernel(); public native GpuSatCollision m_clipHullHullConcaveConvexKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_clipHullHullConcaveConvexKernel(); public native GpuSatCollision m_clipHullHullConcaveConvexKernel(Pointer setter);
 	//	cl_kernel				m_extractManifoldAndAddContactKernel;
-	public native @ByRef cl_kernel m_newContactReductionKernel(); public native GpuSatCollision m_newContactReductionKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_newContactReductionKernel(); public native GpuSatCollision m_newContactReductionKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_bvhTraversalKernel(); public native GpuSatCollision m_bvhTraversalKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_primitiveContactsKernel(); public native GpuSatCollision m_primitiveContactsKernel(cl_kernel setter);
-	public native @ByRef cl_kernel m_findConcaveSphereContactsKernel(); public native GpuSatCollision m_findConcaveSphereContactsKernel(cl_kernel setter);
+	public native @Cast("cl_kernel") Pointer m_bvhTraversalKernel(); public native GpuSatCollision m_bvhTraversalKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_primitiveContactsKernel(); public native GpuSatCollision m_primitiveContactsKernel(Pointer setter);
+	public native @Cast("cl_kernel") Pointer m_findConcaveSphereContactsKernel(); public native GpuSatCollision m_findConcaveSphereContactsKernel(Pointer setter);
 
-	public native @ByRef cl_kernel m_processCompoundPairsPrimitivesKernel(); public native GpuSatCollision m_processCompoundPairsPrimitivesKernel(cl_kernel setter);
-
-	
+	public native @Cast("cl_kernel") Pointer m_processCompoundPairsPrimitivesKernel(); public native GpuSatCollision m_processCompoundPairsPrimitivesKernel(Pointer setter);
 
 	
 
 	
+
+	
 	
 
 	
@@ -75,8 +74,8 @@ public class GpuSatCollision extends Pointer {
 	
 	
 
-	public GpuSatCollision(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q) { super((Pointer)null); allocate(ctx, device, q); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue q);
+	public GpuSatCollision(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q) { super((Pointer)null); allocate(ctx, device, q); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer q);
 
 	public native void computeConvexConvexContactsGPUSAT(b3Int4OCLArray pairs, int nPairs,
 											   @Const b3RigidBodyDataOCLArray bodyBuf,

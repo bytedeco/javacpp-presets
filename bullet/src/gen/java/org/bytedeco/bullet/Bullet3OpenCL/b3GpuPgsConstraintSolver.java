@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -24,8 +23,8 @@ public class b3GpuPgsConstraintSolver extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuPgsConstraintSolver(Pointer p) { super(p); }
 
-	public b3GpuPgsConstraintSolver(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, @Cast("bool") boolean usePgs) { super((Pointer)null); allocate(ctx, device, queue, usePgs); }
-	private native void allocate(@ByVal cl_context ctx, @ByVal cl_device_id device, @ByVal cl_command_queue queue, @Cast("bool") boolean usePgs);
+	public b3GpuPgsConstraintSolver(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, @Cast("bool") boolean usePgs) { super((Pointer)null); allocate(ctx, device, queue, usePgs); }
+	private native void allocate(@Cast("cl_context") Pointer ctx, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue, @Cast("bool") boolean usePgs);
 
 	public native @Cast("b3Scalar") float solveGroupCacheFriendlyIterations(b3GpuGenericConstraintOCLArray gpuConstraints1, int numConstraints, @Const @ByRef b3ContactSolverInfo infoGlobal);
 	public native @Cast("b3Scalar") float solveGroupCacheFriendlySetup(b3RigidBodyDataOCLArray gpuBodies, b3InertiaDataOCLArray gpuInertias, int numBodies, b3GpuGenericConstraintOCLArray gpuConstraints, int numConstraints, @Const @ByRef b3ContactSolverInfo infoGlobal);

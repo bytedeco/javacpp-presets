@@ -13,7 +13,6 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
-import static org.bytedeco.bullet.clew.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
 
@@ -42,8 +41,8 @@ public class b3GpuParallelLinearBvh extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public b3GpuParallelLinearBvh(Pointer p) { super(p); }
 
-	public b3GpuParallelLinearBvh(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue) { super((Pointer)null); allocate(context, device, queue); }
-	private native void allocate(@ByVal cl_context context, @ByVal cl_device_id device, @ByVal cl_command_queue queue);
+	public b3GpuParallelLinearBvh(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue) { super((Pointer)null); allocate(context, device, queue); }
+	private native void allocate(@Cast("cl_context") Pointer context, @Cast("cl_device_id") Pointer device, @Cast("cl_command_queue") Pointer queue);
 
 	/**Must be called before any other function */
 	public native void build(@Const @ByRef b3SapAabbOCLArray worldSpaceAabbs, @Const @ByRef b3IntOCLArray smallAabbIndices,
