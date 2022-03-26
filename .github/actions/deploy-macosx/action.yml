@@ -19,9 +19,9 @@ runs:
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew uninstall --force gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 maven
+        brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
-        brew uninstall --force gcc gcc@7 gcc@8 gcc@9 gcc@11 gcc@12
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
           brew install gcc@10
@@ -42,13 +42,15 @@ runs:
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
           sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
           otool -L /usr/local/lib/gcc/10/*.dylib
-        else
-          brew uninstall --force gcc@10
         fi
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
+
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
+        sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
         python3 -m pip install gdown || python3 -m pip install gdown
 

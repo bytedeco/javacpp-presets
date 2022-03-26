@@ -200,7 +200,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.22.x  https://github.com/numpy/numpy
  * SciPy 1.8.x  https://github.com/scipy/scipy
  * Gym 0.23.x  https://github.com/openai/gym
- * LLVM 13.0.x  http://llvm.org/releases/download.html
+ * LLVM 14.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
@@ -209,7 +209,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.11.x  https://developer.nvidia.com/nccl
+   * NCCL 2.12.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
@@ -222,7 +222,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * DepthAI 2.15.x  https://github.com/luxonis/depthai-core
  * ONNX 1.10.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.11.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

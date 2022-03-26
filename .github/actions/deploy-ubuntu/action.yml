@@ -19,24 +19,24 @@ runs:
           export ARCH=arm64
           export ARCH2=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.2_510.47.03-1.aarch64.rpm
           export CUDNN=cudnn-linux-sbsa-8.3.2.44_cuda11.5-archive.tar.xz
-          export NCCL=2.11.4-1+cuda11.5.aarch64
+          export NCCL=2.12.7-1+cuda11.6.aarch64
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
           export ARCH2=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.2_510.47.03-1.ppc64le.rpm
           export CUDNN=cudnn-linux-ppc64le-8.3.2.44_cuda11.5-archive.tar.xz
-          export NCCL=2.11.4-1+cuda11.5.ppc64le
+          export NCCL=2.12.7-1+cuda11.6.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
           export ARCH2=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-11-6-local-11.6.1_510.47.03-1.x86_64.rpm
+          export CUDA=cuda-repo-rhel8-11-6-local-11.6.2_510.47.03-1.x86_64.rpm
           export CUDNN=cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
-          export NCCL=2.11.4-1+cuda11.5.x86_64
+          export NCCL=2.12.7-1+cuda11.6.x86_64
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "ARCH2=$ARCH2" >> $GITHUB_ENV
@@ -90,7 +90,7 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/$CUDNN
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm

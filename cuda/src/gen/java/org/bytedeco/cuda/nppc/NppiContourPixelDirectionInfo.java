@@ -49,8 +49,6 @@ public class NppiContourPixelDirectionInfo extends Pointer {
     public native @ByRef NppiPoint nSouthWest1(); public native NppiContourPixelDirectionInfo nSouthWest1(NppiPoint setter);
     public native @ByRef NppiPoint nSouth1(); public native NppiContourPixelDirectionInfo nSouth1(NppiPoint setter);
     public native @ByRef NppiPoint nSouthEast1(); public native NppiContourPixelDirectionInfo nSouthEast1(NppiPoint setter);
-    public native @Cast("Npp8u") byte aContourInteriorDirection1(int i); public native NppiContourPixelDirectionInfo aContourInteriorDirection1(int i, byte setter);
-    @MemberGetter public native @Cast("Npp8u*") BytePointer aContourInteriorDirection1();
     public native @Cast("Npp8u") byte nTest1EastConnected(); public native NppiContourPixelDirectionInfo nTest1EastConnected(byte setter);
     public native @Cast("Npp8u") byte nTest1NorthEastConnected(); public native NppiContourPixelDirectionInfo nTest1NorthEastConnected(byte setter);
     public native @Cast("Npp8u") byte nTest1NorthConnected(); public native NppiContourPixelDirectionInfo nTest1NorthConnected(byte setter);
