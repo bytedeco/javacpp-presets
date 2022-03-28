@@ -1,4 +1,5 @@
 
+ * Add presets for Bullet Physics SDK 3.21 ([pull #1153](https://github.com/bytedeco/javacpp-presets/pull/1153))
  * Add `long[] pytorch.Tensor.shape()` method for convenience ([pull #1161](https://github.com/bytedeco/javacpp-presets/pull/1161))
  * Enable DNNL codegen as BYOC backend in presets for TVM
  * Allow passing raw pointer as deleter to `from_blob()`, etc functions of PyTorch ([discussion #1160](https://github.com/bytedeco/javacpp-presets/discussions/1160))
