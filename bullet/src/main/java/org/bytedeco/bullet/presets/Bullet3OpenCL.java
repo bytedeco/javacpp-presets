@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Andrey Krainyak
  */
 @Properties(
-    inherit = Bullet3Dynamics.class,
+    inherit = {Bullet3Dynamics.class, LinearMath.class},
     value = {
         @Platform(
             define = {

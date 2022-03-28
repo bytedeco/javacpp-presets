@@ -13,6 +13,8 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
+import org.bytedeco.bullet.LinearMath.*;
+import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.Bullet3OpenCL.*;
   //for placement new

@@ -15,6 +15,8 @@ import org.bytedeco.bullet.Bullet3Collision.*;
 import static org.bytedeco.bullet.global.Bullet3Collision.*;
 import org.bytedeco.bullet.Bullet3Dynamics.*;
 import static org.bytedeco.bullet.global.Bullet3Dynamics.*;
+import org.bytedeco.bullet.LinearMath.*;
+import static org.bytedeco.bullet.global.LinearMath.*;
 
 public class Bullet3OpenCL extends org.bytedeco.bullet.presets.Bullet3OpenCL {
     static { Loader.load(); }
