@@ -66,6 +66,7 @@
     <module>../ngraph/platform</module>
     <module>../onnxruntime/platform</module>
     <module>../tvm/platform</module>
+    <module>../bullet/platform</module>
     <module>../liquidfun/platform</module>
     <module>../qt/platform</module>
     <module>../skia/platform</module>
@@ -335,6 +336,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
       <version>0.8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>bullet-platform</artifactId>
+      <version>3.21-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
