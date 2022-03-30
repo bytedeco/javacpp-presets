@@ -212,4 +212,21 @@ public class pooling_forward extends primitive {
      *      primitive. */
     public pooling_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
+
+    /** Constructs a pooling forward propagation primitive from a cache blob.
+     *  @param pd Primitive descriptor for a pooling forward propagation
+     *      primitive.
+     *  @param cache_blob Cache blob. */
+    public pooling_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public pooling_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public pooling_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 }

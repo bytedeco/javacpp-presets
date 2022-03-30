@@ -190,4 +190,22 @@ public class inner_product_backward_weights extends primitive {
      *      primitive. */
     public inner_product_backward_weights(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
+
+    /** Constructs an inner product weights gradient primitive from a cache
+     *      blob.
+     *  @param pd Primitive descriptor for an inner product weights gradient
+     *      primitive.
+     *  @param cache_blob Cache blob. */
+    public inner_product_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public inner_product_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public inner_product_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 }

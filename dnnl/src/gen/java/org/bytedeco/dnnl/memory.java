@@ -255,6 +255,8 @@ public class memory extends dnnl_memory_handle {
         /** permuted 4D tensor */
         acdb(dnnl_acdb),
         /** permuted 4D tensor */
+        adbc(dnnl_adbc),
+        /** permuted 4D tensor */
         bacd(dnnl_bacd),
         /** permuted 4D tensor */
         bcda(dnnl_bcda),
@@ -905,6 +907,7 @@ public class memory extends dnnl_memory_handle {
         OIdhw16i32o(dnnl_OIdhw16i32o),
         OIdhw16i64o(dnnl_OIdhw16i64o),
         OIdhw16o16i(dnnl_OIdhw16o16i),
+        OIdhw16o16i2o(dnnl_OIdhw16o16i2o),
         Oidhw16o(dnnl_Oidhw16o),
         OIdhw4i4o(dnnl_OIdhw4i4o),
         OIdhw4o4i(dnnl_OIdhw4o4i),
@@ -998,6 +1001,7 @@ public class memory extends dnnl_memory_handle {
         gOdhwi8o(dnnl_gOdhwi8o),
         gOIdhw16i16o(dnnl_gOIdhw16i16o),
         gOIdhw16o16i(dnnl_gOIdhw16o16i),
+        gOIdhw16o16i2o(dnnl_gOIdhw16o16i2o),
         gOidhw16o(dnnl_gOidhw16o),
         gOIdhw4i4o(dnnl_gOIdhw4i4o),
         gOIdhw4o4i(dnnl_gOIdhw4o4i),
@@ -1346,7 +1350,17 @@ public class memory extends dnnl_memory_handle {
         BA4b8a16b2a(dnnl_BA4b8a16b2a),
         BA4b8a16b4a(dnnl_BA4b8a16b4a),
         aCB4c8b16c2b(dnnl_aCB4c8b16c2b),
-        aCB4c8b16c4b(dnnl_aCB4c8b16c4b);
+        aCB4c8b16c4b(dnnl_aCB4c8b16c4b),
+        aCB16c2b(dnnl_aCB16c2b),
+        aCB16c4b(dnnl_aCB16c4b),
+        BA16b2a(dnnl_BA16b2a),
+        BA16b4a(dnnl_BA16b4a),
+        aBC16b16c(dnnl_aBC16b16c),
+        aBC16b32c(dnnl_aBC16b32c),
+        AB16a16b(dnnl_AB16a16b),
+        AB16a32b(dnnl_AB16a32b),
+        ABcde16a16b2a(dnnl_ABcde16a16b2a),
+        aBCdef16b16c2b(dnnl_aBCdef16b16c2b);
 
         public final int value;
         private format_tag(int v) { this.value = v; }

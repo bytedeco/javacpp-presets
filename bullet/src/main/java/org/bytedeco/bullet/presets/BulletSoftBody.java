@@ -155,6 +155,7 @@ public class BulletSoftBody implements InfoMapper {
             .put(new Info("btSparseSdf<3>::IntFrac").pointerTypes("btSparseSdf3.IntFrac"))
 
             .put(new Info(
+                    "CommonFileIOInterface",
                     "DeformableContactConstraint::m_contact",
                     "SAFE_EPSILON",
                     "btAlignedObjectArray<LagrangeMultiplier>::findBinarySearch",

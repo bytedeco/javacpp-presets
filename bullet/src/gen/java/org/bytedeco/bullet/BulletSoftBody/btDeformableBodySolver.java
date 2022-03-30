@@ -16,6 +16,8 @@ import static org.bytedeco.bullet.global.BulletDynamics.*;
 
 import static org.bytedeco.bullet.global.BulletSoftBody.*;
 
+// class btDeformableBackwardEulerObjective;
+// class btDeformableMultiBodyDynamicsWorld;
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletSoftBody.class)
 public class btDeformableBodySolver extends btSoftBodySolver {
@@ -49,6 +51,9 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 
 	// solve the momentum equation
 	public native void solveDeformableConstraints(@Cast("btScalar") float solverdt);
+
+	// set gravity (get from deformable world)
+	public native void setGravity(@Const @ByRef btVector3 gravity);
 
 	// resize/clear data structures
 	public native void reinitialize(@Const @ByRef btSoftBodyArray softBodies, @Cast("btScalar") float dt);
@@ -127,6 +132,28 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	// 1/2 * dv^T * M * dv
 	// used in line search
 	public native @Cast("btScalar") float kineticEnergy();
+
+	// add explicit force to the velocity in the objective class
+	public native void applyExplicitForce();
+
+	// execute position/velocity update and apply anchor constraints in the integrateTransforms from the Dynamics world
+	public native void applyTransforms(@Cast("btScalar") float timeStep);
+
+	public native void setStrainLimiting(@Cast("bool") boolean opt);
+
+	public native void setPreconditioner(int opt);
+
+	public native btDeformableLagrangianForceArray getLagrangianForceArray();
+
+	public native @Const btSoftBodyNodePointerArray getIndices();
+
+	public native void setProjection();
+
+	public native void setLagrangeMultiplier();
+
+	public native @Cast("bool") boolean isReducedSolver();
+	
+	public native void deformableBodyInternalWriteBack();
 
 	// unused functions
 	public native void optimize(@ByRef btSoftBodyArray softBodies, @Cast("bool") boolean forceUpdate/*=false*/);

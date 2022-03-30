@@ -505,4 +505,22 @@ public class deconvolution_forward extends primitive {
      *      primitive. */
     public deconvolution_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
+
+    /** Constructs a deconvolution forward propagation primitive from a cache
+     *      blob.
+     *  @param pd Primitive descriptor for a deconvolution forward propagation
+     *      primitive.
+     *  @param cache_blob Cache blob. */
+    public deconvolution_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public deconvolution_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public deconvolution_forward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 }

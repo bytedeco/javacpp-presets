@@ -55,6 +55,8 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native @ByRef btSoftBodyWorldInfo getWorldInfo();
 
+	public native void setGravity(@Const @ByRef btVector3 gravity);
+
 	public native void reinitialize(@Cast("btScalar") float timeStep);
 
 	public native void applyRigidBodyGravity(@Cast("btScalar") float timeStep);

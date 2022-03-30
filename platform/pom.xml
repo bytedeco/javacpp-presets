@@ -180,7 +180,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5.4-${project.version}</version>
+      <version>2.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -340,7 +340,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>bullet-platform</artifactId>
-      <version>3.21-${project.version}</version>
+      <version>3.22-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

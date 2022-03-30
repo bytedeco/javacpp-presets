@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>bullet</artifactId>
-  <version>3.21-${project.parent.version}</version>
+  <version>3.22-${project.parent.version}</version>
   <name>JavaCPP Presets for Bullet Physics SDK</name>
 
   <dependencies>
@@ -35,7 +35,8 @@
         <configuration>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/bullet</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/bullet3-3.21/src</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/bullet3-3.22/src</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/bullet3-3.22/src/BulletSoftBody/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
           </includePaths>
         </configuration>

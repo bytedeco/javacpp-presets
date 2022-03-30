@@ -950,6 +950,7 @@ subject to the following restrictions:
 // #define BT_SOFT_BODY_HELPERS_H
 
 // #include "btSoftBody.h"
+// #include "../../examples/CommonInterfaces/CommonFileIOInterface.h"
 // #include <fstream>
 // #include <string>
 // Targeting ../BulletSoftBody/fDrawFlags.java

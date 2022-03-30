@@ -191,7 +191,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 2.6.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.20  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -225,7 +225,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.11.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
- * Bullet Physics SDK 3.21  https://pybullet.org
+ * Bullet Physics SDK 3.22  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
  * Mono/Skia 2.80.x  https://github.com/mono/skia

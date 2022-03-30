@@ -23,6 +23,10 @@ public class btDeformableBackwardEulerObjective extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableBackwardEulerObjective(Pointer p) { super(p); }
 
+	/** enum btDeformableBackwardEulerObjective::_ */
+	public static final int
+		Mass_preconditioner = 0,
+		KKT_preconditioner = 1;
 	@MemberGetter public native @Cast("btScalar") float m_dt();
 	@MemberGetter public native @ByRef btDeformableLagrangianForceArray m_lf();
 	@MemberGetter public native @ByRef btSoftBodyArray m_softBodies();
