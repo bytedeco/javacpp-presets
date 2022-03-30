@@ -25,9 +25,8 @@ public class MemoryFormatOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef MemoryFormatOptional put(@ByRef MemoryFormatOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef MemoryFormat get();
+    public native @Name("value") @ByRef MemoryFormat get();
     @ValueSetter public native MemoryFormatOptional put(@ByRef MemoryFormat value);
 }
 

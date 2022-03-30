@@ -25,9 +25,8 @@ public class IValueOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef IValueOptional put(@ByRef IValueOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef IValue get();
+    public native @Name("value") @ByRef IValue get();
     @ValueSetter public native IValueOptional put(@ByRef IValue value);
 }
 

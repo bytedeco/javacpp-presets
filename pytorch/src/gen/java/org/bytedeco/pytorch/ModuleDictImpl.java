@@ -114,12 +114,12 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   public native @ByVal SharedModuleVector values();
 
   /** Return an iterator to the start of {@code ModuleDict}. */
-  public native @ByVal @Cast("torch::nn::ModuleDictImpl::Iterator*") StringSharedModuleDict.Iterator begin();
+  public native @ByVal @Cast("torch::nn::ModuleDictImpl::Iterator*") StringSharedModuleDictItem begin();
 
   /** Return a const iterator to the start of {@code ModuleDict}. */
 
   /** Return an iterator to the end of {@code ModuleDict}. */
-  public native @ByVal @Cast("torch::nn::ModuleDictImpl::Iterator*") StringSharedModuleDict.Iterator end();
+  public native @ByVal @Cast("torch::nn::ModuleDictImpl::Iterator*") StringSharedModuleDictItem end();
 
   /** Return a const iterator to the end of {@code ModuleDict}. */
 

@@ -25,9 +25,8 @@ public class ValueOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef ValueOptional put(@ByRef ValueOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native Value get();
+    public native @Name("value") Value get();
     @ValueSetter public native ValueOptional put(Value value);
 }
 

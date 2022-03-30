@@ -25,9 +25,8 @@ public class DoubleVectorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DoubleVectorOptional put(@ByRef DoubleVectorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast("std::vector<double>*") @ByRef DoubleVector get();
+    public native @Name("value") @Cast("std::vector<double>*") @ByRef DoubleVector get();
     @ValueSetter public native DoubleVectorOptional put(@Cast("std::vector<double>*") @ByRef DoubleVector value);
 }
 

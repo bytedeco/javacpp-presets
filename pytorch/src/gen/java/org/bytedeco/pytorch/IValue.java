@@ -265,11 +265,11 @@ public class IValue extends Pointer {
   // This SNIFAEs the called constructor exists.
 
   // GenericDict
-  public IValue(@ByVal IValueIValueDict v) { super((Pointer)null); allocate(v); }
-  private native void allocate(@ByVal IValueIValueDict v);
+  public IValue(@ByVal GenericDict v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@ByVal GenericDict v);
   public native @Cast("bool") boolean isGenericDict();
   
-  public native @ByVal IValueIValueDict toGenericDict();
+  public native @ByVal GenericDict toGenericDict();
 
   // ClassType
   public native @Cast("bool") boolean isObject();
@@ -449,12 +449,12 @@ public class IValue extends Pointer {
   public native @Cast("bool") boolean overlaps(@Const @ByRef IValue rhs);
 
   // Inserts all subvalues of this in subValues.
-  public native void getSubValues(@Cast("c10::IValue::HashAliasedIValues*") @ByRef IValueSet subValues);
+  public native void getSubValues(@ByRef HashAliasedIValues subValues);
 
   // Apply visitor to every subvalue.
   // TODO: There are several places that recurse over IValue. This is fragile.
   // This visitor should be used to recurse over ivalues.
   public native void visit(@Const @ByRef IValueVisitor visitor);
   public native @ByVal IValue deepcopy();
-  public native @ByVal IValue deepcopy(@Cast("c10::IValue::HashAliasedIValueMap*") @ByRef IValueIValueMap memo);
+  public native @ByVal IValue deepcopy(@ByRef HashAliasedIValueMap memo);
 }

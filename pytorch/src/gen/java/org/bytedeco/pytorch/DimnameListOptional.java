@@ -25,9 +25,8 @@ public class DimnameListOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DimnameListOptional put(@ByRef DimnameListOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef DimnameArrayRef get();
+    public native @Name("value") @ByRef DimnameArrayRef get();
     @ValueSetter public native DimnameListOptional put(@ByRef DimnameArrayRef value);
 }
 

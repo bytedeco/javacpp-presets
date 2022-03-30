@@ -26,9 +26,8 @@ public class LongArrayRefOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef LongArrayRefOptional put(@ByRef LongArrayRefOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef @Cast("c10::ArrayRef<int64_t>*") LongArrayRef get();
+    public native @Name("value") @ByRef @Cast("c10::ArrayRef<int64_t>*") LongArrayRef get();
     @ValueSetter public native LongArrayRefOptional put(@ByRef @Cast("c10::ArrayRef<int64_t>*") LongArrayRef value);
     @ValueSetter public native LongArrayRefOptional put(@ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... value);
 }

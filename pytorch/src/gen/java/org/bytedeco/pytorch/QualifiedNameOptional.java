@@ -25,9 +25,8 @@ public class QualifiedNameOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef QualifiedNameOptional put(@ByRef QualifiedNameOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef QualifiedName get();
+    public native @Name("value") @ByRef QualifiedName get();
     @ValueSetter public native QualifiedNameOptional put(@ByRef QualifiedName value);
 }
 

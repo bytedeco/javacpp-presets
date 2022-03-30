@@ -25,9 +25,8 @@ public class LongOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef LongOptional put(@ByRef LongOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast("int64_t") long get();
+    public native @Name("value") @Cast("int64_t") long get();
     @ValueSetter public native LongOptional put(@Cast("int64_t") long value);
 }
 

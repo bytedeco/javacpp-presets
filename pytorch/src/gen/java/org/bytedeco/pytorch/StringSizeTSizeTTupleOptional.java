@@ -25,9 +25,8 @@ public class StringSizeTSizeTTupleOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef StringSizeTSizeTTupleOptional put(@ByRef StringSizeTSizeTTupleOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef StringSizeTSizeTTuple get();
+    public native @Name("value") @ByRef StringSizeTSizeTTuple get();
     @ValueSetter public native StringSizeTSizeTTupleOptional put(@ByRef StringSizeTSizeTTuple value);
 }
 

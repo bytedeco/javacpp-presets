@@ -25,9 +25,8 @@ public class DispatchKeyOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DispatchKeyOptional put(@ByRef DispatchKeyOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef DispatchKey get();
+    public native @Name("value") @ByRef DispatchKey get();
     @ValueSetter public native DispatchKeyOptional put(@ByRef DispatchKey value);
 }
 

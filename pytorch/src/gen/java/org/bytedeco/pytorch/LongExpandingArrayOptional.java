@@ -25,9 +25,8 @@ public class LongExpandingArrayOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef LongExpandingArrayOptional put(@ByRef LongExpandingArrayOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast("torch::ExpandingArray<1>*") @ByRef LongPointer get();
+    public native @Name("value") @Cast("torch::ExpandingArray<1>*") @ByRef LongPointer get();
     @ValueSetter public native LongExpandingArrayOptional put(@Cast("torch::ExpandingArray<1>*") @ByRef LongPointer value);
 }
 

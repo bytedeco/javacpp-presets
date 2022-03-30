@@ -25,9 +25,8 @@ public class InlinedCallStackOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef InlinedCallStackOptional put(@ByRef InlinedCallStackOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef InlinedCallStack get();
+    public native @Name("value") @ByRef InlinedCallStack get();
     @ValueSetter public native InlinedCallStackOptional put(@ByRef InlinedCallStack value);
 }
 

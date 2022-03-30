@@ -25,9 +25,8 @@ public class ModuleInstanceInfoOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef ModuleInstanceInfoOptional put(@ByRef ModuleInstanceInfoOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef ModuleInstanceInfo get();
+    public native @Name("value") @ByRef ModuleInstanceInfo get();
     @ValueSetter public native ModuleInstanceInfoOptional put(@ByRef ModuleInstanceInfo value);
 }
 

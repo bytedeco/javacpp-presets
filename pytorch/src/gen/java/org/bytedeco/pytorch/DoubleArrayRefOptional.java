@@ -25,9 +25,8 @@ public class DoubleArrayRefOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DoubleArrayRefOptional put(@ByRef DoubleArrayRefOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef DoubleArrayRef get();
+    public native @Name("value") @ByRef DoubleArrayRef get();
     @ValueSetter public native DoubleArrayRefOptional put(@ByRef DoubleArrayRef value);
 }
 

@@ -25,9 +25,8 @@ public class ShapeSymbolVectorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef ShapeSymbolVectorOptional put(@ByRef ShapeSymbolVectorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef ShapeSymbolVector get();
+    public native @Name("value") @ByRef ShapeSymbolVector get();
     @ValueSetter public native ShapeSymbolVectorOptional put(@ByRef ShapeSymbolVector value);
 }
 

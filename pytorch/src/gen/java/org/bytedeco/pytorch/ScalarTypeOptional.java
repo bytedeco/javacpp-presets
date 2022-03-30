@@ -25,9 +25,8 @@ public class ScalarTypeOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef ScalarTypeOptional put(@ByRef ScalarTypeOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native ScalarType get();
+    public native @Name("value") ScalarType get();
     @ValueSetter public native ScalarTypeOptional put(ScalarType value);
 }
 
