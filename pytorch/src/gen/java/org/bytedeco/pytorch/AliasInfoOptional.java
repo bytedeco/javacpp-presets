@@ -25,9 +25,8 @@ public class AliasInfoOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef AliasInfoOptional put(@ByRef AliasInfoOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef AliasInfo get();
+    public native @Name("value") @ByRef AliasInfo get();
     @ValueSetter public native AliasInfoOptional put(@ByRef AliasInfo value);
 }
 

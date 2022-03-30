@@ -25,9 +25,8 @@ public class MethodOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef MethodOptional put(@ByRef MethodOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef Method get();
+    public native @Name("value") @ByRef Method get();
     @ValueSetter public native MethodOptional put(@ByRef Method value);
 }
 

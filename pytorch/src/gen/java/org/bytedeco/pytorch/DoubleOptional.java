@@ -25,9 +25,8 @@ public class DoubleOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DoubleOptional put(@ByRef DoubleOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native double get();
+    public native @Name("value") double get();
     @ValueSetter public native DoubleOptional put(double value);
 }
 

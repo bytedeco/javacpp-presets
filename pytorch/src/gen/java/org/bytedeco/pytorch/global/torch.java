@@ -171,22 +171,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSizeTSizeTTupleOptional.java
 
 
-// Targeting ../IValueIValueDict.java
-
-
 // Targeting ../TensorTensorOptional.java
-
-
-// Targeting ../StringTensorDict.java
-
-
-// Targeting ../StringModuleDict.java
-
-
-// Targeting ../StringAnyModuleDict.java
-
-
-// Targeting ../StringSharedModuleDict.java
 
 
 // Targeting ../NonlinearityType.java
@@ -399,10 +384,19 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../SharedAnyModuleVector.java
 
 
-// Targeting ../FusionStrategy.java
+// Targeting ../StringTensorPairVector.java
+
+
+// Targeting ../StringModulePairVector.java
+
+
+// Targeting ../StringAnyModulePairVector.java
 
 
 // Targeting ../StringSharedModulePairVector.java
+
+
+// Targeting ../FusionStrategy.java
 
 
 // Targeting ../ExampleVector.java
@@ -412,6 +406,15 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringTensorPair.java
+
+
+// Targeting ../StringModulePair.java
+
+
+// Targeting ../StringAnyModulePair.java
+
+
+// Targeting ../StringSharedModulePair.java
 
 
 // Targeting ../TensorTuple.java
@@ -456,7 +459,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSizeTSizeTTuple.java
 
 
-// Targeting ../IValueIValueMap.java
+// Targeting ../HashAliasedIValueMap.java
 
 
 // Targeting ../LongStringMap.java
@@ -486,7 +489,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSet.java
 
 
-// Targeting ../IValueSet.java
+// Targeting ../HashAliasedIValues.java
 
 
 // Targeting ../SymbolSet.java
@@ -15017,7 +15020,7 @@ attr_zero_points(2092),
 
  // namespace jit
 
-// Targeting ../IValueIValueDict.java
+// Targeting ../GenericDict.java
 
 
 // Targeting ../RRefInterface.java
@@ -15041,9 +15044,6 @@ attr_zero_points(2092),
 
 
 // Targeting ../ConstantString.java
-
-
-// Targeting ../GenericDict.java
 
 
 // Targeting ../Object.java
@@ -15713,12 +15713,12 @@ attr_zero_points(2092),
 // note: It is possible to successfully match a formal, but for type variables
 // in the formal to still not be defined. In particular, None matches Optional[T]
 // but does not define the value of T.
-@Namespace("c10") public static native @ByVal MatchTypeReturn matchTypeVariables(@Const @ByRef Type.TypePtr formal, @Const @ByRef Type.TypePtr actual, @Cast("c10::TypeEnv*") @ByRef IValueIValueMap type_env);
+@Namespace("c10") public static native @ByVal MatchTypeReturn matchTypeVariables(@Const @ByRef Type.TypePtr formal, @Const @ByRef Type.TypePtr actual, @Cast("c10::TypeEnv*") @ByRef HashAliasedIValueMap type_env);
 
 // replace type variables appearing in `type` with the values in
 // `type_env`. Returns nullptr if a variable used in `type`
 // does not appear in `type_env`
-@Namespace("c10") public static native @ByVal Type.TypePtr tryEvalTypeVariables(@Const @ByRef Type.TypePtr type, @Cast("c10::TypeEnv*") @ByRef IValueIValueMap type_env);
+@Namespace("c10") public static native @ByVal Type.TypePtr tryEvalTypeVariables(@Const @ByRef Type.TypePtr type, @Cast("c10::TypeEnv*") @ByRef HashAliasedIValueMap type_env);
 
 @Namespace("c10") public static native @Cast("bool") boolean elementTypeCanBeInferredFromMembers(@Const @ByRef Type.TypePtr elem_type);
 // Targeting ../InterfaceType.java
@@ -59057,6 +59057,112 @@ body of your function, only data pointers.
  // namespace torch
 
 
+// Parsed from torch/csrc/api/include/torch/ordered_dict.h
+
+// #pragma once
+
+// #include <cstdint>
+// #include <initializer_list>
+// #include <string>
+// #include <unordered_map>
+// #include <utility>
+// #include <vector>
+// Targeting ../StringTensorDict.java
+
+
+// Targeting ../StringModuleDict.java
+
+
+// Targeting ../StringAnyModuleDict.java
+
+
+// Targeting ../StringSharedModuleDict.java
+
+
+// Targeting ../StringTensorDictItem.java
+
+
+// Targeting ../StringModuleDictItem.java
+
+
+// Targeting ../StringAnyModuleDictItem.java
+
+
+// Targeting ../StringSharedModuleDictItem.java
+
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ OrderedDict ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // namespace torch
+
+
 // Parsed from torch/csrc/utils/disallow_copy.h
 
 // #pragma once
@@ -62818,12 +62924,12 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
     @SharedPtr CompilationUnit cu,
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr CompilationUnit cu,
     @StdString String filename,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
 // For reading unified serialization format from torch.Package
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
@@ -62843,7 +62949,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
     @SharedPtr CompilationUnit cu,
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
 
 ///
@@ -62851,7 +62957,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
     @SharedPtr CompilationUnit cu,
     @UniquePtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
 /** Loads a serialized {@code Module} from the given {@code istream}.
  * 
@@ -62865,7 +62971,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
 /** Loads a serialized {@code Module} from the given {@code filename}.
  * 
@@ -62888,11 +62994,11 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
 /** Loads a serialized {@code Module} from the given shared_ptr {@code rai}.
  * 
@@ -62908,7 +63014,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
-    @Cast("torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files);
+    @Cast("torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files);
 
  // namespace jit
  // namespace torch
@@ -63154,7 +63260,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native void ExportModule(
     @Const @ByRef JitModule module,
     @Cast("std::ostream*") @ByRef Pointer out,
-    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") IValueIValueMap metadata,
+    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap metadata,
     @Cast("bool") boolean bytecode_format/*=false*/,
     @Cast("bool") boolean save_mobile_debug_info/*=false*/);
 @Namespace("torch::jit") public static native void ExportModule(
@@ -63164,7 +63270,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native void ExportModule(
     @Const @ByRef JitModule module,
     @StdString BytePointer filename,
-    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") IValueIValueMap metadata,
+    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap metadata,
     @Cast("bool") boolean bytecode_format/*=false*/,
     @Cast("bool") boolean save_mobile_debug_info/*=false*/);
 @Namespace("torch::jit") public static native void ExportModule(
@@ -63173,7 +63279,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native void ExportModule(
     @Const @ByRef JitModule module,
     @StdString String filename,
-    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") IValueIValueMap metadata,
+    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap metadata,
     @Cast("bool") boolean bytecode_format/*=false*/,
     @Cast("bool") boolean save_mobile_debug_info/*=false*/);
 @Namespace("torch::jit") public static native void ExportModule(
@@ -63183,7 +63289,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 @Namespace("torch::jit") public static native void ExportModule(
     @Const @ByRef JitModule module,
     @Const @ByRef WriteFunction writer_func,
-    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") IValueIValueMap metadata,
+    @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap metadata,
     @Cast("bool") boolean bytecode_format/*=false*/,
     @Cast("bool") boolean save_mobile_debug_info/*=false*/);
 @Namespace("torch::jit") public static native void ExportModule(

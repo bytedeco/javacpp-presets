@@ -25,9 +25,8 @@ public class LongVectorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef LongVectorOptional put(@ByRef LongVectorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast("std::vector<int64_t>*") @ByRef LongVector get();
+    public native @Name("value") @Cast("std::vector<int64_t>*") @ByRef LongVector get();
     @ValueSetter public native LongVectorOptional put(@Cast("std::vector<int64_t>*") @ByRef LongVector value);
 }
 

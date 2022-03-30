@@ -16,13 +16,13 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @Name("std::unordered_set<c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class IValueSet extends Pointer {
+public class HashAliasedIValues extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IValueSet(Pointer p) { super(p); }
-    public IValueSet()       { allocate();  }
+    public HashAliasedIValues(Pointer p) { super(p); }
+    public HashAliasedIValues()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef IValueSet put(@ByRef IValueSet x);
+    public native @Name("operator =") @ByRef HashAliasedIValues put(@ByRef HashAliasedIValues x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

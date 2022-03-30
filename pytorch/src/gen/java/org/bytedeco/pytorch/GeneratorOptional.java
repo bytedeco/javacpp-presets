@@ -25,9 +25,8 @@ public class GeneratorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef GeneratorOptional put(@ByRef GeneratorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef Generator get();
+    public native @Name("value") @ByRef Generator get();
     @ValueSetter public native GeneratorOptional put(@ByRef Generator value);
 }
 

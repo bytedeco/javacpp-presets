@@ -25,9 +25,8 @@ public class DeviceOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DeviceOptional put(@ByRef DeviceOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef Device get();
+    public native @Name("value") @ByRef Device get();
     @ValueSetter public native DeviceOptional put(@ByRef Device value);
 }
 

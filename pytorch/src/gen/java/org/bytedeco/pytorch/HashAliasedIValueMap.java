@@ -16,19 +16,19 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @Name("std::unordered_map<c10::IValue,c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class IValueIValueMap extends Pointer {
+public class HashAliasedIValueMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IValueIValueMap(Pointer p) { super(p); }
-    public IValueIValueMap()       { allocate();  }
+    public HashAliasedIValueMap(Pointer p) { super(p); }
+    public HashAliasedIValueMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef IValueIValueMap put(@ByRef IValueIValueMap x);
+    public native @Name("operator =") @ByRef HashAliasedIValueMap put(@ByRef HashAliasedIValueMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
 
     @Index public native @ByRef IValue get(@ByRef IValue i);
-    public native IValueIValueMap put(@ByRef IValue i, IValue value);
+    public native HashAliasedIValueMap put(@ByRef IValue i, IValue value);
 
     public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();

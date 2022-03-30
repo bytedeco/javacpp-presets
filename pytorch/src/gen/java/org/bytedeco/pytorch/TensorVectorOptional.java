@@ -25,9 +25,8 @@ public class TensorVectorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef TensorVectorOptional put(@ByRef TensorVectorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector get();
+    public native @Name("value") @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector get();
     @ValueSetter public native TensorVectorOptional put(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector value);
 }
 

@@ -25,7 +25,7 @@ public class IMethod extends Pointer {
 
   public native @ByVal @Name("operator ()") IValue apply(
         @ByVal IValueVector args,
-        @Cast("const torch::IMethod::IValueMap*") @ByRef(nullValue = "torch::IMethod::IValueMap()") IValueIValueMap kwargs);
+        @Cast("const torch::IMethod::IValueMap*") @ByRef(nullValue = "torch::IMethod::IValueMap()") HashAliasedIValueMap kwargs);
   public native @ByVal @Name("operator ()") IValue apply(
         @ByVal IValueVector args);
 

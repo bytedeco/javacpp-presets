@@ -30,7 +30,7 @@ public class ScriptModuleSerializer extends Pointer {
   public native void writeFiles(@StdString String code_dir);
   public native void serialize(
         @Const @ByRef JitModule module,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef IValueIValueMap extra_files,
+        @Cast("const torch::jit::ExtraFilesMap*") @ByRef HashAliasedIValueMap extra_files,
         @Cast("bool") boolean bytecode_format,
         @Cast("bool") boolean save_mobile_debug_info);
   public native void serialize_unified_format(@ByRef JitModule module, @Cast("uint64_t") long script_module_id);

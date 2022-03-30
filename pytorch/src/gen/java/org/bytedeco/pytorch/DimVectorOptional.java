@@ -25,9 +25,8 @@ public class DimVectorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef DimVectorOptional put(@ByRef DimVectorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef DimVector get();
+    public native @Name("value") @ByRef DimVector get();
     @ValueSetter public native DimVectorOptional put(@ByRef DimVector value);
 }
 

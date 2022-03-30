@@ -25,9 +25,8 @@ public class TensorListOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef TensorListOptional put(@ByRef TensorListOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef TensorArrayRef get();
+    public native @Name("value") @ByRef TensorArrayRef get();
     @ValueSetter public native TensorListOptional put(@ByRef TensorArrayRef value);
 }
 

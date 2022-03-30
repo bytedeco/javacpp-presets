@@ -14,8 +14,8 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
-
-@Namespace("c10::ivalue") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+ // namespace torch
+@Name("c10::Dict<c10::IValue,c10::IValue>") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GenericDict extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public GenericDict() { super((Pointer)null); }

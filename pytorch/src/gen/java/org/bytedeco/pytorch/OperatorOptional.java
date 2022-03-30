@@ -25,9 +25,8 @@ public class OperatorOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef OperatorOptional put(@ByRef OperatorOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef Operator get();
+    public native @Name("value") @ByRef Operator get();
     @ValueSetter public native OperatorOptional put(@ByRef Operator value);
 }
 

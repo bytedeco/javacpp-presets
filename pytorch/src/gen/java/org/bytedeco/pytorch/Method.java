@@ -37,7 +37,7 @@ public class Method extends IMethod {
 
   public native @ByVal @Name("operator ()") IValue apply(
         @ByVal IValueVector stack,
-        @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") IValueIValueMap kwargs);
+        @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") HashAliasedIValueMap kwargs);
   public native @ByVal @Name("operator ()") IValue apply(
         @ByVal IValueVector stack);
 
