@@ -190,4 +190,8 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
     /** Returns the kind of the primitive descriptor.
      *  @return The kind of the primitive descriptor. */
     public native primitive.kind get_kind();
+
+    /** Returns the cache blob ID of the primitive descriptor.
+     *  @return The cache blob ID of the primitive descriptor. */
+    public native @Cast("uint8_t*") @StdVector BytePointer get_cache_blob_id();
 }

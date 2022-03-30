@@ -181,4 +181,21 @@ public class lrn_backward extends primitive {
      *      primitive. */
     public lrn_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
+
+    /** Constructs an LRN backward propagation primitive from a cache blob.
+     *  @param pd Primitive descriptor for an LRN backward propagation
+     *      primitive.
+     *  @param cache_blob Cache blob. */
+    public lrn_backward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public lrn_backward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public lrn_backward(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 }

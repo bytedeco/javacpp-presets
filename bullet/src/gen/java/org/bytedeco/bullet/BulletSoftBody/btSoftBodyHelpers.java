@@ -212,6 +212,9 @@ public class btSoftBodyHelpers extends Pointer {
 	public static native void writeObj(@Cast("const char*") BytePointer file, @Const btSoftBody psb);
 	public static native void writeObj(String file, @Const btSoftBody psb);
 
+	public static native void writeState(@Cast("const char*") BytePointer file, @Const btSoftBody psb);
+	public static native void writeState(String file, @Const btSoftBody psb);
+
 	public static native void getBarycentricWeights(@Const @ByRef btVector3 a, @Const @ByRef btVector3 b, @Const @ByRef btVector3 c, @Const @ByRef btVector3 d, @Const @ByRef btVector3 p, @ByRef btVector4 bary);
 
 	public static native void getBarycentricWeights(@Const @ByRef btVector3 a, @Const @ByRef btVector3 b, @Const @ByRef btVector3 c, @Const @ByRef btVector3 p, @ByRef btVector4 bary);

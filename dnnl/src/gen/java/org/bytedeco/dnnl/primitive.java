@@ -96,7 +96,9 @@ public class primitive extends dnnl_primitive_handle {
         /** A reduction primitive. */
         reduction(dnnl_reduction),
         /** A PReLU primitive. */
-        prelu(dnnl_prelu);
+        prelu(dnnl_prelu),
+        /** A softmax version 2 primitive. */
+        softmax_v2(dnnl_softmax_v2);
 
         public final int value;
         private kind(int v) { this.value = v; }
@@ -115,6 +117,25 @@ public class primitive extends dnnl_primitive_handle {
     public primitive(@Const dnnl_primitive_desc c_pd) { super((Pointer)null); allocate(c_pd); }
     private native void allocate(@Const dnnl_primitive_desc c_pd);
 
+    /** Constructs a primitive from a C API primitive descriptor and a cache blob.
+     * 
+     *  @param c_pd C API primitive descriptor.
+     *  @param cache_blob Cache blob. */
+    
+    ///
+    public primitive(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(c_pd, cache_blob); }
+    private native void allocate(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public primitive(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(c_pd, cache_blob); }
+    private native void allocate(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public primitive(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(c_pd, cache_blob); }
+    private native void allocate(@Const dnnl_primitive_desc c_pd,
+                @Cast("uint8_t*") @StdVector byte[] cache_blob);
+
     /** Constructs a primitive from a primitive descriptor.
      * 
      *  @param pd Primitive descriptor. */
@@ -122,6 +143,19 @@ public class primitive extends dnnl_primitive_handle {
     ///
     public primitive(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd);
+
+    /** Constructs a primitive from a primitive descriptor and a cache blob.
+     * 
+     *  @param pd Primitive descriptor.
+     *  @param cache_blob Cache blob. */
+    
+    ///
+    public primitive(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public primitive(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public primitive(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(@Const @ByRef org.bytedeco.dnnl.primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 
     /** Returns the C API primitive descriptor of the underlying C API
      *  primitive.
@@ -138,6 +172,18 @@ public class primitive extends dnnl_primitive_handle {
     ///
     ///
     public native kind get_kind();
+
+    /** Returns a cache blob for the primitive.
+     * 
+     *  @return Vector containing the cache blob.
+     * 
+     *  \note The cache blob can be empty. It's the user's responsibility to
+     *      check whether it's empty prior to passing it to the primitive
+     *      constructor. */
+    
+    ///
+    ///
+    public native @Cast("uint8_t*") @StdVector BytePointer get_cache_blob();
 
     /** Executes computations specified by the primitive in a specified stream.
      * 

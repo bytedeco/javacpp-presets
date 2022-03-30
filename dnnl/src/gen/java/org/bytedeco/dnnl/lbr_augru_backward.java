@@ -13,23 +13,23 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** GRU backward propagation primitive. */
+/** LBR AUGRU backward propagation primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
-public class gru_backward extends primitive {
+public class lbr_augru_backward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public gru_backward(Pointer p) { super(p); }
+    public lbr_augru_backward(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public gru_backward(long size) { super((Pointer)null); allocateArray(size); }
+    public lbr_augru_backward(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public gru_backward position(long position) {
-        return (gru_backward)super.position(position);
+    @Override public lbr_augru_backward position(long position) {
+        return (lbr_augru_backward)super.position(position);
     }
-    @Override public gru_backward getPointer(long i) {
-        return new gru_backward((Pointer)this).offsetAddress(i);
+    @Override public lbr_augru_backward getPointer(long i) {
+        return new lbr_augru_backward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for a GRU backward propagation primitive. */
+    /** Descriptor for an LBR AUGRU backward propagation primitive. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -42,14 +42,15 @@ public class gru_backward extends primitive {
         ///
         public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
 
-        /** Constructs a descriptor for a GRU backward propagation primitive.
+        /** Constructs a descriptor for LBR AUGRU backward propagation
+         *  primitive.
          * 
          *  The following arguments may point to a zero memory descriptor:
          *  - \p src_iter_desc together with \p diff_src_iter_desc,
          *  - \p bias_desc together with \p diff_bias_desc,
          *  - \p dst_iter_desc together with \p diff_dst_iter_desc.
          * 
-         *  This would then indicate that the GRU backward propagation
+         *  This would then indicate that the LBR AUGRU backward propagation
          *  primitive should not use them and should default to zero values
          *  instead.
          * 
@@ -64,6 +65,7 @@ public class gru_backward extends primitive {
          *  @param src_layer_desc Memory descriptor for the input vector.
          *  @param src_iter_desc Memory descriptor for the input recurrent
          *      hidden state vector.
+         *  @param attention_desc Memory descriptor for the attention vector.
          *  @param weights_layer_desc Memory descriptor for the weights
          *      applied to the layer input.
          *  @param weights_iter_desc Memory descriptor for the weights applied
@@ -76,6 +78,8 @@ public class gru_backward extends primitive {
          *      vector.
          *  @param diff_src_iter_desc Memory descriptor for the diff of input
          *      recurrent hidden state vector.
+         *  @param diff_attention_desc Memory descriptor for the diff of
+         *      attention vector.
          *  @param diff_weights_layer_desc Memory descriptor for the diff of
          *      weights applied to the layer input.
          *  @param diff_weights_iter_desc Memory descriptor for the diff of
@@ -89,6 +93,7 @@ public class gru_backward extends primitive {
         public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -96,15 +101,17 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, flags); }
+                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, attention_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_attention_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, flags); }
         private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -112,6 +119,7 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
@@ -121,6 +129,7 @@ public class gru_backward extends primitive {
         public desc(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -128,14 +137,16 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc); }
+                        @Const @ByRef memory.desc diff_dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, attention_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_attention_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc); }
         private native void allocate(prop_kind aprop_kind, rnn_direction direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -143,6 +154,7 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
@@ -151,6 +163,7 @@ public class gru_backward extends primitive {
         public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -158,15 +171,17 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
                         @Const @ByRef memory.desc diff_dst_iter_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, flags); }
+                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, attention_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_attention_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc, flags); }
         private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -174,6 +189,7 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
@@ -183,6 +199,7 @@ public class gru_backward extends primitive {
         public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -190,14 +207,16 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
                         @Const @ByRef memory.desc diff_dst_layer_desc,
-                        @Const @ByRef memory.desc diff_dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc); }
+                        @Const @ByRef memory.desc diff_dst_iter_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, attention_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, diff_src_layer_desc, diff_src_iter_desc, diff_attention_desc, diff_weights_layer_desc, diff_weights_iter_desc, diff_bias_desc, diff_dst_layer_desc, diff_dst_iter_desc); }
         private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
                         @Const @ByRef memory.desc src_layer_desc,
                         @Const @ByRef memory.desc src_iter_desc,
+                        @Const @ByRef memory.desc attention_desc,
                         @Const @ByRef memory.desc weights_layer_desc,
                         @Const @ByRef memory.desc weights_iter_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -205,6 +224,7 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc dst_iter_desc,
                         @Const @ByRef memory.desc diff_src_layer_desc,
                         @Const @ByRef memory.desc diff_src_iter_desc,
+                        @Const @ByRef memory.desc diff_attention_desc,
                         @Const @ByRef memory.desc diff_weights_layer_desc,
                         @Const @ByRef memory.desc diff_weights_iter_desc,
                         @Const @ByRef memory.desc diff_bias_desc,
@@ -212,7 +232,7 @@ public class gru_backward extends primitive {
                         @Const @ByRef memory.desc diff_dst_iter_desc);
     }
 
-    /** Primitive descriptor for a GRU backward propagation primitive. */
+    /** Primitive descriptor for an LBR AUGRU backward propagation primitive. */
     public static class primitive_desc extends rnn_primitive_desc_base {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -233,12 +253,13 @@ public class gru_backward extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a GRU backward propagation
-         *  primitive.
+        /** Constructs a primitive descriptor for an LBR AUGRU backward
+         *  propagation primitive.
          * 
-         *  @param adesc Descriptor for a GRU backward propagation primitive.
+         *  @param adesc Descriptor for an LBR AUGRU backward propagation
+         *      primitive.
          *  @param aengine Engine to use.
-         *  @param hint_fwd_pd Primitive descriptor for a GRU
+         *  @param hint_fwd_pd Primitive descriptor for an LBR AUGRU
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
          *  @param allow_empty A flag signifying whether construction is
@@ -248,23 +269,24 @@ public class gru_backward extends primitive {
         
         ///
         public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd);
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd);
 
-        /** Constructs a primitive descriptor for a GRU backward propagation
-         *  primitive.
+        /** Constructs a primitive descriptor for an LBR AUGRU backward
+         *  propagation primitive.
          * 
-         *  @param adesc Descriptor for a GRU backward propagation primitive.
+         *  @param adesc Descriptor for an LBR AUGRU backward propagation
+         *      primitive.
          *  @param attr Primitive attributes to use.
          *  @param aengine Engine to use.
-         *  @param hint_fwd_pd Primitive descriptor for a GRU
+         *  @param hint_fwd_pd Primitive descriptor for an LBR AUGRU
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
          *  @param allow_empty A flag signifying whether construction is
@@ -275,24 +297,24 @@ public class gru_backward extends primitive {
         ///
         public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
         private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
                         @Const @ByRef engine aengine,
-                        @Const @ByRef gru_forward.primitive_desc hint_fwd_pd);
+                        @Const @ByRef lbr_augru_forward.primitive_desc hint_fwd_pd);
 
-        /** Constructs a primitive descriptor for a GRU backward propagation
-         *  primitive from a C API primitive descriptor that must have a
-         *  matching kind.
+        /** Constructs a primitive descriptor for an LBR AUGRU backward
+         *  propagation primitive from a C API primitive descriptor that must
+         *  have a matching kind.
          * 
-         *  @param pd C API primitive descriptor for a GRU backward
+         *  @param pd C API primitive descriptor for an LBR AUGRU backward
          *      propagation primitive. */
         public primitive_desc(dnnl_primitive_desc pd) { super((Pointer)null); allocate(pd); }
         private native void allocate(dnnl_primitive_desc pd);
@@ -302,6 +324,9 @@ public class gru_backward extends primitive {
 
         /** \copydoc dnnl::rnn_primitive_desc_base::src_iter_desc()const */
         public native @ByVal memory.desc src_iter_desc();
+
+        /** \copydoc dnnl::rnn_primitive_desc_base::attention_desc()const */
+        public native @ByVal memory.desc attention_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_layer_desc()const */
         public native @ByVal memory.desc weights_layer_desc();
@@ -327,6 +352,9 @@ public class gru_backward extends primitive {
         /** \copydoc dnnl::rnn_primitive_desc_base::diff_src_iter_desc()const */
         public native @ByVal memory.desc diff_src_iter_desc();
 
+        /** \copydoc dnnl::rnn_primitive_desc_base::diff_attention_desc()const */
+        public native @ByVal memory.desc diff_attention_desc();
+
         /** \copydoc dnnl::rnn_primitive_desc_base::diff_weights_layer_desc()const */
         public native @ByVal memory.desc diff_weights_layer_desc();
 
@@ -344,28 +372,28 @@ public class gru_backward extends primitive {
     }
 
     /** Default constructor. Produces an empty object. */
-    public gru_backward() { super((Pointer)null); allocate(); }
+    public lbr_augru_backward() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** Constructs a GRU backward propagation primitive.
-     *  @param pd Primitive descriptor for a GRU backward propagation
+    /** Constructs an LBR AUGRU backward propagation primitive.
+     *  @param pd Primitive descriptor for an LBR AUGRU backward propagation
      *      primitive. */
-    public gru_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    public lbr_augru_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 
-    /** Constructs a GRU backward propagation primitive from a cache blob.
-     *  @param pd Primitive descriptor for a GRU backward propagation
+    /** Constructs an LBR AUGRU backward propagation primitive from a cache blob.
+     *  @param pd Primitive descriptor for an LBR AUGRU backward propagation
      *      primitive.
      *  @param cache_blob Cache blob. */
-    public gru_backward(
+    public lbr_augru_backward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
-    public gru_backward(
+    public lbr_augru_backward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
-    public gru_backward(
+    public lbr_augru_backward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);

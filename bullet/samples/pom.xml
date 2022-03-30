@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>bullet-platform</artifactId>
-            <version>3.21-1.5.8-SNAPSHOT</version>
+            <version>3.22-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

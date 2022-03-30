@@ -13,9 +13,9 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_eltwise
+/** \} dnnl_api_softmax
  <p>
- *  \addtogroup dnnl_api_softmax Softmax
+ *  \addtogroup dnnl_api_softmax_v2 Softmax_v2
  * 
  *  A primitive to perform softmax.
  * 
@@ -25,18 +25,18 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  <p>
  *  Softmax forward propagation primitive. */
 @Namespace("dnnl") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
-public class softmax_forward extends primitive {
+public class softmax_v2_forward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public softmax_forward(Pointer p) { super(p); }
+    public softmax_v2_forward(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public softmax_forward(long size) { super((Pointer)null); allocateArray(size); }
+    public softmax_v2_forward(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public softmax_forward position(long position) {
-        return (softmax_forward)super.position(position);
+    @Override public softmax_v2_forward position(long position) {
+        return (softmax_v2_forward)super.position(position);
     }
-    @Override public softmax_forward getPointer(long i) {
-        return new softmax_forward((Pointer)this).offsetAddress(i);
+    @Override public softmax_v2_forward getPointer(long i) {
+        return new softmax_v2_forward((Pointer)this).offsetAddress(i);
     }
 
     /** Descriptor for a softmax forward propagation primitive. */
@@ -54,7 +54,7 @@ public class softmax_forward extends primitive {
             return new desc((Pointer)this).offsetAddress(i);
         }
     
-        public native @ByRef dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
+        public native @ByRef dnnl_softmax_v2_desc_t data(); public native desc data(dnnl_softmax_v2_desc_t setter);
 
         /** Default constructor. Produces an empty object. */
         
@@ -68,15 +68,23 @@ public class softmax_forward extends primitive {
          *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
-         *  @param data_desc Source and destination memory descriptor.
+         *  @param aalgorithm Softmax algorithm kind: either
+         *      #dnnl::algorithm::softmax_accurate,
+         *      or #dnnl::algorithm::softmax_log.
+         *  @param src_desc Source memory descriptor.
+         *  @param dst_desc Destination memory descriptor.
          *  @param softmax_axis Axis over which softmax is computed. */
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
+                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, softmax_axis); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         int softmax_axis);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
+                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, dst_desc, softmax_axis); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc dst_desc,
                         int softmax_axis);
     }
 
@@ -159,28 +167,28 @@ public class softmax_forward extends primitive {
     }
 
     /** Default constructor. Produces an empty object. */
-    public softmax_forward() { super((Pointer)null); allocate(); }
+    public softmax_v2_forward() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** Constructs a softmax forward propagation primitive.
      *  @param pd Primitive descriptor for a softmax forward propagation
      *      primitive. */
-    public softmax_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    public softmax_v2_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
 
     /** Constructs a softmax forward propagation primitive from a cache blob.
      *  @param pd Primitive descriptor for a softmax forward propagation
      *      primitive.
      *  @param cache_blob Cache blob. */
-    public softmax_forward(
+    public softmax_v2_forward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
-    public softmax_forward(
+    public softmax_v2_forward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
-    public softmax_forward(
+    public softmax_v2_forward(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
     private native void allocate(
                 @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);

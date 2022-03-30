@@ -30,7 +30,8 @@ public class btSoftBodySolver extends Pointer {
 		CL_SIMD_SOLVER(3),
 		DX_SOLVER(4),
 		DX_SIMD_SOLVER(5),
-		DEFORMABLE_SOLVER(6);
+		DEFORMABLE_SOLVER(6),
+		REDUCED_DEFORMABLE_SOLVER(7);
 
 	    public final int value;
 	    private SolverTypes(int v) { this.value = v; }

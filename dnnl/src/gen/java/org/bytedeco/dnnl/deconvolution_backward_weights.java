@@ -511,4 +511,22 @@ public class deconvolution_backward_weights extends primitive {
      *      primitive. */
     public deconvolution_backward_weights(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef primitive_desc pd);
+
+    /** Constructs a deconvolution weights gradient primitive from a cache
+     *      blob.
+     *  @param pd Primitive descriptor for a deconvolution weights gradient
+     *      primitive.
+     *  @param cache_blob Cache blob. */
+    public deconvolution_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector BytePointer cache_blob);
+    public deconvolution_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector ByteBuffer cache_blob);
+    public deconvolution_backward_weights(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob) { super((Pointer)null); allocate(pd, cache_blob); }
+    private native void allocate(
+                @Const @ByRef primitive_desc pd, @Cast("uint8_t*") @StdVector byte[] cache_blob);
 }

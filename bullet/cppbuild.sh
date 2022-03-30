@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-BULLET_VERSION=3.21
+BULLET_VERSION=3.22
 download https://github.com/bulletphysics/bullet3/archive/refs/tags/$BULLET_VERSION.zip bullet-$BULLET_VERSION.zip
 
 mkdir -p $PLATFORM
