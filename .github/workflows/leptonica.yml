@@ -60,6 +60,10 @@ jobs:
     container: centos:7
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+  macosx-arm64:
+    runs-on: macos-10.15
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
     runs-on: macos-10.15
     steps:
@@ -73,7 +77,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
-    needs: [android-arm, android-arm64, android-x86, android-x86_64, linux-armhf, linux-arm64, linux-ppc64le, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64]
+    needs: [android-arm, android-arm64, android-x86, android-x86_64, linux-armhf, linux-arm64, linux-ppc64le, linux-x86, linux-x86_64, macosx-arm64, macosx-x86_64, windows-x86, windows-x86_64]
     runs-on: ubuntu-18.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.presets.javacpp.*;
 import org.bytedeco.leptonica.*;
-import static org.bytedeco.leptonica.global.lept.*;
+import static org.bytedeco.leptonica.global.leptonica.*;
 
 import static org.bytedeco.tesseract.global.tesseract.*;
 
