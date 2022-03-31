@@ -1445,6 +1445,8 @@
         <module>ffmpeg</module>
         <module>openblas</module>
         <module>llvm</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>

@@ -14,6 +14,9 @@ runs:
         export MACOSX_DEPLOYMENT_TARGET=10.15
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
+        echo Removing broken stuff from Mono
+        sudo rm -Rf /Library/Frameworks/Mono.framework
+
         if [[ "$CI_DEPLOY_PLATFORM" == "macosx-arm64" ]]; then
           echo Removing old SDKs without ARM support
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*

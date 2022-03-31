@@ -14,7 +14,7 @@ fi
 
 LLVM_VERSION=14.0.0
 OPENSSL_VERSION=1.1.1m
-ZLIB_VERSION=1.2.11
+ZLIB_VERSION=1.2.12
 PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt
 ARROW_VERSION=6.0.1
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz

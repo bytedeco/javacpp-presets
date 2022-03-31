@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2020 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,24 +35,24 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = javacpp.class, target = "org.bytedeco.leptonica", global = "org.bytedeco.leptonica.global.lept", value = {
+@Properties(inherit = javacpp.class, target = "org.bytedeco.leptonica", global = "org.bytedeco.leptonica.global.leptonica", value = {
     @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/hashmap.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/rbtree.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/colorfill.h", "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
         "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"},
-        link = "lept@.5", resource = {"include", "lib"}),
+        link = "leptonica@.5", resource = {"include", "lib"}),
     @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = "gomp@.1"),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-arm64",  preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "android", link = "lept"),
-    @Platform(value = "windows", link = "liblept", preload = {"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "liblept-5"}),
+    @Platform(value = "android", link = "leptonica"),
+    @Platform(value = "windows", link = "leptonica-5", preload = {"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libleptonica-5"}),
     @Platform(value = "windows-x86", preloadpath = "C:/msys64/mingw32/bin/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/msys64/mingw64/bin/") })
 @NoException
-public class lept implements InfoMapper {
+public class leptonica implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "leptonica"); }
 
     public void map(InfoMap infoMap) {
@@ -121,6 +121,7 @@ public class lept implements InfoMapper {
                .put(new Info("L_RegParams").pointerTypes("L_REGPARAMS"))
                .put(new Info("L_StrCode").pointerTypes("L_STRCODE"))
                .put(new Info("L_Sudoku").pointerTypes("L_SUDOKU"))
-               .put(new Info("L_WShed").pointerTypes("L_WSHED"));
+               .put(new Info("L_WShed").pointerTypes("L_WSHED"))
+               .put(new Info("gplotfileoutputs", "gplotstylenames").skip());
     }
 }

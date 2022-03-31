@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.indexer.*;
 
-import static org.bytedeco.leptonica.global.lept.*;
+import static org.bytedeco.leptonica.global.leptonica.*;
 
-@Properties(inherit = org.bytedeco.leptonica.presets.lept.class)
+@Properties(inherit = org.bytedeco.leptonica.presets.leptonica.class)
 public abstract class AbstractPIX extends Pointer implements Indexable {
     protected IntPointer pointer; // a reference to prevent deallocation
 

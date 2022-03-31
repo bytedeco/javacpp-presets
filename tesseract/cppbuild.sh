@@ -16,22 +16,12 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
-if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
-    export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
-fi
-sedinplace '/tiff/d' Makefile.am
-sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
-bash autogen.sh
-chmod 755 configure config/install-sh
-export AUTOCONF=:
-export AUTOHEADER=:
-export AUTOMAKE=:
-export ACLOCAL=:
 
 # Disable external dependencies on asciidoc, libarchive and libtiff
-sedinplace 's/ac_cv_prog_have_asciidoc="true"/ac_cv_prog_have_asciidoc="false"/g' configure
-sedinplace 's/"libarchive"//g' configure
-sedinplace 's/-ltiff//g' Makefile.in
+sedinplace '/  FATAL_ERROR/d' CMakeLists.txt
+sedinplace '/find_package(TIFF)/d' CMakeLists.txt
+sedinplace '/pkg_check_modules(TIFF/d' CMakeLists.txt
+sedinplace 's/if(COMPILER_SUPPORTS_MARCH_NATIVE)/if(FALSE)/g' CMakeLists.txt
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
@@ -48,115 +38,98 @@ fi
 
 LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
 
+export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
+
+CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$LEPTONICA_PATH -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=$INSTALL_PATH/lib -DDISABLE_ARCHIVE=ON -DDISABLE_CURL=ON -DMARCH_NATIVE_OPT=OFF -DOPENMP_BUILD=ON -DBUILD_SHARED_LIBS=ON -DBUILD_TRAINING_TOOLS=OFF"
+
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/avx=true/avx=false/g' configure
-        sedinplace 's/avx2=true/avx2=false/g' configure
-        sedinplace 's/fma=true/fma=false/g' configure
-        sedinplace 's/sse41=true/sse41=false/g' configure
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
-        # Disable what Autoconf tries to do but that fails for Android
-        sedinplace '/predep_objects=/d' libtool
-        sedinplace '/postdep_objects=/d' libtool
-        sedinplace '/predeps=/d' libtool
-        sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib //g' libtool
-        chmod -w libtool
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     android-arm64)
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/avx=true/avx=false/g' configure
-        sedinplace 's/avx2=true/avx2=false/g' configure
-        sedinplace 's/fma=true/fma=false/g' configure
-        sedinplace 's/sse41=true/sse41=false/g' configure
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
-        # Disable what Autoconf tries to do but that fails for Android
-        sedinplace '/predep_objects=/d' libtool
-        sedinplace '/postdep_objects=/d' libtool
-        sedinplace '/predeps=/d' libtool
-        sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib //g' libtool
-        chmod -w libtool
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     android-x86)
         patch -Np1 < ../../../tesseract-android.patch
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
-        # Disable what Autoconf tries to do but that fails for Android
-        sedinplace '/predep_objects=/d' libtool
-        sedinplace '/postdep_objects=/d' libtool
-        sedinplace '/predeps=/d' libtool
-        sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib //g' libtool
-        chmod -w libtool
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     android-x86_64)
         patch -Np1 < ../../../tesseract-android.patch
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
-        # Disable what Autoconf tries to do but that fails for Android
-        sedinplace '/predep_objects=/d' libtool
-        sedinplace '/postdep_objects=/d' libtool
-        sedinplace '/predeps=/d' libtool
-        sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib //g' libtool
-        chmod -w libtool
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
-        ;;
-    linux-x86)
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
-        make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     linux-armhf)
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
+        export CC="arm-linux-gnueabihf-gcc -fPIC"
+        export CXX="arm-linux-gnueabihf-g++ -fPIC"
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 $CMAKE_CONFIG .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     linux-arm64)
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
+        export CC="aarch64-linux-gnu-gcc -fPIC"
+        export CXX="aarch64-linux-gnu-g++ -fPIC"
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG .
         make -j $MAKEJ
-        make install-strip
-        ;;
-    linux-x86_64)
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
-        make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     linux-ppc64le)
         patch -Np1 < ../../../tesseract-openmp.patch
-        MACHINE_TYPE=$( uname -m )
-        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
-        else
-          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
-        fi
+        export CC="powerpc64le-linux-gnu-gcc -fPIC"
+        export CXX="powerpc64le-linux-gnu-g++ -fPIC"
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le $CMAKE_CONFIG .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
-    macosx-*)
-        sedinplace 's/\\$rpath/@rpath/g' configure
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
+    linux-x86)
+        export CC="gcc -m32 -fPIC"
+        export CXX="g++ -m32 -fPIC"
+        $CMAKE $CMAKE_CONFIG .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
+        ;;
+    linux-x86_64)
+        export CC="gcc -m64 -fPIC"
+        export CXX="g++ -m64 -fPIC"
+        $CMAKE $CMAKE_CONFIG .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    macosx-arm64)
+        export CC="clang -arch arm64 -fPIC"
+        export CXX="clang++ -arch arm64 -fPIC"
+        $CMAKE -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    macosx-x86_64)
+        export CC="clang -arch x86_64 -fPIC"
+        export CXX="clang++ -arch x86_64 -fPIC"
+        $CMAKE $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON .
+        make -j $MAKEJ
+        make install/strip
         ;;
     windows-x86)
-        # cp src/vs2010/port/* src/ccutil/
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
+        export CC="gcc -m32"
+        export CXX="g++ -m32"
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     windows-x86_64)
-        # cp src/vs2010/port/* src/ccutil/
-        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
+        export CC="gcc -m64"
+        export CXX="g++ -m64"
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
         make -j $MAKEJ
-        make install-strip
+        make install/strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
