@@ -56,7 +56,7 @@ public class JitModule extends JitObject {
 
   public native @Cast("bool") boolean is_optimized();
 
-  public native @ByVal IValue forward(@ByVal IValueVector inputs, @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") HashAliasedIValueMap kwargs);
+  public native @ByVal IValue forward(@ByVal IValueVector inputs, @Cast("const torch::jit::Kwargs*") @ByRef(nullValue = "torch::jit::Kwargs()") StringIValueMap kwargs);
   public native @ByVal IValue forward(@ByVal IValueVector inputs);
 
   // In script modules, buffers are Tensors attribute that are _not_ registered
@@ -177,37 +177,37 @@ public class JitModule extends JitObject {
 
   public native void save(
         @Cast("std::ostream*") @ByRef Pointer out,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files);
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files);
   public native void save(
         @Cast("std::ostream*") @ByRef Pointer out);
 
   public native void save(
         @StdString BytePointer filename,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files);
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files);
   public native void save(
         @StdString BytePointer filename);
   public native void save(
         @StdString String filename,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files);
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files);
   public native void save(
         @StdString String filename);
 
   public native void _save_for_mobile(
         @Cast("std::ostream*") @ByRef Pointer out,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files,
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
         @Cast("bool") boolean save_mobile_debug_info/*=false*/);
   public native void _save_for_mobile(
         @Cast("std::ostream*") @ByRef Pointer out);
 
   public native void _save_for_mobile(
         @StdString BytePointer filename,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files,
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
         @Cast("bool") boolean save_mobile_debug_info/*=false*/);
   public native void _save_for_mobile(
         @StdString BytePointer filename);
   public native void _save_for_mobile(
         @StdString String filename,
-        @Cast("const torch::jit::ExtraFilesMap*") @ByRef(nullValue = "torch::jit::ExtraFilesMap()") HashAliasedIValueMap extra_files,
+        @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
         @Cast("bool") boolean save_mobile_debug_info/*=false*/);
   public native void _save_for_mobile(
         @StdString String filename);
