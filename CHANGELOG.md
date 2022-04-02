@@ -1,4 +1,5 @@
 
+ * Fix a few incorrectly mapped instances of `std::unordered_map` for PyTorch ([issue #1164](https://github.com/bytedeco/javacpp-presets/issues/1164))
  * Migrate builds for Leptonica and Tesseract to CMake ([issue #1163](https://github.com/bytedeco/javacpp-presets/issues/1163))
  * Introduce `macosx-arm64` builds for Leptonica and Tesseract ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814))
  * Map instances of `torch::OrderedDict` using C++ templates from PyTorch ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623))
