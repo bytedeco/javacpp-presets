@@ -78,13 +78,13 @@ public class SpatialDetectionNetwork extends SpatialDetectionNetworkPropertiesNo
     public native void setBoundingBoxScaleFactor(float scaleFactor);
 
     /**
-     * Specifies lower threshold in millimeters for depth values which will used to calculate spatial data
+     * Specifies lower threshold in depth units (millimeter by default) for depth values which will used to calculate spatial data
      * @param lowerThreshold LowerThreshold must be in the interval [0,upperThreshold] and less than upperThreshold.
      */
     public native void setDepthLowerThreshold(@Cast("uint32_t") int lowerThreshold);
 
     /**
-     * Specifies upper threshold in millimeters for depth values which will used to calculate spatial data
+     * Specifies upper threshold in depth units (millimeter by default) for depth values which will used to calculate spatial data
      * @param upperThreshold UpperThreshold must be in the interval (lowerThreshold,65535].
      */
     public native void setDepthUpperThreshold(@Cast("uint32_t") int upperThreshold);

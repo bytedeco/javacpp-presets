@@ -70,7 +70,7 @@ public class StereoDepth extends StereoDepthPropertiesNode {
     @MemberGetter public native @ByRef Input right();
 
     /**
-     * Outputs ImgFrame message that carries RAW16 encoded (0..65535) depth data in millimeters.
+     * Outputs ImgFrame message that carries RAW16 encoded (0..65535) depth data in depth units (millimeter by default).
      *
      * Non-determined / invalid depth values are set to 0
      */

@@ -11,8 +11,8 @@ DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disab
 ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp"
 
 if [[ "$EXTENSION" == *gpl ]]; then
-    # Enable GPL and nonfree modules
-    ENABLE="$ENABLE --enable-gpl --enable-nonfree --enable-libx264 --enable-libx265"
+    # Enable GPLv3 modules
+    ENABLE="$ENABLE --enable-gpl --enable-version3 --enable-libx264 --enable-libx265"
 fi
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
@@ -30,19 +30,19 @@ SPEEX=speex-1.2.0
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.1m
-OPENH264_VERSION=2.1.1
+OPENSSL=openssl-3.0.2
+OPENH264_VERSION=2.2.0
 X264=x264-stable
 X265=3.4
 VPX_VERSION=1.11.0
 ALSA_VERSION=1.2.6.1
-FREETYPE_VERSION=2.11.1
+FREETYPE_VERSION=2.12.0
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=11.1.5.0
+NVCODEC_VERSION=11.1.5.1
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.4.4
-WEBP_VERSION=1.2.1
-FFMPEG_VERSION=5.0
+WEBP_VERSION=1.2.2
+FFMPEG_VERSION=5.0.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -61,7 +61,7 @@ download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx
 download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
-download https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
+download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -168,7 +168,7 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -300,7 +300,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm64 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm64 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -431,7 +431,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -559,7 +559,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86_64 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86_64 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -679,7 +679,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -804,7 +804,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -945,9 +945,9 @@ EOF
         cd ../$OPENSSL
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=arm-linux-gnueabihf-
         else
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -1115,7 +1115,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1265,9 +1265,9 @@ EOF
         make install
         cd ../$OPENSSL
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         else
-          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -1427,7 +1427,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1538,7 +1538,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1645,7 +1645,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1762,7 +1762,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION

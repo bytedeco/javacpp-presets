@@ -67,9 +67,33 @@ public class RawStereoDepthConfig extends RawBuffer {
         }
 
         /**
+         * Measurement unit for depth data
+         */
+        public enum DepthUnit { METER(0), CENTIMETER(1), MILLIMETER(2), INCH(3), FOOT(4), CUSTOM(5);
+
+            public final int value;
+            private DepthUnit(int v) { this.value = v; }
+            private DepthUnit(DepthUnit e) { this.value = e.value; }
+            public DepthUnit intern() { for (DepthUnit e : values()) if (e.value == value) return e; return this; }
+            @Override public String toString() { return intern().name(); }
+        }
+
+        /**
          * Set the disparity/depth alignment to the perspective of a rectified output, or center it
          */
         public native DepthAlign depthAlign(); public native AlgorithmControl depthAlign(DepthAlign setter);
+
+        /**
+         * Measurement unit for depth data.
+         * Depth data is integer value, multiple of depth unit.
+         */
+        public native DepthUnit depthUnit(); public native AlgorithmControl depthUnit(DepthUnit setter);
+
+        /**
+         * Custom depth unit multiplier, if custom depth unit is enabled, relative to 1 meter.
+         * A multiplier of 1000 effectively means depth unit in millimeter.
+         */
+        public native float customDepthUnitMultiplier(); public native AlgorithmControl customDepthUnitMultiplier(float setter);
 
         /**
          * Computes and combines disparities in both L-R and R-L directions, and combine them.
@@ -206,7 +230,6 @@ public class RawStereoDepthConfig extends RawBuffer {
 
         /**
          * Temporal filtering with optional persistence.
-         * More details about the filter can be found here:
          */
         public static class TemporalFilter extends Pointer {
             static { Loader.load(); }
@@ -278,7 +301,6 @@ public class RawStereoDepthConfig extends RawBuffer {
 
         /**
          * Temporal filtering with optional persistence.
-         * More details about the filter can be found here:
          */
         public native @ByRef TemporalFilter temporalFilter(); public native PostProcessing temporalFilter(TemporalFilter setter);
 
@@ -304,12 +326,12 @@ public class RawStereoDepthConfig extends RawBuffer {
             }
         
             /**
-             * Minimum range in millimeters.
+             * Minimum range in depth units.
              * Depth values under this value are invalidated.
              */
             public native @Cast("std::int32_t") int minRange(); public native ThresholdFilter minRange(int setter);
             /**
-             * Maximum range in millimeters.
+             * Maximum range in depth units.
              * Depth values over this value are invalidated.
              */
             public native @Cast("std::int32_t") int maxRange(); public native ThresholdFilter maxRange(int setter);

@@ -1,23 +1,23 @@
-diff -ruN openssl-1.1.1l/Configurations/15-android.conf openssl-1.1.1l-android/Configurations/15-android.conf
---- openssl-1.1.1l/Configurations/15-android.conf	2021-08-24 22:38:47.000000000 +0900
-+++ openssl-1.1.1l-android/Configurations/15-android.conf	2021-10-30 18:23:15.840592056 +0900
+diff -ruN openssl-3.0.2/Configurations/15-android.conf openssl-3.0.2-android/Configurations/15-android.conf
+--- openssl-3.0.2/Configurations/15-android.conf	2022-03-15 23:30:24.000000000 +0900
++++ openssl-3.0.2-android/Configurations/15-android.conf	2022-04-09 21:47:21.205586136 +0900
 @@ -22,25 +22,14 @@
                  return $android_ndk = { bn_ops => "BN_AUTO" };
              }
  
 -            my $ndk_var;
 -            my $ndk;
--            foreach (qw(ANDROID_NDK_HOME ANDROID_NDK)) {
+-            foreach (qw(ANDROID_NDK_ROOT ANDROID_NDK)) {
 -                $ndk_var = $_;
 -                $ndk = $ENV{$ndk_var};
 -                last if defined $ndk;
 -            }
--            die "\$ANDROID_NDK_HOME is not defined" if (!$ndk);
+-            die "\$ANDROID_NDK_ROOT is not defined"  if (!$ndk);
 -            my $is_standalone_toolchain = -f "$ndk/AndroidVersion.txt";
 -            my $ndk_src_props = "$ndk/source.properties";
 -            my $is_ndk = -f $ndk_src_props;
 -            if ($is_ndk == $is_standalone_toolchain) {
--                die "\$ANDROID_NDK_HOME=$ndk is invalid";
+-                die "\$ANDROID_NDK_ROOT=$ndk is invalid";
 -            }
 +            my $ndk = $ENV{ANDROID_NDK};
 +            die "\$ANDROID_NDK is not defined"  if (!$ndk);

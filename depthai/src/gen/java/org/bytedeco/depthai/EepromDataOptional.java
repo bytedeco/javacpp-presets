@@ -26,9 +26,8 @@ public class EepromDataOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef EepromDataOptional put(@ByRef EepromDataOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @ByRef EepromData get();
+    public native @Name("value") @ByRef EepromData get();
     @ValueSetter public native EepromDataOptional put(@ByRef EepromData value);
 }
 

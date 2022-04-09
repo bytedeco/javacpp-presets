@@ -26,9 +26,8 @@ public class BoolOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef BoolOptional put(@ByRef BoolOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native @Cast("bool") boolean get();
+    public native @Name("value") @Cast("bool") boolean get();
     @ValueSetter public native BoolOptional put(@Cast("bool") boolean value);
 }
 

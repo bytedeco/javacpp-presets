@@ -22,7 +22,7 @@ import static org.bytedeco.depthai.global.depthai.*;
  *
  * Contains configuration data, average depth for the calculated ROI on depth map.
  * Together with spatial coordinates: x,y,z relative to the center of depth map.
- * Units are in millimeters.
+ * Units are in depth units (millimeter by default).
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class SpatialLocations extends Pointer {
