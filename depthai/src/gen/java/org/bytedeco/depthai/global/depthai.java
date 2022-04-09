@@ -2655,6 +2655,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <thread>
 // #include <tuple>
 // #include <unordered_map>
+// #include <utility>
 // #include <vector>
 
 // libraries

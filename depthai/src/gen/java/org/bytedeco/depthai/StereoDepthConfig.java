@@ -111,6 +111,18 @@ public class StereoDepthConfig extends Buffer {
     public native @ByRef StereoDepthConfig setSubpixel(@Cast("bool") boolean enable);
 
     /**
+     * Set depth unit of depth map.
+     *
+     * Meter, centimeter, millimeter, inch, foot or custom unit is available.
+     */
+    public native @ByRef StereoDepthConfig setDepthUnit(RawStereoDepthConfig.AlgorithmControl.DepthUnit depthUnit);
+
+    /**
+     * Get depth unit of depth map.
+     */
+    public native RawStereoDepthConfig.AlgorithmControl.DepthUnit getDepthUnit();
+
+    /**
      * Useful for normalization of the disparity map.
      * @return Maximum disparity value that the node can return
      */

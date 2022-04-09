@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 LLVM_VERSION=14.0.0
-OPENSSL_VERSION=1.1.1m
+OPENSSL_VERSION=3.0.2
 ZLIB_VERSION=1.2.12
 PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt
 ARROW_VERSION=6.0.1
@@ -66,7 +66,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
+        ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=arm-linux-gnueabihf-
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
@@ -88,7 +88,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure linux-aarch64 -march=armv8-a+crypto -mcpu=cortex-a57+crypto -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu-
+        ./Configure linux-aarch64 -march=armv8-a+crypto -mcpu=cortex-a57+crypto -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu-
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
@@ -110,7 +110,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=powerpc64le-linux-gnu-
+        ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=powerpc64le-linux-gnu-
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
@@ -125,7 +125,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
@@ -140,7 +140,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp
@@ -155,7 +155,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../../openssl-$OPENSSL_VERSION
-        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../apache-arrow-$ARROW_VERSION/cpp

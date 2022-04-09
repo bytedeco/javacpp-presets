@@ -220,6 +220,15 @@ public class CalibrationHandler extends Pointer {
     public native @Cast("uint8_t") byte getLensPosition(@Cast("dai::CameraBoardSocket") int cameraId);
 
     /**
+     *  Get the distortion model of the given camera
+     *
+     * @param cameraId of the camera with lens position is requested.
+     * @return lens position of the camera with given cameraId at which it was calibrated.
+     */
+    public native CameraModel getDistortionModel(CameraBoardSocket cameraId);
+    public native @Cast("dai::CameraModel") byte getDistortionModel(@Cast("dai::CameraBoardSocket") int cameraId);
+
+    /**
      * Get the Camera Extrinsics object between two cameras from the calibration data if there is a linked connection
      *  between any two cameras then the relative rotation and translation (in centimeters) is returned by this function.
      *

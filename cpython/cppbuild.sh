@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENSSL=openssl-1.1.1m
+OPENSSL=openssl-3.0.2
 CPYTHON_VERSION=3.10.4
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
@@ -35,15 +35,15 @@ case $PLATFORM in
         fi
 
         cd ../$OPENSSL
-        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host
+        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         make distclean
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=arm-linux-gnueabihf-
         else
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -61,11 +61,11 @@ case $PLATFORM in
     linux-arm64)
         CFLAGS="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
         cd ../$OPENSSL
-        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host
+        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         make distclean
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         make distclean
@@ -82,14 +82,14 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         cd ../$OPENSSL
-        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host
+        ./Configure $OS-$ARCH -fPIC no-shared --prefix=$INSTALL_PATH/host --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         make distclean
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         else
-          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -106,7 +106,7 @@ case $PLATFORM in
         ;;
     linux-x86)
         cd ../$OPENSSL
-        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION
@@ -116,7 +116,7 @@ case $PLATFORM in
         ;;
     linux-x86_64)
         cd ../$OPENSSL
-        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION
@@ -126,7 +126,7 @@ case $PLATFORM in
         ;;
     macosx-*)
         cd ../$OPENSSL
-        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION

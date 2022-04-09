@@ -291,6 +291,8 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::node::VideoEncoder::Properties::RateControlMode").pointerTypes("VideoEncoderProperties.RateControlMode"))
                .put(new Info("dai::RawStereoDepthConfig::AlgorithmControl::DepthAlign",
                              "Properties::DepthAlign", "AlgorithmControl::DepthAlign").enumerate().pointerTypes("RawStereoDepthConfig.AlgorithmControl.DepthAlign"))
+               .put(new Info("dai::RawStereoDepthConfig::AlgorithmControl::DepthUnit",
+                             "Properties::DepthUnit", "AlgorithmControl::DepthUnit").enumerate().pointerTypes("RawStereoDepthConfig.AlgorithmControl.DepthUnit"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::IMU,dai::IMUProperties>").pointerTypes("IMUPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::AprilTag,dai::AprilTagProperties>").pointerTypes("AprilTagPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ColorCamera,dai::ColorCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))

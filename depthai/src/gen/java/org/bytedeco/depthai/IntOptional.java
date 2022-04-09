@@ -26,9 +26,8 @@ public class IntOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef IntOptional put(@ByRef IntOptional x);
 
-
     public native boolean has_value();
-    @Name("value") public native int get();
+    public native @Name("value") int get();
     @ValueSetter public native IntOptional put(int value);
 }
 
