@@ -37,7 +37,7 @@ public class SampleEncodeDecode {
             System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
         }
 
-        // Query decoder capability 'MPEG-1' codec
+        // Query decoder capability for HEVC (H.265) codec
         {
             CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
             decodeCaps.eCodecType(cudaVideoCodec_HEVC);
@@ -46,7 +46,7 @@ public class SampleEncodeDecode {
 
             checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-            System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+            System.out.printf("Decoder Capability HEVC Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
         }
     }
 }
