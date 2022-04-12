@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 13.0.1  http://llvm.org/
+ * LLVM 14.0.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>Factorial</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Factorial</exec.mainClass>
     </properties>
@@ -50,7 +50,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>13.0.1-1.5.7</version>
+            <version>14.0.0-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -104,7 +104,7 @@ public class Factorial {
         LLVMValueRef nMinusOne = LLVMBuildSub(builder, n, one, "nMinusOne = n - 1");
         PointerPointer<Pointer> arguments = new PointerPointer<>(1)
             .put(0, nMinusOne);
-        LLVMValueRef factorialResult = LLVMBuildCall(builder, factorial, arguments, 1, "factorialResult = factorial(nMinusOne)");
+        LLVMValueRef factorialResult = LLVMBuildCall2(builder, factorialType, factorial, arguments, 1, "factorialResult = factorial(nMinusOne)");
         LLVMValueRef resultIfFalse = LLVMBuildMul(builder, n, factorialResult, "resultIfFalse = n * factorialResult");
         LLVMBuildBr(builder, exit);
 

@@ -20,7 +20,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 /**
  * SpatialLocation configuration thresholds structure
  *
- * Contains configuration data for lower and upper threshold in millimeters for ROI.
+ * Contains configuration data for lower and upper threshold in depth units (millimeter by default) for ROI.
  * Values outside of threshold range will be ignored when calculating spatial coordinates from depth map.
  */
 @Namespace("dai") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)

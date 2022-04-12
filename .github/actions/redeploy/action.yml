@@ -66,7 +66,7 @@ runs:
 
         rm -f dependencies.txt
         for POM in $(find $CI_DEPLOY_MODULE/platform/ -iname pom.xml); do
-            if [[ $POM =~ pytorch/platform/gpu ]] || [[ $POM =~ tensorflow/platform/python ]]; then
+            if [[ $POM =~ tensorflow/platform/python ]]; then
                 continue # Skip over builds taking more than 6 hours on GitHub Actions
             fi
             for i in {1..5}; do

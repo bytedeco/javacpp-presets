@@ -66,6 +66,7 @@
     <module>../ngraph/platform</module>
     <module>../onnxruntime/platform</module>
     <module>../tvm/platform</module>
+    <module>../bullet/platform</module>
     <module>../liquidfun/platform</module>
     <module>../qt/platform</module>
     <module>../skia/platform</module>
@@ -89,7 +90,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>5.0-${project.version}</version>
+      <version>5.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -179,12 +180,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5.2-${project.version}</version>
+      <version>2.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.19-${project.version}</version>
+      <version>0.3.20-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -209,12 +210,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.10.2-${project.version}</version>
+      <version>3.10.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.22.2-${project.version}</version>
+      <version>1.22.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -224,12 +225,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.22.0-${project.version}</version>
+      <version>0.23.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>13.0.1-${project.version}</version>
+      <version>14.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -249,7 +250,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>5.0.1-${project.version}</version>
+      <version>5.1.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -284,7 +285,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>pytorch-platform</artifactId>
-      <version>1.10.2-${project.version}</version>
+      <version>1.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -314,7 +315,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.15.0-${project.version}</version>
+      <version>2.15.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -329,12 +330,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.10.0-${project.version}</version>
+      <version>1.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
       <version>0.8.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>bullet-platform</artifactId>
+      <version>3.22-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -354,7 +360,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.6.0-${project.version}</version>
+      <version>0.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

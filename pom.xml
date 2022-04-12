@@ -628,6 +628,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -777,6 +778,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -826,6 +828,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -875,6 +878,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -924,6 +928,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
@@ -1312,6 +1317,7 @@
         <module>tensorflow</module>
         <module>ale</module>
         <module>depthai</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>cpu_features</module>
@@ -1397,6 +1403,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1438,6 +1445,8 @@
         <module>ffmpeg</module>
         <module>openblas</module>
         <module>llvm</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1514,6 +1523,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1581,6 +1591,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1661,6 +1672,7 @@
         <module>onnx</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>cpu_features</module>

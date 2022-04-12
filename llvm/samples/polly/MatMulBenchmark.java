@@ -216,12 +216,12 @@ public class MatMulBenchmark {
         // s += a[m * K + k] * b[k * N + n]
         LLVMValueRef mMulK = LLVMBuildMul(builder, loopMIdx, toConstInt(K), "m * K");
         LLVMValueRef mMulKAddK = LLVMBuildAdd(builder, mMulK, loopKIdx, "m * K + k");
-        LLVMValueRef aAryPtr = LLVMBuildInBoundsGEP(builder, paramA, mMulKAddK, 1, new BytePointer("&a[m * K + k]"));
-        LLVMValueRef aAryValue = LLVMBuildLoad(builder, aAryPtr, "a[m * K + k]");
+        LLVMValueRef aAryPtr = LLVMBuildInBoundsGEP2(builder, llvmFloatType, paramA, mMulKAddK, 1, new BytePointer("&a[m * K + k]"));
+        LLVMValueRef aAryValue = LLVMBuildLoad2(builder, llvmFloatType, aAryPtr, "a[m * K + k]");
         LLVMValueRef kMulN = LLVMBuildMul(builder, loopKIdx, toConstInt(N), "k * N");
         LLVMValueRef kMulNAddN = LLVMBuildAdd(builder, kMulN, loopNIdx, "k * N + n");
-        LLVMValueRef bAryPtr = LLVMBuildInBoundsGEP(builder, paramB, kMulNAddN, 1, new BytePointer("&b[k * N + n]"));
-        LLVMValueRef bAryValue = LLVMBuildLoad(builder, bAryPtr, "b[k * N + n]");
+        LLVMValueRef bAryPtr = LLVMBuildInBoundsGEP2(builder, llvmFloatType, paramB, kMulNAddN, 1, new BytePointer("&b[k * N + n]"));
+        LLVMValueRef bAryValue = LLVMBuildLoad2(builder, llvmFloatType, bAryPtr, "b[k * N + n]");
         LLVMValueRef aMulB = LLVMBuildFMul(builder, aAryValue, bAryValue, "a[m * K + k] * b[k * N + n]");
         LLVMValueRef sAddAMulB = LLVMBuildFAdd(builder, s, aMulB, "s + a[m * K + k] * b[k * N + n]");
 
@@ -241,7 +241,7 @@ public class MatMulBenchmark {
         // c[m * N + n] = s
         LLVMValueRef mMulN = LLVMBuildMul(builder, loopMIdx, toConstInt(N), "m * N");
         LLVMValueRef mMulNAddN = LLVMBuildAdd(builder, mMulN, loopNIdx, "m * N + n");
-        LLVMValueRef cAryPtr = LLVMBuildInBoundsGEP(builder, paramC, mMulNAddN, 1, new BytePointer("&c[m * N + n]"));
+        LLVMValueRef cAryPtr = LLVMBuildInBoundsGEP2(builder, llvmFloatType, paramC, mMulNAddN, 1, new BytePointer("&c[m * N + n]"));
         LLVMBuildStore(builder, sAddAMulB, cAryPtr);
 
         // n++

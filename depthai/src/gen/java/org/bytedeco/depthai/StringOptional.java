@@ -28,8 +28,8 @@ public class StringOptional extends Pointer {
     private native void allocate();
     public native @Name("operator =") @ByRef StringOptional put(@ByRef StringOptional x);
 
-
-    @Name("value") public native @StdString BytePointer get();
+    public native boolean has_value();
+    public native @Name("value") @StdString BytePointer get();
     @ValueSetter public native StringOptional put(@StdString BytePointer value);
     @ValueSetter public native StringOptional put(@StdString ByteBuffer value);
     @ValueSetter public native StringOptional put(@StdString String value);

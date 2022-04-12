@@ -6,25 +6,27 @@ runs:
       shell: bash
       run: |
         cd $HOME
+        mkdir -p .ccache
+        echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
+        echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
+        echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
         export MACOSX_DEPLOYMENT_TARGET=10.15
         echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
+
+        echo Removing broken stuff from Mono
+        sudo rm -Rf /Library/Frameworks/Mono.framework
 
         if [[ "$CI_DEPLOY_PLATFORM" == "macosx-arm64" ]]; then
           echo Removing old SDKs without ARM support
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew uninstall --force gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 maven
+        brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC
-          brew uninstall --force gcc
-          brew uninstall --force gcc@7
-          brew uninstall --force gcc@8
-          brew uninstall --force gcc@9
-          brew uninstall --force gcc@11
-          brew uninstall --force gcc@12
           brew install gcc@10
           brew link --overwrite gcc@10
 
@@ -48,6 +50,10 @@ runs:
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
+
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
+        sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
         python3 -m pip install gdown || python3 -m pip install gdown
 
@@ -85,12 +91,13 @@ runs:
       run: |
         git --version
         clang --version
-        /usr/local/bin/gcc-* --version
+        /usr/local/bin/gcc-* --version || true
         cmake --version
         gradle --version
         mvn -version
         gpg --version
         python3 --version
+        ccache -s --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

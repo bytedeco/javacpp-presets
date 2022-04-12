@@ -6,6 +6,10 @@ runs:
       shell: bash
       run: |
         cd /root
+        mkdir -p .ccache
+        echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
+        echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
+        echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
         SCL_ENABLE="devtoolset-9"
         CENTOS_VERSION=$(rpm --eval '%{centos_ver}')
@@ -20,7 +24,7 @@ runs:
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
         fi
-        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
         # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
         sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9/include/avx512fintrin.h
         source scl_source enable $SCL_ENABLE || true
@@ -62,12 +66,12 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.1/local_installers/cuda-repo-rhel7-11-6-local-11.6.1_510.47.03-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda-repo-rhel7-11-6-local-11.6.2_510.47.03-1.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.11.4-1+cuda11.5.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.11.4-1+cuda11.5.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.12.7-1+cuda11.6.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.12.7-1+cuda11.6.x86_64.rpm
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-6-local-11.6.1_510.47.03-1.x86_64.rpm libnccl*.rpm
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-6-local-11.6.2_510.47.03-1.x86_64.rpm libnccl*.rpm
           pushd /var/cuda-repo-rhel7-11-6-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
@@ -90,6 +94,10 @@ runs:
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
+          sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          sed -i /warp_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
 
           # Remove downloaded archives and unused libraries to avoid running out of disk space
           rm -f *.rpm *.tgz *.txz *.tar.*
@@ -171,6 +179,7 @@ runs:
         mvn -version
         gpg --version
         python3 --version
+        ccache -s --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

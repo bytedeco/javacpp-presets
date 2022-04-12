@@ -3,7 +3,7 @@ import java.net.URL;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.leptonica.*;
 import org.bytedeco.tesseract.*;
-import static org.bytedeco.leptonica.global.lept.*;
+import static org.bytedeco.leptonica.global.leptonica.*;
 import static org.bytedeco.tesseract.global.tesseract.*;
 
 /**
