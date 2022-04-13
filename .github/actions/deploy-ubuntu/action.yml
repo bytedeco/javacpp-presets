@@ -62,15 +62,18 @@ runs:
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         apt-get update
         apt-get -y install python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libffi-dev libbz2-dev zlib1g-dev
+        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
 
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
         tar -xzf cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/
         tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        tar -xzf git-2.18.3.tar.gz
         unzip gradle-6.7.1-bin.zip -d /opt/
+        pushd git-2.18.3; make -j2 prefix=/usr/local/; make -j2 prefix=/usr/local/ install; popd
         ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
