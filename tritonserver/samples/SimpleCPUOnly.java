@@ -103,7 +103,7 @@ public class SimpleCPUOnly {
             // releasing the buffer.
             if (!allocated_ptr.isNull()) {
               buffer.put(0, allocated_ptr);
-              buffer_userp.put(0, new BytePointer(tensor_name));
+              buffer_userp.put(0, Loader.newGlobalRef(tensor_name));
               System.out.println("allocated " + byte_size + " bytes in "
                                + TRITONSERVER_MemoryTypeString(actual_memory_type.get())
                                + " for result tensor " + tensor_name);
@@ -119,18 +119,18 @@ public class SimpleCPUOnly {
             TRITONSERVER_ResponseAllocator allocator, Pointer buffer, Pointer buffer_userp,
             long byte_size, int memory_type, long memory_type_id)
         {
-          BytePointer name = null;
+          String name = null;
           if (buffer_userp != null) {
-            name = new BytePointer(buffer_userp);
+            name = (String)Loader.accessGlobalRef(buffer_userp);
           } else {
-            name = new BytePointer("<unknown>");
+            name = "<unknown>";
           }
 
           System.out.println("Releasing buffer " + buffer + " of size " + byte_size
                            + " in " + TRITONSERVER_MemoryTypeString(memory_type)
-                           + " for result '" + name.getString() + "'");
+                           + " for result '" + name + "'");
           Pointer.free(buffer);
-          name.deallocate();
+          Loader.deleteGlobalRef(buffer_userp);
 
           return null;  // Success
         }
