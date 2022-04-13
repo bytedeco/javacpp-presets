@@ -143,6 +143,11 @@ Eclipse (Java SE 7 or newer):
 
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
+ 
+Visual Studio Code (Java SE 7 or newer):
+
+ 1. Navigate to Java Projects > Referenced Libraries, and click `+`.
+ 2. Locate the JAR files, select them, and click OK.
 
 IntelliJ IDEA (Android 7.0 or newer):
 
