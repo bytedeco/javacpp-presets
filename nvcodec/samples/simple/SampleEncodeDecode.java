@@ -28,25 +28,30 @@ public class SampleEncodeDecode {
 
         checkCudaApiCall("cuInit", cuInit(0));
         checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
-        // Check encoder max supported version
-        {
-            IntPointer version = new IntPointer(1);
+        try {
+            // Check encoder max supported version
+            {
+                try (IntPointer version = new IntPointer(1)) {
+                    checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
 
-            checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
+                    System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
+                }
+            }
 
-            System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
-        }
+            // Query decoder capability 'MPEG-1' codec
+            {
+                try (CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS()) {
+                    decodeCaps.eCodecType(cudaVideoCodec_MPEG1);
+                    decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
+                    decodeCaps.nBitDepthMinus8(0);
 
-        // Query decoder capability 'MPEG-1' codec
-        {
-            CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
-            decodeCaps.eCodecType(cudaVideoCodec_HEVC);
-            decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
-            decodeCaps.nBitDepthMinus8(2); // 10 bit
+                    checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-            checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
-
-            System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+                    System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+                }
+            }
+        } finally {
+            checkCudaApiCall("cuCtxDestroy", cuCtxDestroy(cuContext));
         }
     }
 }
