@@ -84,15 +84,13 @@ import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 public class SampleEncodeDecode {
     public static void checkEncodeApiCall(String functionName, int result) {
         if (result != NV_ENC_SUCCESS) {
-            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
-            System.exit(-1);
+            throw new IllegalStateException(String.format("%s returned '%d'", functionName, result));
         }
     }
 
     public static void checkCudaApiCall(String functionName, int result) {
         if (result != CUDA_SUCCESS) {
-            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
-            System.exit(-1);
+            throw new IllegalStateException(String.format("%s returned '%d'", functionName, result));
         }
     }
 
