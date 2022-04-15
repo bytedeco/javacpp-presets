@@ -26,27 +26,24 @@ public class SampleEncodeDecode {
 
         checkCudaApiCall("cuInit", cuInit(0));
         checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
+        
         try {
             // Check encoder max supported version
-            {
-                try (IntPointer version = new IntPointer(1)) {
-                    checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
+            try (IntPointer version = new IntPointer(1)) {
+                checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
 
-                    System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
-                }
+                System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
             }
 
             // Query decoder capability 'H264' codec
-            {
-                try (CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS()) {
-                    decodeCaps.eCodecType(cudaVideoCodec_H264);
-                    decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
-                    decodeCaps.nBitDepthMinus8(0);
+            try (CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS()) {
+                decodeCaps.eCodecType(cudaVideoCodec_H264);
+                decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
+                decodeCaps.nBitDepthMinus8(0);
 
-                    checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
+                checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-                    System.out.printf("Decoder Capability H264 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
-                }
+                System.out.printf("Decoder Capability H264 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
             }
         } finally {
             checkCudaApiCall("cuCtxDestroy", cuCtxDestroy(cuContext));
