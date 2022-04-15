@@ -38,16 +38,16 @@ public class SampleEncodeDecode {
                 }
             }
 
-            // Query decoder capability 'MPEG-1' codec
+            // Query decoder capability 'H264' codec
             {
                 try (CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS()) {
-                    decodeCaps.eCodecType(cudaVideoCodec_MPEG1);
+                    decodeCaps.eCodecType(cudaVideoCodec_H264);
                     decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
                     decodeCaps.nBitDepthMinus8(0);
 
                     checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-                    System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+                    System.out.printf("Decoder Capability H264 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
                 }
             }
         } finally {
