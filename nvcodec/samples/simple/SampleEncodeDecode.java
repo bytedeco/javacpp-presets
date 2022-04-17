@@ -9,15 +9,13 @@ import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 public class SampleEncodeDecode {
     public static void checkEncodeApiCall(String functionName, int result) {
         if (result != NV_ENC_SUCCESS) {
-            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
-            System.exit(-1);
+            throw new IllegalStateException(String.format("%s returned '%d'", functionName, result));
         }
     }
 
     public static void checkCudaApiCall(String functionName, int result) {
         if (result != CUDA_SUCCESS) {
-            System.err.printf("ERROR: %s returned '%d' \r\n", functionName, result);
-            System.exit(-1);
+            throw new IllegalStateException(String.format("%s returned '%d'", functionName, result));
         }
     }
 
@@ -28,25 +26,26 @@ public class SampleEncodeDecode {
 
         checkCudaApiCall("cuInit", cuInit(0));
         checkCudaApiCall("cuCtxCreate", cuCtxCreate(cuContext, 0, targetGpu));
-        // Check encoder max supported version
-        {
-            IntPointer version = new IntPointer(1);
+        try {
+            // Check encoder max supported version
+            try (IntPointer version = new IntPointer(1)) {
+                checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
 
-            checkEncodeApiCall("NvEncodeAPIGetMaxSupportedVersion", NvEncodeAPIGetMaxSupportedVersion(version));
+                System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
+            }
 
-            System.out.printf("Encoder Max Supported Version\t : %d \r\n", version.get());
-        }
+            // Query decoder capability 'H.264' codec
+            try (CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS()) {
+                decodeCaps.eCodecType(cudaVideoCodec_H264);
+                decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
+                decodeCaps.nBitDepthMinus8(0);
 
-        // Query decoder capability 'MPEG-1' codec
-        {
-            CUVIDDECODECAPS decodeCaps = new CUVIDDECODECAPS();
-            decodeCaps.eCodecType(cudaVideoCodec_HEVC);
-            decodeCaps.eChromaFormat(cudaVideoChromaFormat_420);
-            decodeCaps.nBitDepthMinus8(2); // 10 bit
+                checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
 
-            checkCudaApiCall("cuvidGetDecoderCaps", cuvidGetDecoderCaps(decodeCaps));
-
-            System.out.printf("Decoder Capability MPEG-1 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+                System.out.printf("Decoder Capability H.264 Codec\t : %s \r\n", (decodeCaps.bIsSupported() != 0));
+            }
+        } finally {
+            checkCudaApiCall("cuCtxDestroy", cuCtxDestroy(cuContext));
         }
     }
 }
