@@ -51,12 +51,12 @@ public class OSystem extends Pointer {
     /**
       Adds the specified settings object to the system.
       <p>
-      @param settings The settings object to add 
+      @param settings The settings object to add
     */
     public native void attach(Settings settings);
 
-    /**  //ALE 
-      Get the event object of the system  
+    /**  //ALE
+      Get the event object of the system
       <p>
       @return The event object
     */

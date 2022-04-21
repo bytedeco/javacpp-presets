@@ -12,7 +12,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=14.0.0
+LLVM_VERSION=14.0.1
 OPENSSL_VERSION=3.0.2
 ZLIB_VERSION=1.2.12
 PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt

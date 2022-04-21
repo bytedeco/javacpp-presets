@@ -13,7 +13,7 @@
  * Bundle correctly OpenMP library for PyTorch builds on Mac as well
  * Remove dependency on CUDA from presets for Triton Inference Server ([pull #1151](https://github.com/bytedeco/javacpp-presets/pull/1151))
  * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
- * Upgrade presets for FFmpeg 5.0.1, DNNL 2.6, OpenBLAS 0.3.20, CPython 3.10.4, NumPy 1.22.3, Gym 0.23.1, LLVM 14.0.0, Tesseract 5.1.0, CUDA 11.6.2, NCCL 2.12.7, PyTorch 1.11.0, ALE 0.7.4, DepthAI 2.15.2, ONNX 1.11.0, ONNX Runtime 1.11.0, cpu_features 0.7.0, and their dependencies
+ * Upgrade presets for FFmpeg 5.0.1, DNNL 2.6, OpenBLAS 0.3.20, CPython 3.10.4, NumPy 1.22.3, Gym 0.23.1, LLVM 14.0.1, Tesseract 5.1.0, CUDA 11.6.2, NCCL 2.12.7, PyTorch 1.11.0, TensorFlow Lite 2.9.0, ALE 0.7.5, DepthAI 2.15.2, ONNX 1.11.0, ONNX Runtime 1.11.0, cpu_features 0.7.0, and their dependencies
 
 ### February 11, 2022 version 1.5.7
  * Build FFmpeg with WebP encoding support ([pull #1133](https://github.com/bytedeco/javacpp-presets/pull/1133))

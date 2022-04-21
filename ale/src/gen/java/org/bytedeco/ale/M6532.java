@@ -30,7 +30,7 @@ public class M6532 extends Device {
     */
     public M6532(@Const @ByRef Console console) { super((Pointer)null); allocate(console); }
     private native void allocate(@Const @ByRef Console console);
-    
+
     /**
       Destructor
     */

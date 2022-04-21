@@ -13,13 +13,8 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>14.0.0-1.5.8-SNAPSHOT</version>
+            <version>14.0.1-1.5.8-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.5.0</version>
-         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>

@@ -12,11 +12,11 @@ import static org.bytedeco.ale.global.ale.*;
 
 
 /**
-  This class represents objects which maintain a collection of 
+  This class represents objects which maintain a collection of
   properties.  A property is a key and its corresponding value.
   <p>
   A properties object can contain a reference to another properties
-  object as its "defaults"; this second properties object is searched 
+  object as its "defaults"; this second properties object is searched
   if the property key is not found in the original property list.
   <p>
   @author  Bradford W. Mott
@@ -38,7 +38,7 @@ public class StellaProperties extends Pointer {
     }
 
     /**
-      Creates an empty properties object with the specified defaults.  The 
+      Creates an empty properties object with the specified defaults.  The
       new properties object does not claim ownership of the defaults.
     */
     public StellaProperties() { super((Pointer)null); allocate(); }
@@ -60,7 +60,7 @@ public class StellaProperties extends Pointer {
       not exist then the empty string is returned.
       <p>
       @param key  The key of the property to lookup
-      @return     The value of the property 
+      @return     The value of the property
     */
     public native @StdString BytePointer get(@Cast("ale::stella::PropertyType") int key);
 
@@ -79,7 +79,7 @@ public class StellaProperties extends Pointer {
       @param in The input stream to use
     */
     public native void load(@Cast("std::istream*") @ByRef Pointer in);
- 
+
     /**
       Save properties to the specified output stream
       <p>

@@ -12,9 +12,9 @@ import static org.bytedeco.ale.global.ale.*;
 
 
 /**
-  A cartridge is a device which contains the machine code for a 
+  A cartridge is a device which contains the machine code for a
   game and handles any bankswitching performed by the cartridge.
- 
+  <p>
   @author  Bradford W. Mott
   @version $Id: Cart.hxx,v 1.19 2007/06/14 13:47:50 stephena Exp $
 */
@@ -29,22 +29,22 @@ public class Cartridge extends Device {
       type of cartridge created depends on the properties object.
       <p>
       @param image    A pointer to the ROM image
-      @param size     The size of the ROM image 
+      @param size     The size of the ROM image
       @param props    The properties associated with the game
       @param settings The settings associated with the system
       @return   Pointer to the new cartridge object allocated on the heap
     */
-    public static native Cartridge create(@Cast("const uint8_t*") BytePointer image, @Cast("uint32_t") int size, 
+    public static native Cartridge create(@Cast("const uint8_t*") BytePointer image, @Cast("uint32_t") int size,
             @Const @ByRef StellaProperties props, @Const @ByRef Settings settings);
-    public static native Cartridge create(@Cast("const uint8_t*") ByteBuffer image, @Cast("uint32_t") int size, 
+    public static native Cartridge create(@Cast("const uint8_t*") ByteBuffer image, @Cast("uint32_t") int size,
             @Const @ByRef StellaProperties props, @Const @ByRef Settings settings);
-    public static native Cartridge create(@Cast("const uint8_t*") byte[] image, @Cast("uint32_t") int size, 
+    public static native Cartridge create(@Cast("const uint8_t*") byte[] image, @Cast("uint32_t") int size,
             @Const @ByRef StellaProperties props, @Const @ByRef Settings settings);
 
     /**
       Create a new cartridge
     */
- 
+
     /**
       Destructor
     */
@@ -61,8 +61,8 @@ public class Cartridge extends Device {
     */
     public native @Cast("bool") boolean save(@Cast("std::ofstream*") @ByRef Pointer out);
 
-    /** MGB: Added to drop warning on overloaded save() method. */  
-    public native @Cast("bool") boolean save(@ByRef Serializer out); 
+    /** MGB: Added to drop warning on overloaded save() method. */
+    public native @Cast("bool") boolean save(@ByRef Serializer out);
 
     /**
       Lock/unlock bankswitching capability.

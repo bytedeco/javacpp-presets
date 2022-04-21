@@ -89,7 +89,8 @@ public class tensorflowlite implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK").cppTypes().annotations())
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
-               .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation").skip())
+               .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
+                             "tflite::InterpreterBuilder::PreserveAllTensorsExperimental").skip())
                .put(new Info("tflite::Model", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
                .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
