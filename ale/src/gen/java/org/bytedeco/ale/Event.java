@@ -62,7 +62,7 @@ public class Event extends Pointer {
     */
     public Event() { super((Pointer)null); allocate(); }
     private native void allocate();
- 
+
     /**
       Destructor
     */

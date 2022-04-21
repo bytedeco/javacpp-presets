@@ -32,7 +32,7 @@ public class Sound extends Pointer {
 
     /**
       Destructor
-    */ 
+    */
     /**
       Enables/disables the sound subsystem.
       <p>

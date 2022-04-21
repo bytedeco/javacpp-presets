@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.8.0
+TENSORFLOW_VERSION=2.9.0-rc0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -22,6 +22,7 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 # patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
+sedinplace 's/common.c/common.cc/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c/CMakeLists.txt
 
 mkdir -p build
 cd build
@@ -50,9 +51,15 @@ case $PLATFORM in
         export CXX="clang++"
         ;;
     windows-x86_64)
+        sedinplace 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 20/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
+        sedinplace 's/__PRETTY_FUNCTION__/__func__/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/depthwiseconv*.h ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/integer_ops/depthwise_conv.h
         export CC="cl.exe -D_USE_MATH_DEFINES"
         export CXX="cl.exe -D_USE_MATH_DEFINES"
         export CMAKE_FLAGS="-G Ninja $CMAKE_FLAGS"
+        # create a dummy m.lib to satisfy some dependencies somewhere
+        touch m.c
+        cl.exe //c m.c
+        lib m.obj
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -65,7 +72,7 @@ esac
 #"$CMAKE" --install .
 
 # since the build doesn't have an install phase, collect all object files manually
-find -L $(pwd) -iname *.obj -o -iname *.o -not -path "$(pwd)/CMakeFiles/*" > objs
+find -L $(pwd) -iname '*.obj' -o -iname '*.o' -not -path "$(pwd)/CMakeFiles/*" > objs
 # remove files with main() functions as well as duplicate or unresolved symbols in them
 sedinplace '/main.o/d' objs
 sedinplace '/CMakeCCompilerId.o/d' objs

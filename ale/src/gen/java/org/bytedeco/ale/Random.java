@@ -30,7 +30,7 @@ public class Random extends Pointer {
         return new Random((Pointer)this).offsetAddress(i);
     }
 
-    
+
     /**
       Class method which allows you to set the seed that'll be used
       for created new instances of this class
@@ -64,7 +64,7 @@ public class Random extends Pointer {
     */
     public native @Cast("bool") boolean saveState(@ByRef Serializer out);
 
-    /** 
+    /**
       Deserializes the RNG state.
     */
     public native @Cast("bool") boolean loadState(@ByRef Deserializer in);
