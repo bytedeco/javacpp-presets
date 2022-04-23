@@ -54,6 +54,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/utility/Initialization.hpp",
                 "depthai/utility/LockingQueue.hpp",
                 "depthai/utility/Pimpl.hpp",
+                "depthai/utility/Path.hpp",
                 "depthai-shared/utility/Serialization.hpp",
                 "depthai-shared/common/CameraBoardSocket.hpp",
                 "depthai-shared/common/CameraImageOrientation.hpp",
@@ -183,8 +184,8 @@ public class depthai implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(true))
-               .put(new Info("XLINK_MAX_STREAM_RES").define(false))
-               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE").cppTypes().annotations())
+               .put(new Info("XLINK_MAX_STREAM_RES", "defined(__cpp_lib_filesystem)", "defined(__cpp_lib_char8_t)").define(false))
+               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE", "DEPTHAI_NODISCARD").cppTypes().annotations())
 
                .put(new Info("const char").valueTypes("@Cast(\"const char\") byte").pointerTypes("@Cast(\"const char*\") BytePointer", "@Cast(\"const char*\") ByteBuffer", "String"))
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
@@ -192,7 +193,7 @@ public class depthai implements InfoMapper {
                .put(new Info("std::int32_t", "std::uint32_t", "dai::OpenVINO::Version").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::int64_t", "dai::Node::Id").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
-               .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "ByteBuffer", "String").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
+               .put(new Info("std::string", "std::basic_string<dai::Path::value_type>").annotations("@StdString").valueTypes("BytePointer", "ByteBuffer", "String").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
 
                .put(new Info("basic/containers").cppTypes("tl::optional"))
                .put(new Info("dai::XLinkStream::read").annotations("@Function"))

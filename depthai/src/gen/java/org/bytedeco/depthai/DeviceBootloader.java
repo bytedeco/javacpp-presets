@@ -151,10 +151,8 @@ public class DeviceBootloader extends Pointer {
      * @param compress Optional boolean which specifies if contents should be compressed
      * @return Depthai application package
      */
-    public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @StdString BytePointer pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
+    public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/);
     public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline);
-    public static native @Cast("uint8_t*") @StdVector ByteBuffer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @StdString ByteBuffer pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
-    public static native @Cast("uint8_t*") @StdVector byte[] createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @StdString String pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
 
     /**
      * Creates application package which can be flashed to depthai device.
@@ -171,12 +169,8 @@ public class DeviceBootloader extends Pointer {
      * @param pathToCmd Optional path to custom device firmware
      * @param compress Optional boolean which specifies if contents should be compressed
      */
-    public static native void saveDepthaiApplicationPackage(@StdString BytePointer path, @Const @ByRef Pipeline pipeline, @StdString BytePointer pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
-    public static native void saveDepthaiApplicationPackage(@StdString BytePointer path, @Const @ByRef Pipeline pipeline);
-    public static native void saveDepthaiApplicationPackage(@StdString ByteBuffer path, @Const @ByRef Pipeline pipeline, @StdString ByteBuffer pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
-    public static native void saveDepthaiApplicationPackage(@StdString ByteBuffer path, @Const @ByRef Pipeline pipeline);
-    public static native void saveDepthaiApplicationPackage(@StdString String path, @Const @ByRef Pipeline pipeline, @StdString String pathToCmd/*=""*/, @Cast("bool") boolean compress/*=false*/);
-    public static native void saveDepthaiApplicationPackage(@StdString String path, @Const @ByRef Pipeline pipeline);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline);
 
     /**
      * Saves application package to a file which can be flashed to depthai device.
@@ -184,9 +178,7 @@ public class DeviceBootloader extends Pointer {
      * @param pipeline Pipeline from which to create the application package
      * @param compress Specifies if contents should be compressed
      */
-    public static native void saveDepthaiApplicationPackage(@StdString BytePointer path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
-    public static native void saveDepthaiApplicationPackage(@StdString ByteBuffer path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
-    public static native void saveDepthaiApplicationPackage(@StdString String path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
 
     /**
      * @return Embedded bootloader version
@@ -203,14 +195,17 @@ public class DeviceBootloader extends Pointer {
     
 
     /**
-     * Connects to or boots device in bootloader mode depending on devInfo state.
+     * Connects to or boots device in bootloader mode depending on devInfo state; flashing not allowed
      * @param devInfo DeviceInfo of which to boot or connect to
-     * @param allowFlashingBootloader Set to true to allow flashing the devices bootloader. Defaults to false
      */
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(devInfo, allowFlashingBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
     public DeviceBootloader(@Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(devInfo); }
     private native void allocate(@Const @ByRef DeviceInfo devInfo);
+
+    /**
+     * Connects to or boots device in bootloader mode depending on devInfo state.
+     * @param devInfo DeviceInfo of which to boot or connect to
+     * @param allowFlashingBootloader (bool) Set to true to allow flashing the devices bootloader
+     */
 
     /**
      * Connects to device in bootloader of specified type. Throws if it wasn't possible.
@@ -234,21 +229,14 @@ public class DeviceBootloader extends Pointer {
      * @param pathToBootloader Custom bootloader firmware to boot
      * @param allowFlashingBootloader Set to true to allow flashing the devices bootloader. Defaults to false
      */
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString BytePointer pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(devInfo, pathToBootloader, allowFlashingBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString BytePointer pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString BytePointer pathToBootloader) { super((Pointer)null); allocate(devInfo, pathToBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString BytePointer pathToBootloader);
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString ByteBuffer pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(devInfo, pathToBootloader, allowFlashingBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString ByteBuffer pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString ByteBuffer pathToBootloader) { super((Pointer)null); allocate(devInfo, pathToBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString ByteBuffer pathToBootloader);
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString String pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(devInfo, pathToBootloader, allowFlashingBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString String pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
-    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @StdString String pathToBootloader) { super((Pointer)null); allocate(devInfo, pathToBootloader); }
-    private native void allocate(@Const @ByRef DeviceInfo devInfo, @StdString String pathToBootloader);
+    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(devInfo, pathToBootloader, allowFlashingBootloader); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToBootloader, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
+    public DeviceBootloader(@Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToBootloader) { super((Pointer)null); allocate(devInfo, pathToBootloader); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToBootloader);
 
     /**
-     * \overload
+     * \brief Destroy the Device Bootloader object
+     *
      */
 
     /**
@@ -288,10 +276,8 @@ public class DeviceBootloader extends Pointer {
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
      * @param path Optional parameter to custom bootloader to flash
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @StdString BytePointer path/*=""*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @Const @ByRef(nullValue = "dai::Path{}") Path path);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @StdString ByteBuffer path/*=""*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(ProgressCallback progressCallback, @StdString String path/*=""*/);
 
     /**
      * Flash selected bootloader to the current board
@@ -300,14 +286,10 @@ public class DeviceBootloader extends Pointer {
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
      * @param path Optional parameter to custom bootloader to flash
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback, @StdString BytePointer path/*=""*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback, @Const @ByRef(nullValue = "dai::Path{}") Path path);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback, @StdString ByteBuffer path/*=""*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback, @Const @ByRef(nullValue = "dai::Path{}") Path path);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback, @StdString String path/*=""*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback, @StdString BytePointer path/*=""*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(Memory memory, Type type, ProgressCallback progressCallback, @StdString ByteBuffer path/*=""*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback, @StdString String path/*=""*/);
 
     /**
      * Flash arbitrary data at custom offset in specified memory
@@ -344,15 +326,9 @@ public class DeviceBootloader extends Pointer {
      * @param memory Optional - to which memory flash configuration
      * @param type Optional - for which type of bootloader to flash configuration
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString BytePointer configPath, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, Type type/*=dai::DeviceBootloader::Type::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString BytePointer configPath);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString ByteBuffer configPath, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::Type::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString ByteBuffer configPath);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString String configPath, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, Type type/*=dai::DeviceBootloader::Type::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString String configPath);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString BytePointer configPath, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::Type::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString ByteBuffer configPath, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, Type type/*=dai::DeviceBootloader::Type::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@StdString String configPath, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::Type::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@Const @ByRef Path configPath, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, Type type/*=dai::DeviceBootloader::Type::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@Const @ByRef Path configPath);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfigFile(@Const @ByRef Path configPath, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::Type::AUTO*/);
 
     /**
      * Clears configuration data

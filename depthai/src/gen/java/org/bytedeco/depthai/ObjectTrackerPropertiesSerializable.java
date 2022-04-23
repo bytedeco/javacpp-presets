@@ -34,9 +34,15 @@ public class ObjectTrackerPropertiesSerializable extends DaiProperties {
         return new ObjectTrackerPropertiesSerializable((Pointer)this).offsetAddress(i);
     }
 
-    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data);
-    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
-    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] data);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data, SerializationType type/*=dai::SerializationType::LIBNOP*/);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data, @Cast("dai::SerializationType") int type/*=dai::SerializationType::LIBNOP*/);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] data, SerializationType type/*=dai::SerializationType::LIBNOP*/);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] data);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data, @Cast("dai::SerializationType") int type/*=dai::SerializationType::LIBNOP*/);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data, SerializationType type/*=dai::SerializationType::LIBNOP*/);
+    public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] data, @Cast("dai::SerializationType") int type/*=dai::SerializationType::LIBNOP*/);
 
     public native @UniquePtr @Override DaiProperties clone();
 }

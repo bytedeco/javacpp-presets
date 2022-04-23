@@ -135,8 +135,6 @@ public class DeviceBase extends Pointer {
      * @param pipeline Pipeline to be executed on the device
      * @param usb2Mode Boot device using USB2 mode firmware
      */
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, usb2Mode); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean usb2Mode);
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
@@ -153,18 +151,8 @@ public class DeviceBase extends Pointer {
      * @param pipeline Pipeline to be executed on the device
      * @param pathToCmd Path to custom device firmware
      */
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("const char*") BytePointer pathToCmd);
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Cast("const char*") ByteBuffer pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Cast("const char*") ByteBuffer pathToCmd);
-    public DeviceBase(@Const @ByRef Pipeline pipeline, String pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, String pathToCmd);
-
-    /**
-     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * @param pipeline Pipeline to be executed on the device
-     * @param pathToCmd Path to custom device firmware
-     */
+    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(pipeline, pathToCmd); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef Path pathToCmd);
 
     /**
      * Connects to device specified by devInfo.
@@ -180,8 +168,6 @@ public class DeviceBase extends Pointer {
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param usb2Mode Boot device using USB2 mode firmware
      */
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(pipeline, devInfo, usb2Mode); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode);
 
     /**
      * Connects to device specified by devInfo.
@@ -200,19 +186,8 @@ public class DeviceBase extends Pointer {
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param pathToCmd Path to custom device firmware
      */
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd);
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") ByteBuffer pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") ByteBuffer pathToCmd);
-    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, String pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
-    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, String pathToCmd);
-
-    /**
-     * Connects to device specified by devInfo.
-     * @param pipeline Pipeline to be executed on the device
-     * @param devInfo DeviceInfo which specifies which device to connect to
-     * @param pathToCmd Path to custom device firmware
-     */
+    public DeviceBase(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(pipeline, devInfo, pathToCmd); }
+    private native void allocate(@Const @ByRef Pipeline pipeline, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd);
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
@@ -233,13 +208,10 @@ public class DeviceBase extends Pointer {
      * @param version OpenVINO version which the device will be booted with
      * @param usb2Mode Boot device using USB2 mode firmware
      */
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(version, usb2Mode); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("bool") boolean usb2Mode);
 
     /**
      * Connects to device specified by devInfo.
      * @param version OpenVINO version which the device will be booted with
-     * @param devInfo DeviceInfo which specifies which device to connect to
      * @param maxUsbSpeed Maximum allowed USB speed
      */
     public DeviceBase(@Cast("dai::OpenVINO::Version") int version, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(version, maxUsbSpeed); }
@@ -252,18 +224,8 @@ public class DeviceBase extends Pointer {
      * @param version OpenVINO version which the device will be booted with
      * @param pathToCmd Path to custom device firmware
      */
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") BytePointer pathToCmd);
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") ByteBuffer pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Cast("const char*") ByteBuffer pathToCmd);
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, String pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, String pathToCmd);
-
-    /**
-     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * @param version OpenVINO version which the device will be booted with
-     * @param pathToCmd Path to custom device firmware
-     */
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(version, pathToCmd); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef Path pathToCmd);
 
     /**
      * Connects to device specified by devInfo.
@@ -279,8 +241,6 @@ public class DeviceBase extends Pointer {
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param usb2Mode Boot device using USB2 mode firmware
      */
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode) { super((Pointer)null); allocate(version, devInfo, usb2Mode); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("bool") boolean usb2Mode);
 
     /**
      * Connects to device specified by devInfo.
@@ -299,19 +259,8 @@ public class DeviceBase extends Pointer {
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param pathToCmd Path to custom device firmware
      */
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") BytePointer pathToCmd);
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") ByteBuffer pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Cast("const char*") ByteBuffer pathToCmd);
-    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, String pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
-    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, String pathToCmd);
-
-    /**
-     * Connects to device specified by devInfo.
-     * @param version OpenVINO version which the device will be booted with
-     * @param devInfo DeviceInfo which specifies which device to connect to
-     * @param usb2Mode Path to custom device firmware
-     */
+    public DeviceBase(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(version, devInfo, pathToCmd); }
+    private native void allocate(@Cast("dai::OpenVINO::Version") int version, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd);
 
     /**
      * Connects to any available device with custom config.

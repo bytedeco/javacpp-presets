@@ -62,8 +62,8 @@ public class OpenVINO extends Pointer {
          *
          * @param path Filesystem path to the blob
          */
-        public Blob(@StdString String path) { super((Pointer)null); allocate(path); }
-        private native void allocate(@StdString String path);
+        public Blob(@Const @ByRef Path path) { super((Pointer)null); allocate(path); }
+        private native void allocate(@Const @ByRef Path path);
 
         /** OpenVINO version */
         public native @Cast("dai::OpenVINO::Version") int version(); public native Blob version(int setter);

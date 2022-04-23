@@ -71,12 +71,12 @@ public class AssetManager extends Pointer {
      * @param path Path to file which to load as asset
      * @param alignment [Optional] alignment of asset data in asset storage. Default is 64B
      */
-    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @StdString BytePointer path, int alignment/*=64*/);
-    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @StdString BytePointer path);
-    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @StdString ByteBuffer path, int alignment/*=64*/);
-    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @StdString ByteBuffer path);
-    public native @SharedPtr @ByVal Asset set(@StdString String key, @StdString String path, int alignment/*=64*/);
-    public native @SharedPtr @ByVal Asset set(@StdString String key, @StdString String path);
+    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @Const @ByRef Path path, int alignment/*=64*/);
+    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @Const @ByRef Path path);
+    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @Const @ByRef Path path, int alignment/*=64*/);
+    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @Const @ByRef Path path);
+    public native @SharedPtr @ByVal Asset set(@StdString String key, @Const @ByRef Path path, int alignment/*=64*/);
+    public native @SharedPtr @ByVal Asset set(@StdString String key, @Const @ByRef Path path);
 
     /**
      * Loads file into asset manager under specified key.
@@ -86,6 +86,10 @@ public class AssetManager extends Pointer {
      * @param alignment [Optional] alignment of asset data in asset storage. Default is 64B
      * @return Shared pointer to asset
      */
+    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @Cast("std::uint8_t*") @StdVector BytePointer data, int alignment/*=64*/);
+    public native @SharedPtr @ByVal Asset set(@StdString BytePointer key, @Cast("std::uint8_t*") @StdVector BytePointer data);
+    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @Cast("std::uint8_t*") @StdVector ByteBuffer data, int alignment/*=64*/);
+    public native @SharedPtr @ByVal Asset set(@StdString ByteBuffer key, @Cast("std::uint8_t*") @StdVector ByteBuffer data);
     public native @SharedPtr @ByVal Asset set(@StdString String key, @Cast("std::uint8_t*") @StdVector byte[] data, int alignment/*=64*/);
     public native @SharedPtr @ByVal Asset set(@StdString String key, @Cast("std::uint8_t*") @StdVector byte[] data);
 

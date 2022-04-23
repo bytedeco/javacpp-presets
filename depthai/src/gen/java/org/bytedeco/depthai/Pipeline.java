@@ -54,12 +54,17 @@ public class Pipeline extends Pointer {
     /**
      * @return Pipeline schema
      */
+    public native @ByVal PipelineSchema getPipelineSchema(SerializationType type/*=dai::DEFAULT_SERIALIZATION_TYPE*/);
     public native @ByVal PipelineSchema getPipelineSchema();
+    public native @ByVal PipelineSchema getPipelineSchema(@Cast("dai::SerializationType") int type/*=dai::DEFAULT_SERIALIZATION_TYPE*/);
 
     // void loadAssets(AssetManager& assetManager);
     public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector BytePointer assetStorage);
     public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector ByteBuffer assetStorage);
     public native void serialize(@ByRef PipelineSchema schema, @ByRef Assets assets, @Cast("std::uint8_t*") @StdVector byte[] assetStorage);
+
+    /** Returns whole pipeline represented as JSON */
+    public native @ByVal @Cast("nlohmann::json*") Pointer serializeToJson();
 
     /**
      * Adds a node to pipeline.
@@ -152,9 +157,7 @@ public class Pipeline extends Pointer {
     public native @ByVal VersionOptional getRequiredOpenVINOVersion();
 
     /** Set a camera IQ (Image Quality) tuning blob, used for all cameras */
-    public native void setCameraTuningBlobPath(@StdString BytePointer path);
-    public native void setCameraTuningBlobPath(@StdString ByteBuffer path);
-    public native void setCameraTuningBlobPath(@StdString String path);
+    public native void setCameraTuningBlobPath(@Const @ByRef Path path);
 
     /**
      * Set chunk size for splitting device-sent XLink packets, in bytes. A larger value could
