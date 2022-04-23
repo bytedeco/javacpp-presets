@@ -51,10 +51,10 @@ public class XLinkConnection extends Pointer {
     private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @Cast("std::uint8_t*") @StdVector byte[] mvcmdBinary, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/);
     public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @Cast("std::uint8_t*") @StdVector byte[] mvcmdBinary) { super((Pointer)null); allocate(deviceDesc, mvcmdBinary); }
     private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @Cast("std::uint8_t*") @StdVector byte[] mvcmdBinary);
-    public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @StdString String pathToMvcmd, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/) { super((Pointer)null); allocate(deviceDesc, pathToMvcmd, expectedState); }
-    private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @StdString String pathToMvcmd, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/);
-    public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @StdString String pathToMvcmd) { super((Pointer)null); allocate(deviceDesc, pathToMvcmd); }
-    private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @StdString String pathToMvcmd);
+    public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @ByVal Path pathToMvcmd, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/) { super((Pointer)null); allocate(deviceDesc, pathToMvcmd, expectedState); }
+    private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @ByVal Path pathToMvcmd, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/);
+    public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @ByVal Path pathToMvcmd) { super((Pointer)null); allocate(deviceDesc, pathToMvcmd); }
+    private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @ByVal Path pathToMvcmd);
     public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/) { super((Pointer)null); allocate(deviceDesc, expectedState); }
     private native void allocate(@Const @ByRef DeviceInfo deviceDesc, @Cast("XLinkDeviceState_t") int expectedState/*=X_LINK_BOOTED*/);
     public XLinkConnection(@Const @ByRef DeviceInfo deviceDesc) { super((Pointer)null); allocate(deviceDesc); }

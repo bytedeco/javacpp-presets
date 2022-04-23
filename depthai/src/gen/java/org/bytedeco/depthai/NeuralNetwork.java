@@ -68,9 +68,7 @@ public class NeuralNetwork extends NeuralNetworkPropertiesNode {
      * @throws Error if file doesn't exist or isn't a valid network blob.
      * @param path Path to network blob
      */
-    public native void setBlobPath(@StdString BytePointer path);
-    public native void setBlobPath(@StdString ByteBuffer path);
-    public native void setBlobPath(@StdString String path);
+    public native void setBlobPath(@Const @ByRef Path path);
 
     /**
      * Load network blob into assets and use once pipeline is started.

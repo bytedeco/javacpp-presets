@@ -24,8 +24,11 @@ public class DaiProperties extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DaiProperties(Pointer p) { super(p); }
 
-    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
-    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] data);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data, SerializationType type);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data, @Cast("dai::SerializationType") int type);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] data, SerializationType type);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector BytePointer data, @Cast("dai::SerializationType") int type);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer data, SerializationType type);
+    public native void serialize(@Cast("std::uint8_t*") @StdVector byte[] data, @Cast("dai::SerializationType") int type);
     public native @UniquePtr DaiProperties clone();
 }

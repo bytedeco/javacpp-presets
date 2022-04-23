@@ -89,6 +89,10 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
      */
     public native CameraBoardSocket depthAlignCamera(); public native StereoDepthProperties depthAlignCamera(CameraBoardSocket setter);
 
+    /**
+     * Enable stereo rectification/dewarp or not.
+     * Useful to disable when replaying pre-recorded rectified frames.
+     */
     public native @Cast("bool") boolean enableRectification(); public native StereoDepthProperties enableRectification(boolean setter);
 
     /**
@@ -159,4 +163,10 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
      * otherwise calculated from FOV and image resolution: focalLength = calib.width / (2.f * tan(calib.fov / 2 / 180.f * pi));
      */
     public native @ByRef BoolOptional focalLengthFromCalibration(); public native StereoDepthProperties focalLengthFromCalibration(BoolOptional setter);
+
+    /**
+     * Use homography for stereo rectification instead of sparse mesh generated on device.
+     * Default value: true.
+     */
+    public native @Cast("bool") boolean useHomographyRectification(); public native StereoDepthProperties useHomographyRectification(boolean setter);
 }

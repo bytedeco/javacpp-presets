@@ -22,8 +22,8 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tritonserver-platform</artifactId>
-            <version>2.18-1.5.8-SNAPSHOT</version>
-	    <classifier>shaded</classifier>
+            <version>2.20-1.5.8-SNAPSHOT</version>
+            <classifier>shaded</classifier>
         </dependency>
     </dependencies>
     <build>

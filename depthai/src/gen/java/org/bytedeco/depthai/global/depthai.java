@@ -322,6 +322,23 @@ public static final int
   // namespace dai
 
 
+// Parsed from depthai/utility/Path.hpp
+
+// #pragma once
+// #if(__cplusplus >= 201703L) || (_MSVC_LANG >= 201703L)
+//     #include <filesystem>
+//     #define DEPTHAI_NODISCARD [[nodiscard]]
+// #else
+//     #define DEPTHAI_NODISCARD
+// #endif
+// #include <string>
+// Targeting ../Path.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai-shared/utility/Serialization.hpp
 
 // #pragma once
@@ -352,6 +369,22 @@ public static final int
 // #if __has_feature(cxx_exceptions) || defined(__cpp_exceptions) || (defined(_MSC_VER) && defined(_CPPUNWIND)) || defined(__EXCEPTIONS)
 //     #define DEPTHAI_EXCEPTIONS
 // #endif
+
+@Namespace("dai") public enum SerializationType {
+    LIBNOP(0),
+    JSON(1),
+    JSON_MSGPACK(2);
+
+    public final int value;
+    private SerializationType(int v) { this.value = v; }
+    private SerializationType(SerializationType e) { this.value = e.value; }
+    public SerializationType intern() { for (SerializationType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+// JSON-msgpack serialization
+
+// JSON serialization
 // Targeting ../VectorWriter.java
 
 
@@ -361,7 +394,11 @@ public static final int
 // If exceptions are available it throws in error cases
 // Otherwise return value can be checked
 
-// libnop deserialization
+// Serialization using enum
+
+// Serialization using templates
+
+// Defaults
 
   // namespace utility
 
@@ -1809,6 +1846,7 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 // #include <vector>
 
 // #include "depthai-shared/common/TensorInfo.hpp"
+// #include "depthai/utility/Path.hpp"
 // Targeting ../OpenVINO.java
 
 
@@ -2125,6 +2163,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <vector>
 
 // #include "depthai-shared/pipeline/Assets.hpp"
+// #include "depthai/utility/Path.hpp"
 // Targeting ../Asset.java
 
 
@@ -2628,6 +2667,9 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <unordered_map>
 // #include <vector>
 
+// project
+// #include "depthai/utility/Path.hpp"
+
 // Libraries
 // #include <XLink/XLinkPublicDefines.h>
 // Targeting ../DeviceInfo.java
@@ -2827,6 +2869,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <string>
 // #include <thread>
 // #include <tuple>
+// #include <type_traits>
 // #include <unordered_map>
 // #include <vector>
 
@@ -2864,6 +2907,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "depthai-shared/common/EepromData.hpp"
 // #include "depthai-shared/common/Point2f.hpp"
 // #include "depthai-shared/common/Size2f.hpp"
+// #include "depthai/utility/Path.hpp"
 // Targeting ../CalibrationHandler.java
 
 

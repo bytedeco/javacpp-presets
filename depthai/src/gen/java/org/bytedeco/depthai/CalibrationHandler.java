@@ -43,12 +43,8 @@ public class CalibrationHandler extends Pointer {
      *
      * @param eepromDataPath takes the full path to the json file containing the calibration and device info.
      */
-    public CalibrationHandler(@StdString BytePointer eepromDataPath) { super((Pointer)null); allocate(eepromDataPath); }
-    private native void allocate(@StdString BytePointer eepromDataPath);
-    public CalibrationHandler(@StdString ByteBuffer eepromDataPath) { super((Pointer)null); allocate(eepromDataPath); }
-    private native void allocate(@StdString ByteBuffer eepromDataPath);
-    public CalibrationHandler(@StdString String eepromDataPath) { super((Pointer)null); allocate(eepromDataPath); }
-    private native void allocate(@StdString String eepromDataPath);
+    public CalibrationHandler(@ByVal Path eepromDataPath) { super((Pointer)null); allocate(eepromDataPath); }
+    private native void allocate(@ByVal Path eepromDataPath);
 
     /**
      * Construct a new Calibration Handler object using the board
@@ -57,12 +53,8 @@ public class CalibrationHandler extends Pointer {
      * @param calibrationDataPath Full Path to the .calib binary file from the gen1 calibration. (Supports only Version 5)
      * @param boardConfigPath Full Path to the board config json file containing device information.
      */
-    public CalibrationHandler(@StdString BytePointer calibrationDataPath, @StdString BytePointer boardConfigPath) { super((Pointer)null); allocate(calibrationDataPath, boardConfigPath); }
-    private native void allocate(@StdString BytePointer calibrationDataPath, @StdString BytePointer boardConfigPath);
-    public CalibrationHandler(@StdString ByteBuffer calibrationDataPath, @StdString ByteBuffer boardConfigPath) { super((Pointer)null); allocate(calibrationDataPath, boardConfigPath); }
-    private native void allocate(@StdString ByteBuffer calibrationDataPath, @StdString ByteBuffer boardConfigPath);
-    public CalibrationHandler(@StdString String calibrationDataPath, @StdString String boardConfigPath) { super((Pointer)null); allocate(calibrationDataPath, boardConfigPath); }
-    private native void allocate(@StdString String calibrationDataPath, @StdString String boardConfigPath);
+    public CalibrationHandler(@ByVal Path calibrationDataPath, @ByVal Path boardConfigPath) { super((Pointer)null); allocate(calibrationDataPath, boardConfigPath); }
+    private native void allocate(@ByVal Path calibrationDataPath, @ByVal Path boardConfigPath);
 
     /**
      * Construct a new Calibration Handler object from EepromData object.
@@ -362,9 +354,7 @@ public class CalibrationHandler extends Pointer {
      * @param destPath  Full path to the json file in which raw calibration data will be stored
      * @return True on success, false otherwise
      */
-    public native @Cast("bool") boolean eepromToJsonFile(@StdString BytePointer destPath);
-    public native @Cast("bool") boolean eepromToJsonFile(@StdString ByteBuffer destPath);
-    public native @Cast("bool") boolean eepromToJsonFile(@StdString String destPath);
+    public native @Cast("bool") boolean eepromToJsonFile(@ByVal Path destPath);
 
     /**
      * Set the Board Info object

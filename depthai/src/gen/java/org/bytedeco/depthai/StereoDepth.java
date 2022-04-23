@@ -150,22 +150,6 @@ public class StereoDepth extends StereoDepthPropertiesNode {
     @MemberGetter public native @ByRef Output confidenceMap();
 
     /**
-     * Specify local filesystem path to the calibration file
-     * @param path Path to calibration file. If empty use EEPROM
-     */
-    public native @Deprecated void loadCalibrationFile(@StdString BytePointer path);
-    public native @Deprecated void loadCalibrationFile(@StdString ByteBuffer path);
-    public native @Deprecated void loadCalibrationFile(@StdString String path);
-
-    /**
-     * Specify calibration data as a vector of bytes
-     * @param path Calibration data. If empty use EEPROM
-     */
-    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector BytePointer data);
-    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector ByteBuffer data);
-    public native @Deprecated void loadCalibrationData(@Cast("std::uint8_t*") @StdVector byte[] data);
-
-    /**
      * Specify that a passthrough/dummy calibration should be used,
      * when input frames are already rectified (e.g. sourced from recordings on the host)
      */
@@ -175,6 +159,7 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * Specify local filesystem paths to the mesh calibration files for 'left' and 'right' inputs.
      *
      * When a mesh calibration is set, it overrides the camera intrinsics/extrinsics matrices.
+     * Overrides useHomographyRectification behavior.
      * Mesh format: a sequence of (y,x) points as 'float' with coordinates from the input image
      * to be mapped in the output. The mesh can be subsampled, configured by {@code setMeshStep}.
      *
@@ -184,12 +169,11 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      *
      * height: 800 / 16 + 1 = 51
      */
-    public native void loadMeshFiles(@StdString BytePointer pathLeft, @StdString BytePointer pathRight);
-    public native void loadMeshFiles(@StdString ByteBuffer pathLeft, @StdString ByteBuffer pathRight);
-    public native void loadMeshFiles(@StdString String pathLeft, @StdString String pathRight);
+    public native void loadMeshFiles(@Const @ByRef Path pathLeft, @Const @ByRef Path pathRight);
 
     /**
      * Specify mesh calibration data for 'left' and 'right' inputs, as vectors of bytes.
+     * Overrides useHomographyRectification behavior.
      * See {@code loadMeshFiles} for the expected data format
      */
     public native void loadMeshData(@Cast("std::uint8_t*") @StdVector BytePointer dataLeft, @Cast("std::uint8_t*") @StdVector BytePointer dataRight);
@@ -349,4 +333,16 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * @param mode Stereo depth preset mode
      */
     public native void setFocalLengthFromCalibration(@Cast("bool") boolean focalLengthFromCalibration);
+
+    /**
+     * Use 3x3 homography matrix for stereo rectification instead of sparse mesh generated on device.
+     * Default value: true.
+     * If custom mesh data is provided through loadMeshData or loadMeshFiles this option is ignored.
+     * @param useHomographyRectification true: 3x3 homography matrix generated from calibration data is used for stereo rectification, can't correct lens
+     * distortion.
+     * false: sparse mesh is generated on-device from calibration data with mesh step specified with setMeshStep (Default: (16, 16)), can correct lens
+     * distortion. Implementation for generating the mesh is same as opencv's initUndistortRectifyMap function. Only the first 8 distortion coefficients are
+     * used from calibration data.
+     */
+    public native void useHomographyRectification(@Cast("bool") boolean useHomographyRectification);
 }
