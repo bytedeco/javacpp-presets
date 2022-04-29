@@ -42,7 +42,7 @@ subject to the following restrictions:
 // #include <float.h>
 
 /* SVN $Revision$ on $Date$ from http://bullet.googlecode.com*/
-public static final int BT_BULLET_VERSION = 320;
+public static final int BT_BULLET_VERSION = 324;
 
 public static native int btGetVersion();
 
