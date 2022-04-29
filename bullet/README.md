@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Bullet Physics SDK 3.22  https://github.com/bulletphysics/bullet3
+ * Bullet Physics SDK 3.24  https://github.com/bulletphysics/bullet3
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ Sample Usage
 ------------
 Here is a simple example of Bullet Physics SDK ported to Java and based on code found from:
 
- * https://github.com/bulletphysics/bullet3/tree/3.22/examples/
+ * https://github.com/bulletphysics/bullet3/tree/3.24/examples/
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleBox.java` source files below, simply execute on the command line:
 ```bash
@@ -63,7 +63,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>bullet-platform</artifactId>
-            <version>3.22-1.5.8-SNAPSHOT</version>
+            <version>3.24-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

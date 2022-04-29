@@ -34,6 +34,9 @@ public class btMinkowskiSumShape extends btConvexInternalShape {
 	public native void setTransformB(@Const @ByRef btTransform transB);
 
 	public native @Const @ByRef btTransform getTransformA();
+	public native @Const @ByRef btTransform getTransformB();
+
+	// keep this for backward compatibility
 	public native @Const @ByRef btTransform GetTransformB();
 
 	public native @Cast("btScalar") float getMargin();

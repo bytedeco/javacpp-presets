@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 ZLIB=zlib-1.2.12
-HDF5_VERSION=1.12.1
+HDF5_VERSION=1.12.2
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
 
@@ -19,7 +19,7 @@ echo "Decompressing archives..."
 tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
 cd hdf5-$HDF5_VERSION
 
-sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
+#sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
 sedinplace 's/# *cmakedefine/#cmakedefine/g' config/cmake/H5pubconf.h.in
 sedinplace 's/COMPATIBILITY SameMinorVersion/COMPATIBILITY AnyNewerVersion/g' CMakeInstallation.cmake
 sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
@@ -112,8 +112,8 @@ case $PLATFORM in
         export CC="cl.exe"
         export CXX="cl.exe"
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON ..
-        sedinplace 's/Release\\libzlib.lib/zlibstatic.lib/g' build.ninja
-        ninja -j $MAKEJ ZLIB
+        sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
+        ninja -j $MAKEJ HDF5_ZLIB
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/
@@ -125,8 +125,8 @@ case $PLATFORM in
         export CC="cl.exe"
         export CXX="cl.exe"
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON ..
-        sedinplace 's/Release\\libzlib.lib/zlibstatic.lib/g' build.ninja
-        ninja -j $MAKEJ ZLIB
+        sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
+        ninja -j $MAKEJ HDF5_ZLIB
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/
