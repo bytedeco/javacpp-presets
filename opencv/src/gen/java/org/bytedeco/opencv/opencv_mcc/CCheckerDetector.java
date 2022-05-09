@@ -2,6 +2,7 @@
 
 package org.bytedeco.opencv.opencv_mcc;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -137,6 +138,7 @@ public class CCheckerDetector extends Algorithm {
     /** \brief Get the list of all detected colorcheckers
     * @return checkers vector of colorcheckers
     */
+    public native @ByVal CCheckerVector getListColorChecker();
 
     /** \brief Returns the implementation of the CCheckerDetector.
     *
