@@ -4,6 +4,7 @@ package org.bytedeco.opencv.global;
 
 import org.bytedeco.opencv.opencv_mcc.*;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,6 +32,9 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 public class opencv_mcc extends org.bytedeco.opencv.presets.opencv_mcc {
     static { Loader.load(); }
+
+// Targeting ../opencv_mcc/CCheckerVector.java
+
 
 // Parsed from <opencv2/mcc.hpp>
 

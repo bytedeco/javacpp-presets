@@ -1,4 +1,5 @@
 
+ * Map `std::vector<cv::Ptr<cv::mcc::CChecker> >` for `CCheckerDetector.getListColorChecker()` ([issue bytedeco/javacpp#571](https://github.com/bytedeco/javacpp/issues/571))
  * Include missing `opencv2/mcc/ccm.hpp` header file in presets for OpenCV ([discussion bytedeco/javacpp#568](https://github.com/bytedeco/javacpp/discussions/568))
  * Fix a few incorrectly mapped instances of `std::unordered_map` for PyTorch ([issue #1164](https://github.com/bytedeco/javacpp-presets/issues/1164))
  * Migrate builds for Leptonica and Tesseract to CMake ([issue #1163](https://github.com/bytedeco/javacpp-presets/issues/1163))

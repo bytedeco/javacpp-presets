@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 public class opencv_mcc implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-
+        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
+               .put(new Info("cv::Ptr<cv::mcc::CChecker> ").annotations("@Ptr").valueTypes("CChecker"))
+               .put(new Info("std::vector<cv::Ptr<cv::mcc::CChecker> >").pointerTypes("CCheckerVector").define());
     }
 }
 
