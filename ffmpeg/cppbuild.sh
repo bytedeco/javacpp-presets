@@ -131,7 +131,7 @@ case $PLATFORM in
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -263,7 +263,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -394,7 +394,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -522,7 +522,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -645,7 +645,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -770,7 +770,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -909,7 +909,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1081,7 +1081,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1207,7 +1207,7 @@ EOF
         echo ""
         cd ../$LAME
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+          ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         else
           CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         fi
@@ -1393,7 +1393,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1504,7 +1504,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1611,7 +1611,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1728,7 +1728,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         echo ""
