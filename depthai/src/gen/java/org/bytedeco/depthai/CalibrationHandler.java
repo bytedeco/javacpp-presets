@@ -18,6 +18,14 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 /**
  * CalibrationHandler is an interface to read/load/write structured calibration and device data.
+ * The following fields are protected and aren't allowed to be overriden by default:
+ *  - boardName
+ *  - boardRev
+ *  - boardConf
+ *  - hardwareConf
+ *  - batchName
+ *  - batchTime
+ *  - boardOptions
  */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class CalibrationHandler extends Pointer {
@@ -63,6 +71,13 @@ public class CalibrationHandler extends Pointer {
      */
     public CalibrationHandler(@ByVal EepromData eepromData) { super((Pointer)null); allocate(eepromData); }
     private native void allocate(@ByVal EepromData eepromData);
+
+    /**
+     * Construct a new Calibration Handler object from JSON EepromData.
+     *
+     * @param eepromDataJson EepromData as JSON
+     */
+    public static native @ByVal CalibrationHandler fromJson(@ByVal @Cast("nlohmann::json*") Pointer eepromDataJson);
 
     /**
      * Get the Eeprom Data object
@@ -357,6 +372,13 @@ public class CalibrationHandler extends Pointer {
     public native @Cast("bool") boolean eepromToJsonFile(@ByVal Path destPath);
 
     /**
+     * Get JSON representation of calibration data
+     *
+     * @return JSON structure
+     */
+    public native @ByVal @Cast("nlohmann::json*") Pointer eepromToJson();
+
+    /**
      * Set the Board Info object
      *
      * @param version Sets the version of the Calibration data(Current version is 6)
@@ -366,6 +388,70 @@ public class CalibrationHandler extends Pointer {
     public native void setBoardInfo(@StdString BytePointer boardName, @StdString BytePointer boardRev);
     public native void setBoardInfo(@StdString ByteBuffer boardName, @StdString ByteBuffer boardRev);
     public native void setBoardInfo(@StdString String boardName, @StdString String boardRev);
+
+    /**
+     * Set the Board Info object. Creates version 7 EEPROM data
+     *
+     * @param productName Sets product name (alias).
+     * @param boardName Sets board name.
+     * @param boardRev Sets board revision id.
+     * @param boardConf Sets board configuration id.
+     * @param hardwareConf Sets hardware configuration id.
+     * @param batchName Sets batch name.
+     * @param batchTime Sets batch time (unix timestamp).
+     * @param boardCustom Sets a custom board (Default empty string).
+     */
+    public native void setBoardInfo(@StdString BytePointer productName,
+                          @StdString BytePointer boardName,
+                          @StdString BytePointer boardRev,
+                          @StdString BytePointer boardConf,
+                          @StdString BytePointer hardwareConf,
+                          @StdString BytePointer batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions,
+                          @StdString BytePointer boardCustom/*=""*/);
+    public native void setBoardInfo(@StdString BytePointer productName,
+                          @StdString BytePointer boardName,
+                          @StdString BytePointer boardRev,
+                          @StdString BytePointer boardConf,
+                          @StdString BytePointer hardwareConf,
+                          @StdString BytePointer batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions);
+    public native void setBoardInfo(@StdString ByteBuffer productName,
+                          @StdString ByteBuffer boardName,
+                          @StdString ByteBuffer boardRev,
+                          @StdString ByteBuffer boardConf,
+                          @StdString ByteBuffer hardwareConf,
+                          @StdString ByteBuffer batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions,
+                          @StdString ByteBuffer boardCustom/*=""*/);
+    public native void setBoardInfo(@StdString ByteBuffer productName,
+                          @StdString ByteBuffer boardName,
+                          @StdString ByteBuffer boardRev,
+                          @StdString ByteBuffer boardConf,
+                          @StdString ByteBuffer hardwareConf,
+                          @StdString ByteBuffer batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions);
+    public native void setBoardInfo(@StdString String productName,
+                          @StdString String boardName,
+                          @StdString String boardRev,
+                          @StdString String boardConf,
+                          @StdString String hardwareConf,
+                          @StdString String batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions,
+                          @StdString String boardCustom/*=""*/);
+    public native void setBoardInfo(@StdString String productName,
+                          @StdString String boardName,
+                          @StdString String boardRev,
+                          @StdString String boardConf,
+                          @StdString String hardwareConf,
+                          @StdString String batchName,
+                          @Cast("uint64_t") long batchTime,
+                          @Cast("uint32_t") int boardOptions);
 
     /**
      * Set the Camera Intrinsics object

@@ -31,7 +31,15 @@ public class StereoDepth extends StereoDepthPropertiesNode {
     /**
      * Preset modes for stereo depth.
      */
-    public enum PresetMode { HIGH_ACCURACY(0), HIGH_DENSITY(1);
+    public enum PresetMode {
+        /**
+         * Prefers accuracy over density. More invalid depth values, but less outliers.
+         */
+        HIGH_ACCURACY(0),
+        /**
+         * Prefers density over accuracy. Less invalid depth values, but more outliers.
+         */
+        HIGH_DENSITY(1);
 
         public final int value;
         private PresetMode(int v) { this.value = v; }
@@ -329,14 +337,14 @@ public class StereoDepth extends StereoDepthPropertiesNode {
     public native void setDefaultProfilePreset(@Cast("dai::node::StereoDepth::PresetMode") int mode);
 
     /**
-     * Sets a default preset based on specified option.
-     * @param mode Stereo depth preset mode
+     * Whether to use focal length from calibration intrinsics or calculate based on calibration FOV.
+     * Default value is true.
      */
-    public native void setFocalLengthFromCalibration(@Cast("bool") boolean focalLengthFromCalibration);
+    public native @Deprecated void setFocalLengthFromCalibration(@Cast("bool") boolean focalLengthFromCalibration);
 
     /**
      * Use 3x3 homography matrix for stereo rectification instead of sparse mesh generated on device.
-     * Default value: true.
+     * Default behaviour is AUTO, for lenses with FOV over 85 degrees sparse mesh is used, otherwise 3x3 homography.
      * If custom mesh data is provided through loadMeshData or loadMeshFiles this option is ignored.
      * @param useHomographyRectification true: 3x3 homography matrix generated from calibration data is used for stereo rectification, can't correct lens
      * distortion.

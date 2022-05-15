@@ -40,8 +40,15 @@ public class EepromData extends Pointer {
     }
 
     public native @Cast("uint32_t") int version(); public native EepromData version(int setter);
+    public native @StdString BytePointer productName(); public native EepromData productName(BytePointer setter);
+    public native @StdString BytePointer boardCustom(); public native EepromData boardCustom(BytePointer setter);
     public native @StdString BytePointer boardName(); public native EepromData boardName(BytePointer setter);
     public native @StdString BytePointer boardRev(); public native EepromData boardRev(BytePointer setter);
+    public native @StdString BytePointer boardConf(); public native EepromData boardConf(BytePointer setter);
+    public native @StdString BytePointer hardwareConf(); public native EepromData hardwareConf(BytePointer setter);
+    public native @StdString BytePointer batchName(); public native EepromData batchName(BytePointer setter);
+    public native @Cast("uint64_t") long batchTime(); public native EepromData batchTime(long setter);
+    public native @Cast("uint32_t") int boardOptions(); public native EepromData boardOptions(int setter);
     public native @ByRef CameraBoardSocketCameraInfoMap cameraData(); public native EepromData cameraData(CameraBoardSocketCameraInfoMap setter);
     public native @ByRef StereoRectification stereoRectificationData(); public native EepromData stereoRectificationData(StereoRectification setter);
     public native @ByRef Extrinsics imuExtrinsics(); public native EepromData imuExtrinsics(Extrinsics setter);

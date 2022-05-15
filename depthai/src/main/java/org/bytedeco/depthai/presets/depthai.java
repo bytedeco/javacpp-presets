@@ -185,7 +185,8 @@ public class depthai implements InfoMapper {
         infoMap.put(new Info().enumerate())
                .put(new Info("DEPTHAI_HAVE_OPENCV_SUPPORT").define(true))
                .put(new Info("XLINK_MAX_STREAM_RES", "defined(__cpp_lib_filesystem)", "defined(__cpp_lib_char8_t)").define(false))
-               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE", "DEPTHAI_NODISCARD").cppTypes().annotations())
+               .put(new Info("NLOHMANN_DEFINE_TYPE_INTRUSIVE", "NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE", "NOP_STRUCTURE", "DEPTHAI_NODISCARD",
+                             "DEPTHAI_NLOHMANN_DEFINE_TYPE_INTRUSIVE").cppTypes().annotations())
 
                .put(new Info("const char").valueTypes("@Cast(\"const char\") byte").pointerTypes("@Cast(\"const char*\") BytePointer", "@Cast(\"const char*\") ByteBuffer", "String"))
                .put(new Info("std::uint8_t").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))

@@ -116,6 +116,13 @@ public class DeviceBootloader extends Pointer {
         /** Construct Version major, minor and patch numbers */
         public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch) { super((Pointer)null); allocate(major, minor, patch); }
         private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch);
+        /** Construct Version major, minor and patch numbers with buildInfo */
+        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString BytePointer buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
+        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString BytePointer buildInfo);
+        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString ByteBuffer buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
+        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString ByteBuffer buildInfo);
+        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString String buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
+        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString String buildInfo);
         public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Version other);
         public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Version other);
         public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Version rhs);
@@ -124,6 +131,12 @@ public class DeviceBootloader extends Pointer {
         public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef Version rhs);
         /** Convert Version to string */
         public native @StdString String toString();
+        /** Convert Version to semver string */
+        public native @StdString BytePointer toStringSemver();
+        /** Get build info */
+        public native @StdString BytePointer getBuildInfo();
+        /** Retrieves semver version (no build information) */
+        public native @ByVal Version getSemver();
     }
 
     // constants
