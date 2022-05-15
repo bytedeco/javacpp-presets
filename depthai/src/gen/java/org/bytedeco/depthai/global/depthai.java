@@ -354,13 +354,8 @@ public static final int
 // #include <nop/utility/buffer_reader.h>
 // #include <nop/utility/stream_writer.h>
 
-// #include <nlohmann/json.hpp>
-
-// Check version of nlohmann json
-// #if(defined(NLOHMANN_JSON_VERSION_MAJOR) && defined(NLOHMANN_JSON_VERSION_MINOR))
-//     #if((NLOHMANN_JSON_VERSION_MAJOR < 3) || ((NLOHMANN_JSON_VERSION_MAJOR == 3) && (NLOHMANN_JSON_VERSION_MINOR < 9)))
-//     #endif
-// #endif
+// project
+// #include "NlohmannJsonCompat.hpp"
 
 // To not require exceptions for embedded usecases.
 // #ifndef __has_feature           // Optional of course.
@@ -414,20 +409,45 @@ public static final int
 
 // #define DEPTHAI_DEFERRED_EXPAND(x) x
 // #if defined(_MSC_VER) && (!defined(_MSVC_TRADITIONAL) || _MSVC_TRADITIONAL)
-
-    // Logic using the traditional preprocessor
+   // Logic using the traditional preprocessor
     // This is for suppressing false positive warnings when compiling
     // without /Zc:preprocessor
 //     #pragma warning(disable : 4003)
 // #endif
 
+// #define DEPTHAI_NLOHMANN_JSON_OPTIONAL_TO(v1) nlohmann::to_json(nlohmann_json_j[#v1], nlohmann_json_t.v1);
+// #define DEPTHAI_NLOHMANN_JSON_OPTIONAL_FROM(v1)
+//     if(nlohmann_json_j.contains(#v1)) nlohmann_json_j[#v1].get_to(nlohmann_json_t.v1);
+// #define DEPTHAI_NLOHMANN_DEFINE_TYPE_OPTIONAL_NON_INTRUSIVE(Type, ...)
+//     inline void to_json(nlohmann::json& nlohmann_json_j, const Type& nlohmann_json_t) {
+//         NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_NLOHMANN_JSON_OPTIONAL_TO, __VA_ARGS__))
+//     }
+//     inline void from_json(const nlohmann::json& nlohmann_json_j, Type& nlohmann_json_t) {
+//         NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_NLOHMANN_JSON_OPTIONAL_FROM, __VA_ARGS__))
+//     }
+// #define DEPTHAI_NLOHMANN_DEFINE_TYPE_OPTIONAL_INTRUSIVE(Type, ...)
+//     friend void to_json(nlohmann::json& nlohmann_json_j, const Type& nlohmann_json_t) {
+//         NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_NLOHMANN_JSON_OPTIONAL_TO, __VA_ARGS__))
+//     }
+//     friend void from_json(const nlohmann::json& nlohmann_json_j, Type& nlohmann_json_t) {
+//         NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_NLOHMANN_JSON_OPTIONAL_FROM, __VA_ARGS__))
+//     }
+
 // Macros
+// #define DEPTHAI_SERIALIZE_OPTIONAL_EXT(...)
+//     DEPTHAI_DEFERRED_EXPAND(DEPTHAI_NLOHMANN_DEFINE_TYPE_OPTIONAL_NON_INTRUSIVE(__VA_ARGS__))
+//     DEPTHAI_DEFERRED_EXPAND(NOP_EXTERNAL_STRUCTURE(__VA_ARGS__))
+
+// #define DEPTHAI_SERIALIZE_OPTIONAL(...)
+//     DEPTHAI_DEFERRED_EXPAND(DEPTHAI_NLOHMANN_DEFINE_TYPE_OPTIONAL_INTRUSIVE(__VA_ARGS__))
+//     DEPTHAI_DEFERRED_EXPAND(NOP_EXTERNAL_STRUCTURE(__VA_ARGS__))
+
 // #define DEPTHAI_SERIALIZE_EXT(...)
-//     DEPTHAI_DEFERRED_EXPAND(NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(__VA_ARGS__))
+//     DEPTHAI_DEFERRED_EXPAND(DEPTHAI_NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(__VA_ARGS__))
 //     DEPTHAI_DEFERRED_EXPAND(NOP_EXTERNAL_STRUCTURE(__VA_ARGS__))
 
 // #define DEPTHAI_SERIALIZE(...)
-//     DEPTHAI_DEFERRED_EXPAND(NLOHMANN_DEFINE_TYPE_INTRUSIVE(__VA_ARGS__))
+//     DEPTHAI_DEFERRED_EXPAND(DEPTHAI_NLOHMANN_DEFINE_TYPE_INTRUSIVE(__VA_ARGS__))
 //     DEPTHAI_DEFERRED_EXPAND(NOP_STRUCTURE(__VA_ARGS__))
 
 
@@ -699,6 +719,10 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // Targeting ../EepromData.java
 
 
+
+@Namespace("dai") public static native void to_json(@Cast("nlohmann::json*") @ByRef Pointer nlohmann_json_j, @Const @ByRef EepromData nlohmann_json_t);
+    @Namespace("dai") public static native void from_json(@Cast("const nlohmann::json*") @ByRef Pointer nlohmann_json_j, @ByRef EepromData nlohmann_json_t);
+    
 
   // namespace dai
 
@@ -1148,6 +1172,7 @@ public static final int BOARD_CONFIG_MAGIC1 = BOARD_CONFIG_MAGIC1();
 @Namespace("dai") @MemberGetter public static native @Cast("const uint32_t") int BOARD_CONFIG_MAGIC2();
 public static final int BOARD_CONFIG_MAGIC2 = BOARD_CONFIG_MAGIC2();
 // Targeting ../BoardConfig.java
+
 
 
 
@@ -2736,14 +2761,14 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <cstdint>
 
 // libraries
-// #include "nlohmann/json.hpp"
+// #include "NlohmannJsonCompat.hpp"
 
 // #define DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_TO(v1) nlohmann::to_json(nlohmann_json_j[#v1], nlohmann_json_t.v1);
 // #define DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_FROM(v1) if(nlohmann_json_j.contains(#v1)) nlohmann_json_j[#v1].get_to(nlohmann_json_t.v1);
 
 // #define DEPTHAI_BOOTLOADER_NLOHMANN_DEFINE_TYPE_OPTIONAL_NON_INTRUSIVE(Type, ...)
-//     inline void to_json(nlohmann::json& nlohmann_json_j, const Type& nlohmann_json_t) { NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_TO, __VA_ARGS__)) }
-//     inline void from_json(const nlohmann::json& nlohmann_json_j, Type& nlohmann_json_t) { NLOHMANN_JSON_EXPAND(NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_FROM, __VA_ARGS__)) }
+//     inline void to_json(nlohmann::json& nlohmann_json_j, const Type& nlohmann_json_t) { DEPTHAI_BOOTLOADER_NLOHMANN_JSON_EXPAND(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_TO, __VA_ARGS__)) }
+//     inline void from_json(const nlohmann::json& nlohmann_json_j, Type& nlohmann_json_t) { DEPTHAI_BOOTLOADER_NLOHMANN_JSON_EXPAND(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_PASTE(DEPTHAI_BOOTLOADER_NLOHMANN_JSON_OPTIONAL_FROM, __VA_ARGS__)) }
 // Targeting ../NetworkConfig.java
 
 

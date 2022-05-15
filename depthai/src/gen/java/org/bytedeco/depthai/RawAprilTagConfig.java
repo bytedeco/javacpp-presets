@@ -39,7 +39,7 @@ public class RawAprilTagConfig extends RawBuffer {
     /**
      * Supported AprilTag families.
      */
-    public enum Family { TAG_36H11(0), TAG_36H10(1), TAG_25H9(2), TAG_16H5(3), TAG_CIR21H7(4), TAG_CIR49H12(5), TAG_CUST48H12(6), TAG_STAND41H12(7), TAG_STAND52H13(8);
+    public enum Family { TAG_36H11(0), TAG_36H10(1), TAG_25H9(2), TAG_16H5(3), TAG_CIR21H7(4), TAG_STAND41H12(5);
 
         public final int value;
         private Family(int v) { this.value = v; }

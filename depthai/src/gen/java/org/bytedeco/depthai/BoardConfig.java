@@ -62,6 +62,39 @@ public class BoardConfig extends Pointer {
 
     public native @ByRef USB usb(); public native BoardConfig usb(USB setter);
 
+    /** Network configuration */
+    public static class Network extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public Network() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Network(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Network(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public Network position(long position) {
+            return (Network)super.position(position);
+        }
+        @Override public Network getPointer(long i) {
+            return new Network((Pointer)this).offsetAddress(i);
+        }
+    
+        /** Network MTU, 0 is auto (usually 1500 for Ethernet) or forwarded
+         *  from bootloader (not yet implemented there).
+         *  Note: not advised to increase past 1500 for now */
+        public native @Cast("uint16_t") short mtu(); public native Network mtu(short setter);
+        /** Sets the {@code TCP_NODELAY} option for XLink TCP sockets (disable Nagle's algorithm),
+         *  reducing latency at the expense of a small hit for max throughput. Default is {@code true} */
+        public native @Cast("bool") boolean xlinkTcpNoDelay(); public native Network xlinkTcpNoDelay(boolean setter);
+    }
+
+    public native @ByRef Network network(); public native BoardConfig network(Network setter);
+
+    /** Optional list of FreeBSD sysctl parameters to be set (system, network, etc.).
+     *  For example: "net.inet.tcp.delayed_ack=0" (this one is also set by default) */
+    public native @ByRef StringVector sysctl(); public native BoardConfig sysctl(StringVector setter);
+
     // Watchdog config
     public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogTimeoutMs(); public native BoardConfig watchdogTimeoutMs(IntOptional setter);
     public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogInitialDelayMs(); public native BoardConfig watchdogInitialDelayMs(IntOptional setter);
@@ -176,4 +209,10 @@ public class BoardConfig extends Pointer {
     }
     /** UART instance map */
     public native @ByRef ByteUARTMap uart(); public native BoardConfig uart(ByteUARTMap setter);
+
+    // PCIe config
+    public native @ByRef BoolOptional pcieInternalClock(); public native BoardConfig pcieInternalClock(BoolOptional setter);
+
+    // USB3 phy config
+    public native @ByRef BoolOptional usb3PhyInternalClock(); public native BoardConfig usb3PhyInternalClock(BoolOptional setter);
 }

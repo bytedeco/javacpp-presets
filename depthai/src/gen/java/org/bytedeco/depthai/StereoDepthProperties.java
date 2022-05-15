@@ -159,14 +159,20 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
 
     /**
      * Whether to use focal length from calibration intrinsics or calculate based on calibration FOV.
-     * Default behaviour is AUTO, for fisheye lenses focal length is taken from calibration intrinsics,
-     * otherwise calculated from FOV and image resolution: focalLength = calib.width / (2.f * tan(calib.fov / 2 / 180.f * pi));
+     * Default value is true.
+     * If set to false it's calculated from FOV and image resolution: focalLength = calib.width / (2.f * tan(calib.fov / 2 / 180.f * pi));
      */
-    public native @ByRef BoolOptional focalLengthFromCalibration(); public native StereoDepthProperties focalLengthFromCalibration(BoolOptional setter);
+    public native @Cast("bool") boolean focalLengthFromCalibration(); public native StereoDepthProperties focalLengthFromCalibration(boolean setter);
 
     /**
-     * Use homography for stereo rectification instead of sparse mesh generated on device.
-     * Default value: true.
+     * Use 3x3 homography matrix for stereo rectification instead of sparse mesh generated on device.
+     * Default behaviour is AUTO, for lenses with FOV over 85 degrees sparse mesh is used, otherwise 3x3 homography.
+     * If custom mesh data is provided through loadMeshData or loadMeshFiles this option is ignored.
+     * true: 3x3 homography matrix generated from calibration data is used for stereo rectification, can't correct lens
+     * distortion.
+     * false: sparse mesh is generated on-device from calibration data with mesh step specified with setMeshStep (Default: (16, 16)), can correct lens
+     * distortion. Implementation for generating the mesh is same as opencv's initUndistortRectifyMap function. Only the first 8 distortion coefficients are
+     * used from calibration data.
      */
-    public native @Cast("bool") boolean useHomographyRectification(); public native StereoDepthProperties useHomographyRectification(boolean setter);
+    public native @ByRef BoolOptional useHomographyRectification(); public native StereoDepthProperties useHomographyRectification(BoolOptional setter);
 }
