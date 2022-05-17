@@ -77,13 +77,11 @@ Now, this `models` directory will be our model repository.
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
 ```
 
-4. Execute either `Simple.java` or `SimpleCPUOnly.java`, respectively:
+4. Execute `Simple.java`:
 ```bash
  $ cd tritonserver/samples
  $ mvn compile exec:java -Dexec.mainClass=Simple -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
- $ mvn compile exec:java -Dexec.mainClass=SimpleCPUOnly -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
-`Simple.java` and `SimpleCPUOnly.java` are the two examples in the samples folder. `Simple.java` requires additional `CUDA` and `TensorRT` bindings (as well as `CUDA` and `TensorRT` libraries themselves) while `SimpleCPUOnly.java` can run with only binaries from `tritonserver/platform`, so we can remove the dependencies related to `CUDA` and `TensorRT` [here](samples/pom.xml#L12-L21).
 
 This sample is the Java implementation of the simple example written for the [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api).
 
@@ -102,5 +100,5 @@ To run your code, you will need to:
 After generating `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` by following [steps 1 to 3](#steps-to-run-this-sample-inside-an-ngc-container) above, you can then execute the following to run directly your application:
 ```bash
  $ cd tritonserver/samples
- $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar SimpleCPUOnly.java -r /workspace/models
+ $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar Simple.java -r /workspace/models
 ```
