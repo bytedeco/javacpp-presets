@@ -8,10 +8,13 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tritonserver.global.tritonserver.*;
 
+// #endif
+// #endif
+
 @Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
-public class TRITONSERVER_Metrics extends Pointer {
+public class TRITONSERVER_BufferAttributes extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public TRITONSERVER_Metrics() { super((Pointer)null); }
+    public TRITONSERVER_BufferAttributes() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TRITONSERVER_Metrics(Pointer p) { super(p); }
+    public TRITONSERVER_BufferAttributes(Pointer p) { super(p); }
 }
