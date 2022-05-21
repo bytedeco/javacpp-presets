@@ -79,7 +79,7 @@ Now, this `models` directory will be our model repository.
 
 4. Execute `Simple.java`:
 ```bash
- $ cd tritonserver/samples
+ $ cd tritonserver/samples/simple
  $ mvn compile exec:java -Dexec.mainClass=Simple -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
@@ -99,6 +99,6 @@ To run your code, you will need to:
 
 After generating `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` by following [steps 1 to 3](#steps-to-run-this-sample-inside-an-ngc-container) above, you can then execute the following to run directly your application:
 ```bash
- $ cd tritonserver/samples
+ $ cd tritonserver/samples/simple
  $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar Simple.java -r /workspace/models
 ```

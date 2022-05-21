@@ -2,7 +2,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tritonserver</groupId>
-    <artifactId>simple</artifactId>
+    <artifactId>simplegpu</artifactId>
     <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SimpleGPU</exec.mainClass>
