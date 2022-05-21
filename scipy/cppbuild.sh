@@ -9,7 +9,7 @@ fi
 
 BOOST=1_75_0
 HIGHS=1.1.1
-SCIPY_VERSION=1.8.0
+SCIPY_VERSION=1.8.1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/ERGO-Code/HiGHS/archive/refs/tags/v$HIGHS.tar.gz HiGHS-$HIGHS.tar.gz
 download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
@@ -97,12 +97,12 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 # https://github.com/scipy/scipy/issues/15281
 export SCIPY_USE_PYTHRAN=0
 
-TOOLS="setuptools==59.1.0 cython==0.29.24 pybind11==2.6.2 pythran==0.10.0 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.4.0 gast==0.5.0"
+TOOLS="setuptools==59.1.0 cython==0.29.30 pybind11==2.6.2 pythran==0.10.0 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.4.0 gast==0.5.0"
 if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.3 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.4 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
