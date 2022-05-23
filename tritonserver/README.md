@@ -39,9 +39,9 @@ Sample Usage
 ------------
 Here is a simple example of Triton Inference Server ported to Java from the `simple.cc` sample file available at:
 
- * https://github.com/triton-inference-server/server/tree/main/src/servers
+ * https://github.com/triton-inference-server/server/blob/main/src/simple.cc
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/`](samples/) subdirectory, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/simple`](samples/simple) subdirectory, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="-r /path/to/models"
 ```
