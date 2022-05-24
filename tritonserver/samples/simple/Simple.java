@@ -1,4 +1,4 @@
-// Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+// Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.tritonserver.tritonserver.*;
 import static org.bytedeco.tritonserver.global.tritonserver.*;
 
-public class SimpleCPUOnly {
+public class Simple {
 
     static void FAIL(String MSG) {
         System.err.println("Failure: " + MSG);
@@ -66,7 +66,7 @@ public class SimpleCPUOnly {
         System.err.println(msg);
       }
 
-      System.err.println("Usage: java " + SimpleCPUOnly.class.getSimpleName() + " [options]");
+      System.err.println("Usage: java " + Simple.class.getSimpleName() + " [options]");
       System.err.println("\t-v Enable verbose logging");
       System.err.println("\t-r [model repository absolute path]");
 

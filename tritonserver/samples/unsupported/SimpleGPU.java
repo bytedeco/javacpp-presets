@@ -34,7 +34,7 @@ import org.bytedeco.tritonserver.tritonserver.*;
 import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.tritonserver.global.tritonserver.*;
 
-public class Simple {
+public class SimpleGPU {
     static final double TRITON_MIN_COMPUTE_CAPABILITY = 6.0;
 
     static void FAIL(String MSG) {
@@ -107,7 +107,7 @@ public class Simple {
         System.err.println(msg);
       }
 
-      System.err.println("Usage: java " + Simple.class.getSimpleName() + " [options]");
+      System.err.println("Usage: java " + SimpleGPU.class.getSimpleName() + " [options]");
       System.err.println("\t-m <\"system\"|\"pinned\"|gpu>"
                        + " Enforce the memory type for input and output tensors."
                        + " If not specified, inputs will be in system memory and outputs"
