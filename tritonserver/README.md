@@ -23,7 +23,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Triton Inference Server 2.20.0  https://github.com/triton-inference-server/server
+ * Triton Inference Server 2.21.0  https://github.com/triton-inference-server/server
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -39,9 +39,9 @@ Sample Usage
 ------------
 Here is a simple example of Triton Inference Server ported to Java from the `simple.cc` sample file available at:
 
- * https://github.com/triton-inference-server/server/tree/main/src/servers
+ * https://github.com/triton-inference-server/server/blob/main/src/simple.cc
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/`](samples/) subdirectory, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/simple`](samples/simple) subdirectory, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="-r /path/to/models"
 ```
@@ -51,9 +51,9 @@ This sample intends to show how to call the Java-mapped C API of Triton to execu
 
  1. Get the source code of Triton Inference Server to prepare the model repository:
 ```bash
- $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.20.0.tar.gz
- $ tar zxvf v2.20.0.tar.gz
- $ cd server-2.20.0/docs/examples/model_repository
+ $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.21.0.tar.gz
+ $ tar zxvf v2.21.0.tar.gz
+ $ cd server-2.21.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
 ```
@@ -61,7 +61,7 @@ Now, this `models` directory will be our model repository.
 
  2. Start the Docker container to run the sample (assuming we are under the `models` directory created above):
 ```bash
- $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:22.03-py3 bash
+ $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:22.04-py3 bash
  $ apt update
  $ apt install -y openjdk-11-jdk
  $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
@@ -77,13 +77,11 @@ Now, this `models` directory will be our model repository.
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
 ```
 
-4. Execute either `Simple.java` or `SimpleCPUOnly.java`, respectively:
+4. Execute `Simple.java`:
 ```bash
- $ cd tritonserver/samples
+ $ cd tritonserver/samples/simple
  $ mvn compile exec:java -Dexec.mainClass=Simple -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
- $ mvn compile exec:java -Dexec.mainClass=SimpleCPUOnly -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
-`Simple.java` and `SimpleCPUOnly.java` are the two examples in the samples folder. `Simple.java` requires additional `CUDA` and `TensorRT` bindings (as well as `CUDA` and `TensorRT` libraries themselves) while `SimpleCPUOnly.java` can run with only binaries from `tritonserver/platform`, so we can remove the dependencies related to `CUDA` and `TensorRT` [here](samples/pom.xml#L12-L21).
 
 This sample is the Java implementation of the simple example written for the [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api).
 
@@ -101,6 +99,6 @@ To run your code, you will need to:
 
 After generating `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` by following [steps 1 to 3](#steps-to-run-this-sample-inside-an-ngc-container) above, you can then execute the following to run directly your application:
 ```bash
- $ cd tritonserver/samples
- $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar SimpleCPUOnly.java -r /workspace/models
+ $ cd tritonserver/samples/simple
+ $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar Simple.java -r /workspace/models
 ```

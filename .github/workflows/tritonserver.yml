@@ -17,6 +17,6 @@ env:
 jobs:
   linux-x86_64:
     runs-on: ubuntu-18.04
-    container: nvcr.io/nvidia/tritonserver:22.03-py3
+    container: nvcr.io/nvidia/tritonserver:22.04-py3
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
