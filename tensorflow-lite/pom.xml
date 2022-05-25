@@ -59,6 +59,7 @@
           </preloadPaths>
           <compilerOptions>
             <compilerOption>@${tensorflow.path}/../build/objs</compilerOption>
+            <compilerOption>-Wl,--allow-multiple-definition</compilerOption>
           </compilerOptions>
         </configuration>
       </plugin>
@@ -82,6 +83,26 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os><family>mac os x</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}</properties>
+              <compilerOptions>
+                <compilerOption>@${tensorflow.path}/../build/objs</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>msvc</id>
       <activation>

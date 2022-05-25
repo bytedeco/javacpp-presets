@@ -28,6 +28,18 @@ mkdir -p build
 cd build
 
 case $PLATFORM in
+    android-arm)
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        ;;
+    android-arm64)
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        ;;
+    android-x86)
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        ;;
+    android-x86_64)
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc -funsafe-math-optimizations"
         export CXX="arm-linux-gnueabihf-g++ -funsafe-math-optimizations"

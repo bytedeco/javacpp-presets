@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Samuel Audet
+ * Copyright (C) 2021-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     value = {
         @Platform(
-            value = {"linux", "macosx", "windows"},
+            value = {"android", "linux", "macosx", "windows"},
             compiler = "cpp11",
             define = "UNIQUE_PTR_NAMESPACE std",
             include = {

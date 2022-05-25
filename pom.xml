@@ -778,6 +778,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>bullet</module>
         <module>cpu_features</module>
       </modules>
@@ -785,7 +786,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/armv7a-linux-androideabi24-clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
@@ -828,6 +829,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>bullet</module>
         <module>cpu_features</module>
       </modules>
@@ -835,7 +837,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/aarch64-linux-android24-clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm64>
@@ -878,6 +880,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>bullet</module>
         <module>cpu_features</module>
       </modules>
@@ -885,7 +888,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/i686-linux-android24-clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
@@ -928,6 +931,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>bullet</module>
         <module>cpu_features</module>
       </modules>
@@ -935,7 +939,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/x86_64-linux-android24-clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
