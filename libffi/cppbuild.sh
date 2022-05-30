@@ -83,7 +83,13 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-    macosx-*)
+    macosx-arm64)
+        sedinplace 's/\\\$rpath/@rpath/g' configure
+        CC="clang -arch arm64" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory --host="aarch64-apple-darwin"
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    macosx-x86_64)
         sedinplace 's/\\\$rpath/@rpath/g' configure
         CC="clang" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory
         make -j $MAKEJ
