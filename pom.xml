@@ -1449,6 +1449,7 @@
         <module>ffmpeg</module>
         <module>openblas</module>
         <module>llvm</module>
+        <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
       </modules>
