@@ -70,8 +70,8 @@ public class ffi implements InfoMapper {
                              "defined(POWERPC_DARWIN) || defined(POWERPC_AIX)",
                              "defined (POWERPC_AIX)", "defined (POWERPC_DARWIN)").define(false).translate(true))
                .put(new Info("FFI_TYPE_SMALL_STRUCT_1B", "FFI_TYPE_SMALL_STRUCT_2B",
-                             "FFI_TYPE_SMALL_STRUCT_4B", "FFI_TYPE_MS_STRUCT", "FFI_TRAMPOLINE_SIZE",
-                             "FFI_PPC_TYPE_LAST", "FFI_SIZEOF_ARG", "FFI_SIZEOF_JAVA_RAW").translate(false))
+                             "FFI_TYPE_SMALL_STRUCT_4B", "FFI_TYPE_MS_STRUCT", "FFI_PPC_TYPE_LAST").cppTypes())
+               .put(new Info("FFI_TRAMPOLINE_SIZE", "FFI_SIZEOF_ARG", "FFI_SIZEOF_JAVA_RAW").translate(false))
                .put(new Info("ffi_type_uchar", "ffi_type_schar", "ffi_type_ushort", "ffi_type_sshort",
                              "ffi_type_uint", "ffi_type_sint", "ffi_type_ulong", "ffi_type_slong",
                              "ffi_type_longdouble").cppTypes("ffi_type").translate(false))

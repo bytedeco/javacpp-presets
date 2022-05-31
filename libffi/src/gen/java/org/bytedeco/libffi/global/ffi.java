@@ -105,14 +105,10 @@ public static final int
 public static final int FFI_CLOSURES = 1;
 public static final int FFI_GO_CLOSURES = 1;
 
-public static native @MemberGetter int FFI_TYPE_SMALL_STRUCT_1B();
-public static final int FFI_TYPE_SMALL_STRUCT_1B = FFI_TYPE_SMALL_STRUCT_1B();
-public static native @MemberGetter int FFI_TYPE_SMALL_STRUCT_2B();
-public static final int FFI_TYPE_SMALL_STRUCT_2B = FFI_TYPE_SMALL_STRUCT_2B();
-public static native @MemberGetter int FFI_TYPE_SMALL_STRUCT_4B();
-public static final int FFI_TYPE_SMALL_STRUCT_4B = FFI_TYPE_SMALL_STRUCT_4B();
-public static native @MemberGetter int FFI_TYPE_MS_STRUCT();
-public static final int FFI_TYPE_MS_STRUCT = FFI_TYPE_MS_STRUCT();
+// #define FFI_TYPE_SMALL_STRUCT_1B (FFI_TYPE_LAST + 1)
+// #define FFI_TYPE_SMALL_STRUCT_2B (FFI_TYPE_LAST + 2)
+// #define FFI_TYPE_SMALL_STRUCT_4B (FFI_TYPE_LAST + 3)
+// #define FFI_TYPE_MS_STRUCT       (FFI_TYPE_LAST + 4)
 
 // #if defined (X86_64) || defined(X86_WIN64)
 //     || (defined (__x86_64__) && defined (X86_DARWIN))
