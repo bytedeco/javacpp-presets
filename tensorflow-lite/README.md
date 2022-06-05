@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow Lite 2.9.0  https://www.tensorflow.org/lite
+ * TensorFlow Lite 2.9.1  https://www.tensorflow.org/lite
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Sample Usage
 ------------
 Here is a simple example of TensorFlow ported to Java from this C++ source file:
 
- * https://github.com/tensorflow/tensorflow/blob/v2.9.0/tensorflow/lite/examples/minimal/minimal.cc
+ * https://github.com/tensorflow/tensorflow/blob/v2.9.1/tensorflow/lite/examples/minimal/minimal.cc
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Minimal.java` source files below, simply execute on the command line:
 ```bash
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-lite-platform</artifactId>
-            <version>2.9.0-1.5.8-SNAPSHOT</version>
+            <version>2.9.1-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

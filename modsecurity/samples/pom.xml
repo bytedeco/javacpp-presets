@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.modsecurity</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ModSecuritySimpleIntervention</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>modsecurity-platform</artifactId>
-            <version>3.0.6-1.5.7</version>
+            <version>3.0.7-1.5.8-SNAPSHOT</version>
        </dependency>
     </dependencies>
     <build>
