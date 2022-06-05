@@ -14,7 +14,7 @@ INSTALL_PATH=`pwd`
 if [[ ! -d "ModSecurity" ]]; then
     git clone https://github.com/SpiderLabs/ModSecurity
     cd ModSecurity
-    git checkout v3.0.6
+    git checkout v3.0.7
     git submodule init
     git submodule update
 else
