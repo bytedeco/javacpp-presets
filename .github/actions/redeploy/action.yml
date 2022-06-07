@@ -71,7 +71,10 @@ runs:
             fi
             for i in {1..5}; do
                 STATUS=0
-                mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM && break || STATUS=$? && sleep 60
+                mvn dependency:list $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && mvn dependency:resolve -Dclassifier=javadoc  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && mvn dependency:resolve -Dclassifier=sources  $MAVEN_OPTIONS -DexcludeTransitive -DappendOutput -DoutputFile=$(pwd)/dependencies.txt -f $POM \
+                    && break || STATUS=$? && sleep 60
             done
             (exit $STATUS)
         done
