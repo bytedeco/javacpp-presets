@@ -35,16 +35,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_highgui.class,
     value = {
         @Platform(include = {"<opencv2/bioinspired.hpp>", "opencv2/bioinspired/bioinspired.hpp", "opencv2/bioinspired/retina.hpp",
-            "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.405"),
+            "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.406"),
         @Platform(value = "ios", preload = "libopencv_bioinspired"),
-        @Platform(value = "windows", link = "opencv_bioinspired455")
+        @Platform(value = "windows", link = "opencv_bioinspired460")
     },
     target = "org.bytedeco.opencv.opencv_bioinspired",
     global = "org.bytedeco.opencv.global.opencv_bioinspired"
 )
 public class opencv_bioinspired implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::bioinspired::createRetina_OCL").skip());
+        infoMap.put(new Info("cv::bioinspired::Retina::getMagnoRAW",
+                             "cv::bioinspired::Retina::getParvoRAW").annotations("@Function"))
+               .put(new Info("cv::bioinspired::createRetina_OCL").skip());
     }
 
 }

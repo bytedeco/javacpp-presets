@@ -124,10 +124,22 @@ public class Net extends Pointer {
 
         public native @ByVal StringVector getLayerNames();
 
-        /** \brief Container for strings and integers. */
+        /** \brief Container for strings and integers.
+         *
+         * @deprecated Use getLayerId() with int result.
+         */
 
         /** \brief Returns pointer to layer with specified id or name which the network use. */
-        public native @Ptr Layer getLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layerId);
+        public native @Ptr Layer getLayer(int layerId);
+        /** \overload
+         *  @deprecated Use int getLayerId(const String &layer)
+         */
+        public native @Ptr Layer getLayer(@Str BytePointer layerName);
+        public native @Ptr Layer getLayer(@Str String layerName);
+        /** \overload
+         *  @deprecated to be removed
+         */
+        public native @Ptr Layer getLayer(@Cast("const cv::dnn::Net::LayerId*") @ByRef DictValue layerId);
 
         /** \brief Returns pointers to input layers of specific layer. */ // FIXIT: CV_WRAP
 
@@ -154,6 +166,19 @@ public class Net extends Pointer {
          *  @param inpNum number of the second layer input
          */
         public native void connect(int outLayerId, int outNum, int inpLayerId, int inpNum);
+
+        /** \brief Registers network output with name
+         *
+         *  Function may create additional 'Identity' layer.
+         *
+         *  @param outputName identifier of the output
+         *  @param layerId identifier of the second layer
+         *  @param outputPort number of the second layer input
+         *
+         *  @return index of bound layer (the same as layerId or newly created)
+         */
+        public native int registerOutput(@StdString BytePointer outputName, int layerId, int outputPort);
+        public native int registerOutput(@StdString String outputName, int layerId, int outputPort);
 
         /** \brief Sets outputs names of the network input pseudo layer.
          *
@@ -323,21 +348,31 @@ public class Net extends Pointer {
          *  \note If shape of the new blob differs from the previous shape,
          *  then the following forward pass may fail.
         */
-        public native void setParam(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer, int numParam, @Const @ByRef Mat blob);
+        public native void setParam(int layer, int numParam, @Const @ByRef Mat blob);
+        public native void setParam(@Str BytePointer layerName, int numParam, @Const @ByRef Mat blob);
+        public native void setParam(@Str String layerName, int numParam, @Const @ByRef Mat blob);
 
         /** \brief Returns parameter blob of the layer.
          *  @param layer name or id of the layer.
          *  @param numParam index of the layer parameter in the Layer::blobs array.
          *  @see Layer::blobs
          */
-        public native @ByVal Mat getParam(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer, int numParam/*=0*/);
-        public native @ByVal Mat getParam(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer);
+        public native @ByVal Mat getParam(int layer, int numParam/*=0*/);
+        public native @ByVal Mat getParam(int layer);
+        public native @ByVal Mat getParam(@Str BytePointer layerName, int numParam/*=0*/);
+        public native @ByVal Mat getParam(@Str BytePointer layerName);
+        public native @ByVal Mat getParam(@Str String layerName, int numParam/*=0*/);
+        public native @ByVal Mat getParam(@Str String layerName);
 
         /** \brief Returns indexes of layers with unconnected outputs.
+         *
+         * FIXIT: Rework API to registerOutput() approach, deprecate this call
          */
         public native @StdVector IntPointer getUnconnectedOutLayers();
 
         /** \brief Returns names of layers with unconnected outputs.
+         *
+         * FIXIT: Rework API to registerOutput() approach, deprecate this call
          */
         public native @ByVal StringVector getUnconnectedOutLayersNames();
 

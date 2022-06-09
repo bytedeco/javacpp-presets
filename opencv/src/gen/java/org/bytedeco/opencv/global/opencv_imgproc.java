@@ -2365,7 +2365,7 @@ sophisticated [interpolation methods](http://en.wikipedia.org/wiki/Multivariate_
 where a polynomial function is fit into some neighborhood of the computed pixel {@code (f_x(x,y),
 f_y(x,y))}, and then the value of the polynomial at {@code (f_x(x,y), f_y(x,y))} is taken as the
 interpolated pixel value. In OpenCV, you can choose between several interpolation methods. See
-resize for details.
+#resize for details.
 <p>
 \note The geometrical transformations do not work with {@code CV_8S} or {@code CV_32S} images.
     <p>
@@ -3556,7 +3556,7 @@ center.
 For every pixel {@code  (x, y) } in the source image, the function calculates the sum of squares of those neighboring
 pixel values which overlap the filter placed over the pixel {@code  (x, y) }.
 <p>
-The unnormalized square box filter can be useful in computing local image statistics such as the the local
+The unnormalized square box filter can be useful in computing local image statistics such as the local
 variance and standard deviation around the neighborhood of a pixel.
 <p>
 @param src input image
@@ -4612,7 +4612,7 @@ way:
     resize(src, dst, Size(), 0.5, 0.5, interpolation);
 }</pre>
 To shrink an image, it will generally look best with #INTER_AREA interpolation, whereas to
-enlarge an image, it will generally look best with c#INTER_CUBIC (slow) or #INTER_LINEAR
+enlarge an image, it will generally look best with #INTER_CUBIC (slow) or #INTER_LINEAR
 (faster but still looks OK).
 <p>
 @param src input image.
@@ -4748,7 +4748,7 @@ The function remap transforms the source image using the specified map:
 where values of pixels with non-integer coordinates are computed using one of available
 interpolation methods. {@code map_x} and {@code map_y} can be encoded as separate floating-point maps
 in {@code map_1} and {@code map_2} respectively, or interleaved floating-point maps of {@code (x,y)} in
-{@code map_1}, or fixed-point maps created by using convertMaps. The reason you might want to
+{@code map_1}, or fixed-point maps created by using #convertMaps. The reason you might want to
 convert from floating to fixed-point representations of a map is that they can yield much faster
 (\~2x) remapping operations. In the converted case, {@code map_1} contains pairs (cvFloor(x),
 cvFloor(y)) and {@code map_2} contains indices in a table of interpolation coefficients.
@@ -4758,7 +4758,7 @@ This function cannot operate in-place.
 @param src Source image.
 @param dst Destination image. It has the same size as map1 and the same type as src .
 @param map1 The first map of either (x,y) points or just x values having the type CV_16SC2 ,
-CV_32FC1, or CV_32FC2. See convertMaps for details on converting a floating point
+CV_32FC1, or CV_32FC2. See #convertMaps for details on converting a floating point
 representation to fixed-point for speed.
 @param map2 The second map of y values having the type CV_16UC1, CV_32FC1, or none (empty map
 if map1 is (x,y) points), respectively.
@@ -4800,7 +4800,7 @@ options ( (map1.type(), map2.type()) {@code \rightarrow} (dstmap1.type(), dstmap
 supported:
 <p>
 - {@code \texttt{(CV_32FC1, CV_32FC1)} \rightarrow \texttt{(CV_16SC2, CV_16UC1)}}. This is the
-most frequently used conversion operation, in which the original floating-point maps (see remap )
+most frequently used conversion operation, in which the original floating-point maps (see #remap)
 are converted to a more compact and much faster fixed-point representation. The first output array
 contains the rounded coordinates and the second array (created only when nninterpolation=false )
 contains indices in the interpolation tables.
@@ -6564,10 +6564,11 @@ a mask and then extract the contour, or copy the region to another image, and so
 function unless the #FLOODFILL_MASK_ONLY flag is set in the second variant of the function. See
 the details below.
 @param mask Operation mask that should be a single-channel 8-bit image, 2 pixels wider and 2 pixels
-taller than image. Since this is both an input and output parameter, you must take responsibility
-of initializing it. Flood-filling cannot go across non-zero pixels in the input mask. For example,
+taller than image. If an empty Mat is passed it will be created automatically. Since this is both an
+input and output parameter, you must take responsibility of initializing it.
+Flood-filling cannot go across non-zero pixels in the input mask. For example,
 an edge detector output can be used as a mask to stop filling at edges. On output, pixels in the
-mask corresponding to filled pixels in the image are set to 1 or to the a value specified in flags
+mask corresponding to filled pixels in the image are set to 1 or to the specified value in flags
 as described below. Additionally, the function fills the border of the mask with ones to simplify
 internal processing. It is therefore possible to use the same mask in multiple calls to the function
 to make sure the filled areas do not overlap.

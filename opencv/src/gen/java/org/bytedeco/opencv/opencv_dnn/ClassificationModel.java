@@ -28,7 +28,19 @@ public class ClassificationModel extends Model {
          static { Loader.load(); }
          /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
          public ClassificationModel(Pointer p) { super(p); }
+         /** Native array allocator. Access with {@link Pointer#position(long)}. */
+         public ClassificationModel(long size) { super((Pointer)null); allocateArray(size); }
+         private native void allocateArray(long size);
+         @Override public ClassificationModel position(long position) {
+             return (ClassificationModel)super.position(position);
+         }
+         @Override public ClassificationModel getPointer(long i) {
+             return new ClassificationModel((Pointer)this).offsetAddress(i);
+         }
      
+         public ClassificationModel() { super((Pointer)null); allocate(); }
+         @Deprecated private native void allocate();
+
          /**
           * \brief Create classification model from network represented in one of the supported formats.
           * An order of \p model and \p config arguments does not matter.
@@ -50,6 +62,24 @@ public class ClassificationModel extends Model {
           */
          public ClassificationModel(@Const @ByRef Net network) { super((Pointer)null); allocate(network); }
          private native void allocate(@Const @ByRef Net network);
+
+         /**
+          * \brief Set enable/disable softmax post processing option.
+          *
+          * If this option is true, softmax is applied after forward inference within the classify() function
+          * to convert the confidences range to [0.0-1.0].
+          * This function allows you to toggle this behavior.
+          * Please turn true when not contain softmax layer in model.
+          * @param enable [in] Set enable softmax post processing within the classify() function.
+          */
+         public native @ByRef ClassificationModel setEnableSoftmaxPostProcessing(@Cast("bool") boolean enable);
+
+         /**
+          * \brief Get enable/disable softmax post processing option.
+          *
+          * This option defaults to false, softmax post processing is not applied within the classify() function.
+          */
+         public native @Cast("bool") boolean getEnableSoftmaxPostProcessing();
 
          /** \brief Given the \p input frame, create input blob, run net and return top-1 prediction.
           *  @param frame [in]  The input image.

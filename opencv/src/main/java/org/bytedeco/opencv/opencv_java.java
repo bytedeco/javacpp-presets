@@ -52,9 +52,9 @@ import org.bytedeco.opencv.presets.*;
         opencv_wechat_qrcode.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.405", "opencv_cudaarithm@.405", "opencv_cudafilters@.405", "opencv_cudaimgproc@.405", "opencv_java"}),
+        @Platform(preload = {"opencv_cuda@.406", "opencv_cudaarithm@.406", "opencv_cudafilters@.406", "opencv_cudaimgproc@.406", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda455", "opencv_cudaarithm455", "opencv_cudafilters455", "opencv_cudaimgproc455", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda460", "opencv_cudaarithm460", "opencv_cudafilters460", "opencv_cudaimgproc460", "opencv_java"}),
     }
 )
 public class opencv_java {

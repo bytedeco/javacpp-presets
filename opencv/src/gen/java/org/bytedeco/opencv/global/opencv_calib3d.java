@@ -193,6 +193,7 @@ public static final int CV_STEREO_BM_XSOBEL =               1;
 // #define OPENCV_CALIB3D_HPP
 
 // #include "opencv2/core.hpp"
+// #include "opencv2/core/types.hpp"
 // #include "opencv2/features2d.hpp"
 // #include "opencv2/core/affine.hpp"
 
@@ -576,6 +577,9 @@ R & t \\
     <p>
     <pre>{@code \[u = f_x (x' + \alpha y') + c_x \\
     v = f_y y' + c_y\]}</pre>
+    <p>
+    Summary:
+    Generic camera model \cite Kannala2006 with perspective projection and without distortion correction
     <p>
     \defgroup calib3d_c C API
   <p>
@@ -4888,6 +4892,34 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                      @ByVal GpuMat R, @ByVal GpuMat P, @ByVal TermCriteria criteria);
 
+/**
+ * \brief Compute undistorted image points position
+ *
+ * @param src Observed points position, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel (CV_32FC2 or
+CV_64FC2) (or vector\<Point2f\> ).
+ * @param dst Output undistorted points position (1xN/Nx1 2-channel or vector\<Point2f\> ).
+ * @param cameraMatrix Camera matrix {@code \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}} .
+ * @param distCoeffs Distortion coefficients
+ */
+@Namespace("cv") public static native void undistortImagePoints(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat cameraMatrix,
+                          @ByVal Mat distCoeffs,
+                          @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5,"
+                                                       + "0.01)") TermCriteria arg4);
+@Namespace("cv") public static native void undistortImagePoints(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat cameraMatrix,
+                          @ByVal Mat distCoeffs);
+@Namespace("cv") public static native void undistortImagePoints(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat cameraMatrix,
+                          @ByVal UMat distCoeffs,
+                          @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5,"
+                                                       + "0.01)") TermCriteria arg4);
+@Namespace("cv") public static native void undistortImagePoints(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat cameraMatrix,
+                          @ByVal UMat distCoeffs);
+@Namespace("cv") public static native void undistortImagePoints(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat cameraMatrix,
+                          @ByVal GpuMat distCoeffs,
+                          @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5,"
+                                                       + "0.01)") TermCriteria arg4);
+@Namespace("cv") public static native void undistortImagePoints(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat cameraMatrix,
+                          @ByVal GpuMat distCoeffs);
+
 /** \} calib3d
 <p>
 /** \brief The methods in this namespace use a so-called fisheye camera model.
@@ -4962,8 +4994,7 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
     @param distorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
     <p>
     Note that the function assumes the camera intrinsic matrix of the undistorted points to be identity.
-    This means if you want to transform back points undistorted with #fisheye::undistortPoints you have to
-    multiply them with {@code P^{-1}}.
+    This means if you want to distort image points you have to multiply them with {@code K^{-1}}.
      */
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
@@ -4981,8 +5012,18 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
     @param R Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3
     1-channel or 1x1 3-channel
     @param P New camera intrinsic matrix (3x3) or new projection matrix (3x4)
+    @param criteria Termination criteria
     @param undistorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
      */
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat P,
+                    @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
+            @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P,
+                    @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P,
+                    @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
 
     /** \brief Computes undistortion and rectification maps for image transform by #remap. If D is empty zero
     distortion is used, if R or P is empty identity matrixes are used.
@@ -5066,7 +5107,7 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
     @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
             @ByVal GpuMat P);
 
-    /** \brief Performs camera calibaration
+    /** \brief Performs camera calibration
     <p>
     @param objectPoints vector of vectors of calibration pattern points in the calibration pattern
     coordinate space.

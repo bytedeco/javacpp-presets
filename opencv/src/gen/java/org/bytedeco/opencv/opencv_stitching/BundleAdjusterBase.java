@@ -48,7 +48,7 @@ public class BundleAdjusterBase extends Estimator {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BundleAdjusterBase(Pointer p) { super(p); }
 
-    public native @Const @ByVal Mat refinementMask();
+    public native @ByVal Mat refinementMask();
     public native void setRefinementMask(@Const @ByRef Mat mask);
 
     public native double confThresh();

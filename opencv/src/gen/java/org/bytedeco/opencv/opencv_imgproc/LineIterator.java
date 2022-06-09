@@ -15,13 +15,11 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 
-/** \brief Line iterator
+/** \brief Class for iterating over all pixels on a raster line segment.
 <p>
-The class is used to iterate over all the pixels on the raster line
-segment connecting two specified points.
-<p>
-The class LineIterator is used to get each pixel of a raster line. It
-can be treated as versatile implementation of the Bresenham algorithm
+The class LineIterator is used to get each pixel of a raster line connecting
+two specified points.
+It can be treated as a versatile implementation of the Bresenham algorithm
 where you can stop at each pixel and do some extra processing, for
 example, grab pixel values along the line or draw a line with an effect
 (for example, with XOR operation).
@@ -53,14 +51,19 @@ public class LineIterator extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LineIterator(Pointer p) { super(p); }
 
-    /** \brief initializes the iterator
+    /** \brief Initializes iterator object for the given line and image.
     <p>
-    creates iterators for the line connecting pt1 and pt2
-    the line will be clipped on the image boundaries
-    the line is 8-connected or 4-connected
-    If leftToRight=true, then the iteration is always done
-    from the left-most point to the right most,
-    not to depend on the ordering of pt1 and pt2 parameters;
+    The returned iterator can be used to traverse all pixels on a line that
+    connects the given two points.
+    The line will be clipped on the image boundaries.
+    <p>
+    @param img Underlying image.
+    @param pt1 First endpoint of the line.
+    @param pt2 The other endpoint of the line.
+    @param connectivity Pixel connectivity of the iterator. Valid values are 4 (iterator can move
+    up, down, left and right) and 8 (iterator can also move diagonally).
+    @param leftToRight If true, the line is traversed from the leftmost endpoint to the rightmost
+    endpoint. Otherwise, the line is traversed from \p pt1 to \p pt2.
     */
     public LineIterator( @Const @ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2,
                       int connectivity/*=8*/, @Cast("bool") boolean leftToRight/*=false*/ ) { super((Pointer)null); allocate(img, pt1, pt2, connectivity, leftToRight); }
@@ -88,16 +91,23 @@ public class LineIterator extends Pointer {
     private native void allocate( @ByVal Rect boundingAreaRect, @ByVal Point pt1, @ByVal Point pt2 );
     public native void init(@Const Mat img, @ByVal Rect boundingAreaRect, @ByVal Point pt1, @ByVal Point pt2, int connectivity, @Cast("bool") boolean leftToRight);
 
-    /** \brief returns pointer to the current pixel
+    /** \brief Returns pointer to the current pixel.
     */
     public native @Cast("uchar*") @Name("operator *") BytePointer multiply();
-    /** \brief prefix increment operator (++it). shifts iterator to the next pixel
+
+    /** \brief Moves iterator to the next pixel on the line.
+    <p>
+    This is the prefix version (++it).
     */
     public native @ByRef @Name("operator ++") LineIterator increment();
-    /** \brief postfix increment operator (it++). shifts iterator to the next pixel
+
+    /** \brief Moves iterator to the next pixel on the line.
+    <p>
+    This is the postfix version (it++).
     */
     public native @ByVal @Name("operator ++") LineIterator increment(int arg0);
-    /** \brief returns coordinates of the current pixel
+
+    /** \brief Returns coordinates of the current pixel.
     */
     public native @ByVal Point pos();
 

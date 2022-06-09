@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_videoio.class,
     value = {
-        @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.405"),
+        @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.406"),
         @Platform(value = "ios", preload = "libopencv_highgui"),
-        @Platform(value = "windows", link = "opencv_highgui455")},
+        @Platform(value = "windows", link = "opencv_highgui460")},
     target = "org.bytedeco.opencv.opencv_highgui",
     global = "org.bytedeco.opencv.global.opencv_highgui"
 )

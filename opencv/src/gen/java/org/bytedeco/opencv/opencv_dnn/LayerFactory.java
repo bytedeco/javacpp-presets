@@ -48,6 +48,10 @@ public class LayerFactory extends Pointer {
     public static native void unregisterLayer(@Str BytePointer type);
     public static native void unregisterLayer(@Str String type);
 
+    /** Check if layer is registered. */
+    public static native @Cast("bool") boolean isLayerRegistered(@StdString BytePointer type);
+    public static native @Cast("bool") boolean isLayerRegistered(@StdString String type);
+
     /** \brief Creates instance of registered layer.
      *  @param type type name of creating layer.
      *  @param params parameters which will be used for layer initialization.

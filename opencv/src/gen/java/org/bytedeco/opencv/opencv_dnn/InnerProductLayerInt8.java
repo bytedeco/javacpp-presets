@@ -35,6 +35,9 @@ public class InnerProductLayerInt8 extends InnerProductLayer {
             return new InnerProductLayerInt8((Pointer)this).offsetAddress(i);
         }
     
+        public native int input_zp(); public native InnerProductLayerInt8 input_zp(int setter);
         public native int output_zp(); public native InnerProductLayerInt8 output_zp(int setter);
+        public native float input_sc(); public native InnerProductLayerInt8 input_sc(float setter);
+        public native float output_sc(); public native InnerProductLayerInt8 output_sc(float setter);
         public static native @Ptr InnerProductLayerInt8 create(@Const @ByRef LayerParams params);
     }

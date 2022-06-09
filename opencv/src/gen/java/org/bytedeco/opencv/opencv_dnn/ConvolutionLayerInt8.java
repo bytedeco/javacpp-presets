@@ -37,6 +37,7 @@ public class ConvolutionLayerInt8 extends BaseConvolutionLayer {
     
         public native int input_zp(); public native ConvolutionLayerInt8 input_zp(int setter);
         public native int output_zp(); public native ConvolutionLayerInt8 output_zp(int setter);
+        public native float input_sc(); public native ConvolutionLayerInt8 input_sc(float setter);
         public native float output_sc(); public native ConvolutionLayerInt8 output_sc(float setter);
         public static native @Ptr BaseConvolutionLayer create(@Const @ByRef LayerParams params);
     }

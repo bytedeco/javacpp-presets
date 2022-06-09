@@ -29,10 +29,13 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
-
+/** \}
+ <p>
+ *  \addtogroup objdetect_hog
+ *  \{
 //////////////// HOG (Histogram-of-Oriented-Gradients) Descriptor and Object Detector //////////////
-
-/** struct for detection region of interest (ROI) */
+ <p>
+ *  struct for detection region of interest (ROI) */
 @Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_objdetect.class)
 public class DetectionROI extends Pointer {
     static { Loader.load(); }

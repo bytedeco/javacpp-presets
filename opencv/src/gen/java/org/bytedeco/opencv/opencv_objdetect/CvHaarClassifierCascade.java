@@ -33,8 +33,8 @@ import static org.bytedeco.opencv.global.opencv_objdetect.*;
 /**
 \defgroup objdetect Object Detection
 <p>
-Haar Feature-based Cascade Classifier for Object Detection
-----------------------------------------------------------
+\{
+    \defgroup objdetect_cascade_classifier Cascade Classifier for Object Detection
 <p>
 The object detector described below has been initially proposed by Paul Viola \cite Viola01 and
 improved by Rainer Lienhart \cite Lienhart02 .
@@ -74,8 +74,7 @@ middle) and the sum of the image pixels under the black stripe multiplied by 3 i
 compensate for the differences in the size of areas. The sums of pixel values over a rectangular
 regions are calculated rapidly using integral images (see below and the integral description).
 <p>
-To see the object detector at work, have a look at the facedetect demo:
-<https://github.com/opencv/opencv/tree/4.x/samples/cpp/dbt_face_detection.cpp>
+Check \ref tutorial_cascade_classifier "the corresponding tutorial" for more details.
 <p>
 The following reference is for the detection part only. There is a separate application called
 opencv_traincascade that can train a cascade of boosted classifiers from a set of samples.
@@ -83,10 +82,13 @@ opencv_traincascade that can train a cascade of boosted classifiers from a set o
 \note In the new C++ interface it is also possible to use LBP (local binary pattern) features in
 addition to Haar-like features. .. [Viola01] Paul Viola and Michael J. Jones. Rapid Object Detection
 using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is available online at
-<http://research.microsoft.com/en-us/um/people/viola/Pubs/Detect/violaJones_CVPR2001.pdf>
-<p>
-\{
-    \defgroup objdetect_c C API
+<https://github.com/SvHey/thesis/blob/master/Literature/ObjectDetection/violaJones_CVPR2001.pdf>
+    <p>
+    \defgroup objdetect_hog HOG (Histogram of Oriented Gradients) descriptor and object detector
+    \defgroup objdetect_qrcode QRCode detection and encoding
+    \defgroup objdetect_dnn_face DNN-based face detection and recognition
+Check \ref tutorial_dnn_face "the corresponding tutorial" for more details.
+    \defgroup objdetect_common Common functions and classes
 \}
  */
 

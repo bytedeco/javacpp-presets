@@ -74,7 +74,7 @@ public class CascadeClassifier extends Pointer {
     public native @Cast("bool") boolean load( @Str String filename );
     /** \brief Reads a classifier from a FileStorage node.
     <p>
-    \note The file may contain a new cascade classifier (trained traincascade application) only.
+    \note The file may contain a new cascade classifier (trained by the traincascade application) only.
      */
     public native @Cast("bool") boolean read( @Const @ByRef FileNode node );
 
@@ -91,12 +91,6 @@ public class CascadeClassifier extends Pointer {
     cvHaarDetectObjects. It is not used for a new cascade.
     @param minSize Minimum possible object size. Objects smaller than that are ignored.
     @param maxSize Maximum possible object size. Objects larger than that are ignored. If {@code maxSize == minSize} model is evaluated on single scale.
-    <p>
-    The function is parallelized with the TBB library.
-    <p>
-    \note
-       -   (Python) A face detection example using cascade classifiers can be found at
-            opencv_source_code/samples/python/facedetect.py
     */
     public native void detectMultiScale( @ByVal Mat image,
                               @ByRef RectVector objects,

@@ -30,7 +30,7 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
 
-/** \addtogroup objdetect
+/** \addtogroup objdetect_cascade_classifier
  *  \{ */
 
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_objdetect.class)

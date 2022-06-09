@@ -154,6 +154,10 @@ cluster, the average rectangle is computed and put into the output rectangle lis
                                             double detectThreshold/*=0.0*/, @ByVal(nullValue = "cv::Size(64, 128)") Size winDetSize);
 @Namespace("cv") public static native void groupRectangles_meanshift(@ByRef RectVector rectList, @StdVector double[] foundWeights,
                                             @StdVector double[] foundScales);
+/** \}
+ <p>
+ *  \addtogroup objdetect_cascade_classifier
+ *  \{ */
 
 /** enum cv:: */
 public static final int CASCADE_DO_CANNY_PRUNING    = 1,
@@ -181,7 +185,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
 
 
-/** \} objdetect */
+/** \} */
 
 
 // #include "opencv2/objdetect/detection_based_tracker.hpp"
@@ -245,7 +249,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
 
 
-/** \} objdetect */
+/** \} */
 
  //end of cv namespace
 

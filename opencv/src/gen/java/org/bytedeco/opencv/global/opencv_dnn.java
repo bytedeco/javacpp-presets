@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20211220;
+public static final int OPENCV_DNN_API_VERSION = 20220524;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -289,6 +289,12 @@ public static final int OPENCV_DNN_API_VERSION = 20211220;
 
 
 // Targeting ../opencv_dnn/PoolingLayerInt8.java
+
+
+// Targeting ../opencv_dnn/ReduceLayer.java
+
+
+// Targeting ../opencv_dnn/ReduceLayerInt8.java
 
 
 // Targeting ../opencv_dnn/SoftmaxLayer.java
@@ -456,6 +462,15 @@ public static final int OPENCV_DNN_API_VERSION = 20211220;
 // Targeting ../opencv_dnn/ActivationLayerInt8.java
 
 
+// Targeting ../opencv_dnn/SignLayer.java
+
+
+// Targeting ../opencv_dnn/ShrinkLayer.java
+
+
+// Targeting ../opencv_dnn/ReciprocalLayer.java
+
+
 // Targeting ../opencv_dnn/CropLayer.java
 
 
@@ -612,7 +627,8 @@ public static final int OPENCV_DNN_API_VERSION = 20211220;
         DNN_BACKEND_OPENCV = 3,
         DNN_BACKEND_VKCOM = 4,
         DNN_BACKEND_CUDA = 5,
-        DNN_BACKEND_WEBNN = 6;
+        DNN_BACKEND_WEBNN = 6,
+        DNN_BACKEND_TIMVX = 7;
 // #ifdef __OPENCV_BUILD
 // #endif
 
@@ -631,7 +647,8 @@ public static final int OPENCV_DNN_API_VERSION = 20211220;
         DNN_TARGET_FPGA = 5,
         DNN_TARGET_CUDA = 6,
         DNN_TARGET_CUDA_FP16 = 7,
-        DNN_TARGET_HDDL = 8;
+        DNN_TARGET_HDDL = 8,
+        DNN_TARGET_NPU = 9;
 
     @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
     @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
@@ -1436,14 +1453,6 @@ public static final int OPENCV_DNN_API_VERSION = 20211220;
 @Namespace("cv::dnn") public static native int total(@Const @StdVector @ByRef IntPointer shape);
 
 @Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer concat(@Const @StdVector @ByRef IntPointer a, @Const @StdVector @ByRef IntPointer b);
-
-@Namespace("cv::dnn") public static native @StdString BytePointer toString(@Const @StdVector @ByRef IntPointer shape, @Str BytePointer name/*=""*/);
-@Namespace("cv::dnn") public static native @StdString BytePointer toString(@Const @StdVector @ByRef IntPointer shape);
-@Namespace("cv::dnn") public static native @StdString String toString(@Const @StdVector @ByRef IntPointer shape, @Str String name/*=""*/);
-@Namespace("cv::dnn") public static native void print(@Const @StdVector @ByRef IntPointer shape, @Str BytePointer name/*=""*/);
-@Namespace("cv::dnn") public static native void print(@Const @StdVector @ByRef IntPointer shape);
-@Namespace("cv::dnn") public static native void print(@Const @StdVector @ByRef IntPointer shape, @Str String name/*=""*/);
-@Namespace("cv::dnn") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @StdVector @ByRef IntPointer shape);
 
 /** \brief Converts axis from {@code [-dims; dims)} (similar to Python's slice notation) to {@code [0; dims)} range. */
 @Namespace("cv::dnn") public static native int normalize_axis(int axis, int dims);

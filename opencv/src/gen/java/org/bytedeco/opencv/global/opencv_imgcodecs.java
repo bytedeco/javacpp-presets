@@ -125,9 +125,9 @@ public static final int
        IMWRITE_JPEG_OPTIMIZE       = 3,
        /** JPEG restart interval, 0 - 65535, default is 0 - no restart. */
        IMWRITE_JPEG_RST_INTERVAL   = 4,
-       /** Separate luma quality level, 0 - 100, default is 0 - don't use. */
+       /** Separate luma quality level, 0 - 100, default is -1 - don't use. */
        IMWRITE_JPEG_LUMA_QUALITY   = 5,
-       /** Separate chroma quality level, 0 - 100, default is 0 - don't use. */
+       /** Separate chroma quality level, 0 - 100, default is -1 - don't use. */
        IMWRITE_JPEG_CHROMA_QUALITY = 6,
        /** For PNG, it can be the compression level from 0 to 9. A higher value means a smaller size and longer compression time. If specified, strategy is changed to IMWRITE_PNG_STRATEGY_DEFAULT (Z_DEFAULT_STRATEGY). Default value is 1 (best speed setting). */
        IMWRITE_PNG_COMPRESSION     = 16,
@@ -146,13 +146,13 @@ public static final int
        /** For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format */
        IMWRITE_PAM_TUPLETYPE       = 128,
        /** For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values */
-       IMWRITE_TIFF_RESUNIT = 256,
+       IMWRITE_TIFF_RESUNIT        = 256,
        /** For TIFF, use to specify the X direction DPI */
-       IMWRITE_TIFF_XDPI = 257,
+       IMWRITE_TIFF_XDPI           = 257,
        /** For TIFF, use to specify the Y direction DPI */
-       IMWRITE_TIFF_YDPI = 258,
+       IMWRITE_TIFF_YDPI           = 258,
        /** For TIFF, use to specify the image compression scheme. See libtiff for integer constants corresponding to compression formats. Note, for images whose depth is CV_32F, only libtiff's SGILOG compression scheme is used. For other supported depths, the compression scheme can be specified by this flag; LZW compression is the default. */
-       IMWRITE_TIFF_COMPRESSION = 259,
+       IMWRITE_TIFF_COMPRESSION    = 259,
        /** For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000. */
        IMWRITE_JPEG2000_COMPRESSION_X1000 = 272;
 
@@ -160,9 +160,9 @@ public static final int
 public static final int
        /*IMWRITE_EXR_TYPE_UNIT = 0, //!< not supported */
        /** store as HALF (FP16) */
-       IMWRITE_EXR_TYPE_HALF = 1,
+       IMWRITE_EXR_TYPE_HALF   = 1,
        /** store as FP32 (default) */
-       IMWRITE_EXR_TYPE_FLOAT = 2;
+       IMWRITE_EXR_TYPE_FLOAT  = 2;
 
 /** enum cv::ImwriteEXRCompressionFlags */
 public static final int
@@ -208,15 +208,15 @@ public static final int
        /** Using this value prevents the use of dynamic Huffman codes, allowing for a simpler decoder for special applications. */
        IMWRITE_PNG_STRATEGY_FIXED        = 4;
 
-/** Imwrite PAM specific tupletype flags used to define the 'TUPETYPE' field of a PAM file. */
+/** Imwrite PAM specific tupletype flags used to define the 'TUPLETYPE' field of a PAM file. */
 /** enum cv::ImwritePAMFlags */
 public static final int
-       IMWRITE_PAM_FORMAT_NULL = 0,
-       IMWRITE_PAM_FORMAT_BLACKANDWHITE = 1,
-       IMWRITE_PAM_FORMAT_GRAYSCALE = 2,
+       IMWRITE_PAM_FORMAT_NULL            = 0,
+       IMWRITE_PAM_FORMAT_BLACKANDWHITE   = 1,
+       IMWRITE_PAM_FORMAT_GRAYSCALE       = 2,
        IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA = 3,
-       IMWRITE_PAM_FORMAT_RGB = 4,
-       IMWRITE_PAM_FORMAT_RGB_ALPHA = 5;
+       IMWRITE_PAM_FORMAT_RGB             = 4,
+       IMWRITE_PAM_FORMAT_RGB_ALPHA       = 5;
 
 /** \} imgcodecs_flags
 <p>
@@ -280,8 +280,8 @@ Currently, the following file formats are supported:
 <p>
 The function imreadmulti loads a multi-page image from the specified file into a vector of Mat objects.
 @param filename Name of file to be loaded.
+@param mats A vector of Mat objects holding each page.
 @param flags Flag that can take values of cv::ImreadModes, default with cv::IMREAD_ANYCOLOR.
-@param mats A vector of Mat objects holding each page, if more than one.
 @see cv::imread
 */
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
@@ -293,10 +293,10 @@ The function imreadmulti loads a multi-page image from the specified file into a
 <p>
 The function imreadmulti loads a specified range from a multi-page image from the specified file into a vector of Mat objects.
 @param filename Name of file to be loaded.
+@param mats A vector of Mat objects holding each page.
 @param start Start index of the image to load
 @param count Count number of images to load
 @param flags Flag that can take values of cv::ImreadModes, default with cv::IMREAD_ANYCOLOR.
-@param mats A vector of Mat objects holding each page, if more than one.
 @see cv::imread
 */
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int start, int count, int flags/*=cv::IMREAD_ANYCOLOR*/);
@@ -437,7 +437,7 @@ reallocations when the function is called repeatedly for images of the same size
 The function imencode compresses the image and stores it in the memory buffer that is resized to fit the
 result. See cv::imwrite for the list of supported formats and flags description.
 <p>
-@param ext File extension that defines the output format.
+@param ext File extension that defines the output format. Must include a leading period.
 @param img Image to be written.
 @param buf Output buffer resized to fit the compressed image.
 @param params Format-specific parameters. See cv::imwrite and cv::ImwriteFlags.

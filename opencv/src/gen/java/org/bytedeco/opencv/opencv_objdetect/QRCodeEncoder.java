@@ -29,6 +29,10 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
 
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
+/** \}
+ <p>
+ *  \addtogroup objdetect_qrcode
+ *  \{ */
 
 @Namespace("cv") @Properties(inherit = org.bytedeco.opencv.presets.opencv_objdetect.class)
 public class QRCodeEncoder extends Pointer {

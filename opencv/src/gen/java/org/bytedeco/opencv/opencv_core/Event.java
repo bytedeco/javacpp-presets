@@ -30,8 +30,8 @@ public class Event extends Pointer {
         /** Event is suitable for interprocess use. DisableTiming must be set */
         INTERPROCESS   = 0x04;
 
-    public Event(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/) { super((Pointer)null); allocate(flags); }
-    private native void allocate(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/);
+    public Event(@Cast("const cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/) { super((Pointer)null); allocate(flags); }
+    private native void allocate(@Cast("const cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/);
     public Event() { super((Pointer)null); allocate(); }
     private native void allocate();
 
