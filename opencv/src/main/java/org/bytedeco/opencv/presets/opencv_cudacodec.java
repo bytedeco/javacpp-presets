@@ -34,12 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             not = "macosx",
             include = "<opencv2/cudacodec.hpp>",
-            link = "opencv_cudacodec@.405",
+            link = "opencv_cudacodec@.406",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudacodec455",
+            link = "opencv_cudacodec460",
             extension = "-gpu"
         )
     },
@@ -50,7 +50,8 @@ public class opencv_cudacodec implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::cudacodec::VideoWriter").pointerTypes("org.bytedeco.opencv.opencv_cudacodec.VideoWriter"))
+        infoMap.put(new Info("CV_DOXYGEN").define())
+               .put(new Info("cv::cudacodec::VideoWriter").pointerTypes("org.bytedeco.opencv.opencv_cudacodec.VideoWriter"))
                .put(new Info("cv::cudacodec::VideoReader").pointerTypes("org.bytedeco.opencv.opencv_cudacodec.VideoReader"));
     }
 }

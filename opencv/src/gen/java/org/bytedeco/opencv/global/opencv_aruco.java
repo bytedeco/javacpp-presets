@@ -89,22 +89,39 @@ the use of this software, even if advised of the possibility of such damage.
  */
 /** enum cv::aruco::PREDEFINED_DICTIONARY_NAME */
 public static final int
+    /** 4x4 bits, minimum hamming distance between any two codes = 4, 50 codes */
     DICT_4X4_50 = 0,
+    /** 4x4 bits, minimum hamming distance between any two codes = 3, 100 codes */
     DICT_4X4_100 = 1,
+    /** 4x4 bits, minimum hamming distance between any two codes = 3, 250 codes */
     DICT_4X4_250 = 2,
+    /** 4x4 bits, minimum hamming distance between any two codes = 2, 1000 codes */
     DICT_4X4_1000 = 3,
+    /** 5x5 bits, minimum hamming distance between any two codes = 8, 50 codes */
     DICT_5X5_50 = 4,
+    /** 5x5 bits, minimum hamming distance between any two codes = 7, 100 codes */
     DICT_5X5_100 = 5,
+    /** 5x5 bits, minimum hamming distance between any two codes = 6, 250 codes */
     DICT_5X5_250 = 6,
+    /** 5x5 bits, minimum hamming distance between any two codes = 5, 1000 codes */
     DICT_5X5_1000 = 7,
+    /** 6x6 bits, minimum hamming distance between any two codes = 13, 50 codes */
     DICT_6X6_50 = 8,
+    /** 6x6 bits, minimum hamming distance between any two codes = 12, 100 codes */
     DICT_6X6_100 = 9,
+    /** 6x6 bits, minimum hamming distance between any two codes = 11, 250 codes */
     DICT_6X6_250 = 10,
+    /** 6x6 bits, minimum hamming distance between any two codes = 9, 1000 codes */
     DICT_6X6_1000 = 11,
+    /** 7x7 bits, minimum hamming distance between any two codes = 19, 50 codes */
     DICT_7X7_50 = 12,
+    /** 7x7 bits, minimum hamming distance between any two codes = 18, 100 codes */
     DICT_7X7_100 = 13,
+    /** 7x7 bits, minimum hamming distance between any two codes = 17, 250 codes */
     DICT_7X7_250 = 14,
+    /** 7x7 bits, minimum hamming distance between any two codes = 14, 1000 codes */
     DICT_7X7_1000 = 15,
+    /** 6x6 bits, minimum hamming distance between any two codes = 3, 1024 codes */
     DICT_ARUCO_ORIGINAL = 16,
     /** 4x4 bits, minimum hamming distance between any two codes = 5, 30 codes */
     DICT_APRILTAG_16h5 = 17,
@@ -215,6 +232,7 @@ the use of this software, even if advised of the possibility of such damage.
 // #define __OPENCV_ARUCO_HPP__
 
 // #include <opencv2/core.hpp>
+// #include <opencv2/calib3d.hpp>
 // #include <vector>
 // #include "opencv2/aruco/dictionary.hpp"
 
@@ -280,63 +298,90 @@ public static final int
  * @param parameters marker detection parameters
  * @param rejectedImgPoints contains the imgPoints of those squares whose inner code has not a
  * correct codification. Useful for debugging purposes.
- * @param cameraMatrix optional input 3x3 floating-point camera matrix
- * {@code A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}}
- * @param distCoeff optional vector of distortion coefficients
- * {@code (k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6],[s_1, s_2, s_3, s_4]])} of 4, 5, 8 or 12 elements
  *
  * Performs marker detection in the input image. Only markers included in the specific dictionary
  * are searched. For each detected marker, it returns the 2D position of its corner in the image
  * and its corresponding identifier.
  * Note that this function does not perform pose estimation.
- * @see estimatePoseSingleMarkers,  estimatePoseBoard
+ * \note The function does not correct lens distortion or takes it into account. It's recommended to undistort
+ * input image with corresponging camera model, if camera parameters are known
+ * @see undistort, estimatePoseSingleMarkers,  estimatePoseBoard
  *
  */
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal Mat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal Mat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal Mat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal Mat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal Mat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal Mat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal UMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal UMat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal UMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal UMat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal UMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal UMat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal UMat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal GpuMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") MatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
                                 @ByVal GpuMat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal GpuMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") UMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal UMatVector corners,
                                 @ByVal GpuMat ids);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal GpuMat ids, @Ptr DetectorParameters parameters/*=cv::aruco::DetectorParameters::create()*/,
-                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeff);
+                                @ByVal(nullValue = "cv::OutputArrayOfArrays(cv::noArray())") GpuMatVector rejectedImgPoints);
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal GpuMat image, @Ptr Dictionary dictionary, @ByVal GpuMatVector corners,
                                 @ByVal GpuMat ids);
+/** \brief
+ * rvec/tvec define the right handed coordinate system of the marker.
+ * PatternPos defines center this system and axes direction.
+ * Axis X (red color) - first coordinate, axis Y (green color) - second coordinate,
+ * axis Z (blue color) - third coordinate.
+ * @see estimatePoseSingleMarkers(), \ref tutorial_aruco_detection
+ */
+/** enum cv::aruco::PatternPos */
+public static final int
+    /** \brief The marker coordinate system is centered on the middle of the marker.
+        * The coordinates of the four corners (CCW order) of the marker in its own coordinate system are:
+        * (-markerLength/2, markerLength/2, 0), (markerLength/2, markerLength/2, 0),
+        * (markerLength/2, -markerLength/2, 0), (-markerLength/2, -markerLength/2, 0).
+        *
+        * These pattern points define this coordinate system:
+        * ![Image with axes drawn](images/singlemarkersaxes.jpg)
+        */
+    CCW_center = 0,
+    /** \brief The marker coordinate system is centered on the top-left corner of the marker.
+        * The coordinates of the four corners (CW order) of the marker in its own coordinate system are:
+        * (0, 0, 0), (markerLength, 0, 0),
+        * (markerLength, markerLength, 0), (0, markerLength, 0).
+        *
+        * These pattern points define this coordinate system:
+        * ![Image with axes drawn](images/singlemarkersaxes2.jpg)
+        */
+    CW_top_left_corner = 1;
+// Targeting ../opencv_aruco/EstimateParameters.java
+
 
 
 
@@ -358,68 +403,84 @@ public static final int
  * @param tvecs array of output translation vectors (e.g. std::vector<cv::Vec3d>).
  * Each element in tvecs corresponds to the specific marker in imgPoints.
  * @param _objPoints array of object points of all the marker corners
+ * @param estimateParameters set the origin of coordinate system and the coordinates of the four corners of the marker
+ * (default estimateParameters.pattern = PatternPos::CCW_center, estimateParameters.useExtrinsicGuess = false,
+ * estimateParameters.solvePnPMethod = SOLVEPNP_ITERATIVE).
  *
  * This function receives the detected markers and returns their pose estimation respect to
  * the camera individually. So for each marker, one rotation and translation vector is returned.
  * The returned transformation is the one that transforms points from each marker coordinate system
  * to the camera coordinate system.
- * The marker corrdinate system is centered on the middle of the marker, with the Z axis
- * perpendicular to the marker plane.
- * The coordinates of the four corners of the marker in its own coordinate system are:
+ * The marker coordinate system is centered on the middle (by default) or on the top-left corner of the marker,
+ * with the Z axis perpendicular to the marker plane.
+ * estimateParameters defines the coordinates of the four corners of the marker in its own coordinate system (by default) are:
  * (-markerLength/2, markerLength/2, 0), (markerLength/2, markerLength/2, 0),
  * (markerLength/2, -markerLength/2, 0), (-markerLength/2, -markerLength/2, 0)
+ * @see use cv::drawFrameAxes to get world coordinate system axis for object points
+ * @see \ref tutorial_aruco_detection
+ * @see EstimateParameters
+ * @see PatternPos
  */
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints);
+                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                             @ByVal Mat rvecs, @ByVal Mat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints);
+                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                             @ByVal Mat rvecs, @ByVal Mat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints);
+                                            @ByVal Mat rvecs, @ByVal Mat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                             @ByVal Mat rvecs, @ByVal Mat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints);
+                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                             @ByVal UMat rvecs, @ByVal UMat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints);
+                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                             @ByVal UMat rvecs, @ByVal UMat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints);
+                                            @ByVal UMat rvecs, @ByVal UMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                             @ByVal UMat rvecs, @ByVal UMat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints);
+                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal MatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                             @ByVal GpuMat rvecs, @ByVal GpuMat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints);
+                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal UMatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                             @ByVal GpuMat rvecs, @ByVal GpuMat tvecs);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints);
+                                            @ByVal GpuMat rvecs, @ByVal GpuMat tvecs, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat _objPoints,
+                                            @Ptr EstimateParameters estimateParameters/*=cv::aruco::EstimateParameters::create()*/);
 @Namespace("cv::aruco") public static native void estimatePoseSingleMarkers(@ByVal GpuMatVector corners, float markerLength,
                                             @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                             @ByVal GpuMat rvecs, @ByVal GpuMat tvecs);
@@ -459,6 +520,7 @@ public static final int
  * Input markers that are not included in the board layout are ignored.
  * The function returns the number of markers from the input employed for the board pose estimation.
  * Note that returning a 0 means the pose has not been estimated.
+ * @see use cv::drawFrameAxes to get world coordinate system axis for object points
  */
 @Namespace("cv::aruco") public static native int estimatePoseBoard(@ByVal MatVector corners, @ByVal Mat ids, @Ptr Board board,
                                    @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs, @ByVal Mat rvec,
@@ -649,6 +711,7 @@ public static final int
  * Given an array of detected marker corners and its corresponding ids, this functions draws
  * the markers in the image. The marker borders are painted and the markers identifiers if provided.
  * Useful for debugging purposes.
+ *
  */
 @Namespace("cv::aruco") public static native void drawDetectedMarkers(@ByVal Mat image, @ByVal MatVector corners,
                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat ids,
@@ -686,33 +749,6 @@ public static final int
                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat ids,
                                       @ByVal(nullValue = "cv::Scalar(0, 255, 0)") Scalar borderColor);
 @Namespace("cv::aruco") public static native void drawDetectedMarkers(@ByVal GpuMat image, @ByVal GpuMatVector corners);
-
-
-
-/**
- * \brief Draw coordinate system axis from pose estimation
- *
- * @param image input/output image. It must have 1 or 3 channels. The number of channels is not
- * altered.
- * @param cameraMatrix input 3x3 floating-point camera matrix
- * {@code A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}}
- * @param distCoeffs vector of distortion coefficients
- * {@code (k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6],[s_1, s_2, s_3, s_4]])} of 4, 5, 8 or 12 elements
- * @param rvec rotation vector of the coordinate system that will be drawn. (@see Rodrigues).
- * @param tvec translation vector of the coordinate system that will be drawn.
- * @param length length of the painted axis in the same unit than tvec (usually in meters)
- *
- * Given the pose estimation of a marker or board, this function draws the axis of the world
- * coordinate system, i.e. the system centered on the marker/board. Useful for debugging purposes.
- *
- * @deprecated use cv::drawFrameAxes
- */
-@Namespace("cv::aruco") public static native void drawAxis(@ByVal Mat image, @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                           @ByVal Mat rvec, @ByVal Mat tvec, float length);
-@Namespace("cv::aruco") public static native void drawAxis(@ByVal UMat image, @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                           @ByVal UMat rvec, @ByVal UMat tvec, float length);
-@Namespace("cv::aruco") public static native void drawAxis(@ByVal GpuMat image, @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                           @ByVal GpuMat rvec, @ByVal GpuMat tvec, float length);
 
 
 
@@ -1212,6 +1248,7 @@ the use of this software, even if advised of the possibility of such damage.
  * This function estimates a Charuco board pose from some detected corners.
  * The function checks if the input corners are enough and valid to perform pose estimation.
  * If pose estimation is valid, returns true, else returns false.
+ * @see use cv::drawFrameAxes to get world coordinate system axis for object points
  */
 @Namespace("cv::aruco") public static native @Cast("bool") boolean estimatePoseCharucoBoard(@ByVal Mat charucoCorners, @ByVal Mat charucoIds,
                                            @Ptr CharucoBoard board, @ByVal Mat cameraMatrix,
@@ -1512,6 +1549,7 @@ the use of this software, even if advised of the possibility of such damage.
  * diamond.
  * @param cameraMatrix Optional camera calibration matrix.
  * @param distCoeffs Optional camera distortion coefficients.
+ * @param dictionary dictionary of markers indicating the type of markers.
  *
  * This function detects Diamond markers from the previous detected ArUco markers. The diamonds
  * are returned in the diamondCorners and diamondIds parameters. If camera calibration parameters
@@ -1522,7 +1560,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal Mat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal Mat image, @ByVal MatVector markerCorners,
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal Mat diamondIds);
@@ -1530,7 +1569,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal Mat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal Mat image, @ByVal UMatVector markerCorners,
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal Mat diamondIds);
@@ -1538,7 +1578,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal Mat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal Mat image, @ByVal GpuMatVector markerCorners,
                                        @ByVal Mat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal Mat diamondIds);
@@ -1546,7 +1587,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal UMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal UMat image, @ByVal MatVector markerCorners,
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal UMat diamondIds);
@@ -1554,7 +1596,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal UMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal UMat image, @ByVal UMatVector markerCorners,
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal UMat diamondIds);
@@ -1562,7 +1605,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal UMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal UMat image, @ByVal GpuMatVector markerCorners,
                                        @ByVal UMat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal UMat diamondIds);
@@ -1570,7 +1614,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal GpuMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal GpuMat image, @ByVal MatVector markerCorners,
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal MatVector diamondCorners, @ByVal GpuMat diamondIds);
@@ -1578,7 +1623,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal GpuMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal GpuMat image, @ByVal UMatVector markerCorners,
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal UMatVector diamondCorners, @ByVal GpuMat diamondIds);
@@ -1586,7 +1632,8 @@ the use of this software, even if advised of the possibility of such damage.
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal GpuMat diamondIds,
                                        @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat cameraMatrix,
-                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs);
+                                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat distCoeffs,
+                                       @Ptr Dictionary dictionary/*=cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50)*/);
 @Namespace("cv::aruco") public static native void detectCharucoDiamond(@ByVal GpuMat image, @ByVal GpuMatVector markerCorners,
                                        @ByVal GpuMat markerIds, float squareMarkerLengthRate,
                                        @ByVal GpuMatVector diamondCorners, @ByVal GpuMat diamondIds);

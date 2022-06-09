@@ -42,10 +42,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/quality/qualitygmsd.hpp>",
                 "<opencv2/quality/qualitybrisque.hpp>",
             },
-            link = "opencv_quality@.405"
+            link = "opencv_quality@.406"
         ),
         @Platform(value = "ios", preload = "libopencv_quality"),
-        @Platform(value = "windows", link = "opencv_quality455")
+        @Platform(value = "windows", link = "opencv_quality460")
     },
     target = "org.bytedeco.opencv.opencv_quality",
     global = "org.bytedeco.opencv.global.opencv_quality"

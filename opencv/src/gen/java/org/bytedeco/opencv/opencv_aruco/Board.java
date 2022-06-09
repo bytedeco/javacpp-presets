@@ -85,12 +85,21 @@ public class Board extends Pointer {
     * Recommended way to set ids vector, which will fail if the size of ids does not match size
      * of objPoints.
     */
+    
+    ///
     public native void setIds(@ByVal Mat ids);
     public native void setIds(@ByVal UMat ids);
     public native void setIds(@ByVal GpuMat ids);
 
     /** array of object points of all the marker corners in the board
-     *  each marker include its 4 corners in CCW order. For M markers, the size is Mx4. */
+     *  each marker include its 4 corners in this order:
+     * -   objPoints[i][0] - left-top point of i-th marker
+     * -   objPoints[i][1] - right-top point of i-th marker
+     * -   objPoints[i][2] - right-bottom point of i-th marker
+     * -   objPoints[i][3] - left-bottom point of i-th marker
+     * 
+     *  Markers are placed in a certain order - row by row, left to right in every row.
+     *  For M markers, the size is Mx4. */
     public native @ByRef Point3fVectorVector objPoints(); public native Board objPoints(Point3fVectorVector setter);
 
     /** the dictionary of markers employed for this board */
@@ -99,4 +108,7 @@ public class Board extends Pointer {
     /** vector of the identifiers of the markers in the board (same size than objPoints)
      *  The identifiers refers to the board dictionary */
     public native @StdVector IntPointer ids(); public native Board ids(IntPointer setter);
+
+    /** coordinate of the bottom right corner of the board, is set when calling the function create() */
+    public native @ByRef Point3f rightBottomBorder(); public native Board rightBottomBorder(Point3f setter);
 }

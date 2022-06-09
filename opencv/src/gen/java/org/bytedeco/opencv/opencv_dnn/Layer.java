@@ -121,19 +121,19 @@ public class Layer extends Algorithm {
          * This method maps label of input blob to its index into input vector.
          */
         public native int inputNameToIndex(@Str BytePointer inputName);
-        public native int inputNameToIndex(@Str String inputName);
+        public native int inputNameToIndex(@Str String inputName);  // FIXIT const
         /** \brief Returns index of output blob in output array.
          *  @see inputNameToIndex()
          */
         public native int outputNameToIndex(@Str BytePointer outputName);
-        public native int outputNameToIndex(@Str String outputName);
+        public native int outputNameToIndex(@Str String outputName);  // FIXIT const
 
         /**
          * \brief Ask layer if it support specific backend for doing computations.
          * @param backendId [in] computation backend identifier.
          * @see Backend
          */
-        public native @Cast("bool") boolean supportBackend(int backendId);
+        public native @Cast("bool") boolean supportBackend(int backendId);  // FIXIT const
 
         /**
          * \brief Returns Halide backend node.
@@ -152,6 +152,15 @@ public class Layer extends Algorithm {
          * @param   context  void pointer to CSLContext object
          * @param   inputs   layer inputs
          * @param   outputs  layer outputs
+         */
+
+        /**
+         * \brief Returns a TimVX backend node
+         *
+         * @param   timVxInfo  void pointer to CSLContext object
+         * @param   inputsWrapper   layer inputs
+         * @param   outputsWrapper  layer outputs
+         * @param   isLast if the node is the last one of the TimVX Graph.
          */
 
        /**
@@ -224,7 +233,7 @@ public class Layer extends Algorithm {
 
 
         /**
-         * \brief "Deattaches" all the layers, attached to particular layer.
+         * \brief "Detaches" all the layers, attached to particular layer.
          */
         public native void unsetAttached();
 

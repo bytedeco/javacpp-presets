@@ -97,15 +97,20 @@ public class Dictionary extends Pointer {
                 @Ptr Dictionary baseDictionary);
 
     /**
-     * \brief Read a new dictionary from FileNode. Format:
-     * nmarkers: 35
-     * markersize: 6
-     * marker_0: "101011111011111001001001101100000000"
-     * ...
+     * \brief Read a new dictionary from FileNode. Format:\n
+     * nmarkers: 35\n
+     * markersize: 6\n
+     * maxCorrectionBits: 5\n
+     * marker_0: "101011111011111001001001101100000000"\n
+     * ...\n
      * marker_34: "011111010000111011111110110101100101"
      */
-    public static native @Cast("bool") boolean readDictionary(@Const @ByRef FileNode fn, @Ptr Dictionary dictionary);
+    public native @Cast("bool") boolean readDictionary(@Const @ByRef FileNode fn);
 
+    /**
+     * \brief Write a dictionary to FileStorage. Format is the same as in readDictionary().
+     */
+    public native void writeDictionary(@Ptr FileStorage fs);
     /**
      * @see getPredefinedDictionary
      */

@@ -30,13 +30,15 @@ import static org.bytedeco.opencv.global.opencv_dnn.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
 
-/** \addtogroup objdetect
+/** \addtogroup objdetect_common
  *  \{
 <p>
 ///////////////////////////// Object Detection ////////////////////////////
- <p>
- *  class for grouping object candidates, detected by Cascade Classifier, HOG etc.
- *  instance of the class is to be passed to cv::partition (see cxoperations.hpp) */
+<p>
+/** \brief This class is used for grouping object candidates detected by Cascade Classifier, HOG etc.
+<p>
+instance of the class is to be passed to cv::partition
+ */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_objdetect.class)
 public class SimilarRects extends Pointer {
     static { Loader.load(); }

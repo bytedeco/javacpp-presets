@@ -534,7 +534,7 @@ public class Mat extends AbstractMat {
     @param copyData Flag to specify whether the underlying data of the STL vector should be copied
     to (true) or shared with (false) the newly constructed matrix. When the data is copied, the
     allocated buffer is managed using Mat reference counting mechanism. While the data is shared,
-    the reference counter is NULL, and you should not deallocate the data until the matrix is not
+    the reference counter is NULL, and you should not deallocate the data until the matrix is
     destructed.
     */
 
@@ -1590,7 +1590,7 @@ public class Mat extends AbstractMat {
 
         Mat_<Pixel> image = Mat::zeros(3, sizes, CV_8UC3);
 
-        image.forEach<Pixel>([&](Pixel& pixel, const int position[]) -> void {
+        image.forEach<Pixel>([](Pixel& pixel, const int position[]) -> void {
             pixel.x = position[0];
             pixel.y = position[1];
             pixel.z = position[2];

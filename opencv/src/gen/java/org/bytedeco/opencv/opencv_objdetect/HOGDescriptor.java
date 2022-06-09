@@ -71,7 +71,7 @@ public class HOGDescriptor extends Pointer {
     /** enum cv::HOGDescriptor::DescriptorStorageFormat */
     public static final int DESCR_FORMAT_COL_BY_COL = 0, DESCR_FORMAT_ROW_BY_ROW = 1;
 
-    /**\brief Creates the HOG descriptor and detector with default params.
+    /**\brief Creates the HOG descriptor and detector with default parameters.
     <p>
     aqual to HOGDescriptor(Size(64,128), Size(16,16), Size(8,8), Size(8,8), 9 )
     */
@@ -108,6 +108,8 @@ public class HOGDescriptor extends Pointer {
                       @ByVal Size _cellSize, int _nbins);
 
     /** \overload
+    <p>
+    Creates the HOG descriptor and detector and loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
     @param filename The file name containing HOGDescriptor properties and coefficients for the linear SVM classifier.
     */
     public HOGDescriptor(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
@@ -145,20 +147,20 @@ public class HOGDescriptor extends Pointer {
     public native void setSVMDetector(@ByVal UMat svmdetector);
     public native void setSVMDetector(@ByVal GpuMat svmdetector);
 
-    /** \brief Reads HOGDescriptor parameters from a cv::FileNode.
+    /** \brief Reads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file node.
     @param fn File node
     */
     public native @Cast("bool") boolean read(@ByRef FileNode fn);
 
-    /** \brief Stores HOGDescriptor parameters in a cv::FileStorage.
+    /** \brief Stores HOGDescriptor parameters and coefficients for the linear SVM classifier in a file storage.
     @param fs File storage
     @param objname Object name
     */
     public native void write(@ByRef FileStorage fs, @Str BytePointer objname);
     public native void write(@ByRef FileStorage fs, @Str String objname);
 
-    /** \brief loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
-    @param filename Path of the file to read.
+    /** \brief loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file
+    @param filename Name of the file to read.
     @param objname The optional name of the node to read (if empty, the first top-level node will be used).
     */
     public native @Cast("bool") boolean load(@Str BytePointer filename, @Str BytePointer objname/*=cv::String()*/);
@@ -356,61 +358,62 @@ public class HOGDescriptor extends Pointer {
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
     @param scale Coefficient of the detection window increase.
-    @param finalThreshold Final threshold
+    @param groupThreshold Coefficient to regulate the similarity threshold. When detected, some objects can be covered
+    by many rectangles. 0 means not to perform grouping.
     @param useMeanshiftGrouping indicates grouping algorithm
     */
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoublePointer foundWeights);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector DoubleBuffer foundWeights);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights, double hitThreshold/*=0*/,
                                       @ByVal(nullValue = "cv::Size()") Size winStride, @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       @StdVector double[] foundWeights);
 
@@ -424,23 +427,24 @@ public class HOGDescriptor extends Pointer {
     @param winStride Window stride. It must be a multiple of block stride.
     @param padding Padding
     @param scale Coefficient of the detection window increase.
-    @param finalThreshold Final threshold
+    @param groupThreshold Coefficient to regulate the similarity threshold. When detected, some objects can be covered
+    by many rectangles. 0 means not to perform grouping.
     @param useMeanshiftGrouping indicates grouping algorithm
     */
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations,
                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                       @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal Mat img, @ByRef RectVector foundLocations);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations,
                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                       @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal UMat img, @ByRef RectVector foundLocations);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations,
                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                       @ByVal(nullValue = "cv::Size()") Size padding, double scale/*=1.05*/,
-                                      double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+                                      double groupThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@ByVal GpuMat img, @ByRef RectVector foundLocations);
 
     /** \brief  Computes gradients and quantized gradient orientations.

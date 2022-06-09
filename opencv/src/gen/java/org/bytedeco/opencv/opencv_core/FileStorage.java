@@ -41,7 +41,7 @@ public class FileStorage extends Pointer {
         /** value, open the file for appending */
         APPEND      = 2,
         /** flag, read data from source or write data to the internal buffer (which is
- *  returned by FileStorage::release) */
+                              returned by FileStorage::release) */
         MEMORY      = 4,
         /** mask for format flags */
         FORMAT_MASK = (7<<3),

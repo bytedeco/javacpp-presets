@@ -1999,8 +1999,8 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    4;
-public static final int CV_VERSION_MINOR =    5;
-public static final int CV_VERSION_REVISION = 5;
+public static final int CV_VERSION_MINOR =    6;
+public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -4561,16 +4561,15 @@ public static final int CV_SEQ_INDEX =           (CV_SEQ_KIND_GENERIC  | CV_SEQ_
 // #include "opencv2/core/types_c.h"
 
 // #ifdef __cplusplus
-// #  ifdef _MSC_VER
-/* disable warning C4190: 'function' has C-linkage specified, but returns UDT 'typename'
-                          which is incompatible with C
+/* disable MSVC warning C4190 / clang-cl -Wreturn-type-c-linkage:
+       'function' has C-linkage specified, but returns UDT 'typename'
+       which is incompatible with C
 
    It is OK to disable it because we only extend few plain structures with
    C++ constructors for simpler interoperability with C++ API of the library
 */
-// #    pragma warning(disable:4190)
-// #  elif defined __clang__ && __clang_major__ >= 3
-// #    pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
+// #  if defined(__clang__)
+// #  elif defined(_MSC_VER)
 // #  endif
 // #endif
 
@@ -9483,6 +9482,24 @@ should be done separately if needed.
 @Namespace("cv") public static native void transpose(@ByVal UMat src, @ByVal UMat dst);
 @Namespace("cv") public static native void transpose(@ByVal GpuMat src, @ByVal GpuMat dst);
 
+/** \brief Transpose for n-dimensional matrices.
+ *
+ * \note Input should be continuous single-channel matrix.
+ * @param src input array.
+ * @param order a permutation of [0,1,..,N-1] where N is the number of axes of src.
+ * The i’th axis of dst will correspond to the axis numbered order[i] of the input.
+ * @param dst output array of the same type as src.
+ */
+@Namespace("cv") public static native void transposeND(@ByVal Mat src, @StdVector IntPointer order, @ByVal Mat dst);
+@Namespace("cv") public static native void transposeND(@ByVal Mat src, @StdVector IntBuffer order, @ByVal Mat dst);
+@Namespace("cv") public static native void transposeND(@ByVal Mat src, @StdVector int[] order, @ByVal Mat dst);
+@Namespace("cv") public static native void transposeND(@ByVal UMat src, @StdVector IntPointer order, @ByVal UMat dst);
+@Namespace("cv") public static native void transposeND(@ByVal UMat src, @StdVector IntBuffer order, @ByVal UMat dst);
+@Namespace("cv") public static native void transposeND(@ByVal UMat src, @StdVector int[] order, @ByVal UMat dst);
+@Namespace("cv") public static native void transposeND(@ByVal GpuMat src, @StdVector IntPointer order, @ByVal GpuMat dst);
+@Namespace("cv") public static native void transposeND(@ByVal GpuMat src, @StdVector IntBuffer order, @ByVal GpuMat dst);
+@Namespace("cv") public static native void transposeND(@ByVal GpuMat src, @StdVector int[] order, @ByVal GpuMat dst);
+
 /** \brief Performs the matrix transformation of every array element.
 <p>
 The function cv::transform performs the matrix transformation of every
@@ -10512,6 +10529,33 @@ The function does not reallocate memory if the matrix has proper attributes alre
 // Targeting ../opencv_core/Event.java
 
 
+@Namespace("cv::cuda") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::cuda::Event::CreateFlags") int val);
+
+@Namespace("cv::cuda") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::cuda::Event::CreateFlags") int a, int b);
+
+@Namespace("cv::cuda") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::cuda::Event::CreateFlags") int a, int b);
+
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags") @Name("operator |") int or(@Cast("const cv::cuda::Event::CreateFlags") int a, @Cast("const cv::cuda::Event::CreateFlags") int b);
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags") @Name("operator &") int and(@Cast("const cv::cuda::Event::CreateFlags") int a, @Cast("const cv::cuda::Event::CreateFlags") int b);
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags") @Name("operator ^") int xor(@Cast("const cv::cuda::Event::CreateFlags") int a, @Cast("const cv::cuda::Event::CreateFlags") int b);
+
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntPointer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntBuffer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef int[] _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntPointer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntBuffer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef int[] _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntPointer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef IntBuffer _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+@Namespace("cv::cuda") public static native @Cast("cv::cuda::Event::CreateFlags*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::cuda::Event::CreateFlags*") @ByRef int[] _this, @Cast("const cv::cuda::Event::CreateFlags") int val);
+
+
 
 /** \} cudacore_struct */
 
@@ -10965,6 +11009,10 @@ public static final int
 
 
 
+
+
+
+
 ////////////////////////// Augmenting algebraic & logical operations //////////////////////////
 
 // #define CV_MAT_AUG_OPERATOR1(op, cvop, A, B)
@@ -11212,31 +11260,15 @@ may or may not be in the same class.
 /** enum cv::AccessFlag */
 public static final int ACCESS_READ = 1<<24, ACCESS_WRITE = 1<<25,
     ACCESS_RW = 3<<24, ACCESS_MASK = ACCESS_RW, ACCESS_FAST = 1<<26;
-@Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::AccessFlag") int val);
-
-@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::AccessFlag") int a, int b);
-
-@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::AccessFlag") int a, int b);
 
 
-@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator |") int or(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
-
-@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator &") int and(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
-
-@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator ^") int xor(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
 
 
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
 
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
 
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
-@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+
+
+
 
 
 
@@ -11373,7 +11405,16 @@ public static Mat noArray() { return null; }
 
 /////////////////////////////////// MatAllocator //////////////////////////////////////
 
-/** Usage flags for allocator */
+/** \brief  Usage flags for allocator
+ <p>
+ \warning  All flags except {@code USAGE_DEFAULT} are experimental.
+ <p>
+ \warning  For the OpenCL allocator, {@code USAGE_ALLOCATE_SHARED_MEMORY} depends on
+ OpenCV's optional, experimental integration with OpenCL SVM. To enable this
+ integration, build OpenCV using the {@code WITH_OPENCL_SVM=ON} CMake option and, at
+ runtime, call {@code cv::ocl::Context::getDefault().setUseSVM(true);} or similar
+ code. Note that SVM is incompatible with OpenCL 1.x.
+*/
 /** enum cv::UMatUsageFlags */
 public static final int
     USAGE_DEFAULT = 0,

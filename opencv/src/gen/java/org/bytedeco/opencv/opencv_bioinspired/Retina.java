@@ -227,9 +227,9 @@ public class Retina extends Algorithm {
     /** \brief Accessor of the details channel of the retina (models foveal vision).
     @see getParvo
      */
-    public native void getParvoRAW(@ByVal Mat retinaOutput_parvo);
-    public native void getParvoRAW(@ByVal UMat retinaOutput_parvo);
-    public native void getParvoRAW(@ByVal GpuMat retinaOutput_parvo);
+    public native @Function void getParvoRAW(@ByVal Mat retinaOutput_parvo);
+    public native @Function void getParvoRAW(@ByVal UMat retinaOutput_parvo);
+    public native @Function void getParvoRAW(@ByVal GpuMat retinaOutput_parvo);
 
     /** \brief Accessor of the motion channel of the retina (models peripheral vision).
     <p>
@@ -248,14 +248,14 @@ public class Retina extends Algorithm {
     /** \brief Accessor of the motion channel of the retina (models peripheral vision).
     @see getMagno
      */
-    public native void getMagnoRAW(@ByVal Mat retinaOutput_magno);
-    public native void getMagnoRAW(@ByVal UMat retinaOutput_magno);
-    public native void getMagnoRAW(@ByVal GpuMat retinaOutput_magno);
+    public native @Function void getMagnoRAW(@ByVal Mat retinaOutput_magno);
+    public native @Function void getMagnoRAW(@ByVal UMat retinaOutput_magno);
+    public native @Function void getMagnoRAW(@ByVal GpuMat retinaOutput_magno);
 
     /** \overload */
-    public native @Const @ByVal Mat getMagnoRAW();
+    public native @ByVal @Function Mat getMagnoRAW();
     /** \overload */
-    public native @Const @ByVal Mat getParvoRAW();
+    public native @ByVal @Function Mat getParvoRAW();
 
     /** \brief Activate color saturation as the final step of the color demultiplexing process -\> this
     saturation is a sigmoide function applied to each channel of the demultiplexed image.
