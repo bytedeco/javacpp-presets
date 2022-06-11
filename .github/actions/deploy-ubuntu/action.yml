@@ -30,6 +30,9 @@ runs:
           export CUDA=cuda-repo-rhel8-11-6-local-11.6.2_510.47.03-1.ppc64le.rpm
           export CUDNN=cudnn-linux-ppc64le-8.3.2.44_cuda11.5-archive.tar.xz
           export NCCL=2.12.7-1+cuda11.6.ppc64le
+        elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]]; then
+          export ARCH=i386
+          export PREFIX=i686-linux-gnu
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
           export ARCH2=x86_64
@@ -47,7 +50,10 @@ runs:
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
 
-        if [[ ! "$ARCH" == "amd64" ]]; then
+        if [[ "$ARCH" == "i386" ]]; then
+          dpkg --add-architecture $ARCH
+          TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
+        elif [[ ! "$ARCH" == "amd64" ]]; then
           dpkg --add-architecture $ARCH
           echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
           echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
@@ -61,7 +67,7 @@ runs:
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         apt-get update
-        apt-get -y install python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
+        apt-get -y install gcc-multilib g++-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
         apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
 
         find /usr/lib/jvm/default-java/

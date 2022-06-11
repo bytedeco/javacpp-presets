@@ -41,4 +41,9 @@ public class IMUProperties extends IMUPropertiesSerializable {
     public native @Cast("std::int32_t") int batchReportThreshold(); public native IMUProperties batchReportThreshold(int setter);
     /* Maximum number of IMU packets in a batch. Maximum 5. */
     public native @Cast("std::int32_t") int maxBatchReports(); public native IMUProperties maxBatchReports(int setter);
+    /*
+     * Whether to perform firmware update or not.
+     * Default value: false.
+     */
+    public native @ByRef BoolOptional enableFirmwareUpdate(); public native IMUProperties enableFirmwareUpdate(BoolOptional setter);
 }

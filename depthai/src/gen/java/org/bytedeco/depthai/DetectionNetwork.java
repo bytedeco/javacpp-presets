@@ -34,6 +34,11 @@ public class DetectionNetwork extends DetectionNetworkPropertiesNode {
     @MemberGetter public native @ByRef Output out();
 
     /**
+     * Outputs unparsed inference results.
+     */
+    @MemberGetter public native @ByRef Output outNetwork();
+
+    /**
      * Specifies confidence threshold at which to filter the rest of the detections.
      * @param thresh Detection confidence must be greater than specified threshold to be added to the list
      */

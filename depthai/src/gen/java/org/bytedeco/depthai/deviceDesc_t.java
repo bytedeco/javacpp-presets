@@ -39,4 +39,8 @@ public class deviceDesc_t extends Pointer {
     public native @Cast("XLinkPlatform_t") int platform(); public native deviceDesc_t platform(int setter);
     public native @Cast("char") byte name(int i); public native deviceDesc_t name(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer name();
+    public native @Cast("XLinkDeviceState_t") int state(); public native deviceDesc_t state(int setter);
+    public native @Cast("char") byte mxid(int i); public native deviceDesc_t mxid(int i, byte setter);
+    @MemberGetter public native @Cast("char*") BytePointer mxid();
+    public native @Cast("XLinkError_t") int status(); public native deviceDesc_t status(int setter);
 }

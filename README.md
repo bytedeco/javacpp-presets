@@ -225,7 +225,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.21.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.15.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.16.x  https://github.com/luxonis/depthai-core
  * ONNX 1.11.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.11.x  https://github.com/microsoft/onnxruntime
@@ -233,7 +233,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Bullet Physics SDK 3.24  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
- * Mono/Skia 2.80.x  https://github.com/mono/skia
+ * Mono/Skia 2.88.x  https://github.com/mono/skia
  * cpu_features 0.7.0  https://github.com/google/cpu_features
  * ModSecurity 3.0.x  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
