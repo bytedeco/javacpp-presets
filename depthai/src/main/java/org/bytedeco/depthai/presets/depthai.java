@@ -61,6 +61,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/common/ChipTemperature.hpp",
                 "depthai-shared/common/CpuUsage.hpp",
                 "depthai-shared/common/DetectionNetworkType.hpp",
+                "depthai-shared/common/DetectionParserOptions.hpp",
                 "depthai-shared/common/MemoryInfo.hpp",
                 "depthai-shared/common/Point2f.hpp",
                 "depthai-shared/common/Point3f.hpp",
@@ -104,6 +105,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/properties/MonoCameraProperties.hpp",
                 "depthai-shared/properties/NeuralNetworkProperties.hpp",
                 "depthai-shared/properties/DetectionNetworkProperties.hpp",
+                "depthai-shared/properties/DetectionParserProperties.hpp",
                 "depthai-shared/properties/ObjectTrackerProperties.hpp",
                 "depthai-shared/properties/SPIOutProperties.hpp",
                 "depthai-shared/properties/SpatialDetectionNetworkProperties.hpp",
@@ -149,6 +151,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/node/MonoCamera.hpp",
                 "depthai/pipeline/node/NeuralNetwork.hpp",
                 "depthai/pipeline/node/DetectionNetwork.hpp",
+                "depthai/pipeline/node/DetectionParser.hpp",
                 "depthai/pipeline/node/ObjectTracker.hpp",
                 "depthai/pipeline/node/SPIOut.hpp",
                 "depthai/pipeline/node/SpatialDetectionNetwork.hpp",
@@ -264,7 +267,7 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::AprilTagConfig::Family").pointerTypes("RawAprilTagConfig.Family"))
                .put(new Info("dai::node::AprilTag").immutable().pointerTypes("AprilTagNode"))
                .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
-                             "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::ObjectTracker", "dai::node::SPIOut",
+                             "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::DetectionParser", "dai::node::ObjectTracker", "dai::node::SPIOut",
                              "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
                              "dai::node::SystemLogger", "dai::node::VideoEncoder", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
                .put(new Info("dai::node::IMU::Properties").pointerTypes("IMUProperties"))
@@ -276,6 +279,7 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::node::DetectionNetwork::Properties",
                              "dai::node::MobileNetDetectionNetwork::Properties",
                              "dai::node::YoloDetectionNetwork::Properties").pointerTypes("DetectionNetworkProperties"))
+               .put(new Info("dai::node::DetectionParser::Properties").pointerTypes("DetectionParserProperties"))
                .put(new Info("dai::node::ObjectTracker::Properties").pointerTypes("ObjectTrackerProperties"))
                .put(new Info("dai::node::SPIOut::Properties").pointerTypes("SPIOutProperties"))
                .put(new Info("dai::node::SpatialDetectionNetwork::Properties").pointerTypes("SpatialDetectionNetworkProperties"))
@@ -313,6 +317,7 @@ public class depthai implements InfoMapper {
                              "dai::NodeCRTP<dai::node::SpatialDetectionNetwork,MobileNetSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>").pointerTypes("MobileNetSpatialDetectionNetworkPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::node::SpatialDetectionNetwork,dai::node::YoloSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>",
                              "dai::NodeCRTP<dai::node::SpatialDetectionNetwork,YoloSpatialDetectionNetwork,dai::SpatialDetectionNetworkProperties>").pointerTypes("YoloSpatialDetectionNetworkPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::DetectionParser,dai::DetectionParserProperties>").pointerTypes("DetectionParserPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SpatialLocationCalculator,dai::SpatialLocationCalculatorProperties>").pointerTypes("SpatialLocationCalculatorPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::StereoDepth,dai::StereoDepthProperties>").pointerTypes("StereoDepthPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SystemLogger,dai::SystemLoggerProperties>").pointerTypes("SystemLoggerPropertiesNode"))
@@ -335,6 +340,8 @@ public class depthai implements InfoMapper {
                              "dai::PropertiesSerializable<dai::Properties,NeuralNetworkProperties>").pointerTypes("NeuralNetworkPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::NeuralNetworkProperties,dai::DetectionNetworkProperties>",
                              "dai::PropertiesSerializable<dai::NeuralNetworkProperties,DetectionNetworkProperties>").pointerTypes("DetectionNetworkPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::DetectionParserProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,DetectionParserProperties>").pointerTypes("DetectionParserPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ObjectTrackerProperties>",
                              "dai::PropertiesSerializable<dai::Properties,ObjectTrackerProperties>").pointerTypes("ObjectTrackerPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::SPIOutProperties>",
@@ -366,6 +373,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"create<dai::node::MonoCamera>\") @SharedPtr MonoCamera createMonoCamera();\n"
                      + "public native @Name(\"create<dai::node::NeuralNetwork>\") @SharedPtr NeuralNetwork createNeuralNetwork();\n"
 //                     + "public native @Name(\"create<dai::node::DetectionNetwork>\") @SharedPtr DetectionNetwork createDetectionNetwork();\n"
+                     + "public native @Name(\"create<dai::node::DetectionParser>\") @SharedPtr DetectionParser createDetectionParser();\n"
                      + "public native @Name(\"create<dai::node::MobileNetDetectionNetwork>\") @SharedPtr MobileNetDetectionNetwork createMobileNetDetectionNetwork();\n"
                      + "public native @Name(\"create<dai::node::YoloDetectionNetwork>\") @SharedPtr YoloDetectionNetwork createYoloDetectionNetwork();\n"
                      + "public native @Name(\"create<dai::node::ObjectTracker>\") @SharedPtr ObjectTracker createObjectTracker();\n"
@@ -434,7 +442,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"front<dai::SpatialLocationCalculatorData>\") @SharedPtr SpatialLocationCalculatorData frontSpatialLocationCalculatorData();\n"
                      + "public native @Name(\"front<dai::StereoDepthConfig>\") @SharedPtr StereoDepthConfig frontStereoDepthConfig();\n"
                      + "public native @Name(\"front<dai::SystemInformation>\") @SharedPtr SystemInformation frontSystemInformation();\n"))
-               .put(new Info("dai::DeviceBootloader::Version::toString", "dai::Node::toString").javaText("public native @StdString String toString();"))
+               .put(new Info("dai::DeviceBootloader::Version::toString", "dai::DeviceInfo::toString", "dai::Node::toString").javaText("public native @StdString String toString();"))
 
                .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(std::shared_ptr<RawBuffer>)>").valueTypes("RawBufferCallback"))
                .put(new Info("std::function<void(LogMessage)>").valueTypes("LogCallback"))

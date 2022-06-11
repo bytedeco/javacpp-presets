@@ -130,11 +130,7 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // #endif
 
 public static final int XLINK_MAX_MX_ID_SIZE = 32;
-
-// #ifdef XLINK_USE_MX_ID_NAME
-public static final int XLINK_MAX_NAME_SIZE = (XLINK_MAX_MX_ID_SIZE + 16); // additional space for device name (see supportedDevices)
-// #else
-// #endif
+public static final int XLINK_MAX_NAME_SIZE = 64;
 
 // #ifdef XLINK_MAX_STREAM_RES
 // #else
@@ -164,7 +160,9 @@ public static final int
     X_LINK_TIMEOUT = 6,
     X_LINK_ERROR = 7,
     X_LINK_OUT_OF_MEMORY = 8,
-    X_LINK_NOT_IMPLEMENTED = 9;
+    X_LINK_INSUFFICIENT_PERMISSIONS = 9,
+    X_LINK_DEVICE_ALREADY_IN_USE = 10,
+    X_LINK_NOT_IMPLEMENTED = 11;
 
 /** enum XLinkProtocol_t */
 public static final int
@@ -290,10 +288,14 @@ public static final int
 
 // #include <string>
 
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
 @Namespace("dai") public static native @Cast("bool") boolean initialize();
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString ByteBuffer additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
-@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo/*=""*/, @Cast("bool") boolean installSignalHandler/*=true*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo, @Cast("bool") boolean installSignalHandler/*=true*/, Pointer javavm/*=nullptr*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString BytePointer additionalInfo);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString ByteBuffer additionalInfo, @Cast("bool") boolean installSignalHandler/*=true*/, Pointer javavm/*=nullptr*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString ByteBuffer additionalInfo);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo, @Cast("bool") boolean installSignalHandler/*=true*/, Pointer javavm/*=nullptr*/);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(@StdString String additionalInfo);
+@Namespace("dai") public static native @Cast("bool") boolean initialize(Pointer javavm);
 
   // namespace dai
 
@@ -535,6 +537,20 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
     @Override public String toString() { return intern().name(); }
 }
 
+
+// Parsed from depthai-shared/common/DetectionParserOptions.hpp
+
+// #pragma once
+
+// #include "depthai-shared/common/DetectionNetworkType.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
+// Targeting ../DetectionParserOptions.java
+
+
+
+
+
+  // namespace dai
 
 // Parsed from depthai-shared/common/MemoryInfo.hpp
 
@@ -1288,6 +1304,9 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 // Targeting ../DetectionNetworkPropertiesSerializable.java
 
 
+// Targeting ../DetectionParserPropertiesSerializable.java
+
+
 // Targeting ../ObjectTrackerPropertiesSerializable.java
 
 
@@ -1339,6 +1358,7 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 // #pragma once
 
+// #include "depthai-shared/common/optional.hpp"
 // #include "depthai-shared/datatype/RawIMUData.hpp"
 // #include "depthai-shared/properties/Properties.hpp"
 
@@ -1581,9 +1601,29 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 // project
 // #include "NeuralNetworkProperties.hpp"
-// #include "depthai-shared/common/DetectionNetworkType.hpp"
+// #include "depthai-shared/common/DetectionParserOptions.hpp"
 // #include "depthai-shared/common/optional.hpp"
 // Targeting ../DetectionNetworkProperties.java
+
+
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/properties/DetectionParserProperties.hpp
+
+// #pragma once
+
+// #include <vector>
+
+// #include "depthai-shared/common/DetectionParserOptions.hpp"
+// #include "depthai-shared/common/TensorInfo.hpp"
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/datatype/RawEdgeDetectorConfig.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
+// Targeting ../DetectionParserProperties.java
 
 
 
@@ -2266,6 +2306,9 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // Targeting ../YoloSpatialDetectionNetworkPropertiesNode.java
 
 
+// Targeting ../DetectionParserPropertiesNode.java
+
+
 // Targeting ../SpatialLocationCalculatorPropertiesNode.java
 
 
@@ -2332,6 +2375,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "node/AprilTag.hpp"
 // #include "node/ColorCamera.hpp"
 // #include "node/DetectionNetwork.hpp"
+// #include "node/DetectionParser.hpp"
 // #include "node/EdgeDetector.hpp"
 // #include "node/FeatureTracker.hpp"
 // #include "node/IMU.hpp"
@@ -2502,6 +2546,25 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 
 // Targeting ../YoloDetectionNetwork.java
+
+
+
+  // namespace node
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/node/DetectionParser.hpp
+
+// #pragma once
+
+// #include <depthai/pipeline/Node.hpp>
+
+// standard
+// #include <fstream>
+
+// shared
+// #include <depthai-shared/properties/DetectionParserProperties.hpp>
+// Targeting ../DetectionParser.java
 
 
 

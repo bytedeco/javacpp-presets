@@ -77,6 +77,7 @@ public class DeviceBase extends Pointer {
      * @param timeout duration of time to wait for the any device
      * @return Tuple of bool and DeviceInfo. Bool specifies if device was found. DeviceInfo specifies the found device
      */
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getAnyAvailableDevice(@ByVal @Cast("std::chrono::milliseconds*") Pointer timeout);
 
     /**
      * Gets any available device
@@ -84,6 +85,15 @@ public class DeviceBase extends Pointer {
      * @return Tuple of bool and DeviceInfo. Bool specifies if device was found. DeviceInfo specifies the found device
      */
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getAnyAvailableDevice();
+
+    /**
+     * Waits for any available device with a timeout
+     *
+     * @param timeout duration of time to wait for the any device
+     * @param cb callback function called between pooling intervals
+     * @return Tuple of bool and DeviceInfo. Bool specifies if device was found. DeviceInfo specifies the found device
+     */
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getAnyAvailableDevice(@ByVal @Cast("std::chrono::milliseconds*") Pointer timeout, Callback cb);
 
     /**
      * Gets first available device. Device can be either in XLINK_UNBOOTED or XLINK_BOOTLOADER state

@@ -37,13 +37,32 @@ public class DeviceInfo extends Pointer {
 
     public DeviceInfo() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public DeviceInfo(@Cast("const char*") BytePointer arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Cast("const char*") BytePointer arg0);
-    public DeviceInfo(@Cast("const char*") ByteBuffer arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Cast("const char*") ByteBuffer arg0);
-    public DeviceInfo(String arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(String arg0);
-    public native @ByRef deviceDesc_t desc(); public native DeviceInfo desc(deviceDesc_t setter);
-    public native @Cast("XLinkDeviceState_t") int state(); public native DeviceInfo state(int setter);
+    public DeviceInfo(@StdString BytePointer name, @StdString BytePointer mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status) { super((Pointer)null); allocate(name, mxid, state, protocol, platform, status); }
+    private native void allocate(@StdString BytePointer name, @StdString BytePointer mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status);
+    public DeviceInfo(@StdString ByteBuffer name, @StdString ByteBuffer mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status) { super((Pointer)null); allocate(name, mxid, state, protocol, platform, status); }
+    private native void allocate(@StdString ByteBuffer name, @StdString ByteBuffer mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status);
+    public DeviceInfo(@StdString String name, @StdString String mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status) { super((Pointer)null); allocate(name, mxid, state, protocol, platform, status); }
+    private native void allocate(@StdString String name, @StdString String mxid, @Cast("XLinkDeviceState_t") int state, @Cast("XLinkProtocol_t") int protocol, @Cast("XLinkPlatform_t") int platform, @Cast("XLinkError_t") int status);
+    /**
+     * Creates a DeviceInfo by checking whether supplied parameter is a MXID or IP/USB name
+     * @param mxidOrName Either MXID, IP Address or USB port name
+     */
+    public DeviceInfo(@StdString BytePointer mxidOrName) { super((Pointer)null); allocate(mxidOrName); }
+    private native void allocate(@StdString BytePointer mxidOrName);
+    public DeviceInfo(@StdString ByteBuffer mxidOrName) { super((Pointer)null); allocate(mxidOrName); }
+    private native void allocate(@StdString ByteBuffer mxidOrName);
+    public DeviceInfo(@StdString String mxidOrName) { super((Pointer)null); allocate(mxidOrName); }
+    private native void allocate(@StdString String mxidOrName);
+    public DeviceInfo(@Const @ByRef deviceDesc_t desc) { super((Pointer)null); allocate(desc); }
+    private native void allocate(@Const @ByRef deviceDesc_t desc);
+    public native @ByVal deviceDesc_t getXLinkDeviceDesc();
     public native @StdString BytePointer getMxId();
+    public native @StdString String toString();
+
+    public native @StdString BytePointer name(); public native DeviceInfo name(BytePointer setter);
+    public native @StdString BytePointer mxid(); public native DeviceInfo mxid(BytePointer setter);
+    public native @Cast("XLinkDeviceState_t") int state(); public native DeviceInfo state(int setter);
+    public native @Cast("XLinkProtocol_t") int protocol(); public native DeviceInfo protocol(int setter);
+    public native @Cast("XLinkPlatform_t") int platform(); public native DeviceInfo platform(int setter);
+    public native @Cast("XLinkError_t") int status(); public native DeviceInfo status(int setter);
 }

@@ -82,4 +82,10 @@ public class IMU extends IMUPropertiesNode {
      * Maximum number of IMU packets in a batch report
      */
     public native @Cast("std::int32_t") int getMaxBatchReports();
+
+    /*
+     * Whether to perform firmware update or not.
+     * Default value: false.
+     */
+    public native void enableFirmwareUpdate(@Cast("bool") boolean enable);
 }

@@ -25,14 +25,14 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   linux-x86:
     runs-on: ubuntu-18.04
-    container: centos:7
+    container: ubuntu:bionic
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
     runs-on: ubuntu-18.04
-    container: centos:7
+    container: ubuntu:bionic
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-x86_64:
     runs-on: macos-10.15
     steps:

@@ -90,6 +90,11 @@ public class VideoEncoderProperties extends VideoEncoderPropertiesSerializable {
      */
     public native @Cast("std::uint32_t") int numFramesPool(); public native VideoEncoderProperties numFramesPool(int setter);
     /**
+     * Specifies max output frame size in pool.
+     * Value "0" indicates auto
+     */
+    public native @Cast("std::int32_t") int outputFrameSize(); public native VideoEncoderProperties outputFrameSize(int setter);
+    /**
      * Encoding profile, H264, H265 or MJPEG
      */
     public native Profile profile(); public native VideoEncoderProperties profile(Profile setter);

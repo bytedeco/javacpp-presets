@@ -77,6 +77,7 @@ public class Pipeline extends Pointer {
     public native @Name("create<dai::node::ImageManip>") @SharedPtr ImageManip createImageManip();
     public native @Name("create<dai::node::MonoCamera>") @SharedPtr MonoCamera createMonoCamera();
     public native @Name("create<dai::node::NeuralNetwork>") @SharedPtr NeuralNetwork createNeuralNetwork();
+    public native @Name("create<dai::node::DetectionParser>") @SharedPtr DetectionParser createDetectionParser();
     public native @Name("create<dai::node::MobileNetDetectionNetwork>") @SharedPtr MobileNetDetectionNetwork createMobileNetDetectionNetwork();
     public native @Name("create<dai::node::YoloDetectionNetwork>") @SharedPtr YoloDetectionNetwork createYoloDetectionNetwork();
     public native @Name("create<dai::node::ObjectTracker>") @SharedPtr ObjectTracker createObjectTracker();

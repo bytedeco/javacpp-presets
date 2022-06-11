@@ -38,14 +38,5 @@ public class DetectionNetworkProperties extends DetectionNetworkPropertiesSerial
         return new DetectionNetworkProperties((Pointer)this).offsetAddress(i);
     }
 
-    /** Generic Neural Network properties */
-    public native DetectionNetworkType nnFamily(); public native DetectionNetworkProperties nnFamily(DetectionNetworkType setter);
-    public native float confidenceThreshold(); public native DetectionNetworkProperties confidenceThreshold(float setter);
-
-    /** YOLO specific network properties */
-    public native int classes(); public native DetectionNetworkProperties classes(int setter);
-    public native int coordinates(); public native DetectionNetworkProperties coordinates(int setter);
-    public native @StdVector FloatPointer anchors(); public native DetectionNetworkProperties anchors(FloatPointer setter);
-    public native @ByRef StringIntVectorMap anchorMasks(); public native DetectionNetworkProperties anchorMasks(StringIntVectorMap setter);
-    public native float iouThreshold(); public native DetectionNetworkProperties iouThreshold(float setter);
+    public native @ByRef DetectionParserOptions parser(); public native DetectionNetworkProperties parser(DetectionParserOptions setter);
 }

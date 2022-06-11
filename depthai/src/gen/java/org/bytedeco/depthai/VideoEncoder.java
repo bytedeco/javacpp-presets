@@ -139,6 +139,11 @@ public class VideoEncoder extends VideoEncoderPropertiesNode {
      */
     public native void setFrameRate(float frameRate);
 
+    /**
+     * Specifies maximum output encoded frame size
+     */
+    public native void setMaxOutputFrameSize(int maxFrameSize);
+
     /** Get rate control mode */
     public native @ByVal VideoEncoderProperties.RateControlMode getRateControlMode();
     /** Get profile */
@@ -164,4 +169,5 @@ public class VideoEncoder extends VideoEncoderPropertiesNode {
     public native float getFrameRate();
     /** Get lossless mode. Applies only when using [M]JPEG profile. */
     public native @Cast("bool") boolean getLossless();
+    public native int getMaxOutputFrameSize();
 }
