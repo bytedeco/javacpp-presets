@@ -19,7 +19,7 @@ public class onnxInitGraphFunction extends FunctionPointer {
     private native void allocate();
     public native @Cast("onnxStatus") int call(
     onnxBackend backend,
-    @Cast("const uint64_t*") IntPointer auxPropertiesList,
+    @Cast("const uint64_t*") LongPointer auxPropertiesList,
     @Cast("size_t") long onnxModelSize,
     @Const Pointer onnxModel,
     @Cast("uint32_t") int weightsCount,

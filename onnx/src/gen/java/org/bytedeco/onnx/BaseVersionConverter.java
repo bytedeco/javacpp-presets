@@ -19,18 +19,13 @@ public class BaseVersionConverter extends Pointer {
     public BaseVersionConverter(Pointer p) { super(p); }
 
 
-    // adapter_lookup should be called in convert_version when the user would
-    // like to identify the proper registered adapter in the adapters map for
-    // a given Node from a certain version to another. It should only be called
-    // when the user knows that an adapter should exist for the given context.
-    public native @Const @ByRef Adapter adapter_lookup(@Const Node op,
-            @Const @ByRef OpSetID initial_version,
-            @Const @ByRef OpSetID target_version);
+  // adapter_lookup should be called in convert_version when the user would
+  // like to identify the proper registered adapter in the adapters map for
+  // a given Node from a certain version to another. It should only be called
+  // when the user knows that an adapter should exist for the given context.
+  public native @Const @ByRef Adapter adapter_lookup(@Const Node op, @Const @ByRef OpSetID initial_version, @Const @ByRef OpSetID target_version);
 
-  public native @ByVal ModelProto convert_version(
-        @Const @ByRef ModelProto mp_in,
-        @Const @ByRef OpSetID initial_version,
-        @Const @ByRef OpSetID target_version);
+  public native @ByVal ModelProto convert_version(@Const @ByRef ModelProto mp_in, @Const @ByRef OpSetID initial_version, @Const @ByRef OpSetID target_version);
 
   
 

@@ -17,6 +17,5 @@ public class onnxReleaseEventFunction extends FunctionPointer {
     public    onnxReleaseEventFunction(Pointer p) { super(p); }
     protected onnxReleaseEventFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxEvent event);
+    public native @Cast("onnxStatus") int call(onnxEvent event);
 }

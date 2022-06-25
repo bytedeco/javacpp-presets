@@ -17,6 +17,5 @@ public class onnxReleaseGraphFunction extends FunctionPointer {
     public    onnxReleaseGraphFunction(Pointer p) { super(p); }
     protected onnxReleaseGraphFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxGraph graph);
+    public native @Cast("onnxStatus") int call(onnxGraph graph);
 }

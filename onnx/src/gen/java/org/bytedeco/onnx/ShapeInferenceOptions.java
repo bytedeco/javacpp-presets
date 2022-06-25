@@ -35,10 +35,8 @@ public class ShapeInferenceOptions extends Pointer {
   // Enables data propagation for limited operators
   // to perform shape computation
   public native @Cast("bool") boolean enable_data_propagation(); public native ShapeInferenceOptions enable_data_propagation(boolean setter);
-  public ShapeInferenceOptions(@Cast("bool") boolean check_type_val/*=false*/,
-      int strict_mode_val/*=0*/,@Cast("bool") boolean data_prop_val/*=false*/) { super((Pointer)null); allocate(check_type_val, strict_mode_val, data_prop_val); }
-  private native void allocate(@Cast("bool") boolean check_type_val/*=false*/,
-      int strict_mode_val/*=0*/,@Cast("bool") boolean data_prop_val/*=false*/);
+  public ShapeInferenceOptions(@Cast("bool") boolean check_type_val/*=false*/, int strict_mode_val/*=0*/, @Cast("bool") boolean data_prop_val/*=false*/) { super((Pointer)null); allocate(check_type_val, strict_mode_val, data_prop_val); }
+  private native void allocate(@Cast("bool") boolean check_type_val/*=false*/, int strict_mode_val/*=0*/, @Cast("bool") boolean data_prop_val/*=false*/);
   public ShapeInferenceOptions() { super((Pointer)null); allocate(); }
   private native void allocate();
 }

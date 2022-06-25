@@ -11,12 +11,11 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-// Node is the base class of the IR graph. It represents one computation
-// and dependencies on a list of Values. The "prim-ops", so to speak.
+// Forward declarations for ai.onnx version 17
 @Namespace("onnx") @Opaque @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
-public class Node extends Pointer {
+public class LayerNormalization_Onnx_ver17 extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public Node() { super((Pointer)null); }
+    public LayerNormalization_Onnx_ver17() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Node(Pointer p) { super(p); }
+    public LayerNormalization_Onnx_ver17(Pointer p) { super(p); }
 }

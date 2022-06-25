@@ -50,24 +50,10 @@ public class OpSchemaRegistry extends ISchemaRegistry {
     // standard ONNX domains as above). Custom-domains are free to interpret
     // this as appropriate (that is, as relative to releases of custom-domain
     // as opposed to ONNX releases).
-    public native void AddDomainToVersion(
-            @StdString BytePointer domain,
-            int min_version,
-            int max_version,
-            int last_release_version/*=-1*/);
-    public native void AddDomainToVersion(
-            @StdString BytePointer domain,
-            int min_version,
-            int max_version);
-    public native void AddDomainToVersion(
-            @StdString String domain,
-            int min_version,
-            int max_version,
-            int last_release_version/*=-1*/);
-    public native void AddDomainToVersion(
-            @StdString String domain,
-            int min_version,
-            int max_version);
+    public native void AddDomainToVersion(@StdString BytePointer domain, int min_version, int max_version, int last_release_version/*=-1*/);
+    public native void AddDomainToVersion(@StdString BytePointer domain, int min_version, int max_version);
+    public native void AddDomainToVersion(@StdString String domain, int min_version, int max_version, int last_release_version/*=-1*/);
+    public native void AddDomainToVersion(@StdString String domain, int min_version, int max_version);
 
     public static native @ByRef DomainToVersionRange Instance();
   }
@@ -85,34 +71,18 @@ public class OpSchemaRegistry extends ISchemaRegistry {
 
   // Return the latest schema for an operator in specified domain.
   // Domain with default value ONNX_DOMAIN means ONNX.
-  public static native @Const OpSchema Schema(
-        @StdString BytePointer key,
-        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
-  public static native @Const OpSchema Schema(
-        @StdString BytePointer key);
-  public static native @Const OpSchema Schema(
-        @StdString String key,
-        @StdString String domain/*=ONNX_DOMAIN*/);
-  public static native @Const OpSchema Schema(
-        @StdString String key);
+  public static native @Const OpSchema Schema(@StdString BytePointer key, @StdString BytePointer domain/*=ONNX_DOMAIN*/);
+  public static native @Const OpSchema Schema(@StdString BytePointer key);
+  public static native @Const OpSchema Schema(@StdString String key, @StdString String domain/*=ONNX_DOMAIN*/);
+  public static native @Const OpSchema Schema(@StdString String key);
 
   // Return the schema with biggest version, which is not greater than specified
   // <maxInclusiveVersion> in specified domain. Domain with default value
   // ONNX_DOMAIN means ONNX.
-  public static native @Const OpSchema Schema(
-        @StdString BytePointer key,
-        int maxInclusiveVersion,
-        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
-  public static native @Const OpSchema Schema(
-        @StdString BytePointer key,
-        int maxInclusiveVersion);
-  public static native @Const OpSchema Schema(
-        @StdString String key,
-        int maxInclusiveVersion,
-        @StdString String domain/*=ONNX_DOMAIN*/);
-  public static native @Const OpSchema Schema(
-        @StdString String key,
-        int maxInclusiveVersion);
+  public static native @Const OpSchema Schema(@StdString BytePointer key, int maxInclusiveVersion, @StdString BytePointer domain/*=ONNX_DOMAIN*/);
+  public static native @Const OpSchema Schema(@StdString BytePointer key, int maxInclusiveVersion);
+  public static native @Const OpSchema Schema(@StdString String key, int maxInclusiveVersion, @StdString String domain/*=ONNX_DOMAIN*/);
+  public static native @Const OpSchema Schema(@StdString String key, int maxInclusiveVersion);
 
   public static native OpSchemaRegistry Instance();
 

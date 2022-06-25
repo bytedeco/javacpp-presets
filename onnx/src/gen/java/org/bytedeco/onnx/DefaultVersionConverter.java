@@ -26,11 +26,8 @@ public class DefaultVersionConverter extends BaseVersionConverter {
         return new DefaultVersionConverter((Pointer)this).offsetAddress(i);
     }
 
-    public DefaultVersionConverter() { super((Pointer)null); allocate(); }
-    private native void allocate();
+  public DefaultVersionConverter() { super((Pointer)null); allocate(); }
+  private native void allocate();
 
-    public native @ByVal ModelProto convert_version(
-            @Const @ByRef ModelProto mp_in,
-            @Const @ByRef OpSetID initial_version,
-            @Const @ByRef OpSetID target_version);
+  public native @ByVal ModelProto convert_version(@Const @ByRef ModelProto mp_in, @Const @ByRef OpSetID initial_version, @Const @ByRef OpSetID target_version);
 }

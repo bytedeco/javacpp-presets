@@ -19,30 +19,30 @@ public class OpSetID extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpSetID(Pointer p) { super(p); }
 
-    public OpSetID(@Const @ByRef OperatorSetIdProto proto) { super((Pointer)null); allocate(proto); }
-    private native void allocate(@Const @ByRef OperatorSetIdProto proto);
+  public OpSetID(@Const @ByRef OperatorSetIdProto proto) { super((Pointer)null); allocate(proto); }
+  private native void allocate(@Const @ByRef OperatorSetIdProto proto);
 
-    // Default Domain Constructor
-    public OpSetID(@Cast("const int64_t") int version) { super((Pointer)null); allocate(version); }
-    private native void allocate(@Cast("const int64_t") int version);
+  // Default Domain Constructor
+  public OpSetID(@Cast("const int64_t") long version) { super((Pointer)null); allocate(version); }
+  private native void allocate(@Cast("const int64_t") long version);
 
-    public OpSetID(@StdString BytePointer domain, @Cast("int64_t") int version) { super((Pointer)null); allocate(domain, version); }
-    private native void allocate(@StdString BytePointer domain, @Cast("int64_t") int version);
-    public OpSetID(@StdString String domain, @Cast("int64_t") int version) { super((Pointer)null); allocate(domain, version); }
-    private native void allocate(@StdString String domain, @Cast("int64_t") int version);
+  public OpSetID(@StdString BytePointer domain, @Cast("int64_t") long version) { super((Pointer)null); allocate(domain, version); }
+  private native void allocate(@StdString BytePointer domain, @Cast("int64_t") long version);
+  public OpSetID(@StdString String domain, @Cast("int64_t") long version) { super((Pointer)null); allocate(domain, version); }
+  private native void allocate(@StdString String domain, @Cast("int64_t") long version);
 
-    // target must be in the form "<domain>&<version>"
-    
+  // target must be in the form "<domain>&<version>"
+  
 
-    // target must be in the form "<domain>&<version>"
-    public static native @ByVal OpSetID fromString(@StdString BytePointer target);
-    public static native @ByVal OpSetID fromString(@StdString String target);
+  // target must be in the form "<domain>&<version>"
+  public static native @ByVal OpSetID fromString(@StdString BytePointer target);
+  public static native @ByVal OpSetID fromString(@StdString String target);
 
-    public native @StdString BytePointer domain();
+  public native @StdString BytePointer domain();
 
-    public native @Cast("int64_t") int version();
+  public native @Cast("int64_t") long version();
 
-    public native void incrementVersion(@Cast("int64_t") int step);
+  public native void incrementVersion(@Cast("int64_t") long step);
 
-    public native void setVersion(@Cast("int64_t") int newVal);
+  public native void setVersion(@Cast("int64_t") long newVal);
 }

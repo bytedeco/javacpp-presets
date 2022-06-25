@@ -13,7 +13,7 @@ export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.11.0
+export ONNX=1.12.0
 export PROTO=3.11.3
 export PYBIND=2.6.2
 

@@ -19,6 +19,6 @@ public class onnxInitBackendFunction extends FunctionPointer {
     private native void allocate();
     public native @Cast("onnxStatus") int call(
     onnxBackendID backendID,
-    @Cast("const uint64_t*") IntPointer auxPropertiesList,
+    @Cast("const uint64_t*") LongPointer auxPropertiesList,
     @ByPtrPtr onnxBackend backend);
 }

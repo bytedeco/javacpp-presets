@@ -17,7 +17,5 @@ public class onnxGetEventStateFunction extends FunctionPointer {
     public    onnxGetEventStateFunction(Pointer p) { super(p); }
     protected onnxGetEventStateFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxEvent event,
-    @Cast("onnxEventState*") IntPointer state);
+    public native @Cast("onnxStatus") int call(onnxEvent event, @Cast("onnxEventState*") IntPointer state);
 }

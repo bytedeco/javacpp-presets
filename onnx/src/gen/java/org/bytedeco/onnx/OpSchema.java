@@ -338,43 +338,15 @@ public class OpSchema extends Pointer {
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Attribute(Pointer p) { super(p); }
   
-    public Attribute(
-            @StdString BytePointer name_,
-            @StdString BytePointer description_,
-            @Cast("onnx::AttributeProto::AttributeType") int type_,
-            @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
-    private native void allocate(
-            @StdString BytePointer name_,
-            @StdString BytePointer description_,
-            @Cast("onnx::AttributeProto::AttributeType") int type_,
-            @Cast("bool") boolean required_);
-    public Attribute(
-            @StdString String name_,
-            @StdString String description_,
-            @Cast("onnx::AttributeProto::AttributeType") int type_,
-            @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
-    private native void allocate(
-            @StdString String name_,
-            @StdString String description_,
-            @Cast("onnx::AttributeProto::AttributeType") int type_,
-            @Cast("bool") boolean required_);
+    public Attribute(@StdString BytePointer name_, @StdString BytePointer description_, @Cast("onnx::AttributeProto::AttributeType") int type_, @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
+    private native void allocate(@StdString BytePointer name_, @StdString BytePointer description_, @Cast("onnx::AttributeProto::AttributeType") int type_, @Cast("bool") boolean required_);
+    public Attribute(@StdString String name_, @StdString String description_, @Cast("onnx::AttributeProto::AttributeType") int type_, @Cast("bool") boolean required_) { super((Pointer)null); allocate(name_, description_, type_, required_); }
+    private native void allocate(@StdString String name_, @StdString String description_, @Cast("onnx::AttributeProto::AttributeType") int type_, @Cast("bool") boolean required_);
 
-    public Attribute(
-            @StdString BytePointer name_,
-            @StdString BytePointer description_,
-            @ByVal AttributeProto default_value_) { super((Pointer)null); allocate(name_, description_, default_value_); }
-    private native void allocate(
-            @StdString BytePointer name_,
-            @StdString BytePointer description_,
-            @ByVal AttributeProto default_value_);
-    public Attribute(
-            @StdString String name_,
-            @StdString String description_,
-            @ByVal AttributeProto default_value_) { super((Pointer)null); allocate(name_, description_, default_value_); }
-    private native void allocate(
-            @StdString String name_,
-            @StdString String description_,
-            @ByVal AttributeProto default_value_);
+    public Attribute(@StdString BytePointer name_, @StdString BytePointer description_, @ByVal AttributeProto default_value_) { super((Pointer)null); allocate(name_, description_, default_value_); }
+    private native void allocate(@StdString BytePointer name_, @StdString BytePointer description_, @ByVal AttributeProto default_value_);
+    public Attribute(@StdString String name_, @StdString String description_, @ByVal AttributeProto default_value_) { super((Pointer)null); allocate(name_, description_, default_value_); }
+    private native void allocate(@StdString String name_, @StdString String description_, @ByVal AttributeProto default_value_);
 
     public native @StdString BytePointer name(); public native Attribute name(BytePointer setter);
     public native @StdString BytePointer description(); public native Attribute description(BytePointer setter);
@@ -388,16 +360,10 @@ public class OpSchema extends Pointer {
 // Register "optional" attribute with default value.
 // #define ATTR_SETTER_WITH_DEFAULT_VALUE(TypeName)
 //   OpSchema& Attr(
-//       std::string name,
-//       std::string description,
-//       AttributeProto::AttributeType type,
-//       const TypeName& defaultValue);
+//       std::string name, std::string description, AttributeProto::AttributeType type, const TypeName& defaultValue);
 //   /* non-STL wrapper to reduce binary size */
 //   OpSchema& Attr(
-//       const char* name,
-//       const char* description,
-//       AttributeProto::AttributeType type,
-//       const TypeName& defaultValue);
+//       const char* name, const char* description, AttributeProto::AttributeType type, const TypeName& defaultValue);
 //   OpSchema& Attr(
 //       std::string name,
 //       std::string description,
@@ -405,15 +371,9 @@ public class OpSchema extends Pointer {
 //       const std::vector<TypeName>& defaultValue);
 
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Cast("const int64_t") long defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @Cast("const int64_t") long defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Cast("const int64_t") long defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @Cast("const int64_t") long defaultValue);
   /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
@@ -426,15 +386,9 @@ public class OpSchema extends Pointer {
         @Cast("onnx::AttributeProto::AttributeType") int type,
         @Const @ByRef LongVector defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        float defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, float defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        float defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, float defaultValue);
   /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
@@ -447,15 +401,9 @@ public class OpSchema extends Pointer {
         @Cast("onnx::AttributeProto::AttributeType") int type,
         @Const @ByRef FloatVector defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @StdString BytePointer defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @StdString BytePointer defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @StdString String defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @StdString String defaultValue);
   /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
         @StdString BytePointer name,
@@ -468,58 +416,26 @@ public class OpSchema extends Pointer {
         @Cast("onnx::AttributeProto::AttributeType") int type,
         @Const @ByRef StringVector defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef TensorProto defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef TensorProto defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef TensorProto defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef TensorProto defaultValue);
   /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef GraphProto defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef GraphProto defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef GraphProto defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef GraphProto defaultValue);
   /* non-STL wrapper to reduce binary size */
   public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef TypeProto defaultValue);
+        @StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef TypeProto defaultValue);
   public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Const @ByRef TypeProto defaultValue);
+        @StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @Const @ByRef TypeProto defaultValue);
   /* non-STL wrapper to reduce binary size */
 
   // Register "required" attribute without default value.
-  public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Cast("bool") boolean required/*=true*/);
-  public native @ByRef OpSchema Attr(
-        @StdString BytePointer name,
-        @StdString BytePointer description,
-        @Cast("onnx::AttributeProto::AttributeType") int type);
-  public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type,
-        @Cast("bool") boolean required/*=true*/);
-  public native @ByRef OpSchema Attr(
-        @StdString String name,
-        @StdString String description,
-        @Cast("onnx::AttributeProto::AttributeType") int type);
+  public native @ByRef OpSchema Attr(@StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type, @Cast("bool") boolean required/*=true*/);
+  public native @ByRef OpSchema Attr(@StdString BytePointer name, @StdString BytePointer description, @Cast("onnx::AttributeProto::AttributeType") int type);
+  public native @ByRef OpSchema Attr(@StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type, @Cast("bool") boolean required/*=true*/);
+  public native @ByRef OpSchema Attr(@StdString String name, @StdString String description, @Cast("onnx::AttributeProto::AttributeType") int type);
 
   // Non-STL wrapper to reduce binary size
 
@@ -645,14 +561,8 @@ public class OpSchema extends Pointer {
 
   // Non-STL wrapper to reduce binary size
 
-  public native @ByRef OpSchema TypeConstraint(
-        @StdString BytePointer type_str,
-        @ByVal StringVector constraints,
-        @StdString BytePointer description);
-  public native @ByRef OpSchema TypeConstraint(
-        @StdString String type_str,
-        @ByVal StringVector constraints,
-        @StdString String description);
+  public native @ByRef OpSchema TypeConstraint(@StdString BytePointer type_str, @ByVal StringVector constraints, @StdString BytePointer description);
+  public native @ByRef OpSchema TypeConstraint(@StdString String type_str, @ByVal StringVector constraints, @StdString String description);
 
   // Non-STL wrapper to reduce binary size
 
@@ -714,7 +624,7 @@ public class OpSchema extends Pointer {
 
   public native @Cast("bool") boolean has_type_and_shape_inference_function();
 
-  public native @Cast("bool") boolean has_data_propagation_function();  
+  public native @Cast("bool") boolean has_data_propagation_function();
 
   public native @Cast("bool") boolean HasFunction();
 
@@ -723,9 +633,7 @@ public class OpSchema extends Pointer {
   public native @ByRef OpSchema FunctionBody(@Cast("const char*") BytePointer func_body);
   public native @ByRef OpSchema FunctionBody(String func_body);
 
-  public native @ByRef OpSchema FunctionBody(
-        @StdVector NodeProto func_nodes,
-        @StdVector OperatorSetIdProto opsets);
+  public native @ByRef OpSchema FunctionBody(@StdVector NodeProto func_nodes, @StdVector OperatorSetIdProto opsets);
 
   public native @Const FunctionProto GetFunction();
 
@@ -733,9 +641,7 @@ public class OpSchema extends Pointer {
 
   
 
-  public native @Cast("bool") boolean BuildContextDependentFunction(
-        @Const @ByRef FunctionBodyBuildContext ctx,
-        @ByRef FunctionProto functionProto);
+  public native @Cast("bool") boolean BuildContextDependentFunction(@Const @ByRef FunctionBodyBuildContext ctx, @ByRef FunctionProto functionProto);
 
   // Verifies that the schema is valid and all specifications are compatible.
   // It will also parse all type strings specified for inputs/outputs into valid
@@ -744,6 +650,5 @@ public class OpSchema extends Pointer {
   public native void Finalize();
 
   // Build function with information stored in opschema
-  public native void BuildFunction(
-        @ByRef FunctionProto function_body);
+  public native void BuildFunction(@ByRef FunctionProto function_body);
 }

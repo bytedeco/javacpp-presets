@@ -18,9 +18,9 @@ public class SymbolTable extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SymbolTable(Pointer p) { super(p); }
 
-    // Adds existing symbols from a main graph or subgraph
-    public native void addFromGraph(@Const @ByRef GraphProto g);
-    // Creates a new symbol which is not duplicate as any existing one
-    public native @StdString BytePointer createNew(@StdString BytePointer symbol_prefix);
-    public native @StdString String createNew(@StdString String symbol_prefix);
+  // Adds existing symbols from a main graph or subgraph
+  public native void addFromGraph(@Const @ByRef GraphProto g);
+  // Creates a new symbol which is not duplicate as any existing one
+  public native @StdString BytePointer createNew(@StdString BytePointer symbol_prefix);
+  public native @StdString String createNew(@StdString String symbol_prefix);
 }

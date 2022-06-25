@@ -11,7 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-
 // Forward declarations for ai.onnx version 16
 @Namespace("onnx") @Opaque @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class RoiAlign_Onnx_ver16 extends Pointer {

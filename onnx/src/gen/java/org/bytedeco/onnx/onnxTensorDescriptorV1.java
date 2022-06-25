@@ -39,7 +39,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    * ONNXIFI implementations MUST validate tag before accessing any other
    * members of the structure.
    */
-  public native @Cast("int32_t") int tag(); public native onnxTensorDescriptorV1 tag(int setter);
+  public native int tag(); public native onnxTensorDescriptorV1 tag(int setter);
   /**
    * Name of the blob corresponding to this tensor in the ONNX model. The name
    * must exactly match the ValueInfoProto.name of one of the
@@ -64,7 +64,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    *     ONNXIFI_DATATYPE_COMPLEX64
    *     ONNXIFI_DATATYPE_COMPLEX128
    */
-  public native @Cast("onnxEnum") int dataType(); public native onnxTensorDescriptorV1 dataType(int setter);
+  public native @Cast("onnxEnum") long dataType(); public native onnxTensorDescriptorV1 dataType(long setter);
   /**
    * Type of memory that stores the tensor.
    *
@@ -83,7 +83,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    *     ONNXIFI_MEMORY_TYPE_OPENGLES_TEXTURE_2D (support is optional)
    *     ONNXIFI_MEMORY_TYPE_D3D_RESOURCE        (support is optional)
    */
-  public native @Cast("onnxEnum") int memoryType(); public native onnxTensorDescriptorV1 memoryType(int setter);
+  public native @Cast("onnxEnum") long memoryType(); public native onnxTensorDescriptorV1 memoryType(long setter);
   /**
    * Number of dimensions in the tensor.
    * For a scalar, the number of dimensions is 0.
@@ -93,7 +93,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    * Dimensions of the tensor.
    * For a scalar, this pointer can be NULL.
    */
-  public native @Cast("const uint64_t*") IntPointer shape(); public native onnxTensorDescriptorV1 shape(IntPointer setter);
+  public native @Cast("const uint64_t*") LongPointer shape(); public native onnxTensorDescriptorV1 shape(LongPointer setter);
   /**
    * Pointers to tensor data.
    *
@@ -112,5 +112,5 @@ public class onnxTensorDescriptorV1 extends Pointer {
    *     same device as the backend.
    *   - ONNXIFI_MEMORY_TYPE_D3D_RESOURCE: TBD
    */
-  public native @Cast("onnxPointer") int buffer(); public native onnxTensorDescriptorV1 buffer(int setter);
+  public native @Cast("onnxPointer") long buffer(); public native onnxTensorDescriptorV1 buffer(long setter);
 }
