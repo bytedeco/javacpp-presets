@@ -88,7 +88,6 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 // #pragma once
 
 // #include <climits>
@@ -119,8 +118,7 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 
 
 
-// #define fail_schema(...)
-//   ONNX_THROW_EX(ONNX_NAMESPACE::SchemaError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)));
+// #define fail_schema(...) ONNX_THROW_EX(ONNX_NAMESPACE::SchemaError(ONNX_NAMESPACE::MakeString(__VA_ARGS__)));
 
 // Type constraint map. Key is type string. Value is data type set and
 // description.
@@ -146,19 +144,16 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // enforces a consistent signature on functions that query individual schema,
 // which are defined as specializations of this function.
 
-// #define ONNX_OPERATOR_SET_SCHEMA(name, ver, impl)
-//   ONNX_OPERATOR_SET_SCHEMA_EX(name, Onnx, ONNX_DOMAIN, ver, true, impl)
+// #define ONNX_OPERATOR_SET_SCHEMA(name, ver, impl) ONNX_OPERATOR_SET_SCHEMA_EX(name, Onnx, ONNX_DOMAIN, ver, true, impl)
 
 // #define ONNX_ML_OPERATOR_SET_SCHEMA(name, ver, impl)
 //   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxML, AI_ONNX_ML_DOMAIN, ver, true, impl)
 
 // #define ONNX_TRAINING_OPERATOR_SET_SCHEMA(name, ver, impl)
-//   ONNX_OPERATOR_SET_SCHEMA_EX(
-//       name, OnnxTraining, AI_ONNX_TRAINING_DOMAIN, ver, true, impl)
+//   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxTraining, AI_ONNX_TRAINING_DOMAIN, ver, true, impl)
 
 // #define ONNX_PREVIEW_TRAINING_OPERATOR_SET_SCHEMA(name, ver, impl)
-//   ONNX_OPERATOR_SET_SCHEMA_EX(
-//       name, OnnxPreview, AI_ONNX_PREVIEW_TRAINING_DOMAIN, ver, true, impl)
+//   ONNX_OPERATOR_SET_SCHEMA_EX(name, OnnxPreview, AI_ONNX_PREVIEW_TRAINING_DOMAIN, ver, true, impl)
 
 // Defines specialization of GetOpSchema for a class whose name is determined
 // based on a convention using name, domain, and version.  Operator schema are
@@ -166,35 +161,26 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // In this case, callers should set dbg_included_in_static_opset to true.  This
 // assists with runtime validation in in DEBUG builds ensuring the intended set
 // of operator schema is registered.
-// #define ONNX_OPERATOR_SET_SCHEMA_EX(
-//     name, domain, domain_str, ver, dbg_included_in_static_opset, impl)
+// #define ONNX_OPERATOR_SET_SCHEMA_EX(name, domain, domain_str, ver, dbg_included_in_static_opset, impl)
 //   class ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name);
 //   template <>
-//   OpSchema
-//   GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
-//     return impl.SetName(#name)
-//         .SetDomain(domain_str)
-//         .SinceVersion(ver)
-//         .SetLocation(__FILE__, __LINE__);
+//   OpSchema GetOpSchema<ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)>() {
+//     return impl.SetName(#name).SetDomain(domain_str).SinceVersion(ver).SetLocation(__FILE__, __LINE__);
 //   }
 //   size_t dbg_count_check_##name##_##domain##_ver##ver =
-//       (dbg_included_in_static_opset) ? ONNX_DBG_INCREMENT_COUNT_IN_OPSETS()
-//                                      : 0;
+//       (dbg_included_in_static_opset) ? ONNX_DBG_INCREMENT_COUNT_IN_OPSETS() : 0;
 // #ifdef NDEBUG
 // #define ONNX_DBG_INCREMENT_COUNT_IN_OPSETS() 0
 // #else
-// #define ONNX_DBG_INCREMENT_COUNT_IN_OPSETS()
-//   DbgOperatorSetTracker::Instance().IncrementCount()
-// #define ONNX_DBG_GET_COUNT_IN_OPSETS()
-//   DbgOperatorSetTracker::Instance().GetCount()
+// #define ONNX_DBG_INCREMENT_COUNT_IN_OPSETS() DbgOperatorSetTracker::Instance().IncrementCount()
+// #define ONNX_DBG_GET_COUNT_IN_OPSETS() DbgOperatorSetTracker::Instance().GetCount()
 // Targeting ../DbgOperatorSetTracker.java
 
 
 // #endif
 
 // Naming convention for operator schema classes
-// #define ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name)
-//   name##_##domain##_ver##ver
+// #define ONNX_OPERATOR_SET_SCHEMA_CLASS_NAME(domain, ver, name) name##_##domain##_ver##ver
 
 // Naming convention for preview operator schema classes
 // #define ONNX_PREVIEW_OPERATOR_SET_SCHEMA_CLASS_NAME(ver, name)
@@ -210,13 +196,10 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 // #endif
 
 // Legacy macros to register schema at static initialization
-// #define ONNX_OPERATOR_SCHEMA(name)
-//   ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
-// #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name)
-//   ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
+// #define ONNX_OPERATOR_SCHEMA(name) ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
+// #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name) ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
 // #define ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
-//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce(
-//       op_schema_register_once##name##Counter) ONNX_UNUSED =
+//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce(op_schema_register_once##name##Counter) ONNX_UNUSED =
 //       OpSchema(#name, __FILE__, __LINE__)
 
 // Helper function
@@ -226,12 +209,8 @@ public class onnx extends org.bytedeco.onnx.presets.onnx {
 
 @Namespace("onnx") public static native @StdString BytePointer GenerateBroadcastingDocMul();
 
-@Namespace("onnx") public static native @StdString BytePointer GenerateBroadcastingDocUni(
-    @Cast("const char*") BytePointer from,
-    @Cast("const char*") BytePointer to);
-@Namespace("onnx") public static native @StdString String GenerateBroadcastingDocUni(
-    String from,
-    String to);
+@Namespace("onnx") public static native @StdString BytePointer GenerateBroadcastingDocUni(@Cast("const char*") BytePointer from, @Cast("const char*") BytePointer to);
+@Namespace("onnx") public static native @StdString String GenerateBroadcastingDocUni(String from, String to);
 
 /*
  * Macros for setting operator documentation
@@ -286,7 +265,6 @@ support).
 /*
  * SPDX-License-Identifier: Apache-2.0
  */
-
 
 // #pragma once
 
@@ -1572,6 +1550,34 @@ support).
 // Targeting ../OpSet_Onnx_ver16.java
 
 
+// Targeting ../LayerNormalization_Onnx_ver17.java
+
+
+// Targeting ../SequenceMap_Onnx_ver17.java
+
+
+// Targeting ../DFT_Onnx_ver17.java
+
+
+// Targeting ../HannWindow_Onnx_ver17.java
+
+
+// Targeting ../HammingWindow_Onnx_ver17.java
+
+
+// Targeting ../BlackmanWindow_Onnx_ver17.java
+
+
+// Targeting ../MelWeightMatrix_Onnx_ver17.java
+
+
+// Targeting ../STFT_Onnx_ver17.java
+
+
+// Targeting ../OpSet_Onnx_ver17.java
+
+
+
 @Namespace("onnx") public static native void RegisterOnnxOperatorSetSchema();
 
 @Namespace("onnx") public static native void RegisterOnnxOperatorSetSchema(int target_version);
@@ -1584,7 +1590,6 @@ support).
 /*
  * SPDX-License-Identifier: Apache-2.0
  */
-
 
 // #pragma once
 
@@ -1676,7 +1681,6 @@ support).
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 // #pragma once
 
 // #include "onnx/defs/schema.h"
@@ -1723,10 +1727,10 @@ support).
 
 // #pragma once
 
+// #include <functional>
 // #include "onnx/defs/data_type_utils.h"
 // #include "onnx/proto_utils.h"
 // #include "onnx/string_utils.h"
-// #include <functional>
 // Targeting ../ShapeInferenceOptions.java
 
 
@@ -1799,6 +1803,8 @@ support).
 @Namespace("onnx") public static native @Cast("bool") boolean hasShape(@Const @ByRef TypeProto type);
 
 @Namespace("onnx") public static native @Const @ByRef TensorShapeProto getInputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
+
+@Namespace("onnx") public static native @Const TensorShapeProto getOptionalInputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
 
 // Caller must make sure fromDimIndex is strictly less than shape.dim_size()
 @Namespace("onnx") public static native void appendSingleDimCopiedFromInputTypeToOutputType(
@@ -1877,6 +1883,13 @@ support).
     @ByRef InferenceContext ctx,
     @Cast("size_t") long outputIndex,
     @Const @ByRef TensorProto tensorProto);
+
+// Get shape input by first checking initializer and then propagated symbolic data.
+// If neither is available, try rank inference.
+// When one of above succeeds, `true` is stored in `found`.
+// Otherwise, `false` is stored, which means that returned TensorShapeProto does not make sense.
+@Namespace("onnx") public static native @ByVal TensorShapeProto getShapeInput(@ByRef InferenceContext ctx, @Cast("size_t") long input_index, @Cast("bool*") @ByRef BoolPointer found);
+@Namespace("onnx") public static native @ByVal TensorShapeProto getShapeInput(@ByRef InferenceContext ctx, @Cast("size_t") long input_index, @Cast("bool*") @ByRef boolean[] found);
 
 // Infer shape of an output from the value of a specified attribute, which is
 // expected to be a list of integers specifying a valid shape.
@@ -5936,7 +5949,7 @@ public static final int
 // #include <google/protobuf/message_lite.h>
 // #else // ONNX_USE_LITE_PROTO
 // #include <google/protobuf/message.h>
-// #endif  // !ONNX_USE_LITE_PROTO
+// #endif // !ONNX_USE_LITE_PROTO
 
 // #ifdef ONNX_USE_LITE_PROTO
 @Namespace("onnx") public static native @StdString BytePointer ProtoDebugString(@Const @ByRef MessageLite proto);
@@ -5969,9 +5982,9 @@ public static final int
 // #include "attr_proto_util.h"
 // #include "onnx/common/constants.h"
 // #include "onnx/common/status.h"
+// #include "onnx/defs/parser.h"
 // #include "onnx/defs/schema.h"
 // #include "tensor_proto_util.h"
-// #include "onnx/defs/parser.h"
 // Helper function to expand a function node given the function proto
 @Namespace("onnx") public static native void FunctionExpandHelper(
     @Const @ByRef NodeProto node,
@@ -6084,9 +6097,7 @@ public static final int
 
 
 
-@Namespace("onnx::shape_inference") public static native void checkShapesAndTypes(
-    @Const @ByRef TypeProto inferredType,
-    @Const @ByRef TypeProto existingType);
+@Namespace("onnx::shape_inference") public static native void checkShapesAndTypes(@Const @ByRef TypeProto inferredType, @Const @ByRef TypeProto existingType);
 
 @Namespace("onnx::shape_inference") public static native void MaterializeSymbolicShape(TypeProto inferredType, @ByRef SymbolTable symbolTable);
 
@@ -6096,20 +6107,11 @@ public static final int
 
 
 
+
+
+///
+///
 @Namespace("onnx::shape_inference") public static native void mergeShapesAndTypes(@Const @ByRef TypeProto inferredType, TypeProto existingType);
-
-
-
-///
-///
-@Namespace("onnx::shape_inference") public static native void InferShapes(
-    @ByRef ModelProto m,
-    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
-    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options
-    );
-@Namespace("onnx::shape_inference") public static native void InferShapes(
-    @ByRef ModelProto m
-    );
 
 /**
  *  ModelLocalFunctionsMap is a map of function id -> model local function proto
@@ -6120,12 +6122,18 @@ public static final int
     @Const @ByRef StringIntMap opset_imports,
     @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
     @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options,
-    @Cast("const onnx::shape_inference::ModelLocalFunctionsMap*") @ByRef(nullValue = "onnx::shape_inference::ModelLocalFunctionsMap{}") SizeTStringMap in_model_functions
-    );
+    @Cast("const onnx::shape_inference::ModelLocalFunctionsMap*") @ByRef(nullValue = "onnx::shape_inference::ModelLocalFunctionsMap{}") SizeTStringMap in_model_functions);
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     GraphProto g,
-    @Const @ByRef StringIntMap opset_imports
-    );
+    @Const @ByRef StringIntMap opset_imports);
+
+@Namespace("onnx::shape_inference") public static native void InferShapes(
+    @ByRef ModelProto m,
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
+    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options,
+    StringTensorShapeProtoMap generated_shape_data_by_name/*=nullptr*/);
+@Namespace("onnx::shape_inference") public static native void InferShapes(
+    @ByRef ModelProto m);
 
 
 
@@ -6135,20 +6143,18 @@ public static final int
     @StdString BytePointer model_path,
     @StdString BytePointer save_path/*=""*/,
     @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
-    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options
-    );
+    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options,
+    StringTensorShapeProtoMap generated_shape_data_by_name/*=nullptr*/);
 @Namespace("onnx::shape_inference") public static native void InferShapes(
-    @StdString BytePointer model_path
-    );
+    @StdString BytePointer model_path);
 @Namespace("onnx::shape_inference") public static native void InferShapes(
     @StdString String model_path,
     @StdString String save_path/*=""*/,
     @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/,
-    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options
-    );
+    @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options,
+    StringTensorShapeProtoMap generated_shape_data_by_name/*=nullptr*/);
 @Namespace("onnx::shape_inference") public static native void InferShapes(
-    @StdString String model_path
-    );
+    @StdString String model_path);
 
 /**
  *  ModelLocalFunctionsMap is a map of function id -> model local function proto
@@ -6165,7 +6171,7 @@ public static final int
     @Const @ByRef(nullValue = "onnx::ShapeInferenceOptions{}") ShapeInferenceOptions options,
     @Cast("const onnx::shape_inference::ModelLocalFunctionsMap*") @ByRef(nullValue = "onnx::shape_inference::ModelLocalFunctionsMap{}") SizeTStringMap model_local_functions_map,
     SymbolTable symbolTable/*=nullptr*/,
-    StringTensorShapeProtoMap generatedShapeDataByName/*=nullptr*/);
+    StringTensorShapeProtoMap generated_shape_data_by_name/*=nullptr*/);
 @Namespace("onnx::shape_inference") public static native void InferShapeForFunctionNode(
     @Const @ByRef FunctionProto func,
     @Const ISchemaRegistry schema_registry,
@@ -6243,13 +6249,13 @@ public static final int ONNXIFI_H = 1;
 // #endif
 
 // #ifndef ONNXIFI_CHECK_RESULT
-//   #if defined(__GNUC__) && (__GNUC__ >= 4)
-//     #define ONNXIFI_CHECK_RESULT __attribute__((__warn_unused_result__))
-//   #elif defined(_MSC_VER) && (_MSC_VER >= 1700)
-//     #define ONNXIFI_CHECK_RESULT _Check_return_
-//   #else
-//     #define ONNXIFI_CHECK_RESULT
-//   #endif
+// #if defined(__GNUC__) && (__GNUC__ >= 4)
+// #define ONNXIFI_CHECK_RESULT __attribute__((__warn_unused_result__))
+// #elif defined(_MSC_VER) && (_MSC_VER >= 1700)
+// #define ONNXIFI_CHECK_RESULT _Check_return_
+// #else
+// #define ONNXIFI_CHECK_RESULT
+// #endif
 // #endif
 
 // #include <stddef.h>
@@ -7110,9 +7116,7 @@ public static final int ONNXIFI_TAG_MEMORY_FENCE_V1 = 0x23E08AAB;
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxGetBackendIDs(
-    @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") SizeTPointer numBackends);
+public static native @Cast("onnxStatus") int onnxGetBackendIDs(@ByPtrPtr onnxBackendID backendIDs, @Cast("size_t*") SizeTPointer numBackends);
 
 /**
  * Deinitialize ONNXIFI backend IDs and release associated resources.
@@ -7132,8 +7136,7 @@ public static native @Cast("onnxStatus") int onnxGetBackendIDs(
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxReleaseBackendID(
-    onnxBackendID backendID);
+public static native @Cast("onnxStatus") int onnxReleaseBackendID(onnxBackendID backendID);
 
 /**
  * Query high-level information about the backend and its target device.
@@ -7222,11 +7225,7 @@ public static native @Cast("onnxStatus") int onnxReleaseBackendID(
  *                                            the backend was disconnected or
  *                                            uninstalled from the system.
  */
-public static native @Cast("onnxStatus") int onnxGetBackendInfo(
-    onnxBackendID backendID,
-    @Cast("onnxBackendInfo") int infoType,
-    Pointer infoValue,
-    @Cast("size_t*") SizeTPointer infoValueSize);
+public static native @Cast("onnxStatus") int onnxGetBackendInfo(onnxBackendID backendID, @Cast("onnxBackendInfo") int infoType, Pointer infoValue, @Cast("size_t*") SizeTPointer infoValueSize);
 
 /**
  * Query if an ONNX model graph is compatible with the backend.
@@ -7342,10 +7341,7 @@ public static native @Cast("onnxStatus") int onnxGetBackendInfo(
  *                                       backend experienced an unrecovered
  *                                       internal error.
  */
-public static native @Cast("onnxStatus") int onnxGetBackendCompatibility(
-    onnxBackendID backendID,
-    @Cast("size_t") long onnxModelSize,
-    @Const Pointer onnxModel);
+public static native @Cast("onnxStatus") int onnxGetBackendCompatibility(onnxBackendID backendID, @Cast("size_t") long onnxModelSize, @Const Pointer onnxModel);
 
 /**
  * Initialize an ONNXIFI backend.
@@ -7399,18 +7395,9 @@ public static native @Cast("onnxStatus") int onnxGetBackendCompatibility(
  *                                       backend experienced an unrecovered
  *                                       internal error.
  */
-public static native @Cast("onnxStatus") int onnxInitBackend(
-    onnxBackendID backendID,
-    @Cast("const uint64_t*") IntPointer auxPropertiesList,
-    @ByPtrPtr onnxBackend backend);
-public static native @Cast("onnxStatus") int onnxInitBackend(
-    onnxBackendID backendID,
-    @Cast("const uint64_t*") IntBuffer auxPropertiesList,
-    @ByPtrPtr onnxBackend backend);
-public static native @Cast("onnxStatus") int onnxInitBackend(
-    onnxBackendID backendID,
-    @Cast("const uint64_t*") int[] auxPropertiesList,
-    @ByPtrPtr onnxBackend backend);
+public static native @Cast("onnxStatus") int onnxInitBackend(onnxBackendID backendID, @Cast("const uint64_t*") LongPointer auxPropertiesList, @ByPtrPtr onnxBackend backend);
+public static native @Cast("onnxStatus") int onnxInitBackend(onnxBackendID backendID, @Cast("const uint64_t*") LongBuffer auxPropertiesList, @ByPtrPtr onnxBackend backend);
+public static native @Cast("onnxStatus") int onnxInitBackend(onnxBackendID backendID, @Cast("const uint64_t*") long[] auxPropertiesList, @ByPtrPtr onnxBackend backend);
 
 /**
  * Deinitialize an ONNXIFI backend and release associated resources.
@@ -7430,8 +7417,7 @@ public static native @Cast("onnxStatus") int onnxInitBackend(
  *                                       backend experienced an unrecovered
  *                                       internal error.
  */
-public static native @Cast("onnxStatus") int onnxReleaseBackend(
-    onnxBackend backend);
+public static native @Cast("onnxStatus") int onnxReleaseBackend(onnxBackend backend);
 
 /**
  * Initialize a single-shot ONNXIFI event.
@@ -7473,9 +7459,7 @@ public static native @Cast("onnxStatus") int onnxReleaseBackend(
  *                                       backend experienced an unrecovered
  *                                       internal error.
  */
-public static native @Cast("onnxStatus") int onnxInitEvent(
-    onnxBackend backend,
-    @ByPtrPtr onnxEvent event);
+public static native @Cast("onnxStatus") int onnxInitEvent(onnxBackend backend, @ByPtrPtr onnxEvent event);
 
 /**
  * Change the state of an ONNXIFI event to signalled.
@@ -7497,8 +7481,7 @@ public static native @Cast("onnxStatus") int onnxInitEvent(
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxSignalEvent(
-    onnxEvent event);
+public static native @Cast("onnxStatus") int onnxSignalEvent(onnxEvent event);
 
 /**
  * Query ONNXIFI event state without blocking.
@@ -7526,15 +7509,9 @@ public static native @Cast("onnxStatus") int onnxSignalEvent(
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxGetEventState(
-    onnxEvent event,
-    @Cast("onnxEventState*") IntPointer state);
-public static native @Cast("onnxStatus") int onnxGetEventState(
-    onnxEvent event,
-    @Cast("onnxEventState*") IntBuffer state);
-public static native @Cast("onnxStatus") int onnxGetEventState(
-    onnxEvent event,
-    @Cast("onnxEventState*") int[] state);
+public static native @Cast("onnxStatus") int onnxGetEventState(onnxEvent event, @Cast("onnxEventState*") IntPointer state);
+public static native @Cast("onnxStatus") int onnxGetEventState(onnxEvent event, @Cast("onnxEventState*") IntBuffer state);
+public static native @Cast("onnxStatus") int onnxGetEventState(onnxEvent event, @Cast("onnxEventState*") int[] state);
 
 /**
  * Wait until an ONNXIFI event transitions to signalled state.
@@ -7555,8 +7532,7 @@ public static native @Cast("onnxStatus") int onnxGetEventState(
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxWaitEvent(
-    onnxEvent event);
+public static native @Cast("onnxStatus") int onnxWaitEvent(onnxEvent event);
 
 /**
  * Deinitialize an ONNXIFI event and release associated resources.
@@ -7572,8 +7548,7 @@ public static native @Cast("onnxStatus") int onnxWaitEvent(
  *                                       implementation experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxReleaseEvent(
-    onnxEvent event);
+public static native @Cast("onnxStatus") int onnxReleaseEvent(onnxEvent event);
 
 /**
  * Parse an ONNXIFI graph and convert it for a particular backend.
@@ -7770,7 +7745,7 @@ public static native @Cast("onnxStatus") int onnxReleaseEvent(
  */
 public static native @Cast("onnxStatus") int onnxInitGraph(
     onnxBackend backend,
-    @Cast("const uint64_t*") IntPointer auxPropertiesList,
+    @Cast("const uint64_t*") LongPointer auxPropertiesList,
     @Cast("size_t") long onnxModelSize,
     @Const Pointer onnxModel,
     @Cast("uint32_t") int weightsCount,
@@ -7778,7 +7753,7 @@ public static native @Cast("onnxStatus") int onnxInitGraph(
     @ByPtrPtr onnxGraph graph);
 public static native @Cast("onnxStatus") int onnxInitGraph(
     onnxBackend backend,
-    @Cast("const uint64_t*") IntBuffer auxPropertiesList,
+    @Cast("const uint64_t*") LongBuffer auxPropertiesList,
     @Cast("size_t") long onnxModelSize,
     @Const Pointer onnxModel,
     @Cast("uint32_t") int weightsCount,
@@ -7786,7 +7761,7 @@ public static native @Cast("onnxStatus") int onnxInitGraph(
     @ByPtrPtr onnxGraph graph);
 public static native @Cast("onnxStatus") int onnxInitGraph(
     onnxBackend backend,
-    @Cast("const uint64_t*") int[] auxPropertiesList,
+    @Cast("const uint64_t*") long[] auxPropertiesList,
     @Cast("size_t") long onnxModelSize,
     @Const Pointer onnxModel,
     @Cast("uint32_t") int weightsCount,
@@ -8029,10 +8004,7 @@ public static native @Cast("onnxStatus") int onnxSetGraphIO(
  *                                       backend experienced an unrecovered
  *                                       internal error.
  */
-public static native @Cast("onnxStatus") int onnxRunGraph(
-    onnxGraph graph,
-    @Const onnxMemoryFenceV1 inputFence,
-    onnxMemoryFenceV1 outputFence);
+public static native @Cast("onnxStatus") int onnxRunGraph(onnxGraph graph, @Const onnxMemoryFenceV1 inputFence, onnxMemoryFenceV1 outputFence);
 
 /**
  * Deinitialize an ONNXIFI graph and release associated resources.
@@ -8051,8 +8023,7 @@ public static native @Cast("onnxStatus") int onnxRunGraph(
  *                                       graph backend experienced an
  *                                       unrecovered internal error.
  */
-public static native @Cast("onnxStatus") int onnxReleaseGraph(
-    onnxGraph graph);
+public static native @Cast("onnxStatus") int onnxReleaseGraph(onnxGraph graph);
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -8076,6 +8047,7 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 // #include <numeric>
 // #include "onnx/common/assertions.h"
 // #include "onnx/onnx_pb.h"
+// #include "onnx/string_utils.h"
 // Targeting ../Tensor.java
 
 
@@ -8213,17 +8185,17 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 // #include <assert.h>
 // #include <array>
 // #include <vector>
-  /** ArrayRef - Represent a constant reference to an array (0 or more elements
-   *  consecutively in memory), i.e. a start pointer and a length.  It allows
-   *  various APIs to take consecutive elements easily and conveniently.
-   * 
-   *  This class does not own the underlying data, it is expected to be used in
-   *  situations where the data resides in some other buffer, whose lifetime
-   *  extends past that of the ArrayRef. For this reason, it is not in general
-   *  safe to store an ArrayRef.
-   * 
-   *  This is intended to be trivially copyable, so it should be passed by
-   *  value. */
+/** ArrayRef - Represent a constant reference to an array (0 or more elements
+ *  consecutively in memory), i.e. a start pointer and a length.  It allows
+ *  various APIs to take consecutive elements easily and conveniently.
+ * 
+ *  This class does not own the underlying data, it is expected to be used in
+ *  situations where the data resides in some other buffer, whose lifetime
+ *  extends past that of the ArrayRef. For this reason, it is not in general
+ *  safe to store an ArrayRef.
+ * 
+ *  This is intended to be trivially copyable, so it should be passed by
+ *  value. */
 
  // namespace ONNX_NAMESPACE
 
@@ -8233,7 +8205,6 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 /*
  * SPDX-License-Identifier: Apache-2.0
  */
-
 
 // #pragma once
 
@@ -8286,11 +8257,10 @@ public static final int
  *   }
  */
 // #ifdef __cpp_init_captures
-//   #define MOVE_CAPTURE_IF_CPP14(variable) variable = std::move(variable)
+// #define MOVE_CAPTURE_IF_CPP14(variable) variable = std::move(variable)
 // #else
-//   #define MOVE_CAPTURE_IF_CPP14(variable) variable
+// #define MOVE_CAPTURE_IF_CPP14(variable) variable
 // #endif
-
 
 /**
  * For exception safety and consistency with make_shared. Erase me when
@@ -8301,8 +8271,8 @@ public static final int
  * @author Sebastian Messmer (messmer\fb.com)
  */
 
-// #if __cplusplus >= 201402L || __cpp_lib_make_unique >= 201304L ||
-//     (__ANDROID__ && __cplusplus >= 201300L) || _MSC_VER >= 1900
+// #if __cplusplus >= 201402L || __cpp_lib_make_unique >= 201304L || (__ANDROID__ && __cplusplus >= 201300L) ||
+//     _MSC_VER >= 1900
 
 
 // #else
@@ -8312,7 +8282,7 @@ public static final int
 // Disallows 'make_unique<T[10]>()'. (N3690 s20.9.1.4 p5)
 
 
-
+ // namespace ONNX_NAMESPACE
 
 // #endif
 
@@ -8328,26 +8298,25 @@ public static final int
 
 // #pragma once
 
-// #include <atomic>
+// #include <stdint.h>
 // #include <algorithm>
+// #include <atomic>
 // #include <cstdint>
 // #include <functional>
 // #include <iostream>
 // #include <memory>
 // #include <sstream>
-// #include <stdint.h>
 // #include <string>
 // #include <unordered_set>
 // #include <vector>
 
-// #include "onnx/string_utils.h"
 // #include "onnx/common/array_ref.h"
 // #include "onnx/common/assertions.h"
-// #include "onnx/common/interned_strings.h"
-// #include "onnx/common/graph_node_list.h"
-// #include "onnx/common/tensor.h"
 // #include "onnx/common/common.h"
-
+// #include "onnx/common/graph_node_list.h"
+// #include "onnx/common/interned_strings.h"
+// #include "onnx/common/tensor.h"
+// #include "onnx/string_utils.h"
 
 // #define ONNX_DISALLOW_COPY_AND_ASSIGN(TypeName)
 //   TypeName(const TypeName&) = delete;
@@ -8361,24 +8330,31 @@ public static final int
 
 
 
-
 // A Value represents an input or output to node that is either a
 // Tensor or an opaque Handle object, as determined by type().
 // Targeting ../DimensionIR.java
 
 
 
-
 /** enum class onnx::AttributeKind */
-public static final int
+public static final byte
   // float, float list, int, int list, string, string list,
   // tensor, tensor list, subgraph, subgraph list. type proto, type proto list
-  f = 0, fs = 1, i = 2, is = 3, s = 4, ss = 5, t = 6, ts = 7, g = 8, gs = 9, tp = 10, tps = 11;
-
+  f = (byte)(0),
+  fs = (byte)(1),
+  i = (byte)(2),
+  is = (byte)(3),
+  s = (byte)(4),
+  ss = (byte)(5),
+  t = (byte)(6),
+  ts = (byte)(7),
+  g = (byte)(8),
+  gs = (byte)(9),
+  tp = (byte)(10),
+  tps = (byte)(11);
 
 
 // Targeting ../AttributeValue.java
-
 
 
 
@@ -8391,7 +8367,6 @@ public static final int
 
 
 @Namespace("onnx") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Use a, @Const @ByRef Use b);
-
 
 // the list types are intentionally simple, but we type-def
 // them here so if we need to change them, refactoring will be easier
@@ -8439,7 +8414,6 @@ public static final int
 // safe to delete a Value.
 
 
-
  // namespace ONNX_NAMESPACE
 
 
@@ -8453,15 +8427,14 @@ public static final int
 // Adventurous users should note that the APIs will probably change.
 
 // #pragma once
-
+// #include "onnx/common/common.h"
 // #include "onnx/common/ir.h"
 // #include "onnx/onnx_pb.h"
 // Targeting ../ConvertError.java
 
 
 
-// #define fail_convert(...)
-//   throw ConvertError(MakeString(__VA_ARGS__));
+// #define fail_convert(...) ONNX_THROW_EX(ConvertError(MakeString(__VA_ARGS__)));
 
 @Namespace("onnx") public static native void ExportModelProto(ModelProto p_m, @SharedPtr Graph g);
 
@@ -8494,7 +8467,8 @@ public static final int
 
 
 
- // namespace ONNX_NAMESPACE::version_conversion
+ // namespace version_conversion
+ // namespace ONNX_NAMESPACE
 
 
 // Parsed from onnx/version_converter/helper.h
@@ -8508,15 +8482,17 @@ public static final int
 // #pragma once
 
 // #include "onnx/common/ir.h"
-    @Namespace("onnx::version_conversion") public static native int check_numpy_unibroadcastable_and_require_broadcast(
-            @StdVector DimensionIR input1_sizes,
-            @StdVector DimensionIR input2_sizes);
+@Namespace("onnx::version_conversion") public static native int check_numpy_unibroadcastable_and_require_broadcast(
+    @StdVector DimensionIR input1_sizes,
+    @StdVector DimensionIR input2_sizes);
 
-    @Namespace("onnx::version_conversion") public static native void assert_numpy_multibroadcastable(@StdVector DimensionIR input1_sizes,
-            @StdVector DimensionIR input2_sizes);
+@Namespace("onnx::version_conversion") public static native void assert_numpy_multibroadcastable(
+    @StdVector DimensionIR input1_sizes,
+    @StdVector DimensionIR input2_sizes);
 
-    @Namespace("onnx::version_conversion") public static native void assertNotParams(@StdVector DimensionIR sizes);
-
+@Namespace("onnx::version_conversion") public static native void assertNotParams(@StdVector DimensionIR sizes);
+ // namespace version_conversion
+ // namespace ONNX_NAMESPACE
 
 
 // Parsed from onnx/version_converter/BaseConverter.h
@@ -8529,20 +8505,21 @@ public static final int
 
 // #pragma once
 
+// #include <stdlib.h>
+// #include <iostream>
+// #include <utility>
 // #include "onnx/common/ir.h"
 // #include "onnx/common/ir_pb_converter.h"
 // #include "onnx/common/stl_backports.h"
-// #include "onnx/proto_utils.h"
 // #include "onnx/defs/schema.h"
-// #include <utility>
-// #include <iostream>
-// #include <stdlib.h>
+// #include "onnx/proto_utils.h"
 // #include "onnx/version_converter/adapters/adapter.h"
 // Targeting ../BaseVersionConverter.java
 
 
 
- // namespace ONNX_NAMESPACE::version_conversion
+ // namespace version_conversion
+ // namespace ONNX_NAMESPACE
 
 
 // Parsed from onnx/version_converter/convert.h
@@ -8559,6 +8536,7 @@ public static final int
 // #include "onnx/version_converter/BaseConverter.h"
 // #include "onnx/version_converter/adapters/axes_attribute_to_input.h"
 // #include "onnx/version_converter/adapters/axes_input_to_attribute.h"
+// #include "onnx/version_converter/adapters/batch_normalization_13_14.h"
 // #include "onnx/version_converter/adapters/broadcast_backward_compatibility.h"
 // #include "onnx/version_converter/adapters/broadcast_forward_compatibility.h"
 // #include "onnx/version_converter/adapters/cast_9_8.h"
@@ -8570,35 +8548,33 @@ public static final int
 // #include "onnx/version_converter/adapters/gemm_7_6.h"
 // #include "onnx/version_converter/adapters/maxpool_8_7.h"
 // #include "onnx/version_converter/adapters/no_previous_version.h"
+// #include "onnx/version_converter/adapters/pad_10_11.h"
 // #include "onnx/version_converter/adapters/reshape_4_5.h"
 // #include "onnx/version_converter/adapters/reshape_5_4.h"
+// #include "onnx/version_converter/adapters/resize_10_11.h"
 // #include "onnx/version_converter/adapters/scan_8_9.h"
 // #include "onnx/version_converter/adapters/scan_9_8.h"
+// #include "onnx/version_converter/adapters/scatter_10_11.h"
+// #include "onnx/version_converter/adapters/slice_9_10.h"
+// #include "onnx/version_converter/adapters/softmax_12_13.h"
 // #include "onnx/version_converter/adapters/split_12_13.h"
 // #include "onnx/version_converter/adapters/split_13_12.h"
 // #include "onnx/version_converter/adapters/sum_8_7.h"
-// #include "onnx/version_converter/adapters/slice_9_10.h"
+// #include "onnx/version_converter/adapters/topk_9_10.h"
 // #include "onnx/version_converter/adapters/type_restriction.h"
 // #include "onnx/version_converter/adapters/upsample_6_7.h"
 // #include "onnx/version_converter/adapters/upsample_8_9.h"
-// #include "onnx/version_converter/adapters/upsample_9_8.h"
-// #include "onnx/version_converter/adapters/resize_10_11.h"
-// #include "onnx/version_converter/adapters/topk_9_10.h"
-// #include "onnx/version_converter/adapters/pad_10_11.h"
-// #include "onnx/version_converter/adapters/scatter_10_11.h"
-// #include "onnx/version_converter/adapters/softmax_12_13.h"
-// #include "onnx/version_converter/adapters/batch_normalization_13_14.h"
 // #include "onnx/version_converter/adapters/upsample_9_10.h"
+// #include "onnx/version_converter/adapters/upsample_9_8.h"
 
 // #include "onnx/version_converter/adapters/transformers.h"
 // Targeting ../DefaultVersionConverter.java
 
 
 
-@Namespace("onnx::version_conversion") public static native @ByVal ModelProto ConvertVersion(
-    @Const @ByRef ModelProto mp_in,
-    int target_version);
- // namespace ONNX_NAMESPACE::version_conversion
+@Namespace("onnx::version_conversion") public static native @ByVal ModelProto ConvertVersion(@Const @ByRef ModelProto mp_in, int target_version);
+ // namespace version_conversion
+ // namespace ONNX_NAMESPACE
 
 
 }

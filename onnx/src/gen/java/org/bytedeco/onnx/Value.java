@@ -11,7 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-
 @Namespace("onnx") @NoOffset @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class Value extends Pointer {
     static { Loader.load(); }
@@ -22,8 +21,8 @@ public class Value extends Pointer {
   
   public Value(Node node_, @Cast("size_t") long offset_) { super((Pointer)null); allocate(node_, offset_); }
   private native void allocate(Node node_, @Cast("size_t") long offset_);
-  public native Value setElemType(@Cast("int32_t") int elem_type);
-  public native @Cast("int32_t") int elemType();
+  public native Value setElemType(int elem_type);
+  public native int elemType();
   public native @Cast("bool") boolean has_sizes();
   public native Value setSizes(@StdVector DimensionIR sizes);
   public native Value wipeSizes();
@@ -55,5 +54,4 @@ public class Value extends Pointer {
   public native void replaceAllUsesWith(Value newValue);
 
   public native Value copyMetadata(Value from);
-
 }

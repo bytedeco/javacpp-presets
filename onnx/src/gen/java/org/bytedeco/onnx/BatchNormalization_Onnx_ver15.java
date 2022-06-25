@@ -11,7 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-
 // Forward declarations for ai.onnx version 15
 @Namespace("onnx") @Opaque @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class BatchNormalization_Onnx_ver15 extends Pointer {

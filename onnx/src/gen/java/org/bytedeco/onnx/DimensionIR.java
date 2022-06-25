@@ -11,7 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-
 @Name("onnx::Dimension") @NoOffset @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class DimensionIR extends Pointer {
     static { Loader.load(); }
@@ -24,11 +23,11 @@ public class DimensionIR extends Pointer {
   private native void allocate(@StdString BytePointer param);
   public DimensionIR(@StdString String param) { super((Pointer)null); allocate(param); }
   private native void allocate(@StdString String param);
-  public DimensionIR(@Cast("int64_t") int dim) { super((Pointer)null); allocate(dim); }
-  private native void allocate(@Cast("int64_t") int dim);
+  public DimensionIR(@Cast("int64_t") long dim) { super((Pointer)null); allocate(dim); }
+  private native void allocate(@Cast("int64_t") long dim);
 
   public native @Cast("bool") boolean is_unknown(); public native DimensionIR is_unknown(boolean setter);
   public native @Cast("bool") boolean is_int(); public native DimensionIR is_int(boolean setter);
-  public native @Cast("int64_t") int dim(); public native DimensionIR dim(int setter);
+  public native @Cast("int64_t") long dim(); public native DimensionIR dim(long setter);
   public native @StdString BytePointer param(); public native DimensionIR param(BytePointer setter);
 }

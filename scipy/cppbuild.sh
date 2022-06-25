@@ -8,10 +8,9 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-HIGHS=1.1.1
-SCIPY_VERSION=1.8.1
+SCIPY_VERSION=1.9.0rc1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download https://github.com/ERGO-Code/HiGHS/archive/refs/tags/v$HIGHS.tar.gz HiGHS-$HIGHS.tar.gz
+download https://github.com/scipy/HiGHS/archive/refs/heads/main.tar.gz HiGHS-main.tar.gz
 download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
 download https://github.com/scipy/PROPACK/archive/refs/heads/main.tar.gz PROPACK-main.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
@@ -52,18 +51,19 @@ NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../boost_$BOOST.tar.gz
-tar --totals -xzf ../HiGHS-$HIGHS.tar.gz
+tar --totals -xzf ../HiGHS-main.tar.gz
 tar --totals -xzf ../unuran-main.tar.gz
 tar --totals -xzf ../PROPACK-main.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost/
-#cp -a HiGHS-$HIGHS/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
+cp -a HiGHS-main/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
 cp -a unuran-main/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
 cp -a PROPACK-main/* scipy-$SCIPY_VERSION/scipy/sparse/linalg/_propack/PROPACK/
 cd scipy-$SCIPY_VERSION
 
 # prevent setuptools from trying to build NumPy
 sedinplace '/req_np/d' setup.py
+sedinplace 's/README.rst/README.md/g' scipy/_lib/setup.py
 
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
@@ -102,7 +102,7 @@ if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS;
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.4 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.23.0 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
 #    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"

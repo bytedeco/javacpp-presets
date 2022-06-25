@@ -45,11 +45,10 @@ public static final int NPY_USE_C99_COMPLEX = 1;
 public static final int NPY_HAVE_COMPLEX_DOUBLE = 1;
 public static final int NPY_HAVE_COMPLEX_FLOAT = 1;
 public static final int NPY_HAVE_COMPLEX_LONG_DOUBLE = 1;
-public static final int NPY_RELAXED_STRIDES_CHECKING = 1;
 public static final int NPY_USE_C99_FORMATS = 1;
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x01000009;
-public static final int NPY_API_VERSION = 0x0000000F;
+public static final int NPY_API_VERSION = 0x00000010;
 
 // #ifndef __STDC_FORMAT_MACROS
 public static final int __STDC_FORMAT_MACROS = 1;
@@ -111,6 +110,7 @@ public static final int NPY_1_19_API_VERSION = 0x00000008;
 public static final int NPY_1_20_API_VERSION = 0x0000000e;
 public static final int NPY_1_21_API_VERSION = 0x0000000e;
 public static final int NPY_1_22_API_VERSION = 0x0000000f;
+public static final int NPY_1_23_API_VERSION = 0x00000010;
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_NUMPYCONFIG_H_ */
 
@@ -249,9 +249,10 @@ public static final int NPY_1_22_API_VERSION = 0x0000000f;
 // #endif
 // #endif
 
-// #if defined(_MSC_VER)
-//         #define NPY_INLINE __inline
-// #elif defined(__GNUC__)
+// #if defined(_MSC_VER) && !defined(__clang__)
+//     #define NPY_INLINE __inline
+/* clang included here to handle clang-cl on Windows */
+// #elif defined(__GNUC__) || defined(__clang__)
 //     #if defined(__STRICT_ANSI__)
 //          #define NPY_INLINE __inline__
 //     #else
@@ -916,6 +917,10 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_OS_CYGWIN
 // #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 //     #define NPY_OS_WIN32
+// #elif defined(_WIN64) || defined(__WIN64__) || defined(WIN64)
+//     #define NPY_OS_WIN64
+// #elif defined(__MINGW32__) || defined(__MINGW64__)
+//     #define NPY_OS_MINGW
 // #elif defined(__APPLE__)
 //     #define NPY_OS_DARWIN
 // #else
@@ -1870,7 +1875,7 @@ public static final int NPY_MAX_HALF =    (0x7bff);
 /* Use this to tag a variable as not used. It will remove unused variable
  * warning on support platforms (see __COM_NPY_UNUSED) and mangle the variable
  * to avoid accidental use */
-// #define NPY_UNUSED(x) (__NPY_UNUSED_TAGGED ## x) __COMP_NPY_UNUSED
+// #define NPY_UNUSED(x) __NPY_UNUSED_TAGGED ## x __COMP_NPY_UNUSED
 // #define NPY_EXPAND(x) x
 
 // #define NPY_STRINGIFY(x) #x
@@ -2098,7 +2103,7 @@ public static final int    NPY_BOOL = 0,
 
                     /* The number of types not including the new 1.6 types */
                     NPY_NTYPES_ABI_COMPATIBLE = 21;
-// #ifdef _MSC_VER
+// #if defined(_MSC_VER) && !defined(__clang__)
 // #pragma deprecated(NPY_CHAR)
 // #endif
 
@@ -2232,14 +2237,7 @@ public static final int
         /* Allow safe casts or casts within the same kind */
         NPY_SAME_KIND_CASTING = 3,
         /* Allow any casts */
-        NPY_UNSAFE_CASTING = 4,
-        /*
-         * Flag to allow signalling that a cast is a view, this flag is not
-         * valid when requesting a cast of specific safety.
-         * _NPY_CAST_IS_VIEW|NPY_EQUIV_CASTING means the same as NPY_NO_CASTING.
-         */
-        // TODO-DTYPES: Needs to be documented.
-        _NPY_CAST_IS_VIEW = 1 << 16;
+        NPY_UNSAFE_CASTING = 4;
 
 /** enum NPY_CLIPMODE */
 public static final int
@@ -2572,11 +2570,9 @@ public static final int NPY_ARRAY_F_CONTIGUOUS =    0x0002;
  * 1-d array is C_CONTIGUOUS it is also F_CONTIGUOUS. Arrays with
  * more then one dimension can be C_CONTIGUOUS and F_CONTIGUOUS
  * at the same time if they have either zero or one element.
- * If NPY_RELAXED_STRIDES_CHECKING is set, a higher dimensional
- * array is always C_CONTIGUOUS and F_CONTIGUOUS if it has zero elements
- * and the array is contiguous if ndarray.squeeze() is contiguous.
- * I.e. dimensions for which `ndarray.shape[dimension] == 1` are
- * ignored.
+ * A higher dimensional array always has the same contiguity flags as
+ * `array.squeeze()`; dimensions with `array.shape[dimension] == 1` are
+ * effectively ignored when checking for contiguity.
  */
 
 /*
@@ -2657,7 +2653,6 @@ public static final int NPY_ARRAY_WRITEABLE =       0x0400;
  * This flag may be requested in constructor functions.
  * This flag may be tested for in PyArray_FLAGS(arr).
  */
-public static final int NPY_ARRAY_UPDATEIFCOPY =    0x1000; /* Deprecated in 1.14 */
 public static final int NPY_ARRAY_WRITEBACKIFCOPY = 0x2000;
 
 /*
@@ -2688,14 +2683,12 @@ public static final int NPY_ARRAY_FARRAY_RO =    (NPY_ARRAY_F_CONTIGUOUS |
 public static final int NPY_ARRAY_DEFAULT =      (NPY_ARRAY_CARRAY);
 public static final int NPY_ARRAY_IN_ARRAY =     (NPY_ARRAY_CARRAY_RO);
 public static final int NPY_ARRAY_OUT_ARRAY =    (NPY_ARRAY_CARRAY);
-public static final int NPY_ARRAY_INOUT_ARRAY =  (NPY_ARRAY_CARRAY | 
-                                NPY_ARRAY_UPDATEIFCOPY);
+public static final int NPY_ARRAY_INOUT_ARRAY =  (NPY_ARRAY_CARRAY);
 public static final int NPY_ARRAY_INOUT_ARRAY2 = (NPY_ARRAY_CARRAY | 
                                 NPY_ARRAY_WRITEBACKIFCOPY);
 public static final int NPY_ARRAY_IN_FARRAY =    (NPY_ARRAY_FARRAY_RO);
 public static final int NPY_ARRAY_OUT_FARRAY =   (NPY_ARRAY_FARRAY);
-public static final int NPY_ARRAY_INOUT_FARRAY = (NPY_ARRAY_FARRAY | 
-                                NPY_ARRAY_UPDATEIFCOPY);
+public static final int NPY_ARRAY_INOUT_FARRAY = (NPY_ARRAY_FARRAY);
 public static final int NPY_ARRAY_INOUT_FARRAY2 = (NPY_ARRAY_FARRAY | 
                                 NPY_ARRAY_WRITEBACKIFCOPY);
 
@@ -3500,7 +3493,6 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 //                                             (k)*PyArray_STRIDES(obj)[2] +
 //                                             (l)*PyArray_STRIDES(obj)[3]))
 
-/* Move to arrayobject.c once PyArray_XDECREF_ERR is removed */
 @NoException public static native void PyArray_DiscardWritebackIfCopy(PyArrayObject arr);
 
 // #define PyArray_DESCR_REPLACE(descr) do {
@@ -3558,12 +3550,6 @@ public static final int NPY_MAX_ELSIZE = (2 * NPY_SIZEOF_LONGDOUBLE);
 
 // #define DEPRECATE(msg) PyErr_WarnEx(PyExc_DeprecationWarning,msg,1)
 // #define DEPRECATE_FUTUREWARNING(msg) PyErr_WarnEx(PyExc_FutureWarning,msg,1)
-
-// #if !defined(NPY_NO_DEPRECATED_API) ||
-//     (NPY_NO_DEPRECATED_API < NPY_1_14_API_VERSION)
-@NoException public static native void PyArray_XDECREF_ERR(PyArrayObject arr);
-// #endif
-
 
 // #ifdef __cplusplus
 // #endif

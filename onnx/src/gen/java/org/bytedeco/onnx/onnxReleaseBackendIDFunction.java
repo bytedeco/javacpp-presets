@@ -17,6 +17,5 @@ public class onnxReleaseBackendIDFunction extends FunctionPointer {
     public    onnxReleaseBackendIDFunction(Pointer p) { super(p); }
     protected onnxReleaseBackendIDFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxBackendID backendID);
+    public native @Cast("onnxStatus") int call(onnxBackendID backendID);
 }

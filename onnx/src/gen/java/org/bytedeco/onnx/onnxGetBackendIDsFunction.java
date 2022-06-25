@@ -19,7 +19,5 @@ public class onnxGetBackendIDsFunction extends FunctionPointer {
     public    onnxGetBackendIDsFunction(Pointer p) { super(p); }
     protected onnxGetBackendIDsFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") SizeTPointer numBackends);
+    public native @Cast("onnxStatus") int call(@ByPtrPtr onnxBackendID backendIDs, @Cast("size_t*") SizeTPointer numBackends);
 }

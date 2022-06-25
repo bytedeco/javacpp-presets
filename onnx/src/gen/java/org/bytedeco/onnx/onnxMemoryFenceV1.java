@@ -39,7 +39,7 @@ public class onnxMemoryFenceV1 extends Pointer {
    * ONNXIFI implementations MUST validate tag before accessing any other
    * members of the structure.
    */
-  public native @Cast("int32_t") int tag(); public native onnxMemoryFenceV1 tag(int setter);
+  public native int tag(); public native onnxMemoryFenceV1 tag(int setter);
   /**
    * Type of memory synchronization primitive.
    *
@@ -47,7 +47,7 @@ public class onnxMemoryFenceV1 extends Pointer {
    *      ONNXIFI_SYNCHRONIZATION_EVENT    (onnxEvent, always supported)
    *      ONNXIFI_SYNCHRONIZATION_IMPLICIT
    */
-  public native @Cast("onnxEnum") int type(); public native onnxMemoryFenceV1 type(int setter);
+  public native @Cast("onnxEnum") long type(); public native onnxMemoryFenceV1 type(long setter);
     /**
      * Handle for a single-shot ONNXIFI event used as a synchronization
      * primitive. Event for the input fence must be created by the caller to

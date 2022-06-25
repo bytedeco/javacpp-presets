@@ -10,12 +10,10 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.onnx.global.onnx.*;
 
-@Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
-public class onnxWaitEventFunction extends FunctionPointer {
-    static { Loader.load(); }
+@Namespace("onnx") @Opaque @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
+public class SequenceMap_Onnx_ver17 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SequenceMap_Onnx_ver17() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    onnxWaitEventFunction(Pointer p) { super(p); }
-    protected onnxWaitEventFunction() { allocate(); }
-    private native void allocate();
-    public native @Cast("onnxStatus") int call(onnxEvent event);
+    public SequenceMap_Onnx_ver17(Pointer p) { super(p); }
 }

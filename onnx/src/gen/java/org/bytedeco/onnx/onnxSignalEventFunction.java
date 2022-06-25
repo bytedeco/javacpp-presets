@@ -17,6 +17,5 @@ public class onnxSignalEventFunction extends FunctionPointer {
     public    onnxSignalEventFunction(Pointer p) { super(p); }
     protected onnxSignalEventFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxEvent event);
+    public native @Cast("onnxStatus") int call(onnxEvent event);
 }

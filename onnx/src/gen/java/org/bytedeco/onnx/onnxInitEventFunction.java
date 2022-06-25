@@ -17,7 +17,5 @@ public class onnxInitEventFunction extends FunctionPointer {
     public    onnxInitEventFunction(Pointer p) { super(p); }
     protected onnxInitEventFunction() { allocate(); }
     private native void allocate();
-    public native @Cast("onnxStatus") int call(
-    onnxBackend backend,
-    @ByPtrPtr onnxEvent event);
+    public native @Cast("onnxStatus") int call(onnxBackend backend, @ByPtrPtr onnxEvent event);
 }

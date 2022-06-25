@@ -18,18 +18,8 @@ public class ISchemaRegistry extends Pointer {
     public ISchemaRegistry(Pointer p) { super(p); }
 
 
-  public native @Const OpSchema GetSchema(
-        @StdString BytePointer key,
-        int maxInclusiveVersion,
-        @StdString BytePointer domain/*=ONNX_DOMAIN*/);
-  public native @Const OpSchema GetSchema(
-        @StdString BytePointer key,
-        int maxInclusiveVersion);
-  public native @Const OpSchema GetSchema(
-        @StdString String key,
-        int maxInclusiveVersion,
-        @StdString String domain/*=ONNX_DOMAIN*/);
-  public native @Const OpSchema GetSchema(
-        @StdString String key,
-        int maxInclusiveVersion);
+  public native @Const OpSchema GetSchema(@StdString BytePointer key, int maxInclusiveVersion, @StdString BytePointer domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(@StdString BytePointer key, int maxInclusiveVersion);
+  public native @Const OpSchema GetSchema(@StdString String key, int maxInclusiveVersion, @StdString String domain/*=ONNX_DOMAIN*/);
+  public native @Const OpSchema GetSchema(@StdString String key, int maxInclusiveVersion);
 }

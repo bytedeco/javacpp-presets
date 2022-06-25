@@ -26,7 +26,7 @@ public class Graph extends Pointer {
         return new Graph((Pointer)this).offsetAddress(i);
     }
 
-
+  
   
   public Graph() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -37,7 +37,7 @@ public class Graph extends Pointer {
   public native void setDocString(@StdString String doc_string);
 
   public native void addInitializer(@ByRef Tensor initializer);
-  
+
   // For IR >= 4, initializer is not required to exist in input
   // Add initializer into initializer node list and return its Value
   public native Value addInitializerAndCreateValue(@ByRef Tensor initializer);

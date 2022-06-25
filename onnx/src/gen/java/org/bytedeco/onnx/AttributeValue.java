@@ -11,13 +11,12 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.onnx.global.onnx.*;
 
 
-
 @Namespace("onnx") @Properties(inherit = org.bytedeco.onnx.presets.onnx.class)
 public class AttributeValue extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttributeValue(Pointer p) { super(p); }
 
-  public native @Cast("onnx::AttributeKind") int kind();
+  public native @Cast("onnx::AttributeKind") byte kind();
   public native @UniquePtr AttributeValue clone();
 }

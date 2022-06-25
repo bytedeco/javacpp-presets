@@ -203,8 +203,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.10.x  https://www.python.org/downloads/
- * NumPy 1.22.x  https://github.com/numpy/numpy
- * SciPy 1.8.x  https://github.com/scipy/scipy
+ * NumPy 1.23.x  https://github.com/numpy/numpy
+ * SciPy 1.9.x  https://github.com/scipy/scipy
  * Gym 0.24.x  https://github.com/openai/gym
  * LLVM 14.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
@@ -226,7 +226,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Triton Inference Server 2.21.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.16.x  https://github.com/luxonis/depthai-core
- * ONNX 1.11.x  https://github.com/onnx/onnx
+ * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.11.x  https://github.com/microsoft/onnxruntime
  * TVM 0.8.x  https://github.com/apache/tvm
