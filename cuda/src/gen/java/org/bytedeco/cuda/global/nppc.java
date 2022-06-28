@@ -156,10 +156,10 @@ public static final int NPP_VERSION_BUILD =  NPP_VER_BUILD;
  */
  
 // #ifdef __cplusplus
-// Targeting ../nppc/Npp16f.java
+// Targeting ..\nppc\Npp16f.java
 
 
-// Targeting ../nppc/Npp16f_2.java
+// Targeting ..\nppc\Npp16f_2.java
 
 
 
@@ -376,7 +376,7 @@ public static final int
     
     /**  Speed reduction due to uncoalesced memory accesses warning. */
     NPP_MISALIGNED_DST_ROI_WARNING          = 10000;
-// Targeting ../nppc/NppLibraryVersion.java
+// Targeting ..\nppc\NppLibraryVersion.java
 
 
 
@@ -396,28 +396,28 @@ public static final int
 /**  64-bit signed integers */
 /**  32-bit (IEEE) floating-point numbers */
 /**  64-bit floating-point numbers */
-// Targeting ../nppc/Npp8uc.java
+// Targeting ..\nppc\Npp8uc.java
 
 
-// Targeting ../nppc/Npp16uc.java
+// Targeting ..\nppc\Npp16uc.java
 
 
-// Targeting ../nppc/Npp16sc.java
+// Targeting ..\nppc\Npp16sc.java
 
 
-// Targeting ../nppc/Npp32uc.java
+// Targeting ..\nppc\Npp32uc.java
 
 
-// Targeting ../nppc/Npp32sc.java
+// Targeting ..\nppc\Npp32sc.java
 
 
-// Targeting ../nppc/Npp32fc.java
+// Targeting ..\nppc\Npp32fc.java
 
 
-// Targeting ../nppc/Npp64sc.java
+// Targeting ..\nppc\Npp64sc.java
 
 
-// Targeting ../nppc/Npp64fc.java
+// Targeting ..\nppc\Npp64fc.java
 
 
 
@@ -466,22 +466,22 @@ public static final double NPP_MAXABS_32F =  ( 3.402823466e+38f );
 public static final double NPP_MINABS_64F =  ( 2.2250738585072014e-308 );
 /**  Largest  positive 64-bit floating point value */
 public static final double NPP_MAXABS_64F =  ( 1.7976931348623158e+308 );
-// Targeting ../nppc/NppiPoint.java
+// Targeting ..\nppc\NppiPoint.java
 
 
-// Targeting ../nppc/NppiPoint32f.java
+// Targeting ..\nppc\NppiPoint32f.java
 
 
-// Targeting ../nppc/NppiPoint64f.java
+// Targeting ..\nppc\NppiPoint64f.java
 
 
-// Targeting ../nppc/NppPointPolar.java
+// Targeting ..\nppc\NppPointPolar.java
 
 
-// Targeting ../nppc/NppiSize.java
+// Targeting ..\nppc\NppiSize.java
 
 
-// Targeting ../nppc/NppiRect.java
+// Targeting ..\nppc\NppiRect.java
 
 
 
@@ -594,7 +594,7 @@ public static final int
     NPPI_OP_ALPHA_XOR_PREMUL = 10,
     NPPI_OP_ALPHA_PLUS_PREMUL = 11,
     NPPI_OP_ALPHA_PREMUL = 12;
-// Targeting ../nppc/NppiHOGConfig.java
+// Targeting ..\nppc\NppiHOGConfig.java
 
 
 
@@ -610,10 +610,10 @@ public static final int NPP_HOG_MAX_CELLS_PER_DESCRIPTOR =              (256);
 public static final int NPP_HOG_MAX_OVERLAPPING_BLOCKS_PER_DESCRIPTOR = (256);
 /** max number of descriptor window locations per function call.   */
 public static final int NPP_HOG_MAX_DESCRIPTOR_LOCATIONS_PER_CALL =     (128);
-// Targeting ../nppc/NppiHaarClassifier_32f.java
+// Targeting ..\nppc\NppiHaarClassifier_32f.java
 
 
-// Targeting ../nppc/NppiHaarBuffer.java
+// Targeting ..\nppc\NppiHaarBuffer.java
 
 
 
@@ -641,22 +641,22 @@ public static final int
     nppiNormL1 = 1,
     /**  square root of sum of squares */
     nppiNormL2 = 2;
-// Targeting ../nppc/NppiConnectedRegion.java
+// Targeting ..\nppc\NppiConnectedRegion.java
 
 
-// Targeting ../nppc/NppiImageDescriptor.java
+// Targeting ..\nppc\NppiImageDescriptor.java
 
 
-// Targeting ../nppc/NppiBufferDescriptor.java
+// Targeting ..\nppc\NppiBufferDescriptor.java
 
 
-// Targeting ../nppc/NppiCompressedMarkerLabelsInfo.java
+// Targeting ..\nppc\NppiCompressedMarkerLabelsInfo.java
 
 
-// Targeting ../nppc/NppiContourBlockSegment.java
+// Targeting ..\nppc\NppiContourBlockSegment.java
 
 
-// Targeting ../nppc/NppiContourPixelGeometryInfo.java
+// Targeting ..\nppc\NppiContourPixelGeometryInfo.java
 
 
 
@@ -678,10 +678,10 @@ public static final int NPP_CONTOUR_DIRECTION_ANY_NORTH =  NPP_CONTOUR_DIRECTION
 public static final int NPP_CONTOUR_DIRECTION_ANY_WEST =   NPP_CONTOUR_DIRECTION_NORTH_WEST | NPP_CONTOUR_DIRECTION_WEST | NPP_CONTOUR_DIRECTION_SOUTH_WEST;
 public static final int NPP_CONTOUR_DIRECTION_ANY_SOUTH =  NPP_CONTOUR_DIRECTION_SOUTH_EAST | NPP_CONTOUR_DIRECTION_SOUTH | NPP_CONTOUR_DIRECTION_SOUTH_WEST;
 public static final int NPP_CONTOUR_DIRECTION_ANY_EAST =   NPP_CONTOUR_DIRECTION_NORTH_EAST | NPP_CONTOUR_DIRECTION_EAST | NPP_CONTOUR_DIRECTION_SOUTH_EAST;
-// Targeting ../nppc/NppiContourPixelDirectionInfo.java
+// Targeting ..\nppc\NppiContourPixelDirectionInfo.java
 
 
-// Targeting ../nppc/NppiContourTotalsInfo.java
+// Targeting ..\nppc\NppiContourTotalsInfo.java
 
 
 
@@ -698,7 +698,7 @@ public static final int
     NPP_WATERSHED_SEGMENT_BOUNDARIES_WHITE = 2,
     NPP_WATERSHED_SEGMENT_BOUNDARIES_CONTRAST = 3,
     NPP_WATERSHED_SEGMENT_BOUNDARIES_ONLY = 4;
-// Targeting ../nppc/NppStreamContext.java
+// Targeting ..\nppc\NppStreamContext.java
 
 
 

@@ -139,7 +139,7 @@ public static final String NVML_API_VERSION_STR =        "11";
  * Each structure explicitly states when to check for this value.
  */
 public static final int NVML_VALUE_NOT_AVAILABLE = (-1);
-// Targeting ../nvml/nvmlDevice_st.java
+// Targeting ..\nvml\nvmlDevice_st.java
 
 
 
@@ -152,7 +152,7 @@ public static final int NVML_DEVICE_PCI_BUS_ID_BUFFER_SIZE =      32;
  * Buffer size guaranteed to be large enough for pci bus id for ::busIdLegacy
  */
 public static final int NVML_DEVICE_PCI_BUS_ID_BUFFER_V2_SIZE =   16;
-// Targeting ../nvml/nvmlPciInfo_t.java
+// Targeting ..\nvml\nvmlPciInfo_t.java
 
 
 
@@ -172,37 +172,37 @@ public static final String NVML_DEVICE_PCI_BUS_ID_FMT =                  "%08X:%
 // #define NVML_DEVICE_PCI_BUS_ID_FMT_ARGS(pciInfo)    (pciInfo)->domain,
 //                                                     (pciInfo)->bus,
 //                                                     (pciInfo)->device
-// Targeting ../nvml/nvmlEccErrorCounts_t.java
+// Targeting ..\nvml\nvmlEccErrorCounts_t.java
 
 
-// Targeting ../nvml/nvmlUtilization_t.java
+// Targeting ..\nvml\nvmlUtilization_t.java
 
 
-// Targeting ../nvml/nvmlMemory_t.java
+// Targeting ..\nvml\nvmlMemory_t.java
 
 
-// Targeting ../nvml/nvmlMemory_v2_t.java
+// Targeting ..\nvml\nvmlMemory_v2_t.java
 
 
 
 public static native @MemberGetter int nvmlMemory_v2();
 public static final int nvmlMemory_v2 = nvmlMemory_v2();
-// Targeting ../nvml/nvmlBAR1Memory_t.java
+// Targeting ..\nvml\nvmlBAR1Memory_t.java
 
 
-// Targeting ../nvml/nvmlProcessInfo_v1_t.java
+// Targeting ..\nvml\nvmlProcessInfo_v1_t.java
 
 
-// Targeting ../nvml/nvmlProcessInfo_v2_t.java
+// Targeting ..\nvml\nvmlProcessInfo_v2_t.java
 
 
-// Targeting ../nvml/nvmlProcessInfo_t.java
+// Targeting ..\nvml\nvmlProcessInfo_t.java
 
 
-// Targeting ../nvml/nvmlDeviceAttributes_t.java
+// Targeting ..\nvml\nvmlDeviceAttributes_t.java
 
 
-// Targeting ../nvml/nvmlRowRemapperHistogramValues_t.java
+// Targeting ..\nvml\nvmlRowRemapperHistogramValues_t.java
 
 
 
@@ -249,7 +249,7 @@ public static final int
     NVML_NVLINK_COUNTER_PKTFILTER_RESPDATA   = 0x40,    // responses with data
     NVML_NVLINK_COUNTER_PKTFILTER_RESPNODATA = 0x80,    // responses without data
     NVML_NVLINK_COUNTER_PKTFILTER_ALL        = 0xFF;     // all packets
-// Targeting ../nvml/nvmlNvLinkUtilizationControl_t.java
+// Targeting ..\nvml\nvmlNvLinkUtilizationControl_t.java
 
 
 
@@ -334,10 +334,10 @@ public static final int
  * Maximum limit on Physical Bridges per Board
  */
 public static final int NVML_MAX_PHYSICAL_BRIDGE =                         (128);
-// Targeting ../nvml/nvmlBridgeChipInfo_t.java
+// Targeting ..\nvml\nvmlBridgeChipInfo_t.java
 
 
-// Targeting ../nvml/nvmlBridgeChipHierarchy_t.java
+// Targeting ..\nvml\nvmlBridgeChipHierarchy_t.java
 
 
 
@@ -388,10 +388,10 @@ public static final int
 
     // Keep this last
     NVML_VALUE_TYPE_COUNT = 5;
-// Targeting ../nvml/nvmlValue_t.java
+// Targeting ..\nvml\nvmlValue_t.java
 
 
-// Targeting ../nvml/nvmlSample_t.java
+// Targeting ..\nvml\nvmlSample_t.java
 
 
 
@@ -420,7 +420,7 @@ public static final int
 
     // Keep this last
     NVML_PERF_POLICY_COUNT = 12;
-// Targeting ../nvml/nvmlViolationTime_t.java
+// Targeting ..\nvml\nvmlViolationTime_t.java
 
 
 
@@ -532,10 +532,10 @@ public static final int
  * Max Clock Monitors available
  */
 public static final int MAX_CLK_DOMAINS =			32;
-// Targeting ../nvml/nvmlClkMonFaultInfo_t.java
+// Targeting ..\nvml\nvmlClkMonFaultInfo_t.java
 
 
-// Targeting ../nvml/nvmlClkMonStatus_t.java
+// Targeting ..\nvml\nvmlClkMonStatus_t.java
 
 
 
@@ -992,13 +992,13 @@ public static final int NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION_YES =     0x
  *  \{
  */
 /***************************************************************************************************/
-// Targeting ../nvml/nvmlVgpuInstanceUtilizationSample_t.java
+// Targeting ..\nvml\nvmlVgpuInstanceUtilizationSample_t.java
 
 
-// Targeting ../nvml/nvmlVgpuProcessUtilizationSample_t.java
+// Targeting ..\nvml\nvmlVgpuProcessUtilizationSample_t.java
 
 
-// Targeting ../nvml/nvmlVgpuLicenseExpiry_t.java
+// Targeting ..\nvml\nvmlVgpuLicenseExpiry_t.java
 
 
 
@@ -1017,19 +1017,19 @@ public static final int NVML_GRID_LICENSE_STATE_UNLICENSED_RESTRICTED =   3;
 public static final int NVML_GRID_LICENSE_STATE_UNLICENSED =              4;
 /** Licensed state */
 public static final int NVML_GRID_LICENSE_STATE_LICENSED =                5;
-// Targeting ../nvml/nvmlVgpuLicenseInfo_t.java
+// Targeting ..\nvml\nvmlVgpuLicenseInfo_t.java
 
 
-// Targeting ../nvml/nvmlProcessUtilizationSample_t.java
+// Targeting ..\nvml\nvmlProcessUtilizationSample_t.java
 
 
-// Targeting ../nvml/nvmlGridLicenseExpiry_t.java
+// Targeting ..\nvml\nvmlGridLicenseExpiry_t.java
 
 
-// Targeting ../nvml/nvmlGridLicensableFeature_t.java
+// Targeting ..\nvml\nvmlGridLicensableFeature_t.java
 
 
-// Targeting ../nvml/nvmlGridLicensableFeatures_t.java
+// Targeting ..\nvml\nvmlGridLicensableFeatures_t.java
 
 
 
@@ -1497,13 +1497,13 @@ public static final int NVML_FI_DEV_NVLINK_ECC_DATA_ERROR_COUNT_TOTAL = 160;
 
 /** One greater than the largest field ID defined above */
 public static final int NVML_FI_MAX = 161;
-// Targeting ../nvml/nvmlFieldValue_t.java
+// Targeting ..\nvml\nvmlFieldValue_t.java
 
 
-// Targeting ../nvml/nvmlUnit_st.java
+// Targeting ..\nvml\nvmlUnit_st.java
 
 
-// Targeting ../nvml/nvmlHwbcEntry_t.java
+// Targeting ..\nvml\nvmlHwbcEntry_t.java
 
 
 
@@ -1526,22 +1526,22 @@ public static final int
     NVML_LED_COLOR_GREEN       = 0,
     /** AMBER, indicates problem */
     NVML_LED_COLOR_AMBER       = 1;
-// Targeting ../nvml/nvmlLedState_t.java
+// Targeting ..\nvml\nvmlLedState_t.java
 
 
-// Targeting ../nvml/nvmlUnitInfo_t.java
+// Targeting ..\nvml\nvmlUnitInfo_t.java
 
 
-// Targeting ../nvml/nvmlPSUInfo_t.java
+// Targeting ..\nvml\nvmlPSUInfo_t.java
 
 
-// Targeting ../nvml/nvmlUnitFanInfo_t.java
+// Targeting ..\nvml\nvmlUnitFanInfo_t.java
 
 
-// Targeting ../nvml/nvmlUnitFanSpeeds_t.java
+// Targeting ..\nvml\nvmlUnitFanSpeeds_t.java
 
 
-// Targeting ../nvml/nvmlEventSet_st.java
+// Targeting ..\nvml\nvmlEventSet_st.java
 
 
 
@@ -1603,7 +1603,7 @@ public static final long nvmlEventTypeAll = (nvmlEventTypeNone
         | nvmlEventTypePowerSourceChange       
         | nvmlEventMigConfigChange             
         );
-// Targeting ../nvml/nvmlEventData_t.java
+// Targeting ..\nvml\nvmlEventData_t.java
 
 
 
@@ -1724,7 +1724,7 @@ public static final long nvmlClocksThrottleReasonAll = (nvmlClocksThrottleReason
       | nvmlClocksThrottleReasonHwPowerBrakeSlowdown              
       | nvmlClocksThrottleReasonDisplayClockSetting               
 );
-// Targeting ../nvml/nvmlAccountingStats_t.java
+// Targeting ..\nvml\nvmlAccountingStats_t.java
 
 
 
@@ -1745,7 +1745,7 @@ public static final int
     NVML_ENCODER_QUERY_H264 = 0,
     /** HEVC encoder */
     NVML_ENCODER_QUERY_HEVC = 1;
-// Targeting ../nvml/nvmlEncoderSessionInfo_t.java
+// Targeting ..\nvml\nvmlEncoderSessionInfo_t.java
 
 
 
@@ -1772,7 +1772,7 @@ public static final int
     NVML_FBC_SESSION_TYPE_VID = 3,
     /** HEnc */
     NVML_FBC_SESSION_TYPE_HWENC = 4;
-// Targeting ../nvml/nvmlFBCStats_t.java
+// Targeting ..\nvml\nvmlFBCStats_t.java
 
 
 
@@ -1786,7 +1786,7 @@ public static final int NVML_NVFBC_SESSION_FLAG_CAPTURE_WITH_WAIT_NO_WAIT =     
 public static final int NVML_NVFBC_SESSION_FLAG_CAPTURE_WITH_WAIT_INFINITE =     0x00000008;
 /** Bit specifying if capture was requested as blocking call with timeout period. */
 public static final int NVML_NVFBC_SESSION_FLAG_CAPTURE_WITH_WAIT_TIMEOUT =      0x00000010;
-// Targeting ../nvml/nvmlFBCSessionInfo_t.java
+// Targeting ..\nvml\nvmlFBCSessionInfo_t.java
 
 
 
@@ -7193,13 +7193,13 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") BytePointer vgpuPciId, @Cast("unsigned int*") IntPointer length);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") ByteBuffer vgpuPciId, @Cast("unsigned int*") IntBuffer length);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") byte[] vgpuPciId, @Cast("unsigned int*") int[] length);
-// Targeting ../nvml/nvmlVgpuVersion_t.java
+// Targeting ..\nvml\nvmlVgpuVersion_t.java
 
 
-// Targeting ../nvml/nvmlVgpuMetadata_t.java
+// Targeting ..\nvml\nvmlVgpuMetadata_t.java
 
 
-// Targeting ../nvml/nvmlVgpuPgpuMetadata_t.java
+// Targeting ..\nvml\nvmlVgpuPgpuMetadata_t.java
 
 
 
@@ -7234,7 +7234,7 @@ public static final int
     NVML_VGPU_COMPATIBILITY_LIMIT_GPU           = 0x4,
     /** Compatibility is limited by an undefined factor. */
     NVML_VGPU_COMPATIBILITY_LIMIT_OTHER         = 0x80000000;
-// Targeting ../nvml/nvmlVgpuPgpuCompatibility_t.java
+// Targeting ..\nvml\nvmlVgpuPgpuCompatibility_t.java
 
 
 
@@ -7641,7 +7641,7 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceClearAccountingPi
  *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
  */
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetLicenseInfo_v2(@Cast("nvmlVgpuInstance_t") int vgpuInstance, nvmlVgpuLicenseInfo_t licenseInfo);
-// Targeting ../nvml/nvmlExcludedDeviceInfo_t.java
+// Targeting ..\nvml\nvmlExcludedDeviceInfo_t.java
 
 
 
@@ -7714,13 +7714,13 @@ public static final int NVML_GPU_INSTANCE_PROFILE_8_SLICE =      0x5;
 public static final int NVML_GPU_INSTANCE_PROFILE_6_SLICE =      0x6;
 public static final int NVML_GPU_INSTANCE_PROFILE_1_SLICE_REV1 = 0x7;
 public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =        0x8;
-// Targeting ../nvml/nvmlGpuInstancePlacement_t.java
+// Targeting ..\nvml\nvmlGpuInstancePlacement_t.java
 
 
-// Targeting ../nvml/nvmlGpuInstanceProfileInfo_t.java
+// Targeting ..\nvml\nvmlGpuInstanceProfileInfo_t.java
 
 
-// Targeting ../nvml/nvmlGpuInstanceProfileInfo_v2_t.java
+// Targeting ..\nvml\nvmlGpuInstanceProfileInfo_v2_t.java
 
 
 
@@ -7729,10 +7729,10 @@ public static final int NVML_GPU_INSTANCE_PROFILE_COUNT =        0x8;
  */
 public static native @MemberGetter int nvmlGpuInstanceProfileInfo_v2();
 public static final int nvmlGpuInstanceProfileInfo_v2 = nvmlGpuInstanceProfileInfo_v2();
-// Targeting ../nvml/nvmlGpuInstanceInfo_t.java
+// Targeting ..\nvml\nvmlGpuInstanceInfo_t.java
 
 
-// Targeting ../nvml/nvmlGpuInstance_st.java
+// Targeting ..\nvml\nvmlGpuInstance_st.java
 
 
 
@@ -7754,13 +7754,13 @@ public static final int NVML_COMPUTE_INSTANCE_PROFILE_COUNT =   0x7;
 /** All the engines except multiprocessors would be shared */
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_SHARED = 0x0;
 public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
-// Targeting ../nvml/nvmlComputeInstancePlacement_t.java
+// Targeting ..\nvml\nvmlComputeInstancePlacement_t.java
 
 
-// Targeting ../nvml/nvmlComputeInstanceProfileInfo_t.java
+// Targeting ..\nvml\nvmlComputeInstanceProfileInfo_t.java
 
 
-// Targeting ../nvml/nvmlComputeInstanceProfileInfo_v2_t.java
+// Targeting ..\nvml\nvmlComputeInstanceProfileInfo_v2_t.java
 
 
 
@@ -7769,10 +7769,10 @@ public static final int NVML_COMPUTE_INSTANCE_ENGINE_PROFILE_COUNT =  0x1;
  */
 public static native @MemberGetter int nvmlComputeInstanceProfileInfo_v2();
 public static final int nvmlComputeInstanceProfileInfo_v2 = nvmlComputeInstanceProfileInfo_v2();
-// Targeting ../nvml/nvmlComputeInstanceInfo_t.java
+// Targeting ..\nvml\nvmlComputeInstanceInfo_t.java
 
 
-// Targeting ../nvml/nvmlComputeInstance_st.java
+// Targeting ..\nvml\nvmlComputeInstance_st.java
 
 
 

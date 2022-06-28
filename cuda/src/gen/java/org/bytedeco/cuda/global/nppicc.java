@@ -10298,7 +10298,7 @@ public static native @Cast("NppStatus") int nppiColorTwist_32f_IP3R(@Cast("Npp32
                         @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") FloatBuffer aTwist);
 public static native @Cast("NppStatus") int nppiColorTwist_32f_IP3R(@Cast("Npp32f*const*") @ByPtrPtr float[] pSrcDst, int nSrcDstStep, 
                         @ByVal NppiSize oSizeROI, @Cast("const Npp32f(* /*[3]*/ )[4]") float[] aTwist);
-// Targeting ../nppicc/NppiColorTwistBatchCXR.java
+// Targeting ..\nppicc\NppiColorTwistBatchCXR.java
 
 
 

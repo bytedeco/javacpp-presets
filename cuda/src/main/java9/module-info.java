@@ -17,5 +17,6 @@ module org.bytedeco.cuda {
 //  exports org.bytedeco.cuda.nvgraph;
   exports org.bytedeco.cuda.nvml;
   exports org.bytedeco.cuda.nvrtc;
+  exports org.bytedeco.cuda.nvjpeg;
   exports org.bytedeco.cuda.nvToolsExt;
 }
