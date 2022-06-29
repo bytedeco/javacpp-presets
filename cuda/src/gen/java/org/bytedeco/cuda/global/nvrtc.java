@@ -148,7 +148,7 @@ public static native @Cast("nvrtcResult") int nvrtcGetNumSupportedArchs(int[] nu
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntPointer supportedArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(IntBuffer supportedArchs);
 public static native @Cast("nvrtcResult") int nvrtcGetSupportedArchs(int[] supportedArchs);
-// Targeting ..\nvrtc\_nvrtcProgram.java
+// Targeting ../nvrtc/_nvrtcProgram.java
 
 
 

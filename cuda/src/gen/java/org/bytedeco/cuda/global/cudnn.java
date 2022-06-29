@@ -261,7 +261,7 @@ public static final int CUDNN_OPS_INFER_PATCH = 2;
 // #endif
 
 // #if defined(__cplusplus)
-// Targeting ..\cudnn\cudnnContext.java
+// Targeting ../cudnn/cudnnContext.java
 
 
 
@@ -293,7 +293,7 @@ public static final int
 
 /* human-readable error messages */
 public static native @Cast("const char*") BytePointer cudnnGetErrorString(@Cast("cudnnStatus_t") int status);
-// Targeting ..\cudnn\cudnnRuntimeTag_t.java
+// Targeting ../cudnn/cudnnRuntimeTag_t.java
 
 
 
@@ -322,34 +322,34 @@ public static native @Cast("cudnnStatus_t") int cudnnCreate(@ByPtrPtr cudnnConte
 public static native @Cast("cudnnStatus_t") int cudnnDestroy(cudnnContext handle);
 public static native @Cast("cudnnStatus_t") int cudnnSetStream(cudnnContext handle, CUstream_st streamId);
 public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext handle, @ByPtrPtr CUstream_st streamId);
-// Targeting ..\cudnn\cudnnTensorStruct.java
+// Targeting ../cudnn/cudnnTensorStruct.java
 
 
-// Targeting ..\cudnn\cudnnPoolingStruct.java
+// Targeting ../cudnn/cudnnPoolingStruct.java
 
 
-// Targeting ..\cudnn\cudnnFilterStruct.java
+// Targeting ../cudnn/cudnnFilterStruct.java
 
 
-// Targeting ..\cudnn\cudnnLRNStruct.java
+// Targeting ../cudnn/cudnnLRNStruct.java
 
 
-// Targeting ..\cudnn\cudnnActivationStruct.java
+// Targeting ../cudnn/cudnnActivationStruct.java
 
 
-// Targeting ..\cudnn\cudnnSpatialTransformerStruct.java
+// Targeting ../cudnn/cudnnSpatialTransformerStruct.java
 
 
-// Targeting ..\cudnn\cudnnOpTensorStruct.java
+// Targeting ../cudnn/cudnnOpTensorStruct.java
 
 
-// Targeting ..\cudnn\cudnnReduceTensorStruct.java
+// Targeting ../cudnn/cudnnReduceTensorStruct.java
 
 
-// Targeting ..\cudnn\cudnnCTCLossStruct.java
+// Targeting ../cudnn/cudnnCTCLossStruct.java
 
 
-// Targeting ..\cudnn\cudnnTensorTransformStruct.java
+// Targeting ../cudnn/cudnnTensorTransformStruct.java
 
 
 /*
@@ -1301,7 +1301,7 @@ public static native @Cast("cudnnStatus_t") int cudnnSpatialTfSamplerForward(cud
                              @Const Pointer beta,
                              cudnnTensorStruct yDesc,
                              Pointer y);
-// Targeting ..\cudnn\cudnnDropoutStruct.java
+// Targeting ../cudnn/cudnnDropoutStruct.java
 
 
 
@@ -1359,10 +1359,10 @@ public static native @Cast("cudnnStatus_t") int cudnnDropoutForward(cudnnContext
                     Pointer y,
                     Pointer reserveSpace,
                     @Cast("size_t") long reserveSpaceSizeInBytes);
-// Targeting ..\cudnn\cudnnAlgorithmStruct.java
+// Targeting ../cudnn/cudnnAlgorithmStruct.java
 
 
-// Targeting ..\cudnn\cudnnAlgorithmPerformanceStruct.java
+// Targeting ../cudnn/cudnnAlgorithmPerformanceStruct.java
 
 
 
@@ -1410,7 +1410,7 @@ public static final int
 
 /** enum cudnnCTCLossAlgo_t */
 public static final int CUDNN_CTC_LOSS_ALGO_DETERMINISTIC = 0, CUDNN_CTC_LOSS_ALGO_NON_DETERMINISTIC = 1;
-// Targeting ..\cudnn\cudnnAlgorithm_t.java
+// Targeting ../cudnn/cudnnAlgorithm_t.java
 
 
 
@@ -1473,10 +1473,10 @@ public static final int
 public static final int CUDNN_SEV_ERROR_EN = (1 << CUDNN_SEV_ERROR);
 public static final int CUDNN_SEV_WARNING_EN = (1 << CUDNN_SEV_WARNING);
 public static final int CUDNN_SEV_INFO_EN = (1 << CUDNN_SEV_INFO);
-// Targeting ..\cudnn\cudnnDebug_t.java
+// Targeting ../cudnn/cudnnDebug_t.java
 
 
-// Targeting ..\cudnn\cudnnCallback_t.java
+// Targeting ../cudnn/cudnnCallback_t.java
 
 
 
@@ -2057,13 +2057,13 @@ public static final int
 /* For auxFlags in cudnnSetRNNDescriptor_v8() and cudnnSetRNNPaddingMode() */
 public static final int CUDNN_RNN_PADDED_IO_DISABLED = 0;
 public static final int CUDNN_RNN_PADDED_IO_ENABLED = (1 << 0);
-// Targeting ..\cudnn\cudnnRNNStruct.java
+// Targeting ../cudnn/cudnnRNNStruct.java
 
 
-// Targeting ..\cudnn\cudnnPersistentRNNPlan.java
+// Targeting ../cudnn/cudnnPersistentRNNPlan.java
 
 
-// Targeting ..\cudnn\cudnnRNNDataStruct.java
+// Targeting ../cudnn/cudnnRNNDataStruct.java
 
 
 
@@ -2715,7 +2715,7 @@ public static final int
     CUDNN_SEQDATA_BATCH_DIM = 1, /* index in batch */
     CUDNN_SEQDATA_BEAM_DIM  = 2, /* index in beam */
     CUDNN_SEQDATA_VECT_DIM  = 3;  /* index in vector */
-// Targeting ..\cudnn\cudnnSeqDataStruct.java
+// Targeting ../cudnn/cudnnSeqDataStruct.java
 
 
 
@@ -2794,7 +2794,7 @@ public static final int CUDNN_ATTN_QUERYMAP_ALL_TO_ONE = 0;         /* multiple 
 public static final int CUDNN_ATTN_QUERYMAP_ONE_TO_ONE = (1 << 0); /* multiple Q-s map to multiple (K,V) sets when beam size > 1 */
 public static final int CUDNN_ATTN_DISABLE_PROJ_BIASES = 0;         /* no biases in attention input and output projections */
 public static final int CUDNN_ATTN_ENABLE_PROJ_BIASES = (1 << 1);
-// Targeting ..\cudnn\cudnnAttnStruct.java
+// Targeting ../cudnn/cudnnAttnStruct.java
 
 
 
@@ -4241,7 +4241,7 @@ public static final int CUDNN_CNN_INFER_PATCH = 2;
 // #endif
 
 // #if defined(__cplusplus)
-// Targeting ..\cudnn\cudnnConvolutionStruct.java
+// Targeting ../cudnn/cudnnConvolutionStruct.java
 
 
 
@@ -4258,7 +4258,7 @@ public static final int CUDNN_CONVOLUTION = 0, CUDNN_CROSS_CORRELATION = 1;
 public static final int
     CUDNN_DEFAULT_REORDER = 0,
     CUDNN_NO_REORDER      = 1;
-// Targeting ..\cudnn\cudnnConvolutionFwdAlgoPerf_t.java
+// Targeting ../cudnn/cudnnConvolutionFwdAlgoPerf_t.java
 
 
 
@@ -4567,7 +4567,7 @@ public static native @Cast("cudnnStatus_t") int cudnnConvolutionBiasActivationFo
                                       cudnnActivationStruct activationDesc,
                                       cudnnTensorStruct yDesc,
                                       Pointer y);
-// Targeting ..\cudnn\cudnnConvolutionBwdDataAlgoPerf_t.java
+// Targeting ../cudnn/cudnnConvolutionBwdDataAlgoPerf_t.java
 
 
 
@@ -4707,13 +4707,13 @@ public static native @Cast("cudnnStatus_t") int cudnnGetFoldedConvBackwardDataDe
                                           cudnnTensorTransformStruct diffPadTransDesc,
                                           cudnnTensorTransformStruct gradFoldTransDesc,
                                           cudnnTensorTransformStruct gradUnfoldTransDesc);
-// Targeting ..\cudnn\cudnnFusedOpsConstParamStruct.java
+// Targeting ../cudnn/cudnnFusedOpsConstParamStruct.java
 
 
-// Targeting ..\cudnn\cudnnFusedOpsVariantParamStruct.java
+// Targeting ../cudnn/cudnnFusedOpsVariantParamStruct.java
 
 
-// Targeting ..\cudnn\cudnnFusedOpsPlanStruct.java
+// Targeting ../cudnn/cudnnFusedOpsPlanStruct.java
 
 
 
@@ -4964,7 +4964,7 @@ public static final int CUDNN_CNN_TRAIN_PATCH = 2;
 // #endif
 
 // #if defined(__cplusplus)
-// Targeting ..\cudnn\cudnnConvolutionBwdFilterAlgoPerf_t.java
+// Targeting ../cudnn/cudnnConvolutionBwdFilterAlgoPerf_t.java
 
 
 
@@ -5212,7 +5212,7 @@ public static native @Cast("cudnnStatus_t") int cudnnCnnTrainVersionCheck();
 
 /* NOTE: definition in extern "C" to be copied later to public header */
 // #if defined(__cplusplus)
-// Targeting ..\cudnn\cudnnBackendDescriptor_t.java
+// Targeting ../cudnn/cudnnBackendDescriptor_t.java
 
 
 

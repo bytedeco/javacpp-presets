@@ -127,46 +127,46 @@ public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 +
 //------------------------------------------------------------------------------
 
 // #if defined(__cplusplus)
-// Targeting ..\cusparse\cusparseContext.java
+// Targeting ../cusparse/cusparseContext.java
 
 
-// Targeting ..\cusparse\cusparseMatDescr.java
+// Targeting ../cusparse/cusparseMatDescr.java
 
 
-// Targeting ..\cusparse\csrsv2Info.java
+// Targeting ../cusparse/csrsv2Info.java
 
 
-// Targeting ..\cusparse\csrsm2Info.java
+// Targeting ../cusparse/csrsm2Info.java
 
 
-// Targeting ..\cusparse\bsrsv2Info.java
+// Targeting ../cusparse/bsrsv2Info.java
 
 
-// Targeting ..\cusparse\bsrsm2Info.java
+// Targeting ../cusparse/bsrsm2Info.java
 
 
-// Targeting ..\cusparse\csric02Info.java
+// Targeting ../cusparse/csric02Info.java
 
 
-// Targeting ..\cusparse\bsric02Info.java
+// Targeting ../cusparse/bsric02Info.java
 
 
-// Targeting ..\cusparse\csrilu02Info.java
+// Targeting ../cusparse/csrilu02Info.java
 
 
-// Targeting ..\cusparse\bsrilu02Info.java
+// Targeting ../cusparse/bsrilu02Info.java
 
 
-// Targeting ..\cusparse\csrgemm2Info.java
+// Targeting ../cusparse/csrgemm2Info.java
 
 
-// Targeting ..\cusparse\csru2csrInfo.java
+// Targeting ../cusparse/csru2csrInfo.java
 
 
-// Targeting ..\cusparse\cusparseColorInfo.java
+// Targeting ../cusparse/cusparseColorInfo.java
 
 
-// Targeting ..\cusparse\pruneInfo.java
+// Targeting ../cusparse/pruneInfo.java
 
 
 
@@ -287,7 +287,7 @@ public static native @Cast("cusparseStatus_t") int cusparseGetPointerMode(cuspar
 
 public static native @Cast("cusparseStatus_t") int cusparseSetPointerMode(cusparseContext handle,
                        @Cast("cusparsePointerMode_t") int mode);
-// Targeting ..\cusparse\cusparseLoggerCallback_t.java
+// Targeting ../cusparse/cusparseLoggerCallback_t.java
 
 
 
@@ -12778,16 +12778,16 @@ public static final int
     CUSPARSE_INDEX_32I = 2,
     /** 64-bit signed integer for matrix/vector indices */
     CUSPARSE_INDEX_64I = 3;
-// Targeting ..\cusparse\cusparseSpVecDescr.java
+// Targeting ../cusparse/cusparseSpVecDescr.java
 
 
-// Targeting ..\cusparse\cusparseDnVecDescr.java
+// Targeting ../cusparse/cusparseDnVecDescr.java
 
 
-// Targeting ..\cusparse\cusparseSpMatDescr.java
+// Targeting ../cusparse/cusparseSpMatDescr.java
 
 
-// Targeting ..\cusparse\cusparseDnMatDescr.java
+// Targeting ../cusparse/cusparseDnMatDescr.java
 
 
 
@@ -13057,7 +13057,7 @@ public static final int
 /** enum cusparseSpSVAlg_t */
 public static final int
     CUSPARSE_SPSV_ALG_DEFAULT = 0;
-// Targeting ..\cusparse\cusparseSpSVDescr.java
+// Targeting ../cusparse/cusparseSpSVDescr.java
 
 
 
@@ -13104,7 +13104,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSpSV_solve(cusparseCo
 /** enum cusparseSpSMAlg_t */
 public static final int
     CUSPARSE_SPSM_ALG_DEFAULT = 0;
-// Targeting ..\cusparse\cusparseSpSMDescr.java
+// Targeting ../cusparse/cusparseSpSMDescr.java
 
 
 
@@ -13194,7 +13194,7 @@ public static final int
     CUSPARSE_SPGEMM_DEFAULT                 = 0,
     CUSPARSE_SPGEMM_CSR_ALG_DETERMINITIC    = 1,
     CUSPARSE_SPGEMM_CSR_ALG_NONDETERMINITIC = 2;
-// Targeting ..\cusparse\cusparseSpGEMMDescr.java
+// Targeting ../cusparse/cusparseSpGEMMDescr.java
 
 
 
@@ -13360,7 +13360,7 @@ public static native @Cast("cusparseStatus_t") int cusparseSDDMM(cusparseContext
               @Cast("cudaDataType") int computeType,
               @Cast("cusparseSDDMMAlg_t") int alg,
               Pointer externalBuffer);
-// Targeting ..\cusparse\cusparseSpMMOpPlan.java
+// Targeting ../cusparse/cusparseSpMMOpPlan.java
 
 
 

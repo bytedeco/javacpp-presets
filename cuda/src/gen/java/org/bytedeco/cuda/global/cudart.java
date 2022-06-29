@@ -138,65 +138,65 @@ public static final int CUDA_VERSION = 11060;
 
 /** CUDA device */
 /** CUDA device */
-// Targeting ..\cudart\CUctx_st.java
+// Targeting ../cudart/CUctx_st.java
 
 
-// Targeting ..\cudart\CUmod_st.java
+// Targeting ../cudart/CUmod_st.java
 
 
-// Targeting ..\cudart\CUfunc_st.java
+// Targeting ../cudart/CUfunc_st.java
 
 
-// Targeting ..\cudart\CUarray_st.java
+// Targeting ../cudart/CUarray_st.java
 
 
-// Targeting ..\cudart\CUmipmappedArray_st.java
+// Targeting ../cudart/CUmipmappedArray_st.java
 
 
-// Targeting ..\cudart\CUtexref_st.java
+// Targeting ../cudart/CUtexref_st.java
 
 
-// Targeting ..\cudart\CUsurfref_st.java
+// Targeting ../cudart/CUsurfref_st.java
 
 
-// Targeting ..\cudart\CUevent_st.java
+// Targeting ../cudart/CUevent_st.java
 
 
-// Targeting ..\cudart\CUstream_st.java
+// Targeting ../cudart/CUstream_st.java
 
 
-// Targeting ..\cudart\CUgraphicsResource_st.java
+// Targeting ../cudart/CUgraphicsResource_st.java
 
 
 /** An opaque value that represents a CUDA texture object */
 /** An opaque value that represents a CUDA texture object */
 /** An opaque value that represents a CUDA surface object */
 /** An opaque value that represents a CUDA surface object */
-// Targeting ..\cudart\CUextMemory_st.java
+// Targeting ../cudart/CUextMemory_st.java
 
 
-// Targeting ..\cudart\CUextSemaphore_st.java
+// Targeting ../cudart/CUextSemaphore_st.java
 
 
-// Targeting ..\cudart\CUgraph_st.java
+// Targeting ../cudart/CUgraph_st.java
 
 
-// Targeting ..\cudart\CUgraphNode_st.java
+// Targeting ../cudart/CUgraphNode_st.java
 
 
-// Targeting ..\cudart\CUgraphExec_st.java
+// Targeting ../cudart/CUgraphExec_st.java
 
 
-// Targeting ..\cudart\CUmemPoolHandle_st.java
+// Targeting ../cudart/CUmemPoolHandle_st.java
 
 
-// Targeting ..\cudart\CUuserObject_st.java
+// Targeting ../cudart/CUuserObject_st.java
 
 
 
 // #ifndef CU_UUID_HAS_BEEN_DEFINED
 // #define CU_UUID_HAS_BEEN_DEFINED
-// Targeting ..\cudart\CUuuid.java
+// Targeting ../cudart/CUuuid.java
 
 
 // #endif
@@ -205,10 +205,10 @@ public static final int CUDA_VERSION = 11060;
  * CUDA IPC handle size
  */
 public static final int CU_IPC_HANDLE_SIZE = 64;
-// Targeting ..\cudart\CUipcEventHandle_v1.java
+// Targeting ../cudart/CUipcEventHandle_v1.java
 
 
-// Targeting ..\cudart\CUipcMemHandle_v1.java
+// Targeting ../cudart/CUipcMemHandle_v1.java
 
 
 
@@ -388,7 +388,7 @@ public static final int
     /** This has the same effect as ::CU_STREAM_WAIT_VALUE_FLUSH, but as a
                                                   standalone operation. */
     CU_STREAM_MEM_OP_FLUSH_REMOTE_WRITES = 3;
-// Targeting ..\cudart\CUstreamBatchMemOpParams_v1.java
+// Targeting ../cudart/CUstreamBatchMemOpParams_v1.java
 
 
 
@@ -775,7 +775,7 @@ public static final int
     CU_DEVICE_ATTRIBUTE_DEFERRED_MAPPING_CUDA_ARRAY_SUPPORTED = 121,
 
     CU_DEVICE_ATTRIBUTE_MAX = 122;
-// Targeting ..\cudart\CUdevprop_v1.java
+// Targeting ../cudart/CUdevprop_v1.java
 
 
 
@@ -1396,7 +1396,7 @@ public static final int
     CU_JIT_INPUT_NVVM = 5,
 
     CU_JIT_NUM_INPUT_TYPES = 6;
-// Targeting ..\cudart\CUlinkState_st.java
+// Targeting ../cudart/CUlinkState_st.java
 
 
 
@@ -1477,7 +1477,7 @@ public static final int
 // #define CUDA_CB __stdcall
 // #else
 // #define CUDA_CB
-// Targeting ..\cudart\CUhostFn.java
+// Targeting ../cudart/CUhostFn.java
 
 
 
@@ -1492,16 +1492,16 @@ public static final int
     CU_ACCESS_PROPERTY_STREAMING        = 1,
     /** Persisting access is more likely to persist in cache.*/
     CU_ACCESS_PROPERTY_PERSISTING       = 2;
-// Targeting ..\cudart\CUaccessPolicyWindow_v1.java
+// Targeting ../cudart/CUaccessPolicyWindow_v1.java
 
 
-// Targeting ..\cudart\CUDA_KERNEL_NODE_PARAMS_v1.java
+// Targeting ../cudart/CUDA_KERNEL_NODE_PARAMS_v1.java
 
 
-// Targeting ..\cudart\CUDA_MEMSET_NODE_PARAMS_v1.java
+// Targeting ../cudart/CUDA_MEMSET_NODE_PARAMS_v1.java
 
 
-// Targeting ..\cudart\CUDA_HOST_NODE_PARAMS_v1.java
+// Targeting ../cudart/CUDA_HOST_NODE_PARAMS_v1.java
 
 
 
@@ -1551,7 +1551,7 @@ public static final int
     CU_KERNEL_NODE_ATTRIBUTE_ACCESS_POLICY_WINDOW       = 1,
     /** Allows a kernel node to be cooperative (see ::cuLaunchCooperativeKernel). */
     CU_KERNEL_NODE_ATTRIBUTE_COOPERATIVE                = 2;
-// Targeting ..\cudart\CUkernelNodeAttrValue_v1.java
+// Targeting ../cudart/CUkernelNodeAttrValue_v1.java
 
 
 
@@ -1587,7 +1587,7 @@ public static final int
     CU_STREAM_ATTRIBUTE_ACCESS_POLICY_WINDOW    = 1,
     /** ::CUsynchronizationPolicy for work queued up in this stream */
     CU_STREAM_ATTRIBUTE_SYNCHRONIZATION_POLICY  = 3;
-// Targeting ..\cudart\CUstreamAttrValue_v1.java
+// Targeting ../cudart/CUstreamAttrValue_v1.java
 
 
 
@@ -1611,10 +1611,10 @@ public static final int
     /** Create a context with limited SMs. */
     CU_EXEC_AFFINITY_TYPE_SM_COUNT = 0,
     CU_EXEC_AFFINITY_TYPE_MAX = 1;
-// Targeting ..\cudart\CUexecAffinitySmCount_v1.java
+// Targeting ../cudart/CUexecAffinitySmCount_v1.java
 
 
-// Targeting ..\cudart\CUexecAffinityParam_v1.java
+// Targeting ../cudart/CUexecAffinityParam_v1.java
 
 
 
@@ -2219,10 +2219,10 @@ public static final int
     CU_DEVICE_P2P_ATTRIBUTE_ACCESS_ACCESS_SUPPORTED              = 0x04,
     /** Accessing CUDA arrays over the link supported */
     CU_DEVICE_P2P_ATTRIBUTE_CUDA_ARRAY_ACCESS_SUPPORTED          = 0x04;
-// Targeting ..\cudart\CUstreamCallback.java
+// Targeting ../cudart/CUstreamCallback.java
 
 
-// Targeting ..\cudart\CUoccupancyB2DSize.java
+// Targeting ../cudart/CUoccupancyB2DSize.java
 
 
 
@@ -2285,19 +2285,19 @@ public static final int CU_MEMHOSTREGISTER_IOMEMORY =     0x04;
 * set will cause ::cuMemHostRegister to error with ::CUDA_ERROR_NOT_SUPPORTED.
 */
 public static final int CU_MEMHOSTREGISTER_READ_ONLY =    0x08;
-// Targeting ..\cudart\CUDA_MEMCPY2D_v2.java
+// Targeting ../cudart/CUDA_MEMCPY2D_v2.java
 
 
-// Targeting ..\cudart\CUDA_MEMCPY3D_v2.java
+// Targeting ../cudart/CUDA_MEMCPY3D_v2.java
 
 
-// Targeting ..\cudart\CUDA_MEMCPY3D_PEER_v1.java
+// Targeting ../cudart/CUDA_MEMCPY3D_PEER_v1.java
 
 
-// Targeting ..\cudart\CUDA_ARRAY_DESCRIPTOR_v2.java
+// Targeting ../cudart/CUDA_ARRAY_DESCRIPTOR_v2.java
 
 
-// Targeting ..\cudart\CUDA_ARRAY3D_DESCRIPTOR_v2.java
+// Targeting ../cudart/CUDA_ARRAY3D_DESCRIPTOR_v2.java
 
 
 
@@ -2305,16 +2305,16 @@ public static final int CU_MEMHOSTREGISTER_READ_ONLY =    0x08;
  * Indicates that the layered sparse CUDA array or CUDA mipmapped array has a single mip tail region for all layers
  */
 public static final int CU_ARRAY_SPARSE_PROPERTIES_SINGLE_MIPTAIL = 0x1;
-// Targeting ..\cudart\CUDA_ARRAY_SPARSE_PROPERTIES_v1.java
+// Targeting ../cudart/CUDA_ARRAY_SPARSE_PROPERTIES_v1.java
 
 
-// Targeting ..\cudart\CUDA_ARRAY_MEMORY_REQUIREMENTS_v1.java
+// Targeting ../cudart/CUDA_ARRAY_MEMORY_REQUIREMENTS_v1.java
 
 
-// Targeting ..\cudart\CUDA_RESOURCE_DESC_v1.java
+// Targeting ../cudart/CUDA_RESOURCE_DESC_v1.java
 
 
-// Targeting ..\cudart\CUDA_TEXTURE_DESC_v1.java
+// Targeting ../cudart/CUDA_TEXTURE_DESC_v1.java
 
 
 
@@ -2393,10 +2393,10 @@ public static final int
     CU_RES_VIEW_FORMAT_SIGNED_BC6H   = 0x21,
     /** Block compressed 7 */
     CU_RES_VIEW_FORMAT_UNSIGNED_BC7  = 0x22;
-// Targeting ..\cudart\CUDA_RESOURCE_VIEW_DESC_v1.java
+// Targeting ../cudart/CUDA_RESOURCE_VIEW_DESC_v1.java
 
 
-// Targeting ..\cudart\CUDA_POINTER_ATTRIBUTE_P2P_TOKENS_v1.java
+// Targeting ../cudart/CUDA_POINTER_ATTRIBUTE_P2P_TOKENS_v1.java
 
 
 
@@ -2412,7 +2412,7 @@ public static final int
     CU_POINTER_ATTRIBUTE_ACCESS_FLAG_READ      = 0x1,
     /** Read-write access, the device has full read-write access to the memory */
     CU_POINTER_ATTRIBUTE_ACCESS_FLAG_READWRITE = 0x3;
-// Targeting ..\cudart\CUDA_LAUNCH_PARAMS_v1.java
+// Targeting ../cudart/CUDA_LAUNCH_PARAMS_v1.java
 
 
 
@@ -2490,13 +2490,13 @@ public static final int CUDA_NVSCISYNC_ATTR_SIGNAL = 0x1;
  * to be filled by ::cuDeviceGetNvSciSyncAttributes.
  */
 public static final int CUDA_NVSCISYNC_ATTR_WAIT = 0x2;
-// Targeting ..\cudart\CUDA_EXTERNAL_MEMORY_HANDLE_DESC_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_HANDLE_DESC_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_BUFFER_DESC_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC_v1.java
 
 
 
@@ -2545,19 +2545,19 @@ public static final int
      * Handle is an opaque shared NT handle referencing a timeline semaphore
      */
     CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TIMELINE_SEMAPHORE_WIN32 = 10;
-// Targeting ..\cudart\CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS_v1.java
+// Targeting ../cudart/CUDA_EXTERNAL_SEMAPHORE_WAIT_PARAMS_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1.java
+// Targeting ../cudart/CUDA_EXT_SEM_SIGNAL_NODE_PARAMS_v1.java
 
 
-// Targeting ..\cudart\CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1.java
+// Targeting ../cudart/CUDA_EXT_SEM_WAIT_NODE_PARAMS_v1.java
 
 
 
@@ -2644,10 +2644,10 @@ public static final int
 /** enum CUmemHandleType */
 public static final int
     CU_MEM_HANDLE_TYPE_GENERIC = 0;
-// Targeting ..\cudart\CUarrayMapInfo_v1.java
+// Targeting ../cudart/CUarrayMapInfo_v1.java
 
 
-// Targeting ..\cudart\CUmemLocation_v1.java
+// Targeting ../cudart/CUmemLocation_v1.java
 
 
 
@@ -2665,10 +2665,10 @@ public static final int
  * This flag if set indicates that the memory will be used as a tile pool.
  */
 public static final int CU_MEM_CREATE_USAGE_TILE_POOL =    0x1;
-// Targeting ..\cudart\CUmemAllocationProp_v1.java
+// Targeting ../cudart/CUmemAllocationProp_v1.java
 
 
-// Targeting ..\cudart\CUmemAccessDesc_v1.java
+// Targeting ../cudart/CUmemAccessDesc_v1.java
 
 
 
@@ -2758,13 +2758,13 @@ public static final int
      * the last time it was reset. High watermark can only be reset to zero.
      */
     CU_MEMPOOL_ATTR_USED_MEM_HIGH = 8;
-// Targeting ..\cudart\CUmemPoolProps_v1.java
+// Targeting ../cudart/CUmemPoolProps_v1.java
 
 
-// Targeting ..\cudart\CUmemPoolPtrExportData_v1.java
+// Targeting ../cudart/CUmemPoolPtrExportData_v1.java
 
 
-// Targeting ..\cudart\CUDA_MEM_ALLOC_NODE_PARAMS.java
+// Targeting ../cudart/CUDA_MEM_ALLOC_NODE_PARAMS.java
 
 
 
@@ -20299,17 +20299,17 @@ public static final int
     cudaChannelFormatKindUnsignedBlockCompressed7       = 29,
     /** 4 channel unsigned normalized block-compressed (BC7 compression) format with sRGB encoding */
     cudaChannelFormatKindUnsignedBlockCompressed7SRGB   = 30;
-// Targeting ..\cudart\cudaChannelFormatDesc.java
+// Targeting ../cudart/cudaChannelFormatDesc.java
 
 
-// Targeting ..\cudart\cudaArray.java
+// Targeting ../cudart/cudaArray.java
 
 
 
 /**
  * CUDA array (as source copy argument)
  */
-// Targeting ..\cudart\cudaMipmappedArray.java
+// Targeting ../cudart/cudaMipmappedArray.java
 
 
 
@@ -20321,10 +20321,10 @@ public static final int
  * Indicates that the layered sparse CUDA array or CUDA mipmapped array has a single mip tail region for all layers
  */
 public static final int cudaArraySparsePropertiesSingleMipTail =   0x1;
-// Targeting ..\cudart\cudaArraySparseProperties.java
+// Targeting ../cudart/cudaArraySparseProperties.java
 
 
-// Targeting ..\cudart\cudaArrayMemoryRequirements.java
+// Targeting ../cudart/cudaArrayMemoryRequirements.java
 
 
 
@@ -20358,22 +20358,22 @@ public static final int
     cudaMemcpyDeviceToDevice      = 3,
     /** Direction of the transfer is inferred from the pointer values. Requires unified virtual addressing */
     cudaMemcpyDefault             = 4;
-// Targeting ..\cudart\cudaPitchedPtr.java
+// Targeting ../cudart/cudaPitchedPtr.java
 
 
-// Targeting ..\cudart\cudaExtent.java
+// Targeting ../cudart/cudaExtent.java
 
 
-// Targeting ..\cudart\cudaPos.java
+// Targeting ../cudart/cudaPos.java
 
 
-// Targeting ..\cudart\cudaMemcpy3DParms.java
+// Targeting ../cudart/cudaMemcpy3DParms.java
 
 
-// Targeting ..\cudart\cudaMemcpy3DPeerParms.java
+// Targeting ../cudart/cudaMemcpy3DPeerParms.java
 
 
-// Targeting ..\cudart\cudaMemsetParams.java
+// Targeting ../cudart/cudaMemsetParams.java
 
 
 
@@ -20388,7 +20388,7 @@ public static final int
     cudaAccessPropertyStreaming = 1,
     /** Persisting access is more likely to persist in cache.*/
     cudaAccessPropertyPersisting = 2;
-// Targeting ..\cudart\cudaAccessPolicyWindow.java
+// Targeting ../cudart/cudaAccessPolicyWindow.java
 
 
 
@@ -20396,10 +20396,10 @@ public static final int
 // #define CUDART_CB __stdcall
 // #else
 // #define CUDART_CB
-// Targeting ..\cudart\cudaHostFn_t.java
+// Targeting ../cudart/cudaHostFn_t.java
 
 
-// Targeting ..\cudart\cudaHostNodeParams.java
+// Targeting ../cudart/cudaHostNodeParams.java
 
 
 
@@ -20442,7 +20442,7 @@ public static final int
     cudaStreamAttributeAccessPolicyWindow     = 1,
     /** ::cudaSynchronizationPolicy for work queued up in this stream */
     cudaStreamAttributeSynchronizationPolicy  = 3;
-// Targeting ..\cudart\cudaStreamAttrValue.java
+// Targeting ../cudart/cudaStreamAttrValue.java
 
 
 
@@ -20471,7 +20471,7 @@ public static final int
 public static final int
     /** Transfer references from the caller rather than creating new references. */
     cudaGraphUserObjectMove = 0x1;
-// Targeting ..\cudart\cudaGraphicsResource.java
+// Targeting ../cudart/cudaGraphicsResource.java
 
 
 
@@ -20530,7 +20530,7 @@ public static final int
     cudaKernelNodeAttributeAccessPolicyWindow   = 1,
     /** Allows a kernel node to be cooperative (see ::cudaLaunchCooperativeKernel). */
     cudaKernelNodeAttributeCooperative          = 2;
-// Targeting ..\cudart\cudaKernelNodeAttrValue.java
+// Targeting ../cudart/cudaKernelNodeAttrValue.java
 
 
 
@@ -20623,16 +20623,16 @@ public static final int
     cudaResViewFormatSignedBlockCompressed6H   = 0x21,
     /** Block compressed 7 */
     cudaResViewFormatUnsignedBlockCompressed7  = 0x22;
-// Targeting ..\cudart\cudaResourceDesc.java
+// Targeting ../cudart/cudaResourceDesc.java
 
 
-// Targeting ..\cudart\cudaResourceViewDesc.java
+// Targeting ../cudart/cudaResourceViewDesc.java
 
 
-// Targeting ..\cudart\cudaPointerAttributes.java
+// Targeting ../cudart/cudaPointerAttributes.java
 
 
-// Targeting ..\cudart\cudaFuncAttributes.java
+// Targeting ../cudart/cudaFuncAttributes.java
 
 
 
@@ -21131,7 +21131,7 @@ public static final int
     cudaMemLocationTypeInvalid = 0,
     /** Location is a device location, thus id is a device ordinal */
     cudaMemLocationTypeDevice = 1;
-// Targeting ..\cudart\cudaMemLocation.java
+// Targeting ../cudart/cudaMemLocation.java
 
 
 
@@ -21146,7 +21146,7 @@ public static final int
     cudaMemAccessFlagsProtRead      = 1,
     /** Make the address range read-write accessible */
     cudaMemAccessFlagsProtReadWrite = 3;
-// Targeting ..\cudart\cudaMemAccessDesc.java
+// Targeting ../cudart/cudaMemAccessDesc.java
 
 
 
@@ -21175,13 +21175,13 @@ public static final int
     cudaMemHandleTypeWin32                   = 0x2,
     /** Allows a Win32 KMT handle to be used for exporting. (D3DKMT_HANDLE) */
     cudaMemHandleTypeWin32Kmt                = 0x4;
-// Targeting ..\cudart\cudaMemPoolProps.java
+// Targeting ../cudart/cudaMemPoolProps.java
 
 
-// Targeting ..\cudart\cudaMemPoolPtrExportData.java
+// Targeting ../cudart/cudaMemPoolPtrExportData.java
 
 
-// Targeting ..\cudart\cudaMemAllocNodeParams.java
+// Targeting ../cudart/cudaMemAllocNodeParams.java
 
 
 
@@ -21237,13 +21237,13 @@ public static final int
  */
 // #ifndef CU_UUID_HAS_BEEN_DEFINED
 // #define CU_UUID_HAS_BEEN_DEFINED
-// Targeting ..\cudart\CUuuid_st.java
+// Targeting ../cudart/CUuuid_st.java
 
 
-// Targeting ..\cudart\cudaUUID_t.java
+// Targeting ../cudart/cudaUUID_t.java
 
 
-// Targeting ..\cudart\cudaDeviceProp.java
+// Targeting ../cudart/cudaDeviceProp.java
 
 
 
@@ -21340,10 +21340,10 @@ public static final int
  * CUDA IPC Handle Size
  */
 public static final int CUDA_IPC_HANDLE_SIZE = 64;
-// Targeting ..\cudart\cudaIpcEventHandle_t.java
+// Targeting ../cudart/cudaIpcEventHandle_t.java
 
 
-// Targeting ..\cudart\cudaIpcMemHandle_t.java
+// Targeting ../cudart/cudaIpcMemHandle_t.java
 
 
 
@@ -21421,13 +21421,13 @@ public static final int cudaNvSciSyncAttrSignal =       0x1;
  * to be filled by ::cudaDeviceGetNvSciSyncAttributes.
  */
 public static final int cudaNvSciSyncAttrWait =         0x2;
-// Targeting ..\cudart\cudaExternalMemoryHandleDesc.java
+// Targeting ../cudart/cudaExternalMemoryHandleDesc.java
 
 
-// Targeting ..\cudart\cudaExternalMemoryBufferDesc.java
+// Targeting ../cudart/cudaExternalMemoryBufferDesc.java
 
 
-// Targeting ..\cudart\cudaExternalMemoryMipmappedArrayDesc.java
+// Targeting ../cudart/cudaExternalMemoryMipmappedArrayDesc.java
 
 
  
@@ -21476,19 +21476,19 @@ public static final int
      * Handle is an opaque handle file descriptor referencing a timeline semaphore
      */
     cudaExternalSemaphoreHandleTypeTimelineSemaphoreWin32  = 10;
-// Targeting ..\cudart\cudaExternalSemaphoreHandleDesc.java
+// Targeting ../cudart/cudaExternalSemaphoreHandleDesc.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreSignalParams_v1.java
+// Targeting ../cudart/cudaExternalSemaphoreSignalParams_v1.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreWaitParams_v1.java
+// Targeting ../cudart/cudaExternalSemaphoreWaitParams_v1.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreSignalParams.java
+// Targeting ../cudart/cudaExternalSemaphoreSignalParams.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreWaitParams.java
+// Targeting ../cudart/cudaExternalSemaphoreWaitParams.java
 
 
 
@@ -21518,10 +21518,10 @@ public static final int
 /**
  * CUDA output file modes
  */
-// Targeting ..\cudart\CUexternalMemory_st.java
+// Targeting ../cudart/CUexternalMemory_st.java
 
 
-// Targeting ..\cudart\CUexternalSemaphore_st.java
+// Targeting ../cudart/CUexternalSemaphore_st.java
 
 
 
@@ -21556,16 +21556,16 @@ public static final int
     cudaCGScopeGrid      = 1,
     /** Scope represented by a multi_grid_group */
     cudaCGScopeMultiGrid = 2;
-// Targeting ..\cudart\cudaLaunchParams.java
+// Targeting ../cudart/cudaLaunchParams.java
 
 
-// Targeting ..\cudart\cudaKernelNodeParams.java
+// Targeting ../cudart/cudaKernelNodeParams.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreSignalNodeParams.java
+// Targeting ../cudart/cudaExternalSemaphoreSignalNodeParams.java
 
 
-// Targeting ..\cudart\cudaExternalSemaphoreWaitNodeParams.java
+// Targeting ../cudart/cudaExternalSemaphoreWaitNodeParams.java
 
 
 
@@ -21791,7 +21791,7 @@ public static final int
     cudaFormatModeForced = 0,
     /** Auto format mode */
     cudaFormatModeAuto = 1;
-// Targeting ..\cudart\surfaceReference.java
+// Targeting ../cudart/surfaceReference.java
 
 
 
@@ -21920,10 +21920,10 @@ public static final int
     cudaReadModeElementType     = 0,
     /** Read texture as normalized float */
     cudaReadModeNormalizedFloat = 1;
-// Targeting ..\cudart\textureReference.java
+// Targeting ../cudart/textureReference.java
 
 
-// Targeting ..\cudart\cudaTextureDesc.java
+// Targeting ../cudart/cudaTextureDesc.java
 
 
 
@@ -22022,104 +22022,104 @@ public static final int
 // {
 //     members
 // }
-// Targeting ..\cudart\char1.java
+// Targeting ../cudart/char1.java
 
 
-// Targeting ..\cudart\u005Cuchar1.java
+// Targeting ../cudart/uchar1.java
 
 
-// Targeting ..\cudart\char2.java
+// Targeting ../cudart/char2.java
 
 
-// Targeting ..\cudart\u005Cuchar2.java
+// Targeting ../cudart/uchar2.java
 
 
-// Targeting ..\cudart\char3.java
+// Targeting ../cudart/char3.java
 
 
-// Targeting ..\cudart\u005Cuchar3.java
+// Targeting ../cudart/uchar3.java
 
 
-// Targeting ..\cudart\char4.java
+// Targeting ../cudart/char4.java
 
 
-// Targeting ..\cudart\u005Cuchar4.java
+// Targeting ../cudart/uchar4.java
 
 
-// Targeting ..\cudart\short1.java
+// Targeting ../cudart/short1.java
 
 
-// Targeting ..\cudart\u005Cushort1.java
+// Targeting ../cudart/ushort1.java
 
 
-// Targeting ..\cudart\short2.java
+// Targeting ../cudart/short2.java
 
 
-// Targeting ..\cudart\u005Cushort2.java
+// Targeting ../cudart/ushort2.java
 
 
-// Targeting ..\cudart\short3.java
+// Targeting ../cudart/short3.java
 
 
-// Targeting ..\cudart\u005Cushort3.java
+// Targeting ../cudart/ushort3.java
 
 
-// Targeting ..\cudart\short4.java
+// Targeting ../cudart/short4.java
 
 
-// Targeting ..\cudart\u005Cushort4.java
+// Targeting ../cudart/ushort4.java
 
 
-// Targeting ..\cudart\int1.java
+// Targeting ../cudart/int1.java
 
 
-// Targeting ..\cudart\u005Cuint1.java
+// Targeting ../cudart/uint1.java
 
 
-// Targeting ..\cudart\int2.java
+// Targeting ../cudart/int2.java
 
 
-// Targeting ..\cudart\u005Cuint2.java
+// Targeting ../cudart/uint2.java
 
 
-// Targeting ..\cudart\int3.java
+// Targeting ../cudart/int3.java
 
 
-// Targeting ..\cudart\u005Cuint3.java
+// Targeting ../cudart/uint3.java
 
 
-// Targeting ..\cudart\int4.java
+// Targeting ../cudart/int4.java
 
 
-// Targeting ..\cudart\u005Cuint4.java
+// Targeting ../cudart/uint4.java
 
 
-// Targeting ..\cudart\long1.java
+// Targeting ../cudart/long1.java
 
 
-// Targeting ..\cudart\u005Culong1.java
+// Targeting ../cudart/ulong1.java
 
 
-// Targeting ..\cudart\long2.java
+// Targeting ../cudart/long2.java
 
 
-// Targeting ..\cudart\u005Culong2.java
+// Targeting ../cudart/ulong2.java
 
 
 // #else /* !_WIN32 */
-// Targeting ..\cudart\long3.java
+// Targeting ../cudart/long3.java
 
 
-// Targeting ..\cudart\u005Culong3.java
+// Targeting ../cudart/ulong3.java
 
 
-// Targeting ..\cudart\long4.java
+// Targeting ../cudart/long4.java
 
 
-// Targeting ..\cudart\u005Culong4.java
+// Targeting ../cudart/ulong4.java
 
 
-// Targeting ..\cudart\float1.java
+// Targeting ../cudart/float1.java
 
 
 
@@ -22128,7 +22128,7 @@ public static final int
 
 // #pragma GCC diagnostic push
 // #pragma GCC diagnostic ignored "-pedantic"
-// Targeting ..\cudart\float2.java
+// Targeting ../cudart/float2.java
 
 
 
@@ -22137,46 +22137,46 @@ public static final int
 
 // #else /* !__CUDACC__ && __arm__ && __ARM_PCS_VFP &&
 //          __GNUC__ == 4&& __GNUC_MINOR__ == 6 */
-// Targeting ..\cudart\float3.java
+// Targeting ../cudart/float3.java
 
 
-// Targeting ..\cudart\float4.java
+// Targeting ../cudart/float4.java
 
 
-// Targeting ..\cudart\longlong1.java
+// Targeting ../cudart/longlong1.java
 
 
-// Targeting ..\cudart\u005Culonglong1.java
+// Targeting ../cudart/ulonglong1.java
 
 
-// Targeting ..\cudart\longlong2.java
+// Targeting ../cudart/longlong2.java
 
 
-// Targeting ..\cudart\u005Culonglong2.java
+// Targeting ../cudart/ulonglong2.java
 
 
-// Targeting ..\cudart\longlong3.java
+// Targeting ../cudart/longlong3.java
 
 
-// Targeting ..\cudart\u005Culonglong3.java
+// Targeting ../cudart/ulonglong3.java
 
 
-// Targeting ..\cudart\longlong4.java
+// Targeting ../cudart/longlong4.java
 
 
-// Targeting ..\cudart\u005Culonglong4.java
+// Targeting ../cudart/ulonglong4.java
 
 
-// Targeting ..\cudart\double1.java
+// Targeting ../cudart/double1.java
 
 
-// Targeting ..\cudart\double2.java
+// Targeting ../cudart/double2.java
 
 
-// Targeting ..\cudart\double3.java
+// Targeting ../cudart/double3.java
 
 
-// Targeting ..\cudart\double4.java
+// Targeting ../cudart/double4.java
 
 
 
@@ -22191,7 +22191,7 @@ public static final int
 *                                                                              *
 *                                                                              *
 *******************************************************************************/
-// Targeting ..\cudart\dim3.java
+// Targeting ../cudart/dim3.java
 
 
 
@@ -24809,7 +24809,7 @@ public static native @Cast("cudaError_t") int cudaStreamDestroy(CUstream_st stre
  */
 public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st stream, CUevent_st event, @Cast("unsigned int") int flags/*=0*/);
 public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st stream, CUevent_st event);
-// Targeting ..\cudart\cudaStreamCallback_t.java
+// Targeting ../cudart/cudaStreamCallback_t.java
 
 
 
@@ -36174,10 +36174,10 @@ public static native float __high2float(@Const @ByVal __half2 a);
 //         :"=r"(__HALF2_TO_UI(val)) : "r"(__HALF2_TO_CUI(a)),"r"(__HALF2_TO_CUI(b)),"r"(__HALF2_TO_CUI(c)));
 //    return val;
 // }
-// Targeting ..\cudart\__half_raw.java
+// Targeting ../cudart/__half_raw.java
 
 
-// Targeting ..\cudart\__half2_raw.java
+// Targeting ../cudart/__half2_raw.java
 
 
 
@@ -36198,10 +36198,10 @@ public static native float __high2float(@Const @ByVal __half2 a);
 // #if defined(_MSC_VER) && _MSC_VER >= 1500
 // #pragma warning( push )
 // #pragma warning( disable:4522 )
-// Targeting ..\cudart\__half.java
+// Targeting ../cudart/__half.java
 
 
-// Targeting ..\cudart\__half2.java
+// Targeting ../cudart/__half2.java
 
 
 
@@ -36711,10 +36711,10 @@ public static native float __high2float(@Const @ByVal __nv_bfloat162 a);
 // #define __BFLOAT16_TO_CUS(var) *(reinterpret_cast<const unsigned short *>(&(var)))
 // #define __BFLOAT162_TO_UI(var) *(reinterpret_cast<unsigned int *>(&(var)))
 // #define __BFLOAT162_TO_CUI(var) *(reinterpret_cast<const unsigned int *>(&(var)))
-// Targeting ..\cudart\__nv_bfloat16_raw.java
+// Targeting ../cudart/__nv_bfloat16_raw.java
 
 
-// Targeting ..\cudart\__nv_bfloat162_raw.java
+// Targeting ../cudart/__nv_bfloat162_raw.java
 
 
 
@@ -36735,10 +36735,10 @@ public static native float __high2float(@Const @ByVal __nv_bfloat162 a);
 // #if defined(_MSC_VER) && _MSC_VER >= 1500
 // #pragma warning( push )
 // #pragma warning( disable:4522 )
-// Targeting ..\cudart\__nv_bfloat16.java
+// Targeting ../cudart/__nv_bfloat16.java
 
 
-// Targeting ..\cudart\__nv_bfloat162.java
+// Targeting ../cudart/__nv_bfloat162.java
 
 
 
@@ -36976,7 +36976,7 @@ public static final int
 
 
 // #ifdef __cplusplus
-// Targeting ..\cudart\HGPUNV.java
+// Targeting ../cudart/HGPUNV.java
 
 
 // #endif
@@ -37720,7 +37720,7 @@ public static native @Cast("cudaError_t") int cudaGraphicsGLRegisterImage(@ByPtr
  */
 public static native @Cast("cudaError_t") int cudaGraphicsGLRegisterBuffer(@Cast("cudaGraphicsResource**") PointerPointer resource, @Cast("GLuint") int buffer, @Cast("unsigned int") int flags);
 public static native @Cast("cudaError_t") int cudaGraphicsGLRegisterBuffer(@ByPtrPtr cudaGraphicsResource resource, @Cast("GLuint") int buffer, @Cast("unsigned int") int flags);
-// Targeting ..\cudart\HGPUNV.java
+// Targeting ../cudart/HGPUNV.java
 
 
 // #endif

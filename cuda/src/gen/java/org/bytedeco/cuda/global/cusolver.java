@@ -371,22 +371,22 @@ public static native @Cast("cusolverStatus_t") int cusolverGetVersion(
  
 // #if !defined(CUSOLVERDN_H_)
 // #define CUSOLVERDN_H_
-// Targeting ..\cusolver\cusolverDnContext.java
+// Targeting ../cusolver/cusolverDnContext.java
 
 
-// Targeting ..\cusolver\syevjInfo.java
+// Targeting ../cusolver/syevjInfo.java
 
 
-// Targeting ..\cusolver\gesvdjInfo.java
+// Targeting ../cusolver/gesvdjInfo.java
 
 
-// Targeting ..\cusolver\cusolverDnIRSParams.java
+// Targeting ../cusolver/cusolverDnIRSParams.java
 
 
-// Targeting ..\cusolver\cusolverDnIRSInfos.java
+// Targeting ../cusolver/cusolverDnIRSInfos.java
 
 
-// Targeting ..\cusolver\cusolverDnParams.java
+// Targeting ../cusolver/cusolverDnParams.java
 
 
 
@@ -11930,7 +11930,7 @@ public static native @Cast("cusolverStatus_t") int cusolverDnXgesvdr(
 
 
 // #if defined(__cplusplus)
-// Targeting ..\cusolver\cusolverMgContext.java
+// Targeting ../cusolver/cusolverMgContext.java
 
 
 
@@ -11943,10 +11943,10 @@ public static final int
 
   CUDALIBMG_GRID_MAPPING_ROW_MAJOR = 1,
   CUDALIBMG_GRID_MAPPING_COL_MAJOR = 0;
-// Targeting ..\cusolver\cudaLibMgGrid_t.java
+// Targeting ../cusolver/cudaLibMgGrid_t.java
 
 
-// Targeting ..\cusolver\cudaLibMgMatrixDesc_t.java
+// Targeting ../cusolver/cudaLibMgMatrixDesc_t.java
 
 
 
@@ -12808,7 +12808,7 @@ public static final int
 public static final int
     CUSOLVERRF_NUMERIC_BOOST_NOT_USED = 0, //default
     CUSOLVERRF_NUMERIC_BOOST_USED = 1;
-// Targeting ..\cusolver\cusolverRfCommon.java
+// Targeting ../cusolver/cusolverRfCommon.java
 
 
 
@@ -13383,10 +13383,10 @@ public static native @Cast("cusolverStatus_t") int cusolverRfBatchZeroPivot(
 // #include "cusolver_common.h"
 
 // #if defined(__cplusplus)
-// Targeting ..\cusolver\cusolverSpContext.java
+// Targeting ../cusolver/cusolverSpContext.java
 
 
-// Targeting ..\cusolver\csrqrInfo.java
+// Targeting ../cusolver/csrqrInfo.java
 
 
 

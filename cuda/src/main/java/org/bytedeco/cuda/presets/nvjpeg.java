@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Park JeongHwan
+ * Copyright (C) 2022 Park JeongHwan
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class nvjpeg implements InfoMapper {
                .put(new Info("nvjpegJpegDecoder_t").valueTypes("nvjpegJpegDecoder").pointerTypes("@ByPtrPtr nvjpegJpegDecoder"))
                .put(new Info("nvjpegJpegState_t").valueTypes("nvjpegJpegState").pointerTypes("@ByPtrPtr nvjpegJpegState"))
                .put(new Info("nvjpegJpegStream_t").valueTypes("nvjpegJpegStream").pointerTypes("@ByPtrPtr nvjpegJpegStream"))
-               
+
                .put(new Info("nvjpegDecodeParams_t").valueTypes("nvjpegDecodeParams").pointerTypes("@ByPtrPtr nvjpegDecodeParams"))
 
                .put(new Info("nvjpegEncoderState_t").valueTypes("nvjpegEncoderState").pointerTypes("@ByPtrPtr nvjpegEncoderState"))
@@ -53,6 +53,5 @@ public class nvjpeg implements InfoMapper {
 
                .put(new Info("nvjpegBufferPinned_t").valueTypes("nvjpegBufferPinned").pointerTypes("@ByPtrPtr nvjpegBufferPinned"))
                .put(new Info("nvjpegBufferDevice_t").valueTypes("nvjpegBufferDevice").pointerTypes("@ByPtrPtr nvjpegBufferDevice"));
-        
     }
 }

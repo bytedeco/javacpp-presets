@@ -106,16 +106,16 @@ public static final int FFTW_UNALIGNED =          0x10;
 // note if complex.h has been included we use the C99 complex types
 // #if !defined(FFTW_NO_Complex) && defined(_Complex_I) && defined (complex)
 // #else
-// Targeting ..\cufftw\fftw_plan.java
+// Targeting ../cufftw/fftw_plan.java
 
 
-// Targeting ..\cufftw\fftwf_plan.java
+// Targeting ../cufftw/fftwf_plan.java
 
 
-// Targeting ..\cufftw\fftw_iodim.java
+// Targeting ../cufftw/fftw_iodim.java
 
 
-// Targeting ..\cufftw\fftw_iodim64.java
+// Targeting ../cufftw/fftw_iodim64.java
 
 
     

@@ -201,31 +201,31 @@ public static final int NVJPEG_FLAGS_DEFAULT = 0;
 public static final int NVJPEG_FLAGS_HW_DECODE_NO_PIPELINE = 1;
 public static final int NVJPEG_FLAGS_ENABLE_MEMORY_POOLS =   1<<1;
 public static final int NVJPEG_FLAGS_BITSTREAM_STRICT =  1<<2;
-// Targeting ..\nvjpeg\nvjpegImage_t.java
+// Targeting ../nvjpeg/nvjpegImage_t.java
 
 
-// Targeting ..\nvjpeg\tDevMalloc.java
+// Targeting ../nvjpeg/tDevMalloc.java
 
 
-// Targeting ..\nvjpeg\tDevFree.java
+// Targeting ../nvjpeg/tDevFree.java
 
 
-// Targeting ..\nvjpeg\tPinnedMalloc.java
+// Targeting ../nvjpeg/tPinnedMalloc.java
 
 
-// Targeting ..\nvjpeg\tPinnedFree.java
+// Targeting ../nvjpeg/tPinnedFree.java
 
 
-// Targeting ..\nvjpeg\nvjpegDevAllocator_t.java
+// Targeting ../nvjpeg/nvjpegDevAllocator_t.java
 
 
-// Targeting ..\nvjpeg\nvjpegPinnedAllocator_t.java
+// Targeting ../nvjpeg/nvjpegPinnedAllocator_t.java
 
 
-// Targeting ..\nvjpeg\nvjpegHandle.java
+// Targeting ../nvjpeg/nvjpegHandle.java
 
 
-// Targeting ..\nvjpeg\nvjpegJpegState.java
+// Targeting ../nvjpeg/nvjpegJpegState.java
 
 
 
@@ -477,7 +477,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegDecodeBatchedParseJpegTab
           nvjpegJpegState jpeg_handle,
           @Cast("const unsigned char*") byte[] data,
           @Cast("const size_t") long length);
-// Targeting ..\nvjpeg\nvjpegEncoderState.java
+// Targeting ../nvjpeg/nvjpegEncoderState.java
 
 
 
@@ -487,7 +487,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegEncoderStateCreate(
         CUstream_st stream);
 
 public static native @Cast("nvjpegStatus_t") int nvjpegEncoderStateDestroy(nvjpegEncoderState encoder_state);
-// Targeting ..\nvjpeg\nvjpegEncoderParams.java
+// Targeting ../nvjpeg/nvjpegEncoderParams.java
 
 
 
@@ -582,7 +582,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegEncodeRetrieveBitstream(
         @Cast("unsigned char*") byte[] data,
         @Cast("size_t*") SizeTPointer length,
         CUstream_st stream);
-// Targeting ..\nvjpeg\nvjpegBufferPinned.java
+// Targeting ../nvjpeg/nvjpegBufferPinned.java
 
 
 
@@ -591,7 +591,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedCreate(nvjpeg
     @ByPtrPtr nvjpegBufferPinned buffer);
 
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedDestroy(nvjpegBufferPinned buffer);
-// Targeting ..\nvjpeg\nvjpegBufferDevice.java
+// Targeting ../nvjpeg/nvjpegBufferDevice.java
 
 
 
@@ -615,7 +615,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegStateAttachPinnedBuffer(n
 
 public static native @Cast("nvjpegStatus_t") int nvjpegStateAttachDeviceBuffer(nvjpegJpegState decoder_state,
     nvjpegBufferDevice device_buffer);
-// Targeting ..\nvjpeg\nvjpegJpegStream.java
+// Targeting ../nvjpeg/nvjpegJpegStream.java
 
 
 
@@ -752,7 +752,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetChromaSubsam
 public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetChromaSubsampling(
     nvjpegJpegStream jpeg_stream,
     @Cast("nvjpegChromaSubsampling_t*") int[] chroma_subsampling);
-// Targeting ..\nvjpeg\nvjpegDecodeParams.java
+// Targeting ../nvjpeg/nvjpegDecodeParams.java
 
 
 
@@ -786,7 +786,7 @@ public static native @Cast("nvjpegStatus_t") int nvjpegDecodeParamsSetScaleFacto
 public static native @Cast("nvjpegStatus_t") int nvjpegDecodeParamsSetExifOrientation(
     nvjpegDecodeParams decode_params,
     @Cast("nvjpegExifOrientation_t") int orientation);
-// Targeting ..\nvjpeg\nvjpegJpegDecoder.java
+// Targeting ../nvjpeg/nvjpegJpegDecoder.java
 
 
 

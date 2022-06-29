@@ -82,15 +82,15 @@ import static org.bytedeco.cuda.global.nvToolsExt.*;
  * }</pre>
  *
  * In the example the caller does not have to set the value of
- * \ref ::nvtxEventAttributes_v1::category or
- * \ref ::nvtxEventAttributes_v1::payload as these fields were set to
+ * \ref ::nvtxEventAttributes_v2::category or
+ * \ref ::nvtxEventAttributes_v2::payload as these fields were set to
  * the default value by {0}.
  * @see
- * ::nvtxMarkEx
- * ::nvtxRangeStartEx
- * ::nvtxRangePushEx
+ * ::nvtxDomainMarkEx
+ * ::nvtxDomainRangeStartEx
+ * ::nvtxDomainRangePushEx
  */
-@Name("nvtxEventAttributes_v1") @Properties(inherit = org.bytedeco.cuda.presets.nvToolsExt.class)
+@Name("nvtxEventAttributes_v2") @Properties(inherit = org.bytedeco.cuda.presets.nvToolsExt.class)
 public class nvtxEventAttributes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -174,6 +174,10 @@ public class nvtxEventAttributes_t extends Pointer {
         @Name("payload.ullValue") public native @Cast("uint64_t") long payload_ullValue(); public native nvtxEventAttributes_t payload_ullValue(long setter);
         @Name("payload.llValue") public native @Cast("int64_t") long payload_llValue(); public native nvtxEventAttributes_t payload_llValue(long setter);
         @Name("payload.dValue") public native double payload_dValue(); public native nvtxEventAttributes_t payload_dValue(double setter);
+        /* NVTX_VERSION_2 */
+        @Name("payload.uiValue") public native @Cast("uint32_t") int payload_uiValue(); public native nvtxEventAttributes_t payload_uiValue(int setter);
+        @Name("payload.iValue") public native int payload_iValue(); public native nvtxEventAttributes_t payload_iValue(int setter);
+        @Name("payload.fValue") public native float payload_fValue(); public native nvtxEventAttributes_t payload_fValue(float setter);
 
     /** \brief Message type specified in this attribute structure.
      *
@@ -188,7 +192,6 @@ public class nvtxEventAttributes_t extends Pointer {
      *
      * The text message that is attached to an event.
      */
-        @Name("message.ascii") public native @Cast("const char*") BytePointer message_ascii(); public native nvtxEventAttributes_t message_ascii(BytePointer setter);
-        @Name("message.unicode") public native @Cast("const wchar_t*") CharPointer message_unicode(); public native nvtxEventAttributes_t message_unicode(CharPointer setter);
+    public native @ByRef @Cast("nvtxMessageValue_t*") Pointer message(); public native nvtxEventAttributes_t message(Pointer setter);
 
 }

@@ -229,7 +229,7 @@ public static final int
  * CURAND array of 64-bit direction vectors
  */
 /** \cond UNHIDE_TYPEDEFS */
-// Targeting ..\curand\curandGenerator_st.java
+// Targeting ../curand/curandGenerator_st.java
 
 
 
@@ -243,16 +243,16 @@ public static final int
  * CURAND distribution
  */
 /** \cond UNHIDE_TYPEDEFS */
-// Targeting ..\curand\curandDistributionShift_st.java
+// Targeting ../curand/curandDistributionShift_st.java
 
 
-// Targeting ..\curand\curandDistributionM2Shift_st.java
+// Targeting ../curand/curandDistributionM2Shift_st.java
 
 
-// Targeting ..\curand\curandHistogramM2_st.java
+// Targeting ../curand/curandHistogramM2_st.java
 
 
-// Targeting ..\curand\curandDiscreteDistribution_st.java
+// Targeting ../curand/curandDiscreteDistribution_st.java
 
 
 /** \endcond */
