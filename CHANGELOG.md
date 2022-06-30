@@ -1,4 +1,5 @@
 
+ * Add presets for the nvJPEG module of CUDA ([issue #1193](https://github.com/bytedeco/javacpp-presets/issues/1193))
  * Introduce Android builds for TensorFlow Lite ([discussion #1180](https://github.com/bytedeco/javacpp-presets/discussions/1180))
  * Map `std::vector<cv::Ptr<cv::mcc::CChecker> >` for `CCheckerDetector.getListColorChecker()` ([issue bytedeco/javacpp#571](https://github.com/bytedeco/javacpp/issues/571))
  * Include missing `opencv2/mcc/ccm.hpp` header file in presets for OpenCV ([discussion bytedeco/javacpp#568](https://github.com/bytedeco/javacpp/discussions/568))
