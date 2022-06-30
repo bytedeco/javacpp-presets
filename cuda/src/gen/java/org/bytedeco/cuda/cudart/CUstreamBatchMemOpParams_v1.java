@@ -36,19 +36,19 @@ public class CUstreamBatchMemOpParams_v1 extends Pointer {
         @Name("waitValue.operation") public native @Cast("CUstreamBatchMemOpType") int waitValue_operation(); public native CUstreamBatchMemOpParams_v1 waitValue_operation(int setter);
         @Name("waitValue.address") public native @Cast("CUdeviceptr") long waitValue_address(); public native CUstreamBatchMemOpParams_v1 waitValue_address(long setter);
             @Name("waitValue.value") public native @Cast("cuuint32_t") int waitValue_value(); public native CUstreamBatchMemOpParams_v1 waitValue_value(int setter);
-            @Name("waitValue.value64") public native @Cast("cuuint64_t") int waitValue_value64(); public native CUstreamBatchMemOpParams_v1 waitValue_value64(int setter);
+            @Name("waitValue.value64") public native @Cast("cuuint64_t") long waitValue_value64(); public native CUstreamBatchMemOpParams_v1 waitValue_value64(long setter);
         @Name("waitValue.flags") public native @Cast("unsigned int") int waitValue_flags(); public native CUstreamBatchMemOpParams_v1 waitValue_flags(int setter);
         /** For driver internal use. Initial value is unimportant. */
         @Name("waitValue.alias") public native @Cast("CUdeviceptr") long waitValue_alias(); public native CUstreamBatchMemOpParams_v1 waitValue_alias(long setter);
         @Name("writeValue.operation") public native @Cast("CUstreamBatchMemOpType") int writeValue_operation(); public native CUstreamBatchMemOpParams_v1 writeValue_operation(int setter);
         @Name("writeValue.address") public native @Cast("CUdeviceptr") long writeValue_address(); public native CUstreamBatchMemOpParams_v1 writeValue_address(long setter);
             @Name("writeValue.value") public native @Cast("cuuint32_t") int writeValue_value(); public native CUstreamBatchMemOpParams_v1 writeValue_value(int setter);
-            @Name("writeValue.value64") public native @Cast("cuuint64_t") int writeValue_value64(); public native CUstreamBatchMemOpParams_v1 writeValue_value64(int setter);
+            @Name("writeValue.value64") public native @Cast("cuuint64_t") long writeValue_value64(); public native CUstreamBatchMemOpParams_v1 writeValue_value64(long setter);
         @Name("writeValue.flags") public native @Cast("unsigned int") int writeValue_flags(); public native CUstreamBatchMemOpParams_v1 writeValue_flags(int setter);
         /** For driver internal use. Initial value is unimportant. */
         @Name("writeValue.alias") public native @Cast("CUdeviceptr") long writeValue_alias(); public native CUstreamBatchMemOpParams_v1 writeValue_alias(long setter);
         @Name("flushRemoteWrites.operation") public native @Cast("CUstreamBatchMemOpType") int flushRemoteWrites_operation(); public native CUstreamBatchMemOpParams_v1 flushRemoteWrites_operation(int setter);
         @Name("flushRemoteWrites.flags") public native @Cast("unsigned int") int flushRemoteWrites_flags(); public native CUstreamBatchMemOpParams_v1 flushRemoteWrites_flags(int setter);
-    public native @Cast("cuuint64_t") int pad(int i); public native CUstreamBatchMemOpParams_v1 pad(int i, int setter);
-    @MemberGetter public native @Cast("cuuint64_t*") IntPointer pad();
+    public native @Cast("cuuint64_t") long pad(int i); public native CUstreamBatchMemOpParams_v1 pad(int i, long setter);
+    @MemberGetter public native @Cast("cuuint64_t*") LongPointer pad();
 }

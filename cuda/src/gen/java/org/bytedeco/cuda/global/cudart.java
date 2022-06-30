@@ -11617,9 +11617,9 @@ public static native @Cast("CUresult") int cuStreamIsCapturing(CUstream_st hStre
  * ::cuStreamBeginCapture,
  * ::cuStreamIsCapturing
  */
-public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus_out, @Cast("cuuint64_t*") IntPointer id_out);
-public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus_out, @Cast("cuuint64_t*") IntBuffer id_out);
-public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus_out, @Cast("cuuint64_t*") int[] id_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus_out, @Cast("cuuint64_t*") LongPointer id_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus_out, @Cast("cuuint64_t*") LongBuffer id_out);
+public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus_out, @Cast("cuuint64_t*") long[] id_out);
 
 /**
  * \brief Query a stream's capture state (11.3+)
@@ -11674,11 +11674,11 @@ public static native @Cast("CUresult") int cuStreamGetCaptureInfo(CUstream_st hS
  * ::cuStreamUpdateCaptureDependencies
  */
 public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntPointer captureStatus_out,
-        @Cast("cuuint64_t*") IntPointer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+        @Cast("cuuint64_t*") LongPointer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
 public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") IntBuffer captureStatus_out,
-        @Cast("cuuint64_t*") IntBuffer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+        @Cast("cuuint64_t*") LongBuffer id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
 public static native @Cast("CUresult") int cuStreamGetCaptureInfo_v2(CUstream_st hStream, @Cast("CUstreamCaptureStatus*") int[] captureStatus_out,
-        @Cast("cuuint64_t*") int[] id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
+        @Cast("cuuint64_t*") long[] id_out, @ByPtrPtr CUgraph_st graph_out, @Cast("const CUgraphNode**") @ByPtrPtr PointerPointer dependencies_out, @Cast("size_t*") SizeTPointer numDependencies_out);
 
 /**
  * \brief Update the set of dependencies in a capturing stream (11.3+)
@@ -12986,7 +12986,7 @@ public static native @Cast("CUresult") int cuStreamWaitValue32(CUstream_st strea
  * ::cuMemHostRegister,
  * ::cuStreamWaitEvent
  */
-public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") int value, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuStreamWaitValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") long value, @Cast("unsigned int") int flags);
 
 /**
  * \brief Write a value to memory
@@ -13055,7 +13055,7 @@ public static native @Cast("CUresult") int cuStreamWriteValue32(CUstream_st stre
  * ::cuMemHostRegister,
  * ::cuEventRecord
  */
-public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") int value, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuStreamWriteValue64(CUstream_st stream, @Cast("CUdeviceptr") long addr, @Cast("cuuint64_t") long value, @Cast("unsigned int") int flags);
 
 /**
  * \brief Batch operations to synchronize the stream via memory operations
@@ -18743,9 +18743,9 @@ public static native @Cast("CUresult") int cuGraphicsUnmapResources(@Cast("unsig
  * @see
  * ::cudaGetDriverEntryPoint
  */
-public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") PointerPointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
-public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
-public static native @Cast("CUresult") int cuGetProcAddress(String symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") int flags);
+public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") PointerPointer pfn, int cudaVersion, @Cast("cuuint64_t") long flags);
+public static native @Cast("CUresult") int cuGetProcAddress(@Cast("const char*") BytePointer symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") long flags);
+public static native @Cast("CUresult") int cuGetProcAddress(String symbol, @Cast("void**") @ByPtrPtr Pointer pfn, int cudaVersion, @Cast("cuuint64_t") long flags);
 
 /** \} */ /* END CUDA_DRIVER_ENTRY_POINT */
 
