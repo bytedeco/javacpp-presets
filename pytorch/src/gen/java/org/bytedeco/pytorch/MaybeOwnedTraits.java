@@ -44,5 +44,5 @@ public class MaybeOwnedTraits extends Pointer {
 
   public static native @Cast("const c10::MaybeOwnedTraits<at::TensorBase>::owned_type*") TensorBase pointerFromBorrow(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase borrow);
 
-  public static native @Cast("bool") boolean debugBorrowIsValid(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase borrow);
+  public static native @Cast("bool") boolean debugBorrowIsValid(@Cast("const c10::MaybeOwnedTraits<at::TensorBase>::borrow_type*") @ByRef TensorBase arg0);
 }

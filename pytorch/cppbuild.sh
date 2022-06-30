@@ -23,7 +23,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.11.0
+PYTORCH_VERSION=1.12.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -150,7 +150,7 @@ sedinplace '/#include <thrust\/device_vector.h>/a\
 ' caffe2/utils/math_gpu.cu
 
 # allow setting the build directory and passing CUDA options
-sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
+sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
 sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>

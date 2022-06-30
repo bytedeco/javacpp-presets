@@ -15,7 +15,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-// This type represents a Generator
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LayoutType extends LayoutEnumerationType {
     static { Loader.load(); }

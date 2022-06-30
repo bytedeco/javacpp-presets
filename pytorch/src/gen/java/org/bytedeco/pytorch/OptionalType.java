@@ -50,4 +50,7 @@ public class OptionalType extends UnionType {
 
   // common cast Optional[Tensor] for undefined tensor type
   public static native @ByVal Type.TypePtr ofTensor();
+  //
+  // global singleton
+  public static native @ByVal Type.TypePtr get(@ByVal Type.TypePtr inner);
 }

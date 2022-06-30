@@ -36,32 +36,27 @@ public class SharedParserData extends Pointer {
   public SharedParserData() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  // find the longest match of str.substring(pos) against a token, return true
-  // if successful filling in kind, start,and len
   public native @Cast("bool") boolean match(
-        @ByVal @Cast("c10::string_view*") Pointer str,
-        @Cast("size_t") long pos,
+        @ByVal StringCordView.Iterator pos,
         @Cast("bool") boolean continuation,
         @Cast("bool") boolean whitespace_token,
         IntPointer kind,
-        @Cast("size_t*") SizeTPointer start,
-        @Cast("size_t*") SizeTPointer len);
+        StringCordView.Iterator start,
+        StringCordView.Iterator end);
   public native @Cast("bool") boolean match(
-        @ByVal @Cast("c10::string_view*") Pointer str,
-        @Cast("size_t") long pos,
+        @ByVal StringCordView.Iterator pos,
         @Cast("bool") boolean continuation,
         @Cast("bool") boolean whitespace_token,
         IntBuffer kind,
-        @Cast("size_t*") SizeTPointer start,
-        @Cast("size_t*") SizeTPointer len);
+        StringCordView.Iterator start,
+        StringCordView.Iterator end);
   public native @Cast("bool") boolean match(
-        @ByVal @Cast("c10::string_view*") Pointer str,
-        @Cast("size_t") long pos,
+        @ByVal StringCordView.Iterator pos,
         @Cast("bool") boolean continuation,
         @Cast("bool") boolean whitespace_token,
         int[] kind,
-        @Cast("size_t*") SizeTPointer start,
-        @Cast("size_t*") SizeTPointer len);
+        StringCordView.Iterator start,
+        StringCordView.Iterator end);
 
   public native @Cast("bool") boolean isUnary(int kind, IntPointer prec);
   public native @Cast("bool") boolean isUnary(int kind, IntBuffer prec);

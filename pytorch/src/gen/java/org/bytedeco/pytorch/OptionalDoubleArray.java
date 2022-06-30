@@ -16,29 +16,34 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @Name("c10::OptionalArray<double>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class DoubleOptionalArray extends Pointer {
+public class OptionalDoubleArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DoubleOptionalArray(Pointer p) { super(p); }
+    public OptionalDoubleArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DoubleOptionalArray(long size) { super((Pointer)null); allocateArray(size); }
+    public OptionalDoubleArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public DoubleOptionalArray position(long position) {
-        return (DoubleOptionalArray)super.position(position);
+    @Override public OptionalDoubleArray position(long position) {
+        return (OptionalDoubleArray)super.position(position);
     }
-    @Override public DoubleOptionalArray getPointer(long i) {
-        return new DoubleOptionalArray((Pointer)this).offsetAddress(i);
+    @Override public OptionalDoubleArray getPointer(long i) {
+        return new OptionalDoubleArray((Pointer)this).offsetAddress(i);
     }
 
-  public native @ByRef DoubleVectorOptional list(); public native DoubleOptionalArray list(DoubleVectorOptional setter);
+  public native @ByRef DoubleVectorOptional list(); public native OptionalDoubleArray list(DoubleVectorOptional setter);
 
-  public DoubleOptionalArray() { super((Pointer)null); allocate(); }
+  public OptionalDoubleArray() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public DoubleOptionalArray(@ByVal @Cast("std::vector<double>*") DoubleVector val) { super((Pointer)null); allocate(val); }
+  public OptionalDoubleArray(@ByVal @Cast("std::vector<double>*") DoubleVector val) { super((Pointer)null); allocate(val); }
   private native void allocate(@ByVal @Cast("std::vector<double>*") DoubleVector val);
 
   // Used when saving an argument for the backwards pass.
-  public native @ByRef @Name("operator =") DoubleOptionalArray put(@ByVal DoubleArrayRefOptional ref);
+  public native @ByRef @Name("operator =") OptionalDoubleArray put(@ByVal DoubleArrayRefOptional ref);
+
+  // Used when saving an argument for the backwards pass.
+  public native @ByRef @Name("operator =") OptionalDoubleArray put(@ByVal OptionalDoubleArrayRef ref);
 
   public native @ByVal @Name("operator c10::optional<c10::ArrayRef<double> >") DoubleArrayRefOptional asDoubleArrayRefOptional();
+
+  public native @ByVal @Name("operator c10::OptionalArrayRef<double>") OptionalDoubleArrayRef asOptionalDoubleArrayRef();
 }

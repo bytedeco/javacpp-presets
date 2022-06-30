@@ -24,12 +24,21 @@ public class ExceptionMessageValue extends SugaredValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExceptionMessageValue(Pointer p) { super(p); }
 
-  public ExceptionMessageValue(Value value) { super((Pointer)null); allocate(value); }
-  private native void allocate(Value value);
+  public ExceptionMessageValue(
+        Value value,
+        Value qualified_class_name/*=nullptr*/) { super((Pointer)null); allocate(value, qualified_class_name); }
+  private native void allocate(
+        Value value,
+        Value qualified_class_name/*=nullptr*/);
+  public ExceptionMessageValue(
+        Value value) { super((Pointer)null); allocate(value); }
+  private native void allocate(
+        Value value);
 
   public native @StdString BytePointer kind();
 
   public native Value getValue();
 
-  public native Value value_(); public native ExceptionMessageValue value_(Value setter);
+  // qualified python class name
+  public native Value getQualifiedClassName();
 }

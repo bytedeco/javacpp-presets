@@ -30,6 +30,15 @@ public class ListType extends ListSingleElementType {
 
   public native @Cast("bool") boolean isSubtypeOfExt(@Const @ByRef Type rhs, @Cast("std::ostream*") Pointer why_not);
 
+  // global singleton
+  // Given an inner type T and an identifier,
+  // this function wil return the global singleton type pointer
+  // the type List<T>.
+  // The extra "identifier" argument is needed beccause we have multiple container types
+  // that all re-use this function (List<T>, array<T, N>, etc.)
+  public static native @ByVal Type.TypePtr get(@StdString BytePointer identifier, @ByVal Type.TypePtr inner);
+  public static native @ByVal Type.TypePtr get(@StdString String identifier, @ByVal Type.TypePtr inner);
+
   // common cast List[Tensor]
   public static native @SharedPtr ListType ofTensors();
   public static native @SharedPtr ListType ofOptionalTensors();

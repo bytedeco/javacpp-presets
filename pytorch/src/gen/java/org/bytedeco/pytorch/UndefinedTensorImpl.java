@@ -30,9 +30,6 @@ public class UndefinedTensorImpl extends TensorImpl {
 // #ifdef _WIN32
 // #else
   public static native @Const TensorImpl singleton();
-  public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();
-  public native @Cast("int64_t") long size(@Cast("int64_t") long d);
-  public native @Cast("int64_t") long stride(@Cast("int64_t") long d);
 // #ifdef DEBUG
   public native @Cast("bool") boolean has_storage();
 // #endif

@@ -178,7 +178,7 @@ public class ClassType extends NamedType {
 
   public native @ByVal StringArrayRef constantNames();
 
-  public native @ByVal IValueArrayRef constantValues();
+  public native @ByVal @Cast("at::ArrayRef<c10::IValue>*") IValueArrayRef constantValues();
 
   // [Internal Only] Remove constant from the ClassType
   // caller is responsible to make sure the modification is safe:

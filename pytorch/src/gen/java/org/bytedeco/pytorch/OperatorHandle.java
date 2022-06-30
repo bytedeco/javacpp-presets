@@ -42,7 +42,7 @@ public class OperatorHandle extends Pointer {
   public native @StdString BytePointer dumpState();
 
   public native @Cast("bool") boolean hasKernelForDispatchKey(DispatchKey k);
-  public native @Cast("bool") boolean hasKernelForDispatchKey(@Cast("c10::DispatchKey") byte k);
+  public native @Cast("bool") boolean hasKernelForDispatchKey(@Cast("c10::DispatchKey") short k);
 
 
   public native @StdString BytePointer dumpComputedTable();

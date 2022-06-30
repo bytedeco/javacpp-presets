@@ -50,9 +50,11 @@ public class Context extends Pointer {
   public static native long versionCuDNN();
   public static native @Cast("bool") boolean hasCuSOLVER();
   public static native @Cast("bool") boolean hasHIP();
+  public static native @Cast("bool") boolean hasIPU();
   public static native @Cast("bool") boolean hasXLA();
   public static native @Cast("bool") boolean hasLazy();
-  public static native @Cast("bool") boolean hasMLC();
+  public static native @Cast("bool") boolean hasMPS();
+
   public static native @Cast("bool") boolean hasORT();
   // defined in header so that getNonVariableType has ability to inline
   // call_once check. getNonVariableType is called fairly frequently
@@ -155,10 +157,15 @@ public class Context extends Pointer {
   // https://docs.nvidia.com/cuda/cublas/index.html#cublasApi_reproducibility
   public native void alertCuBLASConfigNotDeterministic();
 
+  public native void setFloat32MatmulPrecision(@StdString BytePointer s);
+  public native void setFloat32MatmulPrecision(@StdString String s);
   public native @Cast("bool") boolean allowTF32CuDNN();
   public native void setAllowTF32CuDNN(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean allowTF32CuBLAS();
   public native void setAllowTF32CuBLAS(@Cast("bool") boolean arg0);
+  public native Float32MatmulPrecision float32MatmulPrecision();
+  public native void setFloat32MatmulPrecision(Float32MatmulPrecision p);
+  public native void setFloat32MatmulPrecision(@Cast("at::Float32MatmulPrecision") int p);
   public native @Cast("bool") boolean allowFP16ReductionCuBLAS();
   public native void setAllowFP16ReductionCuBLAS(@Cast("bool") boolean arg0);
   public native @ByVal QEngine qEngine();

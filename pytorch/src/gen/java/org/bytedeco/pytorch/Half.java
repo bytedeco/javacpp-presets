@@ -47,4 +47,6 @@ public class Half extends Pointer {
 
 // #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif
+// #ifdef SYCL_LANGUAGE_VERSION
+// #endif
 }

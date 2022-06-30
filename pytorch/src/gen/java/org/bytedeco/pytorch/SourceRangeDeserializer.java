@@ -16,16 +16,13 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SourceRangeDeserializer extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public SourceRangeDeserializer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SourceRangeDeserializer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SourceRangeDeserializer(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SourceRangeDeserializer(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public SourceRangeDeserializer position(long position) {
         return (SourceRangeDeserializer)super.position(position);
@@ -34,5 +31,9 @@ public class SourceRangeDeserializer extends Pointer {
         return new SourceRangeDeserializer((Pointer)this).offsetAddress(i);
     }
 
+  public SourceRangeDeserializer() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public SourceRangeDeserializer(@ByVal IValue text_table) { super((Pointer)null); allocate(text_table); }
+  private native void allocate(@ByVal IValue text_table);
   
 }

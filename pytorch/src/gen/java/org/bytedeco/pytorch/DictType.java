@@ -40,4 +40,13 @@ public class DictType extends SharedType {
   public native @ByVal TypeArrayRef containedTypes();
 
   public native @Cast("bool") boolean equals(@Const @ByRef Type rhs);
+
+  // global singleton
+  // Given an inner type T and an identifier,
+  // this function wil return the global singleton type pointer
+  // the type List<T>.
+  // The extra "identifier" argument is needed beccause we have multiple container types
+  // that all re-use this function (Dict<K, V> and unordered_map<K, V>)
+  public static native @ByVal Type.TypePtr get(@StdString BytePointer identifier, @ByVal Type.TypePtr key, @ByVal Type.TypePtr val);
+  public static native @ByVal Type.TypePtr get(@StdString String identifier, @ByVal Type.TypePtr key, @ByVal Type.TypePtr val);
 }

@@ -22,29 +22,34 @@ import static org.bytedeco.pytorch.global.torch.*;
 // either until the end of a statement (as a temporary), or as a saved arg
 // in autograd.
 @Name("c10::OptionalArray<int64_t>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class LongOptionalArray extends Pointer {
+public class OptionalLongArray extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LongOptionalArray(Pointer p) { super(p); }
+    public OptionalLongArray(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LongOptionalArray(long size) { super((Pointer)null); allocateArray(size); }
+    public OptionalLongArray(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
-    @Override public LongOptionalArray position(long position) {
-        return (LongOptionalArray)super.position(position);
+    @Override public OptionalLongArray position(long position) {
+        return (OptionalLongArray)super.position(position);
     }
-    @Override public LongOptionalArray getPointer(long i) {
-        return new LongOptionalArray((Pointer)this).offsetAddress(i);
+    @Override public OptionalLongArray getPointer(long i) {
+        return new OptionalLongArray((Pointer)this).offsetAddress(i);
     }
 
-  public native @ByRef LongVectorOptional list(); public native LongOptionalArray list(LongVectorOptional setter);
+  public native @ByRef LongVectorOptional list(); public native OptionalLongArray list(LongVectorOptional setter);
 
-  public LongOptionalArray() { super((Pointer)null); allocate(); }
+  public OptionalLongArray() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public LongOptionalArray(@ByVal @Cast("std::vector<int64_t>*") LongVector val) { super((Pointer)null); allocate(val); }
+  public OptionalLongArray(@ByVal @Cast("std::vector<int64_t>*") LongVector val) { super((Pointer)null); allocate(val); }
   private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector val);
 
   // Used when saving an argument for the backwards pass.
-  public native @ByRef @Name("operator =") LongOptionalArray put(@ByVal LongArrayRefOptional ref);
+  public native @ByRef @Name("operator =") OptionalLongArray put(@ByVal LongArrayRefOptional ref);
+
+  // Used when saving an argument for the backwards pass.
+  public native @ByRef @Name("operator =") OptionalLongArray put(@ByVal OptionalIntArrayRef ref);
 
   public native @ByVal @Name("operator c10::optional<c10::ArrayRef<int64_t> >") LongArrayRefOptional asLongArrayRefOptional();
+
+  public native @ByVal @Name("operator c10::OptionalArrayRef<int64_t>") OptionalIntArrayRef asOptionalIntArrayRef();
 }

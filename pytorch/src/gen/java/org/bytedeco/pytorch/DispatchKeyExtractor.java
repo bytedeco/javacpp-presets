@@ -45,7 +45,7 @@ public class DispatchKeyExtractor extends Pointer {
   public native @ByVal DispatchKeySet getDispatchKeySetBoxed(@Const IValueVector stack);
 
   public native void setOperatorHasFallthroughForKey(DispatchKey k, @Cast("bool") boolean has_fallthrough);
-  public native void setOperatorHasFallthroughForKey(@Cast("c10::DispatchKey") byte k, @Cast("bool") boolean has_fallthrough);
+  public native void setOperatorHasFallthroughForKey(@Cast("c10::DispatchKey") short k, @Cast("bool") boolean has_fallthrough);
 
   public native @StdString BytePointer dumpState();
   public native void checkInvariants(@Const @ByRef FunctionSchema schema);

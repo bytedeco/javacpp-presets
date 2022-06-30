@@ -16,104 +16,94 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// Source represents a code segment like SourceView, but the former owns a copy
-// of source text while the latter doesn't.
+// Source represents a code segment. It keeps track of:
+//  - text_view : the view into text of the code segment
+//  - filename (optional) : if present, represents the name of the file from
+//                          which the code segment originated.
+//  - starting_line_no : represents the line in the original file where the
+//                       code segment started.
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Source extends SourceView {
+public class Source extends Pointer {
     static { Loader.load(); }
 
-  public Source(
-        @StdString BytePointer text,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text, gen_ranges); }
-  private native void allocate(
-        @StdString BytePointer text,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
-  public Source(
-        @StdString BytePointer text) { super((Pointer)null); allocate(text); }
-  private native void allocate(
-        @StdString BytePointer text);
-  public Source(
-        @StdString String text,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text, gen_ranges); }
-  private native void allocate(
-        @StdString String text,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
-  public Source(
-        @StdString String text) { super((Pointer)null); allocate(text); }
-  private native void allocate(
-        @StdString String text);
+  // Whether or not Source should copy the string passed in the constructor.
+  public enum CopiesString { COPIES_STRING(0), DONT_COPY(1);
+
+      public final int value;
+      private CopiesString(int v) { this.value = v; }
+      private CopiesString(CopiesString e) { this.value = e.value; }
+      public CopiesString intern() { for (CopiesString e : values()) if (e.value == value) return e; return this; }
+      @Override public String toString() { return intern().name(); }
+  }
 
   public Source(
         @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text_view, gen_ranges); }
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
+        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
+        CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
         @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
+        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
+        CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/);
   public Source(
         @ByVal @Cast("c10::string_view*") Pointer text_view) { super((Pointer)null); allocate(text_view); }
   private native void allocate(
         @ByVal @Cast("c10::string_view*") Pointer text_view);
+  public Source(
+        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
+        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
+        @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
+  private native void allocate(
+        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
+        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
+        @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/);
 
   public Source(
-        @StdString BytePointer text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text, filename, starting_line_no, gen_ranges); }
+        @ByVal StringCordView str,
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
+        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(str, filename, starting_line_no, gen_ranges); }
   private native void allocate(
-        @StdString BytePointer text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
+        @ByVal StringCordView str,
+        @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
+        @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
   public Source(
-        @StdString BytePointer text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no) { super((Pointer)null); allocate(text, filename, starting_line_no); }
+        @ByVal StringCordView str) { super((Pointer)null); allocate(str); }
   private native void allocate(
-        @StdString BytePointer text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no);
-  public Source(
-        @StdString String text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text, filename, starting_line_no, gen_ranges); }
-  private native void allocate(
-        @StdString String text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
-  public Source(
-        @StdString String text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no) { super((Pointer)null); allocate(text, filename, starting_line_no); }
-  private native void allocate(
-        @StdString String text,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no);
+        @ByVal StringCordView str);
+  // Given a line number (within source_), return the byte offset of the
+  // beginning of that line.
+  public native @Cast("size_t") long offset_for_line(@Cast("size_t") long line);
 
-  public Source(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges); }
-  private native void allocate(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no,
-        @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/);
-  public Source(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no) { super((Pointer)null); allocate(text_view, filename, starting_line_no); }
-  private native void allocate(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
-        @ByVal StringOptional filename,
-        @Cast("size_t") long starting_line_no);
+  // Returns number of lines present.
+  public native @Cast("size_t") long num_lines();
 
-  // Constructor that deepcopies and owns source text referenced in
-  // `source_view`.
-  public Source(@Const @ByRef SourceView source_view) { super((Pointer)null); allocate(source_view); }
-  private native void allocate(@Const @ByRef SourceView source_view);
+  // Calculate the line (within the code segment) on which `offset` resides.
+  public native @Cast("size_t") long lineno_for_offset(@Cast("size_t") long offset);
 
-  public native @StdString BytePointer text_(); public native Source text_(BytePointer setter);
+  // Calculate the line (within the original source file, if present) on which
+  // `lineno` resides.
+  public native @Cast("size_t") long lineno_to_source_lineno(@Cast("size_t") long lineno);
+
+  public native @ByVal StringCordView get_line(@Cast("size_t") long lineno);
+
+  public native @Const @ByRef StringCordView text_str();
+
+  public native @Cast("char") byte char_at(@Cast("size_t") long index);
+
+  public native @Cast("size_t") long size();
+
+  public native @ByRef StringOptional filename();
+
+  public native @Cast("size_t") long starting_line_no();
+
+  
 }

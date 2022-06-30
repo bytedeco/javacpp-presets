@@ -37,6 +37,23 @@ public class GraphExecutor extends Pointer {
   public GraphExecutor(@Const @SharedPtr @ByRef Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
   private native void allocate(@Const @SharedPtr @ByRef Graph graph, @StdString String function_name);
 
+  public GraphExecutor(
+        @Const @SharedPtr @ByRef Graph graph,
+        @StdString BytePointer function_name,
+        ExecutorExecutionMode executor_mode) { super((Pointer)null); allocate(graph, function_name, executor_mode); }
+  private native void allocate(
+        @Const @SharedPtr @ByRef Graph graph,
+        @StdString BytePointer function_name,
+        ExecutorExecutionMode executor_mode);
+  public GraphExecutor(
+        @Const @SharedPtr @ByRef Graph graph,
+        @StdString String function_name,
+        @Cast("torch::jit::ExecutorExecutionMode") int executor_mode) { super((Pointer)null); allocate(graph, function_name, executor_mode); }
+  private native void allocate(
+        @Const @SharedPtr @ByRef Graph graph,
+        @StdString String function_name,
+        @Cast("torch::jit::ExecutorExecutionMode") int executor_mode);
+
   public native void run(@ByRef IValueVector inputs);
 
   // `remaining_bailout_depth` stands for the maximum number of profiled and
@@ -48,12 +65,14 @@ public class GraphExecutor extends Pointer {
   // profiled information whenever a bailout check is failed/triggered, a new
   // `GraphExecutor` will be created. This new `GraphExecutor`'s
   // remaining_bailout_depth will be reduced by 1.
+  // If no bailout depth is passed, the depth will be initialized from the
+  // current global fusion strategy settings.
   public native @Const @ByRef ExecutionPlan getPlanFor(
         @ByRef IValueVector inputs,
-        @Cast("size_t") long remaining_bailout_depth);
+        @ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional remaining_bailout_depth);
+  public native @Const @ByRef ExecutionPlan getPlanFor(
+        @ByRef IValueVector inputs);
   public native @ByVal GraphExecutorState getDebugState();
-
-  public static native @Cast("size_t") long getDefaultNumBailOuts();
 
   public native void debugFlushCompilationCache();
 

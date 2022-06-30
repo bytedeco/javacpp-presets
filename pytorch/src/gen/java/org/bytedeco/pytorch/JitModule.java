@@ -16,7 +16,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Name("torch::jit::Module") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::jit::Module") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class JitModule extends JitObject {
     static { Loader.load(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -195,20 +195,23 @@ public class JitModule extends JitObject {
   public native void _save_for_mobile(
         @Cast("std::ostream*") @ByRef Pointer out,
         @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
-        @Cast("bool") boolean save_mobile_debug_info/*=false*/);
+        @Cast("bool") boolean save_mobile_debug_info/*=false*/,
+        @Cast("bool") boolean use_flatbuffer/*=false*/);
   public native void _save_for_mobile(
         @Cast("std::ostream*") @ByRef Pointer out);
 
   public native void _save_for_mobile(
         @StdString BytePointer filename,
         @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
-        @Cast("bool") boolean save_mobile_debug_info/*=false*/);
+        @Cast("bool") boolean save_mobile_debug_info/*=false*/,
+        @Cast("bool") boolean use_flatbuffer/*=false*/);
   public native void _save_for_mobile(
         @StdString BytePointer filename);
   public native void _save_for_mobile(
         @StdString String filename,
         @Const @ByRef(nullValue = "torch::jit::ExtraFilesMap()") ExtraFilesMap extra_files,
-        @Cast("bool") boolean save_mobile_debug_info/*=false*/);
+        @Cast("bool") boolean save_mobile_debug_info/*=false*/,
+        @Cast("bool") boolean use_flatbuffer/*=false*/);
   public native void _save_for_mobile(
         @StdString String filename);
 
@@ -241,4 +244,8 @@ public class JitModule extends JitObject {
   public native @ByVal IValue create_class(@Const @ByRef QualifiedName name, @ByVal IValueVector stack);
 
   public native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByRef JitModule y);
+
+  public native void set_delete_memory(@Cast("char*") @SharedPtr BytePointer delete_mem);
+  public native void set_delete_memory(@Cast("char*") @SharedPtr ByteBuffer delete_mem);
+  public native void set_delete_memory(@Cast("char*") @SharedPtr byte[] delete_mem);
 }

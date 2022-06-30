@@ -27,12 +27,14 @@ public class MobileCode extends Code {
         @StdString BytePointer function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, remaining_bailout_depth); }
+        @Cast("bool") boolean emit_promoted_ops/*=true*/,
+        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, emit_promoted_ops, remaining_bailout_depth); }
   private native void allocate(
         @Const @SharedPtr @ByRef Graph graph,
         @StdString BytePointer function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
+        @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/);
   public MobileCode(
         @Const @SharedPtr @ByRef Graph graph,
@@ -45,12 +47,14 @@ public class MobileCode extends Code {
         @StdString String function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, remaining_bailout_depth); }
+        @Cast("bool") boolean emit_promoted_ops/*=true*/,
+        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, emit_promoted_ops, remaining_bailout_depth); }
   private native void allocate(
         @Const @SharedPtr @ByRef Graph graph,
         @StdString String function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
+        @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/);
   public MobileCode(
         @Const @SharedPtr @ByRef Graph graph,

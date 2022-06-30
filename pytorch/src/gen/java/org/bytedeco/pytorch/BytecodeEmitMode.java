@@ -39,4 +39,7 @@ public class BytecodeEmitMode extends Pointer {
 
   public static native @Cast("bool") boolean is_default_args_before_out_args_enabled();
   public static native void set_default_args_before_out_args_enabled(@Cast("bool") boolean enabled);
+
+  public static native @Cast("bool") boolean is_emit_promoted_ops_enabled();
+  public static native void set_default_emit_promoted_ops_enabled(@Cast("bool") boolean enabled);
 }

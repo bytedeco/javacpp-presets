@@ -33,34 +33,10 @@ public class ExecutionPlan extends Pointer {
 
   public ExecutionPlan() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public ExecutionPlan(
-        @SharedPtr @ByVal Graph graph,
-        @StdString BytePointer function_name,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, remaining_bailout_depth); }
-  private native void allocate(
-        @SharedPtr @ByVal Graph graph,
-        @StdString BytePointer function_name,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/);
-  public ExecutionPlan(
-        @SharedPtr @ByVal Graph graph,
-        @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(
-        @SharedPtr @ByVal Graph graph,
-        @StdString BytePointer function_name);
-  public ExecutionPlan(
-        @SharedPtr @ByVal Graph graph,
-        @StdString String function_name,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, remaining_bailout_depth); }
-  private native void allocate(
-        @SharedPtr @ByVal Graph graph,
-        @StdString String function_name,
-        @Cast("size_t") long remaining_bailout_depth/*=0*/);
-  public ExecutionPlan(
-        @SharedPtr @ByVal Graph graph,
-        @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(
-        @SharedPtr @ByVal Graph graph,
-        @StdString String function_name);
+  public ExecutionPlan(@SharedPtr @ByVal Graph graph, @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@SharedPtr @ByVal Graph graph, @StdString BytePointer function_name);
+  public ExecutionPlan(@SharedPtr @ByVal Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@SharedPtr @ByVal Graph graph, @StdString String function_name);
 
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 

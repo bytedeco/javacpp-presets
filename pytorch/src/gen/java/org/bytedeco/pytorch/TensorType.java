@@ -154,6 +154,14 @@ public class TensorType extends SharedType {
 
   @MemberGetter public static native TypeKind Kind();
 
-  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
-  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
+  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
+        @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef in_sizes,
+        @ByVal(nullValue = "at::MemoryFormat(c10::MemoryFormat::Contiguous)") MemoryFormat memory_format);
+  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
+        @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef in_sizes);
+  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] in_sizes,
+        @ByVal(nullValue = "at::MemoryFormat(c10::MemoryFormat::Contiguous)") MemoryFormat memory_format);
+  public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... in_sizes);
 }

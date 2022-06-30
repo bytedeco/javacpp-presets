@@ -33,18 +33,24 @@ public class SourceRange extends Pointer {
         return new SourceRange((Pointer)this).offsetAddress(i);
     }
 
-  public SourceRange(
-        @SharedPtr SourceView source_view_,
-        @Cast("size_t") long start_,
-        @Cast("size_t") long end_) { super((Pointer)null); allocate(source_view_, start_, end_); }
-  private native void allocate(
-        @SharedPtr SourceView source_view_,
-        @Cast("size_t") long start_,
-        @Cast("size_t") long end_);
+  public SourceRange(@SharedPtr Source source_view_, @Cast("size_t") long start_, @Cast("size_t") long end_) { super((Pointer)null); allocate(source_view_, start_, end_); }
+  private native void allocate(@SharedPtr Source source_view_, @Cast("size_t") long start_, @Cast("size_t") long end_);
+
   public SourceRange() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native @StdString BytePointer text();
+  public SourceRange(
+        @SharedPtr Source source_view_,
+        @ByVal StringCordView.Iterator start_iter,
+        @Cast("size_t") long end_) { super((Pointer)null); allocate(source_view_, start_iter, end_); }
+  private native void allocate(
+        @SharedPtr Source source_view_,
+        @ByVal StringCordView.Iterator start_iter,
+        @Cast("size_t") long end_);
+
+  public native @ByVal @Cast("const c10::string_view*") Pointer token_text();
+
+  public native @Const @ByVal StringCordView text();
   public native @Cast("size_t") long size();
   @MemberGetter public static native @Cast("const size_t") long CONTEXT();
   public static final long CONTEXT = CONTEXT();
@@ -62,7 +68,7 @@ public class SourceRange extends Pointer {
         @Cast("bool") boolean highlight,
         @StdString String funcname);
 
-  public native @SharedPtr SourceView source();
+  public native @SharedPtr Source source();
   public native @Cast("size_t") long start();
   public native @Cast("size_t") long end();
   public native @StdString BytePointer str();

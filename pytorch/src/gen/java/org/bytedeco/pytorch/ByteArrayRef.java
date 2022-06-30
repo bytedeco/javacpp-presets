@@ -15,7 +15,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-
 /** ArrayRef - Represent a constant reference to an array (0 or more elements
  *  consecutively in memory), i.e. a start pointer and a length.  It allows
  *  various APIs to take consecutive elements easily and conveniently.
@@ -73,8 +72,6 @@ private native void allocate();
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
    *  copy-construct an ArrayRef. */
-
-  /** Construct an ArrayRef from a generic Container. */
 
   /** Construct an ArrayRef from a std::vector. */
   // The enable_if stuff here makes sure that this isn't used for

@@ -128,7 +128,7 @@ public class Dispatcher extends Pointer {
    * fallback kernel for the given dispatch key and, if yes, call that one.
    */
   public native @ByVal RegistrationHandleRAII registerFallback(DispatchKey dispatch_key, @ByVal KernelFunction kernel, @StdString BytePointer debug);
-  public native @ByVal RegistrationHandleRAII registerFallback(@Cast("c10::DispatchKey") byte dispatch_key, @ByVal KernelFunction kernel, @StdString String debug);
+  public native @ByVal RegistrationHandleRAII registerFallback(@Cast("c10::DispatchKey") short dispatch_key, @ByVal KernelFunction kernel, @StdString String debug);
 
   /**
    * Use to register whenever we had a TORCH_LIBRARY declaration in the frontend
