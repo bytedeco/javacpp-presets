@@ -17,7 +17,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 // OwnedSourceRange is just like a SourceRange except that it owns a `Source`
-// instead of `SourceView`. Thus OwnedSourceRange owns a copy of source text.
+// instead of `Source`. Thus OwnedSourceRange owns a copy of source text.
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class OwnedSourceRange extends SourceRange {
     static { Loader.load(); }

@@ -77,6 +77,9 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of CUDA type. */
   public native @Cast("bool") @NoException(true) boolean is_cuda();
 
+  /** Return true if the device is of MPS type. */
+  public native @Cast("bool") @NoException(true) boolean is_mps();
+
   /** Return true if the device is of HIP type. */
   public native @Cast("bool") @NoException(true) boolean is_hip();
 
@@ -86,8 +89,14 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of XPU type. */
   public native @Cast("bool") @NoException(true) boolean is_xpu();
 
+  /** Return true if the device is of IPU type. */
+  public native @Cast("bool") @NoException(true) boolean is_ipu();
+
   /** Return true if the device is of HPU type. */
   public native @Cast("bool") @NoException(true) boolean is_hpu();
+
+  /** Return true if the device is of META type. */
+  public native @Cast("bool") @NoException(true) boolean is_meta();
 
   /** Return true if the device is of CPU type. */
   public native @Cast("bool") @NoException(true) boolean is_cpu();

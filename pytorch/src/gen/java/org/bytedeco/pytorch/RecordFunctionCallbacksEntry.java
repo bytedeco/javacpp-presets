@@ -20,21 +20,15 @@ import static org.bytedeco.pytorch.global.torch.*;
 // thread-local function callbacks. Moreover, it prevents saving to
 // ThreadLocalState because std::atomic is non-copyable.
 @Namespace("at") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ThreadLocalRecordFunctionCallbacksEntry extends Pointer {
+public class RecordFunctionCallbacksEntry extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ThreadLocalRecordFunctionCallbacksEntry(Pointer p) { super(p); }
+    public RecordFunctionCallbacksEntry(Pointer p) { super(p); }
 
-  public native @ByRef @Cast("at::RecordFunctionCallback*") Pointer callback(); public native ThreadLocalRecordFunctionCallbacksEntry callback(Pointer setter);
-  public native @Cast("bool") boolean enabled(); public native ThreadLocalRecordFunctionCallbacksEntry enabled(boolean setter);
-  public native @Cast("at::CallbackHandle") long handle(); public native ThreadLocalRecordFunctionCallbacksEntry handle(long setter);
-
-  public ThreadLocalRecordFunctionCallbacksEntry(@Cast("at::RecordFunctionCallback*") @ByRef(true) Pointer cb, @Cast("at::CallbackHandle") long h) { super((Pointer)null); allocate(cb, h); }
+  public RecordFunctionCallbacksEntry(@Cast("at::RecordFunctionCallback*") @ByRef(true) Pointer cb, @Cast("at::CallbackHandle") long h) { super((Pointer)null); allocate(cb, h); }
   private native void allocate(@Cast("at::RecordFunctionCallback*") @ByRef(true) Pointer cb, @Cast("at::CallbackHandle") long h);
 
-  public native @Cast("bool") boolean disable();
-
-  public native @Cast("bool") boolean enable();
-
-  public native @Cast("bool") boolean isEnabled();
+  public native @ByRef @Cast("at::RecordFunctionCallback*") Pointer callback_(); public native RecordFunctionCallbacksEntry callback_(Pointer setter);
+  public native @Cast("bool") boolean enabled_(); public native RecordFunctionCallbacksEntry enabled_(boolean setter);
+  public native @Cast("at::CallbackHandle") long handle_(); public native RecordFunctionCallbacksEntry handle_(long setter);
 }

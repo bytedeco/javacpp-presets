@@ -102,6 +102,9 @@ private native void allocate(); }
   public native @Const @ByRef TensorBase fill_(@Const @ByRef Scalar scalar);
   public native @Const @ByRef TensorBase zero_();
 
+  public native @ByVal TensorBase to(@ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @Cast("bool") boolean non_blocking/*=false*/, @Cast("bool") boolean copy/*=false*/, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
+  public native @ByVal TensorBase to();
+
   public native @Cast("bool") boolean is_complex();
 
   public native @Cast("bool") boolean is_floating_point();
@@ -132,6 +135,7 @@ private native void allocate(); }
   public native @StdString String toString();
 
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes();
+  public native @ByVal SymIntArrayRef sym_sizes();
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();
   // See impl::get_opt_names in ATen/NamedTensor.h for docs.
   public native @ByVal DimnameListOptional opt_names();
@@ -208,6 +212,9 @@ private native void allocate(); }
   /** Returns if a {@code Tensor} has CUDA backend. */
   public native @Cast("bool") boolean is_cuda();
 
+  /** Returns if a {@code Tensor} has IPU backend. */
+  public native @Cast("bool") boolean is_ipu();
+
   /** Returns if a {@code Tensor} has XPU backend. */
   public native @Cast("bool") boolean is_xpu();
 
@@ -235,8 +242,8 @@ private native void allocate(); }
   /** Returns if a {@code Tensor} is mkldnn tensor. */
   public native @Cast("bool") boolean is_mkldnn();
 
-  /** Returns if a {@code Tensor} is mlc tensor. */
-  public native @Cast("bool") boolean is_mlc();
+  /** Returns if a {@code Tensor} is mps tensor. */
+  public native @Cast("bool") boolean is_mps();
 
   /** Returns if a {@code Tensor} is ort tensor. */
   public native @Cast("bool") boolean is_ort();
@@ -256,6 +263,9 @@ private native void allocate(); }
 
   /** Returns if a {@code Tensor} is an inference tensor. */
   public native @Cast("bool") boolean is_inference();
+
+  // Returns if a `Tensor` is a NestedTensor.
+  public native @Cast("bool") boolean is_nested();
 
   /** If a tensor is a quantized tensor, returns its quantizer
    *  TODO: it's not in native_functions.yaml yet as it's not exposed to python */

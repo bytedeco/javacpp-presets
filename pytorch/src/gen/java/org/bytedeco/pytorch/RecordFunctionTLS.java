@@ -36,10 +36,7 @@ public class RecordFunctionTLS extends Pointer {
 
   // Thread local vector of callbacks, holds pairs (callbacks, unique_id);
   // must be sorted in increasing handles order
-  public native @StdVector ThreadLocalRecordFunctionCallbacksEntry sorted_tls_callbacks_(); public native RecordFunctionTLS sorted_tls_callbacks_(ThreadLocalRecordFunctionCallbacksEntry setter);
+  public native @StdVector RecordFunctionCallbacksEntry sorted_tls_callbacks_(); public native RecordFunctionTLS sorted_tls_callbacks_(RecordFunctionCallbacksEntry setter);
 
   public native @Cast("bool") boolean tls_record_function_enabled_(); public native RecordFunctionTLS tls_record_function_enabled_(boolean setter);
-
-  // Stores the number of coin flips before the next successful coin flip
-  public native int tries_left_(); public native RecordFunctionTLS tries_left_(int setter);
 }

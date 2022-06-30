@@ -89,6 +89,8 @@ public class Scalar extends Pointer {
   // Deleted for unsupported types, but specialized below for supported types
   
 
+  public native @Const Pointer data_ptr();
+
 // #undef DEFINE_ACCESSOR
   public native @Cast("bool") boolean isFloatingPoint();
 

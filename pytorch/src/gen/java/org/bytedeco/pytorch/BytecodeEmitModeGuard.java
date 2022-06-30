@@ -34,10 +34,13 @@ public class BytecodeEmitModeGuard extends Pointer {
 
   public BytecodeEmitModeGuard(
         @Cast("bool") boolean enable_default_value_for_unspecified_arg,
-        @Cast("bool") boolean enable_default_args_before_out_args) { super((Pointer)null); allocate(enable_default_value_for_unspecified_arg, enable_default_args_before_out_args); }
+        @Cast("bool") boolean enable_default_args_before_out_args,
+        @Cast("bool") boolean enable_emit_promoted_ops) { super((Pointer)null); allocate(enable_default_value_for_unspecified_arg, enable_default_args_before_out_args, enable_emit_promoted_ops); }
   private native void allocate(
         @Cast("bool") boolean enable_default_value_for_unspecified_arg,
-        @Cast("bool") boolean enable_default_args_before_out_args);
+        @Cast("bool") boolean enable_default_args_before_out_args,
+        @Cast("bool") boolean enable_emit_promoted_ops);
   public native @Cast("bool") boolean prev_default_value_for_unspecified_arg_mode(); public native BytecodeEmitModeGuard prev_default_value_for_unspecified_arg_mode(boolean setter);
   public native @Cast("bool") boolean prev_default_args_before_out_args(); public native BytecodeEmitModeGuard prev_default_args_before_out_args(boolean setter);
+  public native @Cast("bool") boolean prev_default_emit_promoted_ops(); public native BytecodeEmitModeGuard prev_default_emit_promoted_ops(boolean setter);
 }

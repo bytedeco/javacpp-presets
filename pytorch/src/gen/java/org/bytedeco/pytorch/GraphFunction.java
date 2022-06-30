@@ -26,6 +26,16 @@ public class GraphFunction extends Function {
   public GraphFunction(
         @ByVal QualifiedName name,
         @SharedPtr @ByVal Graph graph,
+        @ByVal GraphFunctionCreator function_creator,
+        @ByVal(nullValue = "c10::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode) { super((Pointer)null); allocate(name, graph, function_creator, executor_execution_mode); }
+  private native void allocate(
+        @ByVal QualifiedName name,
+        @SharedPtr @ByVal Graph graph,
+        @ByVal GraphFunctionCreator function_creator,
+        @ByVal(nullValue = "c10::optional<torch::jit::ExecutorExecutionMode>(c10::nullopt)") ExecutorExecutionModeOptional executor_execution_mode);
+  public GraphFunction(
+        @ByVal QualifiedName name,
+        @SharedPtr @ByVal Graph graph,
         @ByVal GraphFunctionCreator function_creator) { super((Pointer)null); allocate(name, graph, function_creator); }
   private native void allocate(
         @ByVal QualifiedName name,
@@ -43,6 +53,16 @@ public class GraphFunction extends Function {
   public native @SharedPtr @ByVal Graph optimized_graph();
 
   public native @Const @ByRef QualifiedName qualname();
+
+  // private/unstable api. sets the initial execution mode
+  // will not affect executor if there is an existing executor
+  // created for this function
+  public native void _set_initial_executor_execution_mode(ExecutorExecutionMode mode);
+  public native void _set_initial_executor_execution_mode(@Cast("torch::jit::ExecutorExecutionMode") int mode);
+  // private/unstable api. sets flag of whether or not to ignore amp.
+  // will not affect executor if there is an existing executor
+  // created for this function
+  public native void _set_ignore_amp(@Cast("bool") boolean ignore_amp);
 
   // if this isn't yet defined, run its method_creator function
   public native void ensure_defined();

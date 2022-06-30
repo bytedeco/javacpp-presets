@@ -17,8 +17,8 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 // Notice that those structs don't manage lifetime of their members.
-// They is only valid only right after you call getDebugState() and should never
-// be used again once another GraphExecutor function is called.
+// They are only valid only right after you call getDebugState() and should
+// never be used again once another GraphExecutor function is called.
 
 // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)

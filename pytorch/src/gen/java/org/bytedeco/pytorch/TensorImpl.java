@@ -168,11 +168,11 @@ public class TensorImpl extends Pointer {
         @Const @ByVal TypeMeta data_type);
   public TensorImpl(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
-        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type) { super((Pointer)null); allocate(storage, dispatch_key, data_type); }
   private native void allocate(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
-        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type);
   public TensorImpl(
         DispatchKey dispatch_key,
@@ -183,11 +183,11 @@ public class TensorImpl extends Pointer {
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt);
   public TensorImpl(
-        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt) { super((Pointer)null); allocate(dispatch_key, data_type, device_opt); }
   private native void allocate(
-        @Cast("c10::DispatchKey") byte dispatch_key,
+        @Cast("c10::DispatchKey") short dispatch_key,
         @Const @ByVal TypeMeta data_type,
         @ByVal DeviceOptional device_opt);
   
@@ -214,7 +214,8 @@ public class TensorImpl extends Pointer {
    * valid as long as the tensor is live and not resized.
    */
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes();
-// #endif
+
+  public native @ByVal SymIntArrayRef sym_sizes();
 
   /**
    * Return a reference to the strides of this tensor.  This reference remains
@@ -223,12 +224,49 @@ public class TensorImpl extends Pointer {
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();
 
   /**
+   * Return the size of a tensor at some dimension, wrapping the dimension if
+   * necessary.
+   *
+   * NOTE: if you know wrapping is unnecessary, do sizes()[d] instead; it will
+   * be faster
+   */
+  public native @Cast("int64_t") long size(@Cast("int64_t") long d);
+
+  /**
+   * Return the stride of a tensor at some dimension, wrapping the dimension
+   * if necessary.
+   *
+   * NOTE: if you know wrapping is unnecessary, do sizes()[d] instead; it will
+   * be faster
+   */
+  public native @Cast("int64_t") long stride(@Cast("int64_t") long d);
+
+  /**
    * Return the number of dimensions of this tensor.  Note that 0-dimension
    * represents a Tensor that is a Scalar, e.g., one that has a single element.
    */
   public native @Cast("int64_t") long dim();
-// #endif
 
+  /**
+   * The number of elements in a tensor.
+   *
+   * WARNING: Previously, if you were using the Caffe2 API, you could
+   * test numel() == -1 to see if a tensor was uninitialized.  This
+   * is no longer true; numel always accurately reports the product
+   * of sizes of a tensor.
+   */
+  public native @Cast("int64_t") long numel();
+
+  /**
+   * Whether or not a tensor is laid out in contiguous memory.
+   *
+   * Tensors with non-trivial strides are not contiguous.  See
+   * compute_contiguous() for the exact definition of whether or not
+   * a tensor is contiguous or not.
+   */
+  public native @Cast("bool") boolean is_contiguous(
+        @ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
+  public native @Cast("bool") boolean is_contiguous();
   /**
    * True if this tensor has storage. See storage() for details.
    */
@@ -255,36 +293,11 @@ public class TensorImpl extends Pointer {
    */
   public native @Cast({"", "c10::Storage&&"}) @StdMove Storage unsafe_storage();
 
-  /**
-   * The number of elements in a tensor.
-   *
-   * WARNING: Previously, if you were using the Caffe2 API, you could
-   * test numel() == -1 to see if a tensor was uninitialized.  This
-   * is no longer true; numel always accurately reports the product
-   * of sizes of a tensor.
-   */
-  public native @Cast("int64_t") long numel();
-
   public native @Cast("bool") boolean unique_version();
-
-  /**
-   * Whether or not a tensor is laid out in contiguous memory.
-   *
-   * Tensors with non-trivial strides are not contiguous.  See
-   * compute_contiguous() for the exact definition of whether or not
-   * a tensor is contiguous or not.
-   *
-   * NOTE: is_contiguous is only {@code TENSORIMPL_MAYBE_VIRTUAL} for
-   * backward compatibility. See {@code set_has_contiguity_policy} and
-   * {@code is_contiguous_custom} for the encouraged customization point.
-   */
-  public native @Cast("bool") boolean is_contiguous(
-        @ByVal(nullValue = "at::MemoryFormat::Contiguous") MemoryFormat memory_format);
-  public native @Cast("bool") boolean is_contiguous();
+  // Whether a tensor is sparse COO or not.
   public native @Cast("bool") boolean is_sparse();
 
-  // Whether a tensor is sparse COO or not. Use is_sparse_csr for checking CSR
-  // format.
+  // Whether a tensor is sparse CSR or not.
   public native @Cast("bool") boolean is_sparse_csr();
 
   public native @Cast("bool") boolean is_quantized();
@@ -296,6 +309,8 @@ public class TensorImpl extends Pointer {
   public native @Cast("bool") boolean is_cuda();
 
   public native @Cast("bool") boolean is_xpu();
+
+  public native @Cast("bool") boolean is_ipu();
 
   public native @Cast("bool") boolean is_xla();
 
@@ -313,9 +328,11 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_metal();
 
-  public native @Cast("bool") boolean is_mlc();
+  public native @Cast("bool") boolean is_mps();
 
   public native @Cast("bool") boolean is_ort();
+
+  public native @Cast("bool") boolean is_nested();
 
   // TODO: remove this once we don't automatically enabled Autograd dispatch
   // keys
@@ -590,16 +607,6 @@ public class TensorImpl extends Pointer {
   public native void set_sizes_and_strides(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] new_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... new_stride);
 
   /**
-   * Return the size of a tensor at some dimension.
-   */
-  public native @Cast("int64_t") long size(@Cast("int64_t") long d);
-
-  /**
-   * Return the stride of a tensor at some dimension.
-   */
-  public native @Cast("int64_t") long stride(@Cast("int64_t") long d);
-
-  /**
    * Set whether a tensor allows changes to its metadata (e.g. sizes / strides /
    * storage / storage_offset). See NOTE [ Metadata Change for a Detached Tensor
    * ] for details.
@@ -736,6 +743,8 @@ public class TensorImpl extends Pointer {
   // interpreter.  This is racy!
   public native @Cast("c10::impl::PyInterpreter*") Pointer pyobj_interpreter();
 
+  public native @Cast("PyObject*") Pointer _unchecked_untagged_pyobj();
+
   // Test the interpreter tag.  If tagged for the current interpreter, return
   // a non-nullopt (but possibly null) PyObject.  If (possibly) untagged,
   // returns a nullopt.  If it is definitely invalid, raises an error.
@@ -771,6 +780,7 @@ public class TensorImpl extends Pointer {
    * This must be called after Resize(), since we only specify the first
    * dimension This does not copy over the old data to the newly allocated space
    */
+  public native void ReserveSpace(@Cast("int64_t") long outer_dim);
 
   /**
    * \brief Resizes a tensor.
@@ -880,4 +890,30 @@ public class TensorImpl extends Pointer {
   public native @Cast("bool") boolean owns_pyobj();
 
   public native void set_owns_pyobj(@Cast("bool") boolean b);
+  public enum SizesStridesPolicy {
+    // Default behavior, e.g., dense tensor.
+    //
+    // Can override: nothing
+    Default((byte)(0)),
+    // Customizable strides behavior, e.g., sparse tensor,
+    // mkldnn tensor.
+    //
+    // Can override: strides(), is_contiguous()
+    CustomStrides((byte)(1)),
+    // Customizable sizes behavior, e.g., nested tensor
+    //
+    // Can override: strides(), is_contiguous(), sizes(), dim(), numel()
+    CustomSizes((byte)(2));
+
+      public final byte value;
+      private SizesStridesPolicy(byte v) { this.value = v; }
+      private SizesStridesPolicy(SizesStridesPolicy e) { this.value = e.value; }
+      public SizesStridesPolicy intern() { for (SizesStridesPolicy e : values()) if (e.value == value) return e; return this; }
+      @Override public String toString() { return intern().name(); }
+  }
+
+  public native void set_sizes_strides_policy(SizesStridesPolicy policy);
+  public native void set_sizes_strides_policy(@Cast("c10::TensorImpl::SizesStridesPolicy") byte policy);
+
+  public native @Cast({"", "c10::Storage&&"}) @StdMove Storage storage_(); public native TensorImpl storage_(Storage setter);
 }

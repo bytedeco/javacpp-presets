@@ -130,6 +130,6 @@ private native void allocate(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0
   // per-type constructor, you only need to override this if the
   // containedTypes() is not empty
   public native @ByVal TypePtr createWithContained(
-        @ByVal TypeVector contained_types);
+        @ByVal TypeVector arg0);
 
 }

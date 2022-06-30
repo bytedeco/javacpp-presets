@@ -22,8 +22,8 @@ public class Lexer extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Lexer(Pointer p) { super(p); }
 
-  public Lexer(@SharedPtr SourceView source) { super((Pointer)null); allocate(source); }
-  private native void allocate(@SharedPtr SourceView source);
+  public Lexer(@SharedPtr Source source) { super((Pointer)null); allocate(source); }
+  private native void allocate(@SharedPtr Source source);
   // Return the current token, and then move to the next one
   public native @ByVal Token next();
   // Skip the current token if it matches the given kind

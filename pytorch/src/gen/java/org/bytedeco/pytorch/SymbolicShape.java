@@ -64,6 +64,8 @@ public class SymbolicShape extends Pointer {
 
   public native @ByVal ShapeSymbolVectorOptional sizes();
 
+  public native @ByVal BoolVectorOptional symbolicDims();
+
   // Checks whether the shape is fully defined/complete, ie. rank and sizes
   // of every dimension are known.
   public native @Cast("bool") boolean isComplete();
@@ -74,4 +76,8 @@ public class SymbolicShape extends Pointer {
   // If either of two shapes are of unknown rank or they have unmatching rank,
   // result will be unranked.
   public native @ByVal SymbolicShape merge(@Const @ByRef SymbolicShape other);
+
+  
+
+  
 }

@@ -53,25 +53,25 @@ public class StorageImpl extends Pointer {
   }
 
   public StorageImpl(
-        @ByVal use_byte_size_t use_byte_size,
+        @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
         Allocator allocator,
-        @Cast("bool") boolean resizable) { super((Pointer)null); allocate(use_byte_size, size_bytes, data_ptr, allocator, resizable); }
+        @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, data_ptr, allocator, resizable); }
   private native void allocate(
-        @ByVal use_byte_size_t use_byte_size,
+        @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
         Allocator allocator,
         @Cast("bool") boolean resizable);
 
   public StorageImpl(
-        @ByVal use_byte_size_t use_byte_size,
+        @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
         Allocator allocator,
-        @Cast("bool") boolean resizable) { super((Pointer)null); allocate(use_byte_size, size_bytes, allocator, resizable); }
+        @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, allocator, resizable); }
   private native void allocate(
-        @ByVal use_byte_size_t use_byte_size,
+        @ByVal use_byte_size_t arg0,
         @Cast("size_t") long size_bytes,
         Allocator allocator,
         @Cast("bool") boolean resizable);

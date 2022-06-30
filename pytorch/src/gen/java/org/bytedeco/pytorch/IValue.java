@@ -205,6 +205,16 @@ public class IValue extends Pointer {
   public IValue(@Cast("int64_t") long i) { super((Pointer)null); allocate(i); }
   private native void allocate(@Cast("int64_t") long i);
 
+  public IValue(@ByVal SymInt i) { super((Pointer)null); allocate(i); }
+  private native void allocate(@ByVal SymInt i);
+
+  public IValue(@ByVal SymIntArrayRef v) { super((Pointer)null); allocate(v); }
+  private native void allocate(@ByVal SymIntArrayRef v);
+
+  public native @Cast("bool") boolean isSymInt();
+
+  public native @ByVal SymInt toSymInt();
+
   // allow you to pass literals (3, 4) without ambiguity
   public IValue(int i) { super((Pointer)null); allocate(i); }
   private native void allocate(int i);
@@ -256,10 +266,15 @@ public class IValue extends Pointer {
   
   public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector toTensorVector();
 
+  // OptionalTensorList
+  public native @Cast("bool") boolean isOptionalTensorList();
+  
+  public native @StdVector TensorOptional toOptionalTensorVector();
+
   // GenericList
   public native @Cast("bool") boolean isList();
   
-  public native @ByVal IValueArrayRef toListRef();
+  public native @ByVal @Cast("c10::ArrayRef<c10::IValue>*") IValueArrayRef toListRef();
 
   // Some template constructors of IValue calls another constructor recursively.
   // This SNIFAEs the called constructor exists.

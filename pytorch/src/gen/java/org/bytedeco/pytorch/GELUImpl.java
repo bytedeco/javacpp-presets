@@ -22,16 +22,13 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.GELU to learn
  *  about the exact behavior of this module. */
 // NOLINTNEXTLINE(bugprone-exception-escape)
-@Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GELUImpl extends GELUImplCloneable {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public GELUImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GELUImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GELUImpl(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GELUImpl(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public GELUImpl position(long position) {
         return (GELUImpl)super.position(position);
@@ -40,10 +37,18 @@ public class GELUImpl extends GELUImplCloneable {
         return new GELUImpl((Pointer)this).offsetAddress(i);
     }
 
+  public GELUImpl(@ByVal(nullValue = "torch::nn::GELUOptions{}") GELUOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::GELUOptions{}") GELUOptions options_);
+  public GELUImpl() { super((Pointer)null); allocate(); }
+  @NoDeallocator private native void allocate();
+
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 
   public native void reset();
 
   /** Pretty prints the {@code GELU} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
+
+  /** The options with which this {@code Module} was constructed. */
+  public native @ByRef GELUOptions options(); public native GELUImpl options(GELUOptions setter);
 }

@@ -62,6 +62,55 @@ public class Argument extends Pointer {
         @Cast("bool") boolean kwarg_only/*=false*/,
         @ByVal(nullValue = "c10::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
 
+  public Argument(
+        @StdString BytePointer name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type,
+        @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N,
+        @ByVal(nullValue = "c10::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @Cast("bool") boolean kwarg_only/*=false*/,
+        @ByVal(nullValue = "c10::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
+  private native void allocate(
+        @StdString BytePointer name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type,
+        @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N,
+        @ByVal(nullValue = "c10::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @Cast("bool") boolean kwarg_only/*=false*/,
+        @ByVal(nullValue = "c10::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+  public Argument(
+        @StdString BytePointer name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type) { super((Pointer)null); allocate(name, fake_type, real_type); }
+  private native void allocate(
+        @StdString BytePointer name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type);
+  public Argument(
+        @StdString String name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type,
+        @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N,
+        @ByVal(nullValue = "c10::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @Cast("bool") boolean kwarg_only/*=false*/,
+        @ByVal(nullValue = "c10::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info) { super((Pointer)null); allocate(name, fake_type, real_type, N, default_value, kwarg_only, alias_info); }
+  private native void allocate(
+        @StdString String name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type,
+        @ByVal(nullValue = "c10::optional<int32_t>(c10::nullopt)") IntOptional N,
+        @ByVal(nullValue = "c10::optional<c10::IValue>(c10::nullopt)") IValueOptional default_value,
+        @Cast("bool") boolean kwarg_only/*=false*/,
+        @ByVal(nullValue = "c10::optional<c10::AliasInfo>(c10::nullopt)") AliasInfoOptional alias_info);
+  public Argument(
+        @StdString String name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type) { super((Pointer)null); allocate(name, fake_type, real_type); }
+  private native void allocate(
+        @StdString String name,
+        @ByVal Type.TypePtr fake_type,
+        @ByVal Type.TypePtr real_type);
+
   public Argument(@ByRef(true) Argument rhs) { super((Pointer)null); allocate(rhs); }
   @NoException(true) private native void allocate(@ByRef(true) Argument rhs);
 
@@ -69,6 +118,7 @@ public class Argument extends Pointer {
 
   public native @StdString BytePointer name();
   public native @Const @ByRef Type.TypePtr type();
+  public native @Const @ByRef Type.TypePtr real_type();
   public native @ByVal IntOptional N();
   public native @Const @ByRef IValueOptional default_value();
   public native @Cast("bool") boolean kwarg_only();

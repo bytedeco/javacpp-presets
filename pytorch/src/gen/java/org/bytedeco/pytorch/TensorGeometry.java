@@ -39,8 +39,8 @@ public class TensorGeometry extends Pointer {
   public TensorGeometry(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes) { super((Pointer)null); allocate(sizes); }
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
 
-  public TensorGeometry(@Const @ByRef Tensor t) { super((Pointer)null); allocate(t); }
-  private native void allocate(@Const @ByRef Tensor t);
+  public TensorGeometry(@Const @ByRef TensorBase t) { super((Pointer)null); allocate(t); }
+  private native void allocate(@Const @ByRef TensorBase t);
 
   // true if the tensor is contiguous
   public native @Cast("bool") boolean is_contiguous();
