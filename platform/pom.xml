@@ -73,6 +73,7 @@
     <module>../cpu_features/platform</module>
     <module>../modsecurity/platform</module>
     <module>../systems/platform</module>
+    <module>../kvazaar/platform</module>
   </modules>
 
   <dependencies>
@@ -370,6 +371,11 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>systems-platform</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>kvazaar-platform</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
