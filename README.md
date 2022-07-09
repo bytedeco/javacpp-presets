@@ -263,7 +263,25 @@ With the above in working order, the scripts get launched automatically as part 
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: 
+
+* `android-arm`
+* `android-arm64`
+* `android-x86`
+* `android-x86_64`
+* `ios-arm64`
+* `ios-x86_64`
+* `linux-arm64`
+* `linux-armhf`
+* `linux-ppc64le`
+* `linux-x86`
+* `linux-x86_64`
+* `macosx-arm64`
+* `macosx-x86_64`
+* `windows-x86`
+* `windows-x86_64`
+
+The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 
