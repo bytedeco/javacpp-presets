@@ -1,4 +1,5 @@
 
+ * Map missing factory functions in `torch::` namespace using `torch_` as prefix in presets for PyTorch ([issue #1197](https://github.com/bytedeco/javacpp-presets/issues/1197))
  * Add presets for the nvJPEG module of CUDA ([issue #1193](https://github.com/bytedeco/javacpp-presets/issues/1193))
  * Introduce Android builds for TensorFlow Lite ([discussion #1180](https://github.com/bytedeco/javacpp-presets/discussions/1180))
  * Map `std::vector<cv::Ptr<cv::mcc::CChecker> >` for `CCheckerDetector.getListColorChecker()` ([issue bytedeco/javacpp#571](https://github.com/bytedeco/javacpp/issues/571))

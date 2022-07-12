@@ -2502,6 +2502,21 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::shared_ptr<torch::nn::AnyModule>").annotations("@SharedPtr")
                        .valueTypes("@Cast({\"\", \"std::shared_ptr<torch::nn::AnyModule>\"}) AnyModule").pointerTypes("AnyModule"));
 
+        String[] factories = {"_cudnn_init_dropout_state", "arange", "bartlett_window", "blackman_window", "empty", "_empty_affine_quantized",
+                              "_empty_per_channel_affine_quantized", "empty_quantized", "empty_like", "empty_strided", "eye", "full", "full", "full_like", "from_file",
+                              "hann_window", "hamming_window", "kaiser_window", "linspace", "logspace", "ones", "ones_like", "scalar_tensor", "rand", "rand_like",
+                              "randint", "randint_like", "randn", "randn_like", "randperm", "randperm", "range", "zeros", "_efficientzerotensor", "zeros_like",
+                              "sparse_compressed_tensor", "sparse_csr_tensor", "sparse_csc_tensor", "sparse_bsr_tensor", "sparse_bsc_tensor",
+                              "_sparse_compressed_tensor_unsafe", "_sparse_csr_tensor_unsafe", "_sparse_csc_tensor_unsafe", "_sparse_bsr_tensor_unsafe", "_sparse_bsc_tensor_unsafe",
+                              "sparse_coo_tensor", "_sparse_coo_tensor_unsafe", "_sparse_coo_tensor_with_dims", "_sparse_coo_tensor_with_dims_and_tensors",
+                              "_to_copy", "tril_indices", "triu_indices", "normal", "fft_fftfreq", "fft_rfftfreq"};
+        for (String factory : factories) {
+            infoMap.put(new Info("torch::" + factory).javaNames("torch_" + factory).skipDefaults(factory.equals("range")))
+                   .put(new Info("torch::autograd::" + factory))
+                   .put(new Info("torch::jit::" + factory))
+                   .put(new Info("torch::nn::" + factory));
+        }
+
         mapModule(infoMap, "ModuleDict", true);
         mapModule(infoMap, "ModuleList", true);
         mapModule(infoMap, "Sequential", true);
