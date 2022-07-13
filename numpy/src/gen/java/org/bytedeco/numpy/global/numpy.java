@@ -1200,9 +1200,6 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #ifndef NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_
 // #define NUMPY_CORE_INCLUDE_NUMPY_NPY_MATH_H_
 
-// #ifdef __cplusplus
-// #endif
-
 // #include <numpy/npy_common.h>
 
 // #include <math.h>
@@ -1217,6 +1214,9 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #else
 // #endif
 
+
+// #ifdef __cplusplus
+// #endif
 
 /*
  * NAN and INFINITY like macros (same behavior as glibc for NAN, same as C99

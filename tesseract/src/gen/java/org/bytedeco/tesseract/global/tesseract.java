@@ -145,7 +145,7 @@ public static final int
 // clang-format off
 
 public static final int TESSERACT_MAJOR_VERSION = 5;
-public static final int TESSERACT_MINOR_VERSION = 1;
+public static final int TESSERACT_MINOR_VERSION = 2;
 public static final int TESSERACT_MICRO_VERSION = 0;
 
 public static final int TESSERACT_VERSION =          
@@ -153,7 +153,7 @@ public static final int TESSERACT_VERSION =
    TESSERACT_MINOR_VERSION <<  8 | 
    TESSERACT_MICRO_VERSION);
 
-public static final String TESSERACT_VERSION_STR = "5.1.0";
+public static final String TESSERACT_VERSION_STR = "5.2.0";
 
 // clang-format on
 
@@ -604,6 +604,7 @@ public static final int
 // To avoid collision with other typenames include the ABSOLUTE MINIMUM
 // complexity of includes here. Use forward declarations wherever possible
 // and hide includes of complex types in baseapi.cpp.
+// #include <cstdint>
 // #include <string> // for std::string
 // #include <vector> // for std::vector
 // Targeting ../TessResultRenderer.java
@@ -1006,6 +1007,42 @@ public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*
                               @Cast("char**") @ByPtrPtr ByteBuffer vars_values, @Cast("size_t") long vars_vec_size,
                               @Cast("BOOL") boolean set_only_non_debug_params);
 public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath,
+                              String language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr byte[] configs, int configs_size, @Cast("char**") @ByPtrPtr byte[] vars_vec,
+                              @Cast("char**") @ByPtrPtr byte[] vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+
+public static native int TessBaseAPIInit5(TessBaseAPI handle, @Cast("const char*") BytePointer data, int data_size,
+                              @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") PointerPointer configs, int configs_size, @Cast("char**") PointerPointer vars_vec,
+                              @Cast("char**") PointerPointer vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, @Cast("const char*") BytePointer data, int data_size,
+                              @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr BytePointer configs, int configs_size, @Cast("char**") @ByPtrPtr BytePointer vars_vec,
+                              @Cast("char**") @ByPtrPtr BytePointer vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, String data, int data_size,
+                              String language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr ByteBuffer configs, int configs_size, @Cast("char**") @ByPtrPtr ByteBuffer vars_vec,
+                              @Cast("char**") @ByPtrPtr ByteBuffer vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, @Cast("const char*") BytePointer data, int data_size,
+                              @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr byte[] configs, int configs_size, @Cast("char**") @ByPtrPtr byte[] vars_vec,
+                              @Cast("char**") @ByPtrPtr byte[] vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, String data, int data_size,
+                              String language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr BytePointer configs, int configs_size, @Cast("char**") @ByPtrPtr BytePointer vars_vec,
+                              @Cast("char**") @ByPtrPtr BytePointer vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, @Cast("const char*") BytePointer data, int data_size,
+                              @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
+                              @Cast("char**") @ByPtrPtr ByteBuffer configs, int configs_size, @Cast("char**") @ByPtrPtr ByteBuffer vars_vec,
+                              @Cast("char**") @ByPtrPtr ByteBuffer vars_values, @Cast("size_t") long vars_vec_size,
+                              @Cast("BOOL") boolean set_only_non_debug_params);
+public static native int TessBaseAPIInit5(TessBaseAPI handle, String data, int data_size,
                               String language, @Cast("TessOcrEngineMode") int mode,
                               @Cast("char**") @ByPtrPtr byte[] configs, int configs_size, @Cast("char**") @ByPtrPtr byte[] vars_vec,
                               @Cast("char**") @ByPtrPtr byte[] vars_values, @Cast("size_t") long vars_vec_size,
