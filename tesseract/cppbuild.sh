@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=5.1.0
+TESSERACT_VERSION=5.2.0
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -18,6 +18,8 @@ tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
 
 # Disable external dependencies on asciidoc, libarchive and libtiff
+sedinplace '/NdkCompat/d' CMakeLists.txt
+sedinplace '/ndk_compat/d' CMakeLists.txt
 sedinplace '/  FATAL_ERROR/d' CMakeLists.txt
 sedinplace '/find_package(TIFF)/d' CMakeLists.txt
 sedinplace '/pkg_check_modules(TIFF/d' CMakeLists.txt

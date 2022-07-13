@@ -22,7 +22,7 @@ public class ChoiceIterator extends Pointer {
 
   // Construction is from a LTRResultIterator that points to the symbol of
   // interest. The ChoiceIterator allows a one-shot iteration over the
-  // choices for this symbol and after that is is useless.
+  // choices for this symbol and after that it is useless.
   public ChoiceIterator(@Const @ByRef LTRResultIterator result_it) { super((Pointer)null); allocate(result_it); }
   private native void allocate(@Const @ByRef LTRResultIterator result_it);
 

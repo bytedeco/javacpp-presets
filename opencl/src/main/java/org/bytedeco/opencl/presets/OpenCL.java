@@ -99,6 +99,11 @@ public class OpenCL implements InfoMapper {
                .put(new Info("CL_API_PREFIX__VERSION_2_2_DEPRECATED").cppText("#define CL_API_PREFIX__VERSION_2_2_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
+               .put(new Info("cl_char", "cl_uchar").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
+               .put(new Info("cl_short", "cl_ushort", "cl_half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
+               .put(new Info("cl_int", "cl_uint").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("cl_long", "cl_long").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+
                .put(new Info("__CL_HAS_ANON_STRUCT__", "defined( __cl_uchar2__)",
                              "defined( __CL_CHAR2__)", "defined( __CL_CHAR4__)", "defined( __CL_CHAR8__ )", "defined( __CL_CHAR16__ )",
                              "defined( __CL_UCHAR2__)", "defined( __CL_UCHAR4__)", "defined( __CL_UCHAR8__ )", "defined( __CL_UCHAR16__ )",
