@@ -205,7 +205,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.23.x  https://github.com/numpy/numpy
  * SciPy 1.9.x  https://github.com/scipy/scipy
- * Gym 0.24.x  https://github.com/openai/gym
+ * Gym 0.25.x  https://github.com/openai/gym
  * LLVM 14.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
@@ -225,11 +225,11 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.21.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.16.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.17.x  https://github.com/luxonis/depthai-core
  * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.11.x  https://github.com/microsoft/onnxruntime
- * TVM 0.8.x  https://github.com/apache/tvm
+ * TVM 0.9.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.24  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

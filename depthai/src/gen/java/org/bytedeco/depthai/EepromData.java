@@ -52,5 +52,5 @@ public class EepromData extends Pointer {
     public native @ByRef CameraBoardSocketCameraInfoMap cameraData(); public native EepromData cameraData(CameraBoardSocketCameraInfoMap setter);
     public native @ByRef StereoRectification stereoRectificationData(); public native EepromData stereoRectificationData(StereoRectification setter);
     public native @ByRef Extrinsics imuExtrinsics(); public native EepromData imuExtrinsics(Extrinsics setter);
-    public native @Cast("uint8_t*") @StdVector BytePointer miscellaneousData(); public native EepromData miscellaneousData(BytePointer setter);
+    public native @ByRef ByteVector miscellaneousData(); public native EepromData miscellaneousData(ByteVector setter);
 }

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GYM_VERSION=0.24.1
+GYM_VERSION=0.25.0
 download https://github.com/openai/gym/archive/$GYM_VERSION.tar.gz gym-$GYM_VERSION.tar.gz
 
 mkdir -p $PLATFORM

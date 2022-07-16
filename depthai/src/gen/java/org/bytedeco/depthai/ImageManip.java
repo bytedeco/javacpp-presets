@@ -90,4 +90,13 @@ public class ImageManip extends ImageManipPropertiesNode {
      * @param maxFrameSize Maximum frame size in bytes
      */
     public native void setMaxOutputFrameSize(int maxFrameSize);
+
+    /**
+     * Set a custom warp mesh
+     * @param meshData 2D plane of mesh points, starting from top left to bottom right
+     * @param width Width of mesh
+     * @param height Height of mesh
+     */
+    public native void setWarpMesh(@Const @ByRef Point2fVector meshData, int width, int height);
+    public native void setWarpMesh(@Const @ByRef FloatFloatPairVector meshData, int width, int height);
 }

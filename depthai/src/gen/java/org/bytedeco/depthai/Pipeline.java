@@ -170,6 +170,12 @@ public class Pipeline extends Pointer {
     /** Checks whether a given OpenVINO version is compatible with the pipeline */
     public native @Cast("bool") boolean isOpenVINOVersionCompatible(@Cast("dai::OpenVINO::Version") int version);
 
+    /** Sets board configuration */
+    public native void setBoardConfig(@ByVal BoardConfig board);
+
+    /** Gets board configuration */
+    public native @ByVal BoardConfig getBoardConfig();
+
     /** Get device configuration needed for this pipeline */
     public native @ByVal DeviceBase.Config getDeviceConfig();
 }

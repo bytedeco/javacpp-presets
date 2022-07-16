@@ -215,13 +215,98 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    ///
     public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm,
                 @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
     public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm,
                 @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
     public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm,
                 @ByRef float[] alpha, @ByRef float[] beta);
+
+    /** Appends a depthwise post-op convolution.
+     * 
+     *  This post-op can only be fused with a 2D 1x1 convolution (convolution
+     *  with weights spatial dimension equal to 1 i.e., kh=kw=1).
+     * 
+     *  The kind of this post-op is #dnnl_convolution.
+     * 
+     *  The number of outputs for primitive remain same as before. The output
+     *  spatial size can be derived as below:
+     * 
+     *  output_height = ceil(output_height_1x1_convolution, stride)
+     *  output_width = ceil(output_width_1x1_convolution, stride)
+     * 
+     *  See \ref dev_guide_attributes_post_ops_depthwise and
+     *  \ref dev_guide_attributes_post_ops_depthwise_fusion for more info.
+     * 
+     *  @param weights_data_type Weights data type of depthwise post-op
+     *  @param bias_data_type Bias data type of depthwise post-op
+     *  @param dst_data_type Output data type of depthwise post-op
+     *  @param kernel_size Size of kernel of depthwise post-op
+     *  @param stride_size Size of stride of depthwise post-op
+     *  @param padding_l_size Size of left and top paddings of depthwise post-op
+     *  @param mask Output scaling factors correspondence mask that defines the
+     *      correspondence between the output tensor dimensions and the
+     *      \p scales array. The set i-th bit indicates that a dedicated output
+     *      scaling factor is used for each index along that dimension. The mask
+     *      value of 0 implies a common scaling factor for the whole output
+     *      tensor.
+     *  @param scales Output pointer to a constant array of float scaling
+     *      factors. */
+    
+    ///
+    public native void append_dw(memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
+                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
+                @StdVector FloatPointer scales);
+    public native void append_dw(memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
+                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
+                @StdVector FloatBuffer scales);
+    public native void append_dw(memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
+                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
+                @StdVector float[] scales);
+
+    /** Returns the parameters of an depthwise post-op with stride 1.
+     * 
+     *  @param index Index of the elementwise post-op.
+     *  @param weights_data_type Weights data type of depthwise post-op
+     *  @param bias_data_type Bias data type of depthwise post-op
+     *  @param dst_data_type Output data type of depthwise post-op
+     *  @param mask Output scaling factors correspondence mask that defines the
+     *      correspondence between the output tensor dimensions and the
+     *      \p scales array. The set i-th bit indicates that a dedicated output
+     *      scaling factor is used for each index along that dimension. The mask
+     *      value of 0 implies a common scaling factor for the whole output
+     *      tensor.
+     *  @param scales Output pointer to a constant array of float scaling
+     *      factors. */
+    
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    public native void get_params_dw(int index, memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim*") @ByRef LongPointer kernel_size, @Cast("dnnl::memory::dim*") @ByRef LongPointer stride_size,
+                @Cast("dnnl::memory::dim*") @ByRef LongPointer padding_l_size, @ByRef IntPointer mask,
+                @StdVector FloatPointer scales);
+    public native void get_params_dw(int index, memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim*") @ByRef LongBuffer kernel_size, @Cast("dnnl::memory::dim*") @ByRef LongBuffer stride_size,
+                @Cast("dnnl::memory::dim*") @ByRef LongBuffer padding_l_size, @ByRef IntBuffer mask,
+                @StdVector FloatBuffer scales);
+    public native void get_params_dw(int index, memory.data_type weights_data_type,
+                memory.data_type bias_data_type, memory.data_type dst_data_type,
+                @Cast("dnnl::memory::dim*") @ByRef long[] kernel_size, @Cast("dnnl::memory::dim*") @ByRef long[] stride_size,
+                @Cast("dnnl::memory::dim*") @ByRef long[] padding_l_size, @ByRef int[] mask,
+                @StdVector float[] scales);
 
     /** Appends a depthwise post-op convolution with stride 1.
      * 

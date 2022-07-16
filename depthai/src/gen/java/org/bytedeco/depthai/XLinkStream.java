@@ -49,9 +49,7 @@ public class XLinkStream extends Pointer {
     public native @Function void read(@Cast("std::uint8_t*") @StdVector byte[] data);
     // split write helper
     public native void writeSplit(@Const Pointer data, @Cast("std::size_t") long size, @Cast("std::size_t") long split);
-    public native void writeSplit(@Cast("uint8_t*") @StdVector BytePointer data, @Cast("std::size_t") long split);
-    public native void writeSplit(@Cast("uint8_t*") @StdVector ByteBuffer data, @Cast("std::size_t") long split);
-    public native void writeSplit(@Cast("uint8_t*") @StdVector byte[] data, @Cast("std::size_t") long split);
+    public native void writeSplit(@Const @ByRef ByteVector data, @Cast("std::size_t") long split);
     public native @ByVal StreamPacketDesc readMove();
 
     // Timeout

@@ -88,7 +88,7 @@ public class ImageManipConfig extends Buffer {
      * @param pt 4 points specifying warp
      * @param normalizedCoords If true pt is interpreted as normalized, absolute otherwise
      */
-    public native @ByRef ImageManipConfig setWarpTransformFourPoints(@StdVector Point2f pt, @Cast("bool") boolean normalizedCoords);
+    public native @ByRef ImageManipConfig setWarpTransformFourPoints(@ByVal Point2fVector pt, @Cast("bool") boolean normalizedCoords);
 
     /**
      * Specifies warp with a 3x3 matrix
@@ -178,6 +178,12 @@ public class ImageManipConfig extends Buffer {
      * @param flip True to enable flip, false otherwise
      */
     public native @ByRef ImageManipConfig setHorizontalFlip(@Cast("bool") boolean flip);
+
+    /**
+     * Specify vertical flip
+     * @param flip True to enable vertical flip, false otherwise
+     */
+    public native void setVerticalFlip(@Cast("bool") boolean flip);
 
     /**
      * Instruct ImageManip to not remove current image from its queue and use the same for next message.

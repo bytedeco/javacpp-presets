@@ -51,12 +51,8 @@ public class OpenVINO extends Pointer {
          *
          * @param data In memory blob
          */
-        public Blob(@Cast("uint8_t*") @StdVector BytePointer data) { super((Pointer)null); allocate(data); }
-        private native void allocate(@Cast("uint8_t*") @StdVector BytePointer data);
-        public Blob(@Cast("uint8_t*") @StdVector ByteBuffer data) { super((Pointer)null); allocate(data); }
-        private native void allocate(@Cast("uint8_t*") @StdVector ByteBuffer data);
-        public Blob(@Cast("uint8_t*") @StdVector byte[] data) { super((Pointer)null); allocate(data); }
-        private native void allocate(@Cast("uint8_t*") @StdVector byte[] data);
+        public Blob(@ByVal ByteVector data) { super((Pointer)null); allocate(data); }
+        private native void allocate(@ByVal ByteVector data);
         /**
          * \brief Construct a new Blob by loading from a filesystem path
          *
@@ -78,7 +74,7 @@ public class OpenVINO extends Pointer {
         /** Number of CMX slices the blob was compiled for */
         public native @Cast("uint32_t") int numSlices(); public native Blob numSlices(int setter);
         /** Blob data */
-        public native @Cast("uint8_t*") @StdVector BytePointer data(); public native Blob data(BytePointer setter);
+        public native @ByRef ByteVector data(); public native Blob data(ByteVector setter);
     }
 
     /** Main OpenVINO version */

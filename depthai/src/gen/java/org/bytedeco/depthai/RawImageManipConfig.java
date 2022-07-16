@@ -117,7 +117,7 @@ public class RawImageManipConfig extends RawBuffer {
         public native @Cast("char") byte bgBlue(); public native ResizeConfig bgBlue(byte setter);
 
         //  clockwise order, pt[0] is mapped to the top-left output corner
-        public native @StdVector Point2f warpFourPoints(); public native ResizeConfig warpFourPoints(Point2f setter);
+        public native @ByRef Point2fVector warpFourPoints(); public native ResizeConfig warpFourPoints(Point2fVector setter);
         public native @Cast("bool") boolean normalizedCoords(); public native ResizeConfig normalizedCoords(boolean setter);
         public native @Cast("bool") boolean enableWarp4pt(); public native ResizeConfig enableWarp4pt(boolean setter);
 
@@ -157,6 +157,7 @@ public class RawImageManipConfig extends RawBuffer {
     
         public native RawImgFrame.Type type(); public native FormatConfig type(RawImgFrame.Type setter);
         public native @Cast("bool") boolean flipHorizontal(); public native FormatConfig flipHorizontal(boolean setter);
+        public native @Cast("bool") boolean flipVertical(); public native FormatConfig flipVertical(boolean setter);
     }
 
     public native @ByRef CropConfig cropConfig(); public native RawImageManipConfig cropConfig(CropConfig setter);
