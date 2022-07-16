@@ -139,6 +139,51 @@ public class DeviceBootloader extends Pointer {
         public native @ByVal Version getSemver();
     }
 
+    public static class ApplicationInfo extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public ApplicationInfo() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ApplicationInfo(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ApplicationInfo(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public ApplicationInfo position(long position) {
+            return (ApplicationInfo)super.position(position);
+        }
+        @Override public ApplicationInfo getPointer(long i) {
+            return new ApplicationInfo((Pointer)this).offsetAddress(i);
+        }
+    
+        public native Memory memory(); public native ApplicationInfo memory(Memory setter);
+        public native @Cast("bool") boolean hasApplication(); public native ApplicationInfo hasApplication(boolean setter);
+        public native @StdString BytePointer firmwareVersion(); public native ApplicationInfo firmwareVersion(BytePointer setter);
+        public native @StdString BytePointer applicationName(); public native ApplicationInfo applicationName(BytePointer setter);
+    }
+
+    public static class MemoryInfo extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public MemoryInfo() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public MemoryInfo(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public MemoryInfo(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public MemoryInfo position(long position) {
+            return (MemoryInfo)super.position(position);
+        }
+        @Override public MemoryInfo getPointer(long i) {
+            return new MemoryInfo((Pointer)this).offsetAddress(i);
+        }
+    
+        public native @Cast("bool") boolean available(); public native MemoryInfo available(boolean setter);
+        public native @Cast("std::int64_t") long size(); public native MemoryInfo size(long setter);
+        public native @StdString BytePointer info(); public native MemoryInfo info(BytePointer setter);
+    }
+
     // constants
 
     /** Default Bootloader type */
@@ -162,18 +207,34 @@ public class DeviceBootloader extends Pointer {
      * @param pipeline Pipeline from which to create the application package
      * @param pathToCmd Optional path to custom device firmware
      * @param compress Optional boolean which specifies if contents should be compressed
+     * @param applicationName Optional name the application that is flashed
      * @return Depthai application package
      */
-    public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/);
-    public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                                    @Cast("bool") boolean compress/*=false*/,
+                                                                    @StdString BytePointer applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                                    @Cast("bool") boolean compress/*=false*/,
+                                                                    @StdString ByteBuffer applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                                    @Cast("bool") boolean compress/*=false*/,
+                                                                    @StdString String applicationName/*=""*/);
 
     /**
      * Creates application package which can be flashed to depthai device.
      * @param pipeline Pipeline from which to create the application package
      * @param compress Specifies if contents should be compressed
+     * @param applicationName Name the application that is flashed
      * @return Depthai application package
      */
-    public static native @Cast("uint8_t*") @StdVector BytePointer createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString BytePointer applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString ByteBuffer applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString String applicationName/*=""*/);
 
     /**
      * Saves application package to a file which can be flashed to depthai device.
@@ -181,17 +242,28 @@ public class DeviceBootloader extends Pointer {
      * @param pipeline Pipeline from which to create the application package
      * @param pathToCmd Optional path to custom device firmware
      * @param compress Optional boolean which specifies if contents should be compressed
+     * @param applicationName Optional name the application that is flashed
      */
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/);
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/);
 
     /**
      * Saves application package to a file which can be flashed to depthai device.
      * @param path Path where to save the application package
      * @param pipeline Pipeline from which to create the application package
      * @param compress Specifies if contents should be compressed
+     * @param applicationName Optional name the application that is flashed
      */
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString BytePointer applicationName/*=""*/);
     public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString ByteBuffer applicationName/*=""*/);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString String applicationName/*=""*/);
 
     /**
      * @return Embedded bootloader version
@@ -256,33 +328,92 @@ public class DeviceBootloader extends Pointer {
      * Flashes a given pipeline to the device.
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
      * @param pipeline Pipeline to flash to the board
+     * @param compress Compresses application to reduce needed memory size
+     * @param applicationName Name the application that is flashed
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback, @Const @ByRef Pipeline pipeline);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString BytePointer applicationName/*=""*/,
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString ByteBuffer applicationName/*=""*/,
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString String applicationName/*=""*/,
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString BytePointer applicationName/*=""*/,
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString ByteBuffer applicationName/*=""*/,
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
+                                            @Const @ByRef Pipeline pipeline,
+                                            @Cast("bool") boolean compress/*=false*/,
+                                            @StdString String applicationName/*=""*/,
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
 
     /**
      * Flashes a given pipeline to the device.
      * @param pipeline Pipeline to flash to the board
+     * @param compress Compresses application to reduce needed memory size
+     * @param applicationName Optional name the application that is flashed
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+
+    /**
+     * Reads information about flashed application in specified memory from device
+     * @param memory Specifies which memory to query
+     */
+    public native @ByVal ApplicationInfo readApplicationInfo(Memory memory);
+    public native @ByVal ApplicationInfo readApplicationInfo(@Cast("dai::bootloader::Memory") int memory);
 
     /**
      * Flashes a specific depthai application package that was generated using createDepthaiApplicationPackage or saveDepthaiApplicationPackage
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
      * @param package Depthai application package to flash to the board
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback, @Cast("uint8_t*") @StdVector BytePointer _package);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback, @Cast("uint8_t*") @StdVector ByteBuffer _package);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback, @Cast("uint8_t*") @StdVector byte[] _package);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback,
+                                                                     @ByVal ByteVector _package,
+                                                                     Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback,
+                                                                     @ByVal ByteVector _package);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(ProgressCallback progressCallback,
+                                                                     @ByVal ByteVector _package,
+                                                                     @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
 
     /**
      * Flashes a specific depthai application package that was generated using createDepthaiApplicationPackage or saveDepthaiApplicationPackage
      * @param package Depthai application package to flash to the board
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@Cast("uint8_t*") @StdVector BytePointer _package);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@Cast("uint8_t*") @StdVector ByteBuffer _package);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@Cast("uint8_t*") @StdVector byte[] _package);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@ByVal ByteVector _package, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@ByVal ByteVector _package);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashDepthaiApplicationPackage(@ByVal ByteVector _package, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+
+    /**
+     * Clears flashed application on the device, by removing SBR boot structure
+     * Doesnt remove fast boot header capability to still boot the application
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashClear(Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashClear();
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashClear(@Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
 
     /**
      * Flashes bootloader to the current board
@@ -305,13 +436,124 @@ public class DeviceBootloader extends Pointer {
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback);
 
     /**
+     * Flash boot header which boots same as equivalent GPIO mode would
+     * @param gpioMode GPIO mode equivalent
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashGpioModeBootHeader(Memory memory, int gpioMode);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashGpioModeBootHeader(@Cast("dai::bootloader::Memory") int memory, int gpioMode);
+
+    /**
+     * Flash USB recovery boot header. Switches to USB ROM Bootloader
+     * @param memory Which memory to flash the header to
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashUsbRecoveryBootHeader(Memory memory);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashUsbRecoveryBootHeader(@Cast("dai::bootloader::Memory") int memory);
+
+    /**
+     * Flash optimized boot header
+     * @param memory Which memory to flasht the header to
+     * @param frequency SPI specific parameter, frequency in MHz
+     * @param location Target location the header should boot to. Default to location of bootloader
+     * @param dummyCycles SPI specific parameter
+     * @param offset Offset in memory to flash the header to. Defaults to offset of boot header
+     * @return status as std::tuple<bool, std::string>
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootHeader(Memory memory, int frequency/*=-1*/, @Cast("int64_t") long location/*=-1*/, int dummyCycles/*=-1*/, @Cast("int64_t") long offset/*=-1*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootHeader(Memory memory);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootHeader(@Cast("dai::bootloader::Memory") int memory, int frequency/*=-1*/, @Cast("int64_t") long location/*=-1*/, int dummyCycles/*=-1*/, @Cast("int64_t") long offset/*=-1*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootHeader(@Cast("dai::bootloader::Memory") int memory);
+
+    /**
+     * Flash fast boot header. Application must already be present in flash, or location must be specified manually.
+     * Note - Can soft brick your device if firmware location changes.
+     * @param memory Which memory to flash the header to
+     * @param frequency SPI specific parameter, frequency in MHz
+     * @param location Target location the header should boot to. Default to location of bootloader
+     * @param dummyCycles SPI specific parameter
+     * @param offset Offset in memory to flash the header to. Defaults to offset of boot header
+     * @return status as std::tuple<bool, std::string>
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashFastBootHeader(
+            Memory memory, int frequency/*=-1*/, @Cast("int64_t") long location/*=-1*/, int dummyCycles/*=-1*/, @Cast("int64_t") long offset/*=-1*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashFastBootHeader(
+            Memory memory);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashFastBootHeader(
+            @Cast("dai::bootloader::Memory") int memory, int frequency/*=-1*/, @Cast("int64_t") long location/*=-1*/, int dummyCycles/*=-1*/, @Cast("int64_t") long offset/*=-1*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashFastBootHeader(
+            @Cast("dai::bootloader::Memory") int memory);
+
+    /**
      * Flash arbitrary data at custom offset in specified memory
      * @param memory Memory to flash
      * @param offset Offset at which to flash the given data in bytes
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
      * @param data Data to flash
      */
-    // std::tuple<bool, std::string> flashCustom(Memory memory, uint32_t offset, std::function<void(float)> progressCb, std::vector<uint8_t> data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Const @ByRef ByteVector data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Const @ByRef ByteVector data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Const @ByRef ByteVector data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Const @ByRef ByteVector data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") BytePointer data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") BytePointer data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") ByteBuffer data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") ByteBuffer data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") byte[] data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") byte[] data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") BytePointer data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") BytePointer data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") ByteBuffer data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @Cast("const uint8_t*") ByteBuffer data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") byte[] data, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("const uint8_t*") byte[] data, @Cast("size_t") long size);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString BytePointer filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString BytePointer filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString ByteBuffer filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString ByteBuffer filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString String filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString String filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString BytePointer filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString BytePointer filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString ByteBuffer filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(Memory memory, @Cast("size_t") long offset, @StdString ByteBuffer filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString String filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @StdString String filename);
+
+    /**
+     * Reads arbitrary data at custom offset in specified memory
+     * @param memory Memory to read
+     * @param offset Offset at which to read the specified bytes
+     * @param size Number of bytes to read
+     * @param data Data to read to. Must be atleast 'size' number of bytes big
+     * @param progressCallback Callback that sends back a value between 0..1 which signifies current reading progress
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(
+            Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @ByRef ByteVector data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(
+            Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @ByRef ByteVector data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(
+            @Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @ByRef ByteVector data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(
+            @Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @ByRef ByteVector data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") BytePointer data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") BytePointer data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") ByteBuffer data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") ByteBuffer data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") byte[] data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") byte[] data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") BytePointer data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") BytePointer data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") ByteBuffer data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") ByteBuffer data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") byte[] data, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @Cast("uint8_t*") byte[] data);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @StdString String filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, @StdString String filename);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @StdString String filename, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, @StdString String filename);
+    public native @ByVal BoolStringByteVectorTuple readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal BoolStringByteVectorTuple readCustom(Memory memory, @Cast("size_t") long offset, @Cast("size_t") long size);
+    public native @ByVal BoolStringByteVectorTuple readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size, ProgressCallback progressCb/*=nullptr*/);
+    public native @ByVal BoolStringByteVectorTuple readCustom(@Cast("dai::bootloader::Memory") int memory, @Cast("size_t") long offset, @Cast("size_t") long size);
 
     /**
      * Reads configuration data from bootloader
@@ -373,13 +615,18 @@ public class DeviceBootloader extends Pointer {
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashConfig(@Const @ByRef Config config, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("dai::bootloader::Type") int type/*=dai::DeviceBootloader::Type::AUTO*/);
 
     /**
+     * Retrieves information about specified memory
+     * @param memory Specifies which memory to query
+     */
+    public native @ByVal MemoryInfo getMemoryInfo(Memory memory);
+    public native @ByVal MemoryInfo getMemoryInfo(@Cast("dai::bootloader::Memory") int memory);
+
+    /**
      * Boots a custom FW in memory
      * @param fw
      * @throws A runtime exception if there are any communication issues
      */
-    public native void bootMemory(@Cast("uint8_t*") @StdVector BytePointer fw);
-    public native void bootMemory(@Cast("uint8_t*") @StdVector ByteBuffer fw);
-    public native void bootMemory(@Cast("uint8_t*") @StdVector byte[] fw);
+    public native void bootMemory(@Const @ByRef ByteVector fw);
 
     /**
      * Boots into integrated ROM bootloader in USB mode

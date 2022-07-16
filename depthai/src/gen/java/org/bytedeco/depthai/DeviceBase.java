@@ -582,6 +582,22 @@ public class DeviceBase extends Pointer {
     public native @ByVal CalibrationHandler readFactoryCalibrationOrDefault();
 
     /**
+     * Fetches the raw EEPROM data from User area
+     *
+     * @throws std::runtime_exception if any error occured
+     * @return Binary dump of User area EEPROM data
+     */
+    public native @Cast("std::uint8_t*") @StdVector BytePointer readCalibrationRaw();
+
+    /**
+     * Fetches the raw EEPROM data from Factory area
+     *
+     * @throws std::runtime_exception if any error occured
+     * @return Binary dump of Factory area EEPROM data
+     */
+    public native @Cast("std::uint8_t*") @StdVector BytePointer readFactoryCalibrationRaw();
+
+    /**
      * Retrieves USB connection speed
      *
      * @return USB connection speed of connected device if applicable. Unknown otherwise.

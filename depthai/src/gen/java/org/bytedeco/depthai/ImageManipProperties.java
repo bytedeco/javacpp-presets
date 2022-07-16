@@ -46,4 +46,11 @@ public class ImageManipProperties extends ImageManipPropertiesSerializable {
 
     /** Num frames in output pool */
     public native int numFramesPool(); public native ImageManipProperties numFramesPool(int setter);
+
+    /** Custom warp mesh width. Set to zero to disable */
+    public native int meshWidth(); public native ImageManipProperties meshWidth(int setter);
+    /** Custom warp mesh height. Set to zero to disable. */
+    public native int meshHeight(); public native ImageManipProperties meshHeight(int setter);
+    /** Custom warp mesh uri. Set to empty string to disable. */
+    public native @StdString BytePointer meshUri(); public native ImageManipProperties meshUri(BytePointer setter);
 }

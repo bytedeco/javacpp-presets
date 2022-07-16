@@ -2744,7 +2744,7 @@ public static final int DNNL_VERSION_MAJOR = 2;
 public static final int DNNL_VERSION_MINOR = 6;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 0;
+public static final int DNNL_VERSION_PATCH = 1;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -3806,7 +3806,6 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_eltwise(dnn
 ///
 ///
 ///
-///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_eltwise(
         @Const dnnl_post_ops post_ops, int index, FloatPointer scale,
         @Cast("dnnl_alg_kind_t*") IntPointer alg_kind, FloatPointer alpha, FloatPointer beta);
@@ -3816,6 +3815,108 @@ public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_eltwise
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_eltwise(
         @Const dnnl_post_ops post_ops, int index, float[] scale,
         @Cast("dnnl_alg_kind_t*") int[] alg_kind, float[] alpha, float[] beta);
+
+/** Appends a depthwise post-op convolution.
+ * 
+ *  This post-op can only be fused with a 2D 1x1 convolution (convolution with
+ *  weights spatial dimensions equal to 1 i.e., kh=kw=1).
+ * 
+ *  The kind of this post-op is #dnnl_convolution.
+ * 
+ *  The number of outputs for primitive with fusion is one. The output spatial
+ *  size can be derived as below:
+ * 
+ *  output_height = ceil(output_height_1x1_convolution, stride)
+ *  output_width = ceil(output_width_1x1_convolution, stride)
+ * 
+ *  See \ref dev_guide_attributes_post_ops_depthwise and
+ *  \ref dev_guide_attributes_post_ops_depthwise_fusion for more info.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param weights_data_type Weights data type of depthwise post-op
+ *  @param bias_data_type Bias data type of depthwise post-op
+ *  @param dst_data_type Output data type of depthwise post-op
+ *  @param kernel_size Size of kernel of depthwise post-op
+ *  @param stride_size Size of stride of depthwise post-op
+ *  @param padding_l_size Size of left and top paddings of depthwise post-op
+ *  @param count Output length of the array of scaling factors \p scales.
+ *  @param mask Output scaling factors correspondence mask that defines the
+ *      correspondence between the output tensor dimensions and the \p
+ *      scales array. The set i-th bit indicates that a dedicated output scaling
+ *      factor is used for each index along that dimension. The mask value of 0
+ *      implies a common scaling factor for the whole output tensor.
+ *  @param scales Output pointer to a constant array of float scaling factors.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_dw(dnnl_post_ops post_ops,
+        @Cast("dnnl_data_type_t") int weights_data_type, @Cast("dnnl_data_type_t") int bias_data_type,
+        @Cast("dnnl_data_type_t") int dst_data_type, @Cast("dnnl_dim_t") long kernel_size,
+        @Cast("dnnl_dim_t") long stride_size, @Cast("dnnl_dim_t") long padding_l_size, @Cast("dnnl_dim_t") long count,
+        int mask, @Const FloatPointer scales);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_dw(dnnl_post_ops post_ops,
+        @Cast("dnnl_data_type_t") int weights_data_type, @Cast("dnnl_data_type_t") int bias_data_type,
+        @Cast("dnnl_data_type_t") int dst_data_type, @Cast("dnnl_dim_t") long kernel_size,
+        @Cast("dnnl_dim_t") long stride_size, @Cast("dnnl_dim_t") long padding_l_size, @Cast("dnnl_dim_t") long count,
+        int mask, @Const FloatBuffer scales);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_append_dw(dnnl_post_ops post_ops,
+        @Cast("dnnl_data_type_t") int weights_data_type, @Cast("dnnl_data_type_t") int bias_data_type,
+        @Cast("dnnl_data_type_t") int dst_data_type, @Cast("dnnl_dim_t") long kernel_size,
+        @Cast("dnnl_dim_t") long stride_size, @Cast("dnnl_dim_t") long padding_l_size, @Cast("dnnl_dim_t") long count,
+        int mask, @Const float[] scales);
+
+/** Returns the parameters of an depthwise post-op.
+ * 
+ *  @param post_ops Post-ops.
+ *  @param index Index of the elementwise post-op.
+ *  @param weights_data_type Weights data type of depthwise post-op
+ *  @param bias_data_type Bias data type of depthwise post-op
+ *  @param dst_data_type Output data type of depthwise post-op
+ *  @param kernel_size Size of kernel of depthwise post-op
+ *  @param stride_size Size of stride of depthwise post-op
+ *  @param padding_l_size Size of left and top paddings of depthwise post-op
+ *  @param count Output length of the array of scaling factors \p scales.
+ *  @param mask Output scaling factors correspondence mask that defines the
+ *      correspondence between the output tensor dimensions and the \p
+ *      scales array. The set i-th bit indicates that a dedicated output scaling
+ *      factor is used for each index along that dimension. The mask value of 0
+ *      implies a common scaling factor for the whole output tensor.
+ *  @param scales Output pointer to a constant array of float scaling factors.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise */
+
+///
+///
+///
+///
+///
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw(
+        @Const dnnl_post_ops post_ops, int index,
+        @Cast("dnnl_data_type_t*") IntPointer weights_data_type, @Cast("dnnl_data_type_t*") IntPointer bias_data_type,
+        @Cast("dnnl_data_type_t*") IntPointer dst_data_type, @Cast("dnnl_dim_t*") LongPointer kernel_size,
+        @Cast("dnnl_dim_t*") LongPointer stride_size, @Cast("dnnl_dim_t*") LongPointer padding_l_size, @Cast("dnnl_dim_t*") LongPointer count,
+        IntPointer mask, @Cast("const float**") PointerPointer scales);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw(
+        @Const dnnl_post_ops post_ops, int index,
+        @Cast("dnnl_data_type_t*") IntPointer weights_data_type, @Cast("dnnl_data_type_t*") IntPointer bias_data_type,
+        @Cast("dnnl_data_type_t*") IntPointer dst_data_type, @Cast("dnnl_dim_t*") LongPointer kernel_size,
+        @Cast("dnnl_dim_t*") LongPointer stride_size, @Cast("dnnl_dim_t*") LongPointer padding_l_size, @Cast("dnnl_dim_t*") LongPointer count,
+        IntPointer mask, @Const @ByPtrPtr FloatPointer scales);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw(
+        @Const dnnl_post_ops post_ops, int index,
+        @Cast("dnnl_data_type_t*") IntBuffer weights_data_type, @Cast("dnnl_data_type_t*") IntBuffer bias_data_type,
+        @Cast("dnnl_data_type_t*") IntBuffer dst_data_type, @Cast("dnnl_dim_t*") LongBuffer kernel_size,
+        @Cast("dnnl_dim_t*") LongBuffer stride_size, @Cast("dnnl_dim_t*") LongBuffer padding_l_size, @Cast("dnnl_dim_t*") LongBuffer count,
+        IntBuffer mask, @Const @ByPtrPtr FloatBuffer scales);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_get_params_dw(
+        @Const dnnl_post_ops post_ops, int index,
+        @Cast("dnnl_data_type_t*") int[] weights_data_type, @Cast("dnnl_data_type_t*") int[] bias_data_type,
+        @Cast("dnnl_data_type_t*") int[] dst_data_type, @Cast("dnnl_dim_t*") long[] kernel_size,
+        @Cast("dnnl_dim_t*") long[] stride_size, @Cast("dnnl_dim_t*") long[] padding_l_size, @Cast("dnnl_dim_t*") long[] count,
+        int[] mask, @Const @ByPtrPtr float[] scales);
 
 /** Appends a depthwise post-op convolution with stride 1.
  * 

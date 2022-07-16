@@ -362,4 +362,9 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * used from calibration data.
      */
     public native void useHomographyRectification(@Cast("bool") boolean useHomographyRectification);
+
+    /**
+     * Equivalent to useHomographyRectification(!enableDistortionCorrection)
+     */
+    public native void enableDistortionCorrection(@Cast("bool") boolean enableDistortionCorrection);
 }

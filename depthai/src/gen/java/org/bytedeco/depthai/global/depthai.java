@@ -25,6 +25,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../IntOptional.java
 
 
+// Targeting ../SizeTOptional.java
+
+
 // Targeting ../VersionOptional.java
 
 
@@ -34,16 +37,31 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../EepromDataOptional.java
 
 
+// Targeting ../LogLevelOptional.java
+
+
 // Targeting ../StringIntVectorMap.java
 
 
 // Targeting ../StringAssetViewPairVector.java
 
 
+// Targeting ../ByteVector.java
+
+
+// Targeting ../IntVector.java
+
+
 // Targeting ../StringVector.java
 
 
 // Targeting ../FloatVectorVector.java
+
+
+// Targeting ../FloatFloatPairVector.java
+
+
+// Targeting ../Point2fVector.java
 
 
 // Targeting ../AssetVector.java
@@ -62,6 +80,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 
 // Targeting ../FloatVectorVectorIntIntTuple.java
+
+
+// Targeting ../BoolStringByteVectorTuple.java
 
 
 // Targeting ../StringNodeInputMap.java
@@ -162,7 +183,10 @@ public static final int
     X_LINK_OUT_OF_MEMORY = 8,
     X_LINK_INSUFFICIENT_PERMISSIONS = 9,
     X_LINK_DEVICE_ALREADY_IN_USE = 10,
-    X_LINK_NOT_IMPLEMENTED = 11;
+    X_LINK_NOT_IMPLEMENTED = 11,
+    X_LINK_INIT_USB_ERROR = 12,
+    X_LINK_INIT_TCP_IP_ERROR = 13,
+    X_LINK_INIT_PCIE_ERROR = 14;
 
 /** enum XLinkProtocol_t */
 public static final int
@@ -1180,6 +1204,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // project
 // #include "depthai-shared/common/UsbSpeed.hpp"
 // #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/log/LogLevel.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
 // #include "depthai-shared/xlink/XLinkConstants.hpp"
 

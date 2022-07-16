@@ -78,6 +78,14 @@ public class NeuralNetwork extends NeuralNetworkPropertiesNode {
     public native void setBlob(@ByVal OpenVINO.Blob blob);
 
     /**
+     * Same functionality as the setBlobPath(). Load network blob into assets and use once pipeline is started.
+     *
+     * @throws Error if file doesn't exist or isn't a valid network blob.
+     * @param path Path to network blob
+     */
+    public native void setBlob(@Const @ByRef Path path);
+
+    /**
      * Specifies how many frames will be available in the pool
      * @param numFrames How many frames will pool have
      */

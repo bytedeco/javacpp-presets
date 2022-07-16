@@ -127,6 +127,16 @@ public class StereoDepthConfig extends Buffer {
     public native @ByRef StereoDepthConfig setDepthUnit(RawStereoDepthConfig.AlgorithmControl.DepthUnit depthUnit);
 
     /**
+     * Shift input frame by a number of pixels to increase minimum depth.
+     * For example shifting by 48 will change effective disparity search range from (0,95] to [48,143].
+     * An alternative approach to reducing the minZ.
+     * We normally only recommend doing this when it is known that there will be no objects
+     * farther away than MaxZ, such as having a depth camera mounted above a table
+     * pointing down at the table surface.
+     */
+    public native @ByRef StereoDepthConfig setDisparityShift(int disparityShift);
+
+    /**
      * Get depth unit of depth map.
      */
     public native RawStereoDepthConfig.AlgorithmControl.DepthUnit getDepthUnit();

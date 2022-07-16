@@ -59,9 +59,9 @@ public class NNData extends Buffer {
      * @param name Name of the layer
      * @param data Data to store
      */
-    public native @ByRef NNData setLayer(@StdString BytePointer name, @Const @StdVector @ByRef IntPointer data);
-    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @Const @StdVector @ByRef IntBuffer data);
-    public native @ByRef NNData setLayer(@StdString String name, @Const @StdVector @ByRef int[] data);
+    public native @ByRef NNData setLayer(@StdString BytePointer name, @Const @ByRef IntVector data);
+    public native @ByRef NNData setLayer(@StdString ByteBuffer name, @Const @ByRef IntVector data);
+    public native @ByRef NNData setLayer(@StdString String name, @Const @ByRef IntVector data);
 
     // fp16
     /**

@@ -215,4 +215,19 @@ public class BoardConfig extends Pointer {
 
     // USB3 phy config
     public native @ByRef BoolOptional usb3PhyInternalClock(); public native BoardConfig usb3PhyInternalClock(BoolOptional setter);
+
+    // MIPI 4Lane RGB config
+    public native @ByRef BoolOptional mipi4LaneRgb(); public native BoardConfig mipi4LaneRgb(BoolOptional setter);
+
+    // eMMC config
+    public native @ByRef BoolOptional emmc(); public native BoardConfig emmc(BoolOptional setter);
+
+    // log path
+    public native @ByRef StringOptional logPath(); public native BoardConfig logPath(StringOptional setter);
+
+    // Max log size
+    public native @ByRef SizeTOptional logSizeMax(); public native BoardConfig logSizeMax(SizeTOptional setter);
+
+    // log verbosity
+    public native @ByRef LogLevelOptional logVerbosity(); public native BoardConfig logVerbosity(LogLevelOptional setter);
 }

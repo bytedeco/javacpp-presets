@@ -129,6 +129,16 @@ public class RawStereoDepthConfig extends RawBuffer {
          * Median filter postprocessing is supported only for 3 fractional bits
          */
         public native @Cast("std::int32_t") int subpixelFractionalBits(); public native AlgorithmControl subpixelFractionalBits(int setter);
+
+        /**
+         * Shift input frame by a number of pixels to increase minimum depth.
+         * For example shifting by 48 will change effective disparity search range from (0,95] to [48,143].
+         * An alternative approach to reducing the minZ.
+         * We normally only recommend doing this when it is known that there will be no objects
+         * farther away than MaxZ, such as having a depth camera mounted above a table
+         * pointing down at the table surface.
+         */
+        public native @Cast("std::int32_t") int disparityShift(); public native AlgorithmControl disparityShift(int setter);
     }
 
     /**

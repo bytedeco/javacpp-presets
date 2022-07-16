@@ -67,7 +67,7 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
     /**
      * Select the camera sensor resolution
      */
-    public enum SensorResolution { THE_1080_P(0), THE_4_K(1), THE_12_MP(2), THE_13_MP(3);
+    public enum SensorResolution { THE_1080_P(0), THE_4_K(1), THE_12_MP(2), THE_13_MP(3), THE_720_P(4), THE_800_P(5);
 
         public final int value;
         private SensorResolution(int v) { this.value = v; }

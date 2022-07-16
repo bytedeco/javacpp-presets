@@ -28,10 +28,8 @@ public class StringIntVectorMap extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native @StdVector IntPointer get(@StdString BytePointer i);
-    public native StringIntVectorMap put(@StdString BytePointer i, IntPointer value);
-    @ValueSetter @Index public native StringIntVectorMap put(@StdString BytePointer i, @StdVector IntBuffer value);
-    @ValueSetter @Index public native StringIntVectorMap put(@StdString BytePointer i, @StdVector int[] value);
+    @Index public native @ByRef IntVector get(@StdString BytePointer i);
+    public native StringIntVectorMap put(@StdString BytePointer i, IntVector value);
 
     public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
@@ -43,7 +41,7 @@ public class StringIntVectorMap extends Pointer {
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
         public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator *().second") @MemberGetter @StdVector @Const IntPointer second();
+        public native @Name("operator *().second") @MemberGetter @ByRef @Const IntVector second();
     }
 }
 
