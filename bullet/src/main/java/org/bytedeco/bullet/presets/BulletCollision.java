@@ -231,6 +231,8 @@ public class BulletCollision implements InfoMapper {
                     "DBVT_CHECKTYPE",
                     "DBVT_IPOLICY",
                     "DBVT_PREFIX",
+                    "MAX_CONVEX_CAST_ITERATIONS",
+                    "MAX_CONVEX_CAST_EPSILON",
                     "btAABB",
                     "btAlignedObjectArray<BT_QUANTIZED_BVH_NODE>::findBinarySearch",
                     "btAlignedObjectArray<BT_QUANTIZED_BVH_NODE>::findLinearSearch",

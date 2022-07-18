@@ -37,7 +37,7 @@ case $PLATFORM in
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -61,7 +61,7 @@ case $PLATFORM in
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -85,7 +85,7 @@ case $PLATFORM in
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -109,7 +109,7 @@ case $PLATFORM in
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -132,7 +132,7 @@ case $PLATFORM in
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -155,7 +155,7 @@ case $PLATFORM in
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             ..
@@ -176,7 +176,7 @@ case $PLATFORM in
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             -DCMAKE_MACOSX_RPATH=ON \
@@ -202,7 +202,7 @@ case $PLATFORM in
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
             -DINSTALL_LIBS=ON \
-            -DUSE_DOUBLE_PRECISION=OFF \
+            -DUSE_DOUBLE_PRECISION=ON \
             -DUSE_GLUT=OFF \
             -DUSE_GRAPHICAL_BENCHMARK=OFF \
             -DUSE_MSVC_RUNTIME_LIBRARY_DLL=ON \
