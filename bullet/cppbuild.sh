@@ -175,7 +175,11 @@ case $PLATFORM in
         make install/strip
         ;;
     macosx-x86_64)
-        sedinplace 's/-fopenmp/-Xclang -fopenmp/g' ../CMakeLists.txt
+        mkdir -p $INSTALL_PATH/lib
+        cp /usr/local/lib/libomp.dylib $INSTALL_PATH/lib/libiomp5.dylib
+        chmod +w $INSTALL_PATH/lib/libiomp5.dylib
+        install_name_tool -id @rpath/libiomp5.dylib $INSTALL_PATH/lib/libiomp5.dylib
+        sedinplace 's:-fopenmp:-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5:g' ../CMakeLists.txt
         $CMAKE \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
@@ -198,6 +202,7 @@ case $PLATFORM in
             ..
         make -j $MAKEJ
         make install/strip
+        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib $INSTALL_PATH/lib/*.dylib
         ;;
     windows-x86|windows-x86_64)
         export CC="cl.exe"
