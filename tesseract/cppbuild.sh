@@ -122,14 +122,14 @@ case $PLATFORM in
     windows-x86)
         export CC="gcc -m32"
         export CXX="g++ -m32"
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF -DOPENMP_BUILD=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
