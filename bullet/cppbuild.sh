@@ -33,6 +33,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
@@ -57,6 +59,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
@@ -81,6 +85,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
@@ -105,6 +111,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake \
@@ -129,6 +137,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
@@ -152,6 +162,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
@@ -173,6 +185,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=ON \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
@@ -198,6 +212,8 @@ case $PLATFORM in
             -DBUILD_OPENGL3_DEMOS=OFF \
             -DBUILD_SHARED_LIBS=OFF \
             -DBUILD_UNIT_TESTS=OFF \
+            -DBULLET2_MULTITHREADING=ON \
+            -DBULLET2_USE_OPEN_MP_MULTITHREADING=ON \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH \
             -DENABLE_VHACD=OFF \
