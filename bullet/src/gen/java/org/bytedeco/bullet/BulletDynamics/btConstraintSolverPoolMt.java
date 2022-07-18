@@ -41,7 +41,7 @@ public class btConstraintSolverPoolMt extends btConstraintSolver {
 	private native void allocate(@ByPtrPtr btConstraintSolver solvers, int numSolvers);
 
 	/**solve a group of constraints */
-	public native @Cast("btScalar") float solveGroup(@Cast("btCollisionObject**") PointerPointer bodies,
+	public native @Cast("btScalar") double solveGroup(@Cast("btCollisionObject**") PointerPointer bodies,
 									int numBodies,
 									@Cast("btPersistentManifold**") PointerPointer manifolds,
 									int numManifolds,
@@ -50,7 +50,7 @@ public class btConstraintSolverPoolMt extends btConstraintSolver {
 									@Const @ByRef btContactSolverInfo info,
 									btIDebugDraw debugDrawer,
 									btDispatcher dispatcher);
-	public native @Cast("btScalar") float solveGroup(@ByPtrPtr btCollisionObject bodies,
+	public native @Cast("btScalar") double solveGroup(@ByPtrPtr btCollisionObject bodies,
 									int numBodies,
 									@ByPtrPtr btPersistentManifold manifolds,
 									int numManifolds,

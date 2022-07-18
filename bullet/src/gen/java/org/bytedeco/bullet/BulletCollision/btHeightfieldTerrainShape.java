@@ -83,111 +83,111 @@ public class btHeightfieldTerrainShape extends btConcaveShape {
 	
 		public Range() { super((Pointer)null); allocate(); }
 		private native void allocate();
-		public Range(@Cast("btScalar") float min, @Cast("btScalar") float max) { super((Pointer)null); allocate(min, max); }
-		private native void allocate(@Cast("btScalar") float min, @Cast("btScalar") float max);
+		public Range(@Cast("btScalar") double min, @Cast("btScalar") double max) { super((Pointer)null); allocate(min, max); }
+		private native void allocate(@Cast("btScalar") double min, @Cast("btScalar") double max);
 
 		public native @Cast("bool") boolean overlaps(@Const @ByRef Range other);
 
-		public native @Cast("btScalar") float min(); public native Range min(float setter);
-		public native @Cast("btScalar") float max(); public native Range max(float setter);
+		public native @Cast("btScalar") double min(); public native Range min(double setter);
+		public native @Cast("btScalar") double max(); public native Range max(double setter);
 	}
 
 	/** preferred constructors */
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const FloatPointer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const FloatPointer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const FloatPointer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const FloatPointer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const FloatBuffer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const FloatBuffer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const FloatBuffer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const FloatBuffer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const float[] heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const float[] heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const float[] heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const float[] heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const DoublePointer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const DoublePointer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const DoublePointer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const DoublePointer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const DoubleBuffer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const DoubleBuffer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const DoubleBuffer heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const DoubleBuffer heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const double[] heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const double[] heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const double[] heightfieldData, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const double[] heightfieldData, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const ShortPointer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const ShortPointer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const ShortPointer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const ShortPointer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const ShortBuffer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const ShortBuffer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const ShortBuffer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const ShortBuffer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Const short[] heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const short[] heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Const short[] heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Const short[] heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") BytePointer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") BytePointer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") BytePointer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") BytePointer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") ByteBuffer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") ByteBuffer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") ByteBuffer heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") ByteBuffer heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 	public btHeightfieldTerrainShape(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") byte[] heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") byte[] heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, flipQuadEdges); }
 	private native void allocate(
 			int heightStickWidth, int heightStickLength,
-			@Cast("const unsigned char*") byte[] heightfieldData, @Cast("btScalar") float heightScale, @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+			@Cast("const unsigned char*") byte[] heightfieldData, @Cast("btScalar") double heightScale, @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 			int upAxis, @Cast("bool") boolean flipQuadEdges);
 
 	/** legacy constructor
@@ -201,13 +201,13 @@ public class btHeightfieldTerrainShape extends btConcaveShape {
 	  to be double-precision.
 	 */
 	public btHeightfieldTerrainShape(int heightStickWidth, int heightStickLength,
-								  @Const Pointer heightfieldData, @Cast("btScalar") float heightScale,
-								  @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+								  @Const Pointer heightfieldData, @Cast("btScalar") double heightScale,
+								  @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 								  int upAxis, @Cast("PHY_ScalarType") int heightDataType,
 								  @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, upAxis, heightDataType, flipQuadEdges); }
 	private native void allocate(int heightStickWidth, int heightStickLength,
-								  @Const Pointer heightfieldData, @Cast("btScalar") float heightScale,
-								  @Cast("btScalar") float minHeight, @Cast("btScalar") float maxHeight,
+								  @Const Pointer heightfieldData, @Cast("btScalar") double heightScale,
+								  @Cast("btScalar") double minHeight, @Cast("btScalar") double maxHeight,
 								  int upAxis, @Cast("PHY_ScalarType") int heightDataType,
 								  @Cast("bool") boolean flipQuadEdges);
 
@@ -218,8 +218,8 @@ public class btHeightfieldTerrainShape extends btConcaveShape {
 	  compatibility reasons, heightScale is calculated as maxHeight / 65535 
 	  (and is only used when useFloatData = false).
  	 */
-	public btHeightfieldTerrainShape(int heightStickWidth, int heightStickLength, @Const Pointer heightfieldData, @Cast("btScalar") float maxHeight, int upAxis, @Cast("bool") boolean useFloatData, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, maxHeight, upAxis, useFloatData, flipQuadEdges); }
-	private native void allocate(int heightStickWidth, int heightStickLength, @Const Pointer heightfieldData, @Cast("btScalar") float maxHeight, int upAxis, @Cast("bool") boolean useFloatData, @Cast("bool") boolean flipQuadEdges);
+	public btHeightfieldTerrainShape(int heightStickWidth, int heightStickLength, @Const Pointer heightfieldData, @Cast("btScalar") double maxHeight, int upAxis, @Cast("bool") boolean useFloatData, @Cast("bool") boolean flipQuadEdges) { super((Pointer)null); allocate(heightStickWidth, heightStickLength, heightfieldData, maxHeight, upAxis, useFloatData, flipQuadEdges); }
+	private native void allocate(int heightStickWidth, int heightStickLength, @Const Pointer heightfieldData, @Cast("btScalar") double maxHeight, int upAxis, @Cast("bool") boolean useFloatData, @Cast("bool") boolean flipQuadEdges);
 
 	public native void setUseDiamondSubdivision(@Cast("bool") boolean useDiamondSubdivision/*=true*/);
 	public native void setUseDiamondSubdivision();
@@ -233,7 +233,7 @@ public class btHeightfieldTerrainShape extends btConcaveShape {
 
 	public native void processAllTriangles(btTriangleCallback callback, @Const @ByRef btVector3 aabbMin, @Const @ByRef btVector3 aabbMax);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 
@@ -252,8 +252,8 @@ public class btHeightfieldTerrainShape extends btConcaveShape {
 	public native @Cast("const char*") BytePointer getName();
 
 	
-	public native void setUserValue3(@Cast("btScalar") float value);
-	public native @Cast("btScalar") float getUserValue3();
+	public native void setUserValue3(@Cast("btScalar") double value);
+	public native @Cast("btScalar") double getUserValue3();
 	public native btTriangleInfoMap getTriangleInfoMap();
 	public native void setTriangleInfoMap(btTriangleInfoMap map);
 	public native @Cast("const unsigned char*") BytePointer getHeightfieldRawData();

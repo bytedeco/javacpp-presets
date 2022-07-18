@@ -34,8 +34,8 @@ public class btTypedConstraintData extends Pointer {
         return new btTypedConstraintData((Pointer)this).offsetAddress(i);
     }
 
-	public native btRigidBodyFloatData m_rbA(); public native btTypedConstraintData m_rbA(btRigidBodyFloatData setter);
-	public native btRigidBodyFloatData m_rbB(); public native btTypedConstraintData m_rbB(btRigidBodyFloatData setter);
+	public native btRigidBodyDoubleData m_rbA(); public native btTypedConstraintData m_rbA(btRigidBodyDoubleData setter);
+	public native btRigidBodyDoubleData m_rbB(); public native btTypedConstraintData m_rbB(btRigidBodyDoubleData setter);
 	public native @Cast("char*") BytePointer m_name(); public native btTypedConstraintData m_name(BytePointer setter);
 
 	public native int m_objectType(); public native btTypedConstraintData m_objectType(int setter);

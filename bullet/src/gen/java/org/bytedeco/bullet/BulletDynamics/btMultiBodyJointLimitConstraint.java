@@ -21,8 +21,8 @@ public class btMultiBodyJointLimitConstraint extends btMultiBodyConstraint {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btMultiBodyJointLimitConstraint(Pointer p) { super(p); }
 
-	public btMultiBodyJointLimitConstraint(btMultiBody body, int link, @Cast("btScalar") float lower, @Cast("btScalar") float upper) { super((Pointer)null); allocate(body, link, lower, upper); }
-	private native void allocate(btMultiBody body, int link, @Cast("btScalar") float lower, @Cast("btScalar") float upper);
+	public btMultiBodyJointLimitConstraint(btMultiBody body, int link, @Cast("btScalar") double lower, @Cast("btScalar") double upper) { super((Pointer)null); allocate(body, link, lower, upper); }
+	private native void allocate(btMultiBody body, int link, @Cast("btScalar") double lower, @Cast("btScalar") double upper);
 
 	public native void finalizeMultiDof();
 
@@ -34,8 +34,8 @@ public class btMultiBodyJointLimitConstraint extends btMultiBodyConstraint {
 										  @Const @ByRef btContactSolverInfo infoGlobal);
 
 	public native void debugDraw(btIDebugDraw drawer);
-	public native @Cast("btScalar") float getLowerBound();
-	public native @Cast("btScalar") float getUpperBound();
-	public native void setLowerBound(@Cast("btScalar") float lower);
-	public native void setUpperBound(@Cast("btScalar") float upper);
+	public native @Cast("btScalar") double getLowerBound();
+	public native @Cast("btScalar") double getUpperBound();
+	public native void setLowerBound(@Cast("btScalar") double lower);
+	public native void setUpperBound(@Cast("btScalar") double upper);
 }

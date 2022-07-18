@@ -60,9 +60,9 @@ public class btSolverBody extends Pointer {
 	public native void getAngularVelocity(@ByRef btVector3 angVel);
 
 	//Optimization for the iterative solver: avoid calculating constant terms involving inertia, normal, relative position
-	public native void applyImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("const btScalar") float impulseMagnitude);
+	public native void applyImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("const btScalar") double impulseMagnitude);
 
-	public native void internalApplyPushImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("btScalar") float impulseMagnitude);
+	public native void internalApplyPushImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("btScalar") double impulseMagnitude);
 
 	public native @Const @ByRef btVector3 getDeltaLinearVelocity();
 
@@ -94,9 +94,9 @@ public class btSolverBody extends Pointer {
 	public native void internalGetAngularVelocity(@ByRef btVector3 angVel);
 
 	//Optimization for the iterative solver: avoid calculating constant terms involving inertia, normal, relative position
-	public native void internalApplyImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("const btScalar") float impulseMagnitude);
+	public native void internalApplyImpulse(@Const @ByRef btVector3 linearComponent, @Const @ByRef btVector3 angularComponent, @Cast("const btScalar") double impulseMagnitude);
 
 	public native void writebackVelocity();
 
-	public native void writebackVelocityAndTransform(@Cast("btScalar") float timeStep, @Cast("btScalar") float splitImpulseTurnErp);
+	public native void writebackVelocityAndTransform(@Cast("btScalar") double timeStep, @Cast("btScalar") double splitImpulseTurnErp);
 }

@@ -27,8 +27,8 @@ public class btDeformableRigidContactConstraint extends btDeformableContactConst
 
 	public native @ByRef btVector3 m_total_normal_dv(); public native btDeformableRigidContactConstraint m_total_normal_dv(btVector3 setter);
 	public native @ByRef btVector3 m_total_tangent_dv(); public native btDeformableRigidContactConstraint m_total_tangent_dv(btVector3 setter);
-	public native @Cast("btScalar") float m_penetration(); public native btDeformableRigidContactConstraint m_penetration(float setter);
-	public native @Cast("btScalar") float m_total_split_impulse(); public native btDeformableRigidContactConstraint m_total_split_impulse(float setter);
+	public native @Cast("btScalar") double m_penetration(); public native btDeformableRigidContactConstraint m_penetration(double setter);
+	public native @Cast("btScalar") double m_total_split_impulse(); public native btDeformableRigidContactConstraint m_total_split_impulse(double setter);
 	public native @Cast("bool") boolean m_binding(); public native btDeformableRigidContactConstraint m_binding(boolean setter);
 	public native @Const btSoftBody.DeformableRigidContact m_contact(); public native btDeformableRigidContactConstraint m_contact(btSoftBody.DeformableRigidContact setter);
 
@@ -41,11 +41,11 @@ public class btDeformableRigidContactConstraint extends btDeformableContactConst
 	// get the split impulse velocity of the rigid/multibdoy at the contaft
 	public native @ByVal btVector3 getSplitVa();
 
-	public native @Cast("btScalar") float solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
 
-	public native void setPenetrationScale(@Cast("btScalar") float scale);
+	public native void setPenetrationScale(@Cast("btScalar") double scale);
 
-	public native @Cast("btScalar") float solveSplitImpulse(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveSplitImpulse(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	public native void applySplitImpulse(@Const @ByRef btVector3 impulse);
 }

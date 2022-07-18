@@ -43,7 +43,7 @@ public class btDbvtBroadphase extends btBroadphaseInterface {
 	public native btDbvtProxy m_stageRoots(int i); public native btDbvtBroadphase m_stageRoots(int i, btDbvtProxy setter);
 	@MemberGetter public native @Cast("btDbvtProxy**") PointerPointer m_stageRoots();  // Stages list
 	public native btOverlappingPairCache m_paircache(); public native btDbvtBroadphase m_paircache(btOverlappingPairCache setter);        // Pair cache
-	public native @Cast("btScalar") float m_prediction(); public native btDbvtBroadphase m_prediction(float setter);                      // Velocity prediction
+	public native @Cast("btScalar") double m_prediction(); public native btDbvtBroadphase m_prediction(double setter);                      // Velocity prediction
 	public native int m_stageCurrent(); public native btDbvtBroadphase m_stageCurrent(int setter);                         // Current stage
 	public native int m_fupdates(); public native btDbvtBroadphase m_fupdates(int setter);                             // % of fixed updates per frame
 	public native int m_dupdates(); public native btDbvtBroadphase m_dupdates(int setter);                             // % of dynamic updates per frame
@@ -52,7 +52,7 @@ public class btDbvtBroadphase extends btBroadphaseInterface {
 	public native int m_fixedleft(); public native btDbvtBroadphase m_fixedleft(int setter);                            // Fixed optimization left
 	public native @Cast("unsigned") int m_updates_call(); public native btDbvtBroadphase m_updates_call(int setter);                    // Number of updates call
 	public native @Cast("unsigned") int m_updates_done(); public native btDbvtBroadphase m_updates_done(int setter);                    // Number of updates done
-	public native @Cast("btScalar") float m_updates_ratio(); public native btDbvtBroadphase m_updates_ratio(float setter);                   // m_updates_done/m_updates_call
+	public native @Cast("btScalar") double m_updates_ratio(); public native btDbvtBroadphase m_updates_ratio(double setter);                   // m_updates_done/m_updates_call
 	public native int m_pid(); public native btDbvtBroadphase m_pid(int setter);                                  // Parse id
 	public native int m_cid(); public native btDbvtBroadphase m_cid(int setter);                                  // Cleanup index
 	public native int m_gid(); public native btDbvtBroadphase m_gid(int setter);                                  // Gen id
@@ -89,8 +89,8 @@ public class btDbvtBroadphase extends btBroadphaseInterface {
 
 	public native void performDeferredRemoval(btDispatcher dispatcher);
 
-	public native void setVelocityPrediction(@Cast("btScalar") float prediction);
-	public native @Cast("btScalar") float getVelocityPrediction();
+	public native void setVelocityPrediction(@Cast("btScalar") double prediction);
+	public native @Cast("btScalar") double getVelocityPrediction();
 
 	/**this setAabbForceUpdate is similar to setAabb but always forces the aabb update.
 	 * it is not part of the btBroadphaseInterface but specific to btDbvtBroadphase.

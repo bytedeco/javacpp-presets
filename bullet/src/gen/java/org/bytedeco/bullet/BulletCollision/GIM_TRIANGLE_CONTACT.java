@@ -29,7 +29,7 @@ public class GIM_TRIANGLE_CONTACT extends Pointer {
         return new GIM_TRIANGLE_CONTACT((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_penetration_depth(); public native GIM_TRIANGLE_CONTACT m_penetration_depth(float setter);
+	public native @Cast("btScalar") double m_penetration_depth(); public native GIM_TRIANGLE_CONTACT m_penetration_depth(double setter);
 	public native int m_point_count(); public native GIM_TRIANGLE_CONTACT m_point_count(int setter);
 	public native @ByRef btVector4 m_separating_normal(); public native GIM_TRIANGLE_CONTACT m_separating_normal(btVector4 setter);
 	public native @ByRef btVector3 m_points(int i); public native GIM_TRIANGLE_CONTACT m_points(int i, btVector3 setter);
@@ -45,5 +45,5 @@ public class GIM_TRIANGLE_CONTACT extends Pointer {
 
 	/** classify points that are closer */
 	public native void merge_points(@Const @ByRef btVector4 plane,
-						  @Cast("btScalar") float margin, @Const btVector3 points, int point_count);
+						  @Cast("btScalar") double margin, @Const btVector3 points, int point_count);
 }

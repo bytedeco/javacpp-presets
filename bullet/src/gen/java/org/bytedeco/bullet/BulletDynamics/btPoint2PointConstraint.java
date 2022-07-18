@@ -44,7 +44,7 @@ public class btPoint2PointConstraint extends btTypedConstraint {
 
 	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform body0_trans, @Const @ByRef btTransform body1_trans);
 
-	public native void updateRHS(@Cast("btScalar") float timeStep);
+	public native void updateRHS(@Cast("btScalar") double timeStep);
 
 	public native void setPivotA(@Const @ByRef btVector3 pivotA);
 
@@ -56,11 +56,11 @@ public class btPoint2PointConstraint extends btTypedConstraint {
 
 	/**override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	 * If no axis is provided, it uses the default axis for this constraint. */
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native int getFlags();
 

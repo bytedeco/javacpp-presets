@@ -75,13 +75,13 @@ public class btMatrixXd extends Pointer {
 	public native @ByVal @Name("operator *") btMatrixXd multiply(@Const @ByRef btMatrixXd other);
 
 	// this assumes the 4th and 8th rows of B and C are zero.
-	public native void multiplyAdd2_p8r(@Cast("const btScalar*") FloatPointer B, @Cast("const btScalar*") FloatPointer C, int numRows, int numRowsOther, int row, int col);
-	public native void multiplyAdd2_p8r(@Cast("const btScalar*") FloatBuffer B, @Cast("const btScalar*") FloatBuffer C, int numRows, int numRowsOther, int row, int col);
-	public native void multiplyAdd2_p8r(@Cast("const btScalar*") float[] B, @Cast("const btScalar*") float[] C, int numRows, int numRowsOther, int row, int col);
+	public native void multiplyAdd2_p8r(@Cast("const btScalar*") DoublePointer B, @Cast("const btScalar*") DoublePointer C, int numRows, int numRowsOther, int row, int col);
+	public native void multiplyAdd2_p8r(@Cast("const btScalar*") DoubleBuffer B, @Cast("const btScalar*") DoubleBuffer C, int numRows, int numRowsOther, int row, int col);
+	public native void multiplyAdd2_p8r(@Cast("const btScalar*") double[] B, @Cast("const btScalar*") double[] C, int numRows, int numRowsOther, int row, int col);
 
-	public native void multiply2_p8r(@Cast("const btScalar*") FloatPointer B, @Cast("const btScalar*") FloatPointer C, int numRows, int numRowsOther, int row, int col);
-	public native void multiply2_p8r(@Cast("const btScalar*") FloatBuffer B, @Cast("const btScalar*") FloatBuffer C, int numRows, int numRowsOther, int row, int col);
-	public native void multiply2_p8r(@Cast("const btScalar*") float[] B, @Cast("const btScalar*") float[] C, int numRows, int numRowsOther, int row, int col);
+	public native void multiply2_p8r(@Cast("const btScalar*") DoublePointer B, @Cast("const btScalar*") DoublePointer C, int numRows, int numRowsOther, int row, int col);
+	public native void multiply2_p8r(@Cast("const btScalar*") DoubleBuffer B, @Cast("const btScalar*") DoubleBuffer C, int numRows, int numRowsOther, int row, int col);
+	public native void multiply2_p8r(@Cast("const btScalar*") double[] B, @Cast("const btScalar*") double[] C, int numRows, int numRowsOther, int row, int col);
 
 	public native void setSubMatrix(int rowstart, int colstart, int rowend, int colend, double value);
 

@@ -23,8 +23,8 @@ public class KKTPreconditioner extends Preconditioner {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KKTPreconditioner(Pointer p) { super(p); }
 
-	public KKTPreconditioner(@Const @ByRef btSoftBodyArray softBodies, @Const @ByRef btDeformableContactProjection projections, @Const @ByRef btDeformableLagrangianForceArray lf, @Cast("const btScalar") float dt, @Cast("const bool") boolean implicit) { super((Pointer)null); allocate(softBodies, projections, lf, dt, implicit); }
-	private native void allocate(@Const @ByRef btSoftBodyArray softBodies, @Const @ByRef btDeformableContactProjection projections, @Const @ByRef btDeformableLagrangianForceArray lf, @Cast("const btScalar") float dt, @Cast("const bool") boolean implicit);
+	public KKTPreconditioner(@Const @ByRef btSoftBodyArray softBodies, @Const @ByRef btDeformableContactProjection projections, @Const @ByRef btDeformableLagrangianForceArray lf, @Cast("const btScalar") double dt, @Cast("const bool") boolean implicit) { super((Pointer)null); allocate(softBodies, projections, lf, dt, implicit); }
+	private native void allocate(@Const @ByRef btSoftBodyArray softBodies, @Const @ByRef btDeformableContactProjection projections, @Const @ByRef btDeformableLagrangianForceArray lf, @Cast("const btScalar") double dt, @Cast("const bool") boolean implicit);
 
 	public native void reinitialize(@Cast("bool") boolean nodeUpdated);
 

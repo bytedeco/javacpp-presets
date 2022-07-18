@@ -21,5 +21,5 @@ public class btIParallelSumBody extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btIParallelSumBody(Pointer p) { super(p); }
 
-	public native @Cast("btScalar") float sumLoop(int iBegin, int iEnd);
+	public native @Cast("btScalar") double sumLoop(int iBegin, int iEnd);
 }

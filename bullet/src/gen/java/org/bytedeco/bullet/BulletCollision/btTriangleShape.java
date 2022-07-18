@@ -61,9 +61,9 @@ public class btTriangleShape extends btPolyhedralConvexShape {
 
 	public native void getPlaneEquation(int i, @ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 	//debugging
 	public native @Cast("const char*") BytePointer getName();
 

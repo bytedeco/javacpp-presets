@@ -36,14 +36,14 @@ public class btWheelInfoConstructionInfo extends Pointer {
 	public native @ByRef btVector3 m_chassisConnectionCS(); public native btWheelInfoConstructionInfo m_chassisConnectionCS(btVector3 setter);
 	public native @ByRef btVector3 m_wheelDirectionCS(); public native btWheelInfoConstructionInfo m_wheelDirectionCS(btVector3 setter);
 	public native @ByRef btVector3 m_wheelAxleCS(); public native btWheelInfoConstructionInfo m_wheelAxleCS(btVector3 setter);
-	public native @Cast("btScalar") float m_suspensionRestLength(); public native btWheelInfoConstructionInfo m_suspensionRestLength(float setter);
-	public native @Cast("btScalar") float m_maxSuspensionTravelCm(); public native btWheelInfoConstructionInfo m_maxSuspensionTravelCm(float setter);
-	public native @Cast("btScalar") float m_wheelRadius(); public native btWheelInfoConstructionInfo m_wheelRadius(float setter);
+	public native @Cast("btScalar") double m_suspensionRestLength(); public native btWheelInfoConstructionInfo m_suspensionRestLength(double setter);
+	public native @Cast("btScalar") double m_maxSuspensionTravelCm(); public native btWheelInfoConstructionInfo m_maxSuspensionTravelCm(double setter);
+	public native @Cast("btScalar") double m_wheelRadius(); public native btWheelInfoConstructionInfo m_wheelRadius(double setter);
 
-	public native @Cast("btScalar") float m_suspensionStiffness(); public native btWheelInfoConstructionInfo m_suspensionStiffness(float setter);
-	public native @Cast("btScalar") float m_wheelsDampingCompression(); public native btWheelInfoConstructionInfo m_wheelsDampingCompression(float setter);
-	public native @Cast("btScalar") float m_wheelsDampingRelaxation(); public native btWheelInfoConstructionInfo m_wheelsDampingRelaxation(float setter);
-	public native @Cast("btScalar") float m_frictionSlip(); public native btWheelInfoConstructionInfo m_frictionSlip(float setter);
-	public native @Cast("btScalar") float m_maxSuspensionForce(); public native btWheelInfoConstructionInfo m_maxSuspensionForce(float setter);
+	public native @Cast("btScalar") double m_suspensionStiffness(); public native btWheelInfoConstructionInfo m_suspensionStiffness(double setter);
+	public native @Cast("btScalar") double m_wheelsDampingCompression(); public native btWheelInfoConstructionInfo m_wheelsDampingCompression(double setter);
+	public native @Cast("btScalar") double m_wheelsDampingRelaxation(); public native btWheelInfoConstructionInfo m_wheelsDampingRelaxation(double setter);
+	public native @Cast("btScalar") double m_frictionSlip(); public native btWheelInfoConstructionInfo m_frictionSlip(double setter);
+	public native @Cast("btScalar") double m_maxSuspensionForce(); public native btWheelInfoConstructionInfo m_maxSuspensionForce(double setter);
 	public native @Cast("bool") boolean m_bIsFrontWheel(); public native btWheelInfoConstructionInfo m_bIsFrontWheel(boolean setter);
 }

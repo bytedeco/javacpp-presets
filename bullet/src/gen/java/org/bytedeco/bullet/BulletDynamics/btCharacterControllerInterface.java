@@ -23,12 +23,12 @@ public class btCharacterControllerInterface extends btActionInterface {
 
 
 	public native void setWalkDirection(@Const @ByRef btVector3 walkDirection);
-	public native void setVelocityForTimeInterval(@Const @ByRef btVector3 velocity, @Cast("btScalar") float timeInterval);
+	public native void setVelocityForTimeInterval(@Const @ByRef btVector3 velocity, @Cast("btScalar") double timeInterval);
 	public native void reset(btCollisionWorld collisionWorld);
 	public native void warp(@Const @ByRef btVector3 origin);
 
 	public native void preStep(btCollisionWorld collisionWorld);
-	public native void playerStep(btCollisionWorld collisionWorld, @Cast("btScalar") float dt);
+	public native void playerStep(btCollisionWorld collisionWorld, @Cast("btScalar") double dt);
 	public native @Cast("bool") boolean canJump();
 	public native void jump(@Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 dir);
 	public native void jump();

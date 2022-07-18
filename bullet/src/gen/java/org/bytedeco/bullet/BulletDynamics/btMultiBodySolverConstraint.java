@@ -48,19 +48,19 @@ public class btMultiBodySolverConstraint extends Pointer {
 	public native @ByRef btVector3 m_angularComponentA(); public native btMultiBodySolverConstraint m_angularComponentA(btVector3 setter);
 	public native @ByRef btVector3 m_angularComponentB(); public native btMultiBodySolverConstraint m_angularComponentB(btVector3 setter);
 
-	public native @Cast("btScalar") float m_appliedPushImpulse(); public native btMultiBodySolverConstraint m_appliedPushImpulse(float setter);
-	public native @Cast("btScalar") float m_appliedImpulse(); public native btMultiBodySolverConstraint m_appliedImpulse(float setter);
+	public native @Cast("btScalar") double m_appliedPushImpulse(); public native btMultiBodySolverConstraint m_appliedPushImpulse(double setter);
+	public native @Cast("btScalar") double m_appliedImpulse(); public native btMultiBodySolverConstraint m_appliedImpulse(double setter);
 
-	public native @Cast("btScalar") float m_friction(); public native btMultiBodySolverConstraint m_friction(float setter);
-	public native @Cast("btScalar") float m_jacDiagABInv(); public native btMultiBodySolverConstraint m_jacDiagABInv(float setter);
-	public native @Cast("btScalar") float m_rhs(); public native btMultiBodySolverConstraint m_rhs(float setter);
-	public native @Cast("btScalar") float m_cfm(); public native btMultiBodySolverConstraint m_cfm(float setter);
+	public native @Cast("btScalar") double m_friction(); public native btMultiBodySolverConstraint m_friction(double setter);
+	public native @Cast("btScalar") double m_jacDiagABInv(); public native btMultiBodySolverConstraint m_jacDiagABInv(double setter);
+	public native @Cast("btScalar") double m_rhs(); public native btMultiBodySolverConstraint m_rhs(double setter);
+	public native @Cast("btScalar") double m_cfm(); public native btMultiBodySolverConstraint m_cfm(double setter);
 
-	public native @Cast("btScalar") float m_lowerLimit(); public native btMultiBodySolverConstraint m_lowerLimit(float setter);
-	public native @Cast("btScalar") float m_upperLimit(); public native btMultiBodySolverConstraint m_upperLimit(float setter);
-	public native @Cast("btScalar") float m_rhsPenetration(); public native btMultiBodySolverConstraint m_rhsPenetration(float setter);
+	public native @Cast("btScalar") double m_lowerLimit(); public native btMultiBodySolverConstraint m_lowerLimit(double setter);
+	public native @Cast("btScalar") double m_upperLimit(); public native btMultiBodySolverConstraint m_upperLimit(double setter);
+	public native @Cast("btScalar") double m_rhsPenetration(); public native btMultiBodySolverConstraint m_rhsPenetration(double setter);
 		public native Pointer m_originalContactPoint(); public native btMultiBodySolverConstraint m_originalContactPoint(Pointer setter);
-		public native @Cast("btScalar") float m_unusedPadding4(); public native btMultiBodySolverConstraint m_unusedPadding4(float setter);
+		public native @Cast("btScalar") double m_unusedPadding4(); public native btMultiBodySolverConstraint m_unusedPadding4(double setter);
 
 	public native int m_overrideNumSolverIterations(); public native btMultiBodySolverConstraint m_overrideNumSolverIterations(int setter);
 	public native int m_frictionIndex(); public native btMultiBodySolverConstraint m_frictionIndex(int setter);

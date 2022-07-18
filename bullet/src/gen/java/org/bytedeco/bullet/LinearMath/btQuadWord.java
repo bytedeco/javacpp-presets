@@ -36,32 +36,32 @@ public class btQuadWord extends Pointer {
 // #endif
 
 	/**\brief Return the x value */
-	public native @Cast("const btScalar") float getX();
+	public native @Cast("const btScalar") double getX();
 	/**\brief Return the y value */
-	public native @Cast("const btScalar") float getY();
+	public native @Cast("const btScalar") double getY();
 	/**\brief Return the z value */
-	public native @Cast("const btScalar") float getZ();
+	public native @Cast("const btScalar") double getZ();
 	/**\brief Set the x value */
-	public native void setX(@Cast("btScalar") float _x);
+	public native void setX(@Cast("btScalar") double _x);
 	/**\brief Set the y value */
-	public native void setY(@Cast("btScalar") float _y);
+	public native void setY(@Cast("btScalar") double _y);
 	/**\brief Set the z value */
-	public native void setZ(@Cast("btScalar") float _z);
+	public native void setZ(@Cast("btScalar") double _z);
 	/**\brief Set the w value */
-	public native void setW(@Cast("btScalar") float _w);
+	public native void setW(@Cast("btScalar") double _w);
 	/**\brief Return the x value */
-	public native @Cast("const btScalar") float x();
+	public native @Cast("const btScalar") double x();
 	/**\brief Return the y value */
-	public native @Cast("const btScalar") float y();
+	public native @Cast("const btScalar") double y();
 	/**\brief Return the z value */
-	public native @Cast("const btScalar") float z();
+	public native @Cast("const btScalar") double z();
 	/**\brief Return the w value */
-	public native @Cast("const btScalar") float w();
+	public native @Cast("const btScalar") double w();
 
 	//SIMD_FORCE_INLINE btScalar&       operator[](int i)       { return (&m_floats[0])[i];	}
 	//SIMD_FORCE_INLINE const btScalar& operator[](int i) const { return (&m_floats[0])[i]; }
 	/**operator btScalar*() replaces operator[], using implicit conversion. We added operator != and operator == to avoid pointer comparisons. */
-	public native @Cast("btScalar*") @Name("operator btScalar*") FloatPointer asFloatPointer();
+	public native @Cast("btScalar*") @Name("operator btScalar*") DoublePointer asDoublePointer();
 
 	public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef btQuadWord other);
 
@@ -72,7 +72,7 @@ public class btQuadWord extends Pointer {
    * @param y Value of y
    * @param z Value of z
    */
-	public native void setValue(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z);
+	public native void setValue(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z);
 
 	/*		void getValue(btScalar *m) const 
 		{
@@ -87,7 +87,7 @@ public class btQuadWord extends Pointer {
    * @param z Value of z
    * @param w Value of w
    */
-	public native void setValue(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w);
+	public native void setValue(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w);
 	/**\brief No initialization constructor */
 	public btQuadWord() { super((Pointer)null); allocate(); }
 	private native void allocate();
@@ -97,8 +97,8 @@ public class btQuadWord extends Pointer {
    * @param y Value of y
    * @param z Value of z
    */
-	public btQuadWord(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z) { super((Pointer)null); allocate(_x, _y, _z); }
-	private native void allocate(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z);
+	public btQuadWord(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z) { super((Pointer)null); allocate(_x, _y, _z); }
+	private native void allocate(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z);
 
 	/**\brief Initializing constructor
    * @param x Value of x
@@ -106,8 +106,8 @@ public class btQuadWord extends Pointer {
    * @param z Value of z
    * @param w Value of w
    */
-	public btQuadWord(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w) { super((Pointer)null); allocate(_x, _y, _z, _w); }
-	private native void allocate(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w);
+	public btQuadWord(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w) { super((Pointer)null); allocate(_x, _y, _z, _w); }
+	private native void allocate(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w);
 
 	/**\brief Set each element to the max of the current values and the values of another btQuadWord
    * @param other The other btQuadWord to compare with 

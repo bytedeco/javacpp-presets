@@ -35,7 +35,7 @@ public class btPolyhedralConvexShape extends btConvexInternalShape {
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native int getNumVertices();
 	public native int getNumEdges();
@@ -45,5 +45,5 @@ public class btPolyhedralConvexShape extends btConvexInternalShape {
 	public native void getPlane(@ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport, int i);
 	//	virtual int getIndex(int i) const = 0 ;
 
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 }

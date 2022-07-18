@@ -23,5 +23,5 @@ public class btInternalTickCallback extends FunctionPointer {
     public    btInternalTickCallback(Pointer p) { super(p); }
     protected btInternalTickCallback() { allocate(); }
     private native void allocate();
-    public native void call(btDynamicsWorld world, @Cast("btScalar") float timeStep);
+    public native void call(btDynamicsWorld world, @Cast("btScalar") double timeStep);
 }

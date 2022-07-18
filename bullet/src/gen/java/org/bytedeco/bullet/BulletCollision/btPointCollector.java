@@ -30,7 +30,7 @@ public class btPointCollector extends btDiscreteCollisionDetectorInterface.Resul
 
 	public native @ByRef btVector3 m_normalOnBInWorld(); public native btPointCollector m_normalOnBInWorld(btVector3 setter);
 	public native @ByRef btVector3 m_pointInWorld(); public native btPointCollector m_pointInWorld(btVector3 setter);
-	public native @Cast("btScalar") float m_distance(); public native btPointCollector m_distance(float setter);  //negative means penetration
+	public native @Cast("btScalar") double m_distance(); public native btPointCollector m_distance(double setter);  //negative means penetration
 
 	public native @Cast("bool") boolean m_hasResult(); public native btPointCollector m_hasResult(boolean setter);
 
@@ -40,5 +40,5 @@ public class btPointCollector extends btDiscreteCollisionDetectorInterface.Resul
 	public native void setShapeIdentifiersA(int partId0, int index0);
 	public native void setShapeIdentifiersB(int partId1, int index1);
 
-	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") float depth);
+	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") double depth);
 }

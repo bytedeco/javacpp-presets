@@ -35,10 +35,10 @@ public class btManifoldPoint extends Pointer {
 
 	public btManifoldPoint(@Const @ByRef btVector3 pointA, @Const @ByRef btVector3 pointB,
 						@Const @ByRef btVector3 normal,
-						@Cast("btScalar") float distance) { super((Pointer)null); allocate(pointA, pointB, normal, distance); }
+						@Cast("btScalar") double distance) { super((Pointer)null); allocate(pointA, pointB, normal, distance); }
 	private native void allocate(@Const @ByRef btVector3 pointA, @Const @ByRef btVector3 pointB,
 						@Const @ByRef btVector3 normal,
-						@Cast("btScalar") float distance);
+						@Cast("btScalar") double distance);
 
 	public native @ByRef btVector3 m_localPointA(); public native btManifoldPoint m_localPointA(btVector3 setter);
 	public native @ByRef btVector3 m_localPointB(); public native btManifoldPoint m_localPointB(btVector3 setter);
@@ -47,11 +47,11 @@ public class btManifoldPoint extends Pointer {
 	public native @ByRef btVector3 m_positionWorldOnA(); public native btManifoldPoint m_positionWorldOnA(btVector3 setter);
 	public native @ByRef btVector3 m_normalWorldOnB(); public native btManifoldPoint m_normalWorldOnB(btVector3 setter);
 
-	public native @Cast("btScalar") float m_distance1(); public native btManifoldPoint m_distance1(float setter);
-	public native @Cast("btScalar") float m_combinedFriction(); public native btManifoldPoint m_combinedFriction(float setter);
-	public native @Cast("btScalar") float m_combinedRollingFriction(); public native btManifoldPoint m_combinedRollingFriction(float setter);   //torsional friction orthogonal to contact normal, useful to make spheres stop rolling forever
-	public native @Cast("btScalar") float m_combinedSpinningFriction(); public native btManifoldPoint m_combinedSpinningFriction(float setter);  //torsional friction around contact normal, useful for grasping objects
-	public native @Cast("btScalar") float m_combinedRestitution(); public native btManifoldPoint m_combinedRestitution(float setter);
+	public native @Cast("btScalar") double m_distance1(); public native btManifoldPoint m_distance1(double setter);
+	public native @Cast("btScalar") double m_combinedFriction(); public native btManifoldPoint m_combinedFriction(double setter);
+	public native @Cast("btScalar") double m_combinedRollingFriction(); public native btManifoldPoint m_combinedRollingFriction(double setter);   //torsional friction orthogonal to contact normal, useful to make spheres stop rolling forever
+	public native @Cast("btScalar") double m_combinedSpinningFriction(); public native btManifoldPoint m_combinedSpinningFriction(double setter);  //torsional friction around contact normal, useful for grasping objects
+	public native @Cast("btScalar") double m_combinedRestitution(); public native btManifoldPoint m_combinedRestitution(double setter);
 
 	//BP mod, store contact triangles.
 	public native int m_partId0(); public native btManifoldPoint m_partId0(int setter);
@@ -63,33 +63,33 @@ public class btManifoldPoint extends Pointer {
 	//bool			m_lateralFrictionInitialized;
 	public native int m_contactPointFlags(); public native btManifoldPoint m_contactPointFlags(int setter);
 
-	public native @Cast("btScalar") float m_appliedImpulse(); public native btManifoldPoint m_appliedImpulse(float setter);
-	public native @Cast("btScalar") float m_prevRHS(); public native btManifoldPoint m_prevRHS(float setter);
-	public native @Cast("btScalar") float m_appliedImpulseLateral1(); public native btManifoldPoint m_appliedImpulseLateral1(float setter);
-	public native @Cast("btScalar") float m_appliedImpulseLateral2(); public native btManifoldPoint m_appliedImpulseLateral2(float setter);
-	public native @Cast("btScalar") float m_contactMotion1(); public native btManifoldPoint m_contactMotion1(float setter);
-	public native @Cast("btScalar") float m_contactMotion2(); public native btManifoldPoint m_contactMotion2(float setter);
-		public native @Cast("btScalar") float m_contactCFM(); public native btManifoldPoint m_contactCFM(float setter);
-		public native @Cast("btScalar") float m_combinedContactStiffness1(); public native btManifoldPoint m_combinedContactStiffness1(float setter);
-		public native @Cast("btScalar") float m_contactERP(); public native btManifoldPoint m_contactERP(float setter);
-		public native @Cast("btScalar") float m_combinedContactDamping1(); public native btManifoldPoint m_combinedContactDamping1(float setter);
+	public native @Cast("btScalar") double m_appliedImpulse(); public native btManifoldPoint m_appliedImpulse(double setter);
+	public native @Cast("btScalar") double m_prevRHS(); public native btManifoldPoint m_prevRHS(double setter);
+	public native @Cast("btScalar") double m_appliedImpulseLateral1(); public native btManifoldPoint m_appliedImpulseLateral1(double setter);
+	public native @Cast("btScalar") double m_appliedImpulseLateral2(); public native btManifoldPoint m_appliedImpulseLateral2(double setter);
+	public native @Cast("btScalar") double m_contactMotion1(); public native btManifoldPoint m_contactMotion1(double setter);
+	public native @Cast("btScalar") double m_contactMotion2(); public native btManifoldPoint m_contactMotion2(double setter);
+		public native @Cast("btScalar") double m_contactCFM(); public native btManifoldPoint m_contactCFM(double setter);
+		public native @Cast("btScalar") double m_combinedContactStiffness1(); public native btManifoldPoint m_combinedContactStiffness1(double setter);
+		public native @Cast("btScalar") double m_contactERP(); public native btManifoldPoint m_contactERP(double setter);
+		public native @Cast("btScalar") double m_combinedContactDamping1(); public native btManifoldPoint m_combinedContactDamping1(double setter);
 
-	public native @Cast("btScalar") float m_frictionCFM(); public native btManifoldPoint m_frictionCFM(float setter);
+	public native @Cast("btScalar") double m_frictionCFM(); public native btManifoldPoint m_frictionCFM(double setter);
 
 	public native int m_lifeTime(); public native btManifoldPoint m_lifeTime(int setter);  //lifetime of the contactpoint in frames
 
 	public native @ByRef btVector3 m_lateralFrictionDir1(); public native btManifoldPoint m_lateralFrictionDir1(btVector3 setter);
 	public native @ByRef btVector3 m_lateralFrictionDir2(); public native btManifoldPoint m_lateralFrictionDir2(btVector3 setter);
 
-	public native @Cast("btScalar") float getDistance();
+	public native @Cast("btScalar") double getDistance();
 	public native int getLifeTime();
 
 	public native @Const @ByRef btVector3 getPositionWorldOnA();
 
 	public native @Const @ByRef btVector3 getPositionWorldOnB();
 
-	public native void setDistance(@Cast("btScalar") float dist);
+	public native void setDistance(@Cast("btScalar") double dist);
 
 	/**this returns the most recent applied impulse, to satisfy contact constraints by the constraint solver */
-	public native @Cast("btScalar") float getAppliedImpulse();
+	public native @Cast("btScalar") double getAppliedImpulse();
 }

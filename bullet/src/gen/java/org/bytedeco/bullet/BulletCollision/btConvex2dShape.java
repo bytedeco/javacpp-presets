@@ -31,7 +31,7 @@ public class btConvex2dShape extends btConvexShape {
 
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native btConvexShape getChildShape();
 
@@ -47,8 +47,8 @@ public class btConvex2dShape extends btConvexShape {
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 
 	public native int getNumPreferredPenetrationDirections();
 

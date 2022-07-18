@@ -71,5 +71,5 @@ public class btTranslationalLimitMotor2 extends Pointer {
 
 	public native @Cast("bool") boolean isLimited(int limitIndex);
 
-	public native void testLimitValue(int limitIndex, @Cast("btScalar") float test_value);
+	public native void testLimitValue(int limitIndex, @Cast("btScalar") double test_value);
 }

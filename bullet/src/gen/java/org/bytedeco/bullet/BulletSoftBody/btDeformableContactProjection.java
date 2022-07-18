@@ -58,8 +58,8 @@ public class btDeformableContactProjection extends Pointer {
 	public native void applyDynamicFriction(@Cast("btDeformableContactProjection::TVStack*") @ByRef btVector3Array f);
 
 	// update and solve the constraints
-	public native @Cast("btScalar") float update(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
-	public native @Cast("btScalar") float update(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double update(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double update(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
 
 	// Add constraints to m_constraints. In addition, the constraints that each vertex own are recorded in m_constraintsDict.
 	public native void setConstraints(@Const @ByRef btContactSolverInfo infoGlobal);
@@ -69,8 +69,8 @@ public class btDeformableContactProjection extends Pointer {
 
 	public native void reinitialize(@Cast("bool") boolean nodeUpdated);
 
-	public native @Cast("btScalar") float solveSplitImpulse(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
-	public native @Cast("btScalar") float solveSplitImpulse(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveSplitImpulse(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveSplitImpulse(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
 
 	public native void setLagrangeMultiplier();
 

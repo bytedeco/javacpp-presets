@@ -25,7 +25,7 @@ public class btBoxBoxCollisionAlgorithm extends btActivatingCollisionAlgorithm {
 
 	public native void processCollision(@Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
-	public native @Cast("btScalar") float calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
+	public native @Cast("btScalar") double calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
 	public btBoxBoxCollisionAlgorithm(btPersistentManifold mf, @Const @ByRef btCollisionAlgorithmConstructionInfo ci, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap) { super((Pointer)null); allocate(mf, ci, body0Wrap, body1Wrap); }
 	private native void allocate(btPersistentManifold mf, @Const @ByRef btCollisionAlgorithmConstructionInfo ci, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap);

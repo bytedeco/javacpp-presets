@@ -47,7 +47,7 @@ public class btVoronoiSimplexSolver extends btSimplexSolverInterface {
 	public native @ByRef btVector3 m_cachedV(); public native btVoronoiSimplexSolver m_cachedV(btVector3 setter);
 	public native @ByRef btVector3 m_lastW(); public native btVoronoiSimplexSolver m_lastW(btVector3 setter);
 
-	public native @Cast("btScalar") float m_equalVertexThreshold(); public native btVoronoiSimplexSolver m_equalVertexThreshold(float setter);
+	public native @Cast("btScalar") double m_equalVertexThreshold(); public native btVoronoiSimplexSolver m_equalVertexThreshold(double setter);
 	public native @Cast("bool") boolean m_cachedValidClosest(); public native btVoronoiSimplexSolver m_cachedValidClosest(boolean setter);
 
 	public native @ByRef btSubSimplexClosestResult m_cachedBC(); public native btVoronoiSimplexSolver m_cachedBC(btSubSimplexClosestResult setter);
@@ -67,13 +67,13 @@ public class btVoronoiSimplexSolver extends btSimplexSolverInterface {
 
 	public native void addVertex(@Const @ByRef btVector3 w, @Const @ByRef btVector3 p, @Const @ByRef btVector3 q);
 
-	public native void setEqualVertexThreshold(@Cast("btScalar") float threshold);
+	public native void setEqualVertexThreshold(@Cast("btScalar") double threshold);
 
-	public native @Cast("btScalar") float getEqualVertexThreshold();
+	public native @Cast("btScalar") double getEqualVertexThreshold();
 
 	public native @Cast("bool") boolean closest(@ByRef btVector3 v);
 
-	public native @Cast("btScalar") float maxVertex();
+	public native @Cast("btScalar") double maxVertex();
 
 	public native @Cast("bool") boolean fullSimplex();
 

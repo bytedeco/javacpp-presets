@@ -33,7 +33,7 @@ public class btDiscreteCollisionDetectorInterface extends Pointer {
 		/**setShapeIdentifiersA/B provides experimental support for per-triangle material / custom material combiner */
 		public native void setShapeIdentifiersA(int partId0, int index0);
 		public native void setShapeIdentifiersB(int partId1, int index1);
-		public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") float depth);
+		public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") double depth);
 	}
 
 	@NoOffset public static class ClosestPointInput extends Pointer {
@@ -55,7 +55,7 @@ public class btDiscreteCollisionDetectorInterface extends Pointer {
 
 		public native @ByRef btTransform m_transformA(); public native ClosestPointInput m_transformA(btTransform setter);
 		public native @ByRef btTransform m_transformB(); public native ClosestPointInput m_transformB(btTransform setter);
-		public native @Cast("btScalar") float m_maximumDistanceSquared(); public native ClosestPointInput m_maximumDistanceSquared(float setter);
+		public native @Cast("btScalar") double m_maximumDistanceSquared(); public native ClosestPointInput m_maximumDistanceSquared(double setter);
 	}
 
 	//

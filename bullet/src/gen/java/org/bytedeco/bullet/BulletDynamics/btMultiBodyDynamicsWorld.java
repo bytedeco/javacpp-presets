@@ -45,11 +45,11 @@ public class btMultiBodyDynamicsWorld extends btDiscreteDynamicsWorld {
 
 	public native void removeMultiBodyConstraint(btMultiBodyConstraint constraint);
 
-	public native void integrateTransforms(@Cast("btScalar") float timeStep);
-    public native void integrateMultiBodyTransforms(@Cast("btScalar") float timeStep);
-    public native void predictMultiBodyTransforms(@Cast("btScalar") float timeStep);
+	public native void integrateTransforms(@Cast("btScalar") double timeStep);
+    public native void integrateMultiBodyTransforms(@Cast("btScalar") double timeStep);
+    public native void predictMultiBodyTransforms(@Cast("btScalar") double timeStep);
     
-    public native void predictUnconstraintMotion(@Cast("btScalar") float timeStep);
+    public native void predictUnconstraintMotion(@Cast("btScalar") double timeStep);
 	public native void debugDrawWorld();
 
 	public native void debugDrawMultiBodyConstraint(btMultiBodyConstraint constraint);
@@ -69,5 +69,5 @@ public class btMultiBodyDynamicsWorld extends btDiscreteDynamicsWorld {
     public native void solveInternalConstraints(@ByRef btContactSolverInfo solverInfo);
     public native void buildIslands();
 
-	public native void saveKinematicState(@Cast("btScalar") float timeStep);
+	public native void saveKinematicState(@Cast("btScalar") double timeStep);
 }
