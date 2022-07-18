@@ -179,7 +179,7 @@ case $PLATFORM in
         cp /usr/local/lib/libomp.dylib $INSTALL_PATH/lib/libiomp5.dylib
         chmod +w $INSTALL_PATH/lib/libiomp5.dylib
         install_name_tool -id @rpath/libiomp5.dylib $INSTALL_PATH/lib/libiomp5.dylib
-        sedinplace 's:-fopenmp:-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5:g' ../CMakeLists.txt
+        sedinplace "s:-fopenmp:-Xclang -fopenmp -I/usr/local/include -L$INSTALL_PATH/lib -liomp5:g" ../CMakeLists.txt
         $CMAKE \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
