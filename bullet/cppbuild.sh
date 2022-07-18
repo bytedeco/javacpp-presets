@@ -202,7 +202,9 @@ case $PLATFORM in
             ..
         make -j $MAKEJ
         make install/strip
-        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib $INSTALL_PATH/lib/*.dylib
+        for f in $INSTALL_PATH/lib/*.dylib; do
+            install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib $f
+        done
         ;;
     windows-x86|windows-x86_64)
         export CC="cl.exe"
