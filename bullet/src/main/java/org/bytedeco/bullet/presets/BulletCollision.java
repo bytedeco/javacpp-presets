@@ -162,7 +162,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/Gimpact/btTriangleShapeEx.h",
                 "BulletCollision/Gimpact/gim_pair.h",
             },
-            link = "BulletCollision@.3.20"
+            link = "BulletCollision@.3.24"
         )
     },
     target = "org.bytedeco.bullet.BulletCollision",

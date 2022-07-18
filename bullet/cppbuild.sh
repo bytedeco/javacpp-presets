@@ -21,7 +21,7 @@ cd build
 
 case $PLATFORM in
     android-arm)
-        cmake \
+        $CMAKE \
             -DANDROID_ABI=armeabi-v7a \
             -DANDROID_NATIVE_API_LEVEL=24 \
             -DBUILD_BULLET2_DEMOS=OFF \
@@ -47,7 +47,7 @@ case $PLATFORM in
         make install/strip
         ;;
     android-arm64)
-        cmake \
+        $CMAKE \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_NATIVE_API_LEVEL=24 \
             -DBUILD_BULLET2_DEMOS=OFF \
@@ -73,7 +73,7 @@ case $PLATFORM in
         make install/strip
         ;;
     android-x86)
-        cmake \
+        $CMAKE \
             -DANDROID_ABI=x86 \
             -DANDROID_NATIVE_API_LEVEL=24 \
             -DBUILD_BULLET2_DEMOS=OFF \
@@ -99,7 +99,7 @@ case $PLATFORM in
         make install/strip
         ;;
     android-x86_64)
-        cmake \
+        $CMAKE \
             -DANDROID_ABI=x86_64 \
             -DANDROID_NATIVE_API_LEVEL=24 \
             -DBUILD_BULLET2_DEMOS=OFF \
@@ -127,7 +127,7 @@ case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
         export CXX="g++ -m32"
-        cmake \
+        $CMAKE \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
             -DBUILD_CPU_DEMOS=OFF \
@@ -152,7 +152,7 @@ case $PLATFORM in
     linux-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
-        cmake \
+        $CMAKE \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
             -DBUILD_CPU_DEMOS=OFF \
@@ -175,7 +175,8 @@ case $PLATFORM in
         make install/strip
         ;;
     macosx-x86_64)
-        cmake \
+        sedinplace 's/-fopenmp/-Xclang -fopenmp/g' ../CMakeLists.txt
+        $CMAKE \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
             -DBUILD_CPU_DEMOS=OFF \
@@ -201,7 +202,7 @@ case $PLATFORM in
     windows-x86|windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        cmake \
+        $CMAKE \
             -G "Ninja" \
             -DBUILD_BULLET2_DEMOS=OFF \
             -DBUILD_CLSOCKET=OFF \
@@ -225,7 +226,7 @@ case $PLATFORM in
             ..
         ninja -j $MAKEJ
         ninja install
-	;;
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;

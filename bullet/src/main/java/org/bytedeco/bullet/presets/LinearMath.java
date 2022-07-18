@@ -68,7 +68,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btTransformUtil.h",
                 "LinearMath/btMatrixX.h",
             },
-            link = "LinearMath@.3.20"
+            link = "LinearMath@.3.24",
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}
         )
     },
     target = "org.bytedeco.bullet.LinearMath",
