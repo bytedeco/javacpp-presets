@@ -45,7 +45,7 @@ public class btDeformableFaceNodeContactConstraint extends btDeformableContactCo
 	public btDeformableFaceNodeContactConstraint() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @Cast("btScalar") float solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	// get the velocity of the object A in the contact
 	public native @ByVal btVector3 getVa();
@@ -61,5 +61,5 @@ public class btDeformableFaceNodeContactConstraint extends btDeformableContactCo
 
 	public native void applyImpulse(@Const @ByRef btVector3 impulse);
 
-	public native void setPenetrationScale(@Cast("btScalar") float scale);
+	public native void setPenetrationScale(@Cast("btScalar") double scale);
 }

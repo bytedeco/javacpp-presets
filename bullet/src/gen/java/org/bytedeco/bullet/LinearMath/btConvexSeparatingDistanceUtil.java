@@ -19,12 +19,12 @@ public class btConvexSeparatingDistanceUtil extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btConvexSeparatingDistanceUtil(Pointer p) { super(p); }
 
-	public btConvexSeparatingDistanceUtil(@Cast("btScalar") float boundingRadiusA, @Cast("btScalar") float boundingRadiusB) { super((Pointer)null); allocate(boundingRadiusA, boundingRadiusB); }
-	private native void allocate(@Cast("btScalar") float boundingRadiusA, @Cast("btScalar") float boundingRadiusB);
+	public btConvexSeparatingDistanceUtil(@Cast("btScalar") double boundingRadiusA, @Cast("btScalar") double boundingRadiusB) { super((Pointer)null); allocate(boundingRadiusA, boundingRadiusB); }
+	private native void allocate(@Cast("btScalar") double boundingRadiusA, @Cast("btScalar") double boundingRadiusB);
 
-	public native @Cast("btScalar") float getConservativeSeparatingDistance();
+	public native @Cast("btScalar") double getConservativeSeparatingDistance();
 
 	public native void updateSeparatingDistance(@Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
 
-	public native void initSeparatingDistance(@Const @ByRef btVector3 separatingVector, @Cast("btScalar") float separatingDistance, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
+	public native void initSeparatingDistance(@Const @ByRef btVector3 separatingVector, @Cast("btScalar") double separatingDistance, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
 }

@@ -79,11 +79,11 @@ public class btDbvt extends Pointer {
 	
 		public native @Const btDbvtNode node(); public native sStkNPS node(btDbvtNode setter);
 		public native int mask(); public native sStkNPS mask(int setter);
-		public native @Cast("btScalar") float value(); public native sStkNPS value(float setter);
+		public native @Cast("btScalar") double value(); public native sStkNPS value(double setter);
 		public sStkNPS() { super((Pointer)null); allocate(); }
 		private native void allocate();
-		public sStkNPS(@Const btDbvtNode n, @Cast("unsigned") int m, @Cast("btScalar") float v) { super((Pointer)null); allocate(n, m, v); }
-		private native void allocate(@Const btDbvtNode n, @Cast("unsigned") int m, @Cast("btScalar") float v);
+		public sStkNPS(@Const btDbvtNode n, @Cast("unsigned") int m, @Cast("btScalar") double v) { super((Pointer)null); allocate(n, m, v); }
+		private native void allocate(@Const btDbvtNode n, @Cast("unsigned") int m, @Cast("btScalar") double v);
 	}
 	@NoOffset public static class sStkCLN extends Pointer {
 	    static { Loader.load(); }
@@ -139,7 +139,7 @@ public class btDbvt extends Pointer {
 	
 		public native void Process(@Const btDbvtNode arg0, @Const btDbvtNode arg1);
 		public native void Process(@Const btDbvtNode arg0);
-		public native void Process(@Const btDbvtNode n, @Cast("btScalar") float arg1);
+		public native void Process(@Const btDbvtNode n, @Cast("btScalar") double arg1);
         public native void Process(@Const btDbvntNode arg0, @Const btDbvntNode arg1);
 		public native @Cast("bool") boolean Descent(@Const btDbvtNode arg0);
 		public native @Cast("bool") boolean AllLeaves(@Const btDbvtNode arg0);
@@ -203,9 +203,9 @@ public class btDbvt extends Pointer {
 	public native void update(btDbvtNode leaf, int lookahead/*=-1*/);
 	public native void update(btDbvtNode leaf);
 	public native void update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume);
-	public native @Cast("bool") boolean update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume, @Const @ByRef btVector3 velocity, @Cast("btScalar") float margin);
+	public native @Cast("bool") boolean update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume, @Const @ByRef btVector3 velocity, @Cast("btScalar") double margin);
 	public native @Cast("bool") boolean update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume, @Const @ByRef btVector3 velocity);
-	public native @Cast("bool") boolean update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume, @Cast("btScalar") float margin);
+	public native @Cast("bool") boolean update(btDbvtNode leaf, @Cast("btDbvtVolume*") @ByRef btDbvtAabbMm volume, @Cast("btScalar") double margin);
 	public native void remove(btDbvtNode leaf);
 	public native void write(IWriter iwriter);
 	public native void clone(@ByRef btDbvt dest, IClone iclone/*=0*/);
@@ -226,9 +226,9 @@ public class btDbvt extends Pointer {
 	/**rayTestInternal is faster than rayTest, because it uses a persistent stack (to reduce dynamic memory allocations to a minimum) and it uses precomputed signs/rayInverseDirections
 	 * rayTestInternal is used by btDbvtBroadphase to accelerate world ray casts */
 	// Helpers
-	public static native int nearest(@Const IntPointer i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
-	public static native int nearest(@Const IntBuffer i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
-	public static native int nearest(@Const int[] i, @Const sStkNPS a, @Cast("btScalar") float v, int l, int h);
+	public static native int nearest(@Const IntPointer i, @Const sStkNPS a, @Cast("btScalar") double v, int l, int h);
+	public static native int nearest(@Const IntBuffer i, @Const sStkNPS a, @Cast("btScalar") double v, int l, int h);
+	public static native int nearest(@Const int[] i, @Const sStkNPS a, @Cast("btScalar") double v, int l, int h);
 	public static native @Name("allocate") int _allocate(@ByRef btIntArray ifree,
 										@ByRef btDbvtStkNPSArray stock,
 										@Const @ByRef sStkNPS value);

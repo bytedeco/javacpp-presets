@@ -117,9 +117,9 @@ public static native int btIsDoublePrecision();
 
 /**The btScalar type abstracts floating point numbers, to easily switch between double and single floating point precision. */
 // #if defined(BT_USE_DOUBLE_PRECISION)
+	//this number could be bigger in double precision
+	public static final double BT_LARGE_FLOAT = 1e30;
 // #else
-	//keep BT_LARGE_FLOAT*BT_LARGE_FLOAT < FLT_MAX
-	public static final double BT_LARGE_FLOAT = 1e18f;
 // #endif
 
 // #ifdef BT_USE_SSE
@@ -154,19 +154,19 @@ public static native int btIsDoublePrecision();
 
 // #if defined(BT_USE_DOUBLE_PRECISION) || defined(BT_FORCE_DOUBLE_FUNCTIONS)
 
-	public static native @Cast("btScalar") float btSqrt(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btFabs(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btCos(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btSin(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btTan(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btAcos(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btAsin(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btAtan(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btAtan2(@Cast("btScalar") float x, @Cast("btScalar") float y);
-	public static native @Cast("btScalar") float btExp(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btLog(@Cast("btScalar") float x);
-	public static native @Cast("btScalar") float btPow(@Cast("btScalar") float x, @Cast("btScalar") float y);
-	public static native @Cast("btScalar") float btFmod(@Cast("btScalar") float x, @Cast("btScalar") float y);
+	public static native @Cast("btScalar") double btSqrt(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btFabs(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btCos(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btSin(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btTan(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btAcos(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btAsin(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btAtan(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btAtan2(@Cast("btScalar") double x, @Cast("btScalar") double y);
+	public static native @Cast("btScalar") double btExp(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btLog(@Cast("btScalar") double x);
+	public static native @Cast("btScalar") double btPow(@Cast("btScalar") double x, @Cast("btScalar") double y);
+	public static native @Cast("btScalar") double btFmod(@Cast("btScalar") double x, @Cast("btScalar") double y);
 
 // #else//BT_USE_DOUBLE_PRECISION
 
@@ -188,28 +188,28 @@ public static final double SIMDSQRT12 = SIMDSQRT12();
 // #define btRecip(x) (btScalar(1.0) / btScalar(x))
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// 	#define SIMD_EPSILON DBL_EPSILON
+// 	#define SIMD_INFINITY DBL_MAX
+	public static final double BT_ONE = 1.0;
+	public static final double BT_ZERO = 0.0;
+	public static final double BT_TWO = 2.0;
+	public static final double BT_HALF = 0.5;
 // #else
-// 	#define SIMD_EPSILON FLT_EPSILON
-// 	#define SIMD_INFINITY FLT_MAX
-	public static final double BT_ONE = 1.0f;
-	public static final double BT_ZERO = 0.0f;
-	public static final double BT_TWO = 2.0f;
-	public static final double BT_HALF = 0.5f;
 // #endif
 
 // clang-format on
 
-public static native @Cast("btScalar") float btAtan2Fast(@Cast("btScalar") float y, @Cast("btScalar") float x);
+public static native @Cast("btScalar") double btAtan2Fast(@Cast("btScalar") double y, @Cast("btScalar") double x);
 
-public static native @Cast("bool") boolean btFuzzyZero(@Cast("btScalar") float x);
+public static native @Cast("bool") boolean btFuzzyZero(@Cast("btScalar") double x);
 
-public static native @Cast("bool") boolean btEqual(@Cast("btScalar") float a, @Cast("btScalar") float eps);
-public static native @Cast("bool") boolean btGreaterEqual(@Cast("btScalar") float a, @Cast("btScalar") float eps);
+public static native @Cast("bool") boolean btEqual(@Cast("btScalar") double a, @Cast("btScalar") double eps);
+public static native @Cast("bool") boolean btGreaterEqual(@Cast("btScalar") double a, @Cast("btScalar") double eps);
 
-public static native int btIsNegative(@Cast("btScalar") float x);
+public static native int btIsNegative(@Cast("btScalar") double x);
 
-public static native @Cast("btScalar") float btRadians(@Cast("btScalar") float x);
-public static native @Cast("btScalar") float btDegrees(@Cast("btScalar") float x);
+public static native @Cast("btScalar") double btRadians(@Cast("btScalar") double x);
+public static native @Cast("btScalar") double btDegrees(@Cast("btScalar") double x);
 
 // #define BT_DECLARE_HANDLE(name)
 // 	typedef struct name##__
@@ -218,7 +218,7 @@ public static native @Cast("btScalar") float btDegrees(@Cast("btScalar") float x
 // 	} * name
 
 // #ifndef btFsel
-public static native @Cast("btScalar") float btFsel(@Cast("btScalar") float a, @Cast("btScalar") float b, @Cast("btScalar") float c);
+public static native @Cast("btScalar") double btFsel(@Cast("btScalar") double a, @Cast("btScalar") double b, @Cast("btScalar") double c);
 // #endif
 // #define btFsels(a, b, c) (btScalar) btFsel(a, b, c)
 
@@ -255,12 +255,12 @@ public static native double btUnswapEndianDouble(@Cast("const unsigned char*") B
 public static native double btUnswapEndianDouble(@Cast("const unsigned char*") ByteBuffer src);
 public static native double btUnswapEndianDouble(@Cast("const unsigned char*") byte[] src);
 
-public static native @Cast("btScalar") float btLargeDot(@Cast("const btScalar*") FloatPointer a, @Cast("const btScalar*") FloatPointer b, int n);
-public static native @Cast("btScalar") float btLargeDot(@Cast("const btScalar*") FloatBuffer a, @Cast("const btScalar*") FloatBuffer b, int n);
-public static native @Cast("btScalar") float btLargeDot(@Cast("const btScalar*") float[] a, @Cast("const btScalar*") float[] b, int n);
+public static native @Cast("btScalar") double btLargeDot(@Cast("const btScalar*") DoublePointer a, @Cast("const btScalar*") DoublePointer b, int n);
+public static native @Cast("btScalar") double btLargeDot(@Cast("const btScalar*") DoubleBuffer a, @Cast("const btScalar*") DoubleBuffer b, int n);
+public static native @Cast("btScalar") double btLargeDot(@Cast("const btScalar*") double[] a, @Cast("const btScalar*") double[] b, int n);
 
 // returns normalized value in range [-SIMD_PI, SIMD_PI]
-public static native @Cast("btScalar") float btNormalizeAngle(@Cast("btScalar") float angleInRadians);
+public static native @Cast("btScalar") double btNormalizeAngle(@Cast("btScalar") double angleInRadians);
 // Targeting ../LinearMath/btTypedObject.java
 
 
@@ -295,9 +295,8 @@ subject to the following restrictions:
 // #include "btAlignedAllocator.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btVector3Data btVector3FloatData
-public static final String btVector3DataName = "btVector3FloatData";
+// #define btVector3Data btVector3DoubleData
+public static final String btVector3DataName = "btVector3DoubleData";
 // Targeting ../LinearMath/btVector3.java
 
 
@@ -315,39 +314,39 @@ public static native @ByVal @Name("operator -") btVector3 subtract(@Const @ByRef
 public static native @ByVal @Name("operator -") btVector3 subtract(@Const @ByRef btVector3 v);
 
 /**\brief Return the vector scaled by s */
-public static native @ByVal @Name("operator *") btVector3 multiply(@Const @ByRef btVector3 v, @Cast("const btScalar") float s);
+public static native @ByVal @Name("operator *") btVector3 multiply(@Const @ByRef btVector3 v, @Cast("const btScalar") double s);
 
 /**\brief Return the vector scaled by s */
-public static native @ByVal @Name("operator *") btVector3 multiply(@Cast("const btScalar") float s, @Const @ByRef btVector3 v);
+public static native @ByVal @Name("operator *") btVector3 multiply(@Cast("const btScalar") double s, @Const @ByRef btVector3 v);
 
 /**\brief Return the vector inversely scaled by s */
-public static native @ByVal @Name("operator /") btVector3 divide(@Const @ByRef btVector3 v, @Cast("const btScalar") float s);
+public static native @ByVal @Name("operator /") btVector3 divide(@Const @ByRef btVector3 v, @Cast("const btScalar") double s);
 
 /**\brief Return the vector inversely scaled by s */
 public static native @ByVal @Name("operator /") btVector3 divide(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
 /**\brief Return the dot product between two vectors */
-public static native @Cast("btScalar") float btDot(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
+public static native @Cast("btScalar") double btDot(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
 /**\brief Return the distance squared between two vectors */
-public static native @Cast("btScalar") float btDistance2(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
+public static native @Cast("btScalar") double btDistance2(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
 /**\brief Return the distance between two vectors */
-public static native @Cast("btScalar") float btDistance(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
+public static native @Cast("btScalar") double btDistance(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
 /**\brief Return the angle between two vectors */
-public static native @Cast("btScalar") float btAngle(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
+public static native @Cast("btScalar") double btAngle(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
 /**\brief Return the cross product of two vectors */
 public static native @ByVal btVector3 btCross(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
-public static native @Cast("btScalar") float btTriple(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 v3);
+public static native @Cast("btScalar") double btTriple(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 v3);
 
 /**\brief Return the linear interpolation between two vectors
  * @param v1 One vector 
  * @param v2 The other vector 
  * @param t The ration of this to v (t = 0 => return v1, t=1 => return v2) */
-public static native @ByVal btVector3 lerp(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("const btScalar") float t);
+public static native @ByVal btVector3 lerp(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("const btScalar") double t);
 
 
 
@@ -365,9 +364,9 @@ public static native @ByVal btVector3 lerp(@Const @ByRef btVector3 v1, @Const @B
 
 
 /**btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization */
-public static native void btSwapScalarEndian(@Cast("const btScalar") float sourceVal, @Cast("btScalar*") @ByRef FloatPointer destVal);
-public static native void btSwapScalarEndian(@Cast("const btScalar") float sourceVal, @Cast("btScalar*") @ByRef FloatBuffer destVal);
-public static native void btSwapScalarEndian(@Cast("const btScalar") float sourceVal, @Cast("btScalar*") @ByRef float[] destVal);
+public static native void btSwapScalarEndian(@Cast("const btScalar") double sourceVal, @Cast("btScalar*") @ByRef DoublePointer destVal);
+public static native void btSwapScalarEndian(@Cast("const btScalar") double sourceVal, @Cast("btScalar*") @ByRef DoubleBuffer destVal);
+public static native void btSwapScalarEndian(@Cast("const btScalar") double sourceVal, @Cast("btScalar*") @ByRef double[] destVal);
 /**btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization */
 public static native void btSwapVector3Endian(@Const @ByRef btVector3 sourceVec, @ByRef btVector3 destVec);
 
@@ -451,9 +450,8 @@ subject to the following restrictions:
 // #include "btQuadWord.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btQuaternionData btQuaternionFloatData
-public static final String btQuaternionDataName = "btQuaternionFloatData";
+// #define btQuaternionData btQuaternionDoubleData
+public static final String btQuaternionDataName = "btQuaternionDoubleData";
 // Targeting ../LinearMath/btQuaternion.java
 
 
@@ -466,13 +464,13 @@ public static native @ByVal @Name("operator *") btQuaternion multiply(@Const @By
 public static native @ByVal @Name("operator *") btQuaternion multiply(@Const @ByRef btVector3 w, @Const @ByRef btQuaternion q);
 
 /**\brief Calculate the dot product between two quaternions */
-public static native @Cast("btScalar") float dot(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2);
+public static native @Cast("btScalar") double dot(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2);
 
 /**\brief Return the length of a quaternion */
-public static native @Cast("btScalar") float length(@Const @ByRef btQuaternion q);
+public static native @Cast("btScalar") double length(@Const @ByRef btQuaternion q);
 
 /**\brief Return the angle between two quaternions*/
-public static native @Cast("btScalar") float btAngle(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2);
+public static native @Cast("btScalar") double btAngle(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2);
 
 /**\brief Return the inverse of a quaternion*/
 public static native @ByVal btQuaternion inverse(@Const @ByRef btQuaternion q);
@@ -482,7 +480,7 @@ public static native @ByVal btQuaternion inverse(@Const @ByRef btQuaternion q);
  * @param q2 The second quaternion 
  * @param t The ration between q1 and q2.  t = 0 return q1, t=1 returns q2 
  * Slerp assumes constant velocity between positions. */
-public static native @ByVal btQuaternion slerp(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2, @Cast("const btScalar") float t);
+public static native @ByVal btQuaternion slerp(@Const @ByRef btQuaternion q1, @Const @ByRef btQuaternion q2, @Cast("const btScalar") double t);
 
 public static native @ByVal btVector3 quatRotate(@Const @ByRef btQuaternion rotation, @Const @ByRef btVector3 v);
 
@@ -544,8 +542,7 @@ subject to the following restrictions:
 // #endif
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btMatrix3x3Data btMatrix3x3FloatData
+// #define btMatrix3x3Data btMatrix3x3DoubleData
 // Targeting ../LinearMath/btMatrix3x3.java
 
 
@@ -554,7 +551,7 @@ subject to the following restrictions:
 
 
 
-public static native @ByVal @Name("operator *") btMatrix3x3 multiply(@Const @ByRef btMatrix3x3 m, @Cast("const btScalar") float k);
+public static native @ByVal @Name("operator *") btMatrix3x3 multiply(@Const @ByRef btMatrix3x3 m, @Cast("const btScalar") double k);
 
 public static native @ByVal @Name("operator +") btMatrix3x3 add(@Const @ByRef btMatrix3x3 m1, @Const @ByRef btMatrix3x3 m2);
 
@@ -642,8 +639,7 @@ subject to the following restrictions:
 // #include "btMatrix3x3.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btTransformData btTransformFloatData
+// #define btTransformData btTransformDoubleData
 // Targeting ../LinearMath/btTransform.java
 
 
@@ -728,10 +724,13 @@ public static final int BT_USE_PLACEMENT_NEW = 1;
 // Targeting ../LinearMath/btUIntArray.java
 
 
-// Targeting ../LinearMath/btScalarArray.java
+// Targeting ../LinearMath/btFloatArray.java
 
 
 // Targeting ../LinearMath/btDoubleArray.java
+
+
+// Targeting ../LinearMath/btScalarArray.java
 
 
 // Targeting ../LinearMath/btMatrix3x3Array.java
@@ -1276,7 +1275,7 @@ public static native void btParallelFor(int iBegin, int iEnd, int grainSize, @Co
 
 // btParallelSum -- call this to dispatch work like a for-loop, returns the sum of all iterations
 //                 (iterations may be done out of order, so no dependencies are allowed)
-public static native @Cast("btScalar") float btParallelSum(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelSumBody body);
+public static native @Cast("btScalar") double btParallelSum(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelSumBody body);
 
 // #endif
 
@@ -1568,9 +1567,9 @@ public static native void setElem(@ByRef btMatrixXd mat, int row, int col, doubl
 public static native void setElem(@ByRef btMatrixXf mat, int row, int col, float val);
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btVectorXu btVectorXd
+// #define btMatrixXu btMatrixXd
 // #else
-// #define btVectorXu btVectorXf
-// #define btMatrixXu btMatrixXf
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 // #endif  //BT_MATRIX_H_H

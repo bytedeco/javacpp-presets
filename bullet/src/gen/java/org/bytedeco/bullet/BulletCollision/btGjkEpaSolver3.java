@@ -57,6 +57,6 @@ public class btGjkEpaSolver3 extends Pointer {
 		public native @ByRef btVector3 witnesses(int i); public native sResults witnesses(int i, btVector3 setter);
 		@MemberGetter public native btVector3 witnesses();
 		public native @ByRef btVector3 normal(); public native sResults normal(btVector3 setter);
-		public native @Cast("btScalar") float distance(); public native sResults distance(float setter);
+		public native @Cast("btScalar") double distance(); public native sResults distance(double setter);
 	}
 }

@@ -39,11 +39,11 @@ public class btUniversalConstraint extends btGeneric6DofConstraint {
 	public native @Const @ByRef btVector3 getAnchor2();
 	public native @Const @ByRef btVector3 getAxis1();
 	public native @Const @ByRef btVector3 getAxis2();
-	public native @Cast("btScalar") float getAngle1();
-	public native @Cast("btScalar") float getAngle2();
+	public native @Cast("btScalar") double getAngle1();
+	public native @Cast("btScalar") double getAngle2();
 	// limits
-	public native void setUpperLimit(@Cast("btScalar") float ang1max, @Cast("btScalar") float ang2max);
-	public native void setLowerLimit(@Cast("btScalar") float ang1min, @Cast("btScalar") float ang2min);
+	public native void setUpperLimit(@Cast("btScalar") double ang1max, @Cast("btScalar") double ang2max);
+	public native void setLowerLimit(@Cast("btScalar") double ang1min, @Cast("btScalar") double ang2min);
 
 	public native void setAxis(@Const @ByRef btVector3 axis1, @Const @ByRef btVector3 axis2);
 }

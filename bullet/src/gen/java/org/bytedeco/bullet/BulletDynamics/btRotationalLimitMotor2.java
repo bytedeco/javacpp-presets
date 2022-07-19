@@ -33,28 +33,28 @@ public class btRotationalLimitMotor2 extends Pointer {
 	// upper < lower means free
 	// upper == lower means locked
 	// upper > lower means limited
-	public native @Cast("btScalar") float m_loLimit(); public native btRotationalLimitMotor2 m_loLimit(float setter);
-	public native @Cast("btScalar") float m_hiLimit(); public native btRotationalLimitMotor2 m_hiLimit(float setter);
-	public native @Cast("btScalar") float m_bounce(); public native btRotationalLimitMotor2 m_bounce(float setter);
-	public native @Cast("btScalar") float m_stopERP(); public native btRotationalLimitMotor2 m_stopERP(float setter);
-	public native @Cast("btScalar") float m_stopCFM(); public native btRotationalLimitMotor2 m_stopCFM(float setter);
-	public native @Cast("btScalar") float m_motorERP(); public native btRotationalLimitMotor2 m_motorERP(float setter);
-	public native @Cast("btScalar") float m_motorCFM(); public native btRotationalLimitMotor2 m_motorCFM(float setter);
+	public native @Cast("btScalar") double m_loLimit(); public native btRotationalLimitMotor2 m_loLimit(double setter);
+	public native @Cast("btScalar") double m_hiLimit(); public native btRotationalLimitMotor2 m_hiLimit(double setter);
+	public native @Cast("btScalar") double m_bounce(); public native btRotationalLimitMotor2 m_bounce(double setter);
+	public native @Cast("btScalar") double m_stopERP(); public native btRotationalLimitMotor2 m_stopERP(double setter);
+	public native @Cast("btScalar") double m_stopCFM(); public native btRotationalLimitMotor2 m_stopCFM(double setter);
+	public native @Cast("btScalar") double m_motorERP(); public native btRotationalLimitMotor2 m_motorERP(double setter);
+	public native @Cast("btScalar") double m_motorCFM(); public native btRotationalLimitMotor2 m_motorCFM(double setter);
 	public native @Cast("bool") boolean m_enableMotor(); public native btRotationalLimitMotor2 m_enableMotor(boolean setter);
-	public native @Cast("btScalar") float m_targetVelocity(); public native btRotationalLimitMotor2 m_targetVelocity(float setter);
-	public native @Cast("btScalar") float m_maxMotorForce(); public native btRotationalLimitMotor2 m_maxMotorForce(float setter);
+	public native @Cast("btScalar") double m_targetVelocity(); public native btRotationalLimitMotor2 m_targetVelocity(double setter);
+	public native @Cast("btScalar") double m_maxMotorForce(); public native btRotationalLimitMotor2 m_maxMotorForce(double setter);
 	public native @Cast("bool") boolean m_servoMotor(); public native btRotationalLimitMotor2 m_servoMotor(boolean setter);
-	public native @Cast("btScalar") float m_servoTarget(); public native btRotationalLimitMotor2 m_servoTarget(float setter);
+	public native @Cast("btScalar") double m_servoTarget(); public native btRotationalLimitMotor2 m_servoTarget(double setter);
 	public native @Cast("bool") boolean m_enableSpring(); public native btRotationalLimitMotor2 m_enableSpring(boolean setter);
-	public native @Cast("btScalar") float m_springStiffness(); public native btRotationalLimitMotor2 m_springStiffness(float setter);
+	public native @Cast("btScalar") double m_springStiffness(); public native btRotationalLimitMotor2 m_springStiffness(double setter);
 	public native @Cast("bool") boolean m_springStiffnessLimited(); public native btRotationalLimitMotor2 m_springStiffnessLimited(boolean setter);
-	public native @Cast("btScalar") float m_springDamping(); public native btRotationalLimitMotor2 m_springDamping(float setter);
+	public native @Cast("btScalar") double m_springDamping(); public native btRotationalLimitMotor2 m_springDamping(double setter);
 	public native @Cast("bool") boolean m_springDampingLimited(); public native btRotationalLimitMotor2 m_springDampingLimited(boolean setter);
-	public native @Cast("btScalar") float m_equilibriumPoint(); public native btRotationalLimitMotor2 m_equilibriumPoint(float setter);
+	public native @Cast("btScalar") double m_equilibriumPoint(); public native btRotationalLimitMotor2 m_equilibriumPoint(double setter);
 
-	public native @Cast("btScalar") float m_currentLimitError(); public native btRotationalLimitMotor2 m_currentLimitError(float setter);
-	public native @Cast("btScalar") float m_currentLimitErrorHi(); public native btRotationalLimitMotor2 m_currentLimitErrorHi(float setter);
-	public native @Cast("btScalar") float m_currentPosition(); public native btRotationalLimitMotor2 m_currentPosition(float setter);
+	public native @Cast("btScalar") double m_currentLimitError(); public native btRotationalLimitMotor2 m_currentLimitError(double setter);
+	public native @Cast("btScalar") double m_currentLimitErrorHi(); public native btRotationalLimitMotor2 m_currentLimitErrorHi(double setter);
+	public native @Cast("btScalar") double m_currentPosition(); public native btRotationalLimitMotor2 m_currentPosition(double setter);
 	public native int m_currentLimit(); public native btRotationalLimitMotor2 m_currentLimit(int setter);
 
 	public btRotationalLimitMotor2() { super((Pointer)null); allocate(); }
@@ -65,5 +65,5 @@ public class btRotationalLimitMotor2 extends Pointer {
 
 	public native @Cast("bool") boolean isLimited();
 
-	public native void testLimitValue(@Cast("btScalar") float test_value);
+	public native void testLimitValue(@Cast("btScalar") double test_value);
 }

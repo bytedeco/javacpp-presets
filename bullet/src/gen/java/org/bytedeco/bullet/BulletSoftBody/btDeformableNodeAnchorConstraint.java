@@ -42,7 +42,7 @@ public class btDeformableNodeAnchorConstraint extends btDeformableContactConstra
 	private native void allocate(@Const @ByRef btDeformableNodeAnchorConstraint other);
 	public btDeformableNodeAnchorConstraint() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public native @Cast("btScalar") float solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	// object A is the rigid/multi body, and object B is the deformable node/face
 	public native @ByVal btVector3 getVa();
@@ -51,5 +51,5 @@ public class btDeformableNodeAnchorConstraint extends btDeformableContactConstra
 	public native @ByVal btVector3 getDv(@Const btSoftBody.Node n);
 	public native void applyImpulse(@Const @ByRef btVector3 impulse);
 
-	public native void setPenetrationScale(@Cast("btScalar") float scale);
+	public native void setPenetrationScale(@Cast("btScalar") double scale);
 }

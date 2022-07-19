@@ -35,8 +35,8 @@ public class btSequentialImpulseConstraintSolver extends btConstraintSolver {
 	public btSequentialImpulseConstraintSolver() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @Cast("btScalar") float solveGroup(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifold, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo info, btIDebugDraw debugDrawer, btDispatcher dispatcher);
-	public native @Cast("btScalar") float solveGroup(@ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifold, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo info, btIDebugDraw debugDrawer, btDispatcher dispatcher);
+	public native @Cast("btScalar") double solveGroup(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifold, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo info, btIDebugDraw debugDrawer, btDispatcher dispatcher);
+	public native @Cast("btScalar") double solveGroup(@ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifold, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo info, btIDebugDraw debugDrawer, btDispatcher dispatcher);
 
 	/**clear internal cached data and reset random seed */
 	public native void reset();

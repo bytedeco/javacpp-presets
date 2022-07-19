@@ -24,7 +24,7 @@ public class btCGProjection extends Pointer {
     public btCGProjection(Pointer p) { super(p); }
 
 	public native @ByRef btSoftBodyArray m_softBodies(); public native btCGProjection m_softBodies(btSoftBodyArray setter);
-	@MemberGetter public native @Cast("const btScalar") float m_dt();
+	@MemberGetter public native @Cast("const btScalar") double m_dt();
 	// map from node indices to node pointers
 	public native @Const btSoftBodyNodePointerArray m_nodes(); public native btCGProjection m_nodes(btSoftBodyNodePointerArray setter);
 
@@ -34,7 +34,7 @@ public class btCGProjection extends Pointer {
 	public native void setConstraints();
 
 	// update the constraints
-	public native @Cast("btScalar") float update();
+	public native @Cast("btScalar") double update();
 
 	public native void reinitialize(@Cast("bool") boolean nodeUpdated);
 

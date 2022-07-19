@@ -204,8 +204,8 @@ subject to the following restrictions:
 //#else
 // #define btSoftBodyData btSoftBodyFloatData
 public static final String btSoftBodyDataName = "btSoftBodyFloatData";
-@MemberGetter public static native @Cast("const btScalar") float OVERLAP_REDUCTION_FACTOR();
-public static final float OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
+@MemberGetter public static native @Cast("const btScalar") double OVERLAP_REDUCTION_FACTOR();
+public static final double OVERLAP_REDUCTION_FACTOR = OVERLAP_REDUCTION_FACTOR();
 public static native @Cast("unsigned long") long seed(); public static native void seed(long setter);
 //#endif //BT_USE_DOUBLE_PRECISION
 // Targeting ../BulletSoftBody/btSoftBodyWorldInfo.java
@@ -1003,7 +1003,7 @@ public static native void findJacobian(@Const btMultiBodyLinkCollider multibodyL
 										   @Const @ByRef btVector3 dir);
 public static native @ByVal btVector3 generateUnitOrthogonalVector(@Const @ByRef btVector3 u);
 
-public static native @Cast("bool") boolean proximityTest(@Const @ByRef btVector3 x1, @Const @ByRef btVector3 x2, @Const @ByRef btVector3 x3, @Const @ByRef btVector3 x4, @Const @ByRef btVector3 normal, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
+public static native @Cast("bool") boolean proximityTest(@Const @ByRef btVector3 x1, @Const @ByRef btVector3 x2, @Const @ByRef btVector3 x3, @Const @ByRef btVector3 x4, @Const @ByRef btVector3 normal, @Cast("const btScalar") double mrg, @ByRef btVector3 bary);
 @MemberGetter public static native int KDOP_COUNT();
 public static final int KDOP_COUNT = KDOP_COUNT();
 public static native @ByRef btVector3 dop(int i); public static native void dop(int i, btVector3 setter);
@@ -1011,51 +1011,51 @@ public static native @ByRef btVector3 dop(int i); public static native void dop(
 
 public static native int getSign(@Const @ByRef btVector3 n, @Const @ByRef btVector3 x);
 
-public static native @Cast("bool") boolean hasSeparatingPlane(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+public static native @Cast("bool") boolean hasSeparatingPlane(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt);
 
-public static native @Cast("bool") boolean nearZero(@Cast("const btScalar") float a);
-public static native @Cast("bool") boolean sameSign(@Cast("const btScalar") float a, @Cast("const btScalar") float b);
-public static native @Cast("bool") boolean diffSign(@Cast("const btScalar") float a, @Cast("const btScalar") float b);
-public static native @Cast("btScalar") float evaluateBezier2(@Cast("const btScalar") float p0, @Cast("const btScalar") float p1, @Cast("const btScalar") float p2, @Cast("const btScalar") float t, @Cast("const btScalar") float s);
-public static native @Cast("btScalar") float evaluateBezier(@Cast("const btScalar") float p0, @Cast("const btScalar") float p1, @Cast("const btScalar") float p2, @Cast("const btScalar") float p3, @Cast("const btScalar") float t, @Cast("const btScalar") float s);
-public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef FloatPointer lt0, @Cast("btScalar*") @ByRef FloatPointer lt1);
-public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef FloatBuffer lt0, @Cast("btScalar*") @ByRef FloatBuffer lt1);
-public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("const btScalar") float t1, @Cast("btScalar*") @ByRef float[] lt0, @Cast("btScalar*") @ByRef float[] lt1);
+public static native @Cast("bool") boolean nearZero(@Cast("const btScalar") double a);
+public static native @Cast("bool") boolean sameSign(@Cast("const btScalar") double a, @Cast("const btScalar") double b);
+public static native @Cast("bool") boolean diffSign(@Cast("const btScalar") double a, @Cast("const btScalar") double b);
+public static native @Cast("btScalar") double evaluateBezier2(@Cast("const btScalar") double p0, @Cast("const btScalar") double p1, @Cast("const btScalar") double p2, @Cast("const btScalar") double t, @Cast("const btScalar") double s);
+public static native @Cast("btScalar") double evaluateBezier(@Cast("const btScalar") double p0, @Cast("const btScalar") double p1, @Cast("const btScalar") double p2, @Cast("const btScalar") double p3, @Cast("const btScalar") double t, @Cast("const btScalar") double s);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("const btScalar") double t1, @Cast("btScalar*") @ByRef DoublePointer lt0, @Cast("btScalar*") @ByRef DoublePointer lt1);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("const btScalar") double t1, @Cast("btScalar*") @ByRef DoubleBuffer lt0, @Cast("btScalar*") @ByRef DoubleBuffer lt1);
+public static native @Cast("bool") boolean getSigns(@Cast("bool") boolean type_c, @Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("const btScalar") double t1, @Cast("btScalar*") @ByRef double[] lt0, @Cast("btScalar*") @ByRef double[] lt1);
 
-public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatPointer k0, @Cast("btScalar*") @ByRef FloatPointer k1, @Cast("btScalar*") @ByRef FloatPointer k2, @Cast("btScalar*") @ByRef FloatPointer k3);
-public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatBuffer k0, @Cast("btScalar*") @ByRef FloatBuffer k1, @Cast("btScalar*") @ByRef FloatBuffer k2, @Cast("btScalar*") @ByRef FloatBuffer k3);
-public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef float[] k0, @Cast("btScalar*") @ByRef float[] k1, @Cast("btScalar*") @ByRef float[] k2, @Cast("btScalar*") @ByRef float[] k3);
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef DoublePointer k0, @Cast("btScalar*") @ByRef DoublePointer k1, @Cast("btScalar*") @ByRef DoublePointer k2, @Cast("btScalar*") @ByRef DoublePointer k3);
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef DoubleBuffer k0, @Cast("btScalar*") @ByRef DoubleBuffer k1, @Cast("btScalar*") @ByRef DoubleBuffer k2, @Cast("btScalar*") @ByRef DoubleBuffer k3);
+public static native void getBernsteinCoeff(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef double[] k0, @Cast("btScalar*") @ByRef double[] k1, @Cast("btScalar*") @ByRef double[] k2, @Cast("btScalar*") @ByRef double[] k3);
 
-public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef FloatPointer u0, @Cast("btScalar*") @ByRef FloatPointer u1, @Cast("btScalar*") @ByRef FloatPointer v0, @Cast("btScalar*") @ByRef FloatPointer v1);
-public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef FloatBuffer u0, @Cast("btScalar*") @ByRef FloatBuffer u1, @Cast("btScalar*") @ByRef FloatBuffer v0, @Cast("btScalar*") @ByRef FloatBuffer v1);
-public static native void polyDecomposition(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("btScalar*") @ByRef float[] u0, @Cast("btScalar*") @ByRef float[] u1, @Cast("btScalar*") @ByRef float[] v0, @Cast("btScalar*") @ByRef float[] v1);
+public static native void polyDecomposition(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double j0, @Cast("const btScalar") double j1, @Cast("const btScalar") double j2, @Cast("btScalar*") @ByRef DoublePointer u0, @Cast("btScalar*") @ByRef DoublePointer u1, @Cast("btScalar*") @ByRef DoublePointer v0, @Cast("btScalar*") @ByRef DoublePointer v1);
+public static native void polyDecomposition(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double j0, @Cast("const btScalar") double j1, @Cast("const btScalar") double j2, @Cast("btScalar*") @ByRef DoubleBuffer u0, @Cast("btScalar*") @ByRef DoubleBuffer u1, @Cast("btScalar*") @ByRef DoubleBuffer v0, @Cast("btScalar*") @ByRef DoubleBuffer v1);
+public static native void polyDecomposition(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double j0, @Cast("const btScalar") double j1, @Cast("const btScalar") double j2, @Cast("btScalar*") @ByRef double[] u0, @Cast("btScalar*") @ByRef double[] u1, @Cast("btScalar*") @ByRef double[] v0, @Cast("btScalar*") @ByRef double[] v1);
 
-public static native @Cast("bool") boolean rootFindingLemma(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3);
+public static native @Cast("bool") boolean rootFindingLemma(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3);
 
-public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatPointer j0, @Cast("btScalar*") @ByRef FloatPointer j1, @Cast("btScalar*") @ByRef FloatPointer j2);
-public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef FloatBuffer j0, @Cast("btScalar*") @ByRef FloatBuffer j1, @Cast("btScalar*") @ByRef FloatBuffer j2);
-public static native void getJs(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") float dt, @Cast("btScalar*") @ByRef float[] j0, @Cast("btScalar*") @ByRef float[] j1, @Cast("btScalar*") @ByRef float[] j2);
+public static native void getJs(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef DoublePointer j0, @Cast("btScalar*") @ByRef DoublePointer j1, @Cast("btScalar*") @ByRef DoublePointer j2);
+public static native void getJs(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef DoubleBuffer j0, @Cast("btScalar*") @ByRef DoubleBuffer j1, @Cast("btScalar*") @ByRef DoubleBuffer j2);
+public static native void getJs(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Node a, @Const btSoftBody.Node b, @Const btSoftBody.Node c, @Const btSoftBody.Node p, @Cast("const btScalar") double dt, @Cast("btScalar*") @ByRef double[] j0, @Cast("btScalar*") @ByRef double[] j1, @Cast("btScalar*") @ByRef double[] j2);
 
-public static native @Cast("bool") boolean signDetermination1Internal(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float u0, @Cast("const btScalar") float u1, @Cast("const btScalar") float v0, @Cast("const btScalar") float v1);
+public static native @Cast("bool") boolean signDetermination1Internal(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double u0, @Cast("const btScalar") double u1, @Cast("const btScalar") double v0, @Cast("const btScalar") double v1);
 
-public static native @Cast("bool") boolean signDetermination2Internal(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float j0, @Cast("const btScalar") float j1, @Cast("const btScalar") float j2, @Cast("const btScalar") float u0, @Cast("const btScalar") float u1, @Cast("const btScalar") float v0, @Cast("const btScalar") float v1);
+public static native @Cast("bool") boolean signDetermination2Internal(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double j0, @Cast("const btScalar") double j1, @Cast("const btScalar") double j2, @Cast("const btScalar") double u0, @Cast("const btScalar") double u1, @Cast("const btScalar") double v0, @Cast("const btScalar") double v1);
 
-public static native @Cast("bool") boolean signDetermination1(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+public static native @Cast("bool") boolean signDetermination1(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt);
 
-public static native @Cast("bool") boolean signDetermination2(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+public static native @Cast("bool") boolean signDetermination2(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt);
 
-public static native @Cast("bool") boolean coplanarAndInsideTest(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
-public static native @Cast("bool") boolean conservativeCulling(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float mrg);
+public static native @Cast("bool") boolean coplanarAndInsideTest(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt);
+public static native @Cast("bool") boolean conservativeCulling(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double mrg);
 
-public static native @Cast("bool") boolean bernsteinVFTest(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float mrg, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt);
+public static native @Cast("bool") boolean bernsteinVFTest(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double mrg, @Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt);
 
-public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef FloatPointer k10, @Cast("btScalar*") @ByRef FloatPointer k20, @Cast("btScalar*") @ByRef FloatPointer k30, @Cast("btScalar*") @ByRef FloatPointer k21, @Cast("btScalar*") @ByRef FloatPointer k12);
-public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef FloatBuffer k10, @Cast("btScalar*") @ByRef FloatBuffer k20, @Cast("btScalar*") @ByRef FloatBuffer k30, @Cast("btScalar*") @ByRef FloatBuffer k21, @Cast("btScalar*") @ByRef FloatBuffer k12);
-public static native void deCasteljau(@Cast("const btScalar") float k0, @Cast("const btScalar") float k1, @Cast("const btScalar") float k2, @Cast("const btScalar") float k3, @Cast("const btScalar") float t0, @Cast("btScalar*") @ByRef float[] k10, @Cast("btScalar*") @ByRef float[] k20, @Cast("btScalar*") @ByRef float[] k30, @Cast("btScalar*") @ByRef float[] k21, @Cast("btScalar*") @ByRef float[] k12);
-public static native @Cast("bool") boolean bernsteinVFTest(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg);
+public static native void deCasteljau(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("btScalar*") @ByRef DoublePointer k10, @Cast("btScalar*") @ByRef DoublePointer k20, @Cast("btScalar*") @ByRef DoublePointer k30, @Cast("btScalar*") @ByRef DoublePointer k21, @Cast("btScalar*") @ByRef DoublePointer k12);
+public static native void deCasteljau(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("btScalar*") @ByRef DoubleBuffer k10, @Cast("btScalar*") @ByRef DoubleBuffer k20, @Cast("btScalar*") @ByRef DoubleBuffer k30, @Cast("btScalar*") @ByRef DoubleBuffer k21, @Cast("btScalar*") @ByRef DoubleBuffer k12);
+public static native void deCasteljau(@Cast("const btScalar") double k0, @Cast("const btScalar") double k1, @Cast("const btScalar") double k2, @Cast("const btScalar") double k3, @Cast("const btScalar") double t0, @Cast("btScalar*") @ByRef double[] k10, @Cast("btScalar*") @ByRef double[] k20, @Cast("btScalar*") @ByRef double[] k30, @Cast("btScalar*") @ByRef double[] k21, @Cast("btScalar*") @ByRef double[] k12);
+public static native @Cast("bool") boolean bernsteinVFTest(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("const btScalar") double mrg);
 
-public static native @Cast("bool") boolean continuousCollisionDetection(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
-public static native @Cast("bool") boolean bernsteinCCD(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") float dt, @Cast("const btScalar") float mrg, @ByRef btVector3 bary);
+public static native @Cast("bool") boolean continuousCollisionDetection(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("const btScalar") double mrg, @ByRef btVector3 bary);
+public static native @Cast("bool") boolean bernsteinCCD(@Const btSoftBody.Face face, @Const btSoftBody.Node node, @Cast("const btScalar") double dt, @Cast("const btScalar") double mrg, @ByRef btVector3 bary);
 
 //
 // btSymMatrix
@@ -1079,35 +1079,35 @@ public static native @Cast("bool") boolean bernsteinCCD(@Const btSoftBody.Face f
 //
 public static native @ByVal btMatrix3x3 Lerp(@Const @ByRef btMatrix3x3 a,
 							   @Const @ByRef btMatrix3x3 b,
-							   @Cast("btScalar") float t);
+							   @Cast("btScalar") double t);
 //
-public static native @ByVal btVector3 Clamp(@Const @ByRef btVector3 v, @Cast("btScalar") float maxlength);
-//
-//
+public static native @ByVal btVector3 Clamp(@Const @ByRef btVector3 v, @Cast("btScalar") double maxlength);
 //
 //
 //
 //
-public static native @Cast("btScalar") float ClusterMetric(@Const @ByRef btVector3 x, @Const @ByRef btVector3 y);
 //
-public static native @ByVal btMatrix3x3 ScaleAlongAxis(@Const @ByRef btVector3 a, @Cast("btScalar") float s);
+//
+public static native @Cast("btScalar") double ClusterMetric(@Const @ByRef btVector3 x, @Const @ByRef btVector3 y);
+//
+public static native @ByVal btMatrix3x3 ScaleAlongAxis(@Const @ByRef btVector3 a, @Cast("btScalar") double s);
 //
 public static native @ByVal btMatrix3x3 Cross(@Const @ByRef btVector3 v);
 //
-public static native @ByVal btMatrix3x3 Diagonal(@Cast("btScalar") float x);
+public static native @ByVal btMatrix3x3 Diagonal(@Cast("btScalar") double x);
 
 public static native @ByVal btMatrix3x3 Diagonal(@Const @ByRef btVector3 v);
 
-public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") FloatPointer a, @Cast("const btScalar*") FloatPointer b, int ndof);
-public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") FloatBuffer a, @Cast("const btScalar*") FloatBuffer b, int ndof);
-public static native @Cast("btScalar") float Dot(@Cast("const btScalar*") float[] a, @Cast("const btScalar*") float[] b, int ndof);
+public static native @Cast("btScalar") double Dot(@Cast("const btScalar*") DoublePointer a, @Cast("const btScalar*") DoublePointer b, int ndof);
+public static native @Cast("btScalar") double Dot(@Cast("const btScalar*") DoubleBuffer a, @Cast("const btScalar*") DoubleBuffer b, int ndof);
+public static native @Cast("btScalar") double Dot(@Cast("const btScalar*") double[] a, @Cast("const btScalar*") double[] b, int ndof);
 
-public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") FloatPointer v1, @Cast("const btScalar*") FloatPointer v2, @Cast("const btScalar*") FloatPointer v3,
-									   @Cast("const btScalar*") FloatPointer u1, @Cast("const btScalar*") FloatPointer u2, @Cast("const btScalar*") FloatPointer u3, int ndof);
-public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") FloatBuffer v1, @Cast("const btScalar*") FloatBuffer v2, @Cast("const btScalar*") FloatBuffer v3,
-									   @Cast("const btScalar*") FloatBuffer u1, @Cast("const btScalar*") FloatBuffer u2, @Cast("const btScalar*") FloatBuffer u3, int ndof);
-public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") float[] v1, @Cast("const btScalar*") float[] v2, @Cast("const btScalar*") float[] v3,
-									   @Cast("const btScalar*") float[] u1, @Cast("const btScalar*") float[] u2, @Cast("const btScalar*") float[] u3, int ndof);
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") DoublePointer v1, @Cast("const btScalar*") DoublePointer v2, @Cast("const btScalar*") DoublePointer v3,
+									   @Cast("const btScalar*") DoublePointer u1, @Cast("const btScalar*") DoublePointer u2, @Cast("const btScalar*") DoublePointer u3, int ndof);
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") DoubleBuffer v1, @Cast("const btScalar*") DoubleBuffer v2, @Cast("const btScalar*") DoubleBuffer v3,
+									   @Cast("const btScalar*") DoubleBuffer u1, @Cast("const btScalar*") DoubleBuffer u2, @Cast("const btScalar*") DoubleBuffer u3, int ndof);
+public static native @ByVal btMatrix3x3 OuterProduct(@Cast("const btScalar*") double[] v1, @Cast("const btScalar*") double[] v2, @Cast("const btScalar*") double[] v3,
+									   @Cast("const btScalar*") double[] u1, @Cast("const btScalar*") double[] u2, @Cast("const btScalar*") double[] u3, int ndof);
 
 public static native @ByVal btMatrix3x3 OuterProduct(@Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2);
 
@@ -1119,29 +1119,29 @@ public static native @ByVal btMatrix3x3 Sub(@Const @ByRef btMatrix3x3 a,
 							  @Const @ByRef btMatrix3x3 b);
 //
 public static native @ByVal btMatrix3x3 Mul(@Const @ByRef btMatrix3x3 a,
-							  @Cast("btScalar") float b);
+							  @Cast("btScalar") double b);
 //
 public static native void Orthogonalize(@ByRef btMatrix3x3 m);
 //
-public static native @ByVal btMatrix3x3 MassMatrix(@Cast("btScalar") float im, @Const @ByRef btMatrix3x3 iwi, @Const @ByRef btVector3 r);
+public static native @ByVal btMatrix3x3 MassMatrix(@Cast("btScalar") double im, @Const @ByRef btMatrix3x3 iwi, @Const @ByRef btVector3 r);
 
 //
-public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float dt,
-										@Cast("btScalar") float ima,
-										@Cast("btScalar") float imb,
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") double dt,
+										@Cast("btScalar") double ima,
+										@Cast("btScalar") double imb,
 										@Const @ByRef btMatrix3x3 iwi,
 										@Const @ByRef btVector3 r);
 
 //
-public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float dt,
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") double dt,
 										@Const @ByRef btMatrix3x3 effective_mass_inv,
-										@Cast("btScalar") float imb,
+										@Cast("btScalar") double imb,
 										@Const @ByRef btMatrix3x3 iwi,
 										@Const @ByRef btVector3 r);
 
 //
-public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") float ima, @Const @ByRef btMatrix3x3 iia, @Const @ByRef btVector3 ra,
-										@Cast("btScalar") float imb, @Const @ByRef btMatrix3x3 iib, @Const @ByRef btVector3 rb);
+public static native @ByVal btMatrix3x3 ImpulseMatrix(@Cast("btScalar") double ima, @Const @ByRef btMatrix3x3 iia, @Const @ByRef btVector3 ra,
+										@Cast("btScalar") double imb, @Const @ByRef btMatrix3x3 iib, @Const @ByRef btVector3 rb);
 
 //
 public static native @ByVal btMatrix3x3 AngularImpulseMatrix(@Const @ByRef btMatrix3x3 iia,
@@ -1158,36 +1158,36 @@ public static native @ByVal btVector3 ProjectOnPlane(@Const @ByRef btVector3 v,
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef FloatPointer sqd);
+								 @Cast("btScalar*") @ByRef DoublePointer sqd);
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef FloatBuffer sqd);
+								 @Cast("btScalar*") @ByRef DoubleBuffer sqd);
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef float[] sqd);
+								 @Cast("btScalar*") @ByRef double[] sqd);
 //
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @Const @ByRef btVector3 c,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef FloatPointer sqd);
+								 @Cast("btScalar*") @ByRef DoublePointer sqd);
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @Const @ByRef btVector3 c,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef FloatBuffer sqd);
+								 @Cast("btScalar*") @ByRef DoubleBuffer sqd);
 public static native void ProjectOrigin(@Const @ByRef btVector3 a,
 								 @Const @ByRef btVector3 b,
 								 @Const @ByRef btVector3 c,
 								 @ByRef btVector3 prj,
-								 @Cast("btScalar*") @ByRef float[] sqd);
+								 @Cast("btScalar*") @ByRef double[] sqd);
 
 //
-public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef FloatPointer t);
-public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef FloatBuffer t);
-public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef float[] t);
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef DoublePointer t);
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef DoubleBuffer t);
+public static native @Cast("bool") boolean rayIntersectsTriangle(@Const @ByRef btVector3 origin, @Const @ByRef btVector3 dir, @Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Cast("btScalar*") @ByRef double[] t);
 
 public static native @Cast("bool") boolean lineIntersectsTriangle(@Const @ByRef btVector3 rayStart, @Const @ByRef btVector3 rayEnd, @Const @ByRef btVector3 p1, @Const @ByRef btVector3 p2, @Const @ByRef btVector3 p3, @ByRef btVector3 sect, @ByRef btVector3 normal);
 
@@ -1199,15 +1199,15 @@ public static native @ByVal btVector3 BaryCoord(@Const @ByRef btVector3 a,
 								  @Const @ByRef btVector3 p);
 
 //
-public static native @Cast("btScalar") float ImplicitSolve(btSoftBody.ImplicitFn fn,
+public static native @Cast("btScalar") double ImplicitSolve(btSoftBody.ImplicitFn fn,
 									 @Const @ByRef btVector3 a,
 									 @Const @ByRef btVector3 b,
-									 @Cast("const btScalar") float accuracy,
+									 @Cast("const btScalar") double accuracy,
 									 int maxiterations/*=256*/);
-public static native @Cast("btScalar") float ImplicitSolve(btSoftBody.ImplicitFn fn,
+public static native @Cast("btScalar") double ImplicitSolve(btSoftBody.ImplicitFn fn,
 									 @Const @ByRef btVector3 a,
 									 @Const @ByRef btVector3 b,
-									 @Cast("const btScalar") float accuracy);
+									 @Cast("const btScalar") double accuracy);
 
 public static native void EvaluateMedium(@Const btSoftBodyWorldInfo wfi,
 								  @Const @ByRef btVector3 x,
@@ -1218,18 +1218,18 @@ public static native @ByVal btVector3 NormalizeAny(@Const @ByRef btVector3 v);
 
 //
 public static native @ByVal @Cast("btDbvtVolume*") btDbvtAabbMm VolumeOf(@Const @ByRef btSoftBody.Face f,
-									@Cast("btScalar") float margin);
+									@Cast("btScalar") double margin);
 
 //
 public static native @ByVal btVector3 CenterOf(@Const @ByRef btSoftBody.Face f);
 
 //
-public static native @Cast("btScalar") float AreaOf(@Const @ByRef btVector3 x0,
+public static native @Cast("btScalar") double AreaOf(@Const @ByRef btVector3 x0,
 							  @Const @ByRef btVector3 x1,
 							  @Const @ByRef btVector3 x2);
 
 //
-public static native @Cast("btScalar") float VolumeOf(@Const @ByRef btVector3 x0,
+public static native @Cast("btScalar") double VolumeOf(@Const @ByRef btVector3 x0,
 								@Const @ByRef btVector3 x1,
 								@Const @ByRef btVector3 x2,
 								@Const @ByRef btVector3 x3);
@@ -1239,7 +1239,7 @@ public static native @Cast("btScalar") float VolumeOf(@Const @ByRef btVector3 x0
 //
 public static native void ApplyClampedForce(@ByRef btSoftBody.Node n,
 									 @Const @ByRef btVector3 f,
-									 @Cast("btScalar") float dt);
+									 @Cast("btScalar") double dt);
 
 //
 public static native int MatchEdge(@Const btSoftBody.Node a,

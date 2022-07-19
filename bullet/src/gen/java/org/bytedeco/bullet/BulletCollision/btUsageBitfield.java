@@ -12,6 +12,7 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletCollision.class)

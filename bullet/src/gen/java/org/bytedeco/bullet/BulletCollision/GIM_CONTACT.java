@@ -32,8 +32,8 @@ public class GIM_CONTACT extends Pointer {
 
 	public native @ByRef btVector3 m_point(); public native GIM_CONTACT m_point(btVector3 setter);
 	public native @ByRef btVector3 m_normal(); public native GIM_CONTACT m_normal(btVector3 setter);
-	public native @Cast("btScalar") float m_depth(); public native GIM_CONTACT m_depth(float setter);     //Positive value indicates interpenetration
-	public native @Cast("btScalar") float m_distance(); public native GIM_CONTACT m_distance(float setter);  //Padding not for use
+	public native @Cast("btScalar") double m_depth(); public native GIM_CONTACT m_depth(double setter);     //Positive value indicates interpenetration
+	public native @Cast("btScalar") double m_distance(); public native GIM_CONTACT m_distance(double setter);  //Padding not for use
 	public native int m_feature1(); public native GIM_CONTACT m_feature1(int setter);       //Face number
 	public native int m_feature2(); public native GIM_CONTACT m_feature2(int setter);
 	public GIM_CONTACT() { super((Pointer)null); allocate(); }
@@ -43,9 +43,9 @@ public class GIM_CONTACT extends Pointer {
 	private native void allocate(@Const @ByRef GIM_CONTACT contact);
 
 	public GIM_CONTACT(@Const @ByRef btVector3 point, @Const @ByRef btVector3 normal,
-					@Cast("btScalar") float depth, int feature1, int feature2) { super((Pointer)null); allocate(point, normal, depth, feature1, feature2); }
+					@Cast("btScalar") double depth, int feature1, int feature2) { super((Pointer)null); allocate(point, normal, depth, feature1, feature2); }
 	private native void allocate(@Const @ByRef btVector3 point, @Const @ByRef btVector3 normal,
-					@Cast("btScalar") float depth, int feature1, int feature2);
+					@Cast("btScalar") double depth, int feature1, int feature2);
 
 	/** Calcs key for coord classification */
 	public native @Cast("unsigned int") int calc_key_contact();

@@ -33,14 +33,14 @@ public class btSpatialForceVector extends Pointer {
 	private native void allocate();
 	public btSpatialForceVector(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear) { super((Pointer)null); allocate(angular, linear); }
 	private native void allocate(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
-	public btSpatialForceVector(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz) { super((Pointer)null); allocate(ax, ay, az, lx, ly, lz); }
-	private native void allocate(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz);
+	public btSpatialForceVector(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz) { super((Pointer)null); allocate(ax, ay, az, lx, ly, lz); }
+	private native void allocate(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz);
 	//
 	public native void setVector(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
-	public native void setValue(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz);
+	public native void setValue(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz);
 	//
 	public native void addVector(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
-	public native void addValue(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz);
+	public native void addValue(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz);
 	//
 	public native @Const @ByRef btVector3 getLinear();
 	public native @Const @ByRef btVector3 getAngular();
@@ -58,6 +58,6 @@ public class btSpatialForceVector extends Pointer {
 	public native @ByVal @Name("operator -") btSpatialForceVector subtract(@Const @ByRef btSpatialForceVector vec);
 	public native @ByVal @Name("operator +") btSpatialForceVector add(@Const @ByRef btSpatialForceVector vec);
 	public native @ByVal @Name("operator -") btSpatialForceVector subtract();
-	public native @ByVal @Name("operator *") btSpatialForceVector multiply(@Cast("const btScalar") float s);
+	public native @ByVal @Name("operator *") btSpatialForceVector multiply(@Cast("const btScalar") double s);
 	//btSpatialForceVector & operator = (const btSpatialForceVector &vec) { m_topVec = vec.m_topVec; m_bottomVec = vec.m_bottomVec; return *this; }
 }

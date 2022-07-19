@@ -60,7 +60,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Common/shared/b3Mat3x3.h",
                 "Bullet3Common/shared/b3PlatformDefinitions.h",
             },
-            link = "Bullet3Common@.3.20"
+            link = "Bullet3Common@.3.24",
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}
         )
     },
     target = "org.bytedeco.bullet.Bullet3Common",

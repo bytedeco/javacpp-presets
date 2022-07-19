@@ -102,7 +102,7 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 
 	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 linVelA, @Const @ByRef btVector3 linVelB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
 
-	public native void updateRHS(@Cast("btScalar") float timeStep);
+	public native void updateRHS(@Cast("btScalar") double timeStep);
 
 	/** Get the rotation axis in global coordinates
 	/**
@@ -114,13 +114,13 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 	/**
 	\pre btGeneric6DofConstraint::calculateTransforms() must be called previously.
 	*/
-	public native @Cast("btScalar") float getAngle(int axis_index);
+	public native @Cast("btScalar") double getAngle(int axis_index);
 
 	/** Get the relative position of the constraint pivot
 	/**
 	\pre btGeneric6DofConstraint::calculateTransforms() must be called previously.
 	*/
-	public native @Cast("btScalar") float getRelativePivotPosition(int axis_index);
+	public native @Cast("btScalar") double getRelativePivotPosition(int axis_index);
 
 	public native void setFrames(@Const @ByRef btTransform frameA, @Const @ByRef btTransform frameB);
 
@@ -154,7 +154,7 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 	public native btTranslationalLimitMotor getTranslationalLimitMotor();
 
 	//first 3 are linear, next 3 are angular
-	public native void setLimit(int axis, @Cast("btScalar") float lo, @Cast("btScalar") float hi);
+	public native void setLimit(int axis, @Cast("btScalar") double lo, @Cast("btScalar") double hi);
 
 	/** Test limit
 	/**
@@ -183,11 +183,11 @@ public class btGeneric6DofConstraint extends btTypedConstraint {
 
 	/**override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	 * If no axis is provided, it uses the default axis for this constraint. */
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native void setAxis(@Const @ByRef btVector3 axis1, @Const @ByRef btVector3 axis2);
 

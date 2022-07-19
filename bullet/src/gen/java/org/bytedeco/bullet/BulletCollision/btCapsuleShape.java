@@ -23,18 +23,18 @@ public class btCapsuleShape extends btConvexInternalShape {
     public btCapsuleShape(Pointer p) { super(p); }
 
 
-	public btCapsuleShape(@Cast("btScalar") float radius, @Cast("btScalar") float height) { super((Pointer)null); allocate(radius, height); }
-	private native void allocate(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public btCapsuleShape(@Cast("btScalar") double radius, @Cast("btScalar") double height) { super((Pointer)null); allocate(radius, height); }
+	private native void allocate(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 
 	/**CollisionShape Interface */
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	/** btConvexShape Interface */
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void setMargin(@Cast("btScalar") float collisionMargin);
+	public native void setMargin(@Cast("btScalar") double collisionMargin);
 
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
@@ -42,9 +42,9 @@ public class btCapsuleShape extends btConvexInternalShape {
 
 	public native int getUpAxis();
 
-	public native @Cast("btScalar") float getRadius();
+	public native @Cast("btScalar") double getRadius();
 
-	public native @Cast("btScalar") float getHalfHeight();
+	public native @Cast("btScalar") double getHalfHeight();
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 

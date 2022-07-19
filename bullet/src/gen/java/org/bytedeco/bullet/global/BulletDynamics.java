@@ -166,9 +166,9 @@ and swing 1 and 2 are along the z and y axes respectively.
 // #include "btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btConeTwistConstraintData2 btConeTwistConstraintDoubleData
+public static final String btConeTwistConstraintDataName = "btConeTwistConstraintDoubleData";
 // #else
-// #define btConeTwistConstraintData2 btConeTwistConstraintData
-public static final String btConeTwistConstraintDataName = "btConeTwistConstraintData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** enum btConeTwistFlags */
@@ -262,18 +262,18 @@ subject to the following restrictions:
 
 
 /**very basic collision resolution without friction */
-public static native @Cast("btScalar") float resolveSingleCollision(btRigidBody body1, btCollisionObject colObj2, @Const @ByRef btVector3 contactPositionWorld, @Const @ByRef btVector3 contactNormalOnB, @Const @ByRef btContactSolverInfo solverInfo, @Cast("btScalar") float distance);
+public static native @Cast("btScalar") double resolveSingleCollision(btRigidBody body1, btCollisionObject colObj2, @Const @ByRef btVector3 contactPositionWorld, @Const @ByRef btVector3 contactNormalOnB, @Const @ByRef btContactSolverInfo solverInfo, @Cast("btScalar") double distance);
 
 /**resolveSingleBilateral is an obsolete methods used for vehicle friction between two dynamic objects */
 public static native void resolveSingleBilateral(@ByRef btRigidBody body1, @Const @ByRef btVector3 pos1,
 							@ByRef btRigidBody body2, @Const @ByRef btVector3 pos2,
-							@Cast("btScalar") float distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef FloatPointer impulse, @Cast("btScalar") float timeStep);
+							@Cast("btScalar") double distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef DoublePointer impulse, @Cast("btScalar") double timeStep);
 public static native void resolveSingleBilateral(@ByRef btRigidBody body1, @Const @ByRef btVector3 pos1,
 							@ByRef btRigidBody body2, @Const @ByRef btVector3 pos2,
-							@Cast("btScalar") float distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef FloatBuffer impulse, @Cast("btScalar") float timeStep);
+							@Cast("btScalar") double distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef DoubleBuffer impulse, @Cast("btScalar") double timeStep);
 public static native void resolveSingleBilateral(@ByRef btRigidBody body1, @Const @ByRef btVector3 pos1,
 							@ByRef btRigidBody body2, @Const @ByRef btVector3 pos2,
-							@Cast("btScalar") float distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef float[] impulse, @Cast("btScalar") float timeStep);
+							@Cast("btScalar") double distance, @Const @ByRef btVector3 normal, @Cast("btScalar*") @ByRef double[] impulse, @Cast("btScalar") double timeStep);
 
 // #endif  //BT_CONTACT_CONSTRAINT_H
 
@@ -381,9 +381,8 @@ subject to the following restrictions:
 // #include "BulletDynamics/ConstraintSolver/btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btGearConstraintData btGearConstraintFloatData
-public static final String btGearConstraintDataName = "btGearConstraintFloatData";
+// #define btGearConstraintData btGearConstraintDoubleData
+public static final String btGearConstraintDataName = "btGearConstraintDoubleData";
 // Targeting ../BulletDynamics/btGearConstraint.java
 
 
@@ -437,9 +436,8 @@ http://gimpact.sf.net
 // #include "btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btGeneric6DofConstraintData2 btGeneric6DofConstraintData
-public static final String btGeneric6DofConstraintDataName = "btGeneric6DofConstraintData";
+// #define btGeneric6DofConstraintData2 btGeneric6DofConstraintDoubleData2
+public static final String btGeneric6DofConstraintDataName = "btGeneric6DofConstraintDoubleData2";
 // Targeting ../BulletDynamics/btRotationalLimitMotor.java
 
 
@@ -520,9 +518,9 @@ http://gimpact.sf.net
 // #include "btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btGeneric6DofSpring2ConstraintData2 btGeneric6DofSpring2ConstraintDoubleData2
+public static final String btGeneric6DofSpring2ConstraintDataName = "btGeneric6DofSpring2ConstraintDoubleData2";
 // #else
-// #define btGeneric6DofSpring2ConstraintData2 btGeneric6DofSpring2ConstraintData
-public static final String btGeneric6DofSpring2ConstraintDataName = "btGeneric6DofSpring2ConstraintData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** enum RotateOrder */
@@ -590,9 +588,8 @@ subject to the following restrictions:
 // #include "btGeneric6DofConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btGeneric6DofSpringConstraintData2 btGeneric6DofSpringConstraintData
-public static final String btGeneric6DofSpringConstraintDataName = "btGeneric6DofSpringConstraintData";
+// #define btGeneric6DofSpringConstraintData2 btGeneric6DofSpringConstraintDoubleData2
+public static final String btGeneric6DofSpringConstraintDataName = "btGeneric6DofSpringConstraintDoubleData2";
 // Targeting ../BulletDynamics/btGeneric6DofSpringConstraint.java
 
 
@@ -670,9 +667,9 @@ public static final int _BT_USE_CENTER_LIMIT_ = 1;
 // #include "btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btHingeConstraintData btHingeConstraintDoubleData2  //rename to 2 for backwards compatibility, so we can still load the 'btHingeConstraintDoubleData' version
+public static final String btHingeConstraintDataName = "btHingeConstraintDoubleData2";
 // #else
-// #define btHingeConstraintData btHingeConstraintFloatData
-public static final String btHingeConstraintDataName = "btHingeConstraintFloatData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** enum btHingeFlags */
@@ -786,9 +783,8 @@ subject to the following restrictions:
 // #include "btTypedConstraint.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btPoint2PointConstraintData2 btPoint2PointConstraintFloatData
-public static final String btPoint2PointConstraintDataName = "btPoint2PointConstraintFloatData";
+// #define btPoint2PointConstraintData2 btPoint2PointConstraintDoubleData2
+public static final String btPoint2PointConstraintDataName = "btPoint2PointConstraintDoubleData2";
 // Targeting ../BulletDynamics/btConstraintSetting.java
 
 
@@ -928,9 +924,9 @@ TODO:
 // #include "LinearMath/btScalar.h"  //for BT_USE_DOUBLE_PRECISION
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btSliderConstraintData2 btSliderConstraintDoubleData
+public static final String btSliderConstraintDataName = "btSliderConstraintDoubleData";
 // #else
-// #define btSliderConstraintData2 btSliderConstraintData
-public static final String btSliderConstraintDataName = "btSliderConstraintData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 // #include "LinearMath/btVector3.h"
@@ -1105,13 +1101,13 @@ subject to the following restrictions:
 // #include "BulletCollision/BroadphaseCollision/btBroadphaseProxy.h"
 // #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 
-public static native @Cast("btScalar") float gDeactivationTime(); public static native void gDeactivationTime(float setter);
+public static native @Cast("btScalar") double gDeactivationTime(); public static native void gDeactivationTime(double setter);
 public static native @Cast("bool") boolean gDisableDeactivation(); public static native void gDisableDeactivation(boolean setter);
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btRigidBodyData btRigidBodyDoubleData
+public static final String btRigidBodyDataName = "btRigidBodyDoubleData";
 // #else
-// #define btRigidBodyData btRigidBodyFloatData
-public static final String btRigidBodyDataName = "btRigidBodyFloatData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** enum btRigidBodyFlags */
@@ -1162,9 +1158,9 @@ subject to the following restrictions:
 // #include "BulletDynamics/Dynamics/btRigidBody.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btTypedConstraintData2 btTypedConstraintDoubleData
+public static final String btTypedConstraintDataName = "btTypedConstraintDoubleData";
 // #else
-// #define btTypedConstraintData2 btTypedConstraintFloatData
-public static final String btTypedConstraintDataName = "btTypedConstraintFloatData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 //Don't change any of the existing enum values, so add enum types at the end for serialization compatibility
@@ -1202,7 +1198,7 @@ public static final int
 
 // returns angle in range [-SIMD_2_PI, SIMD_2_PI], closest to one of the limits
 // all arguments should be normalized angles (i.e. in range [-SIMD_PI, SIMD_PI])
-public static native @Cast("btScalar") float btAdjustAngleToLimits(@Cast("btScalar") float angleInRadians, @Cast("btScalar") float angleLowerLimitInRadians, @Cast("btScalar") float angleUpperLimitInRadians);
+public static native @Cast("btScalar") double btAdjustAngleToLimits(@Cast("btScalar") double angleInRadians, @Cast("btScalar") double angleLowerLimitInRadians, @Cast("btScalar") double angleUpperLimitInRadians);
 // Targeting ../BulletDynamics/btTypedConstraintFloatData.java
 
 
@@ -1581,11 +1577,11 @@ subject to the following restrictions:
 
 /**serialization data, don't change them if you are not familiar with the details of the serialization mechanisms */
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btMultiBodyData btMultiBodyDoubleData
+public static final String btMultiBodyDataName = "btMultiBodyDoubleData";
+// #define btMultiBodyLinkData btMultiBodyLinkDoubleData
+public static final String btMultiBodyLinkDataName = "btMultiBodyLinkDoubleData";
 // #else
-// #define btMultiBodyData btMultiBodyFloatData
-public static final String btMultiBodyDataName = "btMultiBodyFloatData";
-// #define btMultiBodyLinkData btMultiBodyLinkFloatData
-public static final String btMultiBodyLinkDataName = "btMultiBodyLinkFloatData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 // #include "btMultiBodyLink.h"
@@ -2012,9 +2008,8 @@ subject to the following restrictions:
 // #include "LinearMath/btSerializer.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btMultiBodyLinkColliderData btMultiBodyLinkColliderFloatData
-public static final String btMultiBodyLinkColliderDataName = "btMultiBodyLinkColliderFloatData";
+// #define btMultiBodyLinkColliderData btMultiBodyLinkColliderDoubleData
+public static final String btMultiBodyLinkColliderDataName = "btMultiBodyLinkColliderDoubleData";
 // Targeting ../BulletDynamics/btMultiBodyLinkCollider.java
 
 
@@ -2213,12 +2208,12 @@ to be implemented. the first `nub' variables are assumed to have findex < 0.
 
 
 //return false if solving failed
-public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") FloatPointer A, @Cast("btScalar*") FloatPointer x, @Cast("btScalar*") FloatPointer b, @Cast("btScalar*") FloatPointer w,
-					   int nub, @Cast("btScalar*") FloatPointer lo, @Cast("btScalar*") FloatPointer hi, IntPointer findex, @ByRef btDantzigScratchMemory scratch);
-public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") FloatBuffer A, @Cast("btScalar*") FloatBuffer x, @Cast("btScalar*") FloatBuffer b, @Cast("btScalar*") FloatBuffer w,
-					   int nub, @Cast("btScalar*") FloatBuffer lo, @Cast("btScalar*") FloatBuffer hi, IntBuffer findex, @ByRef btDantzigScratchMemory scratch);
-public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") float[] A, @Cast("btScalar*") float[] x, @Cast("btScalar*") float[] b, @Cast("btScalar*") float[] w,
-					   int nub, @Cast("btScalar*") float[] lo, @Cast("btScalar*") float[] hi, int[] findex, @ByRef btDantzigScratchMemory scratch);
+public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") DoublePointer A, @Cast("btScalar*") DoublePointer x, @Cast("btScalar*") DoublePointer b, @Cast("btScalar*") DoublePointer w,
+					   int nub, @Cast("btScalar*") DoublePointer lo, @Cast("btScalar*") DoublePointer hi, IntPointer findex, @ByRef btDantzigScratchMemory scratch);
+public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") DoubleBuffer A, @Cast("btScalar*") DoubleBuffer x, @Cast("btScalar*") DoubleBuffer b, @Cast("btScalar*") DoubleBuffer w,
+					   int nub, @Cast("btScalar*") DoubleBuffer lo, @Cast("btScalar*") DoubleBuffer hi, IntBuffer findex, @ByRef btDantzigScratchMemory scratch);
+public static native @Cast("bool") boolean btSolveDantzigLCP(int n, @Cast("btScalar*") double[] A, @Cast("btScalar*") double[] x, @Cast("btScalar*") double[] b, @Cast("btScalar*") double[] w,
+					   int nub, @Cast("btScalar*") double[] lo, @Cast("btScalar*") double[] hi, int[] findex, @ByRef btDantzigScratchMemory scratch);
 
 // #endif  //_BT_LCP_H_
 

@@ -33,13 +33,13 @@ public class btLemkeSolver extends btMLCPSolverInterface {
         return new btLemkeSolver((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_maxValue(); public native btLemkeSolver m_maxValue(float setter);
+	public native @Cast("btScalar") double m_maxValue(); public native btLemkeSolver m_maxValue(double setter);
 	public native int m_debugLevel(); public native btLemkeSolver m_debugLevel(int setter);
 	public native int m_maxLoops(); public native btLemkeSolver m_maxLoops(int setter);
 	public native @Cast("bool") boolean m_useLoHighBounds(); public native btLemkeSolver m_useLoHighBounds(boolean setter);
 
 	public btLemkeSolver() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations);
 }

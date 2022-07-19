@@ -58,7 +58,7 @@ public class btGjkEpaSolver2 extends Pointer {
 		public native @ByRef btVector3 witnesses(int i); public native sResults witnesses(int i, btVector3 setter);
 		@MemberGetter public native btVector3 witnesses();
 		public native @ByRef btVector3 normal(); public native sResults normal(btVector3 setter);
-		public native @Cast("btScalar") float distance(); public native sResults distance(float setter);
+		public native @Cast("btScalar") double distance(); public native sResults distance(double setter);
 	}
 
 	public static native int StackSizeRequirement();
@@ -78,8 +78,8 @@ public class btGjkEpaSolver2 extends Pointer {
 								@Const @ByRef btVector3 guess,
 								@ByRef sResults results);
 // #ifndef __SPU__
-	public static native @Cast("btScalar") float SignedDistance(@Const @ByRef btVector3 _position,
-									   @Cast("btScalar") float margin,
+	public static native @Cast("btScalar") double SignedDistance(@Const @ByRef btVector3 _position,
+									   @Cast("btScalar") double margin,
 									   @Const btConvexShape shape,
 									   @Const @ByRef btTransform wtrs,
 									   @ByRef sResults results);

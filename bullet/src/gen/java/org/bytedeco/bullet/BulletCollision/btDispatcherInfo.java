@@ -34,17 +34,17 @@ public class btDispatcherInfo extends Pointer {
 		DISPATCH_CONTINUOUS = 2;
 	public btDispatcherInfo() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public native @Cast("btScalar") float m_timeStep(); public native btDispatcherInfo m_timeStep(float setter);
+	public native @Cast("btScalar") double m_timeStep(); public native btDispatcherInfo m_timeStep(double setter);
 	public native int m_stepCount(); public native btDispatcherInfo m_stepCount(int setter);
 	public native int m_dispatchFunc(); public native btDispatcherInfo m_dispatchFunc(int setter);
-	public native @Cast("btScalar") float m_timeOfImpact(); public native btDispatcherInfo m_timeOfImpact(float setter);
+	public native @Cast("btScalar") double m_timeOfImpact(); public native btDispatcherInfo m_timeOfImpact(double setter);
 	public native @Cast("bool") boolean m_useContinuous(); public native btDispatcherInfo m_useContinuous(boolean setter);
 	public native btIDebugDraw m_debugDraw(); public native btDispatcherInfo m_debugDraw(btIDebugDraw setter);
 	public native @Cast("bool") boolean m_enableSatConvex(); public native btDispatcherInfo m_enableSatConvex(boolean setter);
 	public native @Cast("bool") boolean m_enableSPU(); public native btDispatcherInfo m_enableSPU(boolean setter);
 	public native @Cast("bool") boolean m_useEpa(); public native btDispatcherInfo m_useEpa(boolean setter);
-	public native @Cast("btScalar") float m_allowedCcdPenetration(); public native btDispatcherInfo m_allowedCcdPenetration(float setter);
+	public native @Cast("btScalar") double m_allowedCcdPenetration(); public native btDispatcherInfo m_allowedCcdPenetration(double setter);
 	public native @Cast("bool") boolean m_useConvexConservativeDistanceUtil(); public native btDispatcherInfo m_useConvexConservativeDistanceUtil(boolean setter);
-	public native @Cast("btScalar") float m_convexConservativeDistanceThreshold(); public native btDispatcherInfo m_convexConservativeDistanceThreshold(float setter);
+	public native @Cast("btScalar") double m_convexConservativeDistanceThreshold(); public native btDispatcherInfo m_convexConservativeDistanceThreshold(double setter);
 	public native @Cast("bool") boolean m_deterministicOverlappingPairs(); public native btDispatcherInfo m_deterministicOverlappingPairs(boolean setter);
 }

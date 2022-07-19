@@ -87,7 +87,7 @@ public class btSoftBodyHelpers extends Pointer {
 									   int resy,
 									   int fixeds,
 									   @Cast("bool") boolean gendiags,
-									   @Cast("btScalar") float perturbation/*=0.*/);
+									   @Cast("btScalar") double perturbation/*=0.*/);
 	public static native btSoftBody CreatePatch(@ByRef btSoftBodyWorldInfo worldInfo,
 									   @Const @ByRef btVector3 corner00,
 									   @Const @ByRef btVector3 corner10,
@@ -145,30 +145,30 @@ public class btSoftBodyHelpers extends Pointer {
 										   int res);
 	/* Create from trimesh													*/
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") FloatPointer vertices,
+											 @Cast("const btScalar*") DoublePointer vertices,
 											 @Const IntPointer triangles,
 											 int ntriangles,
 											 @Cast("bool") boolean randomizeConstraints/*=true*/);
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") FloatPointer vertices,
+											 @Cast("const btScalar*") DoublePointer vertices,
 											 @Const IntPointer triangles,
 											 int ntriangles);
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") FloatBuffer vertices,
+											 @Cast("const btScalar*") DoubleBuffer vertices,
 											 @Const IntBuffer triangles,
 											 int ntriangles,
 											 @Cast("bool") boolean randomizeConstraints/*=true*/);
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") FloatBuffer vertices,
+											 @Cast("const btScalar*") DoubleBuffer vertices,
 											 @Const IntBuffer triangles,
 											 int ntriangles);
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") float[] vertices,
+											 @Cast("const btScalar*") double[] vertices,
 											 @Const int[] triangles,
 											 int ntriangles,
 											 @Cast("bool") boolean randomizeConstraints/*=true*/);
 	public static native btSoftBody CreateFromTriMesh(@ByRef btSoftBodyWorldInfo worldInfo,
-											 @Cast("const btScalar*") float[] vertices,
+											 @Cast("const btScalar*") double[] vertices,
 											 @Const int[] triangles,
 											 int ntriangles);
 	/* Create from convex-hull												*/

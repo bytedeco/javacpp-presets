@@ -62,7 +62,7 @@ public class btConvexPointCloudShape extends btPolyhedralConvexAabbCachingShape 
 	public native void getVertex(int i, @ByRef btVector3 vtx);
 	public native int getNumPlanes();
 	public native void getPlane(@ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport, int i);
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 
 	/**in case we receive negative scaling */
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);

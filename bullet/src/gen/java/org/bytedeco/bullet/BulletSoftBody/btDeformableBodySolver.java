@@ -46,27 +46,27 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	// update soft body normals
 	public native void updateSoftBodies();
 
-	public native @Cast("btScalar") float solveContactConstraints(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
-	public native @Cast("btScalar") float solveContactConstraints(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveContactConstraints(@Cast("btCollisionObject**") PointerPointer deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveContactConstraints(@ByPtrPtr btCollisionObject deformableBodies, int numDeformableBodies, @Const @ByRef btContactSolverInfo infoGlobal);
 
 	// solve the momentum equation
-	public native void solveDeformableConstraints(@Cast("btScalar") float solverdt);
+	public native void solveDeformableConstraints(@Cast("btScalar") double solverdt);
 
 	// set gravity (get from deformable world)
 	public native void setGravity(@Const @ByRef btVector3 gravity);
 
 	// resize/clear data structures
-	public native void reinitialize(@Const @ByRef btSoftBodyArray softBodies, @Cast("btScalar") float dt);
+	public native void reinitialize(@Const @ByRef btSoftBodyArray softBodies, @Cast("btScalar") double dt);
 
 	// set up contact constraints
 	public native void setConstraints(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	// add in elastic forces and gravity to obtain v_{n+1}^* and calls predictDeformableMotion
-	public native void predictMotion(@Cast("btScalar") float solverdt);
+	public native void predictMotion(@Cast("btScalar") double solverdt);
 
 	// move to temporary position x_{n+1}^* = x_n + dt * v_{n+1}^*
 	// x_{n+1}^* is stored in m_q
-	public native void predictDeformableMotion(btSoftBody psb, @Cast("btScalar") float dt);
+	public native void predictDeformableMotion(btSoftBody psb, @Cast("btScalar") double dt);
 
 	// save the current velocity to m_backupVelocity
 	public native void backupVelocity();
@@ -87,8 +87,8 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	public native void computeStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual);
 
 	// calculate the change in dv resulting from the momentum solve when line search is turned on
-	public native @Cast("btScalar") float computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual, @Cast("bool") boolean verbose/*=false*/);
-	public native @Cast("btScalar") float computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual);
+	public native @Cast("btScalar") double computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual, @Cast("bool") boolean verbose/*=false*/);
+	public native @Cast("btScalar") double computeDescentStep(@ByRef btVector3Array ddv, @Const @ByRef btVector3Array residual);
 
 	public native void copySoftBodyToVertexBuffer(@Const btSoftBody softBody, btVertexBufferDescriptor vertexBuffer);
 
@@ -110,7 +110,7 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	public native void updateState();
 
 	// set dv = dv + scale * ddv
-	public native void updateDv(@Cast("btScalar") float scale/*=1*/);
+	public native void updateDv(@Cast("btScalar") double scale/*=1*/);
 	public native void updateDv();
 
 	// set temporary position x^* = x_n + dt * v^*
@@ -126,18 +126,18 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	// set v^* = v_n + dv
 	// set temporary position x^* = x_n + dt * v^*
 	// update the deformation gradient at position x^*
-	public native void updateEnergy(@Cast("btScalar") float scale);
+	public native void updateEnergy(@Cast("btScalar") double scale);
 
 	// calculates the appropriately scaled kinetic energy in the system, which is
 	// 1/2 * dv^T * M * dv
 	// used in line search
-	public native @Cast("btScalar") float kineticEnergy();
+	public native @Cast("btScalar") double kineticEnergy();
 
 	// add explicit force to the velocity in the objective class
 	public native void applyExplicitForce();
 
 	// execute position/velocity update and apply anchor constraints in the integrateTransforms from the Dynamics world
-	public native void applyTransforms(@Cast("btScalar") float timeStep);
+	public native void applyTransforms(@Cast("btScalar") double timeStep);
 
 	public native void setStrainLimiting(@Cast("bool") boolean opt);
 
@@ -158,7 +158,7 @@ public class btDeformableBodySolver extends btSoftBodySolver {
 	// unused functions
 	public native void optimize(@ByRef btSoftBodyArray softBodies, @Cast("bool") boolean forceUpdate/*=false*/);
 	public native void optimize(@ByRef btSoftBodyArray softBodies);
-	public native void solveConstraints(@Cast("btScalar") float dt);
+	public native void solveConstraints(@Cast("btScalar") double dt);
 	public native @Cast("bool") boolean checkInitialized();
 	public native void copyBackToSoftBodies(@Cast("bool") boolean bMove/*=true*/);
 	public native void copyBackToSoftBodies();

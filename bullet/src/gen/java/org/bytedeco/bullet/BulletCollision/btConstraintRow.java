@@ -34,11 +34,11 @@ public class btConstraintRow extends Pointer {
         return new btConstraintRow((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_normal(int i); public native btConstraintRow m_normal(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_normal();
-	public native @Cast("btScalar") float m_rhs(); public native btConstraintRow m_rhs(float setter);
-	public native @Cast("btScalar") float m_jacDiagInv(); public native btConstraintRow m_jacDiagInv(float setter);
-	public native @Cast("btScalar") float m_lowerLimit(); public native btConstraintRow m_lowerLimit(float setter);
-	public native @Cast("btScalar") float m_upperLimit(); public native btConstraintRow m_upperLimit(float setter);
-	public native @Cast("btScalar") float m_accumImpulse(); public native btConstraintRow m_accumImpulse(float setter);
+	public native @Cast("btScalar") double m_normal(int i); public native btConstraintRow m_normal(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_normal();
+	public native @Cast("btScalar") double m_rhs(); public native btConstraintRow m_rhs(double setter);
+	public native @Cast("btScalar") double m_jacDiagInv(); public native btConstraintRow m_jacDiagInv(double setter);
+	public native @Cast("btScalar") double m_lowerLimit(); public native btConstraintRow m_lowerLimit(double setter);
+	public native @Cast("btScalar") double m_upperLimit(); public native btConstraintRow m_upperLimit(double setter);
+	public native @Cast("btScalar") double m_accumImpulse(); public native btConstraintRow m_accumImpulse(double setter);
 }

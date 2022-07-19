@@ -38,6 +38,6 @@ public class btSoftBodyCollisionShape extends btConcaveShape {
 
 	public native void setLocalScaling(@Const @ByRef btVector3 arg0);
 	public native @Const @ByRef btVector3 getLocalScaling();
-	public native void calculateLocalInertia(@Cast("btScalar") float arg0, @ByRef btVector3 arg1);
+	public native void calculateLocalInertia(@Cast("btScalar") double arg0, @ByRef btVector3 arg1);
 	public native @Cast("const char*") BytePointer getName();
 }

@@ -39,7 +39,7 @@ public class btRigidBody extends btCollisionObject {
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public btRigidBodyConstructionInfo(Pointer p) { super(p); }
 	
-		public native @Cast("btScalar") float m_mass(); public native btRigidBodyConstructionInfo m_mass(float setter);
+		public native @Cast("btScalar") double m_mass(); public native btRigidBodyConstructionInfo m_mass(double setter);
 
 		/**When a motionState is provided, the rigid body will initialize its world transform from the motion state
 		 * In this case, m_startWorldTransform is ignored. */
@@ -48,34 +48,34 @@ public class btRigidBody extends btCollisionObject {
 
 		public native btCollisionShape m_collisionShape(); public native btRigidBodyConstructionInfo m_collisionShape(btCollisionShape setter);
 		public native @ByRef btVector3 m_localInertia(); public native btRigidBodyConstructionInfo m_localInertia(btVector3 setter);
-		public native @Cast("btScalar") float m_linearDamping(); public native btRigidBodyConstructionInfo m_linearDamping(float setter);
-		public native @Cast("btScalar") float m_angularDamping(); public native btRigidBodyConstructionInfo m_angularDamping(float setter);
+		public native @Cast("btScalar") double m_linearDamping(); public native btRigidBodyConstructionInfo m_linearDamping(double setter);
+		public native @Cast("btScalar") double m_angularDamping(); public native btRigidBodyConstructionInfo m_angularDamping(double setter);
 
 		/**best simulation results when friction is non-zero */
-		public native @Cast("btScalar") float m_friction(); public native btRigidBodyConstructionInfo m_friction(float setter);
+		public native @Cast("btScalar") double m_friction(); public native btRigidBodyConstructionInfo m_friction(double setter);
 		/**the m_rollingFriction prevents rounded shapes, such as spheres, cylinders and capsules from rolling forever.
 		 * See Bullet/Demos/RollingFrictionDemo for usage */
-		public native @Cast("btScalar") float m_rollingFriction(); public native btRigidBodyConstructionInfo m_rollingFriction(float setter);
-		public native @Cast("btScalar") float m_spinningFriction(); public native btRigidBodyConstructionInfo m_spinningFriction(float setter);  //torsional friction around contact normal
+		public native @Cast("btScalar") double m_rollingFriction(); public native btRigidBodyConstructionInfo m_rollingFriction(double setter);
+		public native @Cast("btScalar") double m_spinningFriction(); public native btRigidBodyConstructionInfo m_spinningFriction(double setter);  //torsional friction around contact normal
 
 		/**best simulation results using zero restitution. */
-		public native @Cast("btScalar") float m_restitution(); public native btRigidBodyConstructionInfo m_restitution(float setter);
+		public native @Cast("btScalar") double m_restitution(); public native btRigidBodyConstructionInfo m_restitution(double setter);
 
-		public native @Cast("btScalar") float m_linearSleepingThreshold(); public native btRigidBodyConstructionInfo m_linearSleepingThreshold(float setter);
-		public native @Cast("btScalar") float m_angularSleepingThreshold(); public native btRigidBodyConstructionInfo m_angularSleepingThreshold(float setter);
+		public native @Cast("btScalar") double m_linearSleepingThreshold(); public native btRigidBodyConstructionInfo m_linearSleepingThreshold(double setter);
+		public native @Cast("btScalar") double m_angularSleepingThreshold(); public native btRigidBodyConstructionInfo m_angularSleepingThreshold(double setter);
 
 		//Additional damping can help avoiding lowpass jitter motion, help stability for ragdolls etc.
 		//Such damping is undesirable, so once the overall simulation quality of the rigid body dynamics system has improved, this should become obsolete
 		public native @Cast("bool") boolean m_additionalDamping(); public native btRigidBodyConstructionInfo m_additionalDamping(boolean setter);
-		public native @Cast("btScalar") float m_additionalDampingFactor(); public native btRigidBodyConstructionInfo m_additionalDampingFactor(float setter);
-		public native @Cast("btScalar") float m_additionalLinearDampingThresholdSqr(); public native btRigidBodyConstructionInfo m_additionalLinearDampingThresholdSqr(float setter);
-		public native @Cast("btScalar") float m_additionalAngularDampingThresholdSqr(); public native btRigidBodyConstructionInfo m_additionalAngularDampingThresholdSqr(float setter);
-		public native @Cast("btScalar") float m_additionalAngularDampingFactor(); public native btRigidBodyConstructionInfo m_additionalAngularDampingFactor(float setter);
+		public native @Cast("btScalar") double m_additionalDampingFactor(); public native btRigidBodyConstructionInfo m_additionalDampingFactor(double setter);
+		public native @Cast("btScalar") double m_additionalLinearDampingThresholdSqr(); public native btRigidBodyConstructionInfo m_additionalLinearDampingThresholdSqr(double setter);
+		public native @Cast("btScalar") double m_additionalAngularDampingThresholdSqr(); public native btRigidBodyConstructionInfo m_additionalAngularDampingThresholdSqr(double setter);
+		public native @Cast("btScalar") double m_additionalAngularDampingFactor(); public native btRigidBodyConstructionInfo m_additionalAngularDampingFactor(double setter);
 
-		public btRigidBodyConstructionInfo(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia) { super((Pointer)null); allocate(mass, motionState, collisionShape, localInertia); }
-		private native void allocate(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia);
-		public btRigidBodyConstructionInfo(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape) { super((Pointer)null); allocate(mass, motionState, collisionShape); }
-		private native void allocate(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape);
+		public btRigidBodyConstructionInfo(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia) { super((Pointer)null); allocate(mass, motionState, collisionShape, localInertia); }
+		private native void allocate(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia);
+		public btRigidBodyConstructionInfo(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape) { super((Pointer)null); allocate(mass, motionState, collisionShape); }
+		private native void allocate(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape);
 	}
 
 	/**btRigidBody constructor using construction info */
@@ -84,10 +84,10 @@ public class btRigidBody extends btCollisionObject {
 
 	/**btRigidBody constructor for backwards compatibility.
 	 * To specify friction (etc) during rigid body construction, please use the other constructor (using btRigidBodyConstructionInfo) */
-	public btRigidBody(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia) { super((Pointer)null); allocate(mass, motionState, collisionShape, localInertia); }
-	private native void allocate(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia);
-	public btRigidBody(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape) { super((Pointer)null); allocate(mass, motionState, collisionShape); }
-	private native void allocate(@Cast("btScalar") float mass, btMotionState motionState, btCollisionShape collisionShape);
+	public btRigidBody(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia) { super((Pointer)null); allocate(mass, motionState, collisionShape, localInertia); }
+	private native void allocate(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape, @Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 localInertia);
+	public btRigidBody(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape) { super((Pointer)null); allocate(mass, motionState, collisionShape); }
+	private native void allocate(@Cast("btScalar") double mass, btMotionState motionState, btCollisionShape collisionShape);
 	public native void proceedToTransform(@Const @ByRef btTransform newTrans);
 
 	/**to keep collision detection and dynamics separate we don't store a rigidbody pointer
@@ -95,9 +95,9 @@ public class btRigidBody extends btCollisionObject {
 	public static native @Const btRigidBody upcast(@Const btCollisionObject colObj);
 
 	/** continuous collision detection needs prediction */
-	public native void predictIntegratedTransform(@Cast("btScalar") float step, @ByRef btTransform predictedTransform);
+	public native void predictIntegratedTransform(@Cast("btScalar") double step, @ByRef btTransform predictedTransform);
 
-	public native void saveKinematicState(@Cast("btScalar") float step);
+	public native void saveKinematicState(@Cast("btScalar") double step);
 
 	public native void applyGravity();
     
@@ -107,29 +107,29 @@ public class btRigidBody extends btCollisionObject {
 
 	public native @Const @ByRef btVector3 getGravity();
 
-	public native void setDamping(@Cast("btScalar") float lin_damping, @Cast("btScalar") float ang_damping);
+	public native void setDamping(@Cast("btScalar") double lin_damping, @Cast("btScalar") double ang_damping);
 
-	public native @Cast("btScalar") float getLinearDamping();
+	public native @Cast("btScalar") double getLinearDamping();
 
-	public native @Cast("btScalar") float getAngularDamping();
+	public native @Cast("btScalar") double getAngularDamping();
 
-	public native @Cast("btScalar") float getLinearSleepingThreshold();
+	public native @Cast("btScalar") double getLinearSleepingThreshold();
 
-	public native @Cast("btScalar") float getAngularSleepingThreshold();
+	public native @Cast("btScalar") double getAngularSleepingThreshold();
 
-	public native void applyDamping(@Cast("btScalar") float timeStep);
+	public native void applyDamping(@Cast("btScalar") double timeStep);
 
 	public native btCollisionShape getCollisionShape();
 
-	public native void setMassProps(@Cast("btScalar") float mass, @Const @ByRef btVector3 inertia);
+	public native void setMassProps(@Cast("btScalar") double mass, @Const @ByRef btVector3 inertia);
 
 	public native @Const @ByRef btVector3 getLinearFactor();
 	public native void setLinearFactor(@Const @ByRef btVector3 linearFactor);
-	public native @Cast("btScalar") float getInvMass();
-	public native @Cast("btScalar") float getMass();
+	public native @Cast("btScalar") double getInvMass();
+	public native @Cast("btScalar") double getMass();
 	public native @Const @ByRef btMatrix3x3 getInvInertiaTensorWorld();
 
-	public native void integrateVelocities(@Cast("btScalar") float step);
+	public native void integrateVelocities(@Cast("btScalar") double step);
 
 	public native void setCenterOfMassTransform(@Const @ByRef btTransform xform);
 
@@ -143,7 +143,7 @@ public class btRigidBody extends btCollisionObject {
 
 	public native void setInvInertiaDiagLocal(@Const @ByRef btVector3 diagInvInertia);
 
-	public native void setSleepingThresholds(@Cast("btScalar") float linear, @Cast("btScalar") float angular);
+	public native void setSleepingThresholds(@Cast("btScalar") double linear, @Cast("btScalar") double angular);
 
 	public native void applyTorque(@Const @ByRef btVector3 torque);
 
@@ -195,11 +195,11 @@ public class btRigidBody extends btCollisionObject {
 
 	public native void getAabb(@ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
-	public native @Cast("btScalar") float computeImpulseDenominator(@Const @ByRef btVector3 pos, @Const @ByRef btVector3 normal);
+	public native @Cast("btScalar") double computeImpulseDenominator(@Const @ByRef btVector3 pos, @Const @ByRef btVector3 normal);
 
-	public native @Cast("btScalar") float computeAngularImpulseDenominator(@Const @ByRef btVector3 axis);
+	public native @Cast("btScalar") double computeAngularImpulseDenominator(@Const @ByRef btVector3 axis);
 
-	public native void updateDeactivation(@Cast("btScalar") float timeStep);
+	public native void updateDeactivation(@Cast("btScalar") double timeStep);
 
 	public native @Cast("bool") boolean wantsSleeping();
 	public native btBroadphaseProxy getBroadphaseProxy();
@@ -215,7 +215,7 @@ public class btRigidBody extends btCollisionObject {
 
 	public native void setAngularFactor(@Const @ByRef btVector3 angFac);
 
-	public native void setAngularFactor(@Cast("btScalar") float angFac);
+	public native void setAngularFactor(@Cast("btScalar") double angFac);
 	public native @Const @ByRef btVector3 getAngularFactor();
 
 	//is this rigidbody added to a btCollisionWorld/btDynamicsWorld/btBroadphase?
@@ -233,13 +233,13 @@ public class btRigidBody extends btCollisionObject {
 	public native int getFlags();
 
 	/**perform implicit force computation in world space */
-	public native @ByVal btVector3 computeGyroscopicImpulseImplicit_World(@Cast("btScalar") float dt);
+	public native @ByVal btVector3 computeGyroscopicImpulseImplicit_World(@Cast("btScalar") double dt);
 
 	/**perform implicit force computation in body space (inertial frame) */
-	public native @ByVal btVector3 computeGyroscopicImpulseImplicit_Body(@Cast("btScalar") float step);
+	public native @ByVal btVector3 computeGyroscopicImpulseImplicit_Body(@Cast("btScalar") double step);
 
 	/**explicit version is best avoided, it gains energy */
-	public native @ByVal btVector3 computeGyroscopicForceExplicit(@Cast("btScalar") float maxGyroscopicForce);
+	public native @ByVal btVector3 computeGyroscopicForceExplicit(@Cast("btScalar") double maxGyroscopicForce);
 	public native @ByVal btVector3 getLocalInertia();
 
 	///////////////////////////////////////////////

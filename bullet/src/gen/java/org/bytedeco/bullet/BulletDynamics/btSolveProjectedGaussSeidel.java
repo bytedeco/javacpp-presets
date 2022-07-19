@@ -31,12 +31,12 @@ public class btSolveProjectedGaussSeidel extends btMLCPSolverInterface {
         return new btSolveProjectedGaussSeidel((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_leastSquaresResidualThreshold(); public native btSolveProjectedGaussSeidel m_leastSquaresResidualThreshold(float setter);
-	public native @Cast("btScalar") float m_leastSquaresResidual(); public native btSolveProjectedGaussSeidel m_leastSquaresResidual(float setter);
+	public native @Cast("btScalar") double m_leastSquaresResidualThreshold(); public native btSolveProjectedGaussSeidel m_leastSquaresResidualThreshold(double setter);
+	public native @Cast("btScalar") double m_leastSquaresResidual(); public native btSolveProjectedGaussSeidel m_leastSquaresResidual(double setter);
 
 	public btSolveProjectedGaussSeidel() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations);
 }
