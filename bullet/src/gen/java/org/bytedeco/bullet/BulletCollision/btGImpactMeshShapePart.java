@@ -53,7 +53,7 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 	        return new TrimeshPrimitiveManager((Pointer)this).offsetAddress(i);
 	    }
 	
-		public native @Cast("btScalar") float m_margin(); public native TrimeshPrimitiveManager m_margin(float setter);
+		public native @Cast("btScalar") double m_margin(); public native TrimeshPrimitiveManager m_margin(double setter);
 		public native btStridingMeshInterface m_meshInterface(); public native TrimeshPrimitiveManager m_meshInterface(btStridingMeshInterface setter);
 		public native @ByRef btVector3 m_scale(); public native TrimeshPrimitiveManager m_scale(btVector3 setter);
 		public native int m_part(); public native TrimeshPrimitiveManager m_part(int setter);
@@ -133,7 +133,7 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 
 	public native TrimeshPrimitiveManager getTrimeshPrimitiveManager();
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native @Cast("const char*") BytePointer getName();
 
@@ -153,9 +153,9 @@ public class btGImpactMeshShapePart extends btGImpactShapeInterface {
 
 	public native void getVertex(int vertex_index, @ByRef btVector3 vertex);
 
-	public native void setMargin(@Cast("btScalar") float margin);
+	public native void setMargin(@Cast("btScalar") double margin);
 
-	public native @Cast("btScalar") float getMargin();
+	public native @Cast("btScalar") double getMargin();
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 

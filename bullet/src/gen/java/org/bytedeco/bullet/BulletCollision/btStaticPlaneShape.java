@@ -21,21 +21,21 @@ public class btStaticPlaneShape extends btConcaveShape {
     public btStaticPlaneShape(Pointer p) { super(p); }
 
 
-	public btStaticPlaneShape(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") float planeConstant) { super((Pointer)null); allocate(planeNormal, planeConstant); }
-	private native void allocate(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") float planeConstant);
+	public btStaticPlaneShape(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") double planeConstant) { super((Pointer)null); allocate(planeNormal, planeConstant); }
+	private native void allocate(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") double planeConstant);
 
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
 	public native void processAllTriangles(btTriangleCallback callback, @Const @ByRef btVector3 aabbMin, @Const @ByRef btVector3 aabbMax);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
 
 	public native @Const @ByRef btVector3 getPlaneNormal();
 
-	public native @Cast("const btScalar") float getPlaneConstant();
+	public native @Cast("const btScalar") double getPlaneConstant();
 
 	//debugging
 	public native @Cast("const char*") BytePointer getName();

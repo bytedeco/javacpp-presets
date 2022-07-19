@@ -20,7 +20,7 @@ public class btPolyhedralConvexAabbCachingShape extends btPolyhedralConvexShape 
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btPolyhedralConvexAabbCachingShape(Pointer p) { super(p); }
 
-	public native void getNonvirtualAabb(@Const @ByRef btTransform trans, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax, @Cast("btScalar") float margin);
+	public native void getNonvirtualAabb(@Const @ByRef btTransform trans, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax, @Cast("btScalar") double margin);
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 

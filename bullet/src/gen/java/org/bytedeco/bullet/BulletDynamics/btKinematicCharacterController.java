@@ -25,13 +25,13 @@ public class btKinematicCharacterController extends btCharacterControllerInterfa
     public btKinematicCharacterController(Pointer p) { super(p); }
 
 
-	public btKinematicCharacterController(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") float stepHeight, @Const @ByRef(nullValue = "btVector3(1.0, 0.0, 0.0)") btVector3 up) { super((Pointer)null); allocate(ghostObject, convexShape, stepHeight, up); }
-	private native void allocate(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") float stepHeight, @Const @ByRef(nullValue = "btVector3(1.0, 0.0, 0.0)") btVector3 up);
-	public btKinematicCharacterController(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") float stepHeight) { super((Pointer)null); allocate(ghostObject, convexShape, stepHeight); }
-	private native void allocate(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") float stepHeight);
+	public btKinematicCharacterController(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") double stepHeight, @Const @ByRef(nullValue = "btVector3(1.0, 0.0, 0.0)") btVector3 up) { super((Pointer)null); allocate(ghostObject, convexShape, stepHeight, up); }
+	private native void allocate(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") double stepHeight, @Const @ByRef(nullValue = "btVector3(1.0, 0.0, 0.0)") btVector3 up);
+	public btKinematicCharacterController(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") double stepHeight) { super((Pointer)null); allocate(ghostObject, convexShape, stepHeight); }
+	private native void allocate(btPairCachingGhostObject ghostObject, btConvexShape convexShape, @Cast("btScalar") double stepHeight);
 
 	/**btActionInterface interface */
-	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") float deltaTime);
+	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") double deltaTime);
 
 	/**btActionInterface interface */
 	public native void debugDraw(btIDebugDraw debugDrawer);
@@ -53,7 +53,7 @@ public class btKinematicCharacterController extends btCharacterControllerInterfa
 	 *  This call will reset any walk direction set by setWalkDirection().
 	 *  Negative time intervals will result in no motion. */
 	public native void setVelocityForTimeInterval(@Const @ByRef btVector3 velocity,
-												@Cast("btScalar") float timeInterval);
+												@Cast("btScalar") double timeInterval);
 
 	public native void setAngularVelocity(@Const @ByRef btVector3 velocity);
 	public native @Const @ByRef btVector3 getAngularVelocity();
@@ -61,24 +61,24 @@ public class btKinematicCharacterController extends btCharacterControllerInterfa
 	public native void setLinearVelocity(@Const @ByRef btVector3 velocity);
 	public native @ByVal btVector3 getLinearVelocity();
 
-	public native void setLinearDamping(@Cast("btScalar") float d);
-	public native @Cast("btScalar") float getLinearDamping();
-	public native void setAngularDamping(@Cast("btScalar") float d);
-	public native @Cast("btScalar") float getAngularDamping();
+	public native void setLinearDamping(@Cast("btScalar") double d);
+	public native @Cast("btScalar") double getLinearDamping();
+	public native void setAngularDamping(@Cast("btScalar") double d);
+	public native @Cast("btScalar") double getAngularDamping();
 
 	public native void reset(btCollisionWorld collisionWorld);
 	public native void warp(@Const @ByRef btVector3 origin);
 
 	public native void preStep(btCollisionWorld collisionWorld);
-	public native void playerStep(btCollisionWorld collisionWorld, @Cast("btScalar") float dt);
+	public native void playerStep(btCollisionWorld collisionWorld, @Cast("btScalar") double dt);
 
-	public native void setStepHeight(@Cast("btScalar") float h);
-	public native @Cast("btScalar") float getStepHeight();
-	public native void setFallSpeed(@Cast("btScalar") float fallSpeed);
-	public native @Cast("btScalar") float getFallSpeed();
-	public native void setJumpSpeed(@Cast("btScalar") float jumpSpeed);
-	public native @Cast("btScalar") float getJumpSpeed();
-	public native void setMaxJumpHeight(@Cast("btScalar") float maxJumpHeight);
+	public native void setStepHeight(@Cast("btScalar") double h);
+	public native @Cast("btScalar") double getStepHeight();
+	public native void setFallSpeed(@Cast("btScalar") double fallSpeed);
+	public native @Cast("btScalar") double getFallSpeed();
+	public native void setJumpSpeed(@Cast("btScalar") double jumpSpeed);
+	public native @Cast("btScalar") double getJumpSpeed();
+	public native void setMaxJumpHeight(@Cast("btScalar") double maxJumpHeight);
 	public native @Cast("bool") boolean canJump();
 
 	public native void jump(@Const @ByRef(nullValue = "btVector3(0, 0, 0)") btVector3 v);
@@ -91,11 +91,11 @@ public class btKinematicCharacterController extends btCharacterControllerInterfa
 
 	/** The max slope determines the maximum angle that the controller can walk up.
 	 *  The slope angle is measured in radians. */
-	public native void setMaxSlope(@Cast("btScalar") float slopeRadians);
-	public native @Cast("btScalar") float getMaxSlope();
+	public native void setMaxSlope(@Cast("btScalar") double slopeRadians);
+	public native @Cast("btScalar") double getMaxSlope();
 
-	public native void setMaxPenetrationDepth(@Cast("btScalar") float d);
-	public native @Cast("btScalar") float getMaxPenetrationDepth();
+	public native void setMaxPenetrationDepth(@Cast("btScalar") double d);
+	public native @Cast("btScalar") double getMaxPenetrationDepth();
 
 	public native btPairCachingGhostObject getGhostObject();
 	public native void setUseGhostSweepTest(@Cast("bool") boolean useGhostObjectSweepTest);

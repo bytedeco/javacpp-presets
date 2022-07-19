@@ -23,6 +23,6 @@ public class btMLCPSolverInterface extends Pointer {
 
 
 	//return true is it solves the problem successfully
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
-	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXf A, @Const @ByRef btVectorXf b, @ByRef btVectorXf x, @Const @ByRef btVectorXf lo, @Const @ByRef btVectorXf hi, @Const @ByRef btIntArray limitDependency, int numIterations);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations, @Cast("bool") boolean useSparsity/*=true*/);
+	public native @Cast("bool") boolean solveMLCP(@Const @ByRef btMatrixXd A, @Const @ByRef btVectorXd b, @ByRef btVectorXd x, @Const @ByRef btVectorXd lo, @Const @ByRef btVectorXd hi, @Const @ByRef btIntArray limitDependency, int numIterations);
 }

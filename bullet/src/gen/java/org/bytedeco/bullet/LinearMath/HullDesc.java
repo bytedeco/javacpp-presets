@@ -54,7 +54,7 @@ public class HullDesc extends Pointer {
 	public native @Cast("unsigned int") int mVcount(); public native HullDesc mVcount(int setter);        // number of vertices in the input point cloud
 	public native @Const btVector3 mVertices(); public native HullDesc mVertices(btVector3 setter);  // the array of vertices.
 	public native @Cast("unsigned int") int mVertexStride(); public native HullDesc mVertexStride(int setter);  // the stride of each vertex, in bytes.
-	public native @Cast("btScalar") float mNormalEpsilon(); public native HullDesc mNormalEpsilon(float setter);     // the epsilon for removing duplicates.  This is a normalized value, if normalized bit is on.
+	public native @Cast("btScalar") double mNormalEpsilon(); public native HullDesc mNormalEpsilon(double setter);     // the epsilon for removing duplicates.  This is a normalized value, if normalized bit is on.
 	public native @Cast("unsigned int") int mMaxVertices(); public native HullDesc mMaxVertices(int setter);   // maximum number of vertices to be considered for the hull!
 	public native @Cast("unsigned int") int mMaxFaces(); public native HullDesc mMaxFaces(int setter);
 }

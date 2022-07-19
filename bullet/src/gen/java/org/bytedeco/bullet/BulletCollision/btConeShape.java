@@ -21,20 +21,20 @@ public class btConeShape extends btConvexInternalShape {
     public btConeShape(Pointer p) { super(p); }
 
 
-	public btConeShape(@Cast("btScalar") float radius, @Cast("btScalar") float height) { super((Pointer)null); allocate(radius, height); }
-	private native void allocate(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public btConeShape(@Cast("btScalar") double radius, @Cast("btScalar") double height) { super((Pointer)null); allocate(radius, height); }
+	private native void allocate(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 
 	public native @ByVal btVector3 localGetSupportingVertex(@Const @ByRef btVector3 vec);
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native @Cast("btScalar") float getRadius();
-	public native @Cast("btScalar") float getHeight();
+	public native @Cast("btScalar") double getRadius();
+	public native @Cast("btScalar") double getHeight();
 
-	public native void setRadius(@Cast("const btScalar") float radius);
-	public native void setHeight(@Cast("const btScalar") float height);
+	public native void setRadius(@Cast("const btScalar") double radius);
+	public native void setHeight(@Cast("const btScalar") double height);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native @Cast("const char*") BytePointer getName();
 

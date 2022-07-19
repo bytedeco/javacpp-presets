@@ -12,6 +12,7 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
+// #else
 // #endif
 /**Typically the conservative advancement reaches solution in a few iterations, clip it to 32 for degenerate cases.
  * See discussion about this here https://bulletphysics.orgphpBB2/viewtopic.php?t=565 */
@@ -45,7 +46,7 @@ public class btConvexCast extends Pointer {
 	
 		//virtual bool	addRayResult(const btVector3& normal,btScalar	fraction) = 0;
 
-		public native void DebugDraw(@Cast("btScalar") float fraction);
+		public native void DebugDraw(@Cast("btScalar") double fraction);
 		public native void drawCoordSystem(@Const @ByRef btTransform trans);
 		public native void reportFailure(int errNo, int numIterations);
 		public CastResult() { super((Pointer)null); allocate(); }
@@ -55,12 +56,12 @@ public class btConvexCast extends Pointer {
 		public native @ByRef btTransform m_hitTransformB(); public native CastResult m_hitTransformB(btTransform setter);
 		public native @ByRef btVector3 m_normal(); public native CastResult m_normal(btVector3 setter);
 		public native @ByRef btVector3 m_hitPoint(); public native CastResult m_hitPoint(btVector3 setter);
-		public native @Cast("btScalar") float m_fraction(); public native CastResult m_fraction(float setter);  //input and output
+		public native @Cast("btScalar") double m_fraction(); public native CastResult m_fraction(double setter);  //input and output
 		public native btIDebugDraw m_debugDrawer(); public native CastResult m_debugDrawer(btIDebugDraw setter);
-		public native @Cast("btScalar") float m_allowedPenetration(); public native CastResult m_allowedPenetration(float setter);
+		public native @Cast("btScalar") double m_allowedPenetration(); public native CastResult m_allowedPenetration(double setter);
 		
 		public native int m_subSimplexCastMaxIterations(); public native CastResult m_subSimplexCastMaxIterations(int setter);
-		public native @Cast("btScalar") float m_subSimplexCastEpsilon(); public native CastResult m_subSimplexCastEpsilon(float setter);
+		public native @Cast("btScalar") double m_subSimplexCastEpsilon(); public native CastResult m_subSimplexCastEpsilon(double setter);
 
 	}
 

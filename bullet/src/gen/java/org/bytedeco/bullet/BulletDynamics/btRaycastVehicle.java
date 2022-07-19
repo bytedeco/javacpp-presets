@@ -40,36 +40,36 @@ public class btRaycastVehicle extends btActionInterface {
 	
 		public btVehicleTuning() { super((Pointer)null); allocate(); }
 		private native void allocate();
-		public native @Cast("btScalar") float m_suspensionStiffness(); public native btVehicleTuning m_suspensionStiffness(float setter);
-		public native @Cast("btScalar") float m_suspensionCompression(); public native btVehicleTuning m_suspensionCompression(float setter);
-		public native @Cast("btScalar") float m_suspensionDamping(); public native btVehicleTuning m_suspensionDamping(float setter);
-		public native @Cast("btScalar") float m_maxSuspensionTravelCm(); public native btVehicleTuning m_maxSuspensionTravelCm(float setter);
-		public native @Cast("btScalar") float m_frictionSlip(); public native btVehicleTuning m_frictionSlip(float setter);
-		public native @Cast("btScalar") float m_maxSuspensionForce(); public native btVehicleTuning m_maxSuspensionForce(float setter);
+		public native @Cast("btScalar") double m_suspensionStiffness(); public native btVehicleTuning m_suspensionStiffness(double setter);
+		public native @Cast("btScalar") double m_suspensionCompression(); public native btVehicleTuning m_suspensionCompression(double setter);
+		public native @Cast("btScalar") double m_suspensionDamping(); public native btVehicleTuning m_suspensionDamping(double setter);
+		public native @Cast("btScalar") double m_maxSuspensionTravelCm(); public native btVehicleTuning m_maxSuspensionTravelCm(double setter);
+		public native @Cast("btScalar") double m_frictionSlip(); public native btVehicleTuning m_frictionSlip(double setter);
+		public native @Cast("btScalar") double m_maxSuspensionForce(); public native btVehicleTuning m_maxSuspensionForce(double setter);
 	}
 	//constructor to create a car from an existing rigidbody
 	public btRaycastVehicle(@Const @ByRef btVehicleTuning tuning, btRigidBody chassis, btVehicleRaycaster raycaster) { super((Pointer)null); allocate(tuning, chassis, raycaster); }
 	private native void allocate(@Const @ByRef btVehicleTuning tuning, btRigidBody chassis, btVehicleRaycaster raycaster);
 
 	/**btActionInterface interface */
-	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") float step);
+	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") double step);
 
 	/**btActionInterface interface */
 	public native void debugDraw(btIDebugDraw debugDrawer);
 
 	public native @Const @ByRef btTransform getChassisWorldTransform();
 
-	public native @Cast("btScalar") float rayCast(@ByRef btWheelInfo wheel);
+	public native @Cast("btScalar") double rayCast(@ByRef btWheelInfo wheel);
 
-	public native void updateVehicle(@Cast("btScalar") float step);
+	public native void updateVehicle(@Cast("btScalar") double step);
 
 	public native void resetSuspension();
 
-	public native @Cast("btScalar") float getSteeringValue(int wheel);
+	public native @Cast("btScalar") double getSteeringValue(int wheel);
 
-	public native void setSteeringValue(@Cast("btScalar") float steering, int wheel);
+	public native void setSteeringValue(@Cast("btScalar") double steering, int wheel);
 
-	public native void applyEngineForce(@Cast("btScalar") float force, int wheel);
+	public native void applyEngineForce(@Cast("btScalar") double force, int wheel);
 
 	public native @Const @ByRef btTransform getWheelTransformWS(int wheelIndex);
 
@@ -78,7 +78,7 @@ public class btRaycastVehicle extends btActionInterface {
 
 	//	void	setRaycastWheelInfo( int wheelIndex , bool isInContact, const btVector3& hitPoint, const btVector3& hitNormal,btScalar depth);
 
-	public native @ByRef btWheelInfo addWheel(@Const @ByRef btVector3 connectionPointCS0, @Const @ByRef btVector3 wheelDirectionCS0, @Const @ByRef btVector3 wheelAxleCS, @Cast("btScalar") float suspensionRestLength, @Cast("btScalar") float wheelRadius, @Const @ByRef btVehicleTuning tuning, @Cast("bool") boolean isFrontWheel);
+	public native @ByRef btWheelInfo addWheel(@Const @ByRef btVector3 connectionPointCS0, @Const @ByRef btVector3 wheelDirectionCS0, @Const @ByRef btVector3 wheelAxleCS, @Cast("btScalar") double suspensionRestLength, @Cast("btScalar") double wheelRadius, @Const @ByRef btVehicleTuning tuning, @Cast("bool") boolean isFrontWheel);
 
 	public native int getNumWheels();
 
@@ -89,13 +89,13 @@ public class btRaycastVehicle extends btActionInterface {
 	public native void updateWheelTransformsWS(@ByRef btWheelInfo wheel, @Cast("bool") boolean interpolatedTransform/*=true*/);
 	public native void updateWheelTransformsWS(@ByRef btWheelInfo wheel);
 
-	public native void setBrake(@Cast("btScalar") float brake, int wheelIndex);
+	public native void setBrake(@Cast("btScalar") double brake, int wheelIndex);
 
-	public native void setPitchControl(@Cast("btScalar") float pitch);
+	public native void setPitchControl(@Cast("btScalar") double pitch);
 
-	public native void updateSuspension(@Cast("btScalar") float deltaTime);
+	public native void updateSuspension(@Cast("btScalar") double deltaTime);
 
-	public native void updateFriction(@Cast("btScalar") float timeStep);
+	public native void updateFriction(@Cast("btScalar") double timeStep);
 
 	public native btRigidBody getRigidBody();
 
@@ -108,7 +108,7 @@ public class btRaycastVehicle extends btActionInterface {
 	public native @ByVal btVector3 getForwardVector();
 
 	/**Velocity of vehicle (positive if velocity vector has same direction as foward vector) */
-	public native @Cast("btScalar") float getCurrentSpeedKmHour();
+	public native @Cast("btScalar") double getCurrentSpeedKmHour();
 
 	public native void setCoordinateSystem(int rightIndex, int upIndex, int forwardIndex);
 

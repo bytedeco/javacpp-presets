@@ -31,54 +31,54 @@ public class btDeformableLinearElasticityForce extends btDeformableLagrangianFor
         return new btDeformableLinearElasticityForce((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_mu(); public native btDeformableLinearElasticityForce m_mu(float setter);
-	public native @Cast("btScalar") float m_lambda(); public native btDeformableLinearElasticityForce m_lambda(float setter);
-	public native @Cast("btScalar") float m_E(); public native btDeformableLinearElasticityForce m_E(float setter);
-	public native @Cast("btScalar") float m_nu(); public native btDeformableLinearElasticityForce m_nu(float setter);  // Young's modulus and Poisson ratio
-	public native @Cast("btScalar") float m_damping_alpha(); public native btDeformableLinearElasticityForce m_damping_alpha(float setter);
-	public native @Cast("btScalar") float m_damping_beta(); public native btDeformableLinearElasticityForce m_damping_beta(float setter);
+	public native @Cast("btScalar") double m_mu(); public native btDeformableLinearElasticityForce m_mu(double setter);
+	public native @Cast("btScalar") double m_lambda(); public native btDeformableLinearElasticityForce m_lambda(double setter);
+	public native @Cast("btScalar") double m_E(); public native btDeformableLinearElasticityForce m_E(double setter);
+	public native @Cast("btScalar") double m_nu(); public native btDeformableLinearElasticityForce m_nu(double setter);  // Young's modulus and Poisson ratio
+	public native @Cast("btScalar") double m_damping_alpha(); public native btDeformableLinearElasticityForce m_damping_alpha(double setter);
+	public native @Cast("btScalar") double m_damping_beta(); public native btDeformableLinearElasticityForce m_damping_beta(double setter);
 	public btDeformableLinearElasticityForce() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public btDeformableLinearElasticityForce(@Cast("btScalar") float mu, @Cast("btScalar") float lambda, @Cast("btScalar") float damping_alpha/*=0.01*/, @Cast("btScalar") float damping_beta/*=0.01*/) { super((Pointer)null); allocate(mu, lambda, damping_alpha, damping_beta); }
-	private native void allocate(@Cast("btScalar") float mu, @Cast("btScalar") float lambda, @Cast("btScalar") float damping_alpha/*=0.01*/, @Cast("btScalar") float damping_beta/*=0.01*/);
-	public btDeformableLinearElasticityForce(@Cast("btScalar") float mu, @Cast("btScalar") float lambda) { super((Pointer)null); allocate(mu, lambda); }
-	private native void allocate(@Cast("btScalar") float mu, @Cast("btScalar") float lambda);
+	public btDeformableLinearElasticityForce(@Cast("btScalar") double mu, @Cast("btScalar") double lambda, @Cast("btScalar") double damping_alpha/*=0.01*/, @Cast("btScalar") double damping_beta/*=0.01*/) { super((Pointer)null); allocate(mu, lambda, damping_alpha, damping_beta); }
+	private native void allocate(@Cast("btScalar") double mu, @Cast("btScalar") double lambda, @Cast("btScalar") double damping_alpha/*=0.01*/, @Cast("btScalar") double damping_beta/*=0.01*/);
+	public btDeformableLinearElasticityForce(@Cast("btScalar") double mu, @Cast("btScalar") double lambda) { super((Pointer)null); allocate(mu, lambda); }
+	private native void allocate(@Cast("btScalar") double mu, @Cast("btScalar") double lambda);
 
 	public native void updateYoungsModulusAndPoissonRatio();
 
 	public native void updateLameParameters();
 
-	public native void setYoungsModulus(@Cast("btScalar") float E);
+	public native void setYoungsModulus(@Cast("btScalar") double E);
 
-	public native void setPoissonRatio(@Cast("btScalar") float nu);
+	public native void setPoissonRatio(@Cast("btScalar") double nu);
 
-	public native void setDamping(@Cast("btScalar") float damping_alpha, @Cast("btScalar") float damping_beta);
+	public native void setDamping(@Cast("btScalar") double damping_alpha, @Cast("btScalar") double damping_beta);
 
-	public native void setLameParameters(@Cast("btScalar") float mu, @Cast("btScalar") float lambda);
+	public native void setLameParameters(@Cast("btScalar") double mu, @Cast("btScalar") double lambda);
 
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledForces(@Cast("btScalar") double scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledExplicitForce(@Cast("btScalar") double scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
 
 	// The damping matrix is calculated using the time n state as described in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledDampingForce(@Cast("btScalar") double scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
 
-	public native double totalElasticEnergy(@Cast("btScalar") float dt);
+	public native double totalElasticEnergy(@Cast("btScalar") double dt);
 
 	// The damping energy is formulated as in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native double totalDampingEnergy(@Cast("btScalar") float dt);
+	public native double totalDampingEnergy(@Cast("btScalar") double dt);
 
 	public native double elasticEnergyDensity(@Const @ByRef btSoftBody.TetraScratch s);
 
-	public native void addScaledElasticForce(@Cast("btScalar") float scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledElasticForce(@Cast("btScalar") double scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") double scale, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array diagA);
 
 	// The damping matrix is calculated using the time n state as described in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableLinearElasticityForce::TVStack*") @ByRef btVector3Array df);
 
 	public native void firstPiola(@Const @ByRef btSoftBody.TetraScratch s, @ByRef btMatrix3x3 P);
 
@@ -90,7 +90,7 @@ public class btDeformableLinearElasticityForce extends btDeformableLagrangianFor
 	// This function calculates the dP = dQ/dF * dF
 	public native void firstPiolaDampingDifferential(@Const @ByRef btSoftBody.TetraScratch s, @Const @ByRef btMatrix3x3 dF, @ByRef btMatrix3x3 dP);
 
-	public native void addScaledHessian(@Cast("btScalar") float scale);
+	public native void addScaledHessian(@Cast("btScalar") double scale);
 
 	public native @Cast("btDeformableLagrangianForceType") int getForceType();
 }

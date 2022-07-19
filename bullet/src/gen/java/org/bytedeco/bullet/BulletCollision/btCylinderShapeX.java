@@ -29,5 +29,5 @@ public class btCylinderShapeX extends btCylinderShape {
 	//debugging
 	public native @Cast("const char*") BytePointer getName();
 
-	public native @Cast("btScalar") float getRadius();
+	public native @Cast("btScalar") double getRadius();
 }

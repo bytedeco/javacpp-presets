@@ -55,11 +55,11 @@ public class btSoftColliders extends Pointer {
 	        return new ClusterBase((Pointer)this).offsetAddress(i);
 	    }
 	
-		public native @Cast("btScalar") float erp(); public native ClusterBase erp(float setter);
-		public native @Cast("btScalar") float idt(); public native ClusterBase idt(float setter);
-		public native @Cast("btScalar") float m_margin(); public native ClusterBase m_margin(float setter);
-		public native @Cast("btScalar") float friction(); public native ClusterBase friction(float setter);
-		public native @Cast("btScalar") float threshold(); public native ClusterBase threshold(float setter);
+		public native @Cast("btScalar") double erp(); public native ClusterBase erp(double setter);
+		public native @Cast("btScalar") double idt(); public native ClusterBase idt(double setter);
+		public native @Cast("btScalar") double m_margin(); public native ClusterBase m_margin(double setter);
+		public native @Cast("btScalar") double friction(); public native ClusterBase friction(double setter);
+		public native @Cast("btScalar") double threshold(); public native ClusterBase threshold(double setter);
 		public ClusterBase() { super((Pointer)null); allocate(); }
 		private native void allocate();
 		public native @Cast("bool") boolean SolveContact(@Const @ByRef btGjkEpaSolver2.sResults res,
@@ -142,8 +142,8 @@ public class btSoftColliders extends Pointer {
 		public native btSoftBody psb(); public native CollideSDF_RS psb(btSoftBody setter);
 		public native @Const btCollisionObjectWrapper m_colObj1Wrap(); public native CollideSDF_RS m_colObj1Wrap(btCollisionObjectWrapper setter);
 		public native btRigidBody m_rigidBody(); public native CollideSDF_RS m_rigidBody(btRigidBody setter);
-		public native @Cast("btScalar") float dynmargin(); public native CollideSDF_RS dynmargin(float setter);
-		public native @Cast("btScalar") float stamargin(); public native CollideSDF_RS stamargin(float setter);
+		public native @Cast("btScalar") double dynmargin(); public native CollideSDF_RS dynmargin(double setter);
+		public native @Cast("btScalar") double stamargin(); public native CollideSDF_RS stamargin(double setter);
 	}
 
 	//
@@ -171,8 +171,8 @@ public class btSoftColliders extends Pointer {
 		public native btSoftBody psb(); public native CollideSDF_RD psb(btSoftBody setter);
 		public native @Const btCollisionObjectWrapper m_colObj1Wrap(); public native CollideSDF_RD m_colObj1Wrap(btCollisionObjectWrapper setter);
 		public native btRigidBody m_rigidBody(); public native CollideSDF_RD m_rigidBody(btRigidBody setter);
-		public native @Cast("btScalar") float dynmargin(); public native CollideSDF_RD dynmargin(float setter);
-		public native @Cast("btScalar") float stamargin(); public native CollideSDF_RD stamargin(float setter);
+		public native @Cast("btScalar") double dynmargin(); public native CollideSDF_RD dynmargin(double setter);
+		public native @Cast("btScalar") double stamargin(); public native CollideSDF_RD stamargin(double setter);
 	}
 
 	//
@@ -200,8 +200,8 @@ public class btSoftColliders extends Pointer {
 		public native btSoftBody psb(); public native CollideSDF_RDF psb(btSoftBody setter);
 		public native @Const btCollisionObjectWrapper m_colObj1Wrap(); public native CollideSDF_RDF m_colObj1Wrap(btCollisionObjectWrapper setter);
 		public native btRigidBody m_rigidBody(); public native CollideSDF_RDF m_rigidBody(btRigidBody setter);
-		public native @Cast("btScalar") float dynmargin(); public native CollideSDF_RDF dynmargin(float setter);
-		public native @Cast("btScalar") float stamargin(); public native CollideSDF_RDF stamargin(float setter);
+		public native @Cast("btScalar") double dynmargin(); public native CollideSDF_RDF dynmargin(double setter);
+		public native @Cast("btScalar") double stamargin(); public native CollideSDF_RDF stamargin(double setter);
 	}
 
 	//
@@ -228,7 +228,7 @@ public class btSoftColliders extends Pointer {
 							 @Const btDbvtNode lface);
 		public native btSoftBody psb(int i); public native CollideVF_SS psb(int i, btSoftBody setter);
 		@MemberGetter public native @Cast("btSoftBody**") PointerPointer psb();
-		public native @Cast("btScalar") float mrg(); public native CollideVF_SS mrg(float setter);
+		public native @Cast("btScalar") double mrg(); public native CollideVF_SS mrg(double setter);
 	}
 
 	//
@@ -255,7 +255,7 @@ public class btSoftColliders extends Pointer {
 							 @Const btDbvtNode lface);
 		public native btSoftBody psb(int i); public native CollideVF_DD psb(int i, btSoftBody setter);
 		@MemberGetter public native @Cast("btSoftBody**") PointerPointer psb();
-		public native @Cast("btScalar") float mrg(); public native CollideVF_DD mrg(float setter);
+		public native @Cast("btScalar") double mrg(); public native CollideVF_DD mrg(double setter);
 		public native @Cast("bool") boolean useFaceNormal(); public native CollideVF_DD useFaceNormal(boolean setter);
 	}
 
@@ -284,7 +284,7 @@ public class btSoftColliders extends Pointer {
 		public native void Repel(btSoftBody.Face f1, btSoftBody.Face f2);
 		public native btSoftBody psb(int i); public native CollideFF_DD psb(int i, btSoftBody setter);
 		@MemberGetter public native @Cast("btSoftBody**") PointerPointer psb();
-		public native @Cast("btScalar") float mrg(); public native CollideFF_DD mrg(float setter);
+		public native @Cast("btScalar") double mrg(); public native CollideFF_DD mrg(double setter);
 		public native @Cast("bool") boolean useFaceNormal(); public native CollideFF_DD useFaceNormal(boolean setter);
 	}
 
@@ -312,8 +312,8 @@ public class btSoftColliders extends Pointer {
 		public native void Repel(btSoftBody.Face f1, btSoftBody.Face f2);
 		public native btSoftBody psb(int i); public native CollideCCD psb(int i, btSoftBody setter);
 		@MemberGetter public native @Cast("btSoftBody**") PointerPointer psb();
-		public native @Cast("btScalar") float dt(); public native CollideCCD dt(float setter);
-		public native @Cast("btScalar") float mrg(); public native CollideCCD mrg(float setter);
+		public native @Cast("btScalar") double dt(); public native CollideCCD dt(double setter);
+		public native @Cast("btScalar") double mrg(); public native CollideCCD mrg(double setter);
 		public native @Cast("bool") boolean useFaceNormal(); public native CollideCCD useFaceNormal(boolean setter);
 	}
 }

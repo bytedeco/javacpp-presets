@@ -26,15 +26,15 @@ public class btSphereBoxCollisionAlgorithm extends btActivatingCollisionAlgorith
 
 	public native void processCollision(@Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
-	public native @Cast("btScalar") float calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
+	public native @Cast("btScalar") double calculateTimeOfImpact(btCollisionObject body0, btCollisionObject body1, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
 	public native void getAllContactManifolds(@Cast("btManifoldArray*") @ByRef btPersistentManifoldArray manifoldArray);
 
-	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef FloatPointer penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") float fRadius, @Cast("btScalar") float maxContactDistance);
-	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef FloatBuffer penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") float fRadius, @Cast("btScalar") float maxContactDistance);
-	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef float[] penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") float fRadius, @Cast("btScalar") float maxContactDistance);
+	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef DoublePointer penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") double fRadius, @Cast("btScalar") double maxContactDistance);
+	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef DoubleBuffer penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") double fRadius, @Cast("btScalar") double maxContactDistance);
+	public native @Cast("bool") boolean getSphereDistance(@Const btCollisionObjectWrapper boxObjWrap, @ByRef btVector3 v3PointOnBox, @ByRef btVector3 normal, @Cast("btScalar*") @ByRef double[] penetrationDepth, @Const @ByRef btVector3 v3SphereCenter, @Cast("btScalar") double fRadius, @Cast("btScalar") double maxContactDistance);
 
-	public native @Cast("btScalar") float getSpherePenetration(@Const @ByRef btVector3 boxHalfExtent, @Const @ByRef btVector3 sphereRelPos, @ByRef btVector3 closestPoint, @ByRef btVector3 normal);
+	public native @Cast("btScalar") double getSpherePenetration(@Const @ByRef btVector3 boxHalfExtent, @Const @ByRef btVector3 sphereRelPos, @ByRef btVector3 closestPoint, @ByRef btVector3 normal);
 
 	public static class CreateFunc extends btCollisionAlgorithmCreateFunc {
 	    static { Loader.load(); }

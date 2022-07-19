@@ -38,10 +38,10 @@ public class btTranslationalLimitMotor extends Pointer {
 	/** Linear_Limit_parameters
 	 * \{ */
 	/** Softness for linear limit */
-	public native @Cast("btScalar") float m_limitSoftness(); public native btTranslationalLimitMotor m_limitSoftness(float setter);
+	public native @Cast("btScalar") double m_limitSoftness(); public native btTranslationalLimitMotor m_limitSoftness(double setter);
 	/** Damping for linear limit */
-	public native @Cast("btScalar") float m_damping(); public native btTranslationalLimitMotor m_damping(float setter);
-	public native @Cast("btScalar") float m_restitution(); public native btTranslationalLimitMotor m_restitution(float setter);    /** Bounce parameter for linear limit */
+	public native @Cast("btScalar") double m_damping(); public native btTranslationalLimitMotor m_damping(double setter);
+	public native @Cast("btScalar") double m_restitution(); public native btTranslationalLimitMotor m_restitution(double setter);    /** Bounce parameter for linear limit */
 	/** Constraint force mixing factor */
 	public native @ByRef btVector3 m_normalCFM(); public native btTranslationalLimitMotor m_normalCFM(btVector3 setter);
 	/** Error tolerance factor when joint is at limit */
@@ -76,11 +76,11 @@ public class btTranslationalLimitMotor extends Pointer {
     */
 	public native @Cast("bool") boolean isLimited(int limitIndex);
 	public native @Cast("bool") boolean needApplyForce(int limitIndex);
-	public native int testLimitValue(int limitIndex, @Cast("btScalar") float test_value);
+	public native int testLimitValue(int limitIndex, @Cast("btScalar") double test_value);
 
-	public native @Cast("btScalar") float solveLinearAxis(
-			@Cast("btScalar") float timeStep,
-			@Cast("btScalar") float jacDiagABInv,
+	public native @Cast("btScalar") double solveLinearAxis(
+			@Cast("btScalar") double timeStep,
+			@Cast("btScalar") double jacDiagABInv,
 			@ByRef btRigidBody body1, @Const @ByRef btVector3 pointInA,
 			@ByRef btRigidBody body2, @Const @ByRef btVector3 pointInB,
 			int limit_index,

@@ -44,19 +44,19 @@ public class btSolverConstraint extends Pointer {
 	public native @ByRef btVector3 m_angularComponentA(); public native btSolverConstraint m_angularComponentA(btVector3 setter);
 	public native @ByRef btVector3 m_angularComponentB(); public native btSolverConstraint m_angularComponentB(btVector3 setter);
 
-	public native @Cast("btScalar") float m_appliedPushImpulse(); public native btSolverConstraint m_appliedPushImpulse(float setter);
-	public native @Cast("btScalar") float m_appliedImpulse(); public native btSolverConstraint m_appliedImpulse(float setter);
+	public native @Cast("btScalar") double m_appliedPushImpulse(); public native btSolverConstraint m_appliedPushImpulse(double setter);
+	public native @Cast("btScalar") double m_appliedImpulse(); public native btSolverConstraint m_appliedImpulse(double setter);
 
-	public native @Cast("btScalar") float m_friction(); public native btSolverConstraint m_friction(float setter);
-	public native @Cast("btScalar") float m_jacDiagABInv(); public native btSolverConstraint m_jacDiagABInv(float setter);
-	public native @Cast("btScalar") float m_rhs(); public native btSolverConstraint m_rhs(float setter);
-	public native @Cast("btScalar") float m_cfm(); public native btSolverConstraint m_cfm(float setter);
+	public native @Cast("btScalar") double m_friction(); public native btSolverConstraint m_friction(double setter);
+	public native @Cast("btScalar") double m_jacDiagABInv(); public native btSolverConstraint m_jacDiagABInv(double setter);
+	public native @Cast("btScalar") double m_rhs(); public native btSolverConstraint m_rhs(double setter);
+	public native @Cast("btScalar") double m_cfm(); public native btSolverConstraint m_cfm(double setter);
 
-	public native @Cast("btScalar") float m_lowerLimit(); public native btSolverConstraint m_lowerLimit(float setter);
-	public native @Cast("btScalar") float m_upperLimit(); public native btSolverConstraint m_upperLimit(float setter);
-	public native @Cast("btScalar") float m_rhsPenetration(); public native btSolverConstraint m_rhsPenetration(float setter);
+	public native @Cast("btScalar") double m_lowerLimit(); public native btSolverConstraint m_lowerLimit(double setter);
+	public native @Cast("btScalar") double m_upperLimit(); public native btSolverConstraint m_upperLimit(double setter);
+	public native @Cast("btScalar") double m_rhsPenetration(); public native btSolverConstraint m_rhsPenetration(double setter);
 		public native Pointer m_originalContactPoint(); public native btSolverConstraint m_originalContactPoint(Pointer setter);
-		public native @Cast("btScalar") float m_unusedPadding4(); public native btSolverConstraint m_unusedPadding4(float setter);
+		public native @Cast("btScalar") double m_unusedPadding4(); public native btSolverConstraint m_unusedPadding4(double setter);
 		public native int m_numRowsForNonContactConstraint(); public native btSolverConstraint m_numRowsForNonContactConstraint(int setter);
 
 	public native int m_overrideNumSolverIterations(); public native btSolverConstraint m_overrideNumSolverIterations(int setter);

@@ -14,6 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** Generic 6 DOF constraint that allows to set spring motors to any translational and rotational DOF
@@ -38,19 +39,19 @@ public class btGeneric6DofSpringConstraint extends btGeneric6DofConstraint {
 	public btGeneric6DofSpringConstraint(@ByRef btRigidBody rbB, @Const @ByRef btTransform frameInB, @Cast("bool") boolean useLinearReferenceFrameB) { super((Pointer)null); allocate(rbB, frameInB, useLinearReferenceFrameB); }
 	private native void allocate(@ByRef btRigidBody rbB, @Const @ByRef btTransform frameInB, @Cast("bool") boolean useLinearReferenceFrameB);
 	public native void enableSpring(int index, @Cast("bool") boolean onOff);
-	public native void setStiffness(int index, @Cast("btScalar") float stiffness);
-	public native void setDamping(int index, @Cast("btScalar") float damping);
+	public native void setStiffness(int index, @Cast("btScalar") double stiffness);
+	public native void setDamping(int index, @Cast("btScalar") double damping);
 	public native void setEquilibriumPoint();           // set the current constraint position/orientation as an equilibrium point for all DOF
 	public native void setEquilibriumPoint(int index);  // set the current constraint position/orientation as an equilibrium point for given DOF
-	public native void setEquilibriumPoint(int index, @Cast("btScalar") float val);
+	public native void setEquilibriumPoint(int index, @Cast("btScalar") double val);
 
 	public native @Cast("bool") boolean isSpringEnabled(int index);
 
-	public native @Cast("btScalar") float getStiffness(int index);
+	public native @Cast("btScalar") double getStiffness(int index);
 
-	public native @Cast("btScalar") float getDamping(int index);
+	public native @Cast("btScalar") double getDamping(int index);
 
-	public native @Cast("btScalar") float getEquilibriumPoint(int index);
+	public native @Cast("btScalar") double getEquilibriumPoint(int index);
 
 	public native void setAxis(@Const @ByRef btVector3 axis1, @Const @ByRef btVector3 axis2);
 

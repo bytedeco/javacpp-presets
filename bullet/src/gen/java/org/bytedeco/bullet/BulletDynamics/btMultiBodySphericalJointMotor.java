@@ -21,8 +21,8 @@ public class btMultiBodySphericalJointMotor extends btMultiBodyConstraint {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btMultiBodySphericalJointMotor(Pointer p) { super(p); }
 
-	public btMultiBodySphericalJointMotor(btMultiBody body, int link, @Cast("btScalar") float maxMotorImpulse) { super((Pointer)null); allocate(body, link, maxMotorImpulse); }
-	private native void allocate(btMultiBody body, int link, @Cast("btScalar") float maxMotorImpulse);
+	public btMultiBodySphericalJointMotor(btMultiBody body, int link, @Cast("btScalar") double maxMotorImpulse) { super((Pointer)null); allocate(body, link, maxMotorImpulse); }
+	private native void allocate(btMultiBody body, int link, @Cast("btScalar") double maxMotorImpulse);
 	public native void finalizeMultiDof();
 
 	public native int getIslandIdA();
@@ -32,27 +32,27 @@ public class btMultiBodySphericalJointMotor extends btMultiBodyConstraint {
 										  @ByRef btMultiBodyJacobianData data,
 										  @Const @ByRef btContactSolverInfo infoGlobal);
 
-	public native void setVelocityTarget(@Const @ByRef btVector3 velTarget, @Cast("btScalar") float kd/*=1.0*/);
+	public native void setVelocityTarget(@Const @ByRef btVector3 velTarget, @Cast("btScalar") double kd/*=1.0*/);
 	public native void setVelocityTarget(@Const @ByRef btVector3 velTarget);
 
 	public native void setVelocityTargetMultiDof(@Const @ByRef btVector3 velTarget, @Const @ByRef(nullValue = "btVector3(1.0, 1.0, 1.0)") btVector3 kd);
 	public native void setVelocityTargetMultiDof(@Const @ByRef btVector3 velTarget);
 
-	public native void setPositionTarget(@Const @ByRef btQuaternion posTarget, @Cast("btScalar") float kp/*=1.f*/);
+	public native void setPositionTarget(@Const @ByRef btQuaternion posTarget, @Cast("btScalar") double kp/*=1.f*/);
 	public native void setPositionTarget(@Const @ByRef btQuaternion posTarget);
 
 	public native void setPositionTargetMultiDof(@Const @ByRef btQuaternion posTarget, @Const @ByRef(nullValue = "btVector3(1.f, 1.f, 1.f)") btVector3 kp);
 	public native void setPositionTargetMultiDof(@Const @ByRef btQuaternion posTarget);
 
-	public native void setErp(@Cast("btScalar") float erp);
-	public native @Cast("btScalar") float getErp();
-	public native void setRhsClamp(@Cast("btScalar") float rhsClamp);
+	public native void setErp(@Cast("btScalar") double erp);
+	public native @Cast("btScalar") double getErp();
+	public native void setRhsClamp(@Cast("btScalar") double rhsClamp);
 
-	public native @Cast("btScalar") float getMaxAppliedImpulseMultiDof(int i);
+	public native @Cast("btScalar") double getMaxAppliedImpulseMultiDof(int i);
 
 	public native void setMaxAppliedImpulseMultiDof(@Const @ByRef btVector3 maxImp);
 
-	public native @Cast("btScalar") float getDamping(int i);
+	public native @Cast("btScalar") double getDamping(int i);
 
 	public native void setDamping(@Const @ByRef btVector3 damping);
 

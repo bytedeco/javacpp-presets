@@ -23,11 +23,11 @@ public class btTriangleConvexcastCallback extends btTriangleCallback {
 	public native @ByRef btTransform m_convexShapeFrom(); public native btTriangleConvexcastCallback m_convexShapeFrom(btTransform setter);
 	public native @ByRef btTransform m_convexShapeTo(); public native btTriangleConvexcastCallback m_convexShapeTo(btTransform setter);
 	public native @ByRef btTransform m_triangleToWorld(); public native btTriangleConvexcastCallback m_triangleToWorld(btTransform setter);
-	public native @Cast("btScalar") float m_hitFraction(); public native btTriangleConvexcastCallback m_hitFraction(float setter);
-	public native @Cast("btScalar") float m_triangleCollisionMargin(); public native btTriangleConvexcastCallback m_triangleCollisionMargin(float setter);
-	public native @Cast("btScalar") float m_allowedPenetration(); public native btTriangleConvexcastCallback m_allowedPenetration(float setter);
+	public native @Cast("btScalar") double m_hitFraction(); public native btTriangleConvexcastCallback m_hitFraction(double setter);
+	public native @Cast("btScalar") double m_triangleCollisionMargin(); public native btTriangleConvexcastCallback m_triangleCollisionMargin(double setter);
+	public native @Cast("btScalar") double m_allowedPenetration(); public native btTriangleConvexcastCallback m_allowedPenetration(double setter);
 
 	public native void processTriangle(btVector3 triangle, int partId, int triangleIndex);
 
-	public native @Cast("btScalar") float reportHit(@Const @ByRef btVector3 hitNormalLocal, @Const @ByRef btVector3 hitPointLocal, @Cast("btScalar") float hitFraction, int partId, int triangleIndex);
+	public native @Cast("btScalar") double reportHit(@Const @ByRef btVector3 hitNormalLocal, @Const @ByRef btVector3 hitPointLocal, @Cast("btScalar") double hitFraction, int partId, int triangleIndex);
 }

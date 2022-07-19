@@ -33,10 +33,10 @@ public class btSoftBodyWorldInfo extends Pointer {
         return new btSoftBodyWorldInfo((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float air_density(); public native btSoftBodyWorldInfo air_density(float setter);
-	public native @Cast("btScalar") float water_density(); public native btSoftBodyWorldInfo water_density(float setter);
-	public native @Cast("btScalar") float water_offset(); public native btSoftBodyWorldInfo water_offset(float setter);
-	public native @Cast("btScalar") float m_maxDisplacement(); public native btSoftBodyWorldInfo m_maxDisplacement(float setter);
+	public native @Cast("btScalar") double air_density(); public native btSoftBodyWorldInfo air_density(double setter);
+	public native @Cast("btScalar") double water_density(); public native btSoftBodyWorldInfo water_density(double setter);
+	public native @Cast("btScalar") double water_offset(); public native btSoftBodyWorldInfo water_offset(double setter);
+	public native @Cast("btScalar") double m_maxDisplacement(); public native btSoftBodyWorldInfo m_maxDisplacement(double setter);
 	public native @ByRef btVector3 water_normal(); public native btSoftBodyWorldInfo water_normal(btVector3 setter);
 	public native btBroadphaseInterface m_broadphase(); public native btSoftBodyWorldInfo m_broadphase(btBroadphaseInterface setter);
 	public native btDispatcher m_dispatcher(); public native btSoftBodyWorldInfo m_dispatcher(btDispatcher setter);

@@ -65,12 +65,12 @@ public class btSequentialImpulseConstraintSolverMt extends btSequentialImpulseCo
 
 	public native void solveGroupCacheFriendlySplitImpulseIterations(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
 	public native void solveGroupCacheFriendlySplitImpulseIterations(@ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
-	public native @Cast("btScalar") float solveSingleIteration(int iteration, @Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
-	public native @Cast("btScalar") float solveSingleIteration(int iteration, @ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
-	public native @Cast("btScalar") float solveGroupCacheFriendlySetup(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
-	public native @Cast("btScalar") float solveGroupCacheFriendlySetup(@ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
-	public native @Cast("btScalar") float solveGroupCacheFriendlyFinish(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Const @ByRef btContactSolverInfo infoGlobal);
-	public native @Cast("btScalar") float solveGroupCacheFriendlyFinish(@ByPtrPtr btCollisionObject bodies, int numBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveSingleIteration(int iteration, @Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
+	public native @Cast("btScalar") double solveSingleIteration(int iteration, @ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
+	public native @Cast("btScalar") double solveGroupCacheFriendlySetup(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Cast("btTypedConstraint**") PointerPointer constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
+	public native @Cast("btScalar") double solveGroupCacheFriendlySetup(@ByPtrPtr btCollisionObject bodies, int numBodies, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @ByPtrPtr btTypedConstraint constraints, int numConstraints, @Const @ByRef btContactSolverInfo infoGlobal, btIDebugDraw debugDrawer);
+	public native @Cast("btScalar") double solveGroupCacheFriendlyFinish(@Cast("btCollisionObject**") PointerPointer bodies, int numBodies, @Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveGroupCacheFriendlyFinish(@ByPtrPtr btCollisionObject bodies, int numBodies, @Const @ByRef btContactSolverInfo infoGlobal);
 
 	// temp struct used to collect info from persistent manifolds into a cache-friendly struct using multiple threads
 	public static class btContactManifoldCachedInfo extends Pointer {
@@ -141,12 +141,12 @@ public class btSequentialImpulseConstraintSolverMt extends btSequentialImpulseCo
 	public btSequentialImpulseConstraintSolverMt() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native @Cast("btScalar") float resolveMultipleJointConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd, int iteration);
-	public native @Cast("btScalar") float resolveMultipleContactConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactSplitPenetrationImpulseConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactRollingFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
-	public native @Cast("btScalar") float resolveMultipleContactConstraintsInterleaved(@Const @ByRef btIntArray contactIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") double resolveMultipleJointConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd, int iteration);
+	public native @Cast("btScalar") double resolveMultipleContactConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") double resolveMultipleContactSplitPenetrationImpulseConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") double resolveMultipleContactFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") double resolveMultipleContactRollingFrictionConstraints(@Const @ByRef btIntArray consIndices, int batchBegin, int batchEnd);
+	public native @Cast("btScalar") double resolveMultipleContactConstraintsInterleaved(@Const @ByRef btIntArray contactIndices, int batchBegin, int batchEnd);
 
 	public native void internalCollectContactManifoldCachedInfo(btContactManifoldCachedInfo cachedInfoArray, @Cast("btPersistentManifold**") PointerPointer manifoldPtr, int numManifolds, @Const @ByRef btContactSolverInfo infoGlobal);
 	public native void internalCollectContactManifoldCachedInfo(btContactManifoldCachedInfo cachedInfoArray, @ByPtrPtr btPersistentManifold manifoldPtr, int numManifolds, @Const @ByRef btContactSolverInfo infoGlobal);

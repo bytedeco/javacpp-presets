@@ -30,17 +30,17 @@ public class btTransformUtil extends Pointer {
         return new btTransformUtil((Pointer)this).offsetAddress(i);
     }
 
-	public static native void integrateTransform(@Const @ByRef btTransform curTrans, @Const @ByRef btVector3 linvel, @Const @ByRef btVector3 angvel, @Cast("btScalar") float timeStep, @ByRef btTransform predictedTransform);
+	public static native void integrateTransform(@Const @ByRef btTransform curTrans, @Const @ByRef btVector3 linvel, @Const @ByRef btVector3 angvel, @Cast("btScalar") double timeStep, @ByRef btTransform predictedTransform);
 
-	public static native void calculateVelocityQuaternion(@Const @ByRef btVector3 pos0, @Const @ByRef btVector3 pos1, @Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1, @Cast("btScalar") float timeStep, @ByRef btVector3 linVel, @ByRef btVector3 angVel);
+	public static native void calculateVelocityQuaternion(@Const @ByRef btVector3 pos0, @Const @ByRef btVector3 pos1, @Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1, @Cast("btScalar") double timeStep, @ByRef btVector3 linVel, @ByRef btVector3 angVel);
 
-	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef FloatPointer angle);
-	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef FloatBuffer angle);
-	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef float[] angle);
+	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef DoublePointer angle);
+	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef DoubleBuffer angle);
+	public static native void calculateDiffAxisAngleQuaternion(@Const @ByRef btQuaternion orn0, @Const @ByRef btQuaternion orn1a, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef double[] angle);
 
-	public static native void calculateVelocity(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @Cast("btScalar") float timeStep, @ByRef btVector3 linVel, @ByRef btVector3 angVel);
+	public static native void calculateVelocity(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @Cast("btScalar") double timeStep, @ByRef btVector3 linVel, @ByRef btVector3 angVel);
 
-	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef FloatPointer angle);
-	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef FloatBuffer angle);
-	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef float[] angle);
+	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef DoublePointer angle);
+	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef DoubleBuffer angle);
+	public static native void calculateDiffAxisAngle(@Const @ByRef btTransform transform0, @Const @ByRef btTransform transform1, @ByRef btVector3 axis, @Cast("btScalar*") @ByRef double[] angle);
 }

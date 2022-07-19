@@ -37,44 +37,44 @@ public class btAngularLimit extends Pointer {
 	/** Sets all limit's parameters.
 	 *  When low > high limit becomes inactive.
 	 *  When high - low > 2PI limit is ineffective too becouse no angle can exceed the limit */
-	public native void set(@Cast("btScalar") float low, @Cast("btScalar") float high, @Cast("btScalar") float _softness/*=0.9f*/, @Cast("btScalar") float _biasFactor/*=0.3f*/, @Cast("btScalar") float _relaxationFactor/*=1.0f*/);
-	public native void set(@Cast("btScalar") float low, @Cast("btScalar") float high);
+	public native void set(@Cast("btScalar") double low, @Cast("btScalar") double high, @Cast("btScalar") double _softness/*=0.9f*/, @Cast("btScalar") double _biasFactor/*=0.3f*/, @Cast("btScalar") double _relaxationFactor/*=1.0f*/);
+	public native void set(@Cast("btScalar") double low, @Cast("btScalar") double high);
 
 	/** Checks conastaint angle against limit. If limit is active and the angle violates the limit
 	 *  correction is calculated. */
-	public native void test(@Cast("const btScalar") float angle);
+	public native void test(@Cast("const btScalar") double angle);
 
 	/** Returns limit's softness */
-	public native @Cast("btScalar") float getSoftness();
+	public native @Cast("btScalar") double getSoftness();
 
 	/** Returns limit's bias factor */
-	public native @Cast("btScalar") float getBiasFactor();
+	public native @Cast("btScalar") double getBiasFactor();
 
 	/** Returns limit's relaxation factor */
-	public native @Cast("btScalar") float getRelaxationFactor();
+	public native @Cast("btScalar") double getRelaxationFactor();
 
 	/** Returns correction value evaluated when test() was invoked */
-	public native @Cast("btScalar") float getCorrection();
+	public native @Cast("btScalar") double getCorrection();
 
 	/** Returns sign value evaluated when test() was invoked */
-	public native @Cast("btScalar") float getSign();
+	public native @Cast("btScalar") double getSign();
 
 	/** Gives half of the distance between min and max limit angle */
-	public native @Cast("btScalar") float getHalfRange();
+	public native @Cast("btScalar") double getHalfRange();
 
 	/** Returns true when the last test() invocation recognized limit violation */
 	public native @Cast("bool") boolean isLimit();
 
 	/** Checks given angle against limit. If limit is active and angle doesn't fit it, the angle
 	 *  returned is modified so it equals to the limit closest to given angle. */
-	public native void fit(@Cast("btScalar*") @ByRef FloatPointer angle);
-	public native void fit(@Cast("btScalar*") @ByRef FloatBuffer angle);
-	public native void fit(@Cast("btScalar*") @ByRef float[] angle);
+	public native void fit(@Cast("btScalar*") @ByRef DoublePointer angle);
+	public native void fit(@Cast("btScalar*") @ByRef DoubleBuffer angle);
+	public native void fit(@Cast("btScalar*") @ByRef double[] angle);
 
 	/** Returns correction value multiplied by sign value */
-	public native @Cast("btScalar") float getError();
+	public native @Cast("btScalar") double getError();
 
-	public native @Cast("btScalar") float getLow();
+	public native @Cast("btScalar") double getLow();
 
-	public native @Cast("btScalar") float getHigh();
+	public native @Cast("btScalar") double getHigh();
 }

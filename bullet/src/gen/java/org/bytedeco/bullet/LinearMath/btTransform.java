@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
 
+// #else
 // #endif
 
 /**\brief The btTransform class supports rigid transforms with only translation and rotation and no scaling/shear.
@@ -92,15 +93,15 @@ public class btTransform extends Pointer {
 
 	/**\brief Set from an array 
    * @param m A pointer to a 16 element array (12 rotation(row major padded on the right by 1), and 3 translation */
-	public native void setFromOpenGLMatrix(@Cast("const btScalar*") FloatPointer m);
-	public native void setFromOpenGLMatrix(@Cast("const btScalar*") FloatBuffer m);
-	public native void setFromOpenGLMatrix(@Cast("const btScalar*") float[] m);
+	public native void setFromOpenGLMatrix(@Cast("const btScalar*") DoublePointer m);
+	public native void setFromOpenGLMatrix(@Cast("const btScalar*") DoubleBuffer m);
+	public native void setFromOpenGLMatrix(@Cast("const btScalar*") double[] m);
 
 	/**\brief Fill an array representation
    * @param m A pointer to a 16 element array (12 rotation(row major padded on the right by 1), and 3 translation */
-	public native void getOpenGLMatrix(@Cast("btScalar*") FloatPointer m);
-	public native void getOpenGLMatrix(@Cast("btScalar*") FloatBuffer m);
-	public native void getOpenGLMatrix(@Cast("btScalar*") float[] m);
+	public native void getOpenGLMatrix(@Cast("btScalar*") DoublePointer m);
+	public native void getOpenGLMatrix(@Cast("btScalar*") DoubleBuffer m);
+	public native void getOpenGLMatrix(@Cast("btScalar*") double[] m);
 
 	/**\brief Set the translational element
    * @param origin The vector to set the translation to */
@@ -135,11 +136,11 @@ public class btTransform extends Pointer {
 	/**\brief Return an identity transform */
 	public static native @Const @ByRef btTransform getIdentity();
 
-	public native void serialize(@ByRef btTransformFloatData dataOut);
+	public native void serialize(@ByRef btTransformDoubleData dataOut);
 
 	public native void serializeFloat(@ByRef btTransformFloatData dataOut);
 
-	public native void deSerialize(@Const @ByRef btTransformFloatData dataIn);
+	public native void deSerialize(@Const @ByRef btTransformDoubleData dataIn);
 
 	public native void deSerializeDouble(@Const @ByRef btTransformDoubleData dataIn);
 

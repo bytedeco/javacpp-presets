@@ -42,7 +42,7 @@ public class btConvexTriangleMeshShape extends btPolyhedralConvexAabbCachingShap
 	public native void getVertex(int i, @ByRef btVector3 vtx);
 	public native int getNumPlanes();
 	public native void getPlane(@ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport, int i);
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
@@ -52,7 +52,7 @@ public class btConvexTriangleMeshShape extends btPolyhedralConvexAabbCachingShap
 	 * by the mass. The resulting transform "principal" has to be applied inversely to the mesh in order for the local coordinate system of the
 	 * shape to be centered at the center of mass and to coincide with the principal axes. This also necessitates a correction of the world transform
 	 * of the collision object by the principal transform. This method also computes the volume of the convex mesh. */
-	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef FloatPointer volume);
-	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef FloatBuffer volume);
-	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef float[] volume);
+	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef DoublePointer volume);
+	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef DoubleBuffer volume);
+	public native void calculatePrincipalAxisTransform(@ByRef btTransform principal, @ByRef btVector3 inertia, @Cast("btScalar*") @ByRef double[] volume);
 }

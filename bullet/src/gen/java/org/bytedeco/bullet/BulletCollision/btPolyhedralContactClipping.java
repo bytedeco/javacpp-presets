@@ -32,12 +32,12 @@ public class btPolyhedralContactClipping extends Pointer {
         return new btPolyhedralContactClipping((Pointer)this).offsetAddress(i);
     }
 
-	public static native void clipHullAgainstHull(@Const @ByRef btVector3 separatingNormal1, @Const @ByRef btConvexPolyhedron hullA, @Const @ByRef btConvexPolyhedron hullB, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Cast("const btScalar") float minDist, @Cast("btScalar") float maxDist, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB1, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB2, @ByRef btDiscreteCollisionDetectorInterface.Result resultOut);
+	public static native void clipHullAgainstHull(@Const @ByRef btVector3 separatingNormal1, @Const @ByRef btConvexPolyhedron hullA, @Const @ByRef btConvexPolyhedron hullB, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Cast("const btScalar") double minDist, @Cast("btScalar") double maxDist, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB1, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB2, @ByRef btDiscreteCollisionDetectorInterface.Result resultOut);
 
-	public static native void clipFaceAgainstHull(@Const @ByRef btVector3 separatingNormal, @Const @ByRef btConvexPolyhedron hullA, @Const @ByRef btTransform transA, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB1, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB2, @Cast("const btScalar") float minDist, @Cast("btScalar") float maxDist, @ByRef btDiscreteCollisionDetectorInterface.Result resultOut);
+	public static native void clipFaceAgainstHull(@Const @ByRef btVector3 separatingNormal, @Const @ByRef btConvexPolyhedron hullA, @Const @ByRef btTransform transA, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB1, @Cast("btVertexArray*") @ByRef btVector3Array worldVertsB2, @Cast("const btScalar") double minDist, @Cast("btScalar") double maxDist, @ByRef btDiscreteCollisionDetectorInterface.Result resultOut);
 
 	public static native @Cast("bool") boolean findSeparatingAxis(@Const @ByRef btConvexPolyhedron hullA, @Const @ByRef btConvexPolyhedron hullB, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @ByRef btVector3 sep, @ByRef btDiscreteCollisionDetectorInterface.Result resultOut);
 
 	/**the clipFace method is used internally */
-	public static native void clipFace(@Cast("const btVertexArray*") @ByRef btVector3Array pVtxIn, @Cast("btVertexArray*") @ByRef btVector3Array ppVtxOut, @Const @ByRef btVector3 planeNormalWS, @Cast("btScalar") float planeEqWS);
+	public static native void clipFace(@Cast("const btVertexArray*") @ByRef btVector3Array pVtxIn, @Cast("btVertexArray*") @ByRef btVector3Array ppVtxOut, @Const @ByRef btVector3 planeNormalWS, @Cast("btScalar") double planeEqWS);
 }

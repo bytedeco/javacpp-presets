@@ -23,7 +23,7 @@ public class btActionInterface extends Pointer {
     public btActionInterface(Pointer p) { super(p); }
 
 
-	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") float deltaTimeStep);
+	public native void updateAction(btCollisionWorld collisionWorld, @Cast("btScalar") double deltaTimeStep);
 
 	public native void debugDraw(btIDebugDraw debugDrawer);
 }

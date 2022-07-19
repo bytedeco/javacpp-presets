@@ -39,9 +39,9 @@ public class btConeTwistConstraint extends btTypedConstraint {
 
 	public native void getInfo2NonVirtual(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btMatrix3x3 invInertiaWorldA, @Const @ByRef btMatrix3x3 invInertiaWorldB);
 
-	public native void solveConstraintObsolete(@ByRef btSolverBody bodyA, @ByRef btSolverBody bodyB, @Cast("btScalar") float timeStep);
+	public native void solveConstraintObsolete(@ByRef btSolverBody bodyA, @ByRef btSolverBody bodyB, @Cast("btScalar") double timeStep);
 
-	public native void updateRHS(@Cast("btScalar") float timeStep);
+	public native void updateRHS(@Cast("btScalar") double timeStep);
 
 	public native @Const @ByRef btRigidBody getRigidBodyA();
 	public native @Const @ByRef btRigidBody getRigidBodyB();
@@ -50,9 +50,9 @@ public class btConeTwistConstraint extends btTypedConstraint {
 
 	public native @Cast("bool") boolean getAngularOnly();
 
-	public native void setLimit(int limitIndex, @Cast("btScalar") float limitValue);
+	public native void setLimit(int limitIndex, @Cast("btScalar") double limitValue);
 
-	public native @Cast("btScalar") float getLimit(int limitIndex);
+	public native @Cast("btScalar") double getLimit(int limitIndex);
 
 	// setLimit(), a few notes:
 	// _softness:
@@ -65,8 +65,8 @@ public class btConeTwistConstraint extends btTypedConstraint {
 	// __relaxationFactor:
 	//		0->1, recommend to stay near 1.
 	//		the lower the value, the less the constraint will fight velocities which violate the angular limits.
-	public native void setLimit(@Cast("btScalar") float _swingSpan1, @Cast("btScalar") float _swingSpan2, @Cast("btScalar") float _twistSpan, @Cast("btScalar") float _softness/*=1.f*/, @Cast("btScalar") float _biasFactor/*=0.3f*/, @Cast("btScalar") float _relaxationFactor/*=1.0f*/);
-	public native void setLimit(@Cast("btScalar") float _swingSpan1, @Cast("btScalar") float _swingSpan2, @Cast("btScalar") float _twistSpan);
+	public native void setLimit(@Cast("btScalar") double _swingSpan1, @Cast("btScalar") double _swingSpan2, @Cast("btScalar") double _twistSpan, @Cast("btScalar") double _softness/*=1.f*/, @Cast("btScalar") double _biasFactor/*=0.3f*/, @Cast("btScalar") double _relaxationFactor/*=1.0f*/);
+	public native void setLimit(@Cast("btScalar") double _swingSpan1, @Cast("btScalar") double _swingSpan2, @Cast("btScalar") double _twistSpan);
 
 	public native @Const @ByRef btTransform getAFrame();
 	public native @Const @ByRef btTransform getBFrame();
@@ -75,32 +75,32 @@ public class btConeTwistConstraint extends btTypedConstraint {
 
 	public native int getSolveSwingLimit();
 
-	public native @Cast("btScalar") float getTwistLimitSign();
+	public native @Cast("btScalar") double getTwistLimitSign();
 
 	public native void calcAngleInfo();
 	public native void calcAngleInfo2(@Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btMatrix3x3 invInertiaWorldA, @Const @ByRef btMatrix3x3 invInertiaWorldB);
 
-	public native @Cast("btScalar") float getSwingSpan1();
-	public native @Cast("btScalar") float getSwingSpan2();
-	public native @Cast("btScalar") float getTwistSpan();
-	public native @Cast("btScalar") float getLimitSoftness();
-	public native @Cast("btScalar") float getBiasFactor();
-	public native @Cast("btScalar") float getRelaxationFactor();
-	public native @Cast("btScalar") float getTwistAngle();
+	public native @Cast("btScalar") double getSwingSpan1();
+	public native @Cast("btScalar") double getSwingSpan2();
+	public native @Cast("btScalar") double getTwistSpan();
+	public native @Cast("btScalar") double getLimitSoftness();
+	public native @Cast("btScalar") double getBiasFactor();
+	public native @Cast("btScalar") double getRelaxationFactor();
+	public native @Cast("btScalar") double getTwistAngle();
 	public native @Cast("bool") boolean isPastSwingLimit();
 
-	public native @Cast("btScalar") float getDamping();
-	public native void setDamping(@Cast("btScalar") float damping);
+	public native @Cast("btScalar") double getDamping();
+	public native void setDamping(@Cast("btScalar") double damping);
 
 	public native void enableMotor(@Cast("bool") boolean b);
 	public native @Cast("bool") boolean isMotorEnabled();
-	public native @Cast("btScalar") float getMaxMotorImpulse();
+	public native @Cast("btScalar") double getMaxMotorImpulse();
 	public native @Cast("bool") boolean isMaxMotorImpulseNormalized();
-	public native void setMaxMotorImpulse(@Cast("btScalar") float maxMotorImpulse);
-	public native void setMaxMotorImpulseNormalized(@Cast("btScalar") float maxMotorImpulse);
+	public native void setMaxMotorImpulse(@Cast("btScalar") double maxMotorImpulse);
+	public native void setMaxMotorImpulseNormalized(@Cast("btScalar") double maxMotorImpulse);
 
-	public native @Cast("btScalar") float getFixThresh();
-	public native void setFixThresh(@Cast("btScalar") float fixThresh);
+	public native @Cast("btScalar") double getFixThresh();
+	public native void setFixThresh(@Cast("btScalar") double fixThresh);
 
 	// setMotorTarget:
 	// q: the desired rotation of bodyA wrt bodyB.
@@ -112,12 +112,12 @@ public class btConeTwistConstraint extends btTypedConstraint {
 	// same as above, but q is the desired rotation of frameA wrt frameB in constraint space
 	public native void setMotorTargetInConstraintSpace(@Const @ByRef btQuaternion q);
 
-	public native @ByVal btVector3 GetPointForAngle(@Cast("btScalar") float fAngleInRadians, @Cast("btScalar") float fLength);
+	public native @ByVal btVector3 GetPointForAngle(@Cast("btScalar") double fAngleInRadians, @Cast("btScalar") double fLength);
 
 	/**override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	 * If no axis is provided, it uses the default axis for this constraint. */
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 
 	public native void setFrames(@Const @ByRef btTransform frameA, @Const @ByRef btTransform frameB);
 
@@ -126,8 +126,8 @@ public class btConeTwistConstraint extends btTypedConstraint {
 	public native @Const @ByRef btTransform getFrameOffsetB();
 
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native int getFlags();
 

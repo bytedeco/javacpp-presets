@@ -37,12 +37,12 @@ public class btTriangleIndexVertexArray extends btStridingMeshInterface {
 	private native void allocate();
 
 	//just to be backwards compatible
-	public btTriangleIndexVertexArray(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") FloatPointer vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
-	private native void allocate(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") FloatPointer vertexBase, int vertexStride);
-	public btTriangleIndexVertexArray(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") FloatBuffer vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
-	private native void allocate(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") FloatBuffer vertexBase, int vertexStride);
-	public btTriangleIndexVertexArray(int numTriangles, int[] triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") float[] vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
-	private native void allocate(int numTriangles, int[] triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") float[] vertexBase, int vertexStride);
+	public btTriangleIndexVertexArray(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") DoublePointer vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
+	private native void allocate(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") DoublePointer vertexBase, int vertexStride);
+	public btTriangleIndexVertexArray(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") DoubleBuffer vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
+	private native void allocate(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") DoubleBuffer vertexBase, int vertexStride);
+	public btTriangleIndexVertexArray(int numTriangles, int[] triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") double[] vertexBase, int vertexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride); }
+	private native void allocate(int numTriangles, int[] triangleIndexBase, int triangleIndexStride, int numVertices, @Cast("btScalar*") double[] vertexBase, int vertexStride);
 
 	public native void addIndexedMesh(@Const @ByRef btIndexedMesh mesh, @Cast("PHY_ScalarType") int indexType/*=PHY_INTEGER*/);
 	public native void addIndexedMesh(@Const @ByRef btIndexedMesh mesh);

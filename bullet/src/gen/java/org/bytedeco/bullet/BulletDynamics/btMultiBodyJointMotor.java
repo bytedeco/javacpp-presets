@@ -21,10 +21,10 @@ public class btMultiBodyJointMotor extends btMultiBodyConstraint {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btMultiBodyJointMotor(Pointer p) { super(p); }
 
-	public btMultiBodyJointMotor(btMultiBody body, int link, @Cast("btScalar") float desiredVelocity, @Cast("btScalar") float maxMotorImpulse) { super((Pointer)null); allocate(body, link, desiredVelocity, maxMotorImpulse); }
-	private native void allocate(btMultiBody body, int link, @Cast("btScalar") float desiredVelocity, @Cast("btScalar") float maxMotorImpulse);
-	public btMultiBodyJointMotor(btMultiBody body, int link, int linkDoF, @Cast("btScalar") float desiredVelocity, @Cast("btScalar") float maxMotorImpulse) { super((Pointer)null); allocate(body, link, linkDoF, desiredVelocity, maxMotorImpulse); }
-	private native void allocate(btMultiBody body, int link, int linkDoF, @Cast("btScalar") float desiredVelocity, @Cast("btScalar") float maxMotorImpulse);
+	public btMultiBodyJointMotor(btMultiBody body, int link, @Cast("btScalar") double desiredVelocity, @Cast("btScalar") double maxMotorImpulse) { super((Pointer)null); allocate(body, link, desiredVelocity, maxMotorImpulse); }
+	private native void allocate(btMultiBody body, int link, @Cast("btScalar") double desiredVelocity, @Cast("btScalar") double maxMotorImpulse);
+	public btMultiBodyJointMotor(btMultiBody body, int link, int linkDoF, @Cast("btScalar") double desiredVelocity, @Cast("btScalar") double maxMotorImpulse) { super((Pointer)null); allocate(body, link, linkDoF, desiredVelocity, maxMotorImpulse); }
+	private native void allocate(btMultiBody body, int link, int linkDoF, @Cast("btScalar") double desiredVelocity, @Cast("btScalar") double maxMotorImpulse);
 	public native void finalizeMultiDof();
 
 	public native int getIslandIdA();
@@ -34,14 +34,14 @@ public class btMultiBodyJointMotor extends btMultiBodyConstraint {
 										  @ByRef btMultiBodyJacobianData data,
 										  @Const @ByRef btContactSolverInfo infoGlobal);
 
-	public native void setVelocityTarget(@Cast("btScalar") float velTarget, @Cast("btScalar") float kd/*=1.f*/);
-	public native void setVelocityTarget(@Cast("btScalar") float velTarget);
+	public native void setVelocityTarget(@Cast("btScalar") double velTarget, @Cast("btScalar") double kd/*=1.f*/);
+	public native void setVelocityTarget(@Cast("btScalar") double velTarget);
 
-	public native void setPositionTarget(@Cast("btScalar") float posTarget, @Cast("btScalar") float kp/*=1.f*/);
-	public native void setPositionTarget(@Cast("btScalar") float posTarget);
+	public native void setPositionTarget(@Cast("btScalar") double posTarget, @Cast("btScalar") double kp/*=1.f*/);
+	public native void setPositionTarget(@Cast("btScalar") double posTarget);
 
-	public native void setErp(@Cast("btScalar") float erp);
-	public native @Cast("btScalar") float getErp();
-	public native void setRhsClamp(@Cast("btScalar") float rhsClamp);
+	public native void setErp(@Cast("btScalar") double erp);
+	public native @Cast("btScalar") double getErp();
+	public native void setRhsClamp(@Cast("btScalar") double rhsClamp);
 	public native void debugDraw(btIDebugDraw drawer);
 }

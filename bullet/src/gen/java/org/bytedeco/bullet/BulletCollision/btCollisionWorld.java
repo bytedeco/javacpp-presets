@@ -82,16 +82,16 @@ public class btCollisionWorld extends Pointer {
 		public LocalRayResult(@Const btCollisionObject collisionObject,
 							   LocalShapeInfo localShapeInfo,
 							   @Const @ByRef btVector3 hitNormalLocal,
-							   @Cast("btScalar") float hitFraction) { super((Pointer)null); allocate(collisionObject, localShapeInfo, hitNormalLocal, hitFraction); }
+							   @Cast("btScalar") double hitFraction) { super((Pointer)null); allocate(collisionObject, localShapeInfo, hitNormalLocal, hitFraction); }
 		private native void allocate(@Const btCollisionObject collisionObject,
 							   LocalShapeInfo localShapeInfo,
 							   @Const @ByRef btVector3 hitNormalLocal,
-							   @Cast("btScalar") float hitFraction);
+							   @Cast("btScalar") double hitFraction);
 
 		public native @Const btCollisionObject m_collisionObject(); public native LocalRayResult m_collisionObject(btCollisionObject setter);
 		public native LocalShapeInfo m_localShapeInfo(); public native LocalRayResult m_localShapeInfo(LocalShapeInfo setter);
 		public native @ByRef btVector3 m_hitNormalLocal(); public native LocalRayResult m_hitNormalLocal(btVector3 setter);
-		public native @Cast("btScalar") float m_hitFraction(); public native LocalRayResult m_hitFraction(float setter);
+		public native @Cast("btScalar") double m_hitFraction(); public native LocalRayResult m_hitFraction(double setter);
 	}
 
 	/**RayResultCallback is used to report new raycast results */
@@ -100,7 +100,7 @@ public class btCollisionWorld extends Pointer {
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public RayResultCallback(Pointer p) { super(p); }
 	
-		public native @Cast("btScalar") float m_closestHitFraction(); public native RayResultCallback m_closestHitFraction(float setter);
+		public native @Cast("btScalar") double m_closestHitFraction(); public native RayResultCallback m_closestHitFraction(double setter);
 		public native @Const btCollisionObject m_collisionObject(); public native RayResultCallback m_collisionObject(btCollisionObject setter);
 		public native int m_collisionFilterGroup(); public native RayResultCallback m_collisionFilterGroup(int setter);
 		public native int m_collisionFilterMask(); public native RayResultCallback m_collisionFilterMask(int setter);
@@ -110,7 +110,7 @@ public class btCollisionWorld extends Pointer {
 
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
+		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
 	@NoOffset public static class ClosestRayResultCallback extends RayResultCallback {
@@ -127,7 +127,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3 m_hitNormalWorld(); public native ClosestRayResultCallback m_hitNormalWorld(btVector3 setter);
 		public native @ByRef btVector3 m_hitPointWorld(); public native ClosestRayResultCallback m_hitPointWorld(btVector3 setter);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
+		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
 	@NoOffset public static class AllHitsRayResultCallback extends RayResultCallback {
@@ -147,7 +147,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3Array m_hitPointWorld(); public native AllHitsRayResultCallback m_hitPointWorld(btVector3Array setter);
 		public native @ByRef btScalarArray m_hitFractions(); public native AllHitsRayResultCallback m_hitFractions(btScalarArray setter);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
+		public native @Cast("btScalar") double addSingleResult(@ByRef LocalRayResult rayResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
 	@NoOffset public static class LocalConvexResult extends Pointer {
@@ -159,18 +159,18 @@ public class btCollisionWorld extends Pointer {
 								  LocalShapeInfo localShapeInfo,
 								  @Const @ByRef btVector3 hitNormalLocal,
 								  @Const @ByRef btVector3 hitPointLocal,
-								  @Cast("btScalar") float hitFraction) { super((Pointer)null); allocate(hitCollisionObject, localShapeInfo, hitNormalLocal, hitPointLocal, hitFraction); }
+								  @Cast("btScalar") double hitFraction) { super((Pointer)null); allocate(hitCollisionObject, localShapeInfo, hitNormalLocal, hitPointLocal, hitFraction); }
 		private native void allocate(@Const btCollisionObject hitCollisionObject,
 								  LocalShapeInfo localShapeInfo,
 								  @Const @ByRef btVector3 hitNormalLocal,
 								  @Const @ByRef btVector3 hitPointLocal,
-								  @Cast("btScalar") float hitFraction);
+								  @Cast("btScalar") double hitFraction);
 
 		public native @Const btCollisionObject m_hitCollisionObject(); public native LocalConvexResult m_hitCollisionObject(btCollisionObject setter);
 		public native LocalShapeInfo m_localShapeInfo(); public native LocalConvexResult m_localShapeInfo(LocalShapeInfo setter);
 		public native @ByRef btVector3 m_hitNormalLocal(); public native LocalConvexResult m_hitNormalLocal(btVector3 setter);
 		public native @ByRef btVector3 m_hitPointLocal(); public native LocalConvexResult m_hitPointLocal(btVector3 setter);
-		public native @Cast("btScalar") float m_hitFraction(); public native LocalConvexResult m_hitFraction(float setter);
+		public native @Cast("btScalar") double m_hitFraction(); public native LocalConvexResult m_hitFraction(double setter);
 	}
 
 	/**RayResultCallback is used to report new raycast results */
@@ -179,7 +179,7 @@ public class btCollisionWorld extends Pointer {
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public ConvexResultCallback(Pointer p) { super(p); }
 	
-		public native @Cast("btScalar") float m_closestHitFraction(); public native ConvexResultCallback m_closestHitFraction(float setter);
+		public native @Cast("btScalar") double m_closestHitFraction(); public native ConvexResultCallback m_closestHitFraction(double setter);
 		public native int m_collisionFilterGroup(); public native ConvexResultCallback m_collisionFilterGroup(int setter);
 		public native int m_collisionFilterMask(); public native ConvexResultCallback m_collisionFilterMask(int setter);
 
@@ -187,7 +187,7 @@ public class btCollisionWorld extends Pointer {
 
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
+		public native @Cast("btScalar") double addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
 	@NoOffset public static class ClosestConvexResultCallback extends ConvexResultCallback {
@@ -205,7 +205,7 @@ public class btCollisionWorld extends Pointer {
 		public native @ByRef btVector3 m_hitPointWorld(); public native ClosestConvexResultCallback m_hitPointWorld(btVector3 setter);
 		public native @Const btCollisionObject m_hitCollisionObject(); public native ClosestConvexResultCallback m_hitCollisionObject(btCollisionObject setter);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
+		public native @Cast("btScalar") double addSingleResult(@ByRef LocalConvexResult convexResult, @Cast("bool") boolean normalInWorldSpace);
 	}
 
 	/**ContactResultCallback is used to report contact points */
@@ -216,11 +216,11 @@ public class btCollisionWorld extends Pointer {
 	
 		public native int m_collisionFilterGroup(); public native ContactResultCallback m_collisionFilterGroup(int setter);
 		public native int m_collisionFilterMask(); public native ContactResultCallback m_collisionFilterMask(int setter);
-		public native @Cast("btScalar") float m_closestDistanceThreshold(); public native ContactResultCallback m_closestDistanceThreshold(float setter);
+		public native @Cast("btScalar") double m_closestDistanceThreshold(); public native ContactResultCallback m_closestDistanceThreshold(double setter);
 
 		public native @Cast("bool") boolean needsCollision(btBroadphaseProxy proxy0);
 
-		public native @Cast("btScalar") float addSingleResult(@ByRef btManifoldPoint cp, @Const btCollisionObjectWrapper colObj0Wrap, int partId0, int index0, @Const btCollisionObjectWrapper colObj1Wrap, int partId1, int index1);
+		public native @Cast("btScalar") double addSingleResult(@ByRef btManifoldPoint cp, @Const btCollisionObjectWrapper colObj0Wrap, int partId0, int index0, @Const btCollisionObjectWrapper colObj1Wrap, int partId1, int index1);
 	}
 
 	public native int getNumCollisionObjects();
@@ -231,7 +231,7 @@ public class btCollisionWorld extends Pointer {
 
 	/** convexTest performs a swept convex cast on all objects in the btCollisionWorld, and calls the resultCallback
 	 *  This allows for several queries: first hit, all hits, any hit, dependent on the value return by the callback. */
-	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform from, @Const @ByRef btTransform to, @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") float allowedCcdPenetration/*=btScalar(0.)*/);
+	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform from, @Const @ByRef btTransform to, @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") double allowedCcdPenetration/*=btScalar(0.)*/);
 	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform from, @Const @ByRef btTransform to, @ByRef ConvexResultCallback resultCallback);
 
 	/**contactTest performs a discrete collision test between colObj against all objects in the btCollisionWorld, and calls the resultCallback.
@@ -260,11 +260,11 @@ public class btCollisionWorld extends Pointer {
 									  btCollisionObject collisionObject,
 									  @Const btCollisionShape collisionShape,
 									  @Const @ByRef btTransform colObjWorldTransform,
-									  @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") float allowedPenetration);
+									  @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") double allowedPenetration);
 
 	public static native void objectQuerySingleInternal(@Const btConvexShape castShape, @Const @ByRef btTransform convexFromTrans, @Const @ByRef btTransform convexToTrans,
 											  @Const btCollisionObjectWrapper colObjWrap,
-											  @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") float allowedPenetration);
+											  @ByRef ConvexResultCallback resultCallback, @Cast("btScalar") double allowedPenetration);
 
 	public native void addCollisionObject(btCollisionObject collisionObject, int collisionFilterGroup/*=btBroadphaseProxy::DefaultFilter*/, int collisionFilterMask/*=btBroadphaseProxy::AllFilter*/);
 	public native void addCollisionObject(btCollisionObject collisionObject);

@@ -36,9 +36,9 @@ public class btConvexInternalShape extends btConvexShape {
 	 * alternatively flush the contact points, see documentation for 'cleanProxyFromPairs' */
 	public native void setImplicitShapeDimensions(@Const @ByRef btVector3 dimensions);
 
-	public native void setSafeMargin(@Cast("btScalar") float minDimension, @Cast("btScalar") float defaultMarginMultiplier/*=0.1f*/);
-	public native void setSafeMargin(@Cast("btScalar") float minDimension);
-	public native void setSafeMargin(@Const @ByRef btVector3 halfExtents, @Cast("btScalar") float defaultMarginMultiplier/*=0.1f*/);
+	public native void setSafeMargin(@Cast("btScalar") double minDimension, @Cast("btScalar") double defaultMarginMultiplier/*=0.1f*/);
+	public native void setSafeMargin(@Cast("btScalar") double minDimension);
+	public native void setSafeMargin(@Const @ByRef btVector3 halfExtents, @Cast("btScalar") double defaultMarginMultiplier/*=0.1f*/);
 	public native void setSafeMargin(@Const @ByRef btVector3 halfExtents);
 
 	/**getAabb's default implementation is brute force, expected derived classes to implement a fast dedicated version */
@@ -51,10 +51,10 @@ public class btConvexInternalShape extends btConvexShape {
 
 	public native @Const @ByRef btVector3 getLocalScalingNV();
 
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 
-	public native @Cast("btScalar") float getMarginNV();
+	public native @Cast("btScalar") double getMarginNV();
 
 	public native int getNumPreferredPenetrationDirections();
 

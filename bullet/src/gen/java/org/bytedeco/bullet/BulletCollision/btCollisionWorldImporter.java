@@ -58,19 +58,19 @@ public class btCollisionWorldImporter extends Pointer {
 
 	/**shapes */
 
-	public native btCollisionShape createPlaneShape(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") float planeConstant);
+	public native btCollisionShape createPlaneShape(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") double planeConstant);
 	public native btCollisionShape createBoxShape(@Const @ByRef btVector3 halfExtents);
-	public native btCollisionShape createSphereShape(@Cast("btScalar") float radius);
-	public native btCollisionShape createCapsuleShapeX(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createCapsuleShapeY(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createCapsuleShapeZ(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public native btCollisionShape createSphereShape(@Cast("btScalar") double radius);
+	public native btCollisionShape createCapsuleShapeX(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createCapsuleShapeY(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createCapsuleShapeZ(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 
-	public native btCollisionShape createCylinderShapeX(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createCylinderShapeY(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createCylinderShapeZ(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createConeShapeX(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createConeShapeY(@Cast("btScalar") float radius, @Cast("btScalar") float height);
-	public native btCollisionShape createConeShapeZ(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public native btCollisionShape createCylinderShapeX(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createCylinderShapeY(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createCylinderShapeZ(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createConeShapeX(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createConeShapeY(@Cast("btScalar") double radius, @Cast("btScalar") double height);
+	public native btCollisionShape createConeShapeZ(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 	public native btTriangleIndexVertexArray createTriangleMeshContainer();
 	public native btBvhTriangleMeshShape createBvhTriangleMeshShape(btStridingMeshInterface trimesh, btOptimizedBvh bvh);
 	public native btCollisionShape createConvexTriangleMeshShape(btStridingMeshInterface trimesh);
@@ -82,9 +82,9 @@ public class btCollisionWorldImporter extends Pointer {
 	public native btCompoundShape createCompoundShape();
 	public native btScaledBvhTriangleMeshShape createScaledTrangleMeshShape(btBvhTriangleMeshShape meshShape, @Const @ByRef btVector3 localScalingbtBvhTriangleMeshShape);
 
-	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") FloatPointer radi, int numSpheres);
-	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") FloatBuffer radi, int numSpheres);
-	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") float[] radi, int numSpheres);
+	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") DoublePointer radi, int numSpheres);
+	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") DoubleBuffer radi, int numSpheres);
+	public native btMultiSphereShape createMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") double[] radi, int numSpheres);
 
 	public native btTriangleIndexVertexArray createMeshInterface(@ByRef btStridingMeshInterfaceData meshData);
 

@@ -46,31 +46,31 @@ public class btMultiBodyConstraint extends Pointer {
 
 	public native int getLinkA();
 	public native int getLinkB();
-	public native void internalSetAppliedImpulse(int dof, @Cast("btScalar") float appliedImpulse);
+	public native void internalSetAppliedImpulse(int dof, @Cast("btScalar") double appliedImpulse);
 
-	public native @Cast("btScalar") float getAppliedImpulse(int dof);
+	public native @Cast("btScalar") double getAppliedImpulse(int dof);
 	// current constraint position
 	// constraint is pos >= 0 for unilateral, or pos = 0 for bilateral
 	// NOTE: ignored position for friction rows.
-	public native @Cast("btScalar") float getPosition(int row);
+	public native @Cast("btScalar") double getPosition(int row);
 
-	public native void setPosition(int row, @Cast("btScalar") float pos);
+	public native void setPosition(int row, @Cast("btScalar") double pos);
 
 	public native @Cast("bool") boolean isUnilateral();
 
 	// jacobian blocks.
 	// each of size 6 + num_links. (jacobian2 is null if no body2.)
 	// format: 3 'omega' coefficients, 3 'v' coefficients, then the 'qdot' coefficients.
-	public native @Cast("btScalar*") FloatPointer jacobianA(int row);
-	public native @Cast("btScalar*") FloatPointer jacobianB(int row);
+	public native @Cast("btScalar*") DoublePointer jacobianA(int row);
+	public native @Cast("btScalar*") DoublePointer jacobianB(int row);
 
-	public native @Cast("btScalar") float getMaxAppliedImpulse();
-	public native void setMaxAppliedImpulse(@Cast("btScalar") float maxImp);
+	public native @Cast("btScalar") double getMaxAppliedImpulse();
+	public native void setMaxAppliedImpulse(@Cast("btScalar") double maxImp);
 
 	public native void debugDraw(btIDebugDraw drawer);
 
-	public native void setGearRatio(@Cast("btScalar") float ratio);
+	public native void setGearRatio(@Cast("btScalar") double ratio);
 	public native void setGearAuxLink(int gearAuxLink);
-	public native void setRelativePositionTarget(@Cast("btScalar") float relPosTarget);
-	public native void setErp(@Cast("btScalar") float erp);
+	public native void setRelativePositionTarget(@Cast("btScalar") double relPosTarget);
+	public native void setErp(@Cast("btScalar") double erp);
 }

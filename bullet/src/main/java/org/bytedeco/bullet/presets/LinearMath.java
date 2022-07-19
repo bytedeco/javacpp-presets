@@ -38,6 +38,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = javacpp.class,
     value = {
         @Platform(
+            define = {
+                "BT_USE_DOUBLE_PRECISION",
+            },
             include = {
                 "LinearMath/btScalar.h",
                 "LinearMath/btVector3.h",
@@ -65,7 +68,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btTransformUtil.h",
                 "LinearMath/btMatrixX.h",
             },
-            link = "LinearMath@.3.20"
+            link = "LinearMath@.3.24",
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}
         )
     },
     target = "org.bytedeco.bullet.LinearMath",
@@ -78,10 +82,10 @@ public class LinearMath implements InfoMapper {
         infoMap
             .put(new Info("ATTRIBUTE_ALIGNED16").cppText("#define ATTRIBUTE_ALIGNED16(x) x"))
             .put(new Info("BT_OVERRIDE").cppText("#define BT_OVERRIDE"))
-            .put(new Info("btMatrix3x3Data").cppText("#define btMatrix3x3Data btMatrix3x3FloatData"))
-            .put(new Info("btQuaternionData").cppText("#define btQuaternionData btQuaternionFloatData"))
-            .put(new Info("btTransformData").cppText("#define btTransformData btTransformFloatData"))
-            .put(new Info("btVector3Data").cppText("#define btVector3Data btVector3FloatData"))
+            .put(new Info("btMatrix3x3Data").cppText("#define btMatrix3x3Data btMatrix3x3DoubleData"))
+            .put(new Info("btQuaternionData").cppText("#define btQuaternionData btQuaternionDoubleData"))
+            .put(new Info("btTransformData").cppText("#define btTransformData btTransformDoubleData"))
+            .put(new Info("btVector3Data").cppText("#define btVector3Data btVector3DoubleData"))
 
             .put(new Info("SIMD_FORCE_INLINE").cppTypes().annotations())
 
@@ -90,7 +94,6 @@ public class LinearMath implements InfoMapper {
                     "(defined(BT_USE_SSE_IN_API) && defined(BT_USE_SSE)) || defined(BT_USE_NEON)",
                     "BT_DEBUG_MEMORY_ALLOCATIONS",
                     "BT_DEBUG_OSTREAM",
-                    "BT_USE_DOUBLE_PRECISION",
                     "BT_USE_NEON",
                     "BT_USE_SSE",
                     "ENABLE_INMEMORY_SERIALIZER",
@@ -98,7 +101,6 @@ public class LinearMath implements InfoMapper {
                     "USE_SIMD",
                     "_WIN32",
                     "defined BT_USE_SSE",
-                    "defined(BT_USE_DOUBLE_PRECISION)",
                     "defined(BT_USE_NEON)",
                     "defined(BT_USE_SSE) || defined(BT_USE_NEON)",
                     "defined(BT_USE_SSE)",
@@ -107,6 +109,10 @@ public class LinearMath implements InfoMapper {
                     "defined(__SPU__) && defined(__CELLOS_LV2__)",
                     "defined\t(__CELLOS_LV2__)"
                 ).define(false))
+            .put(new Info(
+                    "BT_USE_DOUBLE_PRECISION",
+                    "defined(BT_USE_DOUBLE_PRECISION)"
+                ).define(true))
 
             .put(new Info("btDefaultSerializer").immutable(true))
 
@@ -114,8 +120,9 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btAlignedObjectArray<char>").pointerTypes("btCharArray"))
             .put(new Info("btAlignedObjectArray<int>").pointerTypes("btIntArray"))
             .put(new Info("btAlignedObjectArray<unsigned int>").pointerTypes("btUIntArray"))
-            .put(new Info("btAlignedObjectArray<float>").pointerTypes("btScalarArray"))
+            .put(new Info("btAlignedObjectArray<float>").pointerTypes("btFloatArray"))
             .put(new Info("btAlignedObjectArray<double>").pointerTypes("btDoubleArray"))
+            .put(new Info("btAlignedObjectArray<double>").pointerTypes("btScalarArray"))
             .put(new Info("btAlignedObjectArray<btScalar>").pointerTypes("btScalarArray"))
             .put(new Info("btAlignedObjectArray<btMatrix3x3>").pointerTypes("btMatrix3x3Array"))
             .put(new Info("btAlignedObjectArray<btQuaternion>").pointerTypes("btQuaternionArray"))
@@ -136,8 +143,8 @@ public class LinearMath implements InfoMapper {
             .put(new Info("btVectorX<double>").pointerTypes("btVectorXd"))
             .put(new Info("btMatrixX<float>").pointerTypes("btMatrixXf"))
             .put(new Info("btMatrixX<double>").pointerTypes("btMatrixXd"))
-            .put(new Info("btVectorXu").cppText("#define btVectorXu btVectorXf"))
-            .put(new Info("btMatrixXu").cppText("#define btMatrixXu btMatrixXf"))
+            .put(new Info("btVectorXu").cppText("#define btVectorXu btVectorXd"))
+            .put(new Info("btMatrixXu").cppText("#define btMatrixXu btMatrixXd"))
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 

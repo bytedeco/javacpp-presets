@@ -29,15 +29,15 @@ public class btVector4 extends btVector3 {
 	public btVector4() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public btVector4(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w) { super((Pointer)null); allocate(_x, _y, _z, _w); }
-	private native void allocate(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w);
+	public btVector4(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w) { super((Pointer)null); allocate(_x, _y, _z, _w); }
+	private native void allocate(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w);
 
 // #if (defined(BT_USE_SSE_IN_API) && defined(BT_USE_SSE)) || defined(BT_USE_NEON)
 // #endif  // #if defined (BT_USE_SSE_IN_API) || defined (BT_USE_NEON)
 
 	public native @ByVal btVector4 absolute4();
 
-	public native @Cast("btScalar") float getW();
+	public native @Cast("btScalar") double getW();
 
 	public native int maxAxis4();
 
@@ -64,5 +64,5 @@ public class btVector4 extends btVector3 {
    * @param z Value of z
    * @param w Value of w
    */
-	public native void setValue(@Cast("const btScalar") float _x, @Cast("const btScalar") float _y, @Cast("const btScalar") float _z, @Cast("const btScalar") float _w);
+	public native void setValue(@Cast("const btScalar") double _x, @Cast("const btScalar") double _y, @Cast("const btScalar") double _z, @Cast("const btScalar") double _w);
 }

@@ -47,9 +47,9 @@ public class btDefaultSoftBodySolver extends btSoftBodySolver {
 	public native void copyBackToSoftBodies(@Cast("bool") boolean bMove/*=true*/);
 	public native void copyBackToSoftBodies();
 
-	public native void solveConstraints(@Cast("btScalar") float solverdt);
+	public native void solveConstraints(@Cast("btScalar") double solverdt);
 
-	public native void predictMotion(@Cast("btScalar") float solverdt);
+	public native void predictMotion(@Cast("btScalar") double solverdt);
 
 	public native void copySoftBodyToVertexBuffer(@Const btSoftBody softBody, btVertexBufferDescriptor vertexBuffer);
 

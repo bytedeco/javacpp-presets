@@ -36,9 +36,9 @@ public class btTriangleRaycastCallback extends btTriangleCallback {
 		kF_Terminator = 0xFFFFFFFF;
 	public native @Cast("unsigned int") int m_flags(); public native btTriangleRaycastCallback m_flags(int setter);
 
-	public native @Cast("btScalar") float m_hitFraction(); public native btTriangleRaycastCallback m_hitFraction(float setter);
+	public native @Cast("btScalar") double m_hitFraction(); public native btTriangleRaycastCallback m_hitFraction(double setter);
 
 	public native void processTriangle(btVector3 triangle, int partId, int triangleIndex);
 
-	public native @Cast("btScalar") float reportHit(@Const @ByRef btVector3 hitNormalLocal, @Cast("btScalar") float hitFraction, int partId, int triangleIndex);
+	public native @Cast("btScalar") double reportHit(@Const @ByRef btVector3 hitNormalLocal, @Cast("btScalar") double hitFraction, int partId, int triangleIndex);
 }

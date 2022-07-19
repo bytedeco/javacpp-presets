@@ -52,8 +52,8 @@ public class btMultiBodyGearConstraint extends btMultiBodyConstraint {
 
 	public native void debugDraw(btIDebugDraw drawer);
 
-	public native void setGearRatio(@Cast("btScalar") float gearRatio);
+	public native void setGearRatio(@Cast("btScalar") double gearRatio);
 	public native void setGearAuxLink(int gearAuxLink);
-	public native void setRelativePositionTarget(@Cast("btScalar") float relPosTarget);
-	public native void setErp(@Cast("btScalar") float erp);
+	public native void setRelativePositionTarget(@Cast("btScalar") double relPosTarget);
+	public native void setErp(@Cast("btScalar") double erp);
 }

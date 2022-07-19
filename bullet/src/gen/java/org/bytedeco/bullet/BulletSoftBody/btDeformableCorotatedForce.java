@@ -32,29 +32,29 @@ public class btDeformableCorotatedForce extends btDeformableLagrangianForce {
         return new btDeformableCorotatedForce((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_mu(); public native btDeformableCorotatedForce m_mu(float setter);
-	public native @Cast("btScalar") float m_lambda(); public native btDeformableCorotatedForce m_lambda(float setter);
+	public native @Cast("btScalar") double m_mu(); public native btDeformableCorotatedForce m_mu(double setter);
+	public native @Cast("btScalar") double m_lambda(); public native btDeformableCorotatedForce m_lambda(double setter);
 	public btDeformableCorotatedForce() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public btDeformableCorotatedForce(@Cast("btScalar") float mu, @Cast("btScalar") float lambda) { super((Pointer)null); allocate(mu, lambda); }
-	private native void allocate(@Cast("btScalar") float mu, @Cast("btScalar") float lambda);
+	public btDeformableCorotatedForce(@Cast("btScalar") double mu, @Cast("btScalar") double lambda) { super((Pointer)null); allocate(mu, lambda); }
+	private native void allocate(@Cast("btScalar") double mu, @Cast("btScalar") double lambda);
 
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledForces(@Cast("btScalar") double scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledExplicitForce(@Cast("btScalar") double scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledDampingForce(@Cast("btScalar") double scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledElasticForce(@Cast("btScalar") float scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledElasticForce(@Cast("btScalar") double scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array force);
 
 	public native void firstPiola(@Const @ByRef btMatrix3x3 F, @ByRef btMatrix3x3 P);
 
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") double scale, @Cast("btDeformableCorotatedForce::TVStack*") @ByRef btVector3Array diagA);
 
 	public native @Cast("btDeformableLagrangianForceType") int getForceType();
 }

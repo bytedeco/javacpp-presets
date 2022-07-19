@@ -35,10 +35,10 @@ public class btSpatialMotionVector extends Pointer {
 	private native void allocate(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
 	//
 	public native void setVector(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
-	public native void setValue(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz);
+	public native void setValue(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz);
 	//
 	public native void addVector(@Const @ByRef btVector3 angular, @Const @ByRef btVector3 linear);
-	public native void addValue(@Cast("const btScalar") float ax, @Cast("const btScalar") float ay, @Cast("const btScalar") float az, @Cast("const btScalar") float lx, @Cast("const btScalar") float ly, @Cast("const btScalar") float lz);
+	public native void addValue(@Cast("const btScalar") double ax, @Cast("const btScalar") double ay, @Cast("const btScalar") double az, @Cast("const btScalar") double lx, @Cast("const btScalar") double ly, @Cast("const btScalar") double lz);
 	//
 	public native @Const @ByRef btVector3 getAngular();
 	public native @Const @ByRef btVector3 getLinear();
@@ -51,14 +51,14 @@ public class btSpatialMotionVector extends Pointer {
 	//
 	public native void setZero();
 	//
-	public native @Cast("btScalar") float dot(@Const @ByRef btSpatialForceVector b);
+	public native @Cast("btScalar") double dot(@Const @ByRef btSpatialForceVector b);
 	//
 	//
 	public native @ByRef @Name("operator +=") btSpatialMotionVector addPut(@Const @ByRef btSpatialMotionVector vec);
 	public native @ByRef @Name("operator -=") btSpatialMotionVector subtractPut(@Const @ByRef btSpatialMotionVector vec);
-	public native @ByRef @Name("operator *=") btSpatialMotionVector multiplyPut(@Cast("const btScalar") float s);
+	public native @ByRef @Name("operator *=") btSpatialMotionVector multiplyPut(@Cast("const btScalar") double s);
 	public native @ByVal @Name("operator -") btSpatialMotionVector subtract(@Const @ByRef btSpatialMotionVector vec);
 	public native @ByVal @Name("operator +") btSpatialMotionVector add(@Const @ByRef btSpatialMotionVector vec);
 	public native @ByVal @Name("operator -") btSpatialMotionVector subtract();
-	public native @ByVal @Name("operator *") btSpatialMotionVector multiply(@Cast("const btScalar") float s);
+	public native @ByVal @Name("operator *") btSpatialMotionVector multiply(@Cast("const btScalar") double s);
 }

@@ -57,10 +57,10 @@ public class btSoftBodySolver extends Pointer {
 	public native void copyBackToSoftBodies();
 
 	/** Predict motion of soft bodies into next timestep */
-	public native void predictMotion(@Cast("btScalar") float solverdt);
+	public native void predictMotion(@Cast("btScalar") double solverdt);
 
 	/** Solve constraints for a set of soft bodies */
-	public native void solveConstraints(@Cast("btScalar") float solverdt);
+	public native void solveConstraints(@Cast("btScalar") double solverdt);
 
 	/** Perform necessary per-step updates of soft bodies such as recomputing normals and bounding boxes */
 	public native void updateSoftBodies();

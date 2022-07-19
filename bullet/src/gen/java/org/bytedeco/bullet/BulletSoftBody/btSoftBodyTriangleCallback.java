@@ -31,7 +31,7 @@ public class btSoftBodyTriangleCallback extends btTriangleCallback {
 	public btSoftBodyTriangleCallback(btDispatcher dispatcher, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Cast("bool") boolean isSwapped) { super((Pointer)null); allocate(dispatcher, body0Wrap, body1Wrap, isSwapped); }
 	private native void allocate(btDispatcher dispatcher, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Cast("bool") boolean isSwapped);
 
-	public native void setTimeStepAndCounters(@Cast("btScalar") float collisionMarginTriangle, @Const btCollisionObjectWrapper triObjWrap, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
+	public native void setTimeStepAndCounters(@Cast("btScalar") double collisionMarginTriangle, @Const btCollisionObjectWrapper triObjWrap, @Const @ByRef btDispatcherInfo dispatchInfo, btManifoldResult resultOut);
 
 	public native void processTriangle(btVector3 triangle, int partId, int triangleIndex);
 

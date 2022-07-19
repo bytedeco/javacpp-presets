@@ -24,18 +24,18 @@ public class btCollisionShape extends Pointer {
 	/**getAabb returns the axis aligned bounding box in the coordinate frame of the given transform t. */
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
-	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef FloatPointer radius);
-	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef FloatBuffer radius);
-	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef float[] radius);
+	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef DoublePointer radius);
+	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef DoubleBuffer radius);
+	public native void getBoundingSphere(@ByRef btVector3 center, @Cast("btScalar*") @ByRef double[] radius);
 
 	/**getAngularMotionDisc returns the maximum radius needed for Conservative Advancement to handle time-of-impact with rotations. */
-	public native @Cast("btScalar") float getAngularMotionDisc();
+	public native @Cast("btScalar") double getAngularMotionDisc();
 
-	public native @Cast("btScalar") float getContactBreakingThreshold(@Cast("btScalar") float defaultContactThresholdFactor);
+	public native @Cast("btScalar") double getContactBreakingThreshold(@Cast("btScalar") double defaultContactThresholdFactor);
 
 	/**calculateTemporalAabb calculates the enclosing aabb for the moving object over interval [0..timeStep)
 	 * result is conservative */
-	public native void calculateTemporalAabb(@Const @ByRef btTransform curTrans, @Const @ByRef btVector3 linvel, @Const @ByRef btVector3 angvel, @Cast("btScalar") float timeStep, @ByRef btVector3 temporalAabbMin, @ByRef btVector3 temporalAabbMax);
+	public native void calculateTemporalAabb(@Const @ByRef btTransform curTrans, @Const @ByRef btVector3 linvel, @Const @ByRef btVector3 angvel, @Cast("btScalar") double timeStep, @ByRef btVector3 temporalAabbMin, @ByRef btVector3 temporalAabbMax);
 
 	public native @Cast("bool") boolean isPolyhedral();
 
@@ -54,7 +54,7 @@ public class btCollisionShape extends Pointer {
 // #ifndef __SPU__
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	//debugging support
 	public native @Cast("const char*") BytePointer getName();
@@ -65,8 +65,8 @@ public class btCollisionShape extends Pointer {
 	/**the getAnisotropicRollingFrictionDirection can be used in combination with setAnisotropicFriction
 	 * See Bullet/Demos/RollingFrictionDemo for an example */
 	public native @ByVal btVector3 getAnisotropicRollingFrictionDirection();
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 
 	/**optional user data pointer */
 	public native void setUserPointer(Pointer userPtr);

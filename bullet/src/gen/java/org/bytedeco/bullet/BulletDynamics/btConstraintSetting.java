@@ -14,6 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletDynamics.class)
@@ -33,7 +34,7 @@ public class btConstraintSetting extends Pointer {
 
 	public btConstraintSetting() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public native @Cast("btScalar") float m_tau(); public native btConstraintSetting m_tau(float setter);
-	public native @Cast("btScalar") float m_damping(); public native btConstraintSetting m_damping(float setter);
-	public native @Cast("btScalar") float m_impulseClamp(); public native btConstraintSetting m_impulseClamp(float setter);
+	public native @Cast("btScalar") double m_tau(); public native btConstraintSetting m_tau(double setter);
+	public native @Cast("btScalar") double m_damping(); public native btConstraintSetting m_damping(double setter);
+	public native @Cast("btScalar") double m_impulseClamp(); public native btConstraintSetting m_impulseClamp(double setter);
 }

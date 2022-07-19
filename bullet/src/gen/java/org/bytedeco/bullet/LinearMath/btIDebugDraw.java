@@ -76,14 +76,14 @@ public class btIDebugDraw extends Pointer {
 
 	public native void drawLine(@Const @ByRef btVector3 from, @Const @ByRef btVector3 to, @Const @ByRef btVector3 fromColor, @Const @ByRef btVector3 toColor);
 
-	public native void drawSphere(@Cast("btScalar") float radius, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
+	public native void drawSphere(@Cast("btScalar") double radius, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
 
-	public native void drawSphere(@Const @ByRef btVector3 p, @Cast("btScalar") float radius, @Const @ByRef btVector3 color);
+	public native void drawSphere(@Const @ByRef btVector3 p, @Cast("btScalar") double radius, @Const @ByRef btVector3 color);
 
-	public native void drawTriangle(@Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 arg3, @Const @ByRef btVector3 arg4, @Const @ByRef btVector3 arg5, @Const @ByRef btVector3 color, @Cast("btScalar") float alpha);
-	public native void drawTriangle(@Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 color, @Cast("btScalar") float arg4);
+	public native void drawTriangle(@Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 arg3, @Const @ByRef btVector3 arg4, @Const @ByRef btVector3 arg5, @Const @ByRef btVector3 color, @Cast("btScalar") double alpha);
+	public native void drawTriangle(@Const @ByRef btVector3 v0, @Const @ByRef btVector3 v1, @Const @ByRef btVector3 v2, @Const @ByRef btVector3 color, @Cast("btScalar") double arg4);
 
-	public native void drawContactPoint(@Const @ByRef btVector3 PointOnB, @Const @ByRef btVector3 normalOnB, @Cast("btScalar") float distance, int lifeTime, @Const @ByRef btVector3 color);
+	public native void drawContactPoint(@Const @ByRef btVector3 PointOnB, @Const @ByRef btVector3 normalOnB, @Cast("btScalar") double distance, int lifeTime, @Const @ByRef btVector3 color);
 
 	public native void reportErrorWarning(@Cast("const char*") BytePointer warningString);
 	public native void reportErrorWarning(String warningString);
@@ -96,27 +96,27 @@ public class btIDebugDraw extends Pointer {
 	public native int getDebugMode();
 
 	public native void drawAabb(@Const @ByRef btVector3 from, @Const @ByRef btVector3 to, @Const @ByRef btVector3 color);
-	public native void drawTransform(@Const @ByRef btTransform transform, @Cast("btScalar") float orthoLen);
+	public native void drawTransform(@Const @ByRef btTransform transform, @Cast("btScalar") double orthoLen);
 
-	public native void drawArc(@Const @ByRef btVector3 center, @Const @ByRef btVector3 normal, @Const @ByRef btVector3 axis, @Cast("btScalar") float radiusA, @Cast("btScalar") float radiusB, @Cast("btScalar") float minAngle, @Cast("btScalar") float maxAngle,
-							 @Const @ByRef btVector3 color, @Cast("bool") boolean drawSect, @Cast("btScalar") float stepDegrees/*=btScalar(10.f)*/);
-	public native void drawArc(@Const @ByRef btVector3 center, @Const @ByRef btVector3 normal, @Const @ByRef btVector3 axis, @Cast("btScalar") float radiusA, @Cast("btScalar") float radiusB, @Cast("btScalar") float minAngle, @Cast("btScalar") float maxAngle,
+	public native void drawArc(@Const @ByRef btVector3 center, @Const @ByRef btVector3 normal, @Const @ByRef btVector3 axis, @Cast("btScalar") double radiusA, @Cast("btScalar") double radiusB, @Cast("btScalar") double minAngle, @Cast("btScalar") double maxAngle,
+							 @Const @ByRef btVector3 color, @Cast("bool") boolean drawSect, @Cast("btScalar") double stepDegrees/*=btScalar(10.f)*/);
+	public native void drawArc(@Const @ByRef btVector3 center, @Const @ByRef btVector3 normal, @Const @ByRef btVector3 axis, @Cast("btScalar") double radiusA, @Cast("btScalar") double radiusB, @Cast("btScalar") double minAngle, @Cast("btScalar") double maxAngle,
 							 @Const @ByRef btVector3 color, @Cast("bool") boolean drawSect);
-	public native void drawSpherePatch(@Const @ByRef btVector3 center, @Const @ByRef btVector3 up, @Const @ByRef btVector3 axis, @Cast("btScalar") float radius,
-									 @Cast("btScalar") float minTh, @Cast("btScalar") float maxTh, @Cast("btScalar") float minPs, @Cast("btScalar") float maxPs, @Const @ByRef btVector3 color, @Cast("btScalar") float stepDegrees/*=btScalar(10.f)*/, @Cast("bool") boolean drawCenter/*=true*/);
-	public native void drawSpherePatch(@Const @ByRef btVector3 center, @Const @ByRef btVector3 up, @Const @ByRef btVector3 axis, @Cast("btScalar") float radius,
-									 @Cast("btScalar") float minTh, @Cast("btScalar") float maxTh, @Cast("btScalar") float minPs, @Cast("btScalar") float maxPs, @Const @ByRef btVector3 color);
+	public native void drawSpherePatch(@Const @ByRef btVector3 center, @Const @ByRef btVector3 up, @Const @ByRef btVector3 axis, @Cast("btScalar") double radius,
+									 @Cast("btScalar") double minTh, @Cast("btScalar") double maxTh, @Cast("btScalar") double minPs, @Cast("btScalar") double maxPs, @Const @ByRef btVector3 color, @Cast("btScalar") double stepDegrees/*=btScalar(10.f)*/, @Cast("bool") boolean drawCenter/*=true*/);
+	public native void drawSpherePatch(@Const @ByRef btVector3 center, @Const @ByRef btVector3 up, @Const @ByRef btVector3 axis, @Cast("btScalar") double radius,
+									 @Cast("btScalar") double minTh, @Cast("btScalar") double maxTh, @Cast("btScalar") double minPs, @Cast("btScalar") double maxPs, @Const @ByRef btVector3 color);
 
 	public native void drawBox(@Const @ByRef btVector3 bbMin, @Const @ByRef btVector3 bbMax, @Const @ByRef btVector3 color);
 	public native void drawBox(@Const @ByRef btVector3 bbMin, @Const @ByRef btVector3 bbMax, @Const @ByRef btTransform trans, @Const @ByRef btVector3 color);
 
-	public native void drawCapsule(@Cast("btScalar") float radius, @Cast("btScalar") float halfHeight, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
+	public native void drawCapsule(@Cast("btScalar") double radius, @Cast("btScalar") double halfHeight, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
 
-	public native void drawCylinder(@Cast("btScalar") float radius, @Cast("btScalar") float halfHeight, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
+	public native void drawCylinder(@Cast("btScalar") double radius, @Cast("btScalar") double halfHeight, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
 
-	public native void drawCone(@Cast("btScalar") float radius, @Cast("btScalar") float height, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
+	public native void drawCone(@Cast("btScalar") double radius, @Cast("btScalar") double height, int upAxis, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
 
-	public native void drawPlane(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") float planeConst, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
+	public native void drawPlane(@Const @ByRef btVector3 planeNormal, @Cast("btScalar") double planeConst, @Const @ByRef btTransform transform, @Const @ByRef btVector3 color);
 
 	public native void clearLines();
 

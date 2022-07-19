@@ -37,14 +37,14 @@ public class btSdfCollisionShape extends btConcaveShape {
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 	public native @Cast("const char*") BytePointer getName();
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 
 	public native void processAllTriangles(btTriangleCallback callback, @Const @ByRef btVector3 aabbMin, @Const @ByRef btVector3 aabbMax);
 
-	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef FloatPointer distOut, @ByRef btVector3 normal);
-	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef FloatBuffer distOut, @ByRef btVector3 normal);
-	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef float[] distOut, @ByRef btVector3 normal);
+	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef DoublePointer distOut, @ByRef btVector3 normal);
+	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef DoubleBuffer distOut, @ByRef btVector3 normal);
+	public native @Cast("bool") boolean queryPoint(@Const @ByRef btVector3 ptInSDF, @Cast("btScalar*") @ByRef double[] distOut, @ByRef btVector3 normal);
 }

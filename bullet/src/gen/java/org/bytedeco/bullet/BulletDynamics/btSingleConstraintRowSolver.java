@@ -22,5 +22,5 @@ public class btSingleConstraintRowSolver extends FunctionPointer {
     public    btSingleConstraintRowSolver(Pointer p) { super(p); }
     protected btSingleConstraintRowSolver() { allocate(); }
     private native void allocate();
-    public native @Cast("btScalar") float call(@ByRef btSolverBody arg0, @ByRef btSolverBody arg1, @Const @ByRef btSolverConstraint arg2);
+    public native @Cast("btScalar") double call(@ByRef btSolverBody arg0, @ByRef btSolverBody arg1, @Const @ByRef btSolverConstraint arg2);
 }

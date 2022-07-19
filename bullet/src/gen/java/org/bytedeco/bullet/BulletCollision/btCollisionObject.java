@@ -12,6 +12,7 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 
 import static org.bytedeco.bullet.global.BulletCollision.*;
 
+// #else
 // #endif
 
 /** btCollisionObject can be used to manage collision detection objects.
@@ -76,8 +77,8 @@ public class btCollisionObject extends Pointer {
 
 	/**the constraint solver can discard solving contacts, if the distance is above this threshold. 0 by default.
 	 * Note that using contacts with positive distance can improve stability. It increases, however, the chance of colliding with degerate contacts, such as 'interior' triangle edges */
-	public native void setContactProcessingThreshold(@Cast("btScalar") float contactProcessingThreshold);
-	public native @Cast("btScalar") float getContactProcessingThreshold();
+	public native void setContactProcessingThreshold(@Cast("btScalar") double contactProcessingThreshold);
+	public native @Cast("btScalar") double getContactProcessingThreshold();
 
 	public native @Cast("bool") boolean isStaticObject();
 
@@ -113,8 +114,8 @@ public class btCollisionObject extends Pointer {
 
 	public native void setActivationState(int newState);
 
-	public native void setDeactivationTime(@Cast("btScalar") float time);
-	public native @Cast("btScalar") float getDeactivationTime();
+	public native void setDeactivationTime(@Cast("btScalar") double time);
+	public native @Cast("btScalar") double getDeactivationTime();
 
 	public native void forceActivationState(int newState);
 
@@ -123,20 +124,20 @@ public class btCollisionObject extends Pointer {
 
 	public native @Cast("bool") boolean isActive();
 
-	public native void setRestitution(@Cast("btScalar") float rest);
-	public native @Cast("btScalar") float getRestitution();
-	public native void setFriction(@Cast("btScalar") float frict);
-	public native @Cast("btScalar") float getFriction();
+	public native void setRestitution(@Cast("btScalar") double rest);
+	public native @Cast("btScalar") double getRestitution();
+	public native void setFriction(@Cast("btScalar") double frict);
+	public native @Cast("btScalar") double getFriction();
 
-	public native void setRollingFriction(@Cast("btScalar") float frict);
-	public native @Cast("btScalar") float getRollingFriction();
-	public native void setSpinningFriction(@Cast("btScalar") float frict);
-	public native @Cast("btScalar") float getSpinningFriction();
-	public native void setContactStiffnessAndDamping(@Cast("btScalar") float stiffness, @Cast("btScalar") float damping);
+	public native void setRollingFriction(@Cast("btScalar") double frict);
+	public native @Cast("btScalar") double getRollingFriction();
+	public native void setSpinningFriction(@Cast("btScalar") double frict);
+	public native @Cast("btScalar") double getSpinningFriction();
+	public native void setContactStiffnessAndDamping(@Cast("btScalar") double stiffness, @Cast("btScalar") double damping);
 
-	public native @Cast("btScalar") float getContactStiffness();
+	public native @Cast("btScalar") double getContactStiffness();
 
-	public native @Cast("btScalar") float getContactDamping();
+	public native @Cast("btScalar") double getContactDamping();
 
 	/**reserved for Bullet internal usage */
 	public native int getInternalType();
@@ -174,26 +175,26 @@ public class btCollisionObject extends Pointer {
 	// only should be called by CollisionWorld
 	public native void setWorldArrayIndex(int ix);
 
-	public native @Cast("btScalar") float getHitFraction();
+	public native @Cast("btScalar") double getHitFraction();
 
-	public native void setHitFraction(@Cast("btScalar") float hitFraction);
+	public native void setHitFraction(@Cast("btScalar") double hitFraction);
 
 	public native int getCollisionFlags();
 
 	public native void setCollisionFlags(int flags);
 
 	/**Swept sphere radius (0.0 by default), see btConvexConvexAlgorithm:: */
-	public native @Cast("btScalar") float getCcdSweptSphereRadius();
+	public native @Cast("btScalar") double getCcdSweptSphereRadius();
 
 	/**Swept sphere radius (0.0 by default), see btConvexConvexAlgorithm:: */
-	public native void setCcdSweptSphereRadius(@Cast("btScalar") float radius);
+	public native void setCcdSweptSphereRadius(@Cast("btScalar") double radius);
 
-	public native @Cast("btScalar") float getCcdMotionThreshold();
+	public native @Cast("btScalar") double getCcdMotionThreshold();
 
-	public native @Cast("btScalar") float getCcdSquareMotionThreshold();
+	public native @Cast("btScalar") double getCcdSquareMotionThreshold();
 
 	/** Don't do continuous collision detection if the motion (in one step) is less then m_ccdMotionThreshold */
-	public native void setCcdMotionThreshold(@Cast("btScalar") float ccdMotionThreshold);
+	public native void setCcdMotionThreshold(@Cast("btScalar") double ccdMotionThreshold);
 
 	/**users can point to their objects, userPointer is not used by Bullet */
 	public native Pointer getUserPointer();

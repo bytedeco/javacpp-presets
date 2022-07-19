@@ -456,7 +456,7 @@ public static native @Cast("bool") boolean Intersect(@Const @ByRef btDbvtAabbMm 
 //////////////////////////////////////
 
 //
-public static native @Cast("btScalar") float Proximity(@Const @ByRef btDbvtAabbMm a,
+public static native @Cast("btScalar") double Proximity(@Const @ByRef btDbvtAabbMm a,
 							   @Const @ByRef btDbvtAabbMm b);
 
 //
@@ -573,7 +573,7 @@ public static final int DBVT_BP_PREVENTFALSEUPDATE = 0;
 public static final int DBVT_BP_ACCURATESLEEPING = 0;
 public static final int DBVT_BP_ENABLE_BENCHMARK = 0;
 //#define DBVT_BP_MARGIN					(btScalar)0.05
-public static native @Cast("btScalar") float gDbvtMargin(); public static native void gDbvtMargin(float setter);
+public static native @Cast("btScalar") double gDbvtMargin(); public static native void gDbvtMargin(double setter);
 // Targeting ../BulletCollision/btDbvtProxy.java
 
 
@@ -728,10 +728,10 @@ subject to the following restrictions:
 // #include "LinearMath/btAlignedAllocator.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btQuantizedBvhData btQuantizedBvhDoubleData
+// #define btOptimizedBvhNodeData btOptimizedBvhNodeDoubleData
+public static final String btQuantizedBvhDataName = "btQuantizedBvhDoubleData";
 // #else
-// #define btQuantizedBvhData btQuantizedBvhFloatData
-// #define btOptimizedBvhNodeData btOptimizedBvhNodeFloatData
-public static final String btQuantizedBvhDataName = "btQuantizedBvhFloatData";
 // #endif
 
 //http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclang/html/vclrf__m128.asp
@@ -901,10 +901,8 @@ subject to the following restrictions:
 // #include "LinearMath/btIDebugDraw.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-public static final int MAX_CONVEX_CAST_ITERATIONS = 32;
-public static native @MemberGetter double MAX_CONVEX_CAST_EPSILON();
-public static final double MAX_CONVEX_CAST_EPSILON = MAX_CONVEX_CAST_EPSILON();
+// #define MAX_CONVEX_CAST_ITERATIONS 64
+// #define MAX_CONVEX_CAST_EPSILON (SIMD_EPSILON * 10)
 // Targeting ../BulletCollision/btConvexCast.java
 
 
@@ -1113,21 +1111,21 @@ Improvements and refactoring by Erwin Coumans, 2008-2014
 
 /* GJK	*/
 public static final int GJK_MAX_ITERATIONS = 128;
-public static final double GJK_ACCURARY = ((float)0.0001);
-public static final double GJK_MIN_DISTANCE = ((float)0.0001);
-public static final double GJK_DUPLICATED_EPS = ((float)0.0001);
-public static final double GJK_SIMPLEX2_EPS = ((float)0.0);
-public static final double GJK_SIMPLEX3_EPS = ((float)0.0);
-public static final double GJK_SIMPLEX4_EPS = ((float)0.0);
+public static final double GJK_ACCURARY = ((double)0.0001);
+public static final double GJK_MIN_DISTANCE = ((double)0.0001);
+public static final double GJK_DUPLICATED_EPS = ((double)0.0001);
+public static final double GJK_SIMPLEX2_EPS = ((double)0.0);
+public static final double GJK_SIMPLEX3_EPS = ((double)0.0);
+public static final double GJK_SIMPLEX4_EPS = ((double)0.0);
 
 /* EPA	*/
 public static final int EPA_MAX_VERTICES = 64;
 public static final int EPA_MAX_FACES = (EPA_MAX_VERTICES * 2);
 public static final int EPA_MAX_ITERATIONS = 255;
-public static final double EPA_ACCURACY = ((float)0.0001);
+public static final double EPA_ACCURACY = ((double)0.0001);
 public static final double EPA_FALLBACK = (10 * EPA_ACCURACY);
-public static final double EPA_PLANE_EPS = ((float)0.00001);
-public static final double EPA_INSIDE_EPS = ((float)0.01);
+public static final double EPA_PLANE_EPS = ((double)0.00001);
+public static final double EPA_INSIDE_EPS = ((double)0.01);
 
 // Shorthands
 
@@ -1484,7 +1482,7 @@ subject to the following restrictions:
 // #include "LinearMath/btAlignedAllocator.h"
 
 /**maximum contact breaking and merging threshold */
-public static native @Cast("btScalar") float gContactBreakingThreshold(); public static native void gContactBreakingThreshold(float setter);
+public static native @Cast("btScalar") double gContactBreakingThreshold(); public static native void gContactBreakingThreshold(double setter);
 // Targeting ../BulletCollision/ContactDestroyedCallback.java
 
 
@@ -1523,9 +1521,9 @@ public static final int MANIFOLD_CACHE_SIZE = 4;
 // clang-format on
 
 // #ifdef BT_USE_DOUBLE_PRECISION
+// #define btPersistentManifoldData btPersistentManifoldDoubleData
+public static final String btPersistentManifoldDataName = "btPersistentManifoldDoubleData";
 // #else
-// #define btPersistentManifoldData btPersistentManifoldFloatData
-public static final String btPersistentManifoldDataName = "btPersistentManifoldFloatData";
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 // #endif  //BT_PERSISTENT_MANIFOLD_H
@@ -1711,8 +1709,7 @@ public static final int VORONOI_SIMPLEX_MAX_VERTS = 5;
 // #define BT_USE_EQUAL_VERTEX_THRESHOLD
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-public static final double VORONOI_DEFAULT_EQUAL_VERTEX_THRESHOLD = 0.0001f;
+public static final double VORONOI_DEFAULT_EQUAL_VERTEX_THRESHOLD = 1e-12f;
 // Targeting ../BulletCollision/btUsageBitfield.java
 
 
@@ -2002,9 +1999,8 @@ public static final int FIXED_BASE_MULTI_BODY = 6;
 // #include "LinearMath/btAlignedObjectArray.h"
 
 // #ifdef BT_USE_DOUBLE_PRECISION
-// #else
-// #define btCollisionObjectData btCollisionObjectFloatData
-public static final String btCollisionObjectDataName = "btCollisionObjectFloatData";
+// #define btCollisionObjectData btCollisionObjectDoubleData
+public static final String btCollisionObjectDataName = "btCollisionObjectDoubleData";
 // Targeting ../BulletCollision/btCollisionObject.java
 
 
@@ -4395,7 +4391,7 @@ public static final int
 // 	}
 
 /** Returns the dot product between a vec3f and the col of a matrix */
-public static native @Cast("btScalar") float bt_mat3_dot_col(
+public static native @Cast("btScalar") double bt_mat3_dot_col(
 	@Const @ByRef btMatrix3x3 mat, @Const @ByRef btVector3 vec3, int colindex);
 // Targeting ../BulletCollision/BT_BOX_BOX_TRANSFORM_CACHE.java
 
@@ -4442,32 +4438,32 @@ subject to the following restrictions:
 // #include "LinearMath/btTransform.h"
 // #include "LinearMath/btGeometryUtil.h"
 
-public static native @Cast("btScalar") float bt_distance_point_plane(@Const @ByRef btVector4 plane, @Const @ByRef btVector3 point);
+public static native @Cast("btScalar") double bt_distance_point_plane(@Const @ByRef btVector4 plane, @Const @ByRef btVector3 point);
 
 /** Vector blending
 Takes two vectors a, b, blends them together*/
-public static native void bt_vec_blend(@ByRef btVector3 vr, @Const @ByRef btVector3 va, @Const @ByRef btVector3 vb, @Cast("btScalar") float blend_factor);
+public static native void bt_vec_blend(@ByRef btVector3 vr, @Const @ByRef btVector3 va, @Const @ByRef btVector3 vb, @Cast("btScalar") double blend_factor);
 
 /** This function calcs the distance from a 3D plane */
 public static native void bt_plane_clip_polygon_collect(
 	@Const @ByRef btVector3 point0,
 	@Const @ByRef btVector3 point1,
-	@Cast("btScalar") float dist0,
-	@Cast("btScalar") float dist1,
+	@Cast("btScalar") double dist0,
+	@Cast("btScalar") double dist1,
 	btVector3 clipped,
 	@ByRef IntPointer clipped_count);
 public static native void bt_plane_clip_polygon_collect(
 	@Const @ByRef btVector3 point0,
 	@Const @ByRef btVector3 point1,
-	@Cast("btScalar") float dist0,
-	@Cast("btScalar") float dist1,
+	@Cast("btScalar") double dist0,
+	@Cast("btScalar") double dist1,
 	btVector3 clipped,
 	@ByRef IntBuffer clipped_count);
 public static native void bt_plane_clip_polygon_collect(
 	@Const @ByRef btVector3 point0,
 	@Const @ByRef btVector3 point1,
-	@Cast("btScalar") float dist0,
-	@Cast("btScalar") float dist1,
+	@Cast("btScalar") double dist0,
+	@Cast("btScalar") double dist1,
 	btVector3 clipped,
 	@ByRef int[] clipped_count);
 
@@ -4515,7 +4511,7 @@ public static native int bt_plane_clip_triangle(
 
 
 
-public static native btCompoundShape btCreateCompoundFromGimpactShape(@Const btGImpactMeshShape gimpactMesh, @Cast("btScalar") float depth);
+public static native btCompoundShape btCreateCompoundFromGimpactShape(@Const btGImpactMeshShape gimpactMesh, @Cast("btScalar") double depth);
 
 // #endif  //BT_COMPOUND_FROM_GIMPACT
 
@@ -4790,7 +4786,7 @@ subject to the following restrictions:
 public static native @ByVal btVector3 gim_inertia_add_transformed(
 	@Const @ByRef btVector3 source_inertia, @Const @ByRef btVector3 added_inertia, @Const @ByRef btTransform transform);
 
-public static native @ByVal btVector3 gim_get_point_inertia(@Const @ByRef btVector3 point, @Cast("btScalar") float mass);
+public static native @ByVal btVector3 gim_get_point_inertia(@Const @ByRef btVector3 point, @Cast("btScalar") double mass);
 
 // #endif  //GIMPACT_MESH_SHAPE_H
 
@@ -5055,22 +5051,22 @@ public static native int bt_line_plane_collision(
 	@Const @ByRef btVector3 vDir,
 	@Const @ByRef btVector3 vPoint,
 	@ByRef btVector3 pout,
-	@Cast("btScalar*") @ByRef FloatPointer tparam,
-	@Cast("btScalar") float tmin, @Cast("btScalar") float tmax);
+	@Cast("btScalar*") @ByRef DoublePointer tparam,
+	@Cast("btScalar") double tmin, @Cast("btScalar") double tmax);
 public static native int bt_line_plane_collision(
 	@Const @ByRef btVector4 plane,
 	@Const @ByRef btVector3 vDir,
 	@Const @ByRef btVector3 vPoint,
 	@ByRef btVector3 pout,
-	@Cast("btScalar*") @ByRef FloatBuffer tparam,
-	@Cast("btScalar") float tmin, @Cast("btScalar") float tmax);
+	@Cast("btScalar*") @ByRef DoubleBuffer tparam,
+	@Cast("btScalar") double tmin, @Cast("btScalar") double tmax);
 public static native int bt_line_plane_collision(
 	@Const @ByRef btVector4 plane,
 	@Const @ByRef btVector3 vDir,
 	@Const @ByRef btVector3 vPoint,
 	@ByRef btVector3 pout,
-	@Cast("btScalar*") @ByRef float[] tparam,
-	@Cast("btScalar") float tmin, @Cast("btScalar") float tmax);
+	@Cast("btScalar*") @ByRef double[] tparam,
+	@Cast("btScalar") double tmin, @Cast("btScalar") double tmax);
 
 /** Find closest points on segments */
 public static native void bt_segment_collision(
@@ -5120,7 +5116,7 @@ public static native void bt_calc_quantization_parameters(
 	@ByRef btVector3 outMaxBound,
 	@ByRef btVector3 bvhQuantization,
 	@Const @ByRef btVector3 srcMinBound, @Const @ByRef btVector3 srcMaxBound,
-	@Cast("btScalar") float quantizationMargin);
+	@Cast("btScalar") double quantizationMargin);
 
 public static native void bt_quantize_clamp(
 	@Cast("unsigned short*") ShortPointer out,

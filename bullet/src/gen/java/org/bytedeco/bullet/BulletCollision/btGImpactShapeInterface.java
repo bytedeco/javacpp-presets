@@ -50,7 +50,7 @@ public class btGImpactShapeInterface extends btConcaveShape {
 
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void setMargin(@Cast("btScalar") float margin);
+	public native void setMargin(@Cast("btScalar") double margin);
 
 	/** Subshape member functions
 	 * \{

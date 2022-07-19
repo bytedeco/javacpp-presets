@@ -28,7 +28,7 @@ public class btMinkowskiSumShape extends btConvexInternalShape {
 
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native void setTransformA(@Const @ByRef btTransform transA);
 	public native void setTransformB(@Const @ByRef btTransform transB);
@@ -39,7 +39,7 @@ public class btMinkowskiSumShape extends btConvexInternalShape {
 	// keep this for backward compatibility
 	public native @Const @ByRef btTransform GetTransformB();
 
-	public native @Cast("btScalar") float getMargin();
+	public native @Cast("btScalar") double getMargin();
 
 	public native @Const btConvexShape getShapeA();
 	public native @Const btConvexShape getShapeB();

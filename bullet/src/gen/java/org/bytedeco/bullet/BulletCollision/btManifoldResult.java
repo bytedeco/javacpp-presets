@@ -42,7 +42,7 @@ public class btManifoldResult extends btDiscreteCollisionDetectorInterface.Resul
 
 	public native void setShapeIdentifiersB(int partId1, int index1);
 
-	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") float depth);
+	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") double depth);
 
 	public native void refreshContactPoints();
 
@@ -57,13 +57,13 @@ public class btManifoldResult extends btDiscreteCollisionDetectorInterface.Resul
 
 	public native @Const btCollisionObject getBody1Internal();
 
-	public native @Cast("btScalar") float m_closestPointDistanceThreshold(); public native btManifoldResult m_closestPointDistanceThreshold(float setter);
+	public native @Cast("btScalar") double m_closestPointDistanceThreshold(); public native btManifoldResult m_closestPointDistanceThreshold(double setter);
 
 	/** in the future we can let the user override the methods to combine restitution and friction */
-	public static native @Cast("btScalar") float calculateCombinedRestitution(@Const btCollisionObject body0, @Const btCollisionObject body1);
-	public static native @Cast("btScalar") float calculateCombinedFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
-	public static native @Cast("btScalar") float calculateCombinedRollingFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
-	public static native @Cast("btScalar") float calculateCombinedSpinningFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
-	public static native @Cast("btScalar") float calculateCombinedContactDamping(@Const btCollisionObject body0, @Const btCollisionObject body1);
-	public static native @Cast("btScalar") float calculateCombinedContactStiffness(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedRestitution(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedRollingFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedSpinningFriction(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedContactDamping(@Const btCollisionObject body0, @Const btCollisionObject body1);
+	public static native @Cast("btScalar") double calculateCombinedContactStiffness(@Const btCollisionObject body0, @Const btCollisionObject body1);
 }

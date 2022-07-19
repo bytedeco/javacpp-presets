@@ -28,15 +28,15 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
     public    btSolverCallback(Pointer p) { super(p); }
     protected btSolverCallback() { allocate(); }
     private native void allocate();
-    public native void call(@Cast("btScalar") float time, btDeformableMultiBodyDynamicsWorld world);
+    public native void call(@Cast("btScalar") double time, btDeformableMultiBodyDynamicsWorld world);
 }
 	public btDeformableMultiBodyDynamicsWorld(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration, btDeformableBodySolver deformableBodySolver/*=0*/) { super((Pointer)null); allocate(dispatcher, pairCache, constraintSolver, collisionConfiguration, deformableBodySolver); }
 	private native void allocate(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration, btDeformableBodySolver deformableBodySolver/*=0*/);
 	public btDeformableMultiBodyDynamicsWorld(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration) { super((Pointer)null); allocate(dispatcher, pairCache, constraintSolver, collisionConfiguration); }
 	private native void allocate(btDispatcher dispatcher, btBroadphaseInterface pairCache, btDeformableMultiBodyConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration);
 
-	public native int stepSimulation(@Cast("btScalar") float timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") float fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
-	public native int stepSimulation(@Cast("btScalar") float timeStep);
+	public native int stepSimulation(@Cast("btScalar") double timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") double fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
+	public native int stepSimulation(@Cast("btScalar") double timeStep);
 
 	public native void debugDrawWorld();
 
@@ -46,7 +46,7 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native @Cast("btDynamicsWorldType") int getWorldType();
 
-	public native void predictUnconstraintMotion(@Cast("btScalar") float timeStep);
+	public native void predictUnconstraintMotion(@Cast("btScalar") double timeStep);
 
 	public native void addSoftBody(btSoftBody body, int collisionFilterGroup/*=btBroadphaseProxy::DefaultFilter*/, int collisionFilterMask/*=btBroadphaseProxy::AllFilter*/);
 	public native void addSoftBody(btSoftBody body);
@@ -57,13 +57,13 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native void setGravity(@Const @ByRef btVector3 gravity);
 
-	public native void reinitialize(@Cast("btScalar") float timeStep);
+	public native void reinitialize(@Cast("btScalar") double timeStep);
 
-	public native void applyRigidBodyGravity(@Cast("btScalar") float timeStep);
+	public native void applyRigidBodyGravity(@Cast("btScalar") double timeStep);
 
-	public native void beforeSolverCallbacks(@Cast("btScalar") float timeStep);
+	public native void beforeSolverCallbacks(@Cast("btScalar") double timeStep);
 
-	public native void afterSolverCallbacks(@Cast("btScalar") float timeStep);
+	public native void afterSolverCallbacks(@Cast("btScalar") double timeStep);
 
 	public native void addForce(btSoftBody psb, btDeformableLagrangianForce force);
 
@@ -96,9 +96,9 @@ public class btDeformableMultiBodyDynamicsWorld extends btMultiBodyDynamicsWorld
 
 	public native void setUseProjection(@Cast("bool") boolean useProjection);
 
-	public native void applyRepulsionForce(@Cast("btScalar") float timeStep);
+	public native void applyRepulsionForce(@Cast("btScalar") double timeStep);
 
-	public native void performGeometricCollisions(@Cast("btScalar") float timeStep);
+	public native void performGeometricCollisions(@Cast("btScalar") double timeStep);
 
 	@NoOffset public static class btDeformableSingleRayCallback extends btBroadphaseRayCallback {
 	    static { Loader.load(); }

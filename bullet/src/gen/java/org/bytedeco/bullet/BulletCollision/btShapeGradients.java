@@ -38,5 +38,5 @@ public class btShapeGradients extends Pointer {
 
 	public native void bottomRowsMul(int row, double val);
 
-	public native @Cast("btScalar*") @ByRef @Name("operator ()") FloatPointer apply(int i, int j);
+	public native @Cast("btScalar*") @ByRef @Name("operator ()") DoublePointer apply(int i, int j);
 }

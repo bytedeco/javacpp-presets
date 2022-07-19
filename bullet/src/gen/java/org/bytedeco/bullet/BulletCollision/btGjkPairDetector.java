@@ -29,8 +29,8 @@ public class btGjkPairDetector extends btDiscreteCollisionDetectorInterface {
 
 	public btGjkPairDetector(@Const btConvexShape objectA, @Const btConvexShape objectB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver) { super((Pointer)null); allocate(objectA, objectB, simplexSolver, penetrationDepthSolver); }
 	private native void allocate(@Const btConvexShape objectA, @Const btConvexShape objectB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver);
-	public btGjkPairDetector(@Const btConvexShape objectA, @Const btConvexShape objectB, int shapeTypeA, int shapeTypeB, @Cast("btScalar") float marginA, @Cast("btScalar") float marginB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver) { super((Pointer)null); allocate(objectA, objectB, shapeTypeA, shapeTypeB, marginA, marginB, simplexSolver, penetrationDepthSolver); }
-	private native void allocate(@Const btConvexShape objectA, @Const btConvexShape objectB, int shapeTypeA, int shapeTypeB, @Cast("btScalar") float marginA, @Cast("btScalar") float marginB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver);
+	public btGjkPairDetector(@Const btConvexShape objectA, @Const btConvexShape objectB, int shapeTypeA, int shapeTypeB, @Cast("btScalar") double marginA, @Cast("btScalar") double marginB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver) { super((Pointer)null); allocate(objectA, objectB, shapeTypeA, shapeTypeB, marginA, marginB, simplexSolver, penetrationDepthSolver); }
+	private native void allocate(@Const btConvexShape objectA, @Const btConvexShape objectB, int shapeTypeA, int shapeTypeB, @Cast("btScalar") double marginA, @Cast("btScalar") double marginB, btSimplexSolverInterface simplexSolver, btConvexPenetrationDepthSolver penetrationDepthSolver);
 
 	public native void getClosestPoints(@Const @ByRef ClosestPointInput input, @ByRef Result output, btIDebugDraw debugDraw, @Cast("bool") boolean swapResults/*=false*/);
 	public native void getClosestPoints(@Const @ByRef ClosestPointInput input, @ByRef Result output, btIDebugDraw debugDraw);
@@ -43,7 +43,7 @@ public class btGjkPairDetector extends btDiscreteCollisionDetectorInterface {
 	public native void setCachedSeparatingAxis(@Const @ByRef btVector3 separatingAxis);
 
 	public native @Const @ByRef btVector3 getCachedSeparatingAxis();
-	public native @Cast("btScalar") float getCachedSeparatingDistance();
+	public native @Cast("btScalar") double getCachedSeparatingDistance();
 
 	public native void setPenetrationDepthSolver(btConvexPenetrationDepthSolver penetrationDepthSolver);
 

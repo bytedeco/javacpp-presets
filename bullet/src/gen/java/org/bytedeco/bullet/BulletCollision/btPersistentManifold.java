@@ -46,8 +46,8 @@ public class btPersistentManifold extends btTypedObject {
 	public btPersistentManifold() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public btPersistentManifold(@Const btCollisionObject body0, @Const btCollisionObject body1, int arg2, @Cast("btScalar") float contactBreakingThreshold, @Cast("btScalar") float contactProcessingThreshold) { super((Pointer)null); allocate(body0, body1, arg2, contactBreakingThreshold, contactProcessingThreshold); }
-	private native void allocate(@Const btCollisionObject body0, @Const btCollisionObject body1, int arg2, @Cast("btScalar") float contactBreakingThreshold, @Cast("btScalar") float contactProcessingThreshold);
+	public btPersistentManifold(@Const btCollisionObject body0, @Const btCollisionObject body1, int arg2, @Cast("btScalar") double contactBreakingThreshold, @Cast("btScalar") double contactProcessingThreshold) { super((Pointer)null); allocate(body0, body1, arg2, contactBreakingThreshold, contactProcessingThreshold); }
+	private native void allocate(@Const btCollisionObject body0, @Const btCollisionObject body1, int arg2, @Cast("btScalar") double contactBreakingThreshold, @Cast("btScalar") double contactProcessingThreshold);
 
 	public native @Const btCollisionObject getBody0();
 	public native @Const btCollisionObject getBody1();
@@ -66,13 +66,13 @@ public class btPersistentManifold extends btTypedObject {
 	public native @ByRef btManifoldPoint getContactPoint(int index);
 
 	/**\todo: get this margin from the current physics / collision environment */
-	public native @Cast("btScalar") float getContactBreakingThreshold();
+	public native @Cast("btScalar") double getContactBreakingThreshold();
 
-	public native @Cast("btScalar") float getContactProcessingThreshold();
+	public native @Cast("btScalar") double getContactProcessingThreshold();
 
-	public native void setContactBreakingThreshold(@Cast("btScalar") float contactBreakingThreshold);
+	public native void setContactBreakingThreshold(@Cast("btScalar") double contactBreakingThreshold);
 
-	public native void setContactProcessingThreshold(@Cast("btScalar") float contactProcessingThreshold);
+	public native void setContactProcessingThreshold(@Cast("btScalar") double contactProcessingThreshold);
 
 	public native int getCacheEntry(@Const @ByRef btManifoldPoint newPoint);
 

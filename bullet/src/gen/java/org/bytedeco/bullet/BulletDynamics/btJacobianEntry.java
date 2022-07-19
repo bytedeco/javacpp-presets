@@ -47,18 +47,18 @@ public class btJacobianEntry extends Pointer {
 			@Const @ByRef btVector3 rel_pos1, @Const @ByRef btVector3 rel_pos2,
 			@Const @ByRef btVector3 jointAxis,
 			@Const @ByRef btVector3 inertiaInvA,
-			@Cast("const btScalar") float massInvA,
+			@Cast("const btScalar") double massInvA,
 			@Const @ByRef btVector3 inertiaInvB,
-			@Cast("const btScalar") float massInvB) { super((Pointer)null); allocate(world2A, world2B, rel_pos1, rel_pos2, jointAxis, inertiaInvA, massInvA, inertiaInvB, massInvB); }
+			@Cast("const btScalar") double massInvB) { super((Pointer)null); allocate(world2A, world2B, rel_pos1, rel_pos2, jointAxis, inertiaInvA, massInvA, inertiaInvB, massInvB); }
 	private native void allocate(
 			@Const @ByRef btMatrix3x3 world2A,
 			@Const @ByRef btMatrix3x3 world2B,
 			@Const @ByRef btVector3 rel_pos1, @Const @ByRef btVector3 rel_pos2,
 			@Const @ByRef btVector3 jointAxis,
 			@Const @ByRef btVector3 inertiaInvA,
-			@Cast("const btScalar") float massInvA,
+			@Cast("const btScalar") double massInvA,
 			@Const @ByRef btVector3 inertiaInvB,
-			@Cast("const btScalar") float massInvB);
+			@Cast("const btScalar") double massInvB);
 
 	//angular constraint between two different rigidbodies
 	public btJacobianEntry(@Const @ByRef btVector3 jointAxis,
@@ -88,23 +88,23 @@ public class btJacobianEntry extends Pointer {
 			@Const @ByRef btVector3 rel_pos1, @Const @ByRef btVector3 rel_pos2,
 			@Const @ByRef btVector3 jointAxis,
 			@Const @ByRef btVector3 inertiaInvA,
-			@Cast("const btScalar") float massInvA) { super((Pointer)null); allocate(world2A, rel_pos1, rel_pos2, jointAxis, inertiaInvA, massInvA); }
+			@Cast("const btScalar") double massInvA) { super((Pointer)null); allocate(world2A, rel_pos1, rel_pos2, jointAxis, inertiaInvA, massInvA); }
 	private native void allocate(
 			@Const @ByRef btMatrix3x3 world2A,
 			@Const @ByRef btVector3 rel_pos1, @Const @ByRef btVector3 rel_pos2,
 			@Const @ByRef btVector3 jointAxis,
 			@Const @ByRef btVector3 inertiaInvA,
-			@Cast("const btScalar") float massInvA);
+			@Cast("const btScalar") double massInvA);
 
-	public native @Cast("btScalar") float getDiagonal();
+	public native @Cast("btScalar") double getDiagonal();
 
 	// for two constraints on the same rigidbody (for example vehicle friction)
-	public native @Cast("btScalar") float getNonDiagonal(@Const @ByRef btJacobianEntry jacB, @Cast("const btScalar") float massInvA);
+	public native @Cast("btScalar") double getNonDiagonal(@Const @ByRef btJacobianEntry jacB, @Cast("const btScalar") double massInvA);
 
 	// for two constraints on sharing two same rigidbodies (for example two contact points between two rigidbodies)
-	public native @Cast("btScalar") float getNonDiagonal(@Const @ByRef btJacobianEntry jacB, @Cast("const btScalar") float massInvA, @Cast("const btScalar") float massInvB);
+	public native @Cast("btScalar") double getNonDiagonal(@Const @ByRef btJacobianEntry jacB, @Cast("const btScalar") double massInvA, @Cast("const btScalar") double massInvB);
 
-	public native @Cast("btScalar") float getRelativeVelocity(@Const @ByRef btVector3 linvelA, @Const @ByRef btVector3 angvelA, @Const @ByRef btVector3 linvelB, @Const @ByRef btVector3 angvelB);
+	public native @Cast("btScalar") double getRelativeVelocity(@Const @ByRef btVector3 linvelA, @Const @ByRef btVector3 angvelA, @Const @ByRef btVector3 linvelB, @Const @ByRef btVector3 angvelB);
 	//private:
 
 	public native @ByRef btVector3 m_linearJointAxis(); public native btJacobianEntry m_linearJointAxis(btVector3 setter);
@@ -113,5 +113,5 @@ public class btJacobianEntry extends Pointer {
 	public native @ByRef btVector3 m_0MinvJt(); public native btJacobianEntry m_0MinvJt(btVector3 setter);
 	public native @ByRef btVector3 m_1MinvJt(); public native btJacobianEntry m_1MinvJt(btVector3 setter);
 	//Optimization: can be stored in the w/last component of one of the vectors
-	public native @Cast("btScalar") float m_Adiag(); public native btJacobianEntry m_Adiag(float setter);
+	public native @Cast("btScalar") double m_Adiag(); public native btJacobianEntry m_Adiag(double setter);
 }

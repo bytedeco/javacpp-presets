@@ -20,10 +20,10 @@ public class MyInternalTriangleIndexCallback extends btInternalTriangleIndexCall
 
 	public native @Const btGImpactMeshShape m_gimpactShape(); public native MyInternalTriangleIndexCallback m_gimpactShape(btGImpactMeshShape setter);
 	public native btCompoundShape m_colShape(); public native MyInternalTriangleIndexCallback m_colShape(btCompoundShape setter);
-	public native @Cast("btScalar") float m_depth(); public native MyInternalTriangleIndexCallback m_depth(float setter);
+	public native @Cast("btScalar") double m_depth(); public native MyInternalTriangleIndexCallback m_depth(double setter);
 
-	public MyInternalTriangleIndexCallback(btCompoundShape colShape, @Const btGImpactMeshShape meshShape, @Cast("btScalar") float depth) { super((Pointer)null); allocate(colShape, meshShape, depth); }
-	private native void allocate(btCompoundShape colShape, @Const btGImpactMeshShape meshShape, @Cast("btScalar") float depth);
+	public MyInternalTriangleIndexCallback(btCompoundShape colShape, @Const btGImpactMeshShape meshShape, @Cast("btScalar") double depth) { super((Pointer)null); allocate(colShape, meshShape, depth); }
+	private native void allocate(btCompoundShape colShape, @Const btGImpactMeshShape meshShape, @Cast("btScalar") double depth);
 
 	public native void internalProcessTriangleIndex(btVector3 triangle, int partId, int triangleIndex);
 }

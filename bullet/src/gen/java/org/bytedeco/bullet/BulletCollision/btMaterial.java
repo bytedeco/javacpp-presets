@@ -29,13 +29,13 @@ public class btMaterial extends Pointer {
         return new btMaterial((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_friction(); public native btMaterial m_friction(float setter);
-	public native @Cast("btScalar") float m_restitution(); public native btMaterial m_restitution(float setter);
+	public native @Cast("btScalar") double m_friction(); public native btMaterial m_friction(double setter);
+	public native @Cast("btScalar") double m_restitution(); public native btMaterial m_restitution(double setter);
 	public native int pad(int i); public native btMaterial pad(int i, int setter);
 	@MemberGetter public native IntPointer pad();
 
 	public btMaterial() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public btMaterial(@Cast("btScalar") float fric, @Cast("btScalar") float rest) { super((Pointer)null); allocate(fric, rest); }
-	private native void allocate(@Cast("btScalar") float fric, @Cast("btScalar") float rest);
+	public btMaterial(@Cast("btScalar") double fric, @Cast("btScalar") double rest) { super((Pointer)null); allocate(fric, rest); }
+	private native void allocate(@Cast("btScalar") double fric, @Cast("btScalar") double rest);
 }

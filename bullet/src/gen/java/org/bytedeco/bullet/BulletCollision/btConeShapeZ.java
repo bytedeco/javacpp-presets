@@ -20,8 +20,8 @@ public class btConeShapeZ extends btConeShape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btConeShapeZ(Pointer p) { super(p); }
 
-	public btConeShapeZ(@Cast("btScalar") float radius, @Cast("btScalar") float height) { super((Pointer)null); allocate(radius, height); }
-	private native void allocate(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public btConeShapeZ(@Cast("btScalar") double radius, @Cast("btScalar") double height) { super((Pointer)null); allocate(radius, height); }
+	private native void allocate(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 
 	public native @ByVal btVector3 getAnisotropicRollingFrictionDirection();
 

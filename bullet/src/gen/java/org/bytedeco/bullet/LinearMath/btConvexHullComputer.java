@@ -84,12 +84,12 @@ public class btConvexHullComputer extends Pointer {
 
 		The output convex hull can be found in the member variables "vertices", "edges", "faces".
 		*/
-	public native @Cast("btScalar") float compute(@Const FloatPointer coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
-	public native @Cast("btScalar") float compute(@Const FloatBuffer coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
-	public native @Cast("btScalar") float compute(@Const float[] coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const FloatPointer coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const FloatBuffer coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const float[] coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
 
 	// same as above, but double precision
-	public native @Cast("btScalar") float compute(@Const DoublePointer coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
-	public native @Cast("btScalar") float compute(@Const DoubleBuffer coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
-	public native @Cast("btScalar") float compute(@Const double[] coords, int stride, int count, @Cast("btScalar") float shrink, @Cast("btScalar") float shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const DoublePointer coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const DoubleBuffer coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
+	public native @Cast("btScalar") double compute(@Const double[] coords, int stride, int count, @Cast("btScalar") double shrink, @Cast("btScalar") double shrinkClamp);
 }

@@ -24,6 +24,6 @@ public class btConcaveShape extends btCollisionShape {
 
 	public native void processAllTriangles(btTriangleCallback callback, @Const @ByRef btVector3 aabbMin, @Const @ByRef btVector3 aabbMax);
 
-	public native @Cast("btScalar") float getMargin();
-	public native void setMargin(@Cast("btScalar") float collisionMargin);
+	public native @Cast("btScalar") double getMargin();
+	public native void setMargin(@Cast("btScalar") double collisionMargin);
 }

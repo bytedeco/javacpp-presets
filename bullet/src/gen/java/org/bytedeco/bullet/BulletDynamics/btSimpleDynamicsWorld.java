@@ -28,8 +28,8 @@ public class btSimpleDynamicsWorld extends btDynamicsWorld {
 	private native void allocate(btDispatcher dispatcher, btBroadphaseInterface pairCache, btConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration);
 
 	/**maxSubSteps/fixedTimeStep for interpolation is currently ignored for btSimpleDynamicsWorld, use btDiscreteDynamicsWorld instead */
-	public native int stepSimulation(@Cast("btScalar") float timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") float fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
-	public native int stepSimulation(@Cast("btScalar") float timeStep);
+	public native int stepSimulation(@Cast("btScalar") double timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") double fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
+	public native int stepSimulation(@Cast("btScalar") double timeStep);
 
 	public native void setGravity(@Const @ByRef btVector3 gravity);
 

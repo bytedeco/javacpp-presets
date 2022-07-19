@@ -26,8 +26,8 @@ public class btShapeHull extends Pointer {
 	public btShapeHull(@Const btConvexShape shape) { super((Pointer)null); allocate(shape); }
 	private native void allocate(@Const btConvexShape shape);
 
-	public native @Cast("bool") boolean buildHull(@Cast("btScalar") float margin, int highres/*=0*/);
-	public native @Cast("bool") boolean buildHull(@Cast("btScalar") float margin);
+	public native @Cast("bool") boolean buildHull(@Cast("btScalar") double margin, int highres/*=0*/);
+	public native @Cast("bool") boolean buildHull(@Cast("btScalar") double margin);
 
 	public native int numTriangles();
 	public native int numVertices();

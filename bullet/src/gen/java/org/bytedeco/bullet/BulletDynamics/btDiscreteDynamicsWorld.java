@@ -29,8 +29,8 @@ public class btDiscreteDynamicsWorld extends btDynamicsWorld {
 	private native void allocate(btDispatcher dispatcher, btBroadphaseInterface pairCache, btConstraintSolver constraintSolver, btCollisionConfiguration collisionConfiguration);
 
 	/**if maxSubSteps > 0, it will interpolate motion between fixedTimeStep's */
-	public native int stepSimulation(@Cast("btScalar") float timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") float fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
-	public native int stepSimulation(@Cast("btScalar") float timeStep);
+	public native int stepSimulation(@Cast("btScalar") double timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") double fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
+	public native int stepSimulation(@Cast("btScalar") double timeStep);
 
     public native void solveConstraints(@ByRef btContactSolverInfo solverInfo);
     
@@ -91,7 +91,7 @@ public class btDiscreteDynamicsWorld extends btDynamicsWorld {
 	public native void setNumTasks(int numTasks);
 
 	/**obsolete, use updateActions instead */
-	public native void updateVehicles(@Cast("btScalar") float timeStep);
+	public native void updateVehicles(@Cast("btScalar") double timeStep);
 
 	/**obsolete, use addAction instead */
 	public native void addVehicle(btActionInterface vehicle);

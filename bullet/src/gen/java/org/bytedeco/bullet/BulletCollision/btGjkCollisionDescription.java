@@ -30,8 +30,8 @@ public class btGjkCollisionDescription extends Pointer {
 
 	public native @ByRef btVector3 m_firstDir(); public native btGjkCollisionDescription m_firstDir(btVector3 setter);
 	public native int m_maxGjkIterations(); public native btGjkCollisionDescription m_maxGjkIterations(int setter);
-	public native @Cast("btScalar") float m_maximumDistanceSquared(); public native btGjkCollisionDescription m_maximumDistanceSquared(float setter);
-	public native @Cast("btScalar") float m_gjkRelError2(); public native btGjkCollisionDescription m_gjkRelError2(float setter);
+	public native @Cast("btScalar") double m_maximumDistanceSquared(); public native btGjkCollisionDescription m_maximumDistanceSquared(double setter);
+	public native @Cast("btScalar") double m_gjkRelError2(); public native btGjkCollisionDescription m_gjkRelError2(double setter);
 	public btGjkCollisionDescription() { super((Pointer)null); allocate(); }
 	private native void allocate();
 }

@@ -40,7 +40,7 @@ public class btVehicleRaycaster extends Pointer {
 		private native void allocate();
 		public native @ByRef btVector3 m_hitPointInWorld(); public native btVehicleRaycasterResult m_hitPointInWorld(btVector3 setter);
 		public native @ByRef btVector3 m_hitNormalInWorld(); public native btVehicleRaycasterResult m_hitNormalInWorld(btVector3 setter);
-		public native @Cast("btScalar") float m_distFraction(); public native btVehicleRaycasterResult m_distFraction(float setter);
+		public native @Cast("btScalar") double m_distFraction(); public native btVehicleRaycasterResult m_distFraction(double setter);
 	}
 
 	public native Pointer castRay(@Const @ByRef btVector3 from, @Const @ByRef btVector3 to, @ByRef btVehicleRaycasterResult result);

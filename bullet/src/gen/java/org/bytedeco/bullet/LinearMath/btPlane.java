@@ -27,9 +27,9 @@ public class btPlane extends Pointer {
     }
 
 	public native @ByRef btVector3 normal(); public native btPlane normal(btVector3 setter);
-	public native @Cast("btScalar") float dist(); public native btPlane dist(float setter);  // distance below origin - the D from plane equasion Ax+By+Cz+D=0
-	public btPlane(@Const @ByRef btVector3 n, @Cast("btScalar") float d) { super((Pointer)null); allocate(n, d); }
-	private native void allocate(@Const @ByRef btVector3 n, @Cast("btScalar") float d);
+	public native @Cast("btScalar") double dist(); public native btPlane dist(double setter);  // distance below origin - the D from plane equasion Ax+By+Cz+D=0
+	public btPlane(@Const @ByRef btVector3 n, @Cast("btScalar") double d) { super((Pointer)null); allocate(n, d); }
+	private native void allocate(@Const @ByRef btVector3 n, @Cast("btScalar") double d);
 	public btPlane() { super((Pointer)null); allocate(); }
 	private native void allocate();
 }

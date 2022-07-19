@@ -14,6 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
+// #else
 // #endif
 
 @NoOffset @Properties(inherit = org.bytedeco.bullet.presets.BulletDynamics.class)

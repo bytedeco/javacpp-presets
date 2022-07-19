@@ -38,7 +38,7 @@ public class btConvexPolyhedron extends Pointer {
 
 	public native @ByRef btVector3 m_localCenter(); public native btConvexPolyhedron m_localCenter(btVector3 setter);
 	public native @ByRef btVector3 m_extents(); public native btConvexPolyhedron m_extents(btVector3 setter);
-	public native @Cast("btScalar") float m_radius(); public native btConvexPolyhedron m_radius(float setter);
+	public native @Cast("btScalar") double m_radius(); public native btConvexPolyhedron m_radius(double setter);
 	public native @ByRef btVector3 mC(); public native btConvexPolyhedron mC(btVector3 setter);
 	public native @ByRef btVector3 mE(); public native btConvexPolyhedron mE(btVector3 setter);
 
@@ -46,7 +46,7 @@ public class btConvexPolyhedron extends Pointer {
 	public native void initialize2();
 	public native @Cast("bool") boolean testContainment();
 
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatPointer minProj, @Cast("btScalar*") @ByRef FloatPointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatBuffer minProj, @Cast("btScalar*") @ByRef FloatBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef float[] minProj, @Cast("btScalar*") @ByRef float[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoublePointer minProj, @Cast("btScalar*") @ByRef DoublePointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoubleBuffer minProj, @Cast("btScalar*") @ByRef DoubleBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef double[] minProj, @Cast("btScalar*") @ByRef double[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
 }

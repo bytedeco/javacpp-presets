@@ -41,7 +41,7 @@ public class btQuantizedBvh extends Pointer {
 	private native void allocate();
 
 	///***************************************** expert/internal use only *************************
-	public native void setQuantizationValues(@Const @ByRef btVector3 bvhAabbMin, @Const @ByRef btVector3 bvhAabbMax, @Cast("btScalar") float quantizationMargin/*=btScalar(1.0)*/);
+	public native void setQuantizationValues(@Const @ByRef btVector3 bvhAabbMin, @Const @ByRef btVector3 bvhAabbMax, @Cast("btScalar") double quantizationMargin/*=btScalar(1.0)*/);
 	public native void setQuantizationValues(@Const @ByRef btVector3 bvhAabbMin, @Const @ByRef btVector3 bvhAabbMax);
 	public native @Cast("QuantizedNodeArray*") @ByRef btQuantizedBvhNodeArray getLeafNodeArray();
 	/**buildInternal is expert use only: assumes that setQuantizationValues and LeafNodeArray are initialized */

@@ -35,7 +35,7 @@ public class btTriangleInfo extends Pointer {
 
 	public native int m_flags(); public native btTriangleInfo m_flags(int setter);
 
-	public native @Cast("btScalar") float m_edgeV0V1Angle(); public native btTriangleInfo m_edgeV0V1Angle(float setter);
-	public native @Cast("btScalar") float m_edgeV1V2Angle(); public native btTriangleInfo m_edgeV1V2Angle(float setter);
-	public native @Cast("btScalar") float m_edgeV2V0Angle(); public native btTriangleInfo m_edgeV2V0Angle(float setter);
+	public native @Cast("btScalar") double m_edgeV0V1Angle(); public native btTriangleInfo m_edgeV0V1Angle(double setter);
+	public native @Cast("btScalar") double m_edgeV1V2Angle(); public native btTriangleInfo m_edgeV1V2Angle(double setter);
+	public native @Cast("btScalar") double m_edgeV2V0Angle(); public native btTriangleInfo m_edgeV2V0Angle(double setter);
 }

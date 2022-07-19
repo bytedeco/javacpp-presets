@@ -22,8 +22,8 @@ public class btUniformScalingShape extends btConvexShape {
     public btUniformScalingShape(Pointer p) { super(p); }
 
 
-	public btUniformScalingShape(btConvexShape convexChildShape, @Cast("btScalar") float uniformScalingFactor) { super((Pointer)null); allocate(convexChildShape, uniformScalingFactor); }
-	private native void allocate(btConvexShape convexChildShape, @Cast("btScalar") float uniformScalingFactor);
+	public btUniformScalingShape(btConvexShape convexChildShape, @Cast("btScalar") double uniformScalingFactor) { super((Pointer)null); allocate(convexChildShape, uniformScalingFactor); }
+	private native void allocate(btConvexShape convexChildShape, @Cast("btScalar") double uniformScalingFactor);
 
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 
@@ -31,9 +31,9 @@ public class btUniformScalingShape extends btConvexShape {
 
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
-	public native @Cast("btScalar") float getUniformScalingFactor();
+	public native @Cast("btScalar") double getUniformScalingFactor();
 
 	public native btConvexShape getChildShape();
 
@@ -49,8 +49,8 @@ public class btUniformScalingShape extends btConvexShape {
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 
 	public native int getNumPreferredPenetrationDirections();
 

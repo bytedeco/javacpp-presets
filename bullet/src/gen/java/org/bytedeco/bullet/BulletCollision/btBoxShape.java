@@ -34,12 +34,12 @@ public class btBoxShape extends btPolyhedralConvexShape {
 	public btBoxShape(@Const @ByRef btVector3 boxHalfExtents) { super((Pointer)null); allocate(boxHalfExtents); }
 	private native void allocate(@Const @ByRef btVector3 boxHalfExtents);
 
-	public native void setMargin(@Cast("btScalar") float collisionMargin);
+	public native void setMargin(@Cast("btScalar") double collisionMargin);
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native void getPlane(@ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport, int i);
 
@@ -55,7 +55,7 @@ public class btBoxShape extends btPolyhedralConvexShape {
 
 	public native void getEdge(int i, @ByRef btVector3 pa, @ByRef btVector3 pb);
 
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 
 	//debugging
 	public native @Cast("const char*") BytePointer getName();

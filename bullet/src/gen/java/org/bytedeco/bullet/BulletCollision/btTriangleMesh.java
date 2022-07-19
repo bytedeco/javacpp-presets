@@ -32,7 +32,7 @@ public class btTriangleMesh extends btTriangleIndexVertexArray {
         return new btTriangleMesh((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_weldingThreshold(); public native btTriangleMesh m_weldingThreshold(float setter);
+	public native @Cast("btScalar") double m_weldingThreshold(); public native btTriangleMesh m_weldingThreshold(double setter);
 
 	public btTriangleMesh(@Cast("bool") boolean use32bitIndices/*=true*/, @Cast("bool") boolean use4componentVertices/*=true*/) { super((Pointer)null); allocate(use32bitIndices, use4componentVertices); }
 	private native void allocate(@Cast("bool") boolean use32bitIndices/*=true*/, @Cast("bool") boolean use4componentVertices/*=true*/);

@@ -36,12 +36,12 @@ public class btSubSimplexClosestResult extends Pointer {
 	//stores the simplex vertex-usage, using the MASK,
 	// if m_usedVertices & MASK then the related vertex is used
 	public native @ByRef btUsageBitfield m_usedVertices(); public native btSubSimplexClosestResult m_usedVertices(btUsageBitfield setter);
-	public native @Cast("btScalar") float m_barycentricCoords(int i); public native btSubSimplexClosestResult m_barycentricCoords(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_barycentricCoords();
+	public native @Cast("btScalar") double m_barycentricCoords(int i); public native btSubSimplexClosestResult m_barycentricCoords(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_barycentricCoords();
 	public native @Cast("bool") boolean m_degenerate(); public native btSubSimplexClosestResult m_degenerate(boolean setter);
 
 	public native void reset();
 	public native @Cast("bool") boolean isValid();
-	public native void setBarycentricCoordinates(@Cast("btScalar") float a/*=btScalar(0.)*/, @Cast("btScalar") float b/*=btScalar(0.)*/, @Cast("btScalar") float c/*=btScalar(0.)*/, @Cast("btScalar") float d/*=btScalar(0.)*/);
+	public native void setBarycentricCoordinates(@Cast("btScalar") double a/*=btScalar(0.)*/, @Cast("btScalar") double b/*=btScalar(0.)*/, @Cast("btScalar") double c/*=btScalar(0.)*/, @Cast("btScalar") double d/*=btScalar(0.)*/);
 	public native void setBarycentricCoordinates();
 }

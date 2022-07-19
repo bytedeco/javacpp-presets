@@ -28,7 +28,7 @@ public class btConvexTriangleCallback extends btTriangleCallback {
 	public btConvexTriangleCallback(btDispatcher dispatcher, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Cast("bool") boolean isSwapped) { super((Pointer)null); allocate(dispatcher, body0Wrap, body1Wrap, isSwapped); }
 	private native void allocate(btDispatcher dispatcher, @Const btCollisionObjectWrapper body0Wrap, @Const btCollisionObjectWrapper body1Wrap, @Cast("bool") boolean isSwapped);
 
-	public native void setTimeStepAndCounters(@Cast("btScalar") float collisionMarginTriangle, @Const @ByRef btDispatcherInfo dispatchInfo, @Const btCollisionObjectWrapper convexBodyWrap, @Const btCollisionObjectWrapper triBodyWrap, btManifoldResult resultOut);
+	public native void setTimeStepAndCounters(@Cast("btScalar") double collisionMarginTriangle, @Const @ByRef btDispatcherInfo dispatchInfo, @Const btCollisionObjectWrapper convexBodyWrap, @Const btCollisionObjectWrapper triBodyWrap, btManifoldResult resultOut);
 
 	public native void clearWrapperData();
 

@@ -14,6 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /**The btGeatConstraint will couple the angular velocity for two bodies around given local axis and ratio.
@@ -24,8 +25,8 @@ public class btGearConstraint extends btTypedConstraint {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btGearConstraint(Pointer p) { super(p); }
 
-	public btGearConstraint(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB, @Cast("btScalar") float ratio/*=1.f*/) { super((Pointer)null); allocate(rbA, rbB, axisInA, axisInB, ratio); }
-	private native void allocate(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB, @Cast("btScalar") float ratio/*=1.f*/);
+	public btGearConstraint(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB, @Cast("btScalar") double ratio/*=1.f*/) { super((Pointer)null); allocate(rbA, rbB, axisInA, axisInB, ratio); }
+	private native void allocate(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB, @Cast("btScalar") double ratio/*=1.f*/);
 	public btGearConstraint(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB) { super((Pointer)null); allocate(rbA, rbB, axisInA, axisInB); }
 	private native void allocate(@ByRef btRigidBody rbA, @ByRef btRigidBody rbB, @Const @ByRef btVector3 axisInA, @Const @ByRef btVector3 axisInB);
 
@@ -37,17 +38,17 @@ public class btGearConstraint extends btTypedConstraint {
 
 	public native void setAxisA(@ByRef btVector3 axisA);
 	public native void setAxisB(@ByRef btVector3 axisB);
-	public native void setRatio(@Cast("btScalar") float ratio);
+	public native void setRatio(@Cast("btScalar") double ratio);
 	public native @Const @ByRef btVector3 getAxisA();
 	public native @Const @ByRef btVector3 getAxisB();
-	public native @Cast("btScalar") float getRatio();
+	public native @Cast("btScalar") double getRatio();
 
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native int calculateSerializeBufferSize();
 

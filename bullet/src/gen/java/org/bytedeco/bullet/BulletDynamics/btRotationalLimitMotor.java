@@ -14,6 +14,7 @@ import static org.bytedeco.bullet.global.BulletCollision.*;
 
 import static org.bytedeco.bullet.global.BulletDynamics.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /** Rotation Limit structure for generic joints */
@@ -35,37 +36,37 @@ public class btRotationalLimitMotor extends Pointer {
 	/** limit_parameters
 	 * \{ */
 	/** joint limit */
-	public native @Cast("btScalar") float m_loLimit(); public native btRotationalLimitMotor m_loLimit(float setter);
+	public native @Cast("btScalar") double m_loLimit(); public native btRotationalLimitMotor m_loLimit(double setter);
 	/** joint limit */
-	public native @Cast("btScalar") float m_hiLimit(); public native btRotationalLimitMotor m_hiLimit(float setter);
+	public native @Cast("btScalar") double m_hiLimit(); public native btRotationalLimitMotor m_hiLimit(double setter);
 	/** target motor velocity */
-	public native @Cast("btScalar") float m_targetVelocity(); public native btRotationalLimitMotor m_targetVelocity(float setter);
+	public native @Cast("btScalar") double m_targetVelocity(); public native btRotationalLimitMotor m_targetVelocity(double setter);
 	/** max force on motor */
-	public native @Cast("btScalar") float m_maxMotorForce(); public native btRotationalLimitMotor m_maxMotorForce(float setter);
+	public native @Cast("btScalar") double m_maxMotorForce(); public native btRotationalLimitMotor m_maxMotorForce(double setter);
 	/** max force on limit */
-	public native @Cast("btScalar") float m_maxLimitForce(); public native btRotationalLimitMotor m_maxLimitForce(float setter);
+	public native @Cast("btScalar") double m_maxLimitForce(); public native btRotationalLimitMotor m_maxLimitForce(double setter);
 	/** Damping. */
-	public native @Cast("btScalar") float m_damping(); public native btRotationalLimitMotor m_damping(float setter);
-	public native @Cast("btScalar") float m_limitSoftness(); public native btRotationalLimitMotor m_limitSoftness(float setter);   /** Relaxation factor */
+	public native @Cast("btScalar") double m_damping(); public native btRotationalLimitMotor m_damping(double setter);
+	public native @Cast("btScalar") double m_limitSoftness(); public native btRotationalLimitMotor m_limitSoftness(double setter);   /** Relaxation factor */
 	/** Constraint force mixing factor */
-	public native @Cast("btScalar") float m_normalCFM(); public native btRotationalLimitMotor m_normalCFM(float setter);
+	public native @Cast("btScalar") double m_normalCFM(); public native btRotationalLimitMotor m_normalCFM(double setter);
 	/** Error tolerance factor when joint is at limit */
-	public native @Cast("btScalar") float m_stopERP(); public native btRotationalLimitMotor m_stopERP(float setter);
+	public native @Cast("btScalar") double m_stopERP(); public native btRotationalLimitMotor m_stopERP(double setter);
 	/** Constraint force mixing factor when joint is at limit */
-	public native @Cast("btScalar") float m_stopCFM(); public native btRotationalLimitMotor m_stopCFM(float setter);
+	public native @Cast("btScalar") double m_stopCFM(); public native btRotationalLimitMotor m_stopCFM(double setter);
 	/** restitution factor */
-	public native @Cast("btScalar") float m_bounce(); public native btRotationalLimitMotor m_bounce(float setter);
+	public native @Cast("btScalar") double m_bounce(); public native btRotationalLimitMotor m_bounce(double setter);
 	public native @Cast("bool") boolean m_enableMotor(); public native btRotationalLimitMotor m_enableMotor(boolean setter);
 
 	/**\}
 	 <p>
 	 *  temp_variables
 	 * \{ */
-	public native @Cast("btScalar") float m_currentLimitError(); public native btRotationalLimitMotor m_currentLimitError(float setter);  /**  How much is violated this limit */
-	public native @Cast("btScalar") float m_currentPosition(); public native btRotationalLimitMotor m_currentPosition(float setter);    /**  current value of angle */
+	public native @Cast("btScalar") double m_currentLimitError(); public native btRotationalLimitMotor m_currentLimitError(double setter);  /**  How much is violated this limit */
+	public native @Cast("btScalar") double m_currentPosition(); public native btRotationalLimitMotor m_currentPosition(double setter);    /**  current value of angle */
 	/** 0=free, 1=at lo limit, 2=at hi limit */
 	public native int m_currentLimit(); public native btRotationalLimitMotor m_currentLimit(int setter);
-	public native @Cast("btScalar") float m_accumulatedImpulse(); public native btRotationalLimitMotor m_accumulatedImpulse(float setter);
+	public native @Cast("btScalar") double m_accumulatedImpulse(); public native btRotationalLimitMotor m_accumulatedImpulse(double setter);
 	/**\} */
 
 	public btRotationalLimitMotor() { super((Pointer)null); allocate(); }
@@ -84,8 +85,8 @@ public class btRotationalLimitMotor extends Pointer {
 	/**
 	calculates m_currentLimit and m_currentLimitError.
 	*/
-	public native int testLimitValue(@Cast("btScalar") float test_value);
+	public native int testLimitValue(@Cast("btScalar") double test_value);
 
 	/** apply the correction impulses for two bodies */
-	public native @Cast("btScalar") float solveAngularLimits(@Cast("btScalar") float timeStep, @ByRef btVector3 axis, @Cast("btScalar") float jacDiagABInv, btRigidBody body0, btRigidBody body1);
+	public native @Cast("btScalar") double solveAngularLimits(@Cast("btScalar") double timeStep, @ByRef btVector3 axis, @Cast("btScalar") double jacDiagABInv, btRigidBody body0, btRigidBody body1);
 }

@@ -38,7 +38,7 @@ public class SoftRigidAnchorData extends Pointer {
 	public native @ByRef btMatrix3x3FloatData m_c0(); public native SoftRigidAnchorData m_c0(btMatrix3x3FloatData setter);        // Impulse matrix
 	public native @ByRef btVector3FloatData m_c1(); public native SoftRigidAnchorData m_c1(btVector3FloatData setter);          // Relative anchor
 	public native @ByRef btVector3FloatData m_localFrame(); public native SoftRigidAnchorData m_localFrame(btVector3FloatData setter);  // Anchor position in body space
-	public native btRigidBodyFloatData m_rigidBody(); public native SoftRigidAnchorData m_rigidBody(btRigidBodyFloatData setter);
+	public native btRigidBodyDoubleData m_rigidBody(); public native SoftRigidAnchorData m_rigidBody(btRigidBodyDoubleData setter);
 	public native int m_nodeIndex(); public native SoftRigidAnchorData m_nodeIndex(int setter);  // Node pointer
 	public native float m_c2(); public native SoftRigidAnchorData m_c2(float setter);       // ima*dt
 }

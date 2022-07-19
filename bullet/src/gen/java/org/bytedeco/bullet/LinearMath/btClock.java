@@ -51,5 +51,5 @@ public class btClock extends Pointer {
 
 	/** Returns the time in s since the last call to reset or since
 	 *  the Clock was created. */
-	public native @Cast("btScalar") float getTimeSeconds();
+	public native @Cast("btScalar") double getTimeSeconds();
 }

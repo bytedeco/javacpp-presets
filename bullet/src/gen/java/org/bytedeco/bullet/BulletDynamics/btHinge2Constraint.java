@@ -37,9 +37,9 @@ public class btHinge2Constraint extends btGeneric6DofSpring2Constraint {
 	public native @Const @ByRef btVector3 getAnchor2();
 	public native @Const @ByRef btVector3 getAxis1();
 	public native @Const @ByRef btVector3 getAxis2();
-	public native @Cast("btScalar") float getAngle1();
-	public native @Cast("btScalar") float getAngle2();
+	public native @Cast("btScalar") double getAngle1();
+	public native @Cast("btScalar") double getAngle2();
 	// limits
-	public native void setUpperLimit(@Cast("btScalar") float ang1max);
-	public native void setLowerLimit(@Cast("btScalar") float ang1min);
+	public native void setUpperLimit(@Cast("btScalar") double ang1max);
+	public native void setLowerLimit(@Cast("btScalar") double ang1min);
 }

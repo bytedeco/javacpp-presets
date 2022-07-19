@@ -23,5 +23,5 @@ public class btBroadphaseRayCallback extends btBroadphaseAabbCallback {
 	public native @ByRef btVector3 m_rayDirectionInverse(); public native btBroadphaseRayCallback m_rayDirectionInverse(btVector3 setter);
 	public native @Cast("unsigned int") int m_signs(int i); public native btBroadphaseRayCallback m_signs(int i, int setter);
 	@MemberGetter public native @Cast("unsigned int*") IntPointer m_signs();
-	public native @Cast("btScalar") float m_lambda_max(); public native btBroadphaseRayCallback m_lambda_max(float setter);
+	public native @Cast("btScalar") double m_lambda_max(); public native btBroadphaseRayCallback m_lambda_max(double setter);
 }

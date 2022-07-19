@@ -69,10 +69,10 @@ public class btCompoundShape extends btCollisionShape {
 
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 	public native @Cast("const char*") BytePointer getName();
 
 	public native btDbvt getDynamicAabbTree();
@@ -84,9 +84,9 @@ public class btCompoundShape extends btCollisionShape {
 	 * "principal" has to be applied inversely to all children transforms in order for the local coordinate system of the compound
 	 * shape to be centered at the center of mass and to coincide with the principal axes. This also necessitates a correction of the world transform
 	 * of the collision object by the principal transform. */
-	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") FloatPointer masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
-	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") FloatBuffer masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
-	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") float[] masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
+	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") DoublePointer masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
+	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") DoubleBuffer masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
+	public native void calculatePrincipalAxisTransform(@Cast("const btScalar*") double[] masses, @ByRef btTransform principal, @ByRef btVector3 inertia);
 
 	public native int getUpdateRevision();
 

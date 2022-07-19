@@ -23,28 +23,28 @@ public class btDeformableMousePickingForce extends btDeformableLagrangianForce {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btDeformableMousePickingForce(Pointer p) { super(p); }
 
-	public btDeformableMousePickingForce(@Cast("btScalar") float k, @Cast("btScalar") float d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos, @Cast("btScalar") float maxForce/*=0.3*/) { super((Pointer)null); allocate(k, d, face, mouse_pos, maxForce); }
-	private native void allocate(@Cast("btScalar") float k, @Cast("btScalar") float d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos, @Cast("btScalar") float maxForce/*=0.3*/);
-	public btDeformableMousePickingForce(@Cast("btScalar") float k, @Cast("btScalar") float d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos) { super((Pointer)null); allocate(k, d, face, mouse_pos); }
-	private native void allocate(@Cast("btScalar") float k, @Cast("btScalar") float d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos);
+	public btDeformableMousePickingForce(@Cast("btScalar") double k, @Cast("btScalar") double d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos, @Cast("btScalar") double maxForce/*=0.3*/) { super((Pointer)null); allocate(k, d, face, mouse_pos, maxForce); }
+	private native void allocate(@Cast("btScalar") double k, @Cast("btScalar") double d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos, @Cast("btScalar") double maxForce/*=0.3*/);
+	public btDeformableMousePickingForce(@Cast("btScalar") double k, @Cast("btScalar") double d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos) { super((Pointer)null); allocate(k, d, face, mouse_pos); }
+	private native void allocate(@Cast("btScalar") double k, @Cast("btScalar") double d, @Const @ByRef btSoftBody.Face face, @Const @ByRef btVector3 mouse_pos);
 
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledForces(@Cast("btScalar") double scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledExplicitForce(@Cast("btScalar") double scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledDampingForce(@Cast("btScalar") double scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledElasticForce(@Cast("btScalar") float scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledElasticForce(@Cast("btScalar") double scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") double scale, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array diagA);
 
-	public native double totalElasticEnergy(@Cast("btScalar") float dt);
+	public native double totalElasticEnergy(@Cast("btScalar") double dt);
 
-	public native double totalDampingEnergy(@Cast("btScalar") float dt);
+	public native double totalDampingEnergy(@Cast("btScalar") double dt);
 
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableMousePickingForce::TVStack*") @ByRef btVector3Array df);
 
 	public native void setMousePos(@Const @ByRef btVector3 p);
 

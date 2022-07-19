@@ -34,5 +34,5 @@ public class btMprDistanceInfo extends Pointer {
 	public native @ByRef btVector3 m_pointOnA(); public native btMprDistanceInfo m_pointOnA(btVector3 setter);
 	public native @ByRef btVector3 m_pointOnB(); public native btMprDistanceInfo m_pointOnB(btVector3 setter);
 	public native @ByRef btVector3 m_normalBtoA(); public native btMprDistanceInfo m_normalBtoA(btVector3 setter);
-	public native @Cast("btScalar") float m_distance(); public native btMprDistanceInfo m_distance(float setter);
+	public native @Cast("btScalar") double m_distance(); public native btMprDistanceInfo m_distance(double setter);
 }

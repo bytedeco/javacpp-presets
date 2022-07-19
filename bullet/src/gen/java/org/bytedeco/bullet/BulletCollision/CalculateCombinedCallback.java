@@ -23,5 +23,5 @@ public class CalculateCombinedCallback extends FunctionPointer {
     public    CalculateCombinedCallback(Pointer p) { super(p); }
     protected CalculateCombinedCallback() { allocate(); }
     private native void allocate();
-    public native @Cast("btScalar") float call(@Const btCollisionObject body0, @Const btCollisionObject body1);
+    public native @Cast("btScalar") double call(@Const btCollisionObject body0, @Const btCollisionObject body1);
 }

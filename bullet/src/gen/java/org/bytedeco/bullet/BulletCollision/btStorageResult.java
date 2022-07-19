@@ -21,7 +21,7 @@ public class btStorageResult extends btDiscreteCollisionDetectorInterface.Result
 
 	public native @ByRef btVector3 m_normalOnSurfaceB(); public native btStorageResult m_normalOnSurfaceB(btVector3 setter);
 	public native @ByRef btVector3 m_closestPointInB(); public native btStorageResult m_closestPointInB(btVector3 setter);
-	public native @Cast("btScalar") float m_distance(); public native btStorageResult m_distance(float setter);
+	public native @Cast("btScalar") double m_distance(); public native btStorageResult m_distance(double setter);
 
-	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") float depth);
+	public native void addContactPoint(@Const @ByRef btVector3 normalOnBInWorld, @Const @ByRef btVector3 pointInWorld, @Cast("btScalar") double depth);
 }

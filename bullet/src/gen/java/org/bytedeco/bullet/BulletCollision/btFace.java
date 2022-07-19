@@ -33,6 +33,6 @@ public class btFace extends Pointer {
 
 	public native @ByRef btIntArray m_indices(); public native btFace m_indices(btIntArray setter);
 	//	btAlignedObjectArray<int>	m_connectedFaces;
-	public native @Cast("btScalar") float m_plane(int i); public native btFace m_plane(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_plane();
+	public native @Cast("btScalar") double m_plane(int i); public native btFace m_plane(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_plane();
 }

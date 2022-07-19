@@ -43,7 +43,7 @@ public class btDeformableStaticConstraint extends btDeformableContactConstraint 
 	public btDeformableStaticConstraint(@Const @ByRef btDeformableStaticConstraint other) { super((Pointer)null); allocate(other); }
 	private native void allocate(@Const @ByRef btDeformableStaticConstraint other);
 
-	public native @Cast("btScalar") float solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	public native @ByVal btVector3 getVa();
 
@@ -52,5 +52,5 @@ public class btDeformableStaticConstraint extends btDeformableContactConstraint 
 	public native @ByVal btVector3 getDv(@Const btSoftBody.Node n);
 
 	public native void applyImpulse(@Const @ByRef btVector3 impulse);
-	public native void setPenetrationScale(@Cast("btScalar") float scale);
+	public native void setPenetrationScale(@Cast("btScalar") double scale);
 }

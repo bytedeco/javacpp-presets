@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.bullet.global.LinearMath.*;
 
+// #else
 // #endif  //BT_USE_DOUBLE_PRECISION
 
 /**\brief The btMatrix3x3 class implements a 3x3 rotation matrix, to perform linear algebra in combination with btQuaternion, btTransform and btVector3.
@@ -46,12 +47,12 @@ public class btMatrix3x3 extends Pointer {
 	}
 	*/
 	/** \brief Constructor with row major formatting */
-	public btMatrix3x3(@Cast("const btScalar") float xx, @Cast("const btScalar") float xy, @Cast("const btScalar") float xz,
-					@Cast("const btScalar") float yx, @Cast("const btScalar") float yy, @Cast("const btScalar") float yz,
-					@Cast("const btScalar") float zx, @Cast("const btScalar") float zy, @Cast("const btScalar") float zz) { super((Pointer)null); allocate(xx, xy, xz, yx, yy, yz, zx, zy, zz); }
-	private native void allocate(@Cast("const btScalar") float xx, @Cast("const btScalar") float xy, @Cast("const btScalar") float xz,
-					@Cast("const btScalar") float yx, @Cast("const btScalar") float yy, @Cast("const btScalar") float yz,
-					@Cast("const btScalar") float zx, @Cast("const btScalar") float zy, @Cast("const btScalar") float zz);
+	public btMatrix3x3(@Cast("const btScalar") double xx, @Cast("const btScalar") double xy, @Cast("const btScalar") double xz,
+					@Cast("const btScalar") double yx, @Cast("const btScalar") double yy, @Cast("const btScalar") double yz,
+					@Cast("const btScalar") double zx, @Cast("const btScalar") double zy, @Cast("const btScalar") double zz) { super((Pointer)null); allocate(xx, xy, xz, yx, yy, yz, zx, zy, zz); }
+	private native void allocate(@Cast("const btScalar") double xx, @Cast("const btScalar") double xy, @Cast("const btScalar") double xz,
+					@Cast("const btScalar") double yx, @Cast("const btScalar") double yy, @Cast("const btScalar") double yz,
+					@Cast("const btScalar") double zx, @Cast("const btScalar") double zy, @Cast("const btScalar") double zz);
 
 // #if (defined(BT_USE_SSE_IN_API) && defined(BT_USE_SSE)) || defined(BT_USE_NEON)
 
@@ -101,9 +102,9 @@ public class btMatrix3x3 extends Pointer {
 
 	/** \brief Set from the rotational part of a 4x4 OpenGL matrix
 	*  @param m A pointer to the beginning of the array of scalars*/
-	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") FloatPointer m);
-	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") FloatBuffer m);
-	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") float[] m);
+	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") DoublePointer m);
+	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") DoubleBuffer m);
+	public native void setFromOpenGLSubMatrix(@Cast("const btScalar*") double[] m);
 	/** \brief Set the values of the matrix explicitly (row major)
 	*  @param xx Top left
 	*  @param xy Top Middle
@@ -114,9 +115,9 @@ public class btMatrix3x3 extends Pointer {
 	*  @param zx Bottom Left
 	*  @param zy Bottom Middle
 	*  @param zz Bottom Right*/
-	public native void setValue(@Cast("const btScalar") float xx, @Cast("const btScalar") float xy, @Cast("const btScalar") float xz,
-					  @Cast("const btScalar") float yx, @Cast("const btScalar") float yy, @Cast("const btScalar") float yz,
-					  @Cast("const btScalar") float zx, @Cast("const btScalar") float zy, @Cast("const btScalar") float zz);
+	public native void setValue(@Cast("const btScalar") double xx, @Cast("const btScalar") double xy, @Cast("const btScalar") double xz,
+					  @Cast("const btScalar") double yx, @Cast("const btScalar") double yy, @Cast("const btScalar") double yz,
+					  @Cast("const btScalar") double zx, @Cast("const btScalar") double zy, @Cast("const btScalar") double zz);
 
 	/** \brief Set the matrix from a quaternion
 	*  @param q The Quaternion to match */
@@ -127,7 +128,7 @@ public class btMatrix3x3 extends Pointer {
 	*  @param pitch Pitch about X axis
 	*  @param roll Roll about Z axis 
 	*/
-	public native void setEulerYPR(@Cast("const btScalar") float yaw, @Cast("const btScalar") float pitch, @Cast("const btScalar") float roll);
+	public native void setEulerYPR(@Cast("const btScalar") double yaw, @Cast("const btScalar") double pitch, @Cast("const btScalar") double roll);
 
 	/** \brief Set the matrix from euler angles YPR around ZYX axes
 	* @param eulerX Roll about X axis
@@ -138,7 +139,7 @@ public class btMatrix3x3 extends Pointer {
 	* angles are applied in ZYX order. I.e a vector is first rotated 
 	* about X then Y and then Z
 	**/
-	public native void setEulerZYX(@Cast("btScalar") float eulerX, @Cast("btScalar") float eulerY, @Cast("btScalar") float eulerZ);
+	public native void setEulerZYX(@Cast("btScalar") double eulerX, @Cast("btScalar") double eulerY, @Cast("btScalar") double eulerZ);
 
 	/**\brief Set the matrix to the identity */
 	public native void setIdentity();
@@ -150,9 +151,9 @@ public class btMatrix3x3 extends Pointer {
 
 	/**\brief Fill the rotational part of an OpenGL matrix and clear the shear/perspective
 	* @param m The array to be filled */
-	public native void getOpenGLSubMatrix(@Cast("btScalar*") FloatPointer m);
-	public native void getOpenGLSubMatrix(@Cast("btScalar*") FloatBuffer m);
-	public native void getOpenGLSubMatrix(@Cast("btScalar*") float[] m);
+	public native void getOpenGLSubMatrix(@Cast("btScalar*") DoublePointer m);
+	public native void getOpenGLSubMatrix(@Cast("btScalar*") DoubleBuffer m);
+	public native void getOpenGLSubMatrix(@Cast("btScalar*") double[] m);
 
 	/**\brief Get the matrix represented as a quaternion 
 	* @param q The quaternion which will be set */
@@ -162,21 +163,21 @@ public class btMatrix3x3 extends Pointer {
 	* @param yaw Yaw around Y axis
 	* @param pitch Pitch around X axis
 	* @param roll around Z axis */
-	public native void getEulerYPR(@Cast("btScalar*") @ByRef FloatPointer yaw, @Cast("btScalar*") @ByRef FloatPointer pitch, @Cast("btScalar*") @ByRef FloatPointer roll);
-	public native void getEulerYPR(@Cast("btScalar*") @ByRef FloatBuffer yaw, @Cast("btScalar*") @ByRef FloatBuffer pitch, @Cast("btScalar*") @ByRef FloatBuffer roll);
-	public native void getEulerYPR(@Cast("btScalar*") @ByRef float[] yaw, @Cast("btScalar*") @ByRef float[] pitch, @Cast("btScalar*") @ByRef float[] roll);
+	public native void getEulerYPR(@Cast("btScalar*") @ByRef DoublePointer yaw, @Cast("btScalar*") @ByRef DoublePointer pitch, @Cast("btScalar*") @ByRef DoublePointer roll);
+	public native void getEulerYPR(@Cast("btScalar*") @ByRef DoubleBuffer yaw, @Cast("btScalar*") @ByRef DoubleBuffer pitch, @Cast("btScalar*") @ByRef DoubleBuffer roll);
+	public native void getEulerYPR(@Cast("btScalar*") @ByRef double[] yaw, @Cast("btScalar*") @ByRef double[] pitch, @Cast("btScalar*") @ByRef double[] roll);
 
 	/**\brief Get the matrix represented as euler angles around ZYX
 	* @param yaw Yaw around Z axis
 	* @param pitch Pitch around Y axis
 	* @param roll around X axis 
 	* @param solution_number Which solution of two possible solutions ( 1 or 2) are possible values*/
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef FloatPointer yaw, @Cast("btScalar*") @ByRef FloatPointer pitch, @Cast("btScalar*") @ByRef FloatPointer roll, @Cast("unsigned int") int solution_number/*=1*/);
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef FloatPointer yaw, @Cast("btScalar*") @ByRef FloatPointer pitch, @Cast("btScalar*") @ByRef FloatPointer roll);
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef FloatBuffer yaw, @Cast("btScalar*") @ByRef FloatBuffer pitch, @Cast("btScalar*") @ByRef FloatBuffer roll, @Cast("unsigned int") int solution_number/*=1*/);
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef FloatBuffer yaw, @Cast("btScalar*") @ByRef FloatBuffer pitch, @Cast("btScalar*") @ByRef FloatBuffer roll);
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef float[] yaw, @Cast("btScalar*") @ByRef float[] pitch, @Cast("btScalar*") @ByRef float[] roll, @Cast("unsigned int") int solution_number/*=1*/);
-	public native void getEulerZYX(@Cast("btScalar*") @ByRef float[] yaw, @Cast("btScalar*") @ByRef float[] pitch, @Cast("btScalar*") @ByRef float[] roll);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef DoublePointer yaw, @Cast("btScalar*") @ByRef DoublePointer pitch, @Cast("btScalar*") @ByRef DoublePointer roll, @Cast("unsigned int") int solution_number/*=1*/);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef DoublePointer yaw, @Cast("btScalar*") @ByRef DoublePointer pitch, @Cast("btScalar*") @ByRef DoublePointer roll);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef DoubleBuffer yaw, @Cast("btScalar*") @ByRef DoubleBuffer pitch, @Cast("btScalar*") @ByRef DoubleBuffer roll, @Cast("unsigned int") int solution_number/*=1*/);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef DoubleBuffer yaw, @Cast("btScalar*") @ByRef DoubleBuffer pitch, @Cast("btScalar*") @ByRef DoubleBuffer roll);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef double[] yaw, @Cast("btScalar*") @ByRef double[] pitch, @Cast("btScalar*") @ByRef double[] roll, @Cast("unsigned int") int solution_number/*=1*/);
+	public native void getEulerZYX(@Cast("btScalar*") @ByRef double[] yaw, @Cast("btScalar*") @ByRef double[] pitch, @Cast("btScalar*") @ByRef double[] roll);
 
 	/**\brief Create a scaled copy of the matrix 
 	* @param s Scaling vector The elements of the vector will scale each column */
@@ -184,7 +185,7 @@ public class btMatrix3x3 extends Pointer {
 	public native @ByVal btMatrix3x3 scaled(@Const @ByRef btVector3 s);
 
 	/**\brief Return the determinant of the matrix */
-	public native @Cast("btScalar") float determinant();
+	public native @Cast("btScalar") double determinant();
 	/**\brief Return the adjoint of the matrix */
 	public native @ByVal btMatrix3x3 adjoint();
 	/**\brief Return the matrix with all values non negative */
@@ -202,9 +203,9 @@ public class btMatrix3x3 extends Pointer {
 	public native @ByVal btMatrix3x3 transposeTimes(@Const @ByRef btMatrix3x3 m);
 	public native @ByVal btMatrix3x3 timesTranspose(@Const @ByRef btMatrix3x3 m);
 
-	public native @Cast("btScalar") float tdotx(@Const @ByRef btVector3 v);
-	public native @Cast("btScalar") float tdoty(@Const @ByRef btVector3 v);
-	public native @Cast("btScalar") float tdotz(@Const @ByRef btVector3 v);
+	public native @Cast("btScalar") double tdotx(@Const @ByRef btVector3 v);
+	public native @Cast("btScalar") double tdoty(@Const @ByRef btVector3 v);
+	public native @Cast("btScalar") double tdotz(@Const @ByRef btVector3 v);
 
 	/**extractRotation is from "A robust method to extract the rotational part of deformations"
 	 * See http://dl.acm.org/citation.cfm?doid=2994258.2994269
@@ -212,7 +213,7 @@ public class btMatrix3x3 extends Pointer {
 	 * symmetric matrix S:
 	 * A = R*S.
 	 * note that R can include both rotation and scaling. */
-	public native void extractRotation(@ByRef btQuaternion q, @Cast("btScalar") float tolerance/*=1.0e-9*/, int maxIter/*=100*/);
+	public native void extractRotation(@ByRef btQuaternion q, @Cast("btScalar") double tolerance/*=1.0e-9*/, int maxIter/*=100*/);
 	public native void extractRotation(@ByRef btQuaternion q);
 
 	/**\brief diagonalizes this matrix by the Jacobi method.
@@ -224,7 +225,7 @@ public class btMatrix3x3 extends Pointer {
 	*
 	* Note that this matrix is assumed to be symmetric.
 	*/
-	public native void diagonalize(@ByRef btMatrix3x3 rot, @Cast("btScalar") float threshold, int maxSteps);
+	public native void diagonalize(@ByRef btMatrix3x3 rot, @Cast("btScalar") double threshold, int maxSteps);
 
 	/**\brief Calculate the matrix cofactor 
 	* @param r1 The first row to use for calculating the cofactor
@@ -233,13 +234,13 @@ public class btMatrix3x3 extends Pointer {
 	* @param c1 The second column to use for calculating the cofactor
 	* See http://en.wikipedia.org/wiki/Cofactor_(linear_algebra) for more details
 	*/
-	public native @Cast("btScalar") float cofac(int r1, int c1, int r2, int c2);
+	public native @Cast("btScalar") double cofac(int r1, int c1, int r2, int c2);
 
-	public native void serialize(@ByRef btMatrix3x3FloatData dataOut);
+	public native void serialize(@ByRef btMatrix3x3DoubleData dataOut);
 
 	public native void serializeFloat(@ByRef btMatrix3x3FloatData dataOut);
 
-	public native void deSerialize(@Const @ByRef btMatrix3x3FloatData dataIn);
+	public native void deSerialize(@Const @ByRef btMatrix3x3DoubleData dataIn);
 
 	public native void deSerializeFloat(@Const @ByRef btMatrix3x3FloatData dataIn);
 

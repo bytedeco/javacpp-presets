@@ -37,8 +37,8 @@ public class LagrangeMultiplier extends Pointer {
 
 	public native int m_num_constraints(); public native LagrangeMultiplier m_num_constraints(int setter);  // Number of constraints
 	public native int m_num_nodes(); public native LagrangeMultiplier m_num_nodes(int setter);        // Number of nodes in these constraints
-	public native @Cast("btScalar") float m_weights(int i); public native LagrangeMultiplier m_weights(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_weights();  // weights of the nodes involved, same size as m_num_nodes
+	public native @Cast("btScalar") double m_weights(int i); public native LagrangeMultiplier m_weights(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_weights();  // weights of the nodes involved, same size as m_num_nodes
 	public native @ByRef btVector3 m_dirs(int i); public native LagrangeMultiplier m_dirs(int i, btVector3 setter);
 	@MemberGetter public native btVector3 m_dirs();    // Constraint directions, same size of m_num_constraints;
 	public native int m_indices(int i); public native LagrangeMultiplier m_indices(int i, int setter);

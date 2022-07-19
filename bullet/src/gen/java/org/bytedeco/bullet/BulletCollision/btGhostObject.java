@@ -35,7 +35,7 @@ public class btGhostObject extends btCollisionObject {
 	public btGhostObject() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform convexFromWorld, @Const @ByRef btTransform convexToWorld, @ByRef btCollisionWorld.ConvexResultCallback resultCallback, @Cast("btScalar") float allowedCcdPenetration/*=0.f*/);
+	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform convexFromWorld, @Const @ByRef btTransform convexToWorld, @ByRef btCollisionWorld.ConvexResultCallback resultCallback, @Cast("btScalar") double allowedCcdPenetration/*=0.f*/);
 	public native void convexSweepTest(@Const btConvexShape castShape, @Const @ByRef btTransform convexFromWorld, @Const @ByRef btTransform convexToWorld, @ByRef btCollisionWorld.ConvexResultCallback resultCallback);
 
 	public native void rayTest(@Const @ByRef btVector3 rayFromWorld, @Const @ByRef btVector3 rayToWorld, @ByRef btCollisionWorld.RayResultCallback resultCallback);

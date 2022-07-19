@@ -27,36 +27,36 @@ public class btMultiBody extends Pointer {
 	//
 
 	public btMultiBody(int n_links,
-					@Cast("btScalar") float mass,
+					@Cast("btScalar") double mass,
 					@Const @ByRef btVector3 inertia,
 					@Cast("bool") boolean fixedBase,
 					@Cast("bool") boolean canSleep, @Cast("bool") boolean deprecatedMultiDof/*=true*/) { super((Pointer)null); allocate(n_links, mass, inertia, fixedBase, canSleep, deprecatedMultiDof); }
 	private native void allocate(int n_links,
-					@Cast("btScalar") float mass,
+					@Cast("btScalar") double mass,
 					@Const @ByRef btVector3 inertia,
 					@Cast("bool") boolean fixedBase,
 					@Cast("bool") boolean canSleep, @Cast("bool") boolean deprecatedMultiDof/*=true*/);
 	public btMultiBody(int n_links,
-					@Cast("btScalar") float mass,
+					@Cast("btScalar") double mass,
 					@Const @ByRef btVector3 inertia,
 					@Cast("bool") boolean fixedBase,
 					@Cast("bool") boolean canSleep) { super((Pointer)null); allocate(n_links, mass, inertia, fixedBase, canSleep); }
 	private native void allocate(int n_links,
-					@Cast("btScalar") float mass,
+					@Cast("btScalar") double mass,
 					@Const @ByRef btVector3 inertia,
 					@Cast("bool") boolean fixedBase,
 					@Cast("bool") boolean canSleep);
 
 	//note: fixed link collision with parent is always disabled
 	public native void setupFixed(int i,
-						@Cast("btScalar") float mass,
+						@Cast("btScalar") double mass,
 						@Const @ByRef btVector3 inertia,
 						int parent,
 						@Const @ByRef btQuaternion rotParentToThis,
 						@Const @ByRef btVector3 parentComToThisPivotOffset,
 						@Const @ByRef btVector3 thisPivotToThisComOffset, @Cast("bool") boolean deprecatedDisableParentCollision/*=true*/);
 	public native void setupFixed(int i,
-						@Cast("btScalar") float mass,
+						@Cast("btScalar") double mass,
 						@Const @ByRef btVector3 inertia,
 						int parent,
 						@Const @ByRef btQuaternion rotParentToThis,
@@ -64,7 +64,7 @@ public class btMultiBody extends Pointer {
 						@Const @ByRef btVector3 thisPivotToThisComOffset);
 
 	public native void setupPrismatic(int i,
-							@Cast("btScalar") float mass,
+							@Cast("btScalar") double mass,
 							@Const @ByRef btVector3 inertia,
 							int parent,
 							@Const @ByRef btQuaternion rotParentToThis,
@@ -74,7 +74,7 @@ public class btMultiBody extends Pointer {
 							@Cast("bool") boolean disableParentCollision);
 
 	public native void setupRevolute(int i,
-						   @Cast("btScalar") float mass,
+						   @Cast("btScalar") double mass,
 						   @Const @ByRef btVector3 inertia,
 						   int parentIndex,
 						   @Const @ByRef btQuaternion rotParentToThis,
@@ -83,7 +83,7 @@ public class btMultiBody extends Pointer {
 						   @Const @ByRef btVector3 thisPivotToThisComOffset,
 						   @Cast("bool") boolean disableParentCollision/*=false*/);
 	public native void setupRevolute(int i,
-						   @Cast("btScalar") float mass,
+						   @Cast("btScalar") double mass,
 						   @Const @ByRef btVector3 inertia,
 						   int parentIndex,
 						   @Const @ByRef btQuaternion rotParentToThis,
@@ -92,7 +92,7 @@ public class btMultiBody extends Pointer {
 						   @Const @ByRef btVector3 thisPivotToThisComOffset);
 
 	public native void setupSpherical(int i,
-							@Cast("btScalar") float mass,
+							@Cast("btScalar") double mass,
 							@Const @ByRef btVector3 inertia,
 							int parent,
 							@Const @ByRef btQuaternion rotParentToThis,
@@ -100,7 +100,7 @@ public class btMultiBody extends Pointer {
 							@Const @ByRef btVector3 thisPivotToThisComOffset,
 							@Cast("bool") boolean disableParentCollision/*=false*/);
 	public native void setupSpherical(int i,
-							@Cast("btScalar") float mass,
+							@Cast("btScalar") double mass,
 							@Const @ByRef btVector3 inertia,
 							int parent,
 							@Const @ByRef btQuaternion rotParentToThis,
@@ -108,7 +108,7 @@ public class btMultiBody extends Pointer {
 							@Const @ByRef btVector3 thisPivotToThisComOffset);
 
 	public native void setupPlanar(int i,
-						 @Cast("btScalar") float mass,
+						 @Cast("btScalar") double mass,
 						 @Const @ByRef btVector3 inertia,
 						 int parent,
 						 @Const @ByRef btQuaternion rotParentToThis,
@@ -116,7 +116,7 @@ public class btMultiBody extends Pointer {
 						 @Const @ByRef btVector3 parentComToThisComOffset,
 						 @Cast("bool") boolean disableParentCollision/*=false*/);
 	public native void setupPlanar(int i,
-						 @Cast("btScalar") float mass,
+						 @Cast("btScalar") double mass,
 						 @Const @ByRef btVector3 inertia,
 						 int parent,
 						 @Const @ByRef btQuaternion rotParentToThis,
@@ -144,16 +144,16 @@ public class btMultiBody extends Pointer {
 	public native int getNumLinks();
 	public native int getNumDofs();
 	public native int getNumPosVars();
-	public native @Cast("btScalar") float getBaseMass();
+	public native @Cast("btScalar") double getBaseMass();
 	public native @Const @ByRef btVector3 getBaseInertia();
-	public native @Cast("btScalar") float getLinkMass(int i);
+	public native @Cast("btScalar") double getLinkMass(int i);
 	public native @Const @ByRef btVector3 getLinkInertia(int i);
 
 	//
 	// change mass (incomplete: can only change base mass and inertia at present)
 	//
 
-	public native void setBaseMass(@Cast("btScalar") float mass);
+	public native void setBaseMass(@Cast("btScalar") double mass);
 	public native void setBaseInertia(@Const @ByRef btVector3 inertia);
 
 	//
@@ -190,20 +190,20 @@ public class btMultiBody extends Pointer {
 
 	public native void setBaseOmega(@Const @ByRef btVector3 omega);
 
-	public native void saveKinematicState(@Cast("btScalar") float timeStep);
+	public native void saveKinematicState(@Cast("btScalar") double timeStep);
 
 	//
 	// get/set pos/vel for child m_links (i = 0 to num_links-1)
 	//
 
-	public native @Cast("btScalar") float getJointPos(int i);
-	public native @Cast("btScalar") float getJointVel(int i);
+	public native @Cast("btScalar") double getJointPos(int i);
+	public native @Cast("btScalar") double getJointVel(int i);
 
-	public native @Cast("btScalar*") FloatPointer getJointVelMultiDof(int i);
-	public native @Cast("btScalar*") FloatPointer getJointPosMultiDof(int i);
+	public native @Cast("btScalar*") DoublePointer getJointVelMultiDof(int i);
+	public native @Cast("btScalar*") DoublePointer getJointPosMultiDof(int i);
 
-	public native void setJointPos(int i, @Cast("btScalar") float q);
-	public native void setJointVel(int i, @Cast("btScalar") float qdot);
+	public native void setJointPos(int i, @Cast("btScalar") double q);
+	public native void setJointVel(int i, @Cast("btScalar") double qdot);
 	public native void setJointPosMultiDof(int i, @Const DoublePointer q);
 	public native void setJointPosMultiDof(int i, @Const DoubleBuffer q);
 	public native void setJointPosMultiDof(int i, @Const double[] q);
@@ -221,11 +221,11 @@ public class btMultiBody extends Pointer {
 	// direct access to velocities as a vector of 6 + num_links elements.
 	// (omega first, then v, then joint velocities.)
 	//
-	public native @Cast("const btScalar*") FloatPointer getVelocityVector();
+	public native @Cast("const btScalar*") DoublePointer getVelocityVector();
     
-    public native @Cast("const btScalar*") FloatPointer getDeltaVelocityVector();
+    public native @Cast("const btScalar*") DoublePointer getDeltaVelocityVector();
     
-    public native @Cast("const btScalar*") FloatPointer getSplitVelocityVector();
+    public native @Cast("const btScalar*") DoublePointer getSplitVelocityVector();
 	/*    btScalar * getVelocityVector() 
 	{ 
 		return &real_buf[0]; 
@@ -275,18 +275,18 @@ public class btMultiBody extends Pointer {
 	public native void addLinkConstraintForce(int i, @Const @ByRef btVector3 f);
 	public native void addLinkConstraintTorque(int i, @Const @ByRef btVector3 t);
 
-	public native void addJointTorque(int i, @Cast("btScalar") float Q);
-	public native void addJointTorqueMultiDof(int i, int dof, @Cast("btScalar") float Q);
-	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") FloatPointer Q);
-	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") FloatBuffer Q);
-	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") float[] Q);
+	public native void addJointTorque(int i, @Cast("btScalar") double Q);
+	public native void addJointTorqueMultiDof(int i, int dof, @Cast("btScalar") double Q);
+	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") DoublePointer Q);
+	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") DoubleBuffer Q);
+	public native void addJointTorqueMultiDof(int i, @Cast("const btScalar*") double[] Q);
 
 	public native @Const @ByRef btVector3 getBaseForce();
 	public native @Const @ByRef btVector3 getBaseTorque();
 	public native @Const @ByRef btVector3 getLinkForce(int i);
 	public native @Const @ByRef btVector3 getLinkTorque(int i);
-	public native @Cast("btScalar") float getJointTorque(int i);
-	public native @Cast("btScalar*") FloatPointer getJointTorqueMultiDof(int i);
+	public native @Cast("btScalar") double getJointTorque(int i);
+	public native @Cast("btScalar*") DoublePointer getJointTorqueMultiDof(int i);
 
 	//
 	// dynamics routines.
@@ -305,7 +305,7 @@ public class btMultiBody extends Pointer {
 	// allocation appears to be fairly slow).
 	//
 
-	public native void computeAccelerationsArticulatedBodyAlgorithmMultiDof(@Cast("btScalar") float dt,
+	public native void computeAccelerationsArticulatedBodyAlgorithmMultiDof(@Cast("btScalar") double dt,
 																  @ByRef btScalarArray scratch_r,
 																  @ByRef btVector3Array scratch_v,
 																  @ByRef btMatrix3x3Array scratch_m,
@@ -330,38 +330,38 @@ public class btMultiBody extends Pointer {
 	// output: 3 omegadot values, 3 vdot values, num_links q_double_dot values
 	// (existing contents of output array are replaced)
 	// calcAccelerationDeltasMultiDof must have been called first.
-	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") FloatPointer force, @Cast("btScalar*") FloatPointer output,
+	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") DoublePointer force, @Cast("btScalar*") DoublePointer output,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v);
-	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") FloatBuffer force, @Cast("btScalar*") FloatBuffer output,
+	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") DoubleBuffer force, @Cast("btScalar*") DoubleBuffer output,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v);
-	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") float[] force, @Cast("btScalar*") float[] output,
+	public native void calcAccelerationDeltasMultiDof(@Cast("const btScalar*") double[] force, @Cast("btScalar*") double[] output,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v);
 
-	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") FloatPointer delta_vee, @Cast("btScalar") float multiplier);
-	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") FloatBuffer delta_vee, @Cast("btScalar") float multiplier);
-	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") float[] delta_vee, @Cast("btScalar") float multiplier);
-    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") FloatPointer delta_vee, @Cast("btScalar") float multiplier);
-    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") FloatBuffer delta_vee, @Cast("btScalar") float multiplier);
-    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") float[] delta_vee, @Cast("btScalar") float multiplier);
+	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") DoublePointer delta_vee, @Cast("btScalar") double multiplier);
+	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") DoubleBuffer delta_vee, @Cast("btScalar") double multiplier);
+	public native void applyDeltaVeeMultiDof2(@Cast("const btScalar*") double[] delta_vee, @Cast("btScalar") double multiplier);
+    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") DoublePointer delta_vee, @Cast("btScalar") double multiplier);
+    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") DoubleBuffer delta_vee, @Cast("btScalar") double multiplier);
+    public native void applyDeltaSplitVeeMultiDof(@Cast("const btScalar*") double[] delta_vee, @Cast("btScalar") double multiplier);
     public native void addSplitV();
     public native void substractSplitV();
 	public native void processDeltaVeeMultiDof2();
 
-	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") FloatPointer delta_vee, @Cast("btScalar") float multiplier);
-	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") FloatBuffer delta_vee, @Cast("btScalar") float multiplier);
-	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") float[] delta_vee, @Cast("btScalar") float multiplier);
+	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") DoublePointer delta_vee, @Cast("btScalar") double multiplier);
+	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") DoubleBuffer delta_vee, @Cast("btScalar") double multiplier);
+	public native void applyDeltaVeeMultiDof(@Cast("const btScalar*") double[] delta_vee, @Cast("btScalar") double multiplier);
 
 	// timestep the positions (given current velocities).
-	public native void stepPositionsMultiDof(@Cast("btScalar") float dt, @Cast("btScalar*") FloatPointer pq/*=0*/, @Cast("btScalar*") FloatPointer pqd/*=0*/);
-	public native void stepPositionsMultiDof(@Cast("btScalar") float dt);
-	public native void stepPositionsMultiDof(@Cast("btScalar") float dt, @Cast("btScalar*") FloatBuffer pq/*=0*/, @Cast("btScalar*") FloatBuffer pqd/*=0*/);
-	public native void stepPositionsMultiDof(@Cast("btScalar") float dt, @Cast("btScalar*") float[] pq/*=0*/, @Cast("btScalar*") float[] pqd/*=0*/);
+	public native void stepPositionsMultiDof(@Cast("btScalar") double dt, @Cast("btScalar*") DoublePointer pq/*=0*/, @Cast("btScalar*") DoublePointer pqd/*=0*/);
+	public native void stepPositionsMultiDof(@Cast("btScalar") double dt);
+	public native void stepPositionsMultiDof(@Cast("btScalar") double dt, @Cast("btScalar*") DoubleBuffer pq/*=0*/, @Cast("btScalar*") DoubleBuffer pqd/*=0*/);
+	public native void stepPositionsMultiDof(@Cast("btScalar") double dt, @Cast("btScalar*") double[] pq/*=0*/, @Cast("btScalar*") double[] pqd/*=0*/);
     
     // predict the positions
-    public native void predictPositionsMultiDof(@Cast("btScalar") float dt);
+    public native void predictPositionsMultiDof(@Cast("btScalar") double dt);
 
 	//
 	// contacts
@@ -374,21 +374,21 @@ public class btMultiBody extends Pointer {
 	public native void fillContactJacobianMultiDof(int link,
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
-										 @Cast("btScalar*") FloatPointer jac,
+										 @Cast("btScalar*") DoublePointer jac,
 										 @ByRef btScalarArray scratch_r,
 										 @ByRef btVector3Array scratch_v,
 										 @ByRef btMatrix3x3Array scratch_m);
 	public native void fillContactJacobianMultiDof(int link,
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
-										 @Cast("btScalar*") FloatBuffer jac,
+										 @Cast("btScalar*") DoubleBuffer jac,
 										 @ByRef btScalarArray scratch_r,
 										 @ByRef btVector3Array scratch_v,
 										 @ByRef btMatrix3x3Array scratch_m);
 	public native void fillContactJacobianMultiDof(int link,
 										 @Const @ByRef btVector3 contact_point,
 										 @Const @ByRef btVector3 normal,
-										 @Cast("btScalar*") float[] jac,
+										 @Cast("btScalar*") double[] jac,
 										 @ByRef btScalarArray scratch_r,
 										 @ByRef btVector3Array scratch_v,
 										 @ByRef btMatrix3x3Array scratch_m);
@@ -399,7 +399,7 @@ public class btMultiBody extends Pointer {
 											@Const @ByRef btVector3 contact_point,
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
-											@Cast("btScalar*") FloatPointer jac,
+											@Cast("btScalar*") DoublePointer jac,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v,
 											@ByRef btMatrix3x3Array scratch_m);
@@ -407,7 +407,7 @@ public class btMultiBody extends Pointer {
 											@Const @ByRef btVector3 contact_point,
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
-											@Cast("btScalar*") FloatBuffer jac,
+											@Cast("btScalar*") DoubleBuffer jac,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v,
 											@ByRef btMatrix3x3Array scratch_m);
@@ -415,7 +415,7 @@ public class btMultiBody extends Pointer {
 											@Const @ByRef btVector3 contact_point,
 											@Const @ByRef btVector3 normal_ang,
 											@Const @ByRef btVector3 normal_lin,
-											@Cast("btScalar*") float[] jac,
+											@Cast("btScalar*") double[] jac,
 											@ByRef btScalarArray scratch_r,
 											@ByRef btVector3Array scratch_v,
 											@ByRef btMatrix3x3Array scratch_m);
@@ -433,7 +433,7 @@ public class btMultiBody extends Pointer {
 	public native @Cast("bool") boolean isAwake();
 	public native void wakeUp();
 	public native void goToSleep();
-	public native void checkMotionAndSleepIfRequired(@Cast("btScalar") float timestep);
+	public native void checkMotionAndSleepIfRequired(@Cast("btScalar") double timestep);
 
 	public native @Cast("bool") boolean hasFixedBase();
 
@@ -451,18 +451,18 @@ public class btMultiBody extends Pointer {
 
 	public native void setNumLinks(int numLinks);
 
-	public native @Cast("btScalar") float getLinearDamping();
-	public native void setLinearDamping(@Cast("btScalar") float damp);
-	public native @Cast("btScalar") float getAngularDamping();
-	public native void setAngularDamping(@Cast("btScalar") float damp);
+	public native @Cast("btScalar") double getLinearDamping();
+	public native void setLinearDamping(@Cast("btScalar") double damp);
+	public native @Cast("btScalar") double getAngularDamping();
+	public native void setAngularDamping(@Cast("btScalar") double damp);
 
 	public native @Cast("bool") boolean getUseGyroTerm();
 	public native void setUseGyroTerm(@Cast("bool") boolean useGyro);
-	public native @Cast("btScalar") float getMaxCoordinateVelocity();
-	public native void setMaxCoordinateVelocity(@Cast("btScalar") float maxVel);
+	public native @Cast("btScalar") double getMaxCoordinateVelocity();
+	public native void setMaxCoordinateVelocity(@Cast("btScalar") double maxVel);
 
-	public native @Cast("btScalar") float getMaxAppliedImpulse();
-	public native void setMaxAppliedImpulse(@Cast("btScalar") float maxImp);
+	public native @Cast("btScalar") double getMaxAppliedImpulse();
+	public native void setMaxAppliedImpulse(@Cast("btScalar") double maxImp);
 	public native void setHasSelfCollision(@Cast("bool") boolean hasSelfCollision);
 	public native @Cast("bool") boolean hasSelfCollision();
 
@@ -526,7 +526,7 @@ public class btMultiBody extends Pointer {
 
 	public native @Cast("bool") boolean isLinkAndAllAncestorsKinematic(int i);
 
-	public native void setSleepThreshold(@Cast("btScalar") float sleepThreshold);
+	public native void setSleepThreshold(@Cast("btScalar") double sleepThreshold);
 
-	public native void setSleepTimeout(@Cast("btScalar") float sleepTimeout);
+	public native void setSleepTimeout(@Cast("btScalar") double sleepTimeout);
 }

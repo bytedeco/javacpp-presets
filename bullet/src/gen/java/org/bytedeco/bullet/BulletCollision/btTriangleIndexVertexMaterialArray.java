@@ -39,27 +39,27 @@ public class btTriangleIndexVertexMaterialArray extends btTriangleIndexVertexArr
 	private native void allocate();
 
 	public btTriangleIndexVertexMaterialArray(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") FloatPointer vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") DoublePointer vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") BytePointer materialBase, int materialStride,
 										   IntPointer triangleMaterialsBase, int materialIndexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride, numMaterials, materialBase, materialStride, triangleMaterialsBase, materialIndexStride); }
 	private native void allocate(int numTriangles, IntPointer triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") FloatPointer vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") DoublePointer vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") BytePointer materialBase, int materialStride,
 										   IntPointer triangleMaterialsBase, int materialIndexStride);
 	public btTriangleIndexVertexMaterialArray(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") FloatBuffer vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") DoubleBuffer vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") ByteBuffer materialBase, int materialStride,
 										   IntBuffer triangleMaterialsBase, int materialIndexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride, numMaterials, materialBase, materialStride, triangleMaterialsBase, materialIndexStride); }
 	private native void allocate(int numTriangles, IntBuffer triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") FloatBuffer vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") DoubleBuffer vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") ByteBuffer materialBase, int materialStride,
 										   IntBuffer triangleMaterialsBase, int materialIndexStride);
 	public btTriangleIndexVertexMaterialArray(int numTriangles, int[] triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") float[] vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") double[] vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") byte[] materialBase, int materialStride,
 										   int[] triangleMaterialsBase, int materialIndexStride) { super((Pointer)null); allocate(numTriangles, triangleIndexBase, triangleIndexStride, numVertices, vertexBase, vertexStride, numMaterials, materialBase, materialStride, triangleMaterialsBase, materialIndexStride); }
 	private native void allocate(int numTriangles, int[] triangleIndexBase, int triangleIndexStride,
-										   int numVertices, @Cast("btScalar*") float[] vertexBase, int vertexStride,
+										   int numVertices, @Cast("btScalar*") double[] vertexBase, int vertexStride,
 										   int numMaterials, @Cast("unsigned char*") byte[] materialBase, int materialStride,
 										   int[] triangleMaterialsBase, int materialIndexStride);
 

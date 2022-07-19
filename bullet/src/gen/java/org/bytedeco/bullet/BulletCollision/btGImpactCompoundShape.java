@@ -117,7 +117,7 @@ public class btGImpactCompoundShape extends btGImpactShapeInterface {
 	public native void getBulletTetrahedron(int prim_index, @ByRef btTetrahedronShapeEx tetrahedron);
 
 	/** Calculates the exact inertia tensor for this shape */
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native @Cast("const char*") BytePointer getName();
 

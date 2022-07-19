@@ -56,10 +56,10 @@ public class btGeneric6DofSpring2Constraint extends btTypedConstraint {
 	public native @ByVal btVector3 getAxis(int axis_index);
 
 	// Get the relative Euler angle ( btGeneric6DofSpring2Constraint::calculateTransforms() must be called previously )
-	public native @Cast("btScalar") float getAngle(int axis_index);
+	public native @Cast("btScalar") double getAngle(int axis_index);
 
 	// Get the relative position of the constraint pivot ( btGeneric6DofSpring2Constraint::calculateTransforms() must be called previously )
-	public native @Cast("btScalar") float getRelativePivotPosition(int axis_index);
+	public native @Cast("btScalar") double getRelativePivotPosition(int axis_index);
 
 	public native void setFrames(@Const @ByRef btTransform frameA, @Const @ByRef btTransform frameB);
 
@@ -86,9 +86,9 @@ public class btGeneric6DofSpring2Constraint extends btTypedConstraint {
 
 	//first 3 are linear, next 3 are angular
 
-	public native void setLimit(int axis, @Cast("btScalar") float lo, @Cast("btScalar") float hi);
+	public native void setLimit(int axis, @Cast("btScalar") double lo, @Cast("btScalar") double hi);
 
-	public native void setLimitReversed(int axis, @Cast("btScalar") float lo, @Cast("btScalar") float hi);
+	public native void setLimitReversed(int axis, @Cast("btScalar") double lo, @Cast("btScalar") double hi);
 
 	public native @Cast("bool") boolean isLimited(int limitIndex);
 
@@ -97,31 +97,31 @@ public class btGeneric6DofSpring2Constraint extends btTypedConstraint {
 
 	public native void setAxis(@Const @ByRef btVector3 axis1, @Const @ByRef btVector3 axis2);
 
-	public native void setBounce(int index, @Cast("btScalar") float bounce);
+	public native void setBounce(int index, @Cast("btScalar") double bounce);
 
 	public native void enableMotor(int index, @Cast("bool") boolean onOff);
 	public native void setServo(int index, @Cast("bool") boolean onOff);  // set the type of the motor (servo or not) (the motor has to be turned on for servo also)
-	public native void setTargetVelocity(int index, @Cast("btScalar") float velocity);
-	public native void setServoTarget(int index, @Cast("btScalar") float target);
-	public native void setMaxMotorForce(int index, @Cast("btScalar") float force);
+	public native void setTargetVelocity(int index, @Cast("btScalar") double velocity);
+	public native void setServoTarget(int index, @Cast("btScalar") double target);
+	public native void setMaxMotorForce(int index, @Cast("btScalar") double force);
 
 	public native void enableSpring(int index, @Cast("bool") boolean onOff);
-	public native void setStiffness(int index, @Cast("btScalar") float stiffness, @Cast("bool") boolean limitIfNeeded/*=true*/);
-	public native void setStiffness(int index, @Cast("btScalar") float stiffness);  // if limitIfNeeded is true the system will automatically limit the stiffness in necessary situations where otherwise the spring would move unrealistically too widely
-	public native void setDamping(int index, @Cast("btScalar") float damping, @Cast("bool") boolean limitIfNeeded/*=true*/);
-	public native void setDamping(int index, @Cast("btScalar") float damping);      // if limitIfNeeded is true the system will automatically limit the damping in necessary situations where otherwise the spring would blow up
+	public native void setStiffness(int index, @Cast("btScalar") double stiffness, @Cast("bool") boolean limitIfNeeded/*=true*/);
+	public native void setStiffness(int index, @Cast("btScalar") double stiffness);  // if limitIfNeeded is true the system will automatically limit the stiffness in necessary situations where otherwise the spring would move unrealistically too widely
+	public native void setDamping(int index, @Cast("btScalar") double damping, @Cast("bool") boolean limitIfNeeded/*=true*/);
+	public native void setDamping(int index, @Cast("btScalar") double damping);      // if limitIfNeeded is true the system will automatically limit the damping in necessary situations where otherwise the spring would blow up
 	public native void setEquilibriumPoint();                                                   // set the current constraint position/orientation as an equilibrium point for all DOF
 	public native void setEquilibriumPoint(int index);                                          // set the current constraint position/orientation as an equilibrium point for given DOF
-	public native void setEquilibriumPoint(int index, @Cast("btScalar") float val);
+	public native void setEquilibriumPoint(int index, @Cast("btScalar") double val);
 
 	//override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	//If no axis is provided, it uses the default axis for this constraint.
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
-	public static native @Cast("btScalar") float btGetMatrixElem(@Const @ByRef btMatrix3x3 mat, int index);
+	public static native @Cast("btScalar") double btGetMatrixElem(@Const @ByRef btMatrix3x3 mat, int index);
 	public static native @Cast("bool") boolean matrixToEulerXYZ(@Const @ByRef btMatrix3x3 mat, @ByRef btVector3 xyz);
 	public static native @Cast("bool") boolean matrixToEulerXZY(@Const @ByRef btMatrix3x3 mat, @ByRef btVector3 xyz);
 	public static native @Cast("bool") boolean matrixToEulerYXZ(@Const @ByRef btMatrix3x3 mat, @ByRef btVector3 xyz);

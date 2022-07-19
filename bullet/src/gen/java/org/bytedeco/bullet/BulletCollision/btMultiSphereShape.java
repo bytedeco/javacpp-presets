@@ -22,15 +22,15 @@ public class btMultiSphereShape extends btConvexInternalAabbCachingShape {
     public btMultiSphereShape(Pointer p) { super(p); }
 
 
-	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") FloatPointer radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
-	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") FloatPointer radi, int numSpheres);
-	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") FloatBuffer radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
-	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") FloatBuffer radi, int numSpheres);
-	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") float[] radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
-	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") float[] radi, int numSpheres);
+	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") DoublePointer radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
+	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") DoublePointer radi, int numSpheres);
+	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") DoubleBuffer radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
+	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") DoubleBuffer radi, int numSpheres);
+	public btMultiSphereShape(@Const btVector3 positions, @Cast("const btScalar*") double[] radi, int numSpheres) { super((Pointer)null); allocate(positions, radi, numSpheres); }
+	private native void allocate(@Const btVector3 positions, @Cast("const btScalar*") double[] radi, int numSpheres);
 
 	/**CollisionShape Interface */
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	/** btConvexShape Interface */
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
@@ -41,7 +41,7 @@ public class btMultiSphereShape extends btConvexInternalAabbCachingShape {
 
 	public native @Const @ByRef btVector3 getSpherePosition(int index);
 
-	public native @Cast("btScalar") float getSphereRadius(int index);
+	public native @Cast("btScalar") double getSphereRadius(int index);
 
 	public native @Cast("const char*") BytePointer getName();
 

@@ -38,12 +38,12 @@ public class btGImpactMeshShape extends btGImpactShapeInterface {
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 
-	public native void setMargin(@Cast("btScalar") float margin);
+	public native void setMargin(@Cast("btScalar") double margin);
 
 	/** Tells to this object that is needed to refit all the meshes */
 	public native void postUpdate();
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	/** Obtains the primitive manager */
 	public native @Const btPrimitiveManagerBase getPrimitiveManager();

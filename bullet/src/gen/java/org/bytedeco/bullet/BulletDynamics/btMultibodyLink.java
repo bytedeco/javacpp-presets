@@ -37,7 +37,7 @@ public class btMultibodyLink extends Pointer {
     }
 
 
-	public native @Cast("btScalar") float m_mass(); public native btMultibodyLink m_mass(float setter);           // mass of link
+	public native @Cast("btScalar") double m_mass(); public native btMultibodyLink m_mass(double setter);           // mass of link
 	public native @ByRef btVector3 m_inertiaLocal(); public native btMultibodyLink m_inertiaLocal(btVector3 setter);  // inertia of link (local frame; diagonal)
 
 	public native int m_parent(); public native btMultibodyLink m_parent(int setter);  // index of the parent link (assumed to be < index of this link), or -1 if parent is the base link.
@@ -83,8 +83,8 @@ public class btMultibodyLink extends Pointer {
 	@MemberGetter public native btSpatialMotionVector m_axes();
 	public native void setAxisTop(int dof, @Const @ByRef btVector3 axis);
 	public native void setAxisBottom(int dof, @Const @ByRef btVector3 axis);
-	public native void setAxisTop(int dof, @Cast("const btScalar") float x, @Cast("const btScalar") float y, @Cast("const btScalar") float z);
-	public native void setAxisBottom(int dof, @Cast("const btScalar") float x, @Cast("const btScalar") float y, @Cast("const btScalar") float z);
+	public native void setAxisTop(int dof, @Cast("const btScalar") double x, @Cast("const btScalar") double y, @Cast("const btScalar") double z);
+	public native void setAxisBottom(int dof, @Cast("const btScalar") double x, @Cast("const btScalar") double y, @Cast("const btScalar") double z);
 	public native @Const @ByRef btVector3 getAxisTop(int dof);
 	public native @Const @ByRef btVector3 getAxisBottom(int dof);
 
@@ -104,15 +104,15 @@ public class btMultibodyLink extends Pointer {
 	public native @ByRef btVector3 m_appliedConstraintForce(); public native btMultibodyLink m_appliedConstraintForce(btVector3 setter);   // In WORLD frame
 	public native @ByRef btVector3 m_appliedConstraintTorque(); public native btMultibodyLink m_appliedConstraintTorque(btVector3 setter);  // In WORLD frame
 
-	public native @Cast("btScalar") float m_jointPos(int i); public native btMultibodyLink m_jointPos(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_jointPos();
-    public native @Cast("btScalar") float m_jointPos_interpolate(int i); public native btMultibodyLink m_jointPos_interpolate(int i, float setter);
-    @MemberGetter public native @Cast("btScalar*") FloatPointer m_jointPos_interpolate();
+	public native @Cast("btScalar") double m_jointPos(int i); public native btMultibodyLink m_jointPos(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_jointPos();
+    public native @Cast("btScalar") double m_jointPos_interpolate(int i); public native btMultibodyLink m_jointPos_interpolate(int i, double setter);
+    @MemberGetter public native @Cast("btScalar*") DoublePointer m_jointPos_interpolate();
 
 	//m_jointTorque is the joint torque applied by the user using 'addJointTorque'.
 	//It gets set to zero after each internal stepSimulation call
-	public native @Cast("btScalar") float m_jointTorque(int i); public native btMultibodyLink m_jointTorque(int i, float setter);
-	@MemberGetter public native @Cast("btScalar*") FloatPointer m_jointTorque();
+	public native @Cast("btScalar") double m_jointTorque(int i); public native btMultibodyLink m_jointTorque(int i, double setter);
+	@MemberGetter public native @Cast("btScalar*") DoublePointer m_jointTorque();
 
 	public native btMultiBodyLinkCollider m_collider(); public native btMultibodyLink m_collider(btMultiBodyLinkCollider setter);
 	public native int m_flags(); public native btMultibodyLink m_flags(int setter);
@@ -130,22 +130,22 @@ public class btMultibodyLink extends Pointer {
 	public native @Cast("const char*") BytePointer m_jointName(); public native btMultibodyLink m_jointName(BytePointer setter);  //m_jointName memory needs to be managed by the developer/user!
 	public native @Const Pointer m_userPtr(); public native btMultibodyLink m_userPtr(Pointer setter);    //m_userPtr ptr needs to be managed by the developer/user!
 
-	public native @Cast("btScalar") float m_jointDamping(); public native btMultibodyLink m_jointDamping(float setter);      //todo: implement this internally. It is unused for now, it is set by a URDF loader. User can apply manual damping.
-	public native @Cast("btScalar") float m_jointFriction(); public native btMultibodyLink m_jointFriction(float setter);     //todo: implement this internally. It is unused for now, it is set by a URDF loader. User can apply manual friction using a velocity motor.
-	public native @Cast("btScalar") float m_jointLowerLimit(); public native btMultibodyLink m_jointLowerLimit(float setter);   //todo: implement this internally. It is unused for now, it is set by a URDF loader.
-	public native @Cast("btScalar") float m_jointUpperLimit(); public native btMultibodyLink m_jointUpperLimit(float setter);   //todo: implement this internally. It is unused for now, it is set by a URDF loader.
-	public native @Cast("btScalar") float m_jointMaxForce(); public native btMultibodyLink m_jointMaxForce(float setter);     //todo: implement this internally. It is unused for now, it is set by a URDF loader.
-	public native @Cast("btScalar") float m_jointMaxVelocity(); public native btMultibodyLink m_jointMaxVelocity(float setter);  //todo: implement this internally. It is unused for now, it is set by a URDF loader.
+	public native @Cast("btScalar") double m_jointDamping(); public native btMultibodyLink m_jointDamping(double setter);      //todo: implement this internally. It is unused for now, it is set by a URDF loader. User can apply manual damping.
+	public native @Cast("btScalar") double m_jointFriction(); public native btMultibodyLink m_jointFriction(double setter);     //todo: implement this internally. It is unused for now, it is set by a URDF loader. User can apply manual friction using a velocity motor.
+	public native @Cast("btScalar") double m_jointLowerLimit(); public native btMultibodyLink m_jointLowerLimit(double setter);   //todo: implement this internally. It is unused for now, it is set by a URDF loader.
+	public native @Cast("btScalar") double m_jointUpperLimit(); public native btMultibodyLink m_jointUpperLimit(double setter);   //todo: implement this internally. It is unused for now, it is set by a URDF loader.
+	public native @Cast("btScalar") double m_jointMaxForce(); public native btMultibodyLink m_jointMaxForce(double setter);     //todo: implement this internally. It is unused for now, it is set by a URDF loader.
+	public native @Cast("btScalar") double m_jointMaxVelocity(); public native btMultibodyLink m_jointMaxVelocity(double setter);  //todo: implement this internally. It is unused for now, it is set by a URDF loader.
 
 	// ctor: set some sensible defaults
 	public btMultibodyLink() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
 	// routine to update m_cachedRotParentToThis and m_cachedRVector
-	public native void updateCacheMultiDof(@Cast("btScalar*") FloatPointer pq/*=0*/);
+	public native void updateCacheMultiDof(@Cast("btScalar*") DoublePointer pq/*=0*/);
 	public native void updateCacheMultiDof();
-	public native void updateCacheMultiDof(@Cast("btScalar*") FloatBuffer pq/*=0*/);
-	public native void updateCacheMultiDof(@Cast("btScalar*") float[] pq/*=0*/);
+	public native void updateCacheMultiDof(@Cast("btScalar*") DoubleBuffer pq/*=0*/);
+	public native void updateCacheMultiDof(@Cast("btScalar*") double[] pq/*=0*/);
     
     public native void updateInterpolationCacheMultiDof();
 
