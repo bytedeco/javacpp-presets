@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBPOSTAL_VERSION=1.1
-download https://github.com/openvenues/libpostal/archive/v$LIBPOSTAL_VERSION.tar.gz libpostal-$LIBPOSTAL_VERSION.tar.gz
+download https://github.com/openvenues/libpostal/archive/refs/tags/v$LIBPOSTAL_VERSION.tar.gz libpostal-$LIBPOSTAL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -26,6 +26,13 @@ sedinplace 's/-Werror=format-security/-Wno-implicit-function-declaration/g' src/
 sedinplace '/_rand48_/d' src/klib/drand48.h
 
 case $PLATFORM in
+    linux-arm64)
+        ./bootstrap.sh
+        ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host=aarch64-linux-gnu
+        #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
+        make -j $MAKEJ V=0
+        make install
+        ;;
     linux-x86_64)
         ./bootstrap.sh
         ./configure --prefix=$INSTALL_PATH --disable-data-download

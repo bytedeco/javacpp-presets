@@ -1190,6 +1190,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>leptonica</module>
+        <module>libpostal</module>
         <module>tesseract</module>
         <module>cuda</module>
         <module>nvcodec</module>
