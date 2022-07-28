@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = javacpp.class,
     value = {
         @Platform(
-            value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+            value = {"linux-arm64", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             cinclude = "libpostal/libpostal.h",
             link = "postal@.1",
             preload = "libpostal-1"

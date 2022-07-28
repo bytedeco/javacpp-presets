@@ -67,6 +67,10 @@ jobs:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=libpostal OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
         env: PROJ=leptonica,tesseract OS=android-arm64
         install: true
         script: ./ci/install-travis.sh
