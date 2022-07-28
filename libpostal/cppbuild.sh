@@ -26,16 +26,16 @@ sedinplace 's/-Werror=format-security/-Wno-implicit-function-declaration/g' src/
 sedinplace '/_rand48_/d' src/klib/drand48.h
 
 case $PLATFORM in
-    linux-x86_64)
+    linux-arm64)
         ./bootstrap.sh
-        ./configure --prefix=$INSTALL_PATH --disable-data-download
+        ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host=aarch64-linux-gnu
         #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
         make -j $MAKEJ V=0
         make install
         ;;
-    linux-arm64)
+    linux-x86_64)
         ./bootstrap.sh
-        ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host=aarch64-linux-gnu
+        ./configure --prefix=$INSTALL_PATH --disable-data-download
         #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
         make -j $MAKEJ V=0
         make install

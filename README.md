@@ -271,8 +271,8 @@ where possible platform names are:
 * `android-x86_64`
 * `ios-arm64`
 * `ios-x86_64`
-* `linux-arm64`
 * `linux-armhf`
+* `linux-arm64`
 * `linux-ppc64le`
 * `linux-x86`
 * `linux-x86_64`

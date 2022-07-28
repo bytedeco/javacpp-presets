@@ -1,5 +1,5 @@
 
- * Introduce `linux-arm64` to presets for libpostal
+ * Introduce `linux-arm64` to presets for libpostal ([pull #1199](https://github.com/bytedeco/javacpp-presets/pull/1199))
  * Map missing factory functions in `torch::` namespace using `torch_` as prefix in presets for PyTorch ([issue #1197](https://github.com/bytedeco/javacpp-presets/issues/1197))
  * Add presets for the nvJPEG module of CUDA ([issue #1193](https://github.com/bytedeco/javacpp-presets/issues/1193))
  * Introduce Android builds for TensorFlow Lite ([discussion #1180](https://github.com/bytedeco/javacpp-presets/discussions/1180))
