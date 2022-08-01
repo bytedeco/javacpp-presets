@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.avutil",
     value = {
         @Platform(define = {"__STDC_CONSTANT_MACROS", "__STDC_FORMAT_MACROS"},
-            cinclude = {"<libavutil/avutil.h>", "<libavutil/error.h>", "<libavutil/mem.h>", "<libavutil/time.h>",
+            cinclude = {"<libavutil/avutil.h>", /*"<libavutil/attributes.h>",*/ "<libavutil/error.h>", "<libavutil/mem.h>", "<libavutil/time.h>",
             "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
             "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
             "<libavutil/opt.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>", "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>",
@@ -73,7 +73,8 @@ public class avutil implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "ffmpeg"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
+        infoMap.put(new Info("channel_layout.h").linePatterns("#define AV_CHANNEL_LAYOUT_MASK.*", "struct AVBPrint;").skip())
+               .put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("NAN", "INFINITY").cppTypes("double"))
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG", "FF_CEIL_RSHIFT",
                              "av_ceil_log2", "av_clip", "av_clip64", "av_clip_uint8", "av_clip_int8", "av_clip_uint16", "av_clip_int16",
@@ -81,7 +82,8 @@ public class avutil implements InfoMapper {
                              "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity",
                              "av_sat_add64", "av_sat_sub64", "LIBAVUTIL_VERSION").cppTypes().translate())
                .put(new Info("LIBAVUTIL_VERSION_INT", "LIBAVUTIL_IDENT").translate(false))
-               .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY").define().translate().cppTypes("bool"))
+               .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY", "FF_API_FIFO_PEEK2",
+                             "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())

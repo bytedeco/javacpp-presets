@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.postproc",
     value = {
         // GPL only
-        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version.h>"}, link = "postproc@.56", extension = "-gpl"),
+        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version_major.h>", "<libpostproc/version.h>"}, link = "postproc@.56", extension = "-gpl"),
         @Platform(value = "windows", preload = "postproc-56", extension = "-gpl")
     }
 )

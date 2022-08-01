@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avdevice",
     global = "org.bytedeco.ffmpeg.global.avdevice",
     value = {
-        @Platform(cinclude = {"<libavdevice/avdevice.h>" , "<libavdevice/version.h>"}, link = "avdevice@.59"),
+        @Platform(cinclude = {"<libavdevice/avdevice.h>", "<libavdevice/version_major.h>", "<libavdevice/version.h>"}, link = "avdevice@.59"),
         @Platform(value = "windows", preload = "avdevice-59")
     }
 )

@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avformat",
     global = "org.bytedeco.ffmpeg.global.avformat",
     value = {
-        @Platform(cinclude = {"<libavformat/avio.h>", "<libavformat/avformat.h>", "<libavformat/version.h>"}, link = "avformat@.59"),
+        @Platform(cinclude = {"<libavformat/avio.h>", "<libavformat/avformat.h>", "<libavformat/version_major.h>", "<libavformat/version.h>"}, link = "avformat@.59"),
         @Platform(value = "windows", preload = "avformat-59")
     }
 )
