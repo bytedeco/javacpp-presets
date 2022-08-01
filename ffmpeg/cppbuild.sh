@@ -26,23 +26,23 @@ WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWE
 NASM_VERSION=2.14
 ZLIB=zlib-1.2.12
 LAME=lame-3.100
-SPEEX=speex-1.2.0
+SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.0.2
-OPENH264_VERSION=2.2.0
+OPENSSL=openssl-3.0.5
+OPENH264_VERSION=2.3.0
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.11.0
-ALSA_VERSION=1.2.6.1
-FREETYPE_VERSION=2.12.0
+VPX_VERSION=1.12.0
+ALSA_VERSION=1.2.7
+FREETYPE_VERSION=2.12.1
 MFX_VERSION=1.35.1
 NVCODEC_VERSION=11.1.5.1
 XML2=libxml2-2.9.12
-LIBSRT_VERSION=1.4.4
-WEBP_VERSION=1.2.2
-FFMPEG_VERSION=5.0.1
+LIBSRT_VERSION=1.5.0
+WEBP_VERSION=1.2.3
+FFMPEG_VERSION=5.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -149,7 +149,7 @@ case $PLATFORM in
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -281,7 +281,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -412,7 +412,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -540,7 +540,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -663,7 +663,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -788,7 +788,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -927,7 +927,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1099,7 +1099,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1233,9 +1233,9 @@ EOF
         echo ""
         cd ../$SPEEX
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         else
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
+          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
         make -j $MAKEJ V=0
         make install
@@ -1411,7 +1411,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1522,7 +1522,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1629,7 +1629,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1746,7 +1746,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
