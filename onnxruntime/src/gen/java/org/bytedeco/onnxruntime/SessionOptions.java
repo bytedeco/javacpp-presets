@@ -93,9 +93,13 @@ public class SessionOptions extends BaseSessionOptions {
   /** Wraps OrtApi::AddInitializer */
   public native @ByRef SessionOptions AddInitializer(@Cast("const char*") BytePointer name, @Const OrtValue ort_val);
   public native @ByRef SessionOptions AddInitializer(String name, @Const OrtValue ort_val);
+  /** Wraps OrtApi::AddExternalInitializers */
+  public native @ByRef SessionOptions AddExternalInitializers(@Const @ByRef StringVector names, @StdMove ValueVector ort_values);
 
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA */
   public native @ByRef SessionOptions AppendExecutionProvider_CUDA(@Const @ByRef OrtCUDAProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_CUDA_V2 */
+  public native @ByRef SessionOptions AppendExecutionProvider_CUDA_V2(@Const @ByRef OrtCUDAProviderOptionsV2 provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_ROCM */
   public native @ByRef SessionOptions AppendExecutionProvider_ROCM(@Const @ByRef OrtROCMProviderOptions provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_OpenVINO */
@@ -106,6 +110,13 @@ public class SessionOptions extends BaseSessionOptions {
   public native @ByRef SessionOptions AppendExecutionProvider_TensorRT_V2(@Const @ByRef OrtTensorRTProviderOptionsV2 provider_options);
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_MIGraphX */
   public native @ByRef SessionOptions AppendExecutionProvider_MIGraphX(@Const @ByRef OrtMIGraphXProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider. Currently supports SNPE and XNNPACK. */
+  public native @ByRef SessionOptions AppendExecutionProvider(@Cast({"char*", "std::string&&"}) @StdString BytePointer provider_name,
+                                            @Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
+  public native @ByRef SessionOptions AppendExecutionProvider(@Cast({"char*", "std::string&&"}) @StdString BytePointer provider_name);
+  public native @ByRef SessionOptions AppendExecutionProvider(@Cast({"char*", "std::string&&"}) @StdString String provider_name,
+                                            @Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
+  public native @ByRef SessionOptions AppendExecutionProvider(@Cast({"char*", "std::string&&"}) @StdString String provider_name);
 
   /** Wraps OrtApi::SessionOptionsSetCustomCreateThreadFn */
   public native @ByRef SessionOptions SetCustomCreateThreadFn(OrtCustomCreateThreadFn ort_custom_create_thread_fn);

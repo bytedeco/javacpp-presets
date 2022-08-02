@@ -23,6 +23,9 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 // Targeting ../ValueVector.java
 
 
+// Targeting ../StringStringMap.java
+
+
 // Parsed from onnxruntime/core/session/onnxruntime_c_api.h
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -57,7 +60,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 *
 * This value is used by some API functions to behave as this version of the header expects.
 */
-public static final int ORT_API_VERSION = 11;
+public static final int ORT_API_VERSION = 12;
 
 // #ifdef __cplusplus
 // #endif
@@ -264,6 +267,16 @@ public static final int
   ORT_INVALID_GRAPH = 10,
   ORT_EP_FAIL = 11;
 
+/** enum OrtOpAttrType */
+public static final int
+  ORT_OP_ATTR_UNDEFINED = 0,
+  ORT_OP_ATTR_INT = 1,
+  ORT_OP_ATTR_INTS = 2,
+  ORT_OP_ATTR_FLOAT = 3,
+  ORT_OP_ATTR_FLOATS = 4,
+  ORT_OP_ATTR_STRING = 5,
+  ORT_OP_ATTR_STRINGS = 6;
+
 /** \} */
 // #define ORT_RUNTIME_CLASS(X)
 //   struct Ort##X;
@@ -326,6 +339,12 @@ public static final int
 
 
 // Targeting ../OrtCUDAProviderOptionsV2.java
+
+
+// Targeting ../OrtOp.java
+
+
+// Targeting ../OrtOpAttr.java
 
 
 
@@ -480,7 +499,6 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 */
 
 
-
 // #ifdef __cplusplus
 // #endif
 
@@ -511,6 +529,7 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // #include <stdexcept>
 // #include <string>
 // #include <vector>
+// #include <unordered_map>
 // #include <utility>
 // #include <type_traits>
 
@@ -526,6 +545,9 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 
 
 // #ifdef ORT_NO_EXCEPTIONS
+// The #ifndef is for the very special case where the user of this library wants to define their own way of handling errors.
+// NOTE: This header expects control flow to not continue after calling ORT_CXX_API_THROW
+// #ifndef ORT_CXX_API_THROW
 // #define ORT_CXX_API_THROW(string, code)
 //   do {
 //     std::cerr << Ort::Exception(string, code)
@@ -533,13 +555,10 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 //               << std::endl;
 //     abort();
 //   } while (false)
+// #endif
 // #else
-// The #ifndef is for the very special case where the user of this library wants to define their own way of handling errors.
-// NOTE: This header expects control flow to not continue after calling ORT_CXX_API_THROW
-// #ifndef ORT_CXX_API_THROW
 // #define ORT_CXX_API_THROW(string, code)
 //   throw Ort::Exception(string, code)
-// #endif
 // #endif
 
 // This is used internally by the C++ API. This class holds the global variable that points to the OrtApi, it's in a template so that we can define a global variable in a header and make
@@ -649,6 +668,15 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // Targeting ../UnownedMapTypeInfo.java
 
 
+// Targeting ../AllocatedFree.java
+
+
+  // namespace detail
+
+/** \brief unique_ptr typedef used to own strings allocated by OrtAllocators
+ *  and release them at the end of the scope. The lifespan of the given allocator
+ *  must eclipse the lifespan of AllocatedStringPtr instance
+ */
 // Targeting ../Env.java
 
 

@@ -82,14 +82,68 @@ public class Session extends BaseSession {
   /** Returns the number of inputs that have defaults that can be overridden */
   public native @Cast("size_t") long GetOverridableInitializerCount();
 
+  /** @deprecated use GetInputNameAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::SessionGetInputName */
   public native @Cast("char*") BytePointer GetInputName(@Cast("size_t") long index, OrtAllocator allocator);
+
+  /** \brief Returns a copy of input name at the specified index.
+  * 
+  * @param index must less than the value returned by GetInputCount()
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetOutputNameAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::SessionGetOutputName */
   public native @Cast("char*") BytePointer GetOutputName(@Cast("size_t") long index, OrtAllocator allocator);
+
+  /** \brief Returns a copy of output name at then specified index.
+  * 
+  * @param index must less than the value returned by GetOutputCount()
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetOverridableInitializerNameAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::SessionGetOverridableInitializerName */
   public native @Cast("char*") BytePointer GetOverridableInitializerName(@Cast("size_t") long index, OrtAllocator allocator);
+
+  /** \brief Returns a copy of the overridable initializer name at then specified index.
+  * 
+  * @param index must less than the value returned by GetOverridableInitializerCount()
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use EndProfilingAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::SessionEndProfiling */
   public native @Cast("char*") BytePointer EndProfiling(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the profiling file name.
+  * 
+  * @param allocator to allocate memory for the copy of the string returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
   /** Wraps OrtApi::SessionGetProfilingStartTimeNs */
   public native @Cast("uint64_t") long GetProfilingStartTimeNs();
   /** Wraps OrtApi::SessionGetModelMetadata */
