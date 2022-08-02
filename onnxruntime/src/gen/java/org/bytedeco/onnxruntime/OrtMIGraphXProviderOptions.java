@@ -37,7 +37,7 @@ public class OrtMIGraphXProviderOptions extends Pointer {
         return new OrtMIGraphXProviderOptions((Pointer)this).offsetAddress(i);
     }
 
-  public native int device_id(); public native OrtMIGraphXProviderOptions device_id(int setter);                                // hip device id.
-  public native int migraphx_fp16_enable(); public native OrtMIGraphXProviderOptions migraphx_fp16_enable(int setter);                     // enable MIGraphX FP16 precision. Default 0 = false, nonzero = true
-  public native int migraphx_int8_enable(); public native OrtMIGraphXProviderOptions migraphx_int8_enable(int setter);                     // enable MIGraphX INT8 precision. Default 0 = false, nonzero = true
+  public native int device_id(); public native OrtMIGraphXProviderOptions device_id(int setter);             // hip device id.
+  public native int migraphx_fp16_enable(); public native OrtMIGraphXProviderOptions migraphx_fp16_enable(int setter);  // enable MIGraphX FP16 precision. Default 0 = false, nonzero = true
+  public native int migraphx_int8_enable(); public native OrtMIGraphXProviderOptions migraphx_int8_enable(int setter);  // enable MIGraphX INT8 precision. Default 0 = false, nonzero = true
 }

@@ -52,4 +52,112 @@ public class CustomOpApi extends Pointer {
   public native Pointer KernelContext_GetGPUComputeStream(@Const OrtKernelContext context);
 
   public native void ThrowOnError(OrtStatus result);
+
+  public native OrtOpAttr CreateOpAttr(@Cast("const char*") BytePointer name,
+                            @Const Pointer data,
+                            int len,
+                            @Cast("OrtOpAttrType") int type);
+  public native OrtOpAttr CreateOpAttr(String name,
+                            @Const Pointer data,
+                            int len,
+                            @Cast("OrtOpAttrType") int type);
+
+  public native void ReleaseOpAttr(OrtOpAttr op_attr);
+
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") PointerPointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Cast("const OrtOpAttr*const*") PointerPointer attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr BytePointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntBuffer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr byte[] type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") int[] type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr BytePointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntBuffer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+  public native OrtOp CreateOp(@Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr byte[] type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") int[] type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count);
+
+  public native void InvokeOp(@Const OrtKernelContext context,
+                  @Const OrtOp ort_op,
+                  @Cast("const OrtValue*const*") PointerPointer input_values,
+                  int input_count,
+                  @Cast("OrtValue*const*") PointerPointer output_values,
+                  int output_count);
+  public native void InvokeOp(@Const OrtKernelContext context,
+                  @Const OrtOp ort_op,
+                  @Const @ByPtrPtr OrtValue input_values,
+                  int input_count,
+                  @ByPtrPtr OrtValue output_values,
+                  int output_count);
+
+  public native void ReleaseOp(OrtOp ort_op);
+
+  public native OrtKernelInfo CopyKernelInfo(@Const OrtKernelInfo info);
+
+  public native void ReleaseKernelInfo(OrtKernelInfo info_copy);
 }

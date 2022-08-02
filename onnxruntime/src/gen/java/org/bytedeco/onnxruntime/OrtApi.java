@@ -3248,4 +3248,310 @@ public class OrtApi extends Pointer {
   */
   public native OrtStatus SessionOptionsAppendExecutionProvider_MIGraphX(
                     OrtSessionOptions options, @Const OrtMIGraphXProviderOptions migraphx_options);
+
+ /** \brief Replace initialized Tensors with external data with the data provided in initializers.
+  *
+  * The function will find the initialized TensorProtos with external data in the graph with the provided names and
+  * replace them with the provided tensors. The API verifies that the TensorProto being replaced
+  * has an external data reference and has the same name, dimensions and data type as its replacement. The replacement
+  * will occur before any of the optimizations take place. The data will be copied into the graph
+  * since TensorProto can't refer to the user provided buffers.
+  *
+  * Once the model has been loaded, the OrtValue(s) added to SessionOptions instance will be removed
+  * from the internal SessionOptions copy to save memory, the user provided buffers can then be deallocated
+  * and the SessionOptions instance that refers to them can be destroyed.
+  *
+  * @param options [in]
+  * @param initializer_names [in] Array of null terminated UTF-8 encoded strings of the initializers names.
+  * @param initializers [in] Array of ::OrtValue type
+  * @param initializers_num [in] Number of elements in the initializer_names and initializers
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  *
+  * @since Version 1.12.
+  */
+  public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
+                    @Cast("const char*const*") PointerPointer initializer_names,
+                    @Cast("const OrtValue*const*") PointerPointer initializers, @Cast("size_t") long initializers_num);
+  public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer initializer_names,
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+  public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer initializer_names,
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+  public native OrtStatus AddExternalInitializers( OrtSessionOptions options,
+                    @Cast("const char*const*") @ByPtrPtr byte[] initializer_names,
+                    @Const @ByPtrPtr OrtValue initializers, @Cast("size_t") long initializers_num);
+
+  /** \brief: Create attribute of onnxruntime operator
+  * 
+  * @param name [in] Name of the attribute
+  * @param data [in] Data content of the attribute
+  * @param len [in] Number of bytes stored in data
+  * @param type [in] Data type
+  * @param op_attr [out] Attribute that has been created, which must be released by OrtApi::ReleaseOpAttr
+  * 
+  * @since Version 1.12.
+  */
+  public native OrtStatus CreateOpAttr(
+                    @Cast("const char*") BytePointer name,
+                    @Const Pointer data,
+                    int len,
+                    @Cast("OrtOpAttrType") int type,
+                    @Cast("OrtOpAttr**") PointerPointer op_attr);
+  public native OrtStatus CreateOpAttr(
+                    @Cast("const char*") BytePointer name,
+                    @Const Pointer data,
+                    int len,
+                    @Cast("OrtOpAttrType") int type,
+                    @ByPtrPtr OrtOpAttr op_attr);
+  public native OrtStatus CreateOpAttr(
+                    String name,
+                    @Const Pointer data,
+                    int len,
+                    @Cast("OrtOpAttrType") int type,
+                    @ByPtrPtr OrtOpAttr op_attr);
+
+  /* \brief: Release op attribute
+  *
+  * \param[in] opAttr Attribute created by OrtApi::CreateOpAttr
+  * 
+  * \since Version 1.12.
+  */
+  public native void ReleaseOpAttr(OrtOpAttr input);
+
+  /** \brief: Create onnxruntime native operator
+  * 
+  * @param info [in] Kernel info 
+  * @param op_name [in] Operator name
+  * @param domain [in] Operator domain
+  * @param version [in] Operator opset version
+  * @param type_constraint_names [in] Name of the type contraints, such as "T" or "T1"
+  * @param type_constraint_values [in] Type of each contraints
+  * @param type_constraint_count [in] Number of contraints
+  * @param attr_values [in] Attributes used to initialize the operator
+  * @param attr_count [in] Number of the attributes
+  * @param input_count [in] Number of inputs
+  * @param output_count [in] Number of outputs
+  * @param ort_op [out] Operator that has been created
+  * 
+  * @since Version 1.12.
+  */
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") PointerPointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Cast("const OrtOpAttr*const*") PointerPointer attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @Cast("OrtOp**") PointerPointer ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr BytePointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntBuffer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr byte[] type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") int[] type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr BytePointer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntPointer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    @Cast("const char*") BytePointer op_name,
+                    @Cast("const char*") BytePointer domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr ByteBuffer type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") IntBuffer type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+  public native OrtStatus CreateOp(
+                    @Const OrtKernelInfo info,
+                    String op_name,
+                    String domain,
+                    int version,
+                    @Cast("const char**") @ByPtrPtr byte[] type_constraint_names,
+                    @Cast("const ONNXTensorElementDataType*") int[] type_constraint_values,
+                    int type_constraint_count,
+                    @Const @ByPtrPtr OrtOpAttr attr_values,
+                    int attr_count,
+                    int input_count,
+                    int output_count,
+                    @ByPtrPtr OrtOp ort_op);
+
+  /** \brief: Invoke the operator created by OrtApi::CreateOp
+  * The inputs must follow the order as specified in onnx specification
+  * 
+  * @param context [in] Kernel context
+  * @param ort_op [in] Operator that has been created
+  * @param input_values [in] Array of inputs
+  * @param input_count [in] Number of inputs
+  * @param output_values [in] Array of outputs
+  * @param output_count [in] Number of outputs
+  * 
+  * @since Version 1.12.
+  */
+  public native OrtStatus InvokeOp(
+                    @Const OrtKernelContext context,
+                    @Const OrtOp ort_op,
+                    @Cast("const OrtValue*const*") PointerPointer input_values,
+                    int input_count,
+                    @Cast("OrtValue*const*") PointerPointer output_values,
+                    int output_count);
+  public native OrtStatus InvokeOp(
+                    @Const OrtKernelContext context,
+                    @Const OrtOp ort_op,
+                    @Const @ByPtrPtr OrtValue input_values,
+                    int input_count,
+                    @ByPtrPtr OrtValue output_values,
+                    int output_count);
+
+  /* \brief: Release an onnxruntime operator
+  *
+  * \param[in] Op Operator created by OrtApi::CreateOp
+  * 
+  * \since Version 1.12.
+  */
+  public native void ReleaseOp(OrtOp input);
+
+  /** \brief: Append execution provider to the session options.
+   * @param provider_name [in] - provider to add.
+   * @param provider_options_keys [in] - keys to configure the provider options
+   * @param provider_options_values [in] - values to configure the provider options
+   * @param num_keys [in] - number of keys passed in
+   *
+   * Currently supported providers:
+   *   SNPE
+   *   XNNPACK
+   *
+   * Note: If an execution provider has a dedicated SessionOptionsAppendExecutionProvider_<provider name> function
+   *       that should be used to add it.
+   *
+   * SNPE supported keys:
+   *   "runtime": SNPE runtime engine, options: "CPU", "CPU_FLOAT32", "GPU", "GPU_FLOAT32_16_HYBRID", "GPU_FLOAT16",
+   *   "DSP", "DSP_FIXED8_TF", "AIP_FIXED_TF", "AIP_FIXED8_TF".
+   *   Mapping to SNPE Runtime_t definition: CPU, CPU_FLOAT32 => zdl::DlSystem::Runtime_t::CPU;
+   *   GPU, GPU_FLOAT32_16_HYBRID => zdl::DlSystem::Runtime_t::GPU;
+   *   GPU_FLOAT16 => zdl::DlSystem::Runtime_t::GPU_FLOAT16;
+   *   DSP, DSP_FIXED8_TF => zdl::DlSystem::Runtime_t::DSP.
+   *   AIP_FIXED_TF, AIP_FIXED8_TF => zdl::DlSystem::Runtime_t::AIP_FIXED_TF.
+   *   SNPE Runtime_t refers to https://developer.qualcomm.com/docs/snpe/group__c__plus__plus__apis.html
+   *   "priority": execution priority, options: "low", "normal".
+   *   "buffer_type": ITensor or user buffers, options: "ITENSOR", user buffer with different types - "TF8", "TF16", "UINT8", "FLOAT".
+   *   "ITENSOR" -- default, ITensor which is float only.
+   *   "TF8" -- quantized model required, "FLOAT" -- for both quantized or non-quantized model
+   *   If SNPE is not available (due to a non Snpe enabled build or its dependencies not being installed), this function will fail.
+   *
+   * XNNPACK supported keys:
+   *   None currently
+   *
+   * @since Version 1.12.
+   */
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    @Cast("const char*") BytePointer provider_name,
+                    @Cast("const char*const*") PointerPointer provider_options_keys,
+                    @Cast("const char*const*") PointerPointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    @Cast("const char*") BytePointer provider_name,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    String provider_name,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    @Cast("const char*") BytePointer provider_name,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    String provider_name,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    @Cast("const char*") BytePointer provider_name,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus SessionOptionsAppendExecutionProvider( OrtSessionOptions options,
+                    String provider_name,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
+                    @Cast("size_t") long num_keys);
+
+  /* \brief: Get a copy of kernel info
+  *
+  * \param[in] info Kernel info
+  * \param[out] info_copy Copy of kernel info
+  *
+  * \since Version 1.12.
+  */
+  public native OrtStatus CopyKernelInfo(
+                    @Const OrtKernelInfo info,
+                    @Cast("OrtKernelInfo**") PointerPointer info_copy);
+  public native OrtStatus CopyKernelInfo(
+                    @Const OrtKernelInfo info,
+                    @ByPtrPtr OrtKernelInfo info_copy);
+
+  /* \brief: Release kernel info
+  * 
+  * \param[in] KernelInfo A copy of kernel info returned by CopyKernelInfo
+  * 
+  * \since Version 1.12.
+  */
+  public native void ReleaseKernelInfo(OrtKernelInfo input);
 }

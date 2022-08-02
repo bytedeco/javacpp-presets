@@ -9,7 +9,7 @@ fi
 
 export ARCH_FLAGS=
 export DNNL_FLAGS="--use_dnnl"
-export OPENMP_FLAGS="--use_openmp"
+export OPENMP_FLAGS= # "--use_openmp"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
 export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.11.1
+ONNXRUNTIME=1.12.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -66,9 +66,11 @@ fi
 
 sedinplace 's/cmake_minimum_required(VERSION 3...)/cmake_minimum_required(VERSION 3.16)/g' cmake/CMakeLists.txt
 sedinplace '/CMP0104/d' cmake/CMakeLists.txt
+sedinplace '/Werror/d' cmake/CMakeLists.txt
+sedinplace '/WX/d' cmake/CMakeLists.txt
 
 # allow cross compilation for linux-arm64
-sedinplace 's/if (args.arm or args.arm64):/if (False):/g' tools/ci_build/build.py
+sedinplace 's/if args.arm or args.arm64:/if False:/g' tools/ci_build/build.py
 
 # work around toolchain issues on Mac and Windows
 patch -p1 < ../../../onnxruntime.patch
@@ -81,7 +83,7 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/onnxruntime_pro
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.6)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.6.1)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -136,16 +138,16 @@ cp -r orttraining/orttraining/models/runner/training_util.h ../include
 #sedinplace '/#include "core\/framework\/provider_options.h"/,/};/d' ../include/onnxruntime/core/providers/cuda/cuda_provider_factory.h
 sedinplace '/struct ProviderInfo_OpenVINO {/,/};/d' ../include/onnxruntime/core/providers/openvino/openvino_provider_factory.h
 cp -r java/src/main/java/* ../java
-cp -a ../build/Release/lib* ../lib || true
-cp ../build/Release/onnxruntime*.dll ../bin || true
-cp ../build/Release/onnxruntime*.lib ../lib || true
+cp -a ../build/Release/lib* ../build/Release/Release/lib* ../lib || true
+cp ../build/Release/onnxruntime*.dll ../build/Release/Release/onnxruntime*.dll ../bin || true
+cp ../build/Release/onnxruntime*.lib ../build/Release/Release/onnxruntime*.lib ../lib || true
 
 # fix library with the same name for OpenMP as MKL on Mac
-case $PLATFORM in
-    macosx-*)
-        cp ../lib/libonnxruntime_providers_dnnl.so ../lib/libonnxruntime_providers_dnnl.dylib || true
-        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.*.dylib
-        ;;
-esac
+#case $PLATFORM in
+#    macosx-*)
+#        cp ../lib/libonnxruntime_providers_dnnl.so ../lib/libonnxruntime_providers_dnnl.dylib || true
+#        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libonnxruntime.*.dylib
+#        ;;
+#esac
 
 cd ../..

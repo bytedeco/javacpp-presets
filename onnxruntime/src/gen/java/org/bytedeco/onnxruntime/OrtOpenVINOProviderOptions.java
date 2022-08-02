@@ -52,4 +52,8 @@ public class OrtOpenVINOProviderOptions extends Pointer {
   public native @Cast("unsigned char") byte use_compiled_network(); public native OrtOpenVINOProviderOptions use_compiled_network(byte setter);
   public native @Cast("const char*") BytePointer blob_dump_path(); public native OrtOpenVINOProviderOptions blob_dump_path(BytePointer setter);          // path is set to empty by default
   public native Pointer context(); public native OrtOpenVINOProviderOptions context(Pointer setter);
+  /** 0 = disabled, nonzero = enabled */
+  public native @Cast("unsigned char") byte enable_opencl_throttling(); public native OrtOpenVINOProviderOptions enable_opencl_throttling(byte setter);
+  /** 0 = disabled, nonzero = enabled */
+  public native @Cast("unsigned char") byte enable_dynamic_shapes(); public native OrtOpenVINOProviderOptions enable_dynamic_shapes(byte setter);
 }
