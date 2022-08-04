@@ -11,8 +11,8 @@ runs:
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
         echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
-        export MACOSX_DEPLOYMENT_TARGET=10.15
-        echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
+        # export MACOSX_DEPLOYMENT_TARGET=10.15
+        # echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
 
         echo Removing broken stuff from Mono
         sudo rm -Rf /Library/Frameworks/Mono.framework
@@ -22,7 +22,7 @@ runs:
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew uninstall --force gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 maven
+        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 maven openblas r
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then

@@ -102,7 +102,7 @@ public class ngraph implements InfoMapper {
                                       + "import org.bytedeco.ngraph.Function;"))
 //               .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnxBackendID").valueTypes("onnxBackendID").pointerTypes("@ByPtrPtr onnxBackendID", "@Cast(\"onnxBackendID*\") onnxBackendID"))
-               .put(new Info("ngraph::runtime::cpu::CPU_Backend::Property").cast().valueTypes("int"))
+               .put(new Info("int32_t", "onnxEventState", "onnxStatus", "ngraph::runtime::cpu::CPU_Backend::Property").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("ngraph::element::Type_t::boolean").javaNames("boolean_type"))
                .put(new Info("ngraph::descriptor::Tensor").purify(true).pointerTypes("DescriptorTensor"))
                .put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("DescriptorTensor"))

@@ -18,6 +18,8 @@ tar --totals -xf ../qt-$QT_VERSION.tar.xz
 
 cd qt-everywhere-src-$QT_VERSION
 
+patch -Np1 < ../../../qt.patch
+
 # remove stuff not actually available on most Macs
 sedinplace '/kTLSProtocol13/d' qtbase/src/network/ssl/qsslsocket_mac.cpp
 sedinplace '/backtrace_from_fp/d' qtbase/src/corelib/kernel/qcore_mac.mm

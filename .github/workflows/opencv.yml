@@ -37,11 +37,11 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   ios-arm64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   ios-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   linux-armhf:
@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   macosx-arm64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86:

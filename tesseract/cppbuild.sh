@@ -17,6 +17,10 @@ echo "Decompressing archives..."
 tar --totals -xzf ../tesseract-$TESSERACT_VERSION.tar.gz
 cd tesseract-$TESSERACT_VERSION
 
+# Fix build on Mac
+mv VERSION VERSION.txt
+sedinplace 's/"VERSION"/"VERSION.txt"/g' CMakeLists.txt
+
 # Disable external dependencies on asciidoc, libarchive and libtiff
 sedinplace '/NdkCompat/d' CMakeLists.txt
 sedinplace '/ndk_compat/d' CMakeLists.txt
