@@ -16,11 +16,11 @@ env:
   STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
 jobs:
   ios-arm64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   ios-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   linux-x86:
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   redeploy:
