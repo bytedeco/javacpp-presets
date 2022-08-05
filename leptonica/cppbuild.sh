@@ -14,6 +14,7 @@ LIBJPEG=libjpeg-turbo-2.1.3
 LIBPNG=libpng-1.6.37 # warning: libpng16 doesn't work on CentOS 6 for some reason
 LIBTIFF=tiff-4.3.0
 LIBWEBP=libwebp-1.2.2
+OPENJPEG_VERSION=2.5.0
 LEPTONICA_VERSION=1.82.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -22,6 +23,7 @@ download http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.3/$LIBJPEG.t
 download https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
+download https://github.com/uclouvain/openjpeg/archive/refs/tags/v$OPENJPEG_VERSION.tar.gz openjpeg-$OPENJPEG_VERSION.tar.gz
 download https://github.com/DanBloomberg/leptonica/releases/download/$LEPTONICA_VERSION/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -35,6 +37,7 @@ tar --totals -xzf ../$LIBJPEG.tar.gz
 tar --totals -xzf ../$LIBPNG.tar.gz
 tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
+tar --totals -xzf ../openjpeg-$OPENJPEG_VERSION.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
 # https://src.fedoraproject.org/rpms/giflib/blob/rawhide/f/CMakeLists.txt
@@ -100,8 +103,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -140,8 +148,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -180,8 +193,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -220,8 +238,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -257,8 +280,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -294,8 +322,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -334,8 +367,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -372,8 +410,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -410,8 +453,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -447,8 +495,13 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DCMAKE_MACOSX_RPATH=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -483,13 +536,18 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DCMAKE_MACOSX_RPATH=ON .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86)
-        export CFLAGS="-pthread -I$INSTALL_PATH/include/"
+        export CFLAGS="-pthread -I$INSTALL_PATH/include/ -DOPJ_STATIC"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"
@@ -519,13 +577,18 @@ case $PLATFORM in
         $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install
         ;;
     windows-x86_64)
-        export CFLAGS="-pthread -I$INSTALL_PATH/include/"
+        export CFLAGS="-pthread -I$INSTALL_PATH/include/ -DOPJ_STATIC"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"
@@ -555,8 +618,13 @@ case $PLATFORM in
         $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
+        cd ../openjpeg-$OPENJPEG_VERSION
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_CODEC=OFF .
+        make -j $MAKEJ
+        make install
+        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOPENJPEG_SUPPORT=OFF -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install
         ;;

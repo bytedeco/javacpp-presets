@@ -33,9 +33,9 @@ public class L_HASHITEM extends Pointer {
     }
 
     /** key is hashed into index into hashtab   */
-    public native @Cast("l_uint64") int key(); public native L_HASHITEM key(int setter);
+    public native @Cast("l_uint64") long key(); public native L_HASHITEM key(long setter);
     /** number stored associated with the key   */
-    public native @Cast("l_uint64") int val(); public native L_HASHITEM val(int setter);
+    public native @Cast("l_uint64") long val(); public native L_HASHITEM val(long setter);
     /** number of elements seen with this key   */
     public native @Cast("l_int32") int count(); public native L_HASHITEM count(int setter);
     /** ptr to the next in the list             */
