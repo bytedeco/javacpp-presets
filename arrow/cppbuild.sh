@@ -13,7 +13,7 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 LLVM_VERSION=14.0.6
-OPENSSL_VERSION=3.0.2
+OPENSSL_VERSION=3.0.5
 ZLIB_VERSION=1.2.12
 PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt
 ARROW_VERSION=6.0.1

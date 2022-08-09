@@ -82,6 +82,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/datatype/RawAprilTags.hpp",
                 "depthai-shared/datatype/RawIMUData.hpp",
                 "depthai-shared/datatype/RawCameraControl.hpp",
+                "depthai-shared/datatype/RawEdgeDetectorConfig.hpp",
                 "depthai-shared/datatype/RawImgFrame.hpp",
                 "depthai-shared/datatype/RawImgDetections.hpp",
                 "depthai-shared/datatype/RawImageManipConfig.hpp",
@@ -103,6 +104,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/properties/ColorCameraProperties.hpp",
                 "depthai-shared/properties/ImageManipProperties.hpp",
                 "depthai-shared/properties/MonoCameraProperties.hpp",
+                "depthai-shared/properties/EdgeDetectorProperties.hpp",
                 "depthai-shared/properties/NeuralNetworkProperties.hpp",
                 "depthai-shared/properties/DetectionNetworkProperties.hpp",
                 "depthai-shared/properties/DetectionParserProperties.hpp",
@@ -129,6 +131,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/datatype/Buffer.hpp",
                 "depthai/pipeline/datatype/IMUData.hpp",
                 "depthai/pipeline/datatype/CameraControl.hpp",
+                "depthai/pipeline/datatype/EdgeDetectorConfig.hpp",
                 "depthai/pipeline/datatype/ImgFrame.hpp",
                 "depthai/pipeline/datatype/ImgDetections.hpp",
                 "depthai/pipeline/datatype/ImageManipConfig.hpp",
@@ -149,6 +152,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/node/ColorCamera.hpp",
                 "depthai/pipeline/node/ImageManip.hpp",
                 "depthai/pipeline/node/MonoCamera.hpp",
+                "depthai/pipeline/node/EdgeDetector.hpp",
                 "depthai/pipeline/node/NeuralNetwork.hpp",
                 "depthai/pipeline/node/DetectionNetwork.hpp",
                 "depthai/pipeline/node/DetectionParser.hpp",
@@ -273,14 +277,15 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::AprilTagConfig::Family").pointerTypes("RawAprilTagConfig.Family"))
                .put(new Info("dai::node::AprilTag").immutable().pointerTypes("AprilTagNode"))
                .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
-                             "dai::node::NeuralNetwork", "dai::node::DetectionNetwork", "dai::node::DetectionParser", "dai::node::ObjectTracker", "dai::node::SPIOut",
-                             "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
+                             "dai::node::NeuralNetwork", "dai::node::EdgeDetector", "dai::node::DetectionNetwork", "dai::node::DetectionParser", "dai::node::ObjectTracker",
+                             "dai::node::SPIOut", "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
                              "dai::node::SystemLogger", "dai::node::VideoEncoder", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
                .put(new Info("dai::node::IMU::Properties").pointerTypes("IMUProperties"))
                .put(new Info("dai::node::AprilTag::Properties").pointerTypes("AprilTagProperties"))
                .put(new Info("dai::node::ColorCamera::Properties").pointerTypes("ColorCameraProperties"))
                .put(new Info("dai::node::MonoCamera::Properties").pointerTypes("MonoCameraProperties"))
                .put(new Info("dai::node::ImageManip::Properties").pointerTypes("ImageManipProperties"))
+               .put(new Info("dai::node::EdgeDetector::Properties").pointerTypes("EdgeDetectorProperties"))
                .put(new Info("dai::node::NeuralNetwork::Properties").pointerTypes("NeuralNetworkProperties"))
                .put(new Info("dai::node::DetectionNetwork::Properties",
                              "dai::node::MobileNetDetectionNetwork::Properties",
@@ -310,6 +315,7 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ColorCamera,dai::ColorCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::MonoCamera,dai::MonoCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ImageManip,dai::ImageManipProperties>").pointerTypes("ImageManipPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::EdgeDetector,dai::EdgeDetectorProperties>").pointerTypes("EdgeDetectorPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::NeuralNetwork,dai::NeuralNetworkProperties>").pointerTypes("NeuralNetworkPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::node::NeuralNetwork,dai::node::DetectionNetwork,dai::DetectionNetworkProperties>").pointerTypes("DetectionNetworkPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::node::DetectionNetwork,dai::node::MobileNetDetectionNetwork,dai::DetectionNetworkProperties>",
@@ -340,6 +346,8 @@ public class depthai implements InfoMapper {
                              "dai::PropertiesSerializable<dai::Properties,MonoCameraProperties>").pointerTypes("MonoCameraPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ImageManipProperties>",
                              "dai::PropertiesSerializable<dai::Properties,ImageManipProperties>").pointerTypes("ImageManipPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::EdgeDetectorProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,EdgeDetectorProperties>").pointerTypes("EdgeDetectorPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::GlobalProperties>",
                              "dai::PropertiesSerializable<dai::Properties,GlobalProperties>").pointerTypes("GlobalPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::NeuralNetworkProperties>",

@@ -26,18 +26,48 @@ public class DataInputQueue extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataInputQueue(Pointer p) { super(p); }
 
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString BytePointer streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString BytePointer streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/);
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString BytePointer streamName) { super((Pointer)null); allocate(conn, streamName); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString BytePointer streamName);
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString ByteBuffer streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString ByteBuffer streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/);
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString ByteBuffer streamName) { super((Pointer)null); allocate(conn, streamName); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString ByteBuffer streamName);
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString String streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString String streamName, @Cast("unsigned int") int maxSize/*=16*/, @Cast("bool") boolean blocking/*=true*/);
-    public DataInputQueue(@SharedPtr XLinkConnection conn, @StdString String streamName) { super((Pointer)null); allocate(conn, streamName); }
-    private native void allocate(@SharedPtr XLinkConnection conn, @StdString String streamName);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString BytePointer streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking, maxDataSize); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString BytePointer streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString BytePointer streamName) { super((Pointer)null); allocate(conn, streamName); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString BytePointer streamName);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString ByteBuffer streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking, maxDataSize); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString ByteBuffer streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString ByteBuffer streamName) { super((Pointer)null); allocate(conn, streamName); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString ByteBuffer streamName);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString String streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/) { super((Pointer)null); allocate(conn, streamName, maxSize, blocking, maxDataSize); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString String streamName,
+                       @Cast("unsigned int") int maxSize/*=16*/,
+                       @Cast("bool") boolean blocking/*=true*/,
+                       @Cast("std::size_t") long maxDataSize/*=dai::device::XLINK_USB_BUFFER_MAX_SIZE*/);
+    public DataInputQueue(@SharedPtr XLinkConnection conn,
+                       @StdString String streamName) { super((Pointer)null); allocate(conn, streamName); }
+    private native void allocate(@SharedPtr XLinkConnection conn,
+                       @StdString String streamName);
 
     /**
      * Check whether queue is closed

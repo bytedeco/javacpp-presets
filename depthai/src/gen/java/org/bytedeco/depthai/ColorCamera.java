@@ -145,11 +145,17 @@ public class ColorCamera extends ColorCameraPropertiesNode {
     /** Set preview output size, as a tuple <width, height> */
     public native void setPreviewSize(@ByVal @Cast("std::tuple<int,int>*") Pointer size);
 
+    /** Set number of frames in preview pool */
+    public native void setPreviewNumFramesPool(int num);
+
     /** Set video output size */
     public native void setVideoSize(int width, int height);
 
     /** Set video output size, as a tuple <width, height> */
     public native void setVideoSize(@ByVal @Cast("std::tuple<int,int>*") Pointer size);
+
+    /** Set number of frames in preview pool */
+    public native void setVideoNumFramesPool(int num);
 
     /** Set still output size */
     public native void setStillSize(int width, int height);
@@ -157,11 +163,23 @@ public class ColorCamera extends ColorCameraPropertiesNode {
     /** Set still output size, as a tuple <width, height> */
     public native void setStillSize(@ByVal @Cast("std::tuple<int,int>*") Pointer size);
 
+    /** Set number of frames in preview pool */
+    public native void setStillNumFramesPool(int num);
+
     /** Set sensor resolution */
     public native void setResolution(@ByVal ColorCameraProperties.SensorResolution resolution);
 
     /** Get sensor resolution */
     public native @ByVal ColorCameraProperties.SensorResolution getResolution();
+
+    /** Set number of frames in raw pool */
+    public native void setRawNumFramesPool(int num);
+
+    /** Set number of frames in isp pool */
+    public native void setIspNumFramesPool(int num);
+
+    /** Set number of frames in all pools */
+    public native void setNumFramesPool(int raw, int isp, int preview, int video, int still);
 
     /**
      * Set 'isp' output scaling (numerator/denominator), preserving the aspect ratio.
@@ -281,4 +299,15 @@ public class ColorCamera extends ColorCameraPropertiesNode {
      * @return Preview keep aspect ratio option
      */
     public native @Cast("bool") boolean getPreviewKeepAspectRatio();
+
+    /** Get number of frames in preview pool */
+    public native int getPreviewNumFramesPool();
+    /** Get number of frames in video pool */
+    public native int getVideoNumFramesPool();
+    /** Get number of frames in still pool */
+    public native int getStillNumFramesPool();
+    /** Get number of frames in raw pool */
+    public native int getRawNumFramesPool();
+    /** Get number of frames in isp pool */
+    public native int getIspNumFramesPool();
 }

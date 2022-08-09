@@ -192,7 +192,11 @@ case $PLATFORM in
         ;;
 esac
 
-ln -snf $PYTHON_INSTALL_PATH/scipy-*/ ../python
+if [[ -d $PYTHON_INSTALL_PATH/scipy ]]; then
+    ln -snf $PYTHON_INSTALL_PATH ../python
+else
+    ln -snf $PYTHON_INSTALL_PATH/scipy-*/ ../python
+fi
 rm -Rf $(find ../ -iname __pycache__)
 
 cd ../..
