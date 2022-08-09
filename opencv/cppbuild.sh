@@ -82,6 +82,9 @@ patch -Np1 < ../../../opencv-linux-ppc64le.patch
 sedinplace '/include_directories/d' platforms/android/android.toolchain.cmake
 sedinplace "s/<LINK_LIBRARIES>/<LINK_LIBRARIES> ${ANDROID_LIBS:-}/g" platforms/android/android.toolchain.cmake
 
+# https://github.com/opencv/opencv/issues/19846
+sedinplace 's/dgeev_/OCV_LAPACK_FUNC(dgeev)/g' modules/calib3d/src/usac/dls_solver.cpp modules/calib3d/src/usac/essential_solver.cpp
+
 # fixes for iOS
 if [[ $PLATFORM == ios* ]]; then
     sed -i="" '/#if defined(NO)/a\

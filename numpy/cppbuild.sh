@@ -50,6 +50,10 @@ sedinplace 's/for lib in libraries:/for lib in libraries[:]:/g' ./numpy/distutil
 # https://github.com/numpy/numpy/pull/20354
 sedinplace 's/auto x/double x/g' numpy/core/setup.py
 
+sedinplace '/import numpy.distutils.command.sdist/i\
+import setuptools\
+' setup.py
+
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
@@ -140,7 +144,11 @@ case $PLATFORM in
         ;;
 esac
 
-ln -snf $PYTHONPATH/numpy-*/ ../python
+if [[ -d $PYTHON_INSTALL_PATH/numpy ]]; then
+    ln -snf $PYTHON_INSTALL_PATH ../python
+else
+    ln -snf $PYTHON_INSTALL_PATH/numpy-*/ ../python
+fi
 rm -Rf $(find ../ -iname __pycache__)
 
 cd ../..

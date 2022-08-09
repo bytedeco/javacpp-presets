@@ -187,12 +187,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        10;
-public static final int PY_MICRO_VERSION =        5;
+public static final int PY_MICRO_VERSION =        6;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.10.5";
+public static final String PY_VERSION =              "3.10.6";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -355,7 +355,7 @@ public static final int HAVE_CLOCK_GETTIME = 1;
 public static final int HAVE_CLOCK_SETTIME = 1;
 
 /* Define to 1 if you have the `close_range' function. */
-/* #undef HAVE_CLOSE_RANGE */
+public static final int HAVE_CLOSE_RANGE = 1;
 
 /* Define if the C compiler supports computed gotos. */
 public static final int HAVE_COMPUTED_GOTOS = 1;
@@ -1664,7 +1664,7 @@ public static final int Py_ENABLE_SHARED = 1;
 /* #undef SETPGRP_HAVE_ARG */
 
 /* Define to 1 if you must link with -lrt for shm_open(). */
-public static final int SHM_NEEDS_LIBRT = 1;
+/* #undef SHM_NEEDS_LIBRT */
 
 /* Define if i>>j for signed int i does not extend the sign bit when i < 0 */
 /* #undef SIGNED_RIGHT_SHIFT_ZERO_FILLS */
@@ -1858,7 +1858,7 @@ public static final long _POSIX_C_SOURCE = 200809L;
 public static final String _PYTHONFRAMEWORK = "";
 
 /* Define to force use of thread-safe errno, h_errno, and other functions */
-/* #undef _REENTRANT */
+public static final int _REENTRANT = 1;
 
 /* Define to the level of X/Open that your system supports */
 public static final int _XOPEN_SOURCE = 700;
@@ -12762,6 +12762,10 @@ public static native _inittab PyImport_Inittab(); public static native void PyIm
    collection of frozen modules: */
 
 public static native @Const _frozen PyImport_FrozenModules(); public static native void PyImport_FrozenModules(_frozen setter);
+
+@NoException public static native PyObject _PyImport_GetModuleAttr(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject _PyImport_GetModuleAttrString(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1);
+@NoException public static native PyObject _PyImport_GetModuleAttrString(String arg0, String arg1);
 
 
 // Parsed from abstract.h
