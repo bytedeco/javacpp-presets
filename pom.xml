@@ -1451,6 +1451,7 @@
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
       </modules>

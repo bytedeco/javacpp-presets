@@ -1,4 +1,4 @@
-
+ * Introduce `macosx-arm64` to presets for libpostal ([pull #1199](https://github.com/bytedeco/javacpp-presets/pull/1205))
  * Build Leptonica with OpenJPEG for JPEG 2000 support
  * Introduce `linux-arm64` to presets for libpostal ([pull #1199](https://github.com/bytedeco/javacpp-presets/pull/1199))
  * Map missing factory functions in `torch::` namespace using `torch_` as prefix in presets for PyTorch ([issue #1197](https://github.com/bytedeco/javacpp-presets/issues/1197))
