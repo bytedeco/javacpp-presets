@@ -24,6 +24,7 @@ sedinplace '/  FATAL_ERROR/d' CMakeLists.txt
 sedinplace '/find_package(TIFF)/d' CMakeLists.txt
 sedinplace '/pkg_check_modules(TIFF/d' CMakeLists.txt
 sedinplace 's/if(COMPILER_SUPPORTS_MARCH_NATIVE)/if(FALSE)/g' CMakeLists.txt
+sedinplace 's/num_threads([^)]*)//g' src/ccmain/par_control.cpp src/lstm/*.cpp
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
@@ -84,7 +85,6 @@ case $PLATFORM in
         make install/strip
         ;;
     linux-ppc64le)
-        patch -Np1 < ../../../tesseract-openmp.patch
         export CC="powerpc64le-linux-gnu-gcc -fPIC"
         export CXX="powerpc64le-linux-gnu-g++ -fPIC"
         $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le $CMAKE_CONFIG .
@@ -122,14 +122,14 @@ case $PLATFORM in
     windows-x86)
         export CC="gcc -m32"
         export CXX="g++ -m32"
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF -DOPENMP_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF -DOPENMP_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
