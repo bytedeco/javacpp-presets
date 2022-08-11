@@ -40,7 +40,15 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         ;;
-    macosx-*)
+    macosx-arm64)
+        ./bootstrap.sh
+        ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host=aarch64-apple-darwin
+        #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
+        make -j $MAKEJ V=0
+        make install
+        ;;
+
+    macosx-x86_64)
         ./bootstrap.sh
         sed -i="" 's/-install_name \\$rpath/-install_name @rpath/g' configure
         ./configure --prefix=$INSTALL_PATH --disable-data-download
