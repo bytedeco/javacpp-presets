@@ -42,7 +42,8 @@ case $PLATFORM in
         ;;
     macosx-arm64)
         ./bootstrap.sh
-        ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host=aarch64-apple-darwin
+        sedinplace 's/\\\$rpath/@rpath/g' configure
+        CC="clang -arch arm64 -fPIC" ./configure --prefix=$INSTALL_PATH --disable-data-download --disable-sse2 --host="aarch64-apple-darwin"
         #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
         make -j $MAKEJ V=0
         make install
