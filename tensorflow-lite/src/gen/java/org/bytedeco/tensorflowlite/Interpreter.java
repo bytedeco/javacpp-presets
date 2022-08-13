@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-
+  // namespace interpreter_wrapper
 
 /** An interpreter for a graph of nodes that input and output from tensors.
  *  Each node of the graph processes a set of input tensors and produces a
@@ -833,12 +833,24 @@ public class Interpreter extends Pointer {
 
   /** Sets the profiler to tracing execution. The caller retains ownership
    *  of the profiler and must ensure its validity.
+   *  Previously registered profilers will be unregistered.
+   *  If {@code profiler} is nullptr, all previously installed profilers will be
+   *  removed.
    *  WARNING: This is an experimental API and subject to change. */
   public native void SetProfiler(Profiler profiler);
 
   /** Same as SetProfiler except this interpreter takes ownership
    *  of the provided profiler.
+   *  Previously registered profilers will be unregistered.
+   *  If {@code profiler} is nullptr, all previously installed profilers will be
+   *  removed.
    *  WARNING: This is an experimental API and subject to change. */
+
+  /** Adds the profiler to tracing execution. The caller retains ownership
+   *  of the profiler and must ensure its validity.
+   *  nullptr {@code profiler} will be ignored.
+   *  WARNING: This is an experimental API and subject to change. */
+  public native void AddProfiler(Profiler profiler);
 
   /** Gets the profiler used for op tracing.
    *  WARNING: This is an experimental API and subject to change. */

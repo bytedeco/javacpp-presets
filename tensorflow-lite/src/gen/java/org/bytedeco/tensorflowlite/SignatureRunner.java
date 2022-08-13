@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-              // Class for friend declarations.
+     // Class for friend declarations.
 
 /** WARNING: Experimental interface, subject to change
  * 

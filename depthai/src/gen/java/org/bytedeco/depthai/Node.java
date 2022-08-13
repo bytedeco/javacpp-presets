@@ -27,7 +27,6 @@ public class Node extends Pointer {
     public Node(Pointer p) { super(p); }
 
     /** Node identificator. Unique for every node on a single Pipeline */
-
     // fwd declare classes
 
     @MemberGetter public native @ByRef StringNodeOutputMap outputRefs();
@@ -41,7 +40,6 @@ public class Node extends Pointer {
     public native void setInputRefs(Input inRef);
     public native void setOutputMapRefs(OutputMap outMapRef);
     public native void setInputMapRefs(InputMap inMapRef);
-
     @NoOffset public static class DatatypeHierarchy extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -327,6 +325,23 @@ public class Node extends Pointer {
         public native @ByRef @Name("operator []") Input get(@StdString String key);
     }
 
+    /** Connection between an Input and Output */
+    @NoOffset public static class Connection extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Connection(Pointer p) { super(p); }
+    
+        public Connection(@ByVal Output out, @ByVal Input in) { super((Pointer)null); allocate(out, in); }
+        private native void allocate(@ByVal Output out, @ByVal Input in);
+        @MemberGetter public native @Cast("dai::Node::Id") long outputId();
+        @MemberGetter public native @StdString BytePointer outputName();
+        @MemberGetter public native @StdString BytePointer outputGroup();
+        @MemberGetter public native @Cast("dai::Node::Id") long inputId();
+        @MemberGetter public native @StdString BytePointer inputName();
+        @MemberGetter public native @StdString BytePointer inputGroup();
+        public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Connection rhs);
+    }
+
     // when Pipeline tries to serialize and construct on remote, it will check if all connected nodes are on same pipeline
     /** Id of node */
     @MemberGetter public native @Cast("const dai::Node::Id") long id();
@@ -364,22 +379,7 @@ public class Node extends Pointer {
 
     /** Retrieves reference to node inputs */
 
-    /** Connection between an Input and Output */
-    @NoOffset public static class Connection extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Connection(Pointer p) { super(p); }
-    
-        public Connection(@ByVal Output out, @ByVal Input in) { super((Pointer)null); allocate(out, in); }
-        private native void allocate(@ByVal Output out, @ByVal Input in);
-        @MemberGetter public native @Cast("dai::Node::Id") long outputId();
-        @MemberGetter public native @StdString BytePointer outputName();
-        @MemberGetter public native @StdString BytePointer outputGroup();
-        @MemberGetter public native @Cast("dai::Node::Id") long inputId();
-        @MemberGetter public native @StdString BytePointer inputName();
-        @MemberGetter public native @StdString BytePointer inputGroup();
-        public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Connection rhs);
-    }
+    /** Constructs Node */
 
     /** Get node AssetManager as a const reference */
 

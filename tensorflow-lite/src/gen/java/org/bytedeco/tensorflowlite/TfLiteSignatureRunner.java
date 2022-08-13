@@ -15,15 +15,17 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 /** TfLiteSignatureRunner is used to run inference on a signature.
  * 
- *  Note: A signature refers to a computation supported by a model, identified
- *  by a distinct name, a list of named inputs and a list of named outputs. Each
- *  named input/output is associated with a specific input/output tensor. A
- *  model can have multiple signatures. */
-// To learn more about signatures in TFLite, refer to:
-// https://www.tensorflow.org/lite/guide/signatures
-/**
-/** Using the TfLiteSignatureRunner, for a particular signature, you can set its
-/** inputs, invoke (i.e. execute) the computation, and retrieve its outputs. */
+ *  Note: A signature is used to define a computation in a TF model. A model can
+ *  have multiple signatures. Each signature contains three components:
+ *    * Signature Key: A unique string to identify a signature
+ *    * Inputs: A list of names, each mapped to an input tensor of a signature
+ *    * Outputs: A list of names, each mapped to an output tensor of a signature
+ * 
+ *  To learn more about signatures in TFLite, refer to:
+ *  https://www.tensorflow.org/lite/guide/signatures
+ * 
+ *  Using the TfLiteSignatureRunner, for a particular signature, you can set its
+ *  inputs, invoke (i.e. execute) the computation, and retrieve its outputs. */
 
 ///
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

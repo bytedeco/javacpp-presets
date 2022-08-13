@@ -58,4 +58,8 @@ public class MemoryPlanner extends Pointer {
   public native void DumpDebugInfo(@StdVector IntPointer execution_plan);
   public native void DumpDebugInfo(@StdVector IntBuffer execution_plan);
   public native void DumpDebugInfo(@StdVector int[] execution_plan);
+
+  // Returns a map of allocation information. It's only used for debugging.
+  public native void GetAllocInfo(@Cast("size_t*") SizeTPointer arena_size,
+                              @Cast("size_t*") SizeTPointer arena_persist_size);
 }

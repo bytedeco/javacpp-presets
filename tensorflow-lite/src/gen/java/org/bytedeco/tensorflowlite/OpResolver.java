@@ -26,15 +26,49 @@ public class OpResolver extends Pointer {
                                              int version);
   public native @Const TfLiteRegistration FindOp(String op,
                                              int version);
+
+  // Represents a sequence of delegates.
+
   // Returns optional delegates for resolving and handling ops in the flatbuffer
   // model. This may be used in addition to the standard TfLiteRegistration
   // lookup for graph resolution.
   // WARNING: This API is deprecated, GetDelegateCreators is preferred.
   public native @ByVal TfLiteDelegatePtrVector GetDelegates(int num_threads);
 
-  // Represent a function that creates a TfLite delegate instance.
+  // Represents a function that creates a TfLite delegate instance.
+
+  // Represents a sequence of delegate creator functions.
+
   // Returns a vector of delegate creators to create optional delegates for
   // resolving and handling ops in the flatbuffer model. This may be used in
   // addition to the standard TfLiteRegistration lookup for graph resolution.
+  //
+  // Note that this method is not used (will not be called) if you are using
+  // TF Lite in Google Play Services; the GetOpaqueDelegateCreators method
+  // (see below) is used for that case.
   public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
+
+  // TODO(b/202712825): it would be nice if we could avoid the need for separate
+  // "opaque" types & methods for use only with TF Lite in Google Play Services.
+
+  // Represents an opaque delegate instance.
+  // WARNING: Experimental interface, subject to change.
+
+  // Represents a function that creates an opaque delegate instance.
+  // WARNING: Experimental interface, subject to change.
+
+  // Represents a sequence of opaque delegate creator functions.
+  // WARNING: Experimental interface, subject to change.
+
+  // Returns a vector of opaque delegate creators to create optional opaque
+  // delegates for resolving and handling ops in the flatbuffer model. This may
+  // be used in addition to the standard TfLiteRegistration lookup for graph
+  // resolution.
+  //
+  // Note that this method will be called only if you are using TF Lite in
+  // Google Play Services; if you are using regular TF Lite, GetDelegateCreators
+  // (see above) is used instead.
+  //
+  // WARNING: Experimental interface, subject to change.
+  
 }

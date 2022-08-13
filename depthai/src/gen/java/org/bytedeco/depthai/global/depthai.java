@@ -147,6 +147,7 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // #ifndef _XLINKPUBLICDEFINES_H
 // #define _XLINKPUBLICDEFINES_H
 // #include <stdint.h>
+// #include <stdbool.h>
 // #ifdef __cplusplus
 // #endif
 
@@ -904,6 +905,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include <vector>
 
 // #include "depthai-shared/common/Point2f.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/DatatypeEnum.hpp"
 // #include "depthai-shared/datatype/RawAprilTagConfig.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
@@ -1134,6 +1136,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "RawSpatialLocationCalculatorConfig.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/DatatypeEnum.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
@@ -1204,6 +1207,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/datatype/RawImgDetections.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"

@@ -76,4 +76,6 @@ public class MutableOpResolver extends OpResolver {
   public native void AddAll(@Const @ByRef MutableOpResolver other);
 
   public native @ByVal @Cast("tflite::OpResolver::TfLiteDelegateCreators*") Pointer GetDelegateCreators();
+
+  
 }

@@ -7,11 +7,13 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // Class for friend declarations.
-@Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class TensorHandle extends Pointer {
+
+
+// TfLiteOpaqueTensor is an opaque version of TfLiteTensor;
+@Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+public class TfLiteOpaqueTensor extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public TensorHandle() { super((Pointer)null); }
+    public TfLiteOpaqueTensor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TensorHandle(Pointer p) { super(p); }
+    public TfLiteOpaqueTensor(Pointer p) { super(p); }
 }

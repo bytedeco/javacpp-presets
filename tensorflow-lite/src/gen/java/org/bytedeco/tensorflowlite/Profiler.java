@@ -71,21 +71,21 @@ public class Profiler extends Pointer {
   public native void EndEvent(@Cast("uint32_t") int event_handle);
 
   // Appends an event of type 'event_type' with 'tag' and 'event_metadata'
-  // which started at 'start' and ended at 'end'
+  // which ran for elapsed_time.
   // Note:
-  // In cases were ProfileSimmarizer and tensorflow::StatsCalculator are used
+  // In cases were ProfileSummarizer and tensorflow::StatsCalculator are used
   // they assume the value is in "usec", if in any case subclasses
   // didn't put usec, then the values are not meaningful.
-  // TODO karimnosseir: Revisit and make the function more clear.
-  public native void AddEvent(@Cast("const char*") BytePointer tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long start,
-                  @Cast("uint64_t") long end, @Cast("int64_t") long event_metadata);
-  public native void AddEvent(String tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long start,
-                  @Cast("uint64_t") long end, @Cast("int64_t") long event_metadata);
+  // TODO(karimnosseir): karimnosseir: Revisit and make the function more clear.
+  public native void AddEvent(@Cast("const char*") BytePointer tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long elapsed_time,
+                  @Cast("int64_t") long event_metadata);
+  public native void AddEvent(String tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long elapsed_time,
+                  @Cast("int64_t") long event_metadata);
 
-  public native void AddEvent(@Cast("const char*") BytePointer tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long start,
-                          @Cast("uint64_t") long end, @Cast("int64_t") long event_metadata1,
+  public native void AddEvent(@Cast("const char*") BytePointer tag, @Cast("tflite::Profiler::EventType") int event_type,
+                          @Cast("uint64_t") long elapsed_time, @Cast("int64_t") long event_metadata1,
                           @Cast("int64_t") long event_metadata2);
-  public native void AddEvent(String tag, @Cast("tflite::Profiler::EventType") int event_type, @Cast("uint64_t") long start,
-                          @Cast("uint64_t") long end, @Cast("int64_t") long event_metadata1,
+  public native void AddEvent(String tag, @Cast("tflite::Profiler::EventType") int event_type,
+                          @Cast("uint64_t") long elapsed_time, @Cast("int64_t") long event_metadata1,
                           @Cast("int64_t") long event_metadata2);
 }

@@ -21,13 +21,15 @@ public class Subgraph extends Pointer {
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map); }
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             int subgraph_index/*=kInvalidSubgraphIndex*/) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map, subgraph_index); }
   private native void allocate(ErrorReporter error_reporter,
              @Cast("TfLiteExternalContext**") PointerPointer external_contexts,
              SubgraphVector subgraphs,
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
-             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map);
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             int subgraph_index/*=kInvalidSubgraphIndex*/);
   public Subgraph(ErrorReporter error_reporter,
              @ByPtrPtr TfLiteExternalContext external_contexts,
              SubgraphVector subgraphs,
@@ -40,6 +42,20 @@ public class Subgraph extends Pointer {
              @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
              @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
              @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map);
+  public Subgraph(ErrorReporter error_reporter,
+             @ByPtrPtr TfLiteExternalContext external_contexts,
+             SubgraphVector subgraphs,
+             @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             int subgraph_index/*=kInvalidSubgraphIndex*/) { super((Pointer)null); allocate(error_reporter, external_contexts, subgraphs, resources, resource_ids, initialization_status_map, subgraph_index); }
+  private native void allocate(ErrorReporter error_reporter,
+             @ByPtrPtr TfLiteExternalContext external_contexts,
+             SubgraphVector subgraphs,
+             @Cast("tflite::resource::ResourceMap*") IntResourceBaseMap resources,
+             @Cast("tflite::resource::ResourceIDMap*") StringIntMap resource_ids,
+             @Cast("tflite::resource::InitializationStatusMap*") IntResourceBaseMap initialization_status_map,
+             int subgraph_index/*=kInvalidSubgraphIndex*/);
 
   
 
@@ -222,57 +238,57 @@ public class Subgraph extends Pointer {
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization,
         String buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization, @Cast("const char*") BytePointer buffer,
         @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/,
         TfLiteSparsity sparsity/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization, String buffer,
         @Cast("size_t") long bytes);
 
@@ -323,52 +339,52 @@ public class Subgraph extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector int[] dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const IntPointer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const IntBuffer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const int[] dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const IntPointer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const IntPointer dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const IntBuffer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long ndims,
         @Const IntBuffer dims, @ByVal TfLiteQuantization quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long ndims_signature/*=0*/,
         @Const int[] dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long ndims,
         @Const int[] dims, @ByVal TfLiteQuantization quantization);
 
   // Get a mutable tensor data structure.
@@ -522,6 +538,15 @@ public class Subgraph extends Pointer {
   // WARNING: This is an experimental API and subject to change.
   public native SubgraphVector GetSubgraphs();
 
+  // Returns the location of this object within subgraphs_, or
+  // kInvalidSubgraphIndex if subgraphs_ is nullptr or *this is not
+  // represented *subgraphs_.
+  // WARNING: This is an experimental API and subject to
+  // change.
+  @MemberGetter public static native int kInvalidSubgraphIndex();
+  public static final int kInvalidSubgraphIndex = kInvalidSubgraphIndex();
+  public native int GetSubgraphIndex();
+
   // True if all tensors in the graph has static size after calling
   // `AllocateTensors` function.
   // Before `AllocateTensors` is called, this will always return true;
@@ -571,21 +596,36 @@ public class Subgraph extends Pointer {
   public native void DumpMemoryPlannerDebugInfo();
 
   // WARNING: This is an experimental API and subject to change.
-  // Force all intermediate dynamic tensors to be released once they are not
-  // used by the model. Please use this configuration with caution, since it
-  // might reduce the peak memory usage of the model at the cost of a slower
-  // inference speed. This API needs to be called before calling
-  // `AllocateTensors`.
-  public native void EnsureDynamicTensorsAreReleased();
+  // Returns memory allocation status.
+  public native void GetMemoryAllocInfo(@Cast("size_t*") SizeTPointer arena_size, @Cast("size_t*") SizeTPointer arena_persist_size,
+                            @Cast("size_t*") SizeTPointer dynamic_size);
+
+  // WARNING: This is an experimental API and subject to change.
+  // Set the given `InterpreterOptions` object.
+  public native void SetOptions(InterpreterOptions options);
+
+  // WARNING: This is an experimental API and subject to change.
+  // True if all intermediates tensors should be preserved for debugging.
+  public native @Cast("bool") boolean ShouldPreserveAllTensors();
+
+  // WARNING: This is an experimental API and subject to change.
+  // True if all intermediate dynamic tensors should be released once they are
+  // not used by the model.
+  public native @Cast("bool") boolean ShouldReleaseDynamicTensors();
 
   /** WARNING: This is an experimental API and subject to change.
-   *  Use dynamic tensor allocation method for large intermediate tensors
-   *  instead of static memory planner. It improves peak memory usage but there
-   *  could be some latency impact. The parameter
-   *  {@code large_tensors_threshods_in_bytes} is used to determine large tensors.
-   *  This API must be called before {@code AllocateTensors}. */
-  public native void UseDynamicAllocationForLargeTensors(
-        int large_tensors_threshods_in_bytes);
+   *  Use dynamic tensor allocation and deallocation method for large tensors
+   *  instead of static memory planner. Dynamic tensors are allocated just
+   *  before when they're needed and released when they're not needed anymore.
+   *  It improves peak memory usage but there could be some latency impact. The
+   *  parameter {@code large_tensors_thresholds_in_bytes} is used to determine large
+   *  tensors. This API must be called before {@code AllocateTensors}. */
+  public native void OptimizeMemoryForLargeTensors(int large_tensors_thresholds_in_bytes);
+
+  // WARNING: This is an experimental API and subject to change.
+  // True if dynamic tensor allocation / deallocation method is enabled by
+  // `OptimizeMemoryForLargeTensors` API.
+  public native @Cast("bool") boolean ShouldOptimizeMemoryForLargeTensors();
 
   // WARNING: This is an experimental API and subject to change.
   // Remove unused inputs of the subgraph. It checks usage of inputs and mark it
