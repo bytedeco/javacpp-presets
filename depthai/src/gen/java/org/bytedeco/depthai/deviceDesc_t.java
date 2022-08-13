@@ -43,4 +43,5 @@ public class deviceDesc_t extends Pointer {
     public native @Cast("char") byte mxid(int i); public native deviceDesc_t mxid(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer mxid();
     public native @Cast("XLinkError_t") int status(); public native deviceDesc_t status(int setter);
+    public native @Cast("bool") boolean nameHintOnly(); public native deviceDesc_t nameHintOnly(boolean setter);
 }

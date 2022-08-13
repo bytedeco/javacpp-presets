@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // namespace interpreter_wrapper
+
 
 /** Options class for {@code Interpreter}.
  *  WARNING: This is an experimental API and subject to change. */
@@ -51,14 +51,18 @@ public class InterpreterOptions extends Pointer {
    *  WARNING: This is an experimental API and subject to change. */
   public native @Cast("bool") boolean GetEnsureDynamicTensorsAreReleased();
 
-  /** Use dynamic tensor allocation method for large tensors instead of static
-   *  memory planner. It improves peak memory usage but there could be some
-   *  latency impact. The value is used to determine large tensors.
+  /** Use dynamic tensor allocation and deallocation method for large tensors
+   *  instead of static memory planner. Dynamic tensors are allocated just
+   *  before when they're needed and released when they're not needed anymore.
+   *  It improves peak memory usage but there could be some latency impact. The
+   *  value (in bytes, and default is 1024 * 1024) is used to determine large
+   *  tensors.
    *  WARNING: This is an experimental API and subject to change. */
-  public native void SetDynamicAllocationForLargeTensors(int value);
+  public native void OptimizeMemoryForLargeTensors(int value/*=(1 << 20)*/);
+  public native void OptimizeMemoryForLargeTensors();
 
-  /** Returns the size threshold for dynamic tensor allocation method.
-   *  It returns zero if the feature is not enabled.
+  /** Returns the size (in bytes) threshold for dynamic tensor allocation
+   *  method. It returns zero if the feature is not enabled.
    *  WARNING: This is an experimental API and subject to change. */
   public native int GetDynamicAllocationForLargeTensors();
 }

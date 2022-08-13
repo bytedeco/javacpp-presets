@@ -44,4 +44,35 @@ public class AprilTags extends Buffer {
     private native void allocate(@SharedPtr RawAprilTags ptr);
 
     public native @StdVector AprilTag aprilTags(); public native AprilTags aprilTags(AprilTag setter);
+
+    /**
+     * Retrieves image timestamp related to dai::Clock::now()
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestamp();
+
+    /**
+     * Retrieves image timestamp directly captured from device's monotonic clock,
+     * not synchronized to host time. Used mostly for debugging
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @Cast("int64_t") long getSequenceNum();
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef AprilTags setTimestamp(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Sets image timestamp related to dai::Clock::now()
+     */
+    public native @ByRef AprilTags setTimestampDevice(@ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer timestamp);
+
+    /**
+     * Retrieves image sequence number
+     */
+    public native @ByRef AprilTags setSequenceNum(@Cast("int64_t") long sequenceNum);
 }

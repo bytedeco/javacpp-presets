@@ -9,8 +9,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
+// Similar to ScopedProfile but has extra event metadata for EndEvent.
 @Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class ScopedRuntimeInstrumentationProfile extends ScopedProfile {
+public class ScopedRuntimeInstrumentationProfile extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScopedRuntimeInstrumentationProfile(Pointer p) { super(p); }

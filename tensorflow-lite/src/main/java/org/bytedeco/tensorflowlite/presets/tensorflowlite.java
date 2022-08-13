@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             value = {"android", "linux", "macosx", "windows"},
-            compiler = "cpp11",
+            compiler = "cpp14",
             define = "UNIQUE_PTR_NAMESPACE std",
             include = {
 //                "flatbuffers/base.h",
@@ -61,12 +61,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/allocation.h",
                 "tensorflow/lite/stderr_reporter.h",
                 "tensorflow/lite/graph_info.h",
+                "tensorflow/lite/interpreter_options.h",
                 "tensorflow/lite/memory_planner.h",
                 "tensorflow/lite/util.h",
                 "tensorflow/lite/core/macros.h",
                 "tensorflow/lite/core/subgraph.h",
                 "tensorflow/lite/external_cpu_backend_context.h",
                 "tensorflow/lite/portable_type_to_tflitetype.h",
+                "tensorflow/lite/profiling/root_profiler.h",
                 "tensorflow/lite/signature_runner.h",
                 "tensorflow/lite/type_to_tflitetype.h",
                 "tensorflow/lite/string_type.h",
@@ -90,10 +92,12 @@ public class tensorflowlite implements InfoMapper {
         infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK").cppTypes().annotations())
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
                .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
+                             "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators",
                              "tflite::InterpreterBuilder::PreserveAllTensorsExperimental").skip())
                .put(new Info("tflite::Model", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
-               .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator",
+                             "tflite::profiling::RootProfiler::EventType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("String", "BytePointer").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<const std::string*>").pointerTypes("StringVector").define())
                .put(new Info("std::map<std::string,uint32_t>").pointerTypes("StringIntMap").define())
@@ -104,8 +108,11 @@ public class tensorflowlite implements InfoMapper {
                                                                  .valueTypes("@Cast({\"\", \"std::unique_ptr<tflite::Subgraph>&&\"}) Subgraph"))
                .put(new Info("std::unique_ptr<tflite::resource::ResourceBase>").annotations("@UniquePtr").pointerTypes("ResourceBase")
                                                                                .valueTypes("@Cast({\"\", \"std::unique_ptr<tflite::resource::ResourceBase>&&\"}) ResourceBase"))
+               .put(new Info("std::pair<int32_t,int32_t>", "tflite::ControlEdge").cast().pointerTypes("IntIntPair").define())
                .put(new Info("std::pair<TfLiteNode,TfLiteRegistration>").pointerTypes("RegistrationNodePair").define())
+               .put(new Info("std::vector<tflite::NodeSubset>").pointerTypes("NodeSubsetVector").define())
                .put(new Info("std::vector<std::unique_ptr<tflite::Subgraph> >").valueTypes("@StdMove SubgraphVector").pointerTypes("SubgraphVector").define())
+               .put(new Info("std::vector<std::pair<int32_t,int32_t> >", "tflite::ControlEdges").cast().pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<TfLiteNode,TfLiteRegistration> >").valueTypes("@StdMove RegistrationNodePairVector").pointerTypes("RegistrationNodePairVector").define())
                .put(new Info("const std::vector<std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)> >", "tflite::OpResolver::TfLiteDelegatePtrVector").pointerTypes("TfLiteDelegatePtrVector").define())
                .put(new Info("std::unordered_map<std::int32_t,std::unique_ptr<tflite::resource::ResourceBase> >").valueTypes("@StdMove IntResourceBaseMap").pointerTypes("IntResourceBaseMap").define())
