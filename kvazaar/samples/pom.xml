@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.kvazaar</groupId>
+    <artifactId>encoder</artifactId>
+    <version>1.5.8-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>org.bytedeco.kvazaar.samples.Main</exec.mainClass>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>kvazaar-platform</artifactId>
+            <version>2.1.0-1.5.8-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
