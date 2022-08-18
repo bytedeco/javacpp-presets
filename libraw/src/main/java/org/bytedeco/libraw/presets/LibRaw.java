@@ -40,17 +40,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.libraw",
         global = "org.bytedeco.libraw.global.LibRaw",
         value = {
-                @Platform(value = {"windows-x86_64"},
+                @Platform(
                         include = {
                                 "libraw_const.h",
                                 "libraw_version.h",
                                 "libraw_types.h",
                                 "libraw_datastream.h",
                                 "libraw.h",
-                        },
+                        }
+                ),
+                @Platform(value = {"windows-x86_64"},
                         link = {"libraw_static"},
-                        linkpath = {"libraw/cppbuild/lib",},
-                        includepath = {"libraw/cppbuild/include"},
                         define = {
                                 // To avoid errors like: "winsock2.h error C2011 'struct' type redefinition"
                                 "WIN32_LEAN_AND_MEAN",
@@ -58,6 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "LIBRAW_WIN32_CALLS"
                         }
                 )
+
         })
 public class LibRaw implements InfoMapper {
     static {
@@ -134,6 +135,11 @@ public class LibRaw implements InfoMapper {
                 // libraw.h
                 //
                 .put(new Info("LibRaw::get_internal_data_pointer").skip(true))
+
+                //
+                // To build on non-Windows
+                //
+                .put(new Info("defined(_WIN32) || defined(WIN32)").define(false))
         ;
     }
 }

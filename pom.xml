@@ -1366,6 +1366,7 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
+        <module>libraw</module>
         <module>librealsense</module>
         <module>librealsense2</module>
         <module>artoolkitplus</module>

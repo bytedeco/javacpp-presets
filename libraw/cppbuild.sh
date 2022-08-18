@@ -21,9 +21,15 @@ unzip -o ../LibRaw-$LIBRAW_VERSION.zip
 cd LibRaw-$LIBRAW_VERSION
 
 # TODO add: zlib, libjasper, libjpeg8
-# TODO add to `./configure` options: `--disable-examples`
 
 case $PLATFORM in
+    linux-x86_64)
+        autoreconf --install
+        ./configure --disable-examples
+        make -j $MAKEJ
+        cp libraw/*.h ../include
+        cp lib/.libs/*.a ../lib
+        ;;
     windows-x86_64)
         nmake -f Makefile.msvc
         cp libraw/*.h ../include

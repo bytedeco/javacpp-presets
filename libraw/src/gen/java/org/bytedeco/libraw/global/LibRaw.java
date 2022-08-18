@@ -1303,12 +1303,6 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
   public static native int libraw_open_file_ex(libraw_data_t arg0, String arg1,
                                    @Cast("INT64") long max_buff_sz);
 // #if defined(_WIN32) || defined(WIN32)
-  public static native int libraw_open_wfile(libraw_data_t arg0, @Cast("const wchar_t*") CharPointer arg1);
-  public static native int libraw_open_wfile(libraw_data_t arg0, @Cast("const wchar_t*") IntPointer arg1);
-  public static native int libraw_open_wfile_ex(libraw_data_t arg0, @Cast("const wchar_t*") CharPointer arg1,
-                                    @Cast("INT64") long max_buff_sz);
-  public static native int libraw_open_wfile_ex(libraw_data_t arg0, @Cast("const wchar_t*") IntPointer arg1,
-                                    @Cast("INT64") long max_buff_sz);
 // #endif
   public static native int libraw_open_buffer(libraw_data_t arg0, Pointer buffer, @Cast("size_t") long size);
   public static native int libraw_unpack(libraw_data_t arg0);

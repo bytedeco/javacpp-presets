@@ -34,12 +34,6 @@ public class LibRaw extends Pointer {
                   @Cast("INT64") long max_buffered_sz/*=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE*/);
   public native int open_file(String fname);
 // #if defined(_WIN32) || defined(WIN32)
-  public native int open_file(@Cast("const wchar_t*") CharPointer fname,
-                  @Cast("INT64") long max_buffered_sz/*=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE*/);
-  public native int open_file(@Cast("const wchar_t*") CharPointer fname);
-  public native int open_file(@Cast("const wchar_t*") IntPointer fname,
-                  @Cast("INT64") long max_buffered_sz/*=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE*/);
-  public native int open_file(@Cast("const wchar_t*") IntPointer fname);
 // #endif
   public native int open_buffer(Pointer buffer, @Cast("size_t") long size);
   public native int open_datastream(LibRaw_abstract_datastream arg0);
