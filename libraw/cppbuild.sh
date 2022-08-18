@@ -7,6 +7,31 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+# Compilation instructions at https://www.libraw.org/docs/Install-LibRaw.html
+
 LIBRAW_VERSION=0.20.2
-download https://www.libraw.org/data/LibRaw-$LIBRAW_VERSION-Win64.zip LibRaw-$LIBRAW_VERSION-Win64.zip
-unzip -o LibRaw-$LIBRAW_VERSION-Win64.zip
+download https://github.com/LibRaw/LibRaw/archive/refs/tags/$LIBRAW_VERSION.zip LibRaw-$LIBRAW_VERSION.zip
+unzip -o LibRaw-$LIBRAW_VERSION.zip
+
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+mkdir -p include lib
+unzip -o ../LibRaw-$LIBRAW_VERSION.zip
+cd LibRaw-$LIBRAW_VERSION
+
+# TODO add: zlib, libjasper, libjpeg8
+# TODO add to `./configure` options: `--disable-examples`
+
+case $PLATFORM in
+    windows-x86_64)
+        nmake -f Makefile.msvc
+        cp libraw/*.h ../include
+        cp lib/*.lib ../lib
+        ;;
+    *)
+        echo "Error: Platform \"$PLATFORM\" is not supported"
+        ;;
+esac
+
+cd ../..

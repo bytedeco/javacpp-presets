@@ -49,9 +49,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "libraw.h",
                         },
                         link = {"libraw_static"},
-                        linkpath = {"libraw/cppbuild/LibRaw-0.20.2/lib",},
-                        includepath = {"libraw/cppbuild/LibRaw-0.20.2/libraw"},
-                        preloadpath = {"libraw/cppbuild//LibRaw-0.20.2/bin",},
+                        linkpath = {"libraw/cppbuild/lib",},
+                        includepath = {"libraw/cppbuild/include"},
                         define = {
                                 // To avoid errors like: "winsock2.h error C2011 'struct' type redefinition"
                                 "WIN32_LEAN_AND_MEAN",
