@@ -30,6 +30,13 @@ case $PLATFORM in
         cp libraw/*.h ../include
         cp lib/.libs/*.a ../lib
         ;;
+    macosx-*)
+        autoreconf --install
+        ./configure --disable-examples
+        make -j $MAKEJ
+        cp libraw/*.h ../include
+        cp lib/.libs/*.a ../lib
+        ;;
     windows-x86_64)
         nmake -f Makefile.msvc
         cp libraw/*.h ../include

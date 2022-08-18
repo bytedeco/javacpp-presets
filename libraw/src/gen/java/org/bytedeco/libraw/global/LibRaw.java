@@ -937,16 +937,16 @@ it under the terms of the one of two licenses as you choose:
 // #ifdef LIBRAW_WIN32_DLLDEFS
 // #else
 // #define DllDef
-// Targeting ..\libraw_decoder_info_t.java
+// Targeting ../libraw_decoder_info_t.java
 
 
-// Targeting ..\libraw_internal_output_params_t.java
+// Targeting ../libraw_internal_output_params_t.java
 
 
-// Targeting ..\memory_callback.java
+// Targeting ../memory_callback.java
 
 
-// Targeting ..\exif_parser_callback.java
+// Targeting ../exif_parser_callback.java
 
 
 
@@ -954,7 +954,7 @@ it under the terms of the one of two licenses as you choose:
                                         @Cast("const char*") BytePointer where);
   public static native void default_memory_callback(Pointer data, String file,
                                         String where);
-// Targeting ..\data_callback.java
+// Targeting ../data_callback.java
 
 
 
@@ -962,127 +962,127 @@ it under the terms of the one of two licenses as you choose:
                                       int offset);
   public static native void default_data_callback(Pointer data, String file,
                                       int offset);
-// Targeting ..\progress_callback.java
+// Targeting ../progress_callback.java
 
 
-// Targeting ..\pre_identify_callback.java
+// Targeting ../pre_identify_callback.java
 
 
-// Targeting ..\post_identify_callback.java
+// Targeting ../post_identify_callback.java
 
 
-// Targeting ..\process_step_callback.java
+// Targeting ../process_step_callback.java
 
 
-// Targeting ..\libraw_callbacks_t.java
+// Targeting ../libraw_callbacks_t.java
 
 
-// Targeting ..\libraw_processed_image_t.java
+// Targeting ../libraw_processed_image_t.java
 
 
-// Targeting ..\libraw_iparams_t.java
+// Targeting ../libraw_iparams_t.java
 
 
-// Targeting ..\libraw_raw_inset_crop_t.java
+// Targeting ../libraw_raw_inset_crop_t.java
 
 
-// Targeting ..\libraw_image_sizes_t.java
+// Targeting ../libraw_image_sizes_t.java
 
 
-// Targeting ..\ph1_t.java
+// Targeting ../ph1_t.java
 
 
-// Targeting ..\libraw_dng_color_t.java
+// Targeting ../libraw_dng_color_t.java
 
 
-// Targeting ..\libraw_dng_levels_t.java
+// Targeting ../libraw_dng_levels_t.java
 
 
-// Targeting ..\libraw_P1_color_t.java
+// Targeting ../libraw_P1_color_t.java
 
 
-// Targeting ..\libraw_canon_makernotes_t.java
+// Targeting ../libraw_canon_makernotes_t.java
 
 
-// Targeting ..\libraw_hasselblad_makernotes_t.java
+// Targeting ../libraw_hasselblad_makernotes_t.java
 
 
-// Targeting ..\libraw_fuji_info_t.java
+// Targeting ../libraw_fuji_info_t.java
 
 
-// Targeting ..\libraw_sensor_highspeed_crop_t.java
+// Targeting ../libraw_sensor_highspeed_crop_t.java
 
 
-// Targeting ..\libraw_nikon_makernotes_t.java
+// Targeting ../libraw_nikon_makernotes_t.java
 
 
-// Targeting ..\libraw_olympus_makernotes_t.java
+// Targeting ../libraw_olympus_makernotes_t.java
 
 
-// Targeting ..\libraw_panasonic_makernotes_t.java
+// Targeting ../libraw_panasonic_makernotes_t.java
 
 
-// Targeting ..\libraw_pentax_makernotes_t.java
+// Targeting ../libraw_pentax_makernotes_t.java
 
 
-// Targeting ..\libraw_samsung_makernotes_t.java
+// Targeting ../libraw_samsung_makernotes_t.java
 
 
-// Targeting ..\libraw_kodak_makernotes_t.java
+// Targeting ../libraw_kodak_makernotes_t.java
 
 
-// Targeting ..\libraw_p1_makernotes_t.java
+// Targeting ../libraw_p1_makernotes_t.java
 
 
-// Targeting ..\libraw_sony_info_t.java
+// Targeting ../libraw_sony_info_t.java
 
 
-// Targeting ..\libraw_colordata_t.java
+// Targeting ../libraw_colordata_t.java
 
 
-// Targeting ..\libraw_thumbnail_t.java
+// Targeting ../libraw_thumbnail_t.java
 
 
-// Targeting ..\libraw_gps_info_t.java
+// Targeting ../libraw_gps_info_t.java
 
 
-// Targeting ..\libraw_imgother_t.java
+// Targeting ../libraw_imgother_t.java
 
 
-// Targeting ..\libraw_metadata_common_t.java
+// Targeting ../libraw_metadata_common_t.java
 
 
-// Targeting ..\libraw_output_params_t.java
+// Targeting ../libraw_output_params_t.java
 
 
-// Targeting ..\libraw_rawdata_t.java
+// Targeting ../libraw_rawdata_t.java
 
 
-// Targeting ..\libraw_makernotes_lens_t.java
+// Targeting ../libraw_makernotes_lens_t.java
 
 
-// Targeting ..\libraw_nikonlens_t.java
+// Targeting ../libraw_nikonlens_t.java
 
 
-// Targeting ..\libraw_dnglens_t.java
+// Targeting ../libraw_dnglens_t.java
 
 
-// Targeting ..\libraw_lensinfo_t.java
+// Targeting ../libraw_lensinfo_t.java
 
 
-// Targeting ..\libraw_makernotes_t.java
+// Targeting ../libraw_makernotes_t.java
 
 
-// Targeting ..\libraw_shootinginfo_t.java
+// Targeting ../libraw_shootinginfo_t.java
 
 
-// Targeting ..\libraw_custom_camera_t.java
+// Targeting ../libraw_custom_camera_t.java
 
 
-// Targeting ..\libraw_data_t.java
+// Targeting ../libraw_data_t.java
 
 
-// Targeting ..\fuji_compressed_params.java
+// Targeting ../fuji_compressed_params.java
 
 
 
@@ -1186,19 +1186,19 @@ it under the terms of the one of two licenses as you choose:
 //   {
 //     throw LIBRAW_EXCEPTION_IO_EOF;
 //   } while (0)
-// Targeting ..\LibRaw_bit_buffer.java
+// Targeting ../LibRaw_bit_buffer.java
 
 
-// Targeting ..\LibRaw_abstract_datastream.java
+// Targeting ../LibRaw_abstract_datastream.java
 
 
-// Targeting ..\LibRaw_file_datastream.java
+// Targeting ../LibRaw_file_datastream.java
 
 
-// Targeting ..\LibRaw_buffer_datastream.java
+// Targeting ../LibRaw_buffer_datastream.java
 
 
-// Targeting ..\LibRaw_bigfile_datastream.java
+// Targeting ../LibRaw_bigfile_datastream.java
 
 
 
@@ -1376,7 +1376,7 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
   public static native libraw_imgother_t libraw_get_imgother(libraw_data_t lr);
 
 // #ifdef __cplusplus
-// Targeting ..\LibRaw.java
+// Targeting ../LibRaw.java
 
 
 
