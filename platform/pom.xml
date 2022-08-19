@@ -165,7 +165,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>lz4-platform</artifactId>
-      <version>1.9.3-${project.version}</version>
+      <version>1.9.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -215,7 +215,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.23.1-${project.version}</version>
+      <version>1.23.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -225,7 +225,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.25.1-${project.version}</version>
+      <version>0.25.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
