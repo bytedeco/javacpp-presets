@@ -21,8 +21,32 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is an example of implementing `dcraw` functionality using LibRaw ported to Java from the `dcraw_emu.cpp` C++ source file:
+Here is an example of implementing `dcraw` functionality using LibRaw ported to Java from the `dcraw_emu.cpp` C++ source file.
 
+### The `pom.xml` build file
+```xml
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.liblaw</groupId>
+    <artifactId>simpleexample</artifactId>
+    <version>1.5.7</version>
+    <properties>
+        <exec.mainClass>SimpleExample</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>libraw-platform</artifactId>
+            <version>0.20.2-1.5.7</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
+```
+
+### The `LibRawDemo.java` source file
 ```java
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.libraw.LibRaw;

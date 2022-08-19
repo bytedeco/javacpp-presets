@@ -47,8 +47,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "libraw_types.h",
                                 "libraw_datastream.h",
                                 "libraw.h",
-                        },
-                        link = {"raw"}
+                        }
+                ),
+                @Platform(value = {"linux-x86_64"},
+                        link = {"raw_r"}
+                ),
+                @Platform(value = {"macosx-arm64"},
+                        link = {"raw_r"}
+                ),
+                @Platform(value = {"macosx-x86_64"},
+                        link = {"raw_r"}
                 ),
                 @Platform(value = {"windows-x86_64"},
                         link = {"libraw_static"},
