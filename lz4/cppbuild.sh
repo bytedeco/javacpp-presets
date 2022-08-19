@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LZ4_VERSION=1.9.3
+LZ4_VERSION=1.9.4
 download https://github.com/lz4/lz4/archive/refs/tags/v$LZ4_VERSION.tar.gz lz4-$LZ4_VERSION.tar.gz
 mkdir -p $PLATFORM
 cd $PLATFORM
