@@ -50,10 +50,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         }
                 ),
                 @Platform(value = {"linux-x86_64"},
-                        link = {"raw_r"}
+                        link = {"raw_r"},
+                        preload = "gomp@.1"
                 ),
                 @Platform(value = {"macosx-arm64"},
-                        link = {"raw_r"}
+                        link = {"raw_r"},
+                        preload = "gomp@.1"
                 ),
                 @Platform(value = {"macosx-x86_64"},
                         link = {"raw_r"}

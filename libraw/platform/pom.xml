@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libraw-platform</artifactId>
-  <version>3.4.2-${project.parent.version}</version>
+  <version>0.20.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for libraw</name>
 
   <properties>
