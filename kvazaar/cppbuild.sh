@@ -35,6 +35,7 @@ case $PLATFORM in
           CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
         else
           CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared 
+        fi
         make -j $MAKEJ
         make install
         ;;
