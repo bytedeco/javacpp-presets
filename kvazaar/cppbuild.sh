@@ -19,12 +19,12 @@ cd kvazaar-$KVAZAAR_VERSION
 
 case $PLATFORM in
     linux-arm64)
-        CC="aarch64-linux-gnu-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared --host=aarch64-linux-gnu
+        CC="aarch64-linux-gnu-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
         ;;
     linux-armhf)
-        CC="arm-linux-gnueabihf-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared --host=arm-linux-gnueabihf
+        CC="arm-linux-gnueabihf-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         ;;
@@ -32,37 +32,28 @@ case $PLATFORM in
         MACHINE_TYPE=$( uname -m )
         sed -i s/elf64ppc/elf64lppc/ configure
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
+          CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared
         else
-          CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared 
+          CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --enable-static --enable-pic  --disable-shared 
         fi
         make -j $MAKEJ
         make install
         ;;
-    linux-x86)
-        CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
-        make -j $MAKEJ
-        make install
-        ;;
     linux-x86_64)
-        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared
         make -j $MAKEJ
         make install
         ;;
     macosx-*)
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-cli --disable-shared
-        make -j $MAKEJ
-        make install
-        ;;
-    windows-x86)
-        CC="gcc -m32 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-cli --disable-shared
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared
         make -j $MAKEJ
         make install
         ;;
     windows-x86_64)
-        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-cli --disable-shared
+        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-shared
         make -j $MAKEJ
         make install
+        ls -lR ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
