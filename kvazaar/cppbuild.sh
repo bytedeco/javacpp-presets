@@ -50,7 +50,7 @@ case $PLATFORM in
         make install
         ;;
     windows-x86_64)
-        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-shared
+        CC="gcc -m64 -Duint=int -static-libgcc -D_WIN32" ./configure --prefix=$INSTALL_PATH --disable-shared
         make -j $MAKEJ
         make install
         cp ../lib/libkvazaar.a ../lib/kvazaar.lib
