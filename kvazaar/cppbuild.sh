@@ -53,6 +53,7 @@ case $PLATFORM in
         CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-shared
         make -j $MAKEJ
         make install
+        cp ../lib/libkvazaar.a ../lib/kvazaar.lib
         ls -lR ..
         ;;
     *)
