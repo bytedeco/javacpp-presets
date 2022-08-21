@@ -39,6 +39,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    linux-x86)
+        CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
+        make -j $MAKEJ
+        make install
+        ;;
     linux-x86_64)
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --disable-shared
         make -j $MAKEJ
@@ -50,12 +55,12 @@ case $PLATFORM in
         make install
         ;;
     windows-x86)
-        CC="gcc -m32 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-static --disable-cli --disable-shared
+        CC="gcc -m32 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-cli --disable-shared
         make -j $MAKEJ
         make install
         ;;
     windows-x86_64)
-        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH ---enable-static --disable-cli --disable-shared
+        CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --disable-cli --disable-shared
         make -j $MAKEJ
         make install
         ;;
