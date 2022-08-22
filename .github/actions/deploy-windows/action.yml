@@ -30,7 +30,7 @@ runs:
 
         if not "%CI_DEPLOY_NEED_BAZEL%"=="" (
           echo Installing Bazel
-          curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-windows-x86_64.exe -o C:/msys64/mingw64/bin/bazel.exe
+          curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-windows-x86_64.exe -o C:/msys64/usr/bin/bazel.exe
 
           echo Removing old versions of MSVC that interfere with Bazel
           bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' \( -name '14.1*' -or -name '14.2[01234567]*' \) -prune -exec rm -Rf {} \;"
@@ -40,7 +40,7 @@ runs:
         if not "%CI_DEPLOY_NEED_CACHE%"=="" (
           echo Installing ccache
           curl -LO https://github.com/ccache/ccache/releases/download/v4.6/ccache-4.6-windows-64.zip
-          unzip -j ccache-4.6-windows-64.zip -d C:/msys64/mingw64/bin/
+          unzip -j ccache-4.6-windows-64.zip -d C:/msys64/usr/bin/
           mkdir ccache
           echo max_size = 3.0G                                                                        > ccache\ccache.conf
           echo hash_dir = false                                                                      >> ccache\ccache.conf
@@ -81,10 +81,8 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
           bash -c "pacman -Rc --noconfirm mingw-w64-i686-libgccjit mingw-w64-x86_64-libgccjit"
           bash -c "pacman -U --noconfirm *.pkg.tar.zst"
-        )
-
-        if "%CI_DEPLOY_MODULE%"=="arrow" (
-          bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git"
+        ) else (
+          bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
@@ -200,7 +198,7 @@ runs:
           set "TEMP=C:\tmp"
           set "TMP=C:\tmp"
           mkdir C:\tmp
-          C:/msys64/mingw64/bin/bazel.exe version
+          C:/msys64/usr/bin/bazel.exe version
         )
         if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
           set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
