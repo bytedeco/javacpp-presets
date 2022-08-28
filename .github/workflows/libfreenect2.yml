@@ -7,7 +7,7 @@ on:
   pull_request:
     paths:
       - libfreenect2/**
-      - .github/workflows/libfreenec2.yml
+      - .github/workflows/libfreenect2.yml
   workflow_dispatch:
 env:
   CI_DEPLOY_MODULE: ${{ github.workflow }}
