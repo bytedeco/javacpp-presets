@@ -25,10 +25,10 @@ cd LibRaw-$LIBRAW_VERSION
 case $PLATFORM in
     linux-x86_64)
         autoreconf --install
-        ./configure --disable-examples --enable-static --with-pic
+        ./configure --disable-examples --disable-static --with-pic
         make -j $MAKEJ
         cp libraw/*.h ../include
-        cp lib/.libs/*.a ../lib
+        cp lib/.libs/*.so* ../lib
         ;;
     macosx-arm64)
         CC="clang -arch arm64" CXX="clang++ -arch arm64" autoreconf --install
