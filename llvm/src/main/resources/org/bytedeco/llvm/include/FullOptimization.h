@@ -89,7 +89,7 @@ LLVMErrorRef optimizeModule(
     PassManagerBuilder builder2;
     builder2.VerifyInput = true;
     builder2.Inliner = createFunctionInliningPass();
-    builder2.populateLTOPassManager(passes);
+//    builder2.populateLTOPassManager(passes);
 
     fnPasses.doInitialization();
     for (Function &func : *module) {
