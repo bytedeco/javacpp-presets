@@ -1,6 +1,6 @@
-diff -ruN ffmpeg-5.1/configure ffmpeg-5.1-patch/configure
---- ffmpeg-5.1/configure	2022-07-23 02:58:38.000000000 +0900
-+++ ffmpeg-5.1-patch/configure	2022-08-01 20:30:04.490280626 +0900
+diff -ruN ffmpeg-5.1.1/configure ffmpeg-5.1.1-patch/configure
+--- ffmpeg-5.1.1/configure	2022-09-01 03:58:25.000000000 +0900
++++ ffmpeg-5.1.1-patch/configure	2022-09-07 09:45:10.985165854 +0900
 @@ -6548,7 +6548,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
@@ -82,7 +82,7 @@ diff -ruN ffmpeg-5.1/configure ffmpeg-5.1-patch/configure
  enabled libwebp           && {
 -    enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
 -    enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
--enabled libx264           && check_pkg_config libx264 x264 "stdint.h x264.h" x264_encoder_encode &&
+-enabled libx264           && require_pkg_config libx264 x264 "stdint.h x264.h" x264_encoder_encode &&
 +    enabled libwebp_encoder      && require libwebp webp/encode.h WebPGetEncoderVersion -lwebp
 +    enabled libwebp_anim_encoder && require libwebp_anim_encoder webp/mux.h WebPAnimEncoderOptionsInit -lwebpmux -lwebp; }
 +enabled libx264           && require libx264 "stdint.h x264.h" x264_encoder_encode -lx264 $pthreads_extralibs &&

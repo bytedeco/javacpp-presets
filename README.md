@@ -206,7 +206,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.23.x  https://github.com/numpy/numpy
  * SciPy 1.9.x  https://github.com/scipy/scipy
  * Gym 0.25.x  https://github.com/openai/gym
- * LLVM 14.0.x  http://llvm.org/releases/download.html
+ * LLVM 15.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
