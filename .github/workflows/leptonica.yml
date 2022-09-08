@@ -10,6 +10,7 @@ on:
       - .github/workflows/leptonica.yml
   workflow_dispatch:
 env:
+  CI_DEPLOY_NEED_GCC: 1
   CI_DEPLOY_MODULE: ${{ github.workflow }}
   CI_DEPLOY_PLATFORM: ${{ github.job }}
   CI_DEPLOY_SETTINGS: ${{ secrets.CI_DEPLOY_SETTINGS }}
