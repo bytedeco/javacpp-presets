@@ -68,8 +68,8 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
          break;
 +    case FLV_CODECID_HEVC:
 +        par->codec_id = AV_CODEC_ID_HEVC;
-+        vstream->need_parsing = AVSTREAM_PARSE_NONE;
-+        ret = 3;
++        vstreami->need_parsing = AVSTREAM_PARSE_NONE;
++        ret = 3;     // not 4, reading packet type will consume one byte
 +        break;
      default:
          avpriv_request_sample(s, "Video codec (%x)", flv_codecid);
