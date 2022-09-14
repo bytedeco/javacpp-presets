@@ -1,4 +1,5 @@
 
+ * Add support for HEVC and Opus to FLV format in presets for FFmpeg ([pull #1228](https://github.com/bytedeco/javacpp-presets/pull/1228))
  * Build Leptonica with OpenJPEG for JPEG 2000 support
  * Introduce `linux-arm64` and `macosx-arm64` builds to presets for libpostal ([pull #1199](https://github.com/bytedeco/javacpp-presets/pull/1199) and [pull #1205](https://github.com/bytedeco/javacpp-presets/pull/1205))
  * Map missing factory functions in `torch::` namespace using `torch_` as prefix in presets for PyTorch ([issue #1197](https://github.com/bytedeco/javacpp-presets/issues/1197))
