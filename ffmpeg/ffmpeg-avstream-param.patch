@@ -1,0 +1,43 @@
+diff -ruN ffmpeg-5.1.1/libavformat/avformat.c ffmpeg-5.1.1-patch/libavformat/avformat.c
+--- ffmpeg-5.1.1/libavformat/avformat.c	2022-07-23 01:58:39.000000000 +0800
++++ ffmpeg-5.1.1-patch/libavformat/avformat.c	2022-09-15 03:39:32.000000000 +0800
+@@ -694,6 +694,16 @@
+     return cffstream(st)->avctx->time_base;
+ }
+ 
++int64_t av_stream_get_cur_dts(const AVStream *st)
++{
++    return cffstream(st)->cur_dts;
++}
++
++void av_stream_set_probe_packets(AVStream *st, int probe_packets)
++{
++    ffstream(st)->probe_packets = probe_packets;
++}
++
+ void avpriv_set_pts_info(AVStream *st, int pts_wrap_bits,
+                          unsigned int pts_num, unsigned int pts_den)
+ {
+diff -ruN ffmpeg-5.1.1/libavformat/avformat.h ffmpeg-5.1.1-patch/libavformat/avformat.h
+--- ffmpeg-5.1.1/libavformat/avformat.h	2022-07-23 01:58:39.000000000 +0800
++++ ffmpeg-5.1.1-patch/libavformat/avformat.h	2022-09-15 03:38:54.000000000 +0800
+@@ -2901,6 +2901,20 @@
+ AVRational av_stream_get_codec_timebase(const AVStream *st);
+ 
+ /**
++ * Get the internal current dts from a stream.
++ *
++ * @param st  input stream to extract the dts from
++ */
++int64_t av_stream_get_cur_dts(const AVStream *st);
++
++/**
++ * Set the internal probe packets to a stream.
++ *
++ * @param st  input stream to set the probe packets to
++ */
++void av_stream_set_probe_packets(AVStream *st, int probe_packets);
++
++/**
+  * @}
+  */
