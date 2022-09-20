@@ -31,7 +31,7 @@ public class DeviceBootloader extends Pointer {
     // Alias
 
     // Derive and extend bootloader::Config for easier usage
-    public static class Config extends BootloaderConfig {
+    @NoOffset public static class Config extends BootloaderConfig {
         static { Loader.load(); }
         /** Default native constructor. */
         public Config() { super((Pointer)null); allocate(); }
@@ -98,6 +98,12 @@ public class DeviceBootloader extends Pointer {
         public native void setUsbMaxSpeed(@Cast("dai::UsbSpeed") int speed);
         /** Get maxUsbSpeed */
         public native UsbSpeed getUsbMaxSpeed();
+
+        /** To JSON */
+        public native @ByVal @Cast("nlohmann::json*") Pointer toJson();
+
+        /** from JSON */
+        public static native @ByVal Config fromJson(@ByVal @Cast("nlohmann::json*") Pointer arg0);
     }
 
     /** Bootloader version structure */
@@ -210,19 +216,14 @@ public class DeviceBootloader extends Pointer {
      * @param applicationName Optional name the application that is flashed
      * @return Depthai application package
      */
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
-                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
-                                                                    @Cast("bool") boolean compress/*=false*/,
-                                                                    @StdString BytePointer applicationName/*=""*/);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
-                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
-                                                                    @Cast("bool") boolean compress/*=false*/,
-                                                                    @StdString ByteBuffer applicationName/*=""*/);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
-                                                                    @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
-                                                                    @Cast("bool") boolean compress/*=false*/,
-                                                                    @StdString String applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(
+            @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(
+            @Const @ByRef Pipeline pipeline);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(
+            @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(
+            @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * Creates application package which can be flashed to depthai device.
@@ -231,10 +232,20 @@ public class DeviceBootloader extends Pointer {
      * @param applicationName Name the application that is flashed
      * @return Depthai application package
      */
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString BytePointer applicationName/*=""*/);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString ByteBuffer applicationName/*=""*/);
-    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString String applicationName/*=""*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Cast("bool") boolean compress,
+                                                                    @StdString BytePointer applicationName/*=""*/,
+                                                                    @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Cast("bool") boolean compress);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Cast("bool") boolean compress,
+                                                                    @StdString ByteBuffer applicationName/*=""*/,
+                                                                    @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native @ByVal ByteVector createDepthaiApplicationPackage(@Const @ByRef Pipeline pipeline,
+                                                                    @Cast("bool") boolean compress,
+                                                                    @StdString String applicationName/*=""*/,
+                                                                    @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * Saves application package to a file which can be flashed to depthai device.
@@ -244,14 +255,26 @@ public class DeviceBootloader extends Pointer {
      * @param compress Optional boolean which specifies if contents should be compressed
      * @param applicationName Optional name the application that is flashed
      */
-    public static native void saveDepthaiApplicationPackage(
-            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/);
-    public static native void saveDepthaiApplicationPackage(
-            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline);
-    public static native void saveDepthaiApplicationPackage(
-            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/);
-    public static native void saveDepthaiApplicationPackage(
-            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path,
+                                                  @Const @ByRef Pipeline pipeline,
+                                                  @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                  @Cast("bool") boolean compress/*=false*/,
+                                                  @StdString BytePointer applicationName/*=""*/,
+                                                  @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path,
+                                                  @Const @ByRef Pipeline pipeline);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path,
+                                                  @Const @ByRef Pipeline pipeline,
+                                                  @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                  @Cast("bool") boolean compress/*=false*/,
+                                                  @StdString ByteBuffer applicationName/*=""*/,
+                                                  @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path,
+                                                  @Const @ByRef Pipeline pipeline,
+                                                  @Const @ByRef(nullValue = "dai::Path{}") Path pathToCmd,
+                                                  @Cast("bool") boolean compress/*=false*/,
+                                                  @StdString String applicationName/*=""*/,
+                                                  @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * Saves application package to a file which can be flashed to depthai device.
@@ -260,10 +283,14 @@ public class DeviceBootloader extends Pointer {
      * @param compress Specifies if contents should be compressed
      * @param applicationName Optional name the application that is flashed
      */
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString BytePointer applicationName/*=""*/);
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString ByteBuffer applicationName/*=""*/);
-    public static native void saveDepthaiApplicationPackage(@Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString String applicationName/*=""*/);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString BytePointer applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString ByteBuffer applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public static native void saveDepthaiApplicationPackage(
+            @Const @ByRef Path path, @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress, @StdString String applicationName/*=""*/, @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * @return Embedded bootloader version
@@ -335,34 +362,40 @@ public class DeviceBootloader extends Pointer {
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString BytePointer applicationName/*=""*/,
-                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString ByteBuffer applicationName/*=""*/,
-                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString String applicationName/*=""*/,
-                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString BytePointer applicationName/*=""*/,
-                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString ByteBuffer applicationName/*=""*/,
-                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(ProgressCallback progressCallback,
                                             @Const @ByRef Pipeline pipeline,
                                             @Cast("bool") boolean compress/*=false*/,
                                             @StdString String applicationName/*=""*/,
-                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+                                            @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/,
+                                            @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * Flashes a given pipeline to the device.
@@ -370,13 +403,20 @@ public class DeviceBootloader extends Pointer {
      * @param compress Compresses application to reduce needed memory size
      * @param applicationName Optional name the application that is flashed
      */
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
-    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(@Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString BytePointer applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString ByteBuffer applicationName/*=""*/, Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flash(
+            @Const @ByRef Pipeline pipeline, @Cast("bool") boolean compress/*=false*/, @StdString String applicationName/*=""*/, @Cast("dai::bootloader::Memory") int memory/*=dai::DeviceBootloader::Memory::AUTO*/, @Cast("bool") boolean checkChecksum/*=false*/);
 
     /**
      * Reads information about flashed application in specified memory from device

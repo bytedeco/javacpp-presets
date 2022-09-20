@@ -59,8 +59,16 @@ public class StellaEnvironment extends Pointer {
    *  called */
   public native void setMode(@Cast("ale::game_mode_t") int value);
 
-  /** Returns true once we reach a terminal state */
+  /** Returns true if the ROM reported a terminal signal OR if the episode is truncated
+   * (i.e., isGameTerminal() || isTruncated()).
+   * This functions serves to be backwards compatible with previous versions of ALE. */
   public native @Cast("bool") boolean isTerminal();
+
+  /** Returns true if the ROM reported a terminal signal */
+  public native @Cast("bool") boolean isGameTerminal();
+
+  /** Returns true if the episode is truncated, i.e., max number of frames is reached */
+  public native @Cast("bool") boolean isGameTruncated();
 
   /** Accessor methods for the environment state. */
   public native void setState(@Const @ByRef ALEState state);

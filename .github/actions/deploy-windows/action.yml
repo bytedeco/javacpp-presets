@@ -98,9 +98,9 @@ runs:
           move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\lib\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
 
-          echo Applying hotfix to Visual Studio 2019 for CUDA
-          curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
-          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
+          rem echo Applying hotfix to Visual Studio 2019 for CUDA
+          rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
+          rem bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
           bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
           bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
           bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"

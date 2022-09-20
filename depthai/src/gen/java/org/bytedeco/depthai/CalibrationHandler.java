@@ -464,6 +464,16 @@ public class CalibrationHandler extends Pointer {
                           @Cast("uint32_t") int boardOptions);
 
     /**
+     * Set the productName which acts as alisas for users to identify the device
+     *
+     * @param productName Sets product name (alias).
+     */
+
+    public native void setProductName(@StdString BytePointer productName);
+    public native void setProductName(@StdString ByteBuffer productName);
+    public native void setProductName(@StdString String productName);
+
+    /**
      * Set the Camera Intrinsics object
      *
      * @param cameraId CameraId of the camera for which Camera intrinsics are being loaded

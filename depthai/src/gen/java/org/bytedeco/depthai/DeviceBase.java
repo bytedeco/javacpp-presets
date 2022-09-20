@@ -112,10 +112,18 @@ public class DeviceBase extends Pointer {
     public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String mxId);
 
     /**
-     * Returns all connected devices
-     * @return Vector of connected devices
+     * Returns all available devices
+     * @return Vector of available devices
      */
     public static native @StdVector DeviceInfo getAllAvailableDevices();
+
+    /**
+     * Returns information of all connected devices.
+     * The devices could be both connectable as well as already connected to devices.
+     *
+     * @return Vector of connected device information
+     */
+    public static native @StdVector DeviceInfo getAllConnectedDevices();
 
     /**
      * Gets device firmware binary for a specific OpenVINO version
@@ -564,6 +572,24 @@ public class DeviceBase extends Pointer {
      * @return True on successful flash, false on failure
      */
     public native void flashFactoryCalibration(@ByVal CalibrationHandler calibrationHandler);
+
+    /**
+     * Destructive action, deletes User area EEPROM contents
+     * Requires PROTECTED permissions
+     *
+     * @throws std::runtime_exception if failed to flash the calibration
+     * @return True on successful flash, false on failure
+     */
+    public native void flashEepromClear();
+
+    /**
+     * Destructive action, deletes Factory area EEPROM contents
+     * Requires FACTORY PROTECTED permissions
+     *
+     * @throws std::runtime_exception if failed to flash the calibration
+     * @return True on successful flash, false on failure
+     */
+    public native void flashFactoryEepromClear();
 
     /**
      * Fetches the EEPROM data from Factory area and loads it into CalibrationHandler object
