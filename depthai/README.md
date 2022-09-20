@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * DepthAI 2.17.3  https://luxonis.com/depthai
+ * DepthAI 2.17.4  https://luxonis.com/depthai
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>depthai-platform</artifactId>
-            <version>2.17.3-1.5.8-SNAPSHOT</version>
+            <version>2.17.4-1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>

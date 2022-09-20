@@ -22,6 +22,52 @@ public class modsecurity extends org.bytedeco.modsecurity.presets.modsecurity {
 // Targeting ../StringSet.java
 
 
+// Parsed from modsecurity/intervention.h
+
+/*
+ * ModSecurity, http://www.modsecurity.org/
+ * Copyright (c) 2015 - 2021 Trustwave Holdings, Inc. (http://www.trustwave.com/)
+ *
+ * You may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * If any of the files related to licensing are missing or if you have any
+ * other questions related to licensing please contact Trustwave Holdings, Inc.
+ * directly using the email address security@modsecurity.org.
+ *
+ */
+
+// #ifndef HEADERS_MODSECURITY_INTERVENTION_H_
+// #define HEADERS_MODSECURITY_INTERVENTION_H_
+
+// #ifdef __cplusplus
+// Targeting ../ModSecurityIntervention.java
+
+
+
+// #ifdef __cplusplus
+    @Namespace("modsecurity::intervention") @NoException public static native void reset(ModSecurityIntervention i);
+
+    @Namespace("modsecurity::intervention") @NoException public static native void clean(ModSecurityIntervention i);
+
+    @Namespace("modsecurity::intervention") @NoException public static native void freeUrl(ModSecurityIntervention i);
+
+    @Namespace("modsecurity::intervention") @NoException public static native void freeLog(ModSecurityIntervention i);
+
+    @Namespace("modsecurity::intervention") @NoException public static native @Name("free") void _free(ModSecurityIntervention i);
+
+  // namespace intervention
+// #endif
+
+// #ifdef __cplusplus
+  // namespace modsecurity
+// #endif
+
+// #endif  // HEADERS_MODSECURITY_INTERVENTION_H_
+
+
 // Parsed from modsecurity/audit_log.h
 
 /*
@@ -125,20 +171,9 @@ public class modsecurity extends org.bytedeco.modsecurity.presets.modsecurity {
 // #define HEADERS_MODSECURITY_INTERVENTION_H_
 
 // #ifdef __cplusplus
-// Targeting ../ModSecurityIntervention.java
-
-
+// #endif
 
 // #ifdef __cplusplus
-    @Namespace("modsecurity::intervention") @NoException public static native void reset(ModSecurityIntervention i);
-
-    @Namespace("modsecurity::intervention") @NoException public static native void clean(ModSecurityIntervention i);
-
-    @Namespace("modsecurity::intervention") @NoException public static native void freeUrl(ModSecurityIntervention i);
-
-    @Namespace("modsecurity::intervention") @NoException public static native void freeLog(ModSecurityIntervention i);
-
-    @Namespace("modsecurity::intervention") @NoException public static native @Name("free") void _free(ModSecurityIntervention i);
 
   // namespace intervention
 // #endif
@@ -672,7 +707,7 @@ public static final String CODEPAGE_SEPARATORS =  " \t\n\r";
 
 public static final String MODSECURITY_MAJOR = "3";
 public static final String MODSECURITY_MINOR = "0";
-public static final String MODSECURITY_PATCHLEVEL = "7";
+public static final String MODSECURITY_PATCHLEVEL = "8";
 public static final String MODSECURITY_TAG = "";
 public static final String MODSECURITY_TAG_NUM = "100";
 
@@ -680,7 +715,7 @@ public static final String MODSECURITY_VERSION = MODSECURITY_MAJOR +  "." +
     MODSECURITY_MINOR +  "." +  MODSECURITY_PATCHLEVEL +  
     MODSECURITY_TAG;
 
-public static final int MODSECURITY_VERSION_NUM = 3070100;
+public static final int MODSECURITY_VERSION_NUM = 3080100;
 
 // #define MODSECURITY_CHECK_VERSION(a) (MODSECURITY_VERSION_NUM <= a)
 // Targeting ../ModSecLogCb.java
@@ -1017,41 +1052,6 @@ public static final int MODSECURITY_VERSION_NUM = 3070100;
 
 
 // #endif  // HEADERS_MODSECURITY_TRANSACTION_H_
-
-
-// Parsed from modsecurity/intervention.h
-
-/*
- * ModSecurity, http://www.modsecurity.org/
- * Copyright (c) 2015 - 2021 Trustwave Holdings, Inc. (http://www.trustwave.com/)
- *
- * You may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * If any of the files related to licensing are missing or if you have any
- * other questions related to licensing please contact Trustwave Holdings, Inc.
- * directly using the email address security@modsecurity.org.
- *
- */
-
-// #ifndef HEADERS_MODSECURITY_INTERVENTION_H_
-// #define HEADERS_MODSECURITY_INTERVENTION_H_
-
-// #ifdef __cplusplus
-// #endif
-
-// #ifdef __cplusplus
-
-  // namespace intervention
-// #endif
-
-// #ifdef __cplusplus
-  // namespace modsecurity
-// #endif
-
-// #endif  // HEADERS_MODSECURITY_INTERVENTION_H_
 
 
 }

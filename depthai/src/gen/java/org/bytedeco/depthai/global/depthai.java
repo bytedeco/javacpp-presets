@@ -1315,7 +1315,8 @@ public static final int BOARD_CONFIG_MAGIC2 = BOARD_CONFIG_MAGIC2();
 public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // Watchdog timeout
-@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_WATCHDOG_TIMEOUT();
+@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_USB_WATCHDOG_TIMEOUT();
+@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_TCP_WATCHDOG_TIMEOUT();
 
 // Maximum metadata size
 @Namespace("dai::device") @MemberGetter public static native int XLINK_MESSAGE_METADATA_MAX_SIZE();
