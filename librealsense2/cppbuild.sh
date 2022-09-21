@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBREALSENSE2_VERSION=2.50.0
-LIBUSB_VERSION=1.0.22
+LIBUSB_VERSION=1.0.26
 download https://github.com/IntelRealSense/librealsense/archive/v$LIBREALSENSE2_VERSION.tar.gz librealsense-$LIBREALSENSE2_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
@@ -70,6 +70,13 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
+        ;;
+    macosx-arm64)
+        "$CMAKE" -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_THREAD_LIBS_INIT="-lpthread" -DBUILD_WITH_OPENMP=false -DCMAKE_OSX_DEPLOYMENT_TARGET=11 -DHWM_OVER_XU=false -G Xcode .
+        xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
+        cp -a Release/*.dylib "$INSTALL_PATH/lib"
+        cp -a include/* "$INSTALL_PATH/include"
+        install_name_tool -change /opt/homebrew/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
         ;;
     windows-x86)
         mkdir -p build
