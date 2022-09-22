@@ -64,6 +64,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
       <classifier>${javacpp.platform.windows-x86}</classifier>
     </dependency>
     <dependency>
@@ -134,6 +140,7 @@
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
+                      requires static org.bytedeco.${javacpp.moduleId}.macosx.arm64;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
