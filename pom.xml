@@ -1453,6 +1453,7 @@
         <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
+        <module>librealsense2</module>
         <module>tesseract</module>
       </modules>
       <properties>
