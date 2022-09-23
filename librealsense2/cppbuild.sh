@@ -72,11 +72,10 @@ case $PLATFORM in
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
         ;;
     macosx-arm64)
-        "$CMAKE" -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_THREAD_LIBS_INIT="-lpthread" -DBUILD_WITH_OPENMP=false -DCMAKE_OSX_DEPLOYMENT_TARGET=11 -DHWM_OVER_XU=false -G Xcode .
-        xcodebuild -scheme realsense2 -configuration Release MACOSX_DEPLOYMENT_TARGET=11
-        cp -a Release/*.dylib "$INSTALL_PATH/lib"
-        cp -a include/* "$INSTALL_PATH/include"
-        install_name_tool -change /opt/homebrew/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
+        "$CMAKE" -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF -DCMAKE_THREAD_LIBS_INIT="-lpthread" -DBUILD_WITH_OPENMP=false -DHWM_OVER_XU=false .
+        make -j $MAKEJ
+        make install/strip
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
         ;;
     windows-x86)
         mkdir -p build
