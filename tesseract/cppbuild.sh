@@ -24,7 +24,7 @@ sedinplace '/  FATAL_ERROR/d' CMakeLists.txt
 sedinplace '/find_package(TIFF)/d' CMakeLists.txt
 sedinplace '/pkg_check_modules(TIFF/d' CMakeLists.txt
 sedinplace 's/if(COMPILER_SUPPORTS_MARCH_NATIVE)/if(FALSE)/g' CMakeLists.txt
-sedinplace 's/num_threads([^)]*)//g' src/ccmain/par_control.cpp src/lstm/*.cpp
+sedinplace 's/num_threads([^)]*)/num_threads(4)/g' src/ccmain/par_control.cpp src/lstm/*.cpp
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
