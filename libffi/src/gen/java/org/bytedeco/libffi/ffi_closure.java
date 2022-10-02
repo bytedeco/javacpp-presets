@@ -47,5 +47,7 @@ public class ffi_closure extends Pointer {
   }
   public native Fun_ffi_cif_Pointer_PointerPointer_Pointer fun(); public native ffi_closure fun(Fun_ffi_cif_Pointer_PointerPointer_Pointer setter);
   public native Pointer user_data(); public native ffi_closure user_data(Pointer setter);
+// #if defined(_MSC_VER) && defined(_M_IX86)
+// #endif
 }
     

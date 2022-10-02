@@ -12,14 +12,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>5.1.1-1.5.8-SNAPSHOT</version>
+            <version>5.1.2-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional GPL builds with (almost) everything enabled -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform-gpl</artifactId>
-            <version>5.1.1-1.5.8-SNAPSHOT</version>
+            <version>5.1.2-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

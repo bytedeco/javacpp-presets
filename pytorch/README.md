@@ -69,7 +69,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2022.0-1.5.8-SNAPSHOT</version>
+            <version>2022.2-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

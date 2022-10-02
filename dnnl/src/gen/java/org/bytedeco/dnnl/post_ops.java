@@ -51,6 +51,13 @@ public class post_ops extends dnnl_post_ops_handle {
 
     /** Constructs an empty sequence of post-ops. */
 
+    /** Creates post-ops primitive attribute from a C API ::dnnl_post_ops_t
+     *  handle. The resulting handle is not weak and the C handle will be
+     *  destroyed during the destruction of the C++ object.
+     * 
+     *  @param post_ops The C API post-ops primitive attribute. */
+    
+
     /** Returns the number of post-ops entries. */
     public native int len();
 
@@ -270,12 +277,15 @@ public class post_ops extends dnnl_post_ops_handle {
                 @Cast("dnnl::memory::dim") long padding_l_size, int mask,
                 @StdVector float[] scales);
 
-    /** Returns the parameters of an depthwise post-op with stride 1.
+    /** Returns the parameters of an depthwise post-op.
      * 
      *  @param index Index of the elementwise post-op.
      *  @param weights_data_type Weights data type of depthwise post-op
      *  @param bias_data_type Bias data type of depthwise post-op
      *  @param dst_data_type Output data type of depthwise post-op
+     *  @param kernel_size Size of kernel of depthwise post-op
+     *  @param stride_size Size of stride of depthwise post-op
+     *  @param padding_l_size Size of left and top paddings of depthwise post-op
      *  @param mask Output scaling factors correspondence mask that defines the
      *      correspondence between the output tensor dimensions and the
      *      \p scales array. The set i-th bit indicates that a dedicated output
@@ -492,6 +502,8 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
+    ///
+    ///
     public native void get_params_binary(
                 int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef memory.desc src1_desc);
     public native void get_params_binary(
@@ -532,8 +544,9 @@ public class post_ops extends dnnl_post_ops_handle {
      * 
      *      conv_args.insert(
      *       {DNNL_ARG_ATTR_MULTIPLE_POST_OP(0) | DNNL_ARG_WEIGHTS, prelu_weights})
-
-     *  @note
+     *  }</pre>
+     * 
+     *  \note
      *      The order of dimensions does not depend on how elements are laid
      *      out in memory. For example:
      *      - for a 2D CNN activations tensor the order is always (n, c)
@@ -543,8 +556,8 @@ public class post_ops extends dnnl_post_ops_handle {
      * 
      *     Prelu weights tensor is passed in runtime execution phase. Prelu
      *     weights tensor data type is implicitly assumed as f32 using plain
-     *     layout (a, ab, acb, acdb, acdeb)
-
+     *     layout (a, ab, acb, acdb, acdeb).
+     * 
      *  @param mask Defines the correspondence between the output tensor
      *      dimensions and the prelu weights tensor. The set i-th bit indicates
      *      that a dedicated weights value is used for each index along that
@@ -557,7 +570,7 @@ public class post_ops extends dnnl_post_ops_handle {
     /** Returns the parameters of a prelu post-op.
      * 
      *  @param index Index of the prelu post-op.
-     *  @param maks Weights mask of prelu post-op. */
+     *  @param mask Weights mask of prelu post-op. */
     public native void get_params_prelu(int index, @ByRef IntPointer mask);
     public native void get_params_prelu(int index, @ByRef IntBuffer mask);
     public native void get_params_prelu(int index, @ByRef int[] mask);

@@ -13,7 +13,7 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_layer_normalization
+/** \} dnnl_api_layer_normalization_v2
  <p>
  *  \addtogroup dnnl_api_inner_product Inner Product
  * 

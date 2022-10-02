@@ -101,7 +101,13 @@ public static final int
     /** 8-bit signed integer. */
     dnnl_s8 = 5,
     /** 8-bit unsigned integer. */
-    dnnl_u8 = 6;
+    dnnl_u8 = 6,
+    /** 64-bit/double-precision floating point. */
+    dnnl_f64 = 7,
+
+    /** Parameter to allow internal only data_types without undefined behavior.
+     *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
+    dnnl_data_type_max = 0x7fff;
 
 /** Memory format kind */
 /** enum dnnl_format_kind_t */
@@ -784,10 +790,14 @@ public static final int
     dnnl_adbc = 511,
     dnnl_ABcde16a16b2a = 512,
     dnnl_aBCdef16b16c2b = 513,
+    dnnl_Acedb16a = 514,
+    dnnl_aBdfec16b = 515,
+    dnnl_abdEC64e2c = 516,
+    dnnl_abdEC64e4c = 517,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 514,
+    dnnl_format_tag_last = 518,
 
     // Aliases
 
@@ -924,6 +934,8 @@ public static final int
     dnnl_ldgOi32o = dnnl_abdEc32e,
     dnnl_ldgOI32o2i = dnnl_abdEC32e2c,
     dnnl_ldgOI32o4i = dnnl_abdEC32e4c,
+    dnnl_ldgOI64o2i = dnnl_abdEC64e2c,
+    dnnl_ldgOI64o4i = dnnl_abdEC64e4c,
     dnnl_ldgIo32i = dnnl_abdCe32c,
     dnnl_ldgIO32i2o = dnnl_abdCE32c2e,
 
@@ -1059,6 +1071,7 @@ public static final int
     dnnl_OdhwI16o4i = dnnl_AcdeB16a4b,
     dnnl_Odhwi4o = dnnl_Acdeb4a,
     dnnl_Odhwi8o = dnnl_Acdeb8a,
+    dnnl_Odwhi16o = dnnl_Acedb16a,
     dnnl_OIdhw16i16o = dnnl_ABcde16b16a,
     dnnl_OIdhw16i32o = dnnl_ABcde16b32a,
     dnnl_OIdhw16i64o = dnnl_ABcde16b64a,
@@ -1179,6 +1192,7 @@ public static final int
     dnnl_gOdhwI16o4i = dnnl_aBdefC16b4c,
     dnnl_gOdhwi4o = dnnl_aBdefc4b,
     dnnl_gOdhwi8o = dnnl_aBdefc8b,
+    dnnl_gOdwhi16o = dnnl_aBdfec16b,
     dnnl_gOIdhw16i16o = dnnl_aBCdef16c16b,
     dnnl_gOIdhw4i16o4i = dnnl_aBCdef4c16b4c,
     dnnl_gOIdhw16i16o4i = dnnl_aBCdef16c16b4c,
@@ -1479,6 +1493,9 @@ public static final int
     /** A softmax version 2 primitive (softmax with destination memory
      *  descriptor and algorithm kind). */
     dnnl_softmax_v2 = 23,
+    /** A layer normalization version 2 primitive (layer normalization with
+     *  destination memory descriptor). */
+    dnnl_layer_normalization_v2 = 24,
 
     /** Parameter to allow internal only primitives without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -1516,6 +1533,10 @@ public static final int
     dnnl_eltwise_bounded_relu = 0x8f,
     /** Eltwise: soft_relu */
     dnnl_eltwise_soft_relu = 0x9f,
+    /** Eltwise: soft_relu version 2 */
+    dnnl_eltwise_soft_relu_v2 = 0xa0,
+    /** Eltwise: hardsigmoid */
+    dnnl_eltwise_hardsigmoid = 0xa1,
     /** Eltwise: logistic */
     dnnl_eltwise_logistic = 0xaf,
     /** Eltwise: exponent */
@@ -1726,7 +1747,24 @@ public static final int
      *     results
      *   - on backward propagation (for prop_kind == #dnnl_backward) compute
      *     diff wrt shift (hence one extra output used) */
-    dnnl_use_shift = 0x10;
+    
+///
+///
+    dnnl_use_shift = 0x10,
+
+    /** Fuse with Add and then fuse with ReLU
+     * 
+     *  If specified:
+     * 
+     *   - on forward propagation apply element-wise binary Add operation to
+     *     to the normalization results with an additional input tensor and then
+     *     apply ReLU with negative slope being 0.
+     *   - on training primitive requires workspace (required to be able to
+     *     perform backward pass).
+     *   - on backward propagation save the result of backward ReLU operation
+     *     with input tensor and workspace from forward pass to extra output
+     *     tensor and then perform backward normalization. */
+    dnnl_fuse_norm_add_relu = 0x20;
 
 /** \} dnnl_api_primitives_common
  *  \} dnnl_api_primitives
@@ -1907,6 +1945,9 @@ public static final int
 // Targeting ../dnnl_layer_normalization_desc_t.java
 
 
+// Targeting ../dnnl_layer_normalization_v2_desc_t.java
+
+
 // Targeting ../dnnl_inner_product_desc_t.java
 
 
@@ -2003,7 +2044,9 @@ public static final int
     /** Implicit f32->f16 conversions allowed */
     dnnl_fpmath_mode_f16 = 2,
     /** Implicit f32->f16 or f32->bf16 conversions allowed */
-    dnnl_fpmath_mode_any = 3;
+    dnnl_fpmath_mode_any = 3,
+    /** Implicit f32->tf32 conversions allowed */
+    dnnl_fpmath_mode_tf32 = 4;
 
 /** Scratchpad mode */
 /** enum dnnl_scratchpad_mode_t */
@@ -2282,8 +2325,7 @@ public static final int DNNL_ARG_ATTR_INPUT_SCALES = 1048576;
  * 
  *  Query kind                      | Type of query result
  *  --------------------------------|-----------------------------
- *  #dnnl_query_engine              | #dnnl_engine_t *
- *  #dnnl_query_scratchpad_engine   | #dnnl_engine_t *
+ *  dnnl_query_*_engine             | #dnnl_engine_t *
  *  #dnnl_query_primitive_kind      | #dnnl_primitive_kind_t *
  *  dnnl_query_*_s32                | int *
  *  dnnl_query_*_s64                | #dnnl_dim_t * (same as int64_t *)
@@ -2393,6 +2435,8 @@ public static final int
     dnnl_query_prelu_d = 84,
     /** softmax version 2 descriptor */
     dnnl_query_softmax_v2_d = 85,
+    /** layer normalization version 2 descriptor */
+    dnnl_query_layer_normalization_v2_d = 86,
 
     // memory descriptor section
     /** stub */
@@ -2530,7 +2574,12 @@ public static final int
      *  and Intel Core processor family. */
     dnnl_cpu_isa_avx512_core_bf16 = 0xe7,
 
-    /** Intel AVX-512, Intel DL Boost and bfloat16 support and
+    /** Intel AVX-512 with float16, Intel DL Boost and bfloat16 support
+     *  for Intel Xeon Scalable processor family
+     *  and Intel Core processor family. */
+    dnnl_cpu_isa_avx512_core_fp16 = 0x1e7,
+
+    /** Intel AVX-512 with float16, Intel DL Boost and bfloat16 support and
      *  Intel AMX with 8-bit integer and bfloat16 support */
     dnnl_cpu_isa_avx512_core_amx = 0x3e7,
 
@@ -2666,6 +2715,9 @@ public static final int DNNL_GPU_RUNTIME = DNNL_RUNTIME_OCL;
 // When defined, SYCL CUDA backend is used.
 /* #undef DNNL_SYCL_CUDA */
 
+// When defined, SYCL HIP backend is used.
+/* #undef DNNL_SYCL_HIP */
+
 // When defined, stack checker is enabled.
 /* #undef DNNL_ENABLE_STACK_CHECKER */
 
@@ -2741,10 +2793,10 @@ public static final int BUILD_XEHPC = 0;
 public static final int DNNL_VERSION_MAJOR = 2;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 6;
+public static final int DNNL_VERSION_MINOR = 7;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 2;
+public static final int DNNL_VERSION_PATCH = 0;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -3202,6 +3254,7 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_get_fpmath_m
  *      #dnnl_fpmath_mode_strict (default),
  *      #dnnl_fpmath_mode_bf16,
  *      #dnnl_fpmath_mode_f16,
+ *      #dnnl_fpmath_mode_tf32,
  *      #dnnl_fpmath_mode_any.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
@@ -3548,6 +3601,19 @@ public static native @Cast("dnnl_status_t") int dnnl_primitive_attr_set_post_ops
 ///
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_create(@ByPtrPtr dnnl_post_ops post_ops);
 public static native @Cast("dnnl_status_t") int dnnl_post_ops_create(@Cast("dnnl_post_ops_t*") PointerPointer post_ops);
+
+/** Clones post-ops primitive attribute.
+ * 
+ *  @param post_ops Output post-ops primitive attribute.
+ *  @param existing_post_ops Post-ops primitive attribute to clone.
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_clone(
+        @ByPtrPtr dnnl_post_ops post_ops, @Const dnnl_post_ops existing_post_ops);
+public static native @Cast("dnnl_status_t") int dnnl_post_ops_clone(
+        @Cast("dnnl_post_ops_t*") PointerPointer post_ops, @Const dnnl_post_ops existing_post_ops);
 
 /** Destroys post-ops.
  * 
@@ -6054,6 +6120,74 @@ public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_backwar
 
 /** \} dnnl_api_layer_normalization
  <p>
+ *  \addtogroup dnnl_api_layer_normalization_v2
+ *  \{
+ <p>
+ *  Initializes a descriptor for layer normalization v2 forward propagation
+ *  primitive.
+ * 
+ *  \note
+ *      In-place operation is supported: the dst can refer to the same memory
+ *      as the src.
+ * 
+ *  @param lnrm_desc Output descriptor for layer normalization primitive.
+ *  @param prop_kind Propagation kind. Possible values are
+ *      #dnnl_forward_training and #dnnl_forward_inference.
+ *  @param src_desc Source memory descriptor.
+ *  @param dst_desc Destination memory descriptor.
+ *  @param stat_desc Memory descriptor for mean and variance. If this
+ *      parameter is NULL, a zero memory descriptor, or a memory descriptor
+ *      with format_kind set to #dnnl_format_kind_undef, then the memory
+ *      descriptor for stats is derived from \p data_desc by removing the last
+ *      dimension.
+ *  @param epsilon Layer normalization epsilon parameter.
+ *  @param flags Layer normalization flags (\ref dnnl_normalization_flags_t).
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_v2_forward_desc_init(
+        dnnl_layer_normalization_v2_desc_t lnrm_desc,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc_t src_desc,
+        @Const dnnl_memory_desc_t dst_desc, @Const dnnl_memory_desc_t stat_desc,
+        float epsilon, @Cast("unsigned") int flags);
+
+/** Initializes a descriptor for a layer normalization v2 backward propagation
+ *  primitive.
+ * 
+ *  \note
+ *      In-place operation is supported: the diff_dst can refer to the same
+ *      memory as the diff_src.
+ * 
+ *  @param lnrm_desc Output descriptor for layer normalization primitive.
+ *  @param prop_kind Propagation kind. Possible values are
+ *      #dnnl_backward_data and #dnnl_backward (diffs for all parameters are
+ *      computed in this case).
+ *  @param diff_src_desc Diff source memory descriptor.
+ *  @param diff_dst_desc Diff destination memory descriptor.
+ *  @param src_desc Source memory descriptor.
+ *  @param stat_desc Memory descriptor for mean and variance. If this
+ *      parameter is NULL, a zero memory descriptor, or a memory descriptor
+ *      with format_kind set to #dnnl_format_kind_undef, then the memory
+ *      descriptor for stats is derived from \p data_desc by removing the last
+ *      dimension.
+ *  @param epsilon Layer normalization epsilon parameter.
+ *  @param flags Layer normalization flags (\ref dnnl_normalization_flags_t).
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_layer_normalization_v2_backward_desc_init(
+        dnnl_layer_normalization_v2_desc_t lnrm_desc,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc_t diff_src_desc,
+        @Const dnnl_memory_desc_t diff_dst_desc,
+        @Const dnnl_memory_desc_t src_desc, @Const dnnl_memory_desc_t stat_desc,
+        float epsilon, @Cast("unsigned") int flags);
+
+/** \} dnnl_api_layer_normalization_v2
+ <p>
  *  \addtogroup dnnl_api_inner_product
  *  \{
  <p>
@@ -7714,6 +7848,7 @@ public static native @Cast("dnnl_status_t") int dnnl_get_default_fpmath_mode(@Ca
  *      #dnnl_fpmath_mode_strict,
  *      #dnnl_fpmath_mode_bf16,
  *      #dnnl_fpmath_mode_f16,
+ *      #dnnl_fpmath_mode_tf32,
  *      #dnnl_fpmath_mode_any.
  *  @return #dnnl_success on success and a status describing the error
  *      otherwise. */
@@ -7851,7 +7986,7 @@ public static native @Cast("dnnl_status_t") int dnnl_set_jit_profiling_jitdumpdi
  *      The ISAs are only partially ordered:
  *          - SSE41 < AVX < AVX2,
  *          - AVX2 < AVX512_CORE < AVX512_CORE_VNNI < AVX512_CORE_BF16
- *            < AVX512_CORE_AMX,
+ *            < AVX512_CORE_FP16 < AVX512_CORE_AMX,
  *          - AVX2 < AVX2_VNNI.
  * 
  *  @see \ref dev_guide_cpu_dispatcher_control for more details
@@ -8299,6 +8434,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     bf16(dnnl_fpmath_mode_bf16),
     /** Implicit f32->f16 conversions allowed */
     f16(dnnl_fpmath_mode_f16),
+    /** Implicit f32->tf32 conversions allowed */
+    tf32(dnnl_fpmath_mode_tf32),
     /** Implicit f32->f16 or f32->bf16 conversions allowed */
     any(dnnl_fpmath_mode_any);
 
@@ -8428,6 +8565,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     eltwise_bounded_relu(dnnl_eltwise_bounded_relu),
     /** Elementwise: soft_relu */
     eltwise_soft_relu(dnnl_eltwise_soft_relu),
+    /** Elementwise: soft_relu version 2 */
+    eltwise_soft_relu_v2(dnnl_eltwise_soft_relu_v2),
     /** Elementwise: logsigmoid */
     eltwise_logsigmoid(dnnl_eltwise_logsigmoid),
     /** Elementwise: mish */
@@ -8455,6 +8594,8 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     eltwise_round(dnnl_eltwise_round),
     /** Elementwise: hardswish */
     eltwise_hardswish(dnnl_eltwise_hardswish),
+    /** Elementwise: hardsigmoid */
+    eltwise_hardsigmoid(dnnl_eltwise_hardsigmoid),
     /** Elementwise: rectified linar unit (ReLU) (dst for backward) */
     eltwise_relu_use_dst_for_bwd(dnnl_eltwise_relu_use_dst_for_bwd),
     /** Elementwise: hyperbolic tangent non-linearity (tanh) (dst for backward) */
@@ -8595,6 +8736,11 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
      *  workspace is not required and behavior is the same as when normalization
      *  is fused with ReLU using the post-ops API. */
     fuse_norm_relu(dnnl_fuse_norm_relu),
+
+    /** Fuse normalization with elementwise binary Add and then fuse with ReLU.
+     *  On training, normalization will require the workspace to implement
+     *  backward propagation. On inference, the workspace is not required. */
+    fuse_norm_add_relu(dnnl_fuse_norm_add_relu),
 
     /** Use scale parameter. If specified, the user is expected to pass scale as
      *  input on forward propagation. On backward propagation of type
@@ -9261,7 +9407,9 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
     /** \copydoc dnnl_cpu_isa_avx512_core_amx */
     avx512_core_amx(dnnl_cpu_isa_avx512_core_amx),
     /** \copydoc dnnl_cpu_isa_avx2_vnni */
-    avx2_vnni(dnnl_cpu_isa_avx2_vnni);
+    avx2_vnni(dnnl_cpu_isa_avx2_vnni),
+    /** \copydoc dnnl_cpu_isa_avx512_core_fp16 */
+    avx512_core_fp16(dnnl_cpu_isa_avx512_core_fp16);
 
     public final int value;
     private cpu_isa(int v) { this.value = v; }

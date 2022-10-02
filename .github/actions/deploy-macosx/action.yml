@@ -65,9 +65,9 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18346/m_onemkl_p_2022.0.0.105_offline.dmg
-          hdiutil mount m_onemkl_p_2022.0.0.105_offline.dmg
-          sudo /Volumes/m_onemkl_p_2022.0.0.105_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18900/m_onemkl_p_2022.2.0.8687_offline.dmg
+          hdiutil mount m_onemkl_p_2022.2.0.8687_offline.dmg
+          sudo /Volumes/m_onemkl_p_2022.2.0.8687_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
         fi
 
         GRADLE_TASK=publishToMavenLocal

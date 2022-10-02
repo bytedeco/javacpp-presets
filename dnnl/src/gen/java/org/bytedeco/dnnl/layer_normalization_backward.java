@@ -37,7 +37,7 @@ public class layer_normalization_backward extends primitive {
     
         
         ///
-        public native @ByRef dnnl_layer_normalization_desc_t data(); public native desc data(dnnl_layer_normalization_desc_t setter);
+        public native @ByRef dnnl_layer_normalization_v2_desc_t data(); public native desc data(dnnl_layer_normalization_v2_desc_t setter);
 
         /** Constructs a descriptor for layer normalization backward
          *  propagation primitive.
@@ -79,6 +79,8 @@ public class layer_normalization_backward extends primitive {
          *  @param epsilon Layer normalization epsilon parameter.
          *  @param flags Layer normalization flags (\ref
          *      dnnl::normalization_flags). */
+        
+        ///
         public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float epsilon,
                         normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
@@ -90,6 +92,36 @@ public class layer_normalization_backward extends primitive {
                         @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
         private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags);
+
+        /** Constructs a descriptor for layer normalization backward
+         *  propagation primitive.
+         * 
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
+         *      (diffs for all parameters are computed in this case).
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param src_desc Source memory descriptor.
+         *  @param stat_desc Statistics memory descriptors.
+         *  @param epsilon Layer normalization epsilon parameter.
+         *  @param flags Layer normalization flags (\ref
+         *      dnnl::normalization_flags). */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc stat_desc, float epsilon,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc stat_desc, float epsilon,
+                        normalization_flags flags);
+        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc stat_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags); }
+        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_src_desc,
+                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc stat_desc, float epsilon,
                         @Cast("dnnl::normalization_flags") int flags);
     }
 

@@ -473,6 +473,8 @@ public static final int __CL_HAS_ANON_STRUCT__ = __CL_HAS_ANON_STRUCT__();
 // #define  __CL_ANON_STRUCT__
 // #elif defined(__GNUC__) && ! defined(__STRICT_ANSI__)
 // #define  __CL_ANON_STRUCT__ __extension__
+// #elif defined(__clang__)
+// #define  __CL_ANON_STRUCT__ __extension__
 // #else
 // #define  __CL_ANON_STRUCT__
 // #endif

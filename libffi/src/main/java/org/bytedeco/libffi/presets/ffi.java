@@ -63,6 +63,7 @@ public class ffi implements InfoMapper {
                .put(new Info("defined (POWERPC64)", "LONG_LONG_MAX", "1").define(true))
                .put(new Info("FFI_GO_CLOSURES", "!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE",
                              "defined(_WIN32)", "defined(X86_WIN32)", "defined(X86_WIN64)", "X86_WIN64",
+                             "defined(_MSC_VER) && defined(_M_IX86)",
                              "defined __x86_64__ && defined __ILP32__",
                              "defined(X86_64) || (defined (__x86_64__) && defined (X86_DARWIN))",
                              "defined(__ARM_PCS_VFP) || defined(_M_ARM)",
