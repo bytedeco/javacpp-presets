@@ -139,6 +139,8 @@ public class memory extends dnnl_memory_handle {
         bf16(dnnl_bf16),
         /** [32-bit/single-precision floating point](https://en.wikipedia.org/wiki/Single-precision_floating-point_format). */
         f32(dnnl_f32),
+        //// [64-bit/double-precision floating point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
+        f64(dnnl_f64),
         /** 32-bit signed integer. */
         s32(dnnl_s32),
         /** 8-bit signed integer. */
@@ -1360,7 +1362,15 @@ public class memory extends dnnl_memory_handle {
         AB16a16b(dnnl_AB16a16b),
         AB16a32b(dnnl_AB16a32b),
         ABcde16a16b2a(dnnl_ABcde16a16b2a),
-        aBCdef16b16c2b(dnnl_aBCdef16b16c2b);
+        aBCdef16b16c2b(dnnl_aBCdef16b16c2b),
+        Acedb16a(dnnl_Acedb16a),
+        aBdfec16b(dnnl_aBdfec16b),
+        Odwhi16o(dnnl_Odwhi16o),
+        gOdwhi16o(dnnl_gOdwhi16o),
+        abdEC64e2c(dnnl_abdEC64e2c),
+        abdEC64e4c(dnnl_abdEC64e4c),
+        ldgOI64o2i(abdEC64e2c.value),
+        ldgOI64o4i(abdEC64e4c.value);
 
         public final int value;
         private format_tag(int v) { this.value = v; }

@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FFmpeg 5.1.1  http://ffmpeg.org/
+ * FFmpeg 5.1.2  http://ffmpeg.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,14 +46,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>5.1.1-1.5.8-SNAPSHOT</version>
+            <version>5.1.2-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional GPL builds with (almost) everything enabled -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform-gpl</artifactId>
-            <version>5.1.1-1.5.8-SNAPSHOT</version>
+            <version>5.1.2-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

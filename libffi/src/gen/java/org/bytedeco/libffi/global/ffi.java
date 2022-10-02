@@ -58,6 +58,9 @@ public class ffi extends org.bytedeco.libffi.presets.ffi {
 
 // #if defined (X86_64) && defined (__i386__)
 // #undef X86_64
+// #warning ******************************************************
+// #warning ********** X86 IS DEFINED ****************************
+// #warning ******************************************************
 // #define X86
 // #endif
 
@@ -81,7 +84,7 @@ public class ffi extends org.bytedeco.libffi.presets.ffi {
 
 /** enum ffi_abi */
 public static final int
-// #if defined(X86_WIN64)  
+// #if defined(X86_WIN64)
 
 // #elif defined(X86_64) || (defined (__x86_64__) && defined (X86_DARWIN))
 
@@ -137,12 +140,11 @@ public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // #endif
 
 
-
 // Parsed from ffi.h
 
 /* -----------------------------------------------------------------*-C-*-
-   libffi 3.4.2
-     - Copyright (c) 2011, 2014, 2019, 2021 Anthony Green
+   libffi 3.4.3
+     - Copyright (c) 2011, 2014, 2019, 2021, 2022 Anthony Green
      - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
 
    Permission is hereby granted, free of charge, to any person
@@ -196,6 +198,30 @@ public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // #endif
 
 /* ---- System configuration information --------------------------------- */
+
+/* If these change, update src/mips/ffitarget.h. */
+public static final int FFI_TYPE_VOID =       0;
+public static final int FFI_TYPE_INT =        1;
+public static final int FFI_TYPE_FLOAT =      2;
+public static final int FFI_TYPE_DOUBLE =     3;
+// #if 1
+public static final int FFI_TYPE_LONGDOUBLE = 4;
+// #else
+// #endif
+public static final int FFI_TYPE_UINT8 =      5;
+public static final int FFI_TYPE_SINT8 =      6;
+public static final int FFI_TYPE_UINT16 =     7;
+public static final int FFI_TYPE_SINT16 =     8;
+public static final int FFI_TYPE_UINT32 =     9;
+public static final int FFI_TYPE_SINT32 =     10;
+public static final int FFI_TYPE_UINT64 =     11;
+public static final int FFI_TYPE_SINT64 =     12;
+public static final int FFI_TYPE_STRUCT =     13;
+public static final int FFI_TYPE_POINTER =    14;
+public static final int FFI_TYPE_COMPLEX =    15;
+
+/* This should always refer to the last type code (for sanity checks).  */
+public static final int FFI_TYPE_LAST =       FFI_TYPE_COMPLEX;
 
 // #include <ffitarget.h>
 
@@ -501,30 +527,6 @@ public static native @Cast("ffi_status") int ffi_get_struct_offsets(@Cast("ffi_a
 /* ---- Definitions shared with assembly code ---------------------------- */
 
 // #endif
-
-/* If these change, update src/mips/ffitarget.h. */
-public static final int FFI_TYPE_VOID =       0;
-public static final int FFI_TYPE_INT =        1;
-public static final int FFI_TYPE_FLOAT =      2;
-public static final int FFI_TYPE_DOUBLE =     3;
-// #if 1
-public static final int FFI_TYPE_LONGDOUBLE = 4;
-// #else
-// #endif
-public static final int FFI_TYPE_UINT8 =      5;
-public static final int FFI_TYPE_SINT8 =      6;
-public static final int FFI_TYPE_UINT16 =     7;
-public static final int FFI_TYPE_SINT16 =     8;
-public static final int FFI_TYPE_UINT32 =     9;
-public static final int FFI_TYPE_SINT32 =     10;
-public static final int FFI_TYPE_UINT64 =     11;
-public static final int FFI_TYPE_SINT64 =     12;
-public static final int FFI_TYPE_STRUCT =     13;
-public static final int FFI_TYPE_POINTER =    14;
-public static final int FFI_TYPE_COMPLEX =    15;
-
-/* This should always refer to the last type code (for sanity checks).  */
-public static final int FFI_TYPE_LAST =       FFI_TYPE_COMPLEX;
 
 // #ifdef __cplusplus
 // #endif
