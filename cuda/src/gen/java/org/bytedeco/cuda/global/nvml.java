@@ -18,7 +18,7 @@ public class nvml extends org.bytedeco.cuda.presets.nvml {
 // Parsed from <nvml.h>
 
 /*
- * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2022 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO USER:
  *
@@ -217,7 +217,7 @@ public static final int
 /**
  * Maximum number of NvLink links supported
  */
-public static final int NVML_NVLINK_MAX_LINKS = 12;
+public static final int NVML_NVLINK_MAX_LINKS = 18;
 
 /**
  * Enum to represent the NvLink utilization counter packet units
@@ -421,6 +421,54 @@ public static final int
     // Keep this last
     NVML_PERF_POLICY_COUNT = 12;
 // Targeting ../nvml/nvmlViolationTime_t.java
+
+
+
+public static final int NVML_MAX_THERMAL_SENSORS_PER_GPU =  3;
+
+/** enum nvmlThermalTarget_t */
+public static final int
+    NVML_THERMAL_TARGET_NONE          = 0,
+    /** GPU core temperature requires NvPhysicalGpuHandle */
+    NVML_THERMAL_TARGET_GPU           = 1,
+    /** GPU memory temperature requires NvPhysicalGpuHandle */
+    NVML_THERMAL_TARGET_MEMORY        = 2,
+    /** GPU power supply temperature requires NvPhysicalGpuHandle */
+    NVML_THERMAL_TARGET_POWER_SUPPLY  = 4,
+    /** GPU board ambient temperature requires NvPhysicalGpuHandle */
+    NVML_THERMAL_TARGET_BOARD         = 8,
+    /** Visual Computing Device Board temperature requires NvVisualComputingDeviceHandle */
+    NVML_THERMAL_TARGET_VCD_BOARD     = 9,
+    /** Visual Computing Device Inlet temperature requires NvVisualComputingDeviceHandle */
+    NVML_THERMAL_TARGET_VCD_INLET     = 10,
+    /** Visual Computing Device Outlet temperature requires NvVisualComputingDeviceHandle */
+    NVML_THERMAL_TARGET_VCD_OUTLET    = 11,
+
+    NVML_THERMAL_TARGET_ALL           = 15,
+    NVML_THERMAL_TARGET_UNKNOWN       = -1;
+
+/** enum nvmlThermalController_t */
+public static final int
+    NVML_THERMAL_CONTROLLER_NONE = 0,
+    NVML_THERMAL_CONTROLLER_GPU_INTERNAL = 1,
+    NVML_THERMAL_CONTROLLER_ADM1032 = 2,
+    NVML_THERMAL_CONTROLLER_ADT7461 = 3,
+    NVML_THERMAL_CONTROLLER_MAX6649 = 4,
+    NVML_THERMAL_CONTROLLER_MAX1617 = 5,
+    NVML_THERMAL_CONTROLLER_LM99 = 6,
+    NVML_THERMAL_CONTROLLER_LM89 = 7,
+    NVML_THERMAL_CONTROLLER_LM64 = 8,
+    NVML_THERMAL_CONTROLLER_G781 = 9,
+    NVML_THERMAL_CONTROLLER_ADT7473 = 10,
+    NVML_THERMAL_CONTROLLER_SBMAX6649 = 11,
+    NVML_THERMAL_CONTROLLER_VBIOSEVT = 12,
+    NVML_THERMAL_CONTROLLER_OS = 13,
+    NVML_THERMAL_CONTROLLER_NVSYSCON_CANOAS = 14,
+    NVML_THERMAL_CONTROLLER_NVSYSCON_E551 = 15,
+    NVML_THERMAL_CONTROLLER_MAX6649R = 16,
+    NVML_THERMAL_CONTROLLER_ADT7473S = 17,
+    NVML_THERMAL_CONTROLLER_UNKNOWN = -1;
+// Targeting ../nvml/nvmlGpuThermalSettings_t.java
 
 
 
@@ -650,12 +698,15 @@ public static final int
  *
  * Windows only.
  */
+
 /** enum nvmlDriverModel_t */
 public static final int
     /** WDDM driver model -- GPU treated as a display device */
-    NVML_DRIVER_WDDM      = 0,
+    NVML_DRIVER_WDDM = 0,
     /** WDM (TCC) model (recommended) -- GPU treated as a generic device */
-    NVML_DRIVER_WDM       = 1;
+    NVML_DRIVER_WDM = 1;
+
+public static final int NVML_MAX_GPU_PERF_PSTATES = 16;
 
 /**
  * Allowed PStates.
@@ -789,6 +840,8 @@ public static final int
     NVML_ERROR_INSUFFICIENT_RESOURCES = 23,
     /** Ran out of critical resources, other than memory */
     NVML_ERROR_FREQ_NOT_SUPPORTED = 24,
+    /** The provided version is invalid/unsupported */
+    NVML_ERROR_ARGUMENT_VERSION_MISMATCH = 25,
     /** An internal driver error occurred */
     NVML_ERROR_UNKNOWN = 999;
 
@@ -846,19 +899,6 @@ public static final int
     // Keep this last
     NVML_RESTRICTED_API_COUNT = 2;
 
-/**
- * Enum to represent NvLink ECC per-lane error counts
- */
-/** enum nvmlNvLinkEccLaneErrorCounter_t */
-public static final int
-    NVML_NVLINK_ERROR_DL_ECC_LANE0 = 0, // Data link receive ECC error counter lane 0
-    NVML_NVLINK_ERROR_DL_ECC_LANE1 = 1, // Data link receive ECC error counter lane 1
-    NVML_NVLINK_ERROR_DL_ECC_LANE2 = 2, // Data link receive ECC error counter lane 2
-    NVML_NVLINK_ERROR_DL_ECC_LANE3 = 3, // Data link receive ECC error counter lane 3
-
-    // this must be last
-    NVML_NVLINK_ERROR_DL_ECC_COUNT = 4;
-
 /** \} */
 
 /***************************************************************************************************/
@@ -908,7 +948,7 @@ public static final int
     NVML_VGPU_VM_ID_UUID = 1;
 
 /**
- * vGPU GUEST info state.
+ * vGPU GUEST info state
  */
 /** enum nvmlVgpuGuestInfoState_t */
 public static final int
@@ -948,6 +988,18 @@ public static final int NVML_GRID_LICENSE_EXPIRY_VALID =           2;
 public static final int NVML_GRID_LICENSE_EXPIRY_NOT_APPLICABLE =  3;
 /** Permanent expiry */
 public static final int NVML_GRID_LICENSE_EXPIRY_PERMANENT =       4;
+
+/**
+ * vGPU queryable capabilities
+ */
+/** enum nvmlVgpuCapability_t */
+public static final int
+    /** P2P over NVLink is supported */
+    NVML_VGPU_CAP_NVLINK_P2P                    = 0,
+    /** GPUDirect capability is supported */
+    NVML_VGPU_CAP_GPUDIRECT                     = 1,
+    // Keep this last
+    NVML_VGPU_CAP_COUNT = 2;
 
 /** \} */
 
@@ -1034,6 +1086,11 @@ public static final int NVML_GRID_LICENSE_STATE_LICENSED =                5;
 
 
 /**
+ * GSP firmware
+ */
+public static final int NVML_GSP_FIRMWARE_VERSION_BUF_SIZE = 0x40;
+
+/**
  * Simplified chip architecture
  */
 public static final int NVML_DEVICE_ARCH_KEPLER =    2; // Devices based on the NVIDIA Kepler architecture
@@ -1043,6 +1100,10 @@ public static final int NVML_DEVICE_ARCH_VOLTA =     5; // Devices based on the 
 public static final int NVML_DEVICE_ARCH_TURING =    6; // Devices based on the NVIDIA Turing architecture
 
 public static final int NVML_DEVICE_ARCH_AMPERE =    7; // Devices based on the NVIDIA Ampere architecture
+
+public static final int NVML_DEVICE_ARCH_ADA =       8; // Devices based on the NVIDIA Ada architecture
+
+public static final int NVML_DEVICE_ARCH_HOPPER =    9; // Devices based on the NVIDIA Hopper architecture
 
 public static final int NVML_DEVICE_ARCH_UNKNOWN =   0xffffffff; // Anything else, presumably something newer
 
@@ -1054,6 +1115,12 @@ public static final int NVML_BUS_TYPE_PCI =      1;
 public static final int NVML_BUS_TYPE_PCIE =     2;
 public static final int NVML_BUS_TYPE_FPCI =     3;
 public static final int NVML_BUS_TYPE_AGP =      4;
+
+/**
+ * Device Power Modes
+ */
+public static final int NVML_POWER_MODE_ID_BALANCED =  0;
+public static final int NVML_POWER_MODE_ID_MAX =       1;
 
 /**
  * Device Power Source
@@ -1076,6 +1143,21 @@ public static final int NVML_PCIE_LINK_MAX_SPEED_32000MBPS = 0x00000005;
  */
 public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_DISABLED = 0x00000000;
 public static final int NVML_ADAPTIVE_CLOCKING_INFO_STATUS_ENABLED =  0x00000001;
+
+public static final int NVML_MAX_GPU_UTILIZATIONS = 8;
+/** enum nvmlGpuUtilizationDomainId_t */
+public static final int
+    /** Graphics engine domain */
+    NVML_GPU_UTILIZATION_DOMAIN_GPU    = 0,
+    /** Frame buffer domain */
+    NVML_GPU_UTILIZATION_DOMAIN_FB     = 1,
+    /** Video engine domain */
+    NVML_GPU_UTILIZATION_DOMAIN_VID    = 2,
+    /** Bus interface domain */
+    NVML_GPU_UTILIZATION_DOMAIN_BUS    = 3;
+// Targeting ../nvml/nvmlGpuDynamicPstatesInfo_t.java
+
+
 
 /** \} */
 /** \} */
@@ -1495,8 +1577,14 @@ public static final int NVML_FI_DEV_NVLINK_ECC_DATA_ERROR_COUNT_L11 =   159;
 /** NvLink data ECC Error Counter total for all Links */
 public static final int NVML_FI_DEV_NVLINK_ECC_DATA_ERROR_COUNT_TOTAL = 160;
 
+public static final int NVML_FI_DEV_NVLINK_ERROR_DL_REPLAY =            161;
+public static final int NVML_FI_DEV_NVLINK_ERROR_DL_RECOVERY =          162;
+public static final int NVML_FI_DEV_NVLINK_ERROR_DL_CRC =               163;
+public static final int NVML_FI_DEV_NVLINK_GET_SPEED =                  164;
+public static final int NVML_FI_DEV_NVLINK_GET_STATE =                  165;
+public static final int NVML_FI_DEV_NVLINK_GET_VERSION =                166;
 /** One greater than the largest field ID defined above */
-public static final int NVML_FI_MAX = 161;
+public static final int NVML_FI_MAX = 167;
 // Targeting ../nvml/nvmlFieldValue_t.java
 
 
@@ -3617,6 +3705,78 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevi
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") int[] speed);
 
 /**
+ * Retrieves the intended target speed of the device's specified fan.
+ *
+ * Normally, the driver dynamically adjusts the fan based on
+ * the needs of the GPU.  But when user set fan speed using nvmlDeviceSetFanSpeed_v2,
+ * the driver will attempt to make the fan achieve the setting in
+ * nvmlDeviceSetFanSpeed_v2.  The actual current speed of the fan
+ * is reported in nvmlDeviceGetFanSpeed_v2.
+ *
+ * For all discrete products with dedicated fans.
+ *
+ * The fan speed is expressed as a percentage of the product's maximum noise tolerance fan speed.
+ * This value may exceed 100% in certain cases.
+ *
+ * @param device                                The identifier of the target device
+ * @param fan                                   The index of the target fan, zero indexed.
+ * @param targetSpeed                           Reference in which to return the fan speed percentage
+ *
+ * @return
+ *        - \ref NVML_SUCCESS                   if \a speed has been set
+ *        - \ref NVML_ERROR_UNINITIALIZED       if the library has not been successfully initialized
+ *        - \ref NVML_ERROR_INVALID_ARGUMENT    if \a device is invalid, \a fan is not an acceptable index, or \a speed is NULL
+ *        - \ref NVML_ERROR_NOT_SUPPORTED       if the device does not have a fan or is newer than Maxwell
+ *        - \ref NVML_ERROR_GPU_IS_LOST         if the target GPU has fallen off the bus or is otherwise inaccessible
+ *        - \ref NVML_ERROR_UNKNOWN             on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTargetFanSpeed(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") IntPointer targetSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTargetFanSpeed(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") IntBuffer targetSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTargetFanSpeed(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int*") int[] targetSpeed);
+
+/**
+ * Sets the speed of the fan control policy to default.
+ *
+ * For all cuda-capable discrete products with fans
+ *
+ * @param device                        The identifier of the target device
+ * @param fan                           The index of the fan, starting at zero
+ *
+ * return
+ *         NVML_SUCCESS                 if speed has been adjusted
+ *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         NVML_ERROR_INVALID_ARGUMENT  if device is invalid
+ *         NVML_ERROR_NOT_SUPPORTED     if the device does not support this
+ *                                      (doesn't have fans)
+ *         NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetDefaultFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan);
+
+/**
+ * Retrieves the min and max fan speed that user can set for the GPU fan.
+ *
+ * For all cuda-capable discrete products with fans
+ *
+ * @param device                        The identifier of the target device
+ * @param minSpeed                      The minimum speed allowed to set
+ * @param maxSpeed                      The maximum speed allowed to set
+ *
+ * return
+ *         NVML_SUCCESS                 if speed has been adjusted
+ *         NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         NVML_ERROR_INVALID_ARGUMENT  if device is invalid
+ *         NVML_ERROR_NOT_SUPPORTED     if the device does not support this
+ *                                      (doesn't have fans)
+ *         NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxFanSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntPointer minSpeed,
+                                                 @Cast("unsigned int*") IntPointer maxSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxFanSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer minSpeed,
+                                                 @Cast("unsigned int*") IntBuffer maxSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxFanSpeed(nvmlDevice_st device, @Cast("unsigned int*") int[] minSpeed,
+                                                 @Cast("unsigned int*") int[] maxSpeed);
+
+/**
  * Retrieves the number of fans on the device.
  *
  * For all discrete products with dedicated fans.
@@ -3702,6 +3862,23 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetTemperatureThreshold
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, IntPointer temp);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, IntBuffer temp);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceSetTemperatureThreshold(nvmlDevice_st device, @Cast("nvmlTemperatureThresholds_t") int thresholdType, int[] temp);
+
+/**
+ * Used to execute a list of thermal system instructions.
+ *
+ * @param device                               The identifier of the target device
+ * @param sensorIndex                          The index of the thermal sensor
+ * @param pThermalSettings                     Reference in which to return the thermal sensor information
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a pThermalSettings has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a pThermalSettings is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetThermalSettings(nvmlDevice_st device, @Cast("unsigned int") int sensorIndex, nvmlGpuThermalSettings_t pThermalSettings);
 
 /**
  * Retrieves the current performance state for the device.
@@ -3928,6 +4105,64 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerUsage(nvmlDevic
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerUsage(nvmlDevice_st device, @Cast("unsigned int*") int[] power);
 
 /**
+ * Retrieves current power mode on this device.
+ *
+ * %ADA_OR_NEWER%
+ *
+ * @param device                               The identifier of the target device
+ * @param powerModeId                          Reference in which to return the power mode
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a power has been populated
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a power is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support power readings
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerMode(nvmlDevice_st device, @Cast("unsigned int*") IntPointer powerModeId);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerMode(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer powerModeId);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPowerMode(nvmlDevice_st device, @Cast("unsigned int*") int[] powerModeId);
+
+/**
+ * Retrieves bitmask of supported power modes on this device.
+ *
+ * %ADA_OR_NEWER%
+ *
+ * @param device                               The identifier of the target device
+ * @param supportedPowerModes                   Reference in which to return the bitmask of supported power mode
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a bitmask of supported power mode has been populated
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a power is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support power readings
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPowerModes(nvmlDevice_st device, @Cast("unsigned int*") IntPointer supportedPowerModes);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPowerModes(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer supportedPowerModes);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPowerModes(nvmlDevice_st device, @Cast("unsigned int*") int[] supportedPowerModes);
+
+/**
+ * Sets new power mode.
+ *
+ * %ADA_OR_NEWER%
+ *
+ * @param device                               The identifier of the target device
+ * @param powerModeId                          Power mode to set.
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a power has been populated
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a power is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support power readings
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetPowerMode(nvmlDevice_st device, @Cast("unsigned int") int powerModeId);
+
+/**
  * Retrieves total energy consumption for this GPU in millijoules (mJ) since the driver was last reloaded
  *
  * For Volta &tm; or newer fully supported devices.
@@ -4109,6 +4344,32 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetCudaComputeCapabilit
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") IntPointer current, @Cast("nvmlEnableState_t*") IntPointer pending);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") IntBuffer current, @Cast("nvmlEnableState_t*") IntBuffer pending);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") int[] current, @Cast("nvmlEnableState_t*") int[] pending);
+
+/**
+ * Retrieves the default ECC modes for the device.
+ *
+ * For Fermi &tm; or newer fully supported devices.
+ * Only applicable to devices with ECC.
+ * Requires \a NVML_INFOROM_ECC version 1.0 or higher.
+ *
+ * See \ref nvmlEnableState_t for details on allowed modes.
+ *
+ * @param device                               The identifier of the target device
+ * @param defaultMode                          Reference in which to return the default ECC mode
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a current and \a pending have been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a default is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ *
+ * @see nvmlDeviceSetEccMode()
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDefaultEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") IntPointer defaultMode);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDefaultEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") IntBuffer defaultMode);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDefaultEccMode(nvmlDevice_st device, @Cast("nvmlEnableState_t*") int[] defaultMode);
 
 /**
  * Retrieves the device boardId from 0-N.
@@ -4923,6 +5184,23 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemoryBusWidth(nvmlD
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntPointer maxSpeed);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer maxSpeed);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieLinkMaxSpeed(nvmlDevice_st device, @Cast("unsigned int*") int[] maxSpeed);
+
+/**
+ * Gets the device's PCIe Link speed in Mbps
+ *
+ * @param device                               The identifier of the target device
+ * @param pcieSpeed                            The devices's PCIe Max Link speed in Mbps
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a pcieSpeed has been retrieved
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a pcieSpeed is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support PCIe speed getting
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntPointer pcieSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieSpeed(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer pcieSpeed);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetPcieSpeed(nvmlDevice_st device, @Cast("unsigned int*") int[] pcieSpeed);
 
 /**
  * Gets the device's Adaptive Clock status
@@ -6502,6 +6780,44 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetProcessUtilization(n
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetProcessUtilization(nvmlDevice_st device, nvmlProcessUtilizationSample_t utilization,
                                               @Cast("unsigned int*") int[] processSamplesCount, @Cast("unsigned long long") long lastSeenTimeStamp);
 
+/**
+ * Retrieve GSP firmware version.
+ *
+ * The caller passes in buffer via \a version and corresponding GSP firmware numbered version
+ * is returned with the same parameter in string format.
+ *
+ * @param device                               Device handle
+ * @param version                              The retrieved GSP firmware version
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if GSP firmware version is sucessfully retrieved
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or GSP \a version pointer is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if GSP firmware is not enabled for GPU
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareVersion(nvmlDevice_st device, @Cast("char*") BytePointer version);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareVersion(nvmlDevice_st device, @Cast("char*") ByteBuffer version);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareVersion(nvmlDevice_st device, @Cast("char*") byte[] version);
+
+/**
+ * Retrieve GSP firmware mode.
+ *
+ * The caller passes in integer pointers. GSP firmware enablement and default mode information is returned with
+ * corresponding parameters. The return value in \a isEnabled and \a defaultMode should be treated as boolean.
+ *
+ * @param device                               Device handle
+ * @param isEnabled                            Pointer to specify if GSP firmware is enabled
+ * @param defaultMode                          Pointer to specify if GSP firmware is supported by default on \a device
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if GSP firmware mode is sucessfully retrieved
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or any of \a isEnabled or \a defaultMode is NULL
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareMode(nvmlDevice_st device, @Cast("unsigned int*") IntPointer isEnabled, @Cast("unsigned int*") IntPointer defaultMode);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareMode(nvmlDevice_st device, @Cast("unsigned int*") IntBuffer isEnabled, @Cast("unsigned int*") IntBuffer defaultMode);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGspFirmwareMode(nvmlDevice_st device, @Cast("unsigned int*") int[] isEnabled, @Cast("unsigned int*") int[] defaultMode);
+
 /** \} */
 
 /***************************************************************************************************/
@@ -7193,6 +7509,27 @@ public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuInstanceId(
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") BytePointer vgpuPciId, @Cast("unsigned int*") IntPointer length);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") ByteBuffer vgpuPciId, @Cast("unsigned int*") IntBuffer length);
 public static native @Cast("nvmlReturn_t") int nvmlVgpuInstanceGetGpuPciId(@Cast("nvmlVgpuInstance_t") int vgpuInstance, @Cast("char*") byte[] vgpuPciId, @Cast("unsigned int*") int[] length);
+
+/**
+* Retrieve the requested capability for a given vGPU type. Refer to the \a nvmlVgpuCapability_t structure
+* for the specific capabilities that can be queried. The return value in \a capResult should be treated as
+* a boolean, with a non-zero value indicating that the capability is supported.
+*
+* For Maxwell &tm; or newer fully supported devices.
+*
+* @param vgpuTypeId                           Handle to vGPU type
+* @param capability                           Specifies the \a nvmlVgpuCapability_t to be queried
+* @param capResult                            A boolean for the queried capability indicating that feature is supported
+*
+* @return
+*         - \ref NVML_SUCCESS                 successful completion
+*         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+*         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a vgpuTypeId is invalid, or \a capability is invalid, or \a capResult is NULL
+*         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+*/
+public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetCapabilities(@Cast("nvmlVgpuTypeId_t") int vgpuTypeId, @Cast("nvmlVgpuCapability_t") int capability, @Cast("unsigned int*") IntPointer capResult);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetCapabilities(@Cast("nvmlVgpuTypeId_t") int vgpuTypeId, @Cast("nvmlVgpuCapability_t") int capability, @Cast("unsigned int*") IntBuffer capResult);
+public static native @Cast("nvmlReturn_t") int nvmlVgpuTypeGetCapabilities(@Cast("nvmlVgpuTypeId_t") int vgpuTypeId, @Cast("nvmlVgpuCapability_t") int capability, @Cast("unsigned int*") int[] capResult);
 // Targeting ../nvml/nvmlVgpuVersion_t.java
 
 
@@ -8466,7 +8803,389 @@ public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_s
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") IntBuffer type);
 public static native @Cast("nvmlReturn_t") int nvmlDeviceGetBusType(nvmlDevice_st device, @Cast("nvmlBusType_t*") int[] type);
 
+/**
+ * Retrieve performance monitor samples from the associated subdevice.
+ *
+ * @param device
+ * @param pDynamicPstatesInfo
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a pDynamicPstatesInfo has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a pDynamicPstatesInfo is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetDynamicPstatesInfo(nvmlDevice_st device, nvmlGpuDynamicPstatesInfo_t pDynamicPstatesInfo);
+
+/**
+ * Sets the speed of a specified fan.
+ *
+ * WARNING: This function changes the fan control policy to manual. It means that YOU have to monitor
+ *          the temperature and adjust the fan speed accordingly.
+ *          If you set the fan speed too low you can burn your GPU!
+ *          Use nvmlDeviceSetDefaultFanSpeed_v2 to restore default control policy.
+ *
+ * For all cuda-capable discrete products with fans that are Maxwell or Newer.
+ *
+ * device                                The identifier of the target device
+ * fan                                   The index of the fan, starting at zero
+ * speed                                 The target speed of the fan [0-100] in % of max speed
+ *
+ * return
+ *        NVML_SUCCESS                   if the fan speed has been set
+ *        NVML_ERROR_UNINITIALIZED       if the library has not been successfully initialized
+ *        NVML_ERROR_INVALID_ARGUMENT    if the device is not valid, or the speed is outside acceptable ranges,
+ *                                              or if the fan index doesn't reference an actual fan.
+ *        NVML_ERROR_NOT_SUPPORTED       if the device is older than Maxwell.
+ *        NVML_ERROR_UNKNOWN             if there was an unexpected error.
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetFanSpeed_v2(nvmlDevice_st device, @Cast("unsigned int") int fan, @Cast("unsigned int") int speed);
+
+/**
+ * Retrieve the GPCCLK VF offset value
+ * @param device [in]                         The identifier of the target device
+ * @param offset [out]                         The retrieved GPCCLK VF offset value
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been successfully queried
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkVfOffset(nvmlDevice_st device, IntPointer offset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkVfOffset(nvmlDevice_st device, IntBuffer offset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkVfOffset(nvmlDevice_st device, int[] offset);
+
+/**
+ * Set the GPCCLK VF offset value
+ * @param device [in]                         The identifier of the target device
+ * @param offset [in]                         The GPCCLK VF offset value to set
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetGpcClkVfOffset(nvmlDevice_st device, int offset);
+
+/**
+ * Retrieve the MemClk (Memory Clock) VF offset value.
+ * @param device [in]                         The identifier of the target device
+ * @param offset [out]                         The retrieved MemClk VF offset value
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been successfully queried
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkVfOffset(nvmlDevice_st device, IntPointer offset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkVfOffset(nvmlDevice_st device, IntBuffer offset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkVfOffset(nvmlDevice_st device, int[] offset);
+
+/**
+ * Set the MemClk (Memory Clock) VF offset value. It requires elevated privileges.
+ * @param device [in]                         The identifier of the target device
+ * @param offset [in]                         The MemClk VF offset value to set
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been set
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_GPU_IS_LOST       if the target GPU has fallen off the bus or is otherwise inaccessible
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceSetMemClkVfOffset(nvmlDevice_st device, int offset);
+
+/**
+ * Retrieve min and max clocks of some clock domain for a given PState
+ *
+ * @param device                               The identifier of the target device
+ * @param type                                 Clock domain
+ * @param pstate                               PState to query
+ * @param minClockMHz                          Reference in which to return min clock frequency
+ * @param maxClockMHz                          Reference in which to return max clock frequency
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if everything worked
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device, \a type or \a pstate are invalid or both
+ *                                                  \a minClockMHz and \a maxClockMHz are NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxClockOfPState(nvmlDevice_st device, @Cast("nvmlClockType_t") int type, @Cast("nvmlPstates_t") int pstate,
+                                                      @Cast("unsigned int*") IntPointer minClockMHz, @Cast("unsigned int*") IntPointer maxClockMHz);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxClockOfPState(nvmlDevice_st device, @Cast("nvmlClockType_t") int type, @Cast("nvmlPstates_t") int pstate,
+                                                      @Cast("unsigned int*") IntBuffer minClockMHz, @Cast("unsigned int*") IntBuffer maxClockMHz);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMinMaxClockOfPState(nvmlDevice_st device, @Cast("nvmlClockType_t") int type, @Cast("nvmlPstates_t") int pstate,
+                                                      @Cast("unsigned int*") int[] minClockMHz, @Cast("unsigned int*") int[] maxClockMHz);
+
+/**
+ * Get all supported Performance States (P-States) for the device.
+ *
+ * The returned array would contain a contiguous list of valid P-States supported by
+ * the device. If the number of supported P-States is fewer than the size of the array
+ * supplied missing elements would contain \a NVML_PSTATE_UNKNOWN.
+ *
+ * The number of elements in the returned list will never exceed \a NVML_MAX_GPU_PERF_PSTATES.
+ *
+ * @param device                               The identifier of the target device
+ * @param pstates                              Container to return the list of performance states
+ *                                             supported by device
+ * @param size                                 Size of the supplied \a pstates array in bytes
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a pstates array has been retrieved
+ *         - \ref NVML_ERROR_INSUFFICIENT_SIZE if the the container supplied was not large enough to
+ *                                             hold the resulting list
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device or \a pstates is invalid
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support performance state readings
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPerformanceStates(nvmlDevice_st device,
+                                                             @Cast("nvmlPstates_t*") IntPointer pstates, @Cast("unsigned int") int size);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPerformanceStates(nvmlDevice_st device,
+                                                             @Cast("nvmlPstates_t*") IntBuffer pstates, @Cast("unsigned int") int size);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetSupportedPerformanceStates(nvmlDevice_st device,
+                                                             @Cast("nvmlPstates_t*") int[] pstates, @Cast("unsigned int") int size);
+
+/**
+ * Retrieve the GPCCLK min max VF offset value.
+ * @param device [in]                         The identifier of the target device
+ * @param minOffset [out]                      The retrieved GPCCLK VF min offset value
+ * @param maxOffset [out]                      The retrieved GPCCLK VF max offset value
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been successfully queried
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       IntPointer minOffset, IntPointer maxOffset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       IntBuffer minOffset, IntBuffer maxOffset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetGpcClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       int[] minOffset, int[] maxOffset);
+
+/**
+ * Retrieve the MemClk (Memory Clock) min max VF offset value.
+ * @param device [in]                         The identifier of the target device
+ * @param minOffset [out]                      The retrieved MemClk VF min offset value
+ * @param maxOffset [out]                      The retrieved MemClk VF max offset value
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                 if \a offset has been successfully queried
+ *         - \ref NVML_ERROR_UNINITIALIZED     if the library has not been successfully initialized
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT  if \a device is invalid or \a offset is NULL
+ *         - \ref NVML_ERROR_NOT_SUPPORTED     if the device does not support this feature
+ *         - \ref NVML_ERROR_UNKNOWN           on any unexpected error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       IntPointer minOffset, IntPointer maxOffset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       IntBuffer minOffset, IntBuffer maxOffset);
+public static native @Cast("nvmlReturn_t") int nvmlDeviceGetMemClkMinMaxVfOffset(nvmlDevice_st device,
+                                                       int[] minOffset, int[] maxOffset);
+
 /** \} */
+
+/***************************************************************************************************/
+/** \defgroup GPM NVML GPM
+ *  \{
+ */
+/***************************************************************************************************/
+/** \defgroup nvmlGpmEnums GPM Enums
+ *  \{
+ */
+/***************************************************************************************************/
+
+/* GPM Metric Identifiers */
+/** enum nvmlGpmMetricId_t */
+public static final int
+    NVML_GPM_METRIC_GRAPHICS_UTIL           = 1, /* Percentage of time any compute/graphics app was active on the GPU. 0.0 - 100.0 */
+    NVML_GPM_METRIC_SM_UTIL                 = 2, /* Percentage of SMs that were busy. 0.0 - 100.0 */
+    NVML_GPM_METRIC_SM_OCCUPANCY            = 3, /* Percentage of warps that were active vs theoretical maximum. 0.0 - 100.0 */
+    NVML_GPM_METRIC_INTEGER_UTIL            = 4, /* Percentage of time the GPU's SMs were doing integer operations. 0.0 - 100.0 */
+    NVML_GPM_METRIC_ANY_TENSOR_UTIL         = 5, /* Percentage of time the GPU's SMs were doing ANY tensor operations. 0.0 - 100.0 */
+    NVML_GPM_METRIC_DFMA_TENSOR_UTIL        = 6, /* Percentage of time the GPU's SMs were doing DFMA tensor operations. 0.0 - 100.0 */
+    NVML_GPM_METRIC_HMMA_TENSOR_UTIL        = 7, /* Percentage of time the GPU's SMs were doing HMMA tensor operations. 0.0 - 100.0 */
+    NVML_GPM_METRIC_IMMA_TENSOR_UTIL        = 9, /* Percentage of time the GPU's SMs were doing IMMA tensor operations. 0.0 - 100.0 */
+    NVML_GPM_METRIC_DRAM_BW_UTIL            = 10, /* Percentage of DRAM bw used vs theoretical maximum. 0.0 - 100.0 */
+    NVML_GPM_METRIC_FP64_UTIL               = 11, /* Percentage of time the GPU's SMs were doing non-tensor FP64 math. 0.0 - 100.0 */
+    NVML_GPM_METRIC_FP32_UTIL               = 12, /* Percentage of time the GPU's SMs were doing non-tensor FP32 math. 0.0 - 100.0 */
+    NVML_GPM_METRIC_FP16_UTIL               = 13, /* Percentage of time the GPU's SMs were doing non-tensor FP16 math. 0.0 - 100.0 */
+    NVML_GPM_METRIC_PCIE_TX_PER_SEC         = 20, /* PCIe traffic from this GPU in MiB/sec */
+    NVML_GPM_METRIC_PCIE_RX_PER_SEC         = 21, /* PCIe traffic to this GPU in MiB/sec */
+    NVML_GPM_METRIC_NVDEC_0_UTIL            = 30, /* Percent utilization of NVDEC 0. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_1_UTIL            = 31, /* Percent utilization of NVDEC 1. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_2_UTIL            = 32, /* Percent utilization of NVDEC 2. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_3_UTIL            = 33, /* Percent utilization of NVDEC 3. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_4_UTIL            = 34, /* Percent utilization of NVDEC 4. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_5_UTIL            = 35, /* Percent utilization of NVDEC 5. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_6_UTIL            = 36, /* Percent utilization of NVDEC 6. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVDEC_7_UTIL            = 37, /* Percent utilization of NVDEC 7. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_0_UTIL            = 40, /* Percent utilization of NVJPG 0. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_1_UTIL            = 41, /* Percent utilization of NVJPG 1. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_2_UTIL            = 42, /* Percent utilization of NVJPG 2. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_3_UTIL            = 43, /* Percent utilization of NVJPG 3. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_4_UTIL            = 44, /* Percent utilization of NVJPG 4. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_5_UTIL            = 45, /* Percent utilization of NVJPG 5. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_6_UTIL            = 46, /* Percent utilization of NVJPG 6. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVJPG_7_UTIL            = 47, /* Percent utilization of NVJPG 7. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVOFA_0_UTIL            = 50, /* Percent utilization of NVOFA 0. 0.0 - 100.0 */
+    NVML_GPM_METRIC_NVLINK_TOTAL_RX_PER_SEC = 60, /* NvLink read bandwidth for all links in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_TOTAL_TX_PER_SEC = 61, /* NvLink write bandwidth for all links in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L0_RX_PER_SEC    = 62, /* NvLink read bandwidth for link 0 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L0_TX_PER_SEC    = 63, /* NvLink write bandwidth for link 0 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L1_RX_PER_SEC    = 64, /* NvLink read bandwidth for link 1 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L1_TX_PER_SEC    = 65, /* NvLink write bandwidth for link 1 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L2_RX_PER_SEC    = 66, /* NvLink read bandwidth for link 2 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L2_TX_PER_SEC    = 67, /* NvLink write bandwidth for link 2 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L3_RX_PER_SEC    = 68, /* NvLink read bandwidth for link 3 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L3_TX_PER_SEC    = 69, /* NvLink write bandwidth for link 3 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L4_RX_PER_SEC    = 70, /* NvLink read bandwidth for link 4 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L4_TX_PER_SEC    = 71, /* NvLink write bandwidth for link 4 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L5_RX_PER_SEC    = 72, /* NvLink read bandwidth for link 5 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L5_TX_PER_SEC    = 73, /* NvLink write bandwidth for link 5 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L6_RX_PER_SEC    = 74, /* NvLink read bandwidth for link 6 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L6_TX_PER_SEC    = 75, /* NvLink write bandwidth for link 6 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L7_RX_PER_SEC    = 76, /* NvLink read bandwidth for link 7 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L7_TX_PER_SEC    = 77, /* NvLink write bandwidth for link 7 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L8_RX_PER_SEC    = 78, /* NvLink read bandwidth for link 8 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L8_TX_PER_SEC    = 79, /* NvLink write bandwidth for link 8 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L9_RX_PER_SEC    = 80, /* NvLink read bandwidth for link 9 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L9_TX_PER_SEC    = 81, /* NvLink write bandwidth for link 9 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L10_RX_PER_SEC   = 82, /* NvLink read bandwidth for link 10 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L10_TX_PER_SEC   = 83, /* NvLink write bandwidth for link 10 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L11_RX_PER_SEC   = 84, /* NvLink read bandwidth for link 11 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L11_TX_PER_SEC   = 85, /* NvLink write bandwidth for link 11 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L12_RX_PER_SEC   = 86, /* NvLink read bandwidth for link 12 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L12_TX_PER_SEC   = 87, /* NvLink write bandwidth for link 12 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L13_RX_PER_SEC   = 88, /* NvLink read bandwidth for link 13 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L13_TX_PER_SEC   = 89, /* NvLink write bandwidth for link 13 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L14_RX_PER_SEC   = 90, /* NvLink read bandwidth for link 14 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L14_TX_PER_SEC   = 91, /* NvLink write bandwidth for link 14 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L15_RX_PER_SEC   = 92, /* NvLink read bandwidth for link 15 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L15_TX_PER_SEC   = 93, /* NvLink write bandwidth for link 15 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L16_RX_PER_SEC   = 94, /* NvLink read bandwidth for link 16 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L16_TX_PER_SEC   = 95, /* NvLink write bandwidth for link 16 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L17_RX_PER_SEC   = 96, /* NvLink read bandwidth for link 17 in MiB/sec */
+    NVML_GPM_METRIC_NVLINK_L17_TX_PER_SEC   = 97, /* NvLink write bandwidth for link 17 in MiB/sec */
+    NVML_GPM_METRIC_MAX                     = 98; /* Maximum value above +1. Note that changing this
+                                                     should also change NVML_GPM_METRICS_GET_VERSION
+                                                     due to struct size change */
+// Targeting ../nvml/nvmlGpmSample_st.java
+
+
+// Targeting ../nvml/nvmlGpmMetric_t.java
+
+
+// Targeting ../nvml/nvmlGpmMetricsGet_t.java
+
+
+
+public static final int NVML_GPM_METRICS_GET_VERSION = 1;
+// Targeting ../nvml/nvmlGpmSupport_t.java
+
+
+
+public static final int NVML_GPM_SUPPORT_VERSION = 1;
+
+/** \} */ // @defgroup nvmlGPMStructs
+
+/***************************************************************************************************/
+/** \defgroup nvmlGpmFunctions GPM Functions
+ *  \{
+ */
+/***************************************************************************************************/
+
+/**
+ * Calculate GPM metrics from two samples.
+ *
+ *
+ * @param metricsGet             IN/OUT: populated nvmlGpmMetricsGet_t struct
+ *
+ * %HOPPER_OR_NEWER%
+ *
+ * @return
+ *         - \ref NVML_SUCCESS on success
+ *         - Nonzero NVML_ERROR_? enum on error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpmMetricsGet(nvmlGpmMetricsGet_t metricsGet);
+
+
+/**
+ * Free an allocated sample buffer that was allocated with \ref nvmlGpmSampleAlloc()
+ *
+ * %HOPPER_OR_NEWER%
+ *
+ * @param gpmSample              Sample to free
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                on success
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT if an invalid pointer is provided
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpmSampleFree(nvmlGpmSample_st gpmSample);
+
+
+/**
+ * Allocate a sample buffer to be used with NVML GPM . You will need to allocate
+ * at least two of these buffers to use with the NVML GPM feature
+ *
+ * %HOPPER_OR_NEWER%
+ *
+ * @param gpmSample             Where  the allocated sample will be stored
+ *
+ * @return
+ *         - \ref NVML_SUCCESS                on success
+ *         - \ref NVML_ERROR_INVALID_ARGUMENT if an invalid pointer is provided
+ *         - \ref NVML_ERROR_MEMORY           if system memory is insufficient
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpmSampleAlloc(@ByPtrPtr nvmlGpmSample_st gpmSample);
+public static native @Cast("nvmlReturn_t") int nvmlGpmSampleAlloc(@Cast("nvmlGpmSample_st**") PointerPointer gpmSample);
+
+/**
+ * Read a sample of GPM metrics into the provided \a gpmSample buffer. After
+ * two samples are gathered, you can call nvmlGpmMetricGet on those samples to
+ * retrive metrics
+ *
+ * %HOPPER_OR_NEWER%
+ *
+ * @param device                Device to get samples for
+ * @param gpmSample             Buffer to read samples into
+ *
+ * @return
+ *         - \ref NVML_SUCCESS on success
+ *         - Nonzero NVML_ERROR_? enum on error
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpmSampleGet(nvmlDevice_st device, nvmlGpmSample_st gpmSample);
+
+/**
+ * Indicate whether the supplied device supports GPM
+ *
+ * @param device                NVML device to query for
+ * @param gpmSupport            Structure to indicate GPM support. Indicates
+ *                              GPM support per system for the supplied device
+ *
+ * @return
+ *         - NVML_SUCCESS on success
+ *         - Nonzero NVML_ERROR_? enum if there is an error in processing the query
+ */
+public static native @Cast("nvmlReturn_t") int nvmlGpmQueryDeviceSupport(nvmlDevice_st device, nvmlGpmSupport_t gpmSupport);
+
+/** \} */ // @defgroup nvmlGpmFunctions
+/** \} */ // @defgroup GPM
 
 /**
  * NVML API versioning support

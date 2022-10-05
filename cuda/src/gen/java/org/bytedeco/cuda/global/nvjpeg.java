@@ -18,7 +18,7 @@ public class nvjpeg extends org.bytedeco.cuda.presets.nvjpeg {
 // Parsed from <nvjpeg.h>
 
 /*
- * Copyright 2009-2019 NVIDIA Corporation.  All rights reserved.
+ * Copyright 2009-2022 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -86,9 +86,9 @@ public static final int NVJPEG_MAX_COMPONENT = 4;
 
 // nvjpeg version information
 public static final int NVJPEG_VER_MAJOR = 11;
-public static final int NVJPEG_VER_MINOR = 6;
-public static final int NVJPEG_VER_PATCH = 2;
-public static final int NVJPEG_VER_BUILD = 124;
+public static final int NVJPEG_VER_MINOR = 9;
+public static final int NVJPEG_VER_PATCH = 0;
+public static final int NVJPEG_VER_BUILD = 86;
 
 /* nvJPEG status enums, returned by nvJPEG API */
 /** enum nvjpegStatus_t */
@@ -168,7 +168,7 @@ public static final int
 // NVJPEG_BACKEND_DEFAULT    : default value
 // NVJPEG_BACKEND_HYBRID     : uses CPU for Huffman decode
 // NVJPEG_BACKEND_GPU_HYBRID : uses GPU assisted Huffman decode. nvjpegDecodeBatched will use GPU decoding for baseline JPEG bitstreams with
-//                             interleaved scan when batch size is bigger than 100
+//                             interleaved scan when batch size is bigger than 50
 // NVJPEG_BACKEND_HARDWARE   : supports baseline JPEG bitstream with single scan. 410 and 411 sub-samplings are not supported
 // NVJPEG_BACKEND_GPU_HYBRID_DEVICE : nvjpegDecodeBatched will support bitstream input on device memory
 // NVJPEG_BACKEND_HARDWARE_DEVICE   : nvjpegDecodeBatched will support bitstream input on device memory
@@ -222,6 +222,24 @@ public static final int NVJPEG_FLAGS_BITSTREAM_STRICT =  1<<2;
 // Targeting ../nvjpeg/nvjpegPinnedAllocator_t.java
 
 
+// Targeting ../nvjpeg/tDevMallocV2.java
+
+
+// Targeting ../nvjpeg/tDevFreeV2.java
+
+
+// Targeting ../nvjpeg/tPinnedMallocV2.java
+
+
+// Targeting ../nvjpeg/tPinnedFreeV2.java
+
+
+// Targeting ../nvjpeg/nvjpegDevAllocatorV2_t.java
+
+
+// Targeting ../nvjpeg/nvjpegPinnedAllocatorV2_t.java
+
+
 // Targeting ../nvjpeg/nvjpegHandle.java
 
 
@@ -261,6 +279,12 @@ public static native @Cast("nvjpegStatus_t") int nvjpegCreateEx(@Cast("nvjpegBac
         @Cast("unsigned int") int flags,
         @ByPtrPtr nvjpegHandle handle);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegCreateExV2(@Cast("nvjpegBackend_t") int backend,
+        nvjpegDevAllocatorV2_t dev_allocator,
+        nvjpegPinnedAllocatorV2_t pinned_allocator,
+        @Cast("unsigned int") int flags,
+        @ByPtrPtr nvjpegHandle handle);
+
 // Release the handle and resources.
 // IN/OUT     handle: instance handle to release 
 public static native @Cast("nvjpegStatus_t") int nvjpegDestroy(nvjpegHandle handle);
@@ -287,6 +311,16 @@ public static native @Cast("nvjpegStatus_t") int nvjpegSetPinnedMemoryPadding(@C
 // IN/OUT     handle: instance handle to release 
 public static native @Cast("nvjpegStatus_t") int nvjpegGetPinnedMemoryPadding(@Cast("size_t*") SizeTPointer padding, nvjpegHandle handle);
 
+
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareDecoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") IntPointer num_engines,
+        @Cast("unsigned int*") IntPointer num_cores_per_engine);
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareDecoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") IntBuffer num_engines,
+        @Cast("unsigned int*") IntBuffer num_cores_per_engine);
+public static native @Cast("nvjpegStatus_t") int nvjpegGetHardwareDecoderInfo(nvjpegHandle handle,
+        @Cast("unsigned int*") int[] num_engines,
+        @Cast("unsigned int*") int[] num_cores_per_engine);
 
 
 // Initalization of decoding state
@@ -590,6 +624,10 @@ public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedCreate(nvjpeg
     nvjpegPinnedAllocator_t pinned_allocator,
     @ByPtrPtr nvjpegBufferPinned buffer);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedCreateV2(nvjpegHandle handle,
+    nvjpegPinnedAllocatorV2_t pinned_allocator,
+    @ByPtrPtr nvjpegBufferPinned buffer);
+
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedDestroy(nvjpegBufferPinned buffer);
 // Targeting ../nvjpeg/nvjpegBufferDevice.java
 
@@ -597,6 +635,10 @@ public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedDestroy(nvjpe
 
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceCreate(nvjpegHandle handle, 
     nvjpegDevAllocator_t device_allocator, 
+    @ByPtrPtr nvjpegBufferDevice buffer);
+
+public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceCreateV2(nvjpegHandle handle,
+    nvjpegDevAllocatorV2_t device_allocator,
     @ByPtrPtr nvjpegBufferDevice buffer);
 
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceDestroy(nvjpegBufferDevice buffer);

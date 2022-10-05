@@ -22,7 +22,7 @@
  * Bundle correctly OpenMP library for PyTorch builds on Mac as well ([issue #1225](https://github.com/bytedeco/javacpp-presets/issues/1225))
  * Remove dependency on CUDA from presets for Triton Inference Server ([pull #1151](https://github.com/bytedeco/javacpp-presets/pull/1151))
  * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
- * Upgrade presets for OpenCV 4.6.0, FFmpeg 5.1.2, HDF5 1.12.2, LZ4 1.9.4, MKL 2022.2, DNNL 2.7, OpenBLAS 0.3.21 ([issue #1171](https://github.com/bytedeco/javacpp-presets/issues/1171)), CPython 3.10.7, NumPy 1.23.3, SciPy 1.9.1, Gym 0.26.1, LLVM 15.0.1, libffi 3.4.3, Tesseract 5.2.0, CUDA 11.6.2, NCCL 2.12.7, OpenCL 3.0.12, MXNet 1.9.1, PyTorch 1.12.1, TensorFlow Lite 2.10.0, Triton Inference Server 2.24.0, ALE 0.8.0, DepthAI 2.17.4, ONNX 1.12.0, ONNX Runtime 1.12.1, TVM 0.9.0, Skia 2.88.0, cpu_features 0.7.0, ModSecurity 3.0.8, and their dependencies
+ * Upgrade presets for OpenCV 4.6.0, FFmpeg 5.1.2, HDF5 1.12.2, LZ4 1.9.4, MKL 2022.2, DNNL 2.7, OpenBLAS 0.3.21 ([issue #1171](https://github.com/bytedeco/javacpp-presets/issues/1171)), CPython 3.10.7, NumPy 1.23.3, SciPy 1.9.1, Gym 0.26.1, LLVM 15.0.1, libffi 3.4.3, Tesseract 5.2.0, CUDA 11.8.0, cuDNN 8.6.0, NCCL 2.14.3, OpenCL 3.0.12, MXNet 1.9.1, PyTorch 1.12.1, TensorFlow Lite 2.10.0, TensorRT 8.4.3.1, Triton Inference Server 2.24.0, ALE 0.8.0, DepthAI 2.17.4, ONNX 1.12.0, ONNX Runtime 1.12.1, TVM 0.9.0, Skia 2.88.0, cpu_features 0.7.0, ModSecurity 3.0.8, and their dependencies
 
 ### February 11, 2022 version 1.5.7
  * Build FFmpeg with WebP encoding support ([pull #1133](https://github.com/bytedeco/javacpp-presets/pull/1133))
