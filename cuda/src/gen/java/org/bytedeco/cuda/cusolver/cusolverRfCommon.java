@@ -17,11 +17,11 @@ import static org.bytedeco.cuda.global.cusparse.*;
 import static org.bytedeco.cuda.global.cusolver.*;
 
 
-/* Opaque structure holding CUSOLVERRF library common */
-@Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusolver.class)
+  /* Opaque structure holding CUSOLVERRF library common */
+  @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusolver.class)
 public class cusolverRfCommon extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cusolverRfCommon() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cusolverRfCommon(Pointer p) { super(p); }
-}
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public cusolverRfCommon() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public cusolverRfCommon(Pointer p) { super(p); }
+  }

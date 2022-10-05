@@ -48,8 +48,8 @@ import org.bytedeco.cuda.presets.nvrtc;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
-            link = "nvinfer@.8.2.3",
-            preload = "nvinfer_builder_resource@.8.2.3"
+            link = "nvinfer@.8",
+            preload = "nvinfer_builder_resource@.8.4.3"
         ),
         @Platform(
             value = "linux-arm64",

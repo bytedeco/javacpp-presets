@@ -145,6 +145,7 @@ cp -a liblmdb.a ../../../lib/
 cd ../../..
 
 cd boost_$BOOST
+sedinplace 's/#if PTHREAD_STACK_MIN > 0/#ifdef PTHREAD_STACK_MIN/g' boost/thread/pthread/thread_data.hpp
 ./bootstrap.sh --with-libraries=filesystem,system,thread
 ./b2 -d0 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..

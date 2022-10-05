@@ -82,8 +82,4 @@ public class cudaTextureDesc extends Pointer {
      * Disable any trilinear filtering optimizations.
      */
     public native int disableTrilinearOptimization(); public native cudaTextureDesc disableTrilinearOptimization(int setter);
-    /**
-     * Enable seamless cube map filtering.
-     */
-    public native int seamlessCubemap(); public native cudaTextureDesc seamlessCubemap(int setter);
 }

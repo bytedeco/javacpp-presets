@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt-platform-redist</artifactId>
-  <version>8.2-${project.parent.version}</version>
+  <version>8.4-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for TensorRT</name>
 
   <properties>

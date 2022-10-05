@@ -20,7 +20,7 @@ public class nvrtc extends org.bytedeco.cuda.presets.nvrtc {
 //
 // NVIDIA_COPYRIGHT_BEGIN
 //
-// Copyright (c) 2014-2021, NVIDIA CORPORATION.  All rights reserved.
+// Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
 // and proprietary rights in and to this software, related documentation
@@ -535,6 +535,9 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *         - \c compute_72
  *         - \c compute_75
  *         - \c compute_80
+ *         - \c compute_87
+ *         - \c compute_89
+ *         - \c compute_90
  *         - \c sm_35
  *         - \c sm_37
  *         - \c sm_50
@@ -547,6 +550,9 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *         - \c sm_72
  *         - \c sm_75
  *         - \c sm_80
+ *         - \c sm_87
+ *         - \c sm_89
+ *         - \c sm_90
  *       - Default: \c compute_52
  *   - Separate compilation / whole-program compilation
  *     - \c --device-c (\c -dc)\n
@@ -563,10 +569,17 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       - Default: \c false
  *   - Debugging support
  *     - \c --device-debug (\c -G)\n
- *       Generate debug information.
+ *       Generate debug information. If --dopt is not specified, 
+ *       then turns off all optimizations.
  *     - \c --generate-line-info (\c -lineinfo)\n
  *       Generate line-number information.
  *   - Code generation
+ *     - \c --dopt on (\c -dopt)\n
+ *     - \c --dopt=on \n
+ *       Enable device code optimization. When specified along with '-G', enables
+ *       limited debug information generation for optimized device code (currently,
+ *       only line number information).
+ *       When '-G' is not specified, '-dopt=on' is implicit.
  *     - \c --ptxas-options \<options\> (\c -Xptxas)\n
  *     - \c --ptxas-options=\<options\> \n
  *       Specify options directly to ptxas, the PTX optimizing assembler.
@@ -616,7 +629,7 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *     - \c --dlink-time-opt (\c -dlto)\n
  *       Generate intermediate code for later link-time optimization.
  *       It implies \c -rdc=true.  
- *       Note: when this is used the nvvmGetNVVM API should be used, 
+ *       Note: when this is used the nvrtcGetNVVM API should be used, 
  *       as PTX or Cubin will not be generated.
  *   - Preprocessing
  *     - \c --define-macro=\<def\> (\c -D)\n
@@ -641,7 +654,8 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       to the include path. This option disables this feature and only
  *       considers the path specified explicitly.
  *   - Language Dialect
- *     - \c --std={c++03|c++11|c++14|c++17} (\c -std={c++11|c++14|c++17})\n
+ *     - \c --std={c++03|c++11|c++14|c++17}
+ *       (\c -std={c++11|c++14|c++17})\n
  *       Set language dialect to C++03, C++11, C++14 or C++17
  *     - \c --builtin-move-forward={true|false} (\c -builtin-move-forward)\n
  *       Provide builtin definitions of \c std::move and \c std::forward,

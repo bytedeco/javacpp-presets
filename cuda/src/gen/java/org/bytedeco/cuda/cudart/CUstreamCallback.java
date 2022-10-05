@@ -11,17 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cuda.global.cudart.*;
 
 
-
-
-
-
-
-
-
-
-
-
-
 /**
  * CUDA stream callback
  * @param hStream The stream the callback was added to, as passed to ::cuStreamAddCallback.  May be NULL.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public class nvml implements InfoMapper {
                .put(new Info("nvmlDevice_t").valueTypes("nvmlDevice_st").pointerTypes("@ByPtrPtr nvmlDevice_st", "@Cast(\"nvmlDevice_st**\") PointerPointer"))
                .put(new Info("nvmlUnit_t").valueTypes("nvmlUnit_st").pointerTypes("@ByPtrPtr nvmlUnit_st", "@Cast(\"nvmlUnit_st**\") PointerPointer"))
                .put(new Info("nvmlEventSet_t").valueTypes("nvmlEventSet_st").pointerTypes("@ByPtrPtr nvmlEventSet_st", "@Cast(\"nvmlEventSet_st**\") PointerPointer"))
+               .put(new Info("nvmlGpmSample_t").valueTypes("nvmlGpmSample_st").pointerTypes("@ByPtrPtr nvmlGpmSample_st", "@Cast(\"nvmlGpmSample_st**\") PointerPointer"))
                .put(new Info("nvmlGpuInstance_t").valueTypes("nvmlGpuInstance_st").pointerTypes("@ByPtrPtr nvmlGpuInstance_st", "@Cast(\"nvmlGpuInstance_st**\") PointerPointer"))
                .put(new Info("nvmlComputeInstance_t").valueTypes("nvmlComputeInstance_st").pointerTypes("@ByPtrPtr nvmlComputeInstance_st", "@Cast(\"nvmlComputeInstance_st**\") PointerPointer"));
     }

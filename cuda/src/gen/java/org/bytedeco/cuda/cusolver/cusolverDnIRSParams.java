@@ -17,7 +17,6 @@ import static org.bytedeco.cuda.global.cusparse.*;
 import static org.bytedeco.cuda.global.cusolver.*;
 
 
-
 //------------------------------------------------------
 // opaque cusolverDnIRS structure for IRS solver
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusolver.class)

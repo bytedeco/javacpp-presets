@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.caffe</groupId>
     <artifactId>caffe</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>caffe</exec.mainClass>
     </properties>
@@ -46,21 +46,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>caffe-platform</artifactId>
-            <version>1.0-1.5.7</version>
+            <version>1.0-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>caffe-platform-gpu</artifactId>
-            <version>1.0-1.5.7</version>
+            <version>1.0-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.7</version>
+            <version>11.8-8.6-1.5.8-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

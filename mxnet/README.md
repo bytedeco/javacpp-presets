@@ -69,7 +69,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.8-SNAPSHOT</version>
+            <version>11.8-8.6-1.5.8-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

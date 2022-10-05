@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -49,21 +49,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.15.5-1.5.7</version>
+            <version>1.15.5-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-gpu</artifactId>
-            <version>1.15.5-1.5.7</version>
+            <version>1.15.5-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.7</version>
+            <version>11.8-8.6-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
@@ -71,12 +71,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python</artifactId>
-            <version>1.15.5-1.5.7</version>
+            <version>1.15.5-1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform-python-gpu</artifactId>
-            <version>1.15.5-1.5.7</version>
+            <version>1.15.5-1.5.8-SNAPSHOT</version>
         </dependency>
 -->
     </dependencies>

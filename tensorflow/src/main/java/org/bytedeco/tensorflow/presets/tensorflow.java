@@ -284,9 +284,9 @@ import java.util.List;
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "cudart", "cudart_static", "cuda", "cublasLt", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
 //                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/extras/CUPTI/lib64/"}),
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/extras/CUPTI/lib64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},

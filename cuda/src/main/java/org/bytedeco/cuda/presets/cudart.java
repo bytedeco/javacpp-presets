@@ -41,21 +41,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<cuda_fp16.hpp>",
                          "<cuda_bf16.h>", "<cuda_bf16.hpp>", "<library_types.h>", "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = {"/usr/local/cuda-11.6/include/", "/usr/include/"}, link = {"cudart@.11.0", "cuda@.1#"}, linkpath = {"/usr/local/cuda-11.6/lib/", "/usr/lib/"}),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-11.6/lib64/", "/usr/lib64/"}),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.6/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-11.6/lib/", "/usr/local/cuda/lib/"}),
+              includepath = {"/usr/local/cuda-11.8/include/", "/usr/local/cuda/include/", "/usr/include/"},
+              link = {"cudart@.11.0", "cuda@.1#"}, linkpath = {"/usr/local/cuda-11.8/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-11.8/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.8/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-11.8/lib/", "/usr/local/cuda/lib/"}),
     @Platform(value = "windows-x86_64",     preload = "cudart64_110",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/lib/x64/") },
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cuda"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__",
+        infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__", "__grid_constant__",
                              "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__", "__CUDA_HOSTDEVICE__",
                              "__constant__", "__managed__", "NV_CLANG_ATOMIC_NOEXCEPT", "cudaDevicePropDontCare", "__LDG_PTR", "__CUDA_ALIGN__",
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__", "__CUDA_HOSTDEVICE_FP16_DECL__",
@@ -69,6 +70,15 @@ public class cudart implements InfoMapper {
                .put(new Info("CUDNN_DEPRECATED").cppText("#define CUDNN_DEPRECATED deprecated").cppTypes())
                .put(new Info("CUSPARSE_DEPRECATED").cppText("#define CUSPARSE_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
+
+               .put(new Info("cudaStreamAttrID", "cudaKernelNodeAttrID").cppTypes().pointerTypes("cudaLaunchAttributeID"))
+               .put(new Info("cudaStreamAttributeAccessPolicyWindow", "cudaKernelNodeAttributeAccessPolicyWindow").cppTypes().pointerTypes("cudaLaunchAttributeAccessPolicyWindow"))
+               .put(new Info("cudaStreamAttributeSynchronizationPolicy").cppTypes().pointerTypes("cudaLaunchAttributeSynchronizationPolicy"))
+               .put(new Info("cudaStreamAttrValue", "cudaKernelNodeAttrValue").cppTypes().pointerTypes("cudaLaunchAttributeValue"))
+               .put(new Info("cudaKernelNodeAttributeCooperative").cppTypes().pointerTypes("cudaLaunchAttributeCooperative"))
+               .put(new Info("cudaKernelNodeAttributePriority").cppTypes().pointerTypes("cudaLaunchAttributePriority"))
+               .put(new Info("cudaKernelNodeAttributeClusterDimension").cppTypes().pointerTypes("cudaLaunchAttributeClusterDimension"))
+               .put(new Info("cudaKernelNodeAttributeClusterSchedulingPolicyPreference").cppTypes().pointerTypes("cudaLaunchAttributeClusterSchedulingPolicyPreference"))
 
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
                .put(new Info("defined(CUDA_FORCE_API_VERSION)", "defined(__CUDACC__)",
