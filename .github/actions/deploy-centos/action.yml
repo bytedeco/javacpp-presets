@@ -69,8 +69,8 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.6.0.163-1.cuda11.8.x86_64.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.6.0.163-1.cuda11.8.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.14.3-1+cuda11.7.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.14.3-1+cuda11.7.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.15.1-1+cuda11.8.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.15.1-1+cuda11.8.x86_64.rpm
 
           rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm libcudnn*.rpm libnccl*.rpm
           pushd /var/cuda-repo-rhel7-11-8-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd

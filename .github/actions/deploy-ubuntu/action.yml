@@ -21,7 +21,7 @@ runs:
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-11-8-local-11.8.0_520.61.05-1.aarch64.rpm
           export CUDNN=8.6.0.163-1.cuda11.8.aarch64
-          export NCCL=2.14.3-1+cuda11.7.aarch64
+          export NCCL=2.15.1-1+cuda11.8.aarch64
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
@@ -29,7 +29,7 @@ runs:
           export PREFIX=powerpc64le-linux-gnu
           export CUDA=cuda-repo-rhel8-11-8-local-11.8.0_520.61.05-1.ppc64le.rpm
           export CUDNN=8.6.0.163-1.cuda11.8.ppc64le
-          export NCCL=2.14.3-1+cuda11.7.ppc64le
+          export NCCL=2.15.1-1+cuda11.8.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]]; then
           export ARCH=i386
           export PREFIX=i686-linux-gnu
@@ -39,7 +39,7 @@ runs:
           export PREFIX=x86_64-linux-gnu
           export CUDA=cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm
           export CUDNN=8.6.0.163-1.cuda11.8.x86_64
-          export NCCL=2.14.3-1+cuda11.7.x86_64
+          export NCCL=2.15.1-1+cuda11.8.x86_64
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "ARCH2=$ARCH2" >> $GITHUB_ENV

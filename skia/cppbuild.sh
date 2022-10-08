@@ -33,8 +33,8 @@ case $PLATFORM in
         export TARGET_CPU="x64"
         ;;
     macosx-*)
-        export CC="clang"
-        export CXX="clang++"
+        export CC="clang -undefined dynamic_lookup"
+        export CXX="clang++ -undefined dynamic_lookup"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -43,7 +43,7 @@ case $PLATFORM in
 esac
 
 # Must be kept in sync with skia.version in pom.xml
-SKIA_VERSION=2.88.0
+SKIA_VERSION=2.88.3
 download https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz depot_tools.tar.gz
 download https://github.com/mono/skia/archive/v$SKIA_VERSION.tar.gz skia-$SKIA_VERSION.tar.gz
 

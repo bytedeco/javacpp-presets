@@ -33,11 +33,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 14;
-public static final int NCCL_PATCH = 3;
+public static final int NCCL_MINOR = 15;
+public static final int NCCL_PATCH = 1;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 21403;
+public static final int NCCL_VERSION_CODE = 21501;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
