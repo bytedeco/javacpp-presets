@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tritonserver-platform</artifactId>
-  <version>2.24-${project.parent.version}</version>
+  <version>2.26-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Triton Inference Server</name>
 
   <properties>
