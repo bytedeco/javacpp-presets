@@ -26,6 +26,8 @@ case $PLATFORM in
         PREFIX=$INSTALL_PATH make install
         ;;
     macosx-arm64)
+        export CC="clang -arch arm64"
+        export CXX="clang++ -arch arm64"
         make -j $MAKEJ
         PREFIX=$INSTALL_PATH make install
         # fix library with correct rpath
