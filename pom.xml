@@ -1448,6 +1448,7 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>
