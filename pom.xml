@@ -1448,12 +1448,12 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
         <module>leptonica</module>
-        <module>lz4</module>
         <module>tesseract</module>
       </modules>
       <properties>
