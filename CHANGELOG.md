@@ -10,7 +10,7 @@
  * Include missing `opencv2/mcc/ccm.hpp` header file in presets for OpenCV ([discussion bytedeco/javacpp#568](https://github.com/bytedeco/javacpp/discussions/568))
  * Fix a few incorrectly mapped instances of `std::unordered_map` for PyTorch ([issue #1164](https://github.com/bytedeco/javacpp-presets/issues/1164))
  * Migrate builds for Leptonica and Tesseract to CMake ([issue #1163](https://github.com/bytedeco/javacpp-presets/issues/1163))
- * Introduce `macosx-arm64` builds for libffi ([issue #1182](https://github.com/bytedeco/javacpp-presets/issues/1182)), Leptonica, and Tesseract ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814))
+ * Introduce `macosx-arm64` builds for lz4 ([pull #1243](https://github.com/bytedeco/javacpp-presets/pull/1243)), libffi ([issue #1182](https://github.com/bytedeco/javacpp-presets/issues/1182)), Leptonica, and Tesseract ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814))
  * Map instances of `torch::OrderedDict` using C++ templates from PyTorch ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623))
  * Add presets for Bullet Physics SDK 3.24 ([pull #1153](https://github.com/bytedeco/javacpp-presets/pull/1153))
  * Add `long[] pytorch.Tensor.shape()` method for convenience ([pull #1161](https://github.com/bytedeco/javacpp-presets/pull/1161))
