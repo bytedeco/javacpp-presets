@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy</artifactId>
-  <version>1.23.3-${project.parent.version}</version>
+  <version>1.23.4-${project.parent.version}</version>
   <name>JavaCPP Presets for NumPy</name>
 
   <dependencies>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython</artifactId>
-      <version>3.10.7-${project.parent.version}</version>
+      <version>3.10.8-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -51,7 +51,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.10.7-${project.parent.version}</version>
+            <version>3.10.8-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -62,7 +62,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.10.7-${project.parent.version}</version>
+            <version>3.10.8-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -171,7 +171,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>cpython</artifactId>
-                <version>3.10.7-${project.parent.version}</version>
+                <version>3.10.8-${project.parent.version}</version>
                 <classifier>${os.name}-${os.arch}</classifier>
               </dependency>
             </dependencies>
