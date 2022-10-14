@@ -48,7 +48,7 @@ import org.bytedeco.mkl.presets.*;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            compiler = "cpp14",
+            compiler = "cpp17",
             define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()", "DMLC_USE_LOGGING_LIBRARY <tvm/runtime/logging.h>"},
             exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
             include = {

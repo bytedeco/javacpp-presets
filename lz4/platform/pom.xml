@@ -13,7 +13,7 @@
   <groupId>org.bytedeco</groupId>
   <artifactId>lz4-platform</artifactId>
   <version>1.9.4-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for lz4</name>
+  <name>JavaCPP Presets Platform for LZ4</name>
 
   <properties>
     <javacpp.moduleId>lz4</javacpp.moduleId>
