@@ -18,7 +18,7 @@ public class ListEnvs {
         PyObject globals = PyModule_GetDict(PyImport_AddModule("__main__"));
 
         PyRun_StringFlags("from gym import envs\n"
-                + "envids = [spec.id for spec in envs.registry.all()]\n"
+                + "envids = [spec.id for spec in envs.registry.values()]\n"
                 + "for envid in sorted(envids):\n"
                 + "    print(envid)\n", Py_file_input, globals, globals, null);
 

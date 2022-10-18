@@ -146,7 +146,7 @@ public class HowtoDeploy {
                 + "    fadd_dylib.export_library(dylib_path)\n"
 
                 + "    # Compile library in system library mode\n"
-                + "    fadd_syslib = tvm.build(s, [A, B], \"llvm --system-lib\", name=\"addonesys\")\n"
+                + "    fadd_syslib = tvm.build(s, [A, B], \"llvm\", name=\"addonesys\")\n"
                 + "    syslib_path = os.path.join(base_path, \"test_addone_sys.o\")\n"
                 + "    fadd_syslib.save(syslib_path)\n"
 

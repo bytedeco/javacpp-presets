@@ -25,15 +25,15 @@ case $PLATFORM in
     linux-x86_64)
         sh build.sh
         ./configure --prefix=$INSTALL_PATH
-        make
-        make install
+        make -j $MAKEJ
+        make install-strip
         ;;
     macosx-x86_64)
         sh build.sh
         sedinplace 's/\\\$rpath/@rpath/g' configure
         ./configure --prefix=$INSTALL_PATH
-        make
-        make install
+        make -j $MAKEJ
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
