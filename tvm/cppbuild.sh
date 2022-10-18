@@ -75,6 +75,9 @@ export TVM_LIBRARY_PATH=`pwd`
 # prevent setuptools from trying to build NumPy or SciPy
 sedinplace '/numpy/d' python/gen_requirements.py
 sedinplace '/scipy/d' python/gen_requirements.py
+sedinplace '/                "tornado",/a\
+                "typing-extensions",\
+' python/gen_requirements.py
 
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
@@ -187,7 +190,7 @@ cp -a 3rdparty/dlpack/include/dlpack 3rdparty/dmlc-core/include/dmlc ../include
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(attr cloudpickle decorator psutil synr typed_ast tornado tvm)
+export MODULES=(attr cloudpickle decorator psutil synr typed_ast tornado typing_extensions tvm)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE*/$MODULE* ../python/ || true
