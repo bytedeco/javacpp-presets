@@ -32,16 +32,16 @@ runs:
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
-        curl -LO https://services.gradle.org/distributions/gradle-6.7.1-bin.zip
+        curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
         tar -xzf cmake-3.16.6-Linux-x86_64.tar.gz -C /opt/
         tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
         tar -xzf git-2.18.3.tar.gz
-        unzip gradle-6.7.1-bin.zip -d /opt/
+        unzip gradle-7.1.1-bin.zip -d /opt/
         pushd git-2.18.3; make -j2 prefix=/usr/local/; make -j2 prefix=/usr/local/ install; popd
         ln -sf /usr/bin/python3.6 /usr/bin/python3
         ln -sf /opt/cmake-3.16.6-Linux-x86_64/bin/* /usr/bin/
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
-        ln -sf /opt/gradle-6.7.1/bin/gradle /usr/bin/gradle
+        ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 
         python3 -m pip install gdown || python3 -m pip install gdown
 
@@ -66,22 +66,24 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda-repo-rhel7-11-6-local-11.6.2_510.47.03-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.12.7-1+cuda11.6.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.12.7-1+cuda11.6.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.6.0.163-1.cuda11.8.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.6.0.163-1.cuda11.8.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.15.1-1+cuda11.8.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.15.1-1+cuda11.8.x86_64.rpm
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-6-local-11.6.2_510.47.03-1.x86_64.rpm libnccl*.rpm
-          pushd /var/cuda-repo-rhel7-11-6-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm libcudnn*.rpm libnccl*.rpm
+          pushd /var/cuda-repo-rhel7-11-8-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          tar -hxvf cudnn-linux-x86_64-8.3.2.44_cuda11.5-archive.tar.xz --strip-components=1 -C /usr/local/cuda/
-          mv /usr/include/nccl* /usr/local/cuda/include/
-          mv /usr/local/cuda/lib/* /usr/lib64/libnccl* /usr/local/cuda/lib64/
+          mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
+          mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
           mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
           mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/ || true
+          for f in /usr/local/cuda/include/*_v8.h; do ln -sf $f ${f:0:${#f}-5}.h; done
+          for f in /usr/local/cuda/lib64/libcudnn*so.8.*; do ln -sf $f ${f:0:${#f}-4}; ln -sf $f ${f:0:${#f}-6}; done
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f $f.2; done
           for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
@@ -90,10 +92,13 @@ runs:
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
           ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.7
+          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.8
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
+          sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h
           sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
           sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
           sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
@@ -113,15 +118,15 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1mWSoITLd2PvJFn71JkVug7Axo0NziWAf
-          tar -hxvf TensorRT-8.2.3.0.Linux.x86_64-gnu.cuda-11.4.cudnn8.2.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1UZLOE_RylYGMC80LzJ7m7iiKrTzYF_Qy
+          tar -hxvf TensorRT-8.4.3.1.Linux.x86_64-gnu.cuda-11.6.cudnn8.4.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18444/l_onemkl_p_2022.0.1.117_offline.sh
-          bash l_onemkl_p_2022.0.1.117_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18898/l_onemkl_p_2022.2.0.8748_offline.sh
+          bash l_onemkl_p_2022.2.0.8748_offline.sh -s -a -s --eula accept
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

@@ -51,7 +51,7 @@ public class btWheelInfo extends Pointer {
 		//set by raycaster
 		public native @ByRef btVector3 m_contactNormalWS(); public native RaycastInfo m_contactNormalWS(btVector3 setter);  //contactnormal
 		public native @ByRef btVector3 m_contactPointWS(); public native RaycastInfo m_contactPointWS(btVector3 setter);   //raycast hitpoint
-		public native @Cast("btScalar") float m_suspensionLength(); public native RaycastInfo m_suspensionLength(float setter);
+		public native @Cast("btScalar") double m_suspensionLength(); public native RaycastInfo m_suspensionLength(double setter);
 		public native @ByRef btVector3 m_hardPointWS(); public native RaycastInfo m_hardPointWS(btVector3 setter);       //raycast starting point
 		public native @ByRef btVector3 m_wheelDirectionWS(); public native RaycastInfo m_wheelDirectionWS(btVector3 setter);  //direction in worldspace
 		public native @ByRef btVector3 m_wheelAxleWS(); public native RaycastInfo m_wheelAxleWS(btVector3 setter);       // axle in worldspace
@@ -66,23 +66,23 @@ public class btWheelInfo extends Pointer {
 	public native @ByRef btVector3 m_chassisConnectionPointCS(); public native btWheelInfo m_chassisConnectionPointCS(btVector3 setter);  //const
 	public native @ByRef btVector3 m_wheelDirectionCS(); public native btWheelInfo m_wheelDirectionCS(btVector3 setter);          //const
 	public native @ByRef btVector3 m_wheelAxleCS(); public native btWheelInfo m_wheelAxleCS(btVector3 setter);               // const or modified by steering
-	public native @Cast("btScalar") float m_suspensionRestLength1(); public native btWheelInfo m_suspensionRestLength1(float setter);      //const
-	public native @Cast("btScalar") float m_maxSuspensionTravelCm(); public native btWheelInfo m_maxSuspensionTravelCm(float setter);
-	public native @Cast("btScalar") float getSuspensionRestLength();
-	public native @Cast("btScalar") float m_wheelsRadius(); public native btWheelInfo m_wheelsRadius(float setter);              //const
-	public native @Cast("btScalar") float m_suspensionStiffness(); public native btWheelInfo m_suspensionStiffness(float setter);       //const
-	public native @Cast("btScalar") float m_wheelsDampingCompression(); public native btWheelInfo m_wheelsDampingCompression(float setter);  //const
-	public native @Cast("btScalar") float m_wheelsDampingRelaxation(); public native btWheelInfo m_wheelsDampingRelaxation(float setter);   //const
-	public native @Cast("btScalar") float m_frictionSlip(); public native btWheelInfo m_frictionSlip(float setter);
-	public native @Cast("btScalar") float m_steering(); public native btWheelInfo m_steering(float setter);
-	public native @Cast("btScalar") float m_rotation(); public native btWheelInfo m_rotation(float setter);
-	public native @Cast("btScalar") float m_deltaRotation(); public native btWheelInfo m_deltaRotation(float setter);
-	public native @Cast("btScalar") float m_rollInfluence(); public native btWheelInfo m_rollInfluence(float setter);
-	public native @Cast("btScalar") float m_maxSuspensionForce(); public native btWheelInfo m_maxSuspensionForce(float setter);
+	public native @Cast("btScalar") double m_suspensionRestLength1(); public native btWheelInfo m_suspensionRestLength1(double setter);      //const
+	public native @Cast("btScalar") double m_maxSuspensionTravelCm(); public native btWheelInfo m_maxSuspensionTravelCm(double setter);
+	public native @Cast("btScalar") double getSuspensionRestLength();
+	public native @Cast("btScalar") double m_wheelsRadius(); public native btWheelInfo m_wheelsRadius(double setter);              //const
+	public native @Cast("btScalar") double m_suspensionStiffness(); public native btWheelInfo m_suspensionStiffness(double setter);       //const
+	public native @Cast("btScalar") double m_wheelsDampingCompression(); public native btWheelInfo m_wheelsDampingCompression(double setter);  //const
+	public native @Cast("btScalar") double m_wheelsDampingRelaxation(); public native btWheelInfo m_wheelsDampingRelaxation(double setter);   //const
+	public native @Cast("btScalar") double m_frictionSlip(); public native btWheelInfo m_frictionSlip(double setter);
+	public native @Cast("btScalar") double m_steering(); public native btWheelInfo m_steering(double setter);
+	public native @Cast("btScalar") double m_rotation(); public native btWheelInfo m_rotation(double setter);
+	public native @Cast("btScalar") double m_deltaRotation(); public native btWheelInfo m_deltaRotation(double setter);
+	public native @Cast("btScalar") double m_rollInfluence(); public native btWheelInfo m_rollInfluence(double setter);
+	public native @Cast("btScalar") double m_maxSuspensionForce(); public native btWheelInfo m_maxSuspensionForce(double setter);
 
-	public native @Cast("btScalar") float m_engineForce(); public native btWheelInfo m_engineForce(float setter);
+	public native @Cast("btScalar") double m_engineForce(); public native btWheelInfo m_engineForce(double setter);
 
-	public native @Cast("btScalar") float m_brake(); public native btWheelInfo m_brake(float setter);
+	public native @Cast("btScalar") double m_brake(); public native btWheelInfo m_brake(double setter);
 
 	public native @Cast("bool") boolean m_bIsFrontWheel(); public native btWheelInfo m_bIsFrontWheel(boolean setter);
 
@@ -96,9 +96,9 @@ public class btWheelInfo extends Pointer {
 
 	public native void updateWheel(@Const @ByRef btRigidBody chassis, @ByRef RaycastInfo raycastInfo);
 
-	public native @Cast("btScalar") float m_clippedInvContactDotSuspension(); public native btWheelInfo m_clippedInvContactDotSuspension(float setter);
-	public native @Cast("btScalar") float m_suspensionRelativeVelocity(); public native btWheelInfo m_suspensionRelativeVelocity(float setter);
+	public native @Cast("btScalar") double m_clippedInvContactDotSuspension(); public native btWheelInfo m_clippedInvContactDotSuspension(double setter);
+	public native @Cast("btScalar") double m_suspensionRelativeVelocity(); public native btWheelInfo m_suspensionRelativeVelocity(double setter);
 	//calculated by suspension
-	public native @Cast("btScalar") float m_wheelsSuspensionForce(); public native btWheelInfo m_wheelsSuspensionForce(float setter);
-	public native @Cast("btScalar") float m_skidInfo(); public native btWheelInfo m_skidInfo(float setter);
+	public native @Cast("btScalar") double m_wheelsSuspensionForce(); public native btWheelInfo m_wheelsSuspensionForce(double setter);
+	public native @Cast("btScalar") double m_skidInfo(); public native btWheelInfo m_skidInfo(double setter);
 }

@@ -16,12 +16,12 @@ import static org.bytedeco.cuda.global.cusparse.*;
 
 import static org.bytedeco.cuda.global.cusolver.*;
 
-// #endif /* __cplusplus */
+//   #endif /* __cplusplus */
 
-@Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusolver.class)
+  @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusolver.class)
 public class cusolverMgContext extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public cusolverMgContext() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public cusolverMgContext(Pointer p) { super(p); }
-}
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public cusolverMgContext() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public cusolverMgContext(Pointer p) { super(p); }
+  }

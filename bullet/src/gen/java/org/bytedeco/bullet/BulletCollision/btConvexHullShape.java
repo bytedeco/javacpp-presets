@@ -34,14 +34,14 @@ public class btConvexHullShape extends btPolyhedralConvexAabbCachingShape {
 	/**this constructor optionally takes in a pointer to points. Each point is assumed to be 3 consecutive btScalar (x,y,z), the striding defines the number of bytes between each point, in memory.
 	 * It is easier to not pass any points in the constructor, and just add one point at a time, using addPoint.
 	 * btConvexHullShape make an internal copy of the points. */
-	public btConvexHullShape(@Cast("const btScalar*") FloatPointer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
-	private native void allocate(@Cast("const btScalar*") FloatPointer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
+	public btConvexHullShape(@Cast("const btScalar*") DoublePointer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
+	private native void allocate(@Cast("const btScalar*") DoublePointer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
 	public btConvexHullShape() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public btConvexHullShape(@Cast("const btScalar*") FloatBuffer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
-	private native void allocate(@Cast("const btScalar*") FloatBuffer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
-	public btConvexHullShape(@Cast("const btScalar*") float[] points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
-	private native void allocate(@Cast("const btScalar*") float[] points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
+	public btConvexHullShape(@Cast("const btScalar*") DoubleBuffer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
+	private native void allocate(@Cast("const btScalar*") DoubleBuffer points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
+	public btConvexHullShape(@Cast("const btScalar*") double[] points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/) { super((Pointer)null); allocate(points, numPoints, stride); }
+	private native void allocate(@Cast("const btScalar*") double[] points/*=0*/, int numPoints/*=0*/, int stride/*=sizeof(btVector3)*/);
 
 	public native void addPoint(@Const @ByRef btVector3 point, @Cast("bool") boolean recalculateLocalAabb/*=true*/);
 	public native void addPoint(@Const @ByRef btVector3 point);
@@ -61,9 +61,9 @@ public class btConvexHullShape extends btPolyhedralConvexAabbCachingShape {
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatPointer minProj, @Cast("btScalar*") @ByRef FloatPointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatBuffer minProj, @Cast("btScalar*") @ByRef FloatBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef float[] minProj, @Cast("btScalar*") @ByRef float[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoublePointer minProj, @Cast("btScalar*") @ByRef DoublePointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoubleBuffer minProj, @Cast("btScalar*") @ByRef DoubleBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef double[] minProj, @Cast("btScalar*") @ByRef double[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
 
 	//debugging
 	public native @Cast("const char*") BytePointer getName();
@@ -74,7 +74,7 @@ public class btConvexHullShape extends btPolyhedralConvexAabbCachingShape {
 	public native void getVertex(int i, @ByRef btVector3 vtx);
 	public native int getNumPlanes();
 	public native void getPlane(@ByRef btVector3 planeNormal, @ByRef btVector3 planeSupport, int i);
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 
 	/**in case we receive negative scaling */
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);

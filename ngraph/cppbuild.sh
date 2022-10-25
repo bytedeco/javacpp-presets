@@ -28,8 +28,8 @@ tar --totals -xf ../ngraph-$NGRAPH.tar.gz
 
 export LIBRARY_PATH="$INSTALL_PATH/lib"
 export PATH="$PATH:$INSTALL_PATH/bin"
-export CFLAGS="-I$INSTALL_PATH/include"
-export CXXFLAGS="-I$INSTALL_PATH/include"
+export CFLAGS="-I$INSTALL_PATH/include -Wno-error -Wno-non-c-typedef-for-linkage"
+export CXXFLAGS="-I$INSTALL_PATH/include -Wno-error -Wno-non-c-typedef-for-linkage"
 
 cd ncurses-$NCURSES
 ./configure "--prefix=$INSTALL_PATH" "--with-shared" CFLAGS=-fPIC CXXFLAGS=-fPIC
@@ -42,6 +42,8 @@ ln -sf libncurses.so.6 ../lib/libtinfo.so
 cd ../ngraph-$NGRAPH
 patch -Np1 < ../../../ngraph.patch
 
+sedinplace '/VERSION.in/d' CMakeLists.txt
+sedinplace '/\/VERSION/d' src/ngraph/CMakeLists.txt
 sedinplace '/In-source builds are not allowed/d' CMakeLists.txt
 sedinplace 's/set(NGRAPH_FORWARD_CMAKE_ARGS/set(NGRAPH_FORWARD_CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib/g' CMakeLists.txt
 sedinplace 's/"-DARCH_OPT_FLAGS=.*/"-DARCH_OPT_FLAGS=-Wno-error"/g' cmake/external_mkldnn.cmake cmake/external_mkldnn_v1.cmake

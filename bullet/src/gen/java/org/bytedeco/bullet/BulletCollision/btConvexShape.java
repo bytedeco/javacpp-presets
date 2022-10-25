@@ -31,12 +31,12 @@ public class btConvexShape extends btCollisionShape {
 
 	public native @ByVal btVector3 localGetSupportVertexWithoutMarginNonVirtual(@Const @ByRef btVector3 vec);
 	public native @ByVal btVector3 localGetSupportVertexNonVirtual(@Const @ByRef btVector3 vec);
-	public native @Cast("btScalar") float getMarginNonVirtual();
+	public native @Cast("btScalar") double getMarginNonVirtual();
 	public native void getAabbNonVirtual(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatPointer minProj, @Cast("btScalar*") @ByRef FloatPointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef FloatBuffer minProj, @Cast("btScalar*") @ByRef FloatBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
-	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef float[] minProj, @Cast("btScalar*") @ByRef float[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoublePointer minProj, @Cast("btScalar*") @ByRef DoublePointer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef DoubleBuffer minProj, @Cast("btScalar*") @ByRef DoubleBuffer maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
+	public native void project(@Const @ByRef btTransform trans, @Const @ByRef btVector3 dir, @Cast("btScalar*") @ByRef double[] minProj, @Cast("btScalar*") @ByRef double[] maxProj, @ByRef btVector3 witnesPtMin, @ByRef btVector3 witnesPtMax);
 
 	//notice that the vectors should be unit length
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
@@ -49,9 +49,9 @@ public class btConvexShape extends btCollisionShape {
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void setMargin(@Cast("btScalar") float margin);
+	public native void setMargin(@Cast("btScalar") double margin);
 
-	public native @Cast("btScalar") float getMargin();
+	public native @Cast("btScalar") double getMargin();
 
 	public native int getNumPreferredPenetrationDirections();
 

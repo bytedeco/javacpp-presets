@@ -36,7 +36,7 @@ public class btGeometryUtil extends Pointer {
 
 	
 
-	public static native @Cast("bool") boolean isPointInsidePlanes(@Const @ByRef btVector3Array planeEquations, @Const @ByRef btVector3 point, @Cast("btScalar") float margin);
+	public static native @Cast("bool") boolean isPointInsidePlanes(@Const @ByRef btVector3Array planeEquations, @Const @ByRef btVector3 point, @Cast("btScalar") double margin);
 
-	public static native @Cast("bool") boolean areVerticesBehindPlane(@Const @ByRef btVector3 planeNormal, @Const @ByRef btVector3Array vertices, @Cast("btScalar") float margin);
+	public static native @Cast("bool") boolean areVerticesBehindPlane(@Const @ByRef btVector3 planeNormal, @Const @ByRef btVector3Array vertices, @Cast("btScalar") double margin);
 }

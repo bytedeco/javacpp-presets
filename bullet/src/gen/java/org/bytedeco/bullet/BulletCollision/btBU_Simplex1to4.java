@@ -64,7 +64,7 @@ public class btBU_Simplex1to4 extends btPolyhedralConvexAabbCachingShape {
 
 	public native int getIndex(int i);
 
-	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") float tolerance);
+	public native @Cast("bool") boolean isInside(@Const @ByRef btVector3 pt, @Cast("btScalar") double tolerance);
 
 	/**getName is for debugging */
 	public native @Cast("const char*") BytePointer getName();

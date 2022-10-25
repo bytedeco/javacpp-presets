@@ -33,11 +33,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 12;
-public static final int NCCL_PATCH = 7;
+public static final int NCCL_MINOR = 15;
+public static final int NCCL_PATCH = 1;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 21207;
+public static final int NCCL_VERSION_CODE = 21501;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -58,7 +58,21 @@ public static final int ncclSuccess                 = 0,
                ncclInternalError           = 3,
                ncclInvalidArgument         = 4,
                ncclInvalidUsage            = 5,
-               ncclNumResults              = 6;
+               ncclRemoteError             = 6,
+               ncclInProgress              = 7,
+               ncclNumResults              = 8;
+// Targeting ../nccl/ncclConfig_t.java
+
+
+
+/* Config initializer must be assigned to initialize config structure when it is created.
+ * Not initialized config will result in NCCL error. */
+// #define NCCL_CONFIG_INITIALIZER {
+//   sizeof(ncclConfig_t), /* size */
+//   0xcafebeef,           /* magic */
+//   NCCL_VERSION(NCCL_MAJOR, NCCL_MINOR, NCCL_PATCH), /* version */
+//   1                     /* blocking */
+// }
 
 /* Return the NCCL_VERSION_CODE of the NCCL library in the supplied integer.
  * This integer is coded with the MAJOR, MINOR and PATCH level of the
@@ -76,6 +90,13 @@ public static native @Cast("ncclResult_t") int pncclGetVersion(int[] version);
  * communicator before calling ncclCommInitRank. */
 public static native @Cast("ncclResult_t") int ncclGetUniqueId(ncclUniqueId uniqueId);
 public static native @Cast("ncclResult_t") int pncclGetUniqueId(ncclUniqueId uniqueId);
+
+/* Create a new communicator (multi thread/process version) with a configuration
+ * set by users. */
+public static native @Cast("ncclResult_t") int ncclCommInitRankConfig(@ByPtrPtr ncclComm comm, int nranks, @ByVal ncclUniqueId commId, int rank, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int ncclCommInitRankConfig(@Cast("ncclComm**") PointerPointer comm, int nranks, @ByVal ncclUniqueId commId, int rank, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommInitRankConfig(@ByPtrPtr ncclComm comm, int nranks, @ByVal ncclUniqueId commId, int rank, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommInitRankConfig(@Cast("ncclComm**") PointerPointer comm, int nranks, @ByVal ncclUniqueId commId, int rank, ncclConfig_t config);
 
 /* Creates a new communicator (multi thread/process version).
  * rank must be between 0 and nranks-1 and unique within a communicator clique.
@@ -107,8 +128,15 @@ public static native @Cast("ncclResult_t") int pncclCommInitAll(@Cast("ncclComm*
 public static native @Cast("ncclResult_t") int pncclCommInitAll(@ByPtrPtr ncclComm comm, int ndev, @Const IntBuffer devlist);
 public static native @Cast("ncclResult_t") int pncclCommInitAll(@Cast("ncclComm**") PointerPointer comm, int ndev, @Const int[] devlist);
 
-/* Frees resources associated with communicator object, but waits for any operations
- * that might still be running on the device. */
+/* Finalize a communicator. ncclCommFinalize flushes all issued communications,
+ * and marks communicator state as ncclInProgress. The state will change to ncclSuccess
+ * when the communicator is globally quiescent and related resources are freed; then,
+ * calling ncclCommDestroy can locally free the rest of the resources (e.g. communicator
+ * itself) without blocking. */
+public static native @Cast("ncclResult_t") int ncclCommFinalize(ncclComm comm);
+public static native @Cast("ncclResult_t") int pncclCommFinalize(ncclComm comm);
+
+/* Frees local resources associated with communicator object. */
 public static native @Cast("ncclResult_t") int ncclCommDestroy(ncclComm comm);
 public static native @Cast("ncclResult_t") int pncclCommDestroy(ncclComm comm);
 
@@ -117,9 +145,15 @@ public static native @Cast("ncclResult_t") int pncclCommDestroy(ncclComm comm);
 public static native @Cast("ncclResult_t") int ncclCommAbort(ncclComm comm);
 public static native @Cast("ncclResult_t") int pncclCommAbort(ncclComm comm);
 
-/* Returns a human-readable error message. */
+/* Returns a string for each error code. */
 public static native @Cast("const char*") BytePointer ncclGetErrorString(@Cast("ncclResult_t") int result);
 public static native @Cast("const char*") BytePointer pncclGetErrorString(@Cast("ncclResult_t") int result);
+
+/* Returns a human-readable message of the last error that occurred.
+ * comm is currently unused and can be set to NULL
+ */
+public static native @Cast("const char*") BytePointer ncclGetLastError(ncclComm comm);
+public static native @Cast("const char*") BytePointer pncclGetError(ncclComm comm);
 
 /* Checks whether the comm has encountered any asynchronous errors */
 public static native @Cast("ncclResult_t") int ncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") IntPointer asyncError);

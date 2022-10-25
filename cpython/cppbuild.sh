@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENSSL=openssl-3.0.2
-CPYTHON_VERSION=3.10.5
+OPENSSL=openssl-3.0.5
+CPYTHON_VERSION=3.10.8
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 

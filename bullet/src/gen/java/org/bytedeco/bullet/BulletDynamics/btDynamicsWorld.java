@@ -27,8 +27,8 @@ public class btDynamicsWorld extends btCollisionWorld {
 	 * By default, Bullet will subdivide the timestep in constant substeps of each 'fixedTimeStep'.
 	 * in order to keep the simulation real-time, the maximum number of substeps can be clamped to 'maxSubSteps'.
 	 * You can disable subdividing the timestep/substepping by passing maxSubSteps=0 as second argument to stepSimulation, but in that case you have to keep the timeStep constant. */
-	public native int stepSimulation(@Cast("btScalar") float timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") float fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
-	public native int stepSimulation(@Cast("btScalar") float timeStep);
+	public native int stepSimulation(@Cast("btScalar") double timeStep, int maxSubSteps/*=1*/, @Cast("btScalar") double fixedTimeStep/*=btScalar(1.) / btScalar(60.)*/);
+	public native int stepSimulation(@Cast("btScalar") double timeStep);
 
 	public native void debugDrawWorld();
 

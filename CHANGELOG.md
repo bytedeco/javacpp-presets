@@ -1,5 +1,9 @@
 
  * Disable OpenMP for Tesseract to work around performance issues ([pull #1201](https://github.com/bytedeco/javacpp-presets/pull/1201))
+ * Enable NVIDIA GPU acceleration for FFmpeg on ARM and POWER as well ([issue bytedeco/javacv#1894](https://github.com/bytedeco/javacv/issues/1894))
+ * Add support for HEVC and Opus to FLV format in presets for FFmpeg ([pull #1228](https://github.com/bytedeco/javacpp-presets/pull/1228))
+ * Build Leptonica with OpenJPEG for JPEG 2000 support
+ * Introduce `linux-arm64` and `macosx-arm64` builds to presets for libpostal ([pull #1199](https://github.com/bytedeco/javacpp-presets/pull/1199) and [pull #1205](https://github.com/bytedeco/javacpp-presets/pull/1205))
  * Map missing factory functions in `torch::` namespace using `torch_` as prefix in presets for PyTorch ([issue #1197](https://github.com/bytedeco/javacpp-presets/issues/1197))
  * Add presets for the nvJPEG module of CUDA ([issue #1193](https://github.com/bytedeco/javacpp-presets/issues/1193))
  * Introduce Android builds for TensorFlow Lite ([discussion #1180](https://github.com/bytedeco/javacpp-presets/discussions/1180))
@@ -7,7 +11,7 @@
  * Include missing `opencv2/mcc/ccm.hpp` header file in presets for OpenCV ([discussion bytedeco/javacpp#568](https://github.com/bytedeco/javacpp/discussions/568))
  * Fix a few incorrectly mapped instances of `std::unordered_map` for PyTorch ([issue #1164](https://github.com/bytedeco/javacpp-presets/issues/1164))
  * Migrate builds for Leptonica and Tesseract to CMake ([issue #1163](https://github.com/bytedeco/javacpp-presets/issues/1163))
- * Introduce `macosx-arm64` builds for libffi ([issue #1182](https://github.com/bytedeco/javacpp-presets/issues/1182)), Leptonica, and Tesseract ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814))
+ * Introduce `macosx-arm64` builds for LZ4 ([pull #1243](https://github.com/bytedeco/javacpp-presets/pull/1243)), libffi ([issue #1182](https://github.com/bytedeco/javacpp-presets/issues/1182)), Leptonica, and Tesseract ([issue #814](https://github.com/bytedeco/javacpp-presets/issues/814))
  * Map instances of `torch::OrderedDict` using C++ templates from PyTorch ([issue #623](https://github.com/bytedeco/javacpp-presets/issues/623))
  * Add presets for Bullet Physics SDK 3.24 ([pull #1153](https://github.com/bytedeco/javacpp-presets/pull/1153))
  * Add `long[] pytorch.Tensor.shape()` method for convenience ([pull #1161](https://github.com/bytedeco/javacpp-presets/pull/1161))
@@ -16,10 +20,10 @@
  * Include `cudnn_backend.h` header file in presets for CUDA ([issue #1158](https://github.com/bytedeco/javacpp-presets/issues/1158))
  * Bundle `zlibwapi.dll` required by cuDNN in redist artifacts of presets for CUDA ([issue bytedeco/javacv#1767](https://github.com/bytedeco/javacv/issues/1767))
  * Harmonize string and buffer pointer types of function parameters from DepthAI ([issue #1155](https://github.com/bytedeco/javacpp-presets/issues/1155))
- * Bundle correctly OpenMP library for PyTorch builds on Mac as well
+ * Bundle correctly OpenMP library for PyTorch builds on Mac as well ([issue #1225](https://github.com/bytedeco/javacpp-presets/issues/1225))
  * Remove dependency on CUDA from presets for Triton Inference Server ([pull #1151](https://github.com/bytedeco/javacpp-presets/pull/1151))
  * Disable signal handlers of DepthAI known to cause issues with the JDK ([issue #1118](https://github.com/bytedeco/javacpp-presets/issues/1118))
- * Upgrade presets for OpenCV 4.6.0, FFmpeg 5.0.1, HDF5 1.12.2, DNNL 2.6.1, OpenBLAS 0.3.20, CPython 3.10.5, NumPy 1.23.1, SciPy 1.9.0, Gym 0.25.0, LLVM 14.0.6, Tesseract 5.2.0, CUDA 11.6.2, NCCL 2.12.7, OpenCL 3.0.11, MXNet 1.9.1, PyTorch 1.12.0, TensorFlow Lite 2.9.1, Triton Inference Server 2.21.0, ALE 0.7.5, DepthAI 2.17.0, ONNX 1.12.0, ONNX Runtime 1.11.1, TVM 0.9.0, Skia 2.88.0, cpu_features 0.7.0, ModSecurity 3.0.7, and their dependencies
+ * Upgrade presets for OpenCV 4.6.0, FFmpeg 5.1.2, HDF5 1.12.2, LZ4 1.9.4, MKL 2022.2, DNNL 2.7, OpenBLAS 0.3.21 ([issue #1171](https://github.com/bytedeco/javacpp-presets/issues/1171)), CPython 3.10.8, NumPy 1.23.4, SciPy 1.9.2, Gym 0.26.2, LLVM 15.0.2, libffi 3.4.3, Tesseract 5.2.0, CUDA 11.8.0, cuDNN 8.6.0, NCCL 2.15.1, OpenCL 3.0.12, MXNet 1.9.1, PyTorch 1.12.1, TensorFlow Lite 2.10.0, TensorRT 8.4.3.1, Triton Inference Server 2.26.0, ALE 0.8.0, DepthAI 2.17.4, ONNX 1.12.0, ONNX Runtime 1.12.1, TVM 0.10.0, Skia 2.88.3, cpu_features 0.7.0, ModSecurity 3.0.8, and their dependencies
 
 ### February 11, 2022 version 1.5.7
  * Build FFmpeg with WebP encoding support ([pull #1133](https://github.com/bytedeco/javacpp-presets/pull/1133))

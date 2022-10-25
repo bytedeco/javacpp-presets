@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libffi-platform</artifactId>
-  <version>3.4.2-${project.parent.version}</version>
+  <version>3.4.3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for libffi</name>
 
   <properties>

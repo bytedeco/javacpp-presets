@@ -162,7 +162,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletCollision/Gimpact/btTriangleShapeEx.h",
                 "BulletCollision/Gimpact/gim_pair.h",
             },
-            link = "BulletCollision@.3.20"
+            link = "BulletCollision@.3.24"
         )
     },
     target = "org.bytedeco.bullet.BulletCollision",
@@ -231,6 +231,8 @@ public class BulletCollision implements InfoMapper {
                     "DBVT_CHECKTYPE",
                     "DBVT_IPOLICY",
                     "DBVT_PREFIX",
+                    "MAX_CONVEX_CAST_ITERATIONS",
+                    "MAX_CONVEX_CAST_EPSILON",
                     "btAABB",
                     "btAlignedObjectArray<BT_QUANTIZED_BVH_NODE>::findBinarySearch",
                     "btAlignedObjectArray<BT_QUANTIZED_BVH_NODE>::findLinearSearch",

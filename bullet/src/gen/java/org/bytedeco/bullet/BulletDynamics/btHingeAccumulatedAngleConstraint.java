@@ -43,7 +43,7 @@ public class btHingeAccumulatedAngleConstraint extends btHingeConstraint {
 	private native void allocate(@ByRef btRigidBody rbA, @Const @ByRef btTransform rbAFrame, @Cast("bool") boolean useReferenceFrameA/*=false*/);
 	public btHingeAccumulatedAngleConstraint(@ByRef btRigidBody rbA, @Const @ByRef btTransform rbAFrame) { super((Pointer)null); allocate(rbA, rbAFrame); }
 	private native void allocate(@ByRef btRigidBody rbA, @Const @ByRef btTransform rbAFrame);
-	public native @Cast("btScalar") float getAccumulatedHingeAngle();
-	public native void setAccumulatedHingeAngle(@Cast("btScalar") float accAngle);
+	public native @Cast("btScalar") double getAccumulatedHingeAngle();
+	public native void setAccumulatedHingeAngle(@Cast("btScalar") double accAngle);
 	public native void getInfo1(btConstraintInfo1 info);
 }

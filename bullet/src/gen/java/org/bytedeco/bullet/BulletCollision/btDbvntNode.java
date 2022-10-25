@@ -22,7 +22,7 @@ public class btDbvntNode extends Pointer {
 
     public native @ByRef @Cast("btDbvtVolume*") btDbvtAabbMm volume(); public native btDbvntNode volume(btDbvtAabbMm setter);
     public native @ByRef btVector3 normal(); public native btDbvntNode normal(btVector3 setter);
-    public native @Cast("btScalar") float angle(); public native btDbvntNode angle(float setter);
+    public native @Cast("btScalar") double angle(); public native btDbvntNode angle(double setter);
     public native @Cast("bool") boolean isleaf();
     public native @Cast("bool") boolean isinternal();
     public native btDbvntNode childs(int i); public native btDbvntNode childs(int i, btDbvntNode setter);

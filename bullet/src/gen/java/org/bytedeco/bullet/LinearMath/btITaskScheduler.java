@@ -27,7 +27,7 @@ public class btITaskScheduler extends Pointer {
 	public native int getNumThreads();
 	public native void setNumThreads(int numThreads);
 	public native void parallelFor(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelForBody body);
-	public native @Cast("btScalar") float parallelSum(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelSumBody body);
+	public native @Cast("btScalar") double parallelSum(int iBegin, int iEnd, int grainSize, @Const @ByRef btIParallelSumBody body);
 	public native void sleepWorkerThreadsHint();  // hint the task scheduler that we may not be using these threads for a little while
 
 	// internal use only

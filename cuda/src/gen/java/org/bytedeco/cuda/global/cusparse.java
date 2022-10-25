@@ -18,7 +18,7 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 // Parsed from <cusparse.h>
 
 /*
- * Copyright 1993-2021 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2022 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -81,8 +81,8 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 
 public static final int CUSPARSE_VER_MAJOR = 11;
 public static final int CUSPARSE_VER_MINOR = 7;
-public static final int CUSPARSE_VER_PATCH = 2;
-public static final int CUSPARSE_VER_BUILD = 124;
+public static final int CUSPARSE_VER_PATCH = 5;
+public static final int CUSPARSE_VER_BUILD = 86;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -12894,6 +12894,51 @@ public static native @Cast("cusparseStatus_t") int cusparseCreateCsc(@ByPtrPtr c
                   @Cast("cudaDataType") int valueType);
 
 
+
+public static native @Cast("cusparseStatus_t") int cusparseCscGet(cusparseSpMatDescr spMatDescr,
+               @Cast("int64_t*") LongPointer rows,
+               @Cast("int64_t*") LongPointer cols,
+               @Cast("int64_t*") LongPointer nnz,
+               @Cast("void**") PointerPointer cscColOffsets,
+               @Cast("void**") PointerPointer cscRowInd,
+               @Cast("void**") PointerPointer cscValues,
+               @Cast("cusparseIndexType_t*") IntPointer cscColOffsetsType,
+               @Cast("cusparseIndexType_t*") IntPointer cscRowIndType,
+               @Cast("cusparseIndexBase_t*") IntPointer idxBase,
+               @Cast("cudaDataType*") IntPointer valueType);
+public static native @Cast("cusparseStatus_t") int cusparseCscGet(cusparseSpMatDescr spMatDescr,
+               @Cast("int64_t*") LongPointer rows,
+               @Cast("int64_t*") LongPointer cols,
+               @Cast("int64_t*") LongPointer nnz,
+               @Cast("void**") @ByPtrPtr Pointer cscColOffsets,
+               @Cast("void**") @ByPtrPtr Pointer cscRowInd,
+               @Cast("void**") @ByPtrPtr Pointer cscValues,
+               @Cast("cusparseIndexType_t*") IntPointer cscColOffsetsType,
+               @Cast("cusparseIndexType_t*") IntPointer cscRowIndType,
+               @Cast("cusparseIndexBase_t*") IntPointer idxBase,
+               @Cast("cudaDataType*") IntPointer valueType);
+public static native @Cast("cusparseStatus_t") int cusparseCscGet(cusparseSpMatDescr spMatDescr,
+               @Cast("int64_t*") LongBuffer rows,
+               @Cast("int64_t*") LongBuffer cols,
+               @Cast("int64_t*") LongBuffer nnz,
+               @Cast("void**") @ByPtrPtr Pointer cscColOffsets,
+               @Cast("void**") @ByPtrPtr Pointer cscRowInd,
+               @Cast("void**") @ByPtrPtr Pointer cscValues,
+               @Cast("cusparseIndexType_t*") IntBuffer cscColOffsetsType,
+               @Cast("cusparseIndexType_t*") IntBuffer cscRowIndType,
+               @Cast("cusparseIndexBase_t*") IntBuffer idxBase,
+               @Cast("cudaDataType*") IntBuffer valueType);
+public static native @Cast("cusparseStatus_t") int cusparseCscGet(cusparseSpMatDescr spMatDescr,
+               @Cast("int64_t*") long[] rows,
+               @Cast("int64_t*") long[] cols,
+               @Cast("int64_t*") long[] nnz,
+               @Cast("void**") @ByPtrPtr Pointer cscColOffsets,
+               @Cast("void**") @ByPtrPtr Pointer cscRowInd,
+               @Cast("void**") @ByPtrPtr Pointer cscValues,
+               @Cast("cusparseIndexType_t*") int[] cscColOffsetsType,
+               @Cast("cusparseIndexType_t*") int[] cscRowIndType,
+               @Cast("cusparseIndexBase_t*") int[] idxBase,
+               @Cast("cudaDataType*") int[] valueType);
 
 public static native @Cast("cusparseStatus_t") int cusparseCsrSetPointers(cusparseSpMatDescr spMatDescr,
                        Pointer csrRowOffsets,

@@ -32,54 +32,54 @@ public class btDeformableNeoHookeanForce extends btDeformableLagrangianForce {
         return new btDeformableNeoHookeanForce((Pointer)this).offsetAddress(i);
     }
 
-	public native @Cast("btScalar") float m_mu(); public native btDeformableNeoHookeanForce m_mu(float setter);
-	public native @Cast("btScalar") float m_lambda(); public native btDeformableNeoHookeanForce m_lambda(float setter);  // Lame Parameters
-	public native @Cast("btScalar") float m_E(); public native btDeformableNeoHookeanForce m_E(float setter);
-	public native @Cast("btScalar") float m_nu(); public native btDeformableNeoHookeanForce m_nu(float setter);       // Young's modulus and Poisson ratio
-	public native @Cast("btScalar") float m_mu_damp(); public native btDeformableNeoHookeanForce m_mu_damp(float setter);
-	public native @Cast("btScalar") float m_lambda_damp(); public native btDeformableNeoHookeanForce m_lambda_damp(float setter);
+	public native @Cast("btScalar") double m_mu(); public native btDeformableNeoHookeanForce m_mu(double setter);
+	public native @Cast("btScalar") double m_lambda(); public native btDeformableNeoHookeanForce m_lambda(double setter);  // Lame Parameters
+	public native @Cast("btScalar") double m_E(); public native btDeformableNeoHookeanForce m_E(double setter);
+	public native @Cast("btScalar") double m_nu(); public native btDeformableNeoHookeanForce m_nu(double setter);       // Young's modulus and Poisson ratio
+	public native @Cast("btScalar") double m_mu_damp(); public native btDeformableNeoHookeanForce m_mu_damp(double setter);
+	public native @Cast("btScalar") double m_lambda_damp(); public native btDeformableNeoHookeanForce m_lambda_damp(double setter);
 	public btDeformableNeoHookeanForce() { super((Pointer)null); allocate(); }
 	private native void allocate();
 
-	public btDeformableNeoHookeanForce(@Cast("btScalar") float mu, @Cast("btScalar") float lambda, @Cast("btScalar") float damping/*=0.05*/) { super((Pointer)null); allocate(mu, lambda, damping); }
-	private native void allocate(@Cast("btScalar") float mu, @Cast("btScalar") float lambda, @Cast("btScalar") float damping/*=0.05*/);
-	public btDeformableNeoHookeanForce(@Cast("btScalar") float mu, @Cast("btScalar") float lambda) { super((Pointer)null); allocate(mu, lambda); }
-	private native void allocate(@Cast("btScalar") float mu, @Cast("btScalar") float lambda);
+	public btDeformableNeoHookeanForce(@Cast("btScalar") double mu, @Cast("btScalar") double lambda, @Cast("btScalar") double damping/*=0.05*/) { super((Pointer)null); allocate(mu, lambda, damping); }
+	private native void allocate(@Cast("btScalar") double mu, @Cast("btScalar") double lambda, @Cast("btScalar") double damping/*=0.05*/);
+	public btDeformableNeoHookeanForce(@Cast("btScalar") double mu, @Cast("btScalar") double lambda) { super((Pointer)null); allocate(mu, lambda); }
+	private native void allocate(@Cast("btScalar") double mu, @Cast("btScalar") double lambda);
 
 	public native void updateYoungsModulusAndPoissonRatio();
 
 	public native void updateLameParameters();
 
-	public native void setYoungsModulus(@Cast("btScalar") float E);
+	public native void setYoungsModulus(@Cast("btScalar") double E);
 
-	public native void setPoissonRatio(@Cast("btScalar") float nu);
+	public native void setPoissonRatio(@Cast("btScalar") double nu);
 
-	public native void setDamping(@Cast("btScalar") float damping);
+	public native void setDamping(@Cast("btScalar") double damping);
 
-	public native void setLameParameters(@Cast("btScalar") float mu, @Cast("btScalar") float lambda);
+	public native void setLameParameters(@Cast("btScalar") double mu, @Cast("btScalar") double lambda);
 
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledForces(@Cast("btScalar") double scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledExplicitForce(@Cast("btScalar") double scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
 
 	// The damping matrix is calculated using the time n state as described in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledDampingForce(@Cast("btScalar") double scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
 
-	public native double totalElasticEnergy(@Cast("btScalar") float dt);
+	public native double totalElasticEnergy(@Cast("btScalar") double dt);
 
 	// The damping energy is formulated as in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native double totalDampingEnergy(@Cast("btScalar") float dt);
+	public native double totalDampingEnergy(@Cast("btScalar") double dt);
 
 	public native double elasticEnergyDensity(@Const @ByRef btSoftBody.TetraScratch s);
 
-	public native void addScaledElasticForce(@Cast("btScalar") float scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledElasticForce(@Cast("btScalar") double scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array force);
 
 	// The damping matrix is calculated using the time n state as described in https://www.math.ucla.edu/~jteran/papers/GSSJT15.pdf to allow line search
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") double scale, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array diagA);
 
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableNeoHookeanForce::TVStack*") @ByRef btVector3Array df);
 
 	public native void firstPiola(@Const @ByRef btSoftBody.TetraScratch s, @ByRef btMatrix3x3 P);
 
@@ -91,12 +91,12 @@ public class btDeformableNeoHookeanForce extends btDeformableLagrangianForce {
 	// This function calculates the dP = dQ/dF * dF
 	public native void firstPiolaDampingDifferential(@Const @ByRef btSoftBody.TetraScratch s, @Const @ByRef btMatrix3x3 dF, @ByRef btMatrix3x3 dP);
 
-	public native @Cast("btScalar") float DotProduct(@Const @ByRef btMatrix3x3 A, @Const @ByRef btMatrix3x3 B);
+	public native @Cast("btScalar") double DotProduct(@Const @ByRef btMatrix3x3 A, @Const @ByRef btMatrix3x3 B);
 
 	// Let C(A) be the cofactor of the matrix A
 	// Let H = the derivative of C(A) with respect to A evaluated at F = A
 	// This function calculates H*dF
-	public native void addScaledCofactorMatrixDifferential(@Const @ByRef btMatrix3x3 F, @Const @ByRef btMatrix3x3 dF, @Cast("btScalar") float scale, @ByRef btMatrix3x3 M);
+	public native void addScaledCofactorMatrixDifferential(@Const @ByRef btMatrix3x3 F, @Const @ByRef btMatrix3x3 dF, @Cast("btScalar") double scale, @ByRef btMatrix3x3 M);
 
 	public native @Cast("btDeformableLagrangianForceType") int getForceType();
 }

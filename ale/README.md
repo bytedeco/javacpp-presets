@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * The Arcade Learning Environment 0.7.5  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * The Arcade Learning Environment 0.8.0  https://github.com/mgbellemare/Arcade-Learning-Environment
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.7.5-1.5.8-SNAPSHOT</version>
+            <version>0.8.0-1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

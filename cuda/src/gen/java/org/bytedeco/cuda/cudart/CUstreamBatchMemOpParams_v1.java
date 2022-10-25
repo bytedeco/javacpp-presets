@@ -49,6 +49,8 @@ public class CUstreamBatchMemOpParams_v1 extends Pointer {
         @Name("writeValue.alias") public native @Cast("CUdeviceptr") long writeValue_alias(); public native CUstreamBatchMemOpParams_v1 writeValue_alias(long setter);
         @Name("flushRemoteWrites.operation") public native @Cast("CUstreamBatchMemOpType") int flushRemoteWrites_operation(); public native CUstreamBatchMemOpParams_v1 flushRemoteWrites_operation(int setter);
         @Name("flushRemoteWrites.flags") public native @Cast("unsigned int") int flushRemoteWrites_flags(); public native CUstreamBatchMemOpParams_v1 flushRemoteWrites_flags(int setter);
+        @Name("memoryBarrier.operation") public native @Cast("CUstreamBatchMemOpType") int memoryBarrier_operation(); public native CUstreamBatchMemOpParams_v1 memoryBarrier_operation(int setter);
+        @Name("memoryBarrier.flags") public native @Cast("unsigned int") int memoryBarrier_flags(); public native CUstreamBatchMemOpParams_v1 memoryBarrier_flags(int setter);
     public native @Cast("cuuint64_t") long pad(int i); public native CUstreamBatchMemOpParams_v1 pad(int i, long setter);
     @MemberGetter public native @Cast("cuuint64_t*") LongPointer pad();
 }

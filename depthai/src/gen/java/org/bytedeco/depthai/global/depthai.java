@@ -147,6 +147,7 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // #ifndef _XLINKPUBLICDEFINES_H
 // #define _XLINKPUBLICDEFINES_H
 // #include <stdint.h>
+// #include <stdbool.h>
 // #ifdef __cplusplus
 // #endif
 
@@ -352,8 +353,10 @@ public static final int
 
 // #pragma once
 // #if(__cplusplus >= 201703L) || (_MSVC_LANG >= 201703L)
-//     #include <filesystem>
 //     #define DEPTHAI_NODISCARD [[nodiscard]]
+//     #if(defined(_MSC_VER)) || (defined(__has_include) && __has_include(<filesystem>)) || (__cplusplus >= 202002L)
+//         #include <filesystem>
+//     #endif
 // #else
 //     #define DEPTHAI_NODISCARD
 // #endif
@@ -902,6 +905,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include <vector>
 
 // #include "depthai-shared/common/Point2f.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/DatatypeEnum.hpp"
 // #include "depthai-shared/datatype/RawAprilTagConfig.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
@@ -967,6 +971,28 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
 // Targeting ../RawCameraControl.java
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/datatype/RawEdgeDetectorConfig.hpp
+
+// #pragma once
+// #include <cstdint>
+// #include <vector>
+
+// #include "RawImgFrame.hpp"
+// #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/datatype/DatatypeEnum.hpp"
+// #include "depthai-shared/datatype/RawBuffer.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
+// Targeting ../EdgeDetectorConfigData.java
+
+
+
+// Targeting ../RawEdgeDetectorConfig.java
 
 
 
@@ -1110,6 +1136,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "RawSpatialLocationCalculatorConfig.hpp"
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/DatatypeEnum.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
@@ -1180,6 +1207,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include "depthai-shared/common/Point3f.hpp"
 // #include "depthai-shared/common/Rect.hpp"
+// #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/datatype/RawImgDetections.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
@@ -1287,7 +1315,8 @@ public static final int BOARD_CONFIG_MAGIC2 = BOARD_CONFIG_MAGIC2();
 public static final int XLINK_USB_BUFFER_MAX_SIZE = XLINK_USB_BUFFER_MAX_SIZE();
 
 // Watchdog timeout
-@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_WATCHDOG_TIMEOUT();
+@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_USB_WATCHDOG_TIMEOUT();
+@Namespace("dai::device") @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer XLINK_TCP_WATCHDOG_TIMEOUT();
 
 // Maximum metadata size
 @Namespace("dai::device") @MemberGetter public static native int XLINK_MESSAGE_METADATA_MAX_SIZE();
@@ -1318,6 +1347,9 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 
 // Targeting ../ImageManipPropertiesSerializable.java
+
+
+// Targeting ../EdgeDetectorPropertiesSerializable.java
 
 
 // Targeting ../GlobalPropertiesSerializable.java
@@ -1594,6 +1626,24 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 // #include "depthai-shared/datatype/RawCameraControl.hpp"
 // #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../MonoCameraProperties.java
+
+
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/properties/EdgeDetectorProperties.hpp
+
+// #pragma once
+
+// #include <vector>
+
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/datatype/RawEdgeDetectorConfig.hpp"
+// #include "depthai-shared/properties/Properties.hpp"
+// Targeting ../EdgeDetectorProperties.java
 
 
 
@@ -2065,6 +2115,22 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
   // namespace dai
 
 
+// Parsed from depthai/pipeline/datatype/EdgeDetectorConfig.hpp
+
+// #pragma once
+
+// #include <unordered_map>
+// #include <vector>
+
+// #include "depthai-shared/datatype/RawEdgeDetectorConfig.hpp"
+// #include "depthai/pipeline/datatype/Buffer.hpp"
+// Targeting ../EdgeDetectorConfig.java
+
+
+
+  // namespace dai
+
+
 // Parsed from depthai/pipeline/datatype/ImgFrame.hpp
 
 // #pragma once
@@ -2304,6 +2370,9 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // Targeting ../ImageManipPropertiesNode.java
 
 
+// Targeting ../EdgeDetectorPropertiesNode.java
+
+
 // Targeting ../NeuralNetworkPropertiesNode.java
 
 
@@ -2429,6 +2498,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "datatype/AprilTags.hpp"
 // #include "datatype/Buffer.hpp"
 // #include "datatype/CameraControl.hpp"
+// #include "datatype/EdgeDetectorConfig.hpp"
 // #include "datatype/FeatureTrackerConfig.hpp"
 // #include "datatype/IMUData.hpp"
 // #include "datatype/ImageManipConfig.hpp"
@@ -2438,9 +2508,11 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "datatype/SpatialImgDetections.hpp"
 // #include "datatype/SpatialLocationCalculatorConfig.hpp"
 // #include "datatype/SpatialLocationCalculatorData.hpp"
+// #include "datatype/StereoDepthConfig.hpp"
 // #include "datatype/SystemInformation.hpp"
 // #include "datatype/TrackedFeatures.hpp"
 // #include "datatype/Tracklets.hpp"
+
 
 // Parsed from depthai/pipeline/node/IMU.hpp
 
@@ -2523,6 +2595,27 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // shared
 // #include <depthai-shared/properties/MonoCameraProperties.hpp>
 // Targeting ../MonoCamera.java
+
+
+
+  // namespace node
+  // namespace dai
+
+
+// Parsed from depthai/pipeline/node/EdgeDetector.hpp
+
+// #pragma once
+
+// #include <depthai/pipeline/Node.hpp>
+
+// standard
+// #include <fstream>
+
+// shared
+// #include <depthai-shared/properties/EdgeDetectorProperties.hpp>
+
+// #include "depthai/pipeline/datatype/EdgeDetectorConfig.hpp"
+// Targeting ../EdgeDetector.java
 
 
 
@@ -2958,6 +3051,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 // shared
 // #include "depthai-shared/datatype/RawBuffer.hpp"
+// #include "depthai-shared/xlink/XLinkConstants.hpp"
 // Targeting ../DataOutputQueue.java
 
 

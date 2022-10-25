@@ -78,7 +78,11 @@ public class ALEInterface extends Pointer {
   public native @Cast("ale::reward_t") int act(@Cast("ale::Action") int action);
 
   // Indicates if the game has ended.
+  public native @Cast("bool") boolean game_over(@Cast("bool") boolean with_truncation/*=true*/);
   public native @Cast("bool") boolean game_over();
+
+  // Indicates if the episode has been truncated.
+  public native @Cast("bool") boolean game_truncated();
 
   // Resets the game, but not the full system.
   public native void reset_game();

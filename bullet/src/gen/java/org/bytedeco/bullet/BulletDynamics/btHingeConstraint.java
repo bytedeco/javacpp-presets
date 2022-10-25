@@ -57,7 +57,7 @@ public class btHingeConstraint extends btTypedConstraint {
 	public native void getInfo2Internal(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
 	public native void getInfo2InternalUsingFrameOffset(btConstraintInfo2 info, @Const @ByRef btTransform transA, @Const @ByRef btTransform transB, @Const @ByRef btVector3 angVelA, @Const @ByRef btVector3 angVelB);
 
-	public native void updateRHS(@Cast("btScalar") float timeStep);
+	public native void updateRHS(@Cast("btScalar") double timeStep);
 
 	public native @ByRef btRigidBody getRigidBodyA();
 
@@ -71,38 +71,38 @@ public class btHingeConstraint extends btTypedConstraint {
 
 	public native void setAngularOnly(@Cast("bool") boolean angularOnly);
 
-	public native void enableAngularMotor(@Cast("bool") boolean enableMotor, @Cast("btScalar") float targetVelocity, @Cast("btScalar") float maxMotorImpulse);
+	public native void enableAngularMotor(@Cast("bool") boolean enableMotor, @Cast("btScalar") double targetVelocity, @Cast("btScalar") double maxMotorImpulse);
 
 	// extra motor API, including ability to set a target rotation (as opposed to angular velocity)
 	// note: setMotorTarget sets angular velocity under the hood, so you must call it every tick to
 	//       maintain a given angular target.
 	public native void enableMotor(@Cast("bool") boolean enableMotor);
-	public native void setMaxMotorImpulse(@Cast("btScalar") float maxMotorImpulse);
-	public native void setMotorTargetVelocity(@Cast("btScalar") float motorTargetVelocity);
-	public native void setMotorTarget(@Const @ByRef btQuaternion qAinB, @Cast("btScalar") float dt);  // qAinB is rotation of body A wrt body B.
-	public native void setMotorTarget(@Cast("btScalar") float targetAngle, @Cast("btScalar") float dt);
+	public native void setMaxMotorImpulse(@Cast("btScalar") double maxMotorImpulse);
+	public native void setMotorTargetVelocity(@Cast("btScalar") double motorTargetVelocity);
+	public native void setMotorTarget(@Const @ByRef btQuaternion qAinB, @Cast("btScalar") double dt);  // qAinB is rotation of body A wrt body B.
+	public native void setMotorTarget(@Cast("btScalar") double targetAngle, @Cast("btScalar") double dt);
 
-	public native void setLimit(@Cast("btScalar") float low, @Cast("btScalar") float high, @Cast("btScalar") float _softness/*=0.9f*/, @Cast("btScalar") float _biasFactor/*=0.3f*/, @Cast("btScalar") float _relaxationFactor/*=1.0f*/);
-	public native void setLimit(@Cast("btScalar") float low, @Cast("btScalar") float high);
+	public native void setLimit(@Cast("btScalar") double low, @Cast("btScalar") double high, @Cast("btScalar") double _softness/*=0.9f*/, @Cast("btScalar") double _biasFactor/*=0.3f*/, @Cast("btScalar") double _relaxationFactor/*=1.0f*/);
+	public native void setLimit(@Cast("btScalar") double low, @Cast("btScalar") double high);
 
-	public native @Cast("btScalar") float getLimitSoftness();
+	public native @Cast("btScalar") double getLimitSoftness();
 
-	public native @Cast("btScalar") float getLimitBiasFactor();
+	public native @Cast("btScalar") double getLimitBiasFactor();
 
-	public native @Cast("btScalar") float getLimitRelaxationFactor();
+	public native @Cast("btScalar") double getLimitRelaxationFactor();
 
 	public native void setAxis(@ByRef btVector3 axisInA);
 
 	public native @Cast("bool") boolean hasLimit();
 
-	public native @Cast("btScalar") float getLowerLimit();
+	public native @Cast("btScalar") double getLowerLimit();
 
-	public native @Cast("btScalar") float getUpperLimit();
+	public native @Cast("btScalar") double getUpperLimit();
 
 	/**The getHingeAngle gives the hinge angle in range [-PI,PI] */
-	public native @Cast("btScalar") float getHingeAngle();
+	public native @Cast("btScalar") double getHingeAngle();
 
-	public native @Cast("btScalar") float getHingeAngle(@Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
+	public native @Cast("btScalar") double getHingeAngle(@Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
 
 	public native void testLimit(@Const @ByRef btTransform transA, @Const @ByRef btTransform transB);
 
@@ -111,12 +111,12 @@ public class btHingeConstraint extends btTypedConstraint {
 
 	public native int getSolveLimit();
 
-	public native @Cast("btScalar") float getLimitSign();
+	public native @Cast("btScalar") double getLimitSign();
 
 	public native @Cast("bool") boolean getAngularOnly();
 	public native @Cast("bool") boolean getEnableAngularMotor();
-	public native @Cast("btScalar") float getMotorTargetVelocity();
-	public native @Cast("btScalar") float getMaxMotorImpulse();
+	public native @Cast("btScalar") double getMotorTargetVelocity();
+	public native @Cast("btScalar") double getMaxMotorImpulse();
 	// access for UseFrameOffset
 	public native @Cast("bool") boolean getUseFrameOffset();
 	public native void setUseFrameOffset(@Cast("bool") boolean frameOffsetOnOff);
@@ -126,11 +126,11 @@ public class btHingeConstraint extends btTypedConstraint {
 
 	/**override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	 * If no axis is provided, it uses the default axis for this constraint. */
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native int getFlags();
 

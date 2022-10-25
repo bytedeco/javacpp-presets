@@ -36,7 +36,7 @@ public class btSoftClusterCollisionShape extends btConvexInternalShape {
 	//notice that the vectors should be unit length
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
@@ -45,6 +45,6 @@ public class btSoftClusterCollisionShape extends btConvexInternalShape {
 	//debugging
 	public native @Cast("const char*") BytePointer getName();
 
-	public native void setMargin(@Cast("btScalar") float margin);
-	public native @Cast("btScalar") float getMargin();
+	public native void setMargin(@Cast("btScalar") double margin);
+	public native @Cast("btScalar") double getMargin();
 }

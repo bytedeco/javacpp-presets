@@ -30,13 +30,13 @@ public class btCylinderShape extends btConvexInternalShape {
 
 	public native void getAabb(@Const @ByRef btTransform t, @ByRef btVector3 aabbMin, @ByRef btVector3 aabbMax);
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native @ByVal btVector3 localGetSupportingVertexWithoutMargin(@Const @ByRef btVector3 vec);
 
 	public native void batchedUnitVectorGetSupportingVertexWithoutMargin(@Const btVector3 vectors, btVector3 supportVerticesOut, int numVectors);
 
-	public native void setMargin(@Cast("btScalar") float collisionMargin);
+	public native void setMargin(@Cast("btScalar") double collisionMargin);
 
 	public native @ByVal btVector3 localGetSupportingVertex(@Const @ByRef btVector3 vec);
 
@@ -47,7 +47,7 @@ public class btCylinderShape extends btConvexInternalShape {
 
 	public native @ByVal btVector3 getAnisotropicRollingFrictionDirection();
 
-	public native @Cast("btScalar") float getRadius();
+	public native @Cast("btScalar") double getRadius();
 
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 

@@ -34,28 +34,28 @@ public class btDeformableMassSpringForce extends btDeformableLagrangianForce {
 
 	public btDeformableMassSpringForce() { super((Pointer)null); allocate(); }
 	private native void allocate();
-	public btDeformableMassSpringForce(@Cast("btScalar") float k, @Cast("btScalar") float d, @Cast("bool") boolean conserve_angular/*=true*/, double bending_k/*=-1*/) { super((Pointer)null); allocate(k, d, conserve_angular, bending_k); }
-	private native void allocate(@Cast("btScalar") float k, @Cast("btScalar") float d, @Cast("bool") boolean conserve_angular/*=true*/, double bending_k/*=-1*/);
-	public btDeformableMassSpringForce(@Cast("btScalar") float k, @Cast("btScalar") float d) { super((Pointer)null); allocate(k, d); }
-	private native void allocate(@Cast("btScalar") float k, @Cast("btScalar") float d);
+	public btDeformableMassSpringForce(@Cast("btScalar") double k, @Cast("btScalar") double d, @Cast("bool") boolean conserve_angular/*=true*/, double bending_k/*=-1*/) { super((Pointer)null); allocate(k, d, conserve_angular, bending_k); }
+	private native void allocate(@Cast("btScalar") double k, @Cast("btScalar") double d, @Cast("bool") boolean conserve_angular/*=true*/, double bending_k/*=-1*/);
+	public btDeformableMassSpringForce(@Cast("btScalar") double k, @Cast("btScalar") double d) { super((Pointer)null); allocate(k, d); }
+	private native void allocate(@Cast("btScalar") double k, @Cast("btScalar") double d);
 
-	public native void addScaledForces(@Cast("btScalar") float scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledForces(@Cast("btScalar") double scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledExplicitForce(@Cast("btScalar") float scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledExplicitForce(@Cast("btScalar") double scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledDampingForce(@Cast("btScalar") float scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledDampingForce(@Cast("btScalar") double scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledElasticForce(@Cast("btScalar") float scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
+	public native void addScaledElasticForce(@Cast("btScalar") double scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array force);
 
-	public native void addScaledDampingForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledDampingForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array dv, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array df);
 
-	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") float scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array diagA);
+	public native void buildDampingForceDifferentialDiagonal(@Cast("btScalar") double scale, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array diagA);
 
-	public native double totalElasticEnergy(@Cast("btScalar") float dt);
+	public native double totalElasticEnergy(@Cast("btScalar") double dt);
 
-	public native double totalDampingEnergy(@Cast("btScalar") float dt);
+	public native double totalDampingEnergy(@Cast("btScalar") double dt);
 
-	public native void addScaledElasticForceDifferential(@Cast("btScalar") float scale, @Cast("const btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array df);
+	public native void addScaledElasticForceDifferential(@Cast("btScalar") double scale, @Cast("const btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array dx, @Cast("btDeformableMassSpringForce::TVStack*") @ByRef btVector3Array df);
 
 	public native @Cast("btDeformableLagrangianForceType") int getForceType();
 }

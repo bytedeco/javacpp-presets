@@ -28,23 +28,110 @@ public class ModelMetadata extends BaseModelMetadata {
   public ModelMetadata(OrtModelMetadata p) { super((Pointer)null); allocate(p); }
   private native void allocate(OrtModelMetadata p);
 
+  /** @deprecated use GetProducerNameAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetProducerName */
   public native @Cast("char*") BytePointer GetProducerName(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the producer name.
+  * 
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetGraphNameAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetGraphName */
   public native @Cast("char*") BytePointer GetGraphName(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the graph name.
+  * 
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetDomainAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetDomain */
   public native @Cast("char*") BytePointer GetDomain(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the domain name.
+  * 
+  * @param allocator to allocate memory for the copy of the name returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetDescriptionAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetDescription */
   public native @Cast("char*") BytePointer GetDescription(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the description.
+  * 
+  * @param allocator to allocate memory for the copy of the string returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetGraphDescriptionAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetGraphDescription */
   public native @Cast("char*") BytePointer GetGraphDescription(OrtAllocator allocator);
+
+  /** \brief Returns a copy of the graph description.
+  * 
+  * @param allocator to allocate memory for the copy of the string returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
+  /** @deprecated use GetCustomMetadataMapKeysAllocated()
+  * [[deprecated]] 
+  * This interface produces multiple pointers that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataGetCustomMetadataMapKeys */
   public native @Cast("char**") PointerPointer GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef LongPointer num_keys);
   public native @Cast("char**") @ByPtrPtr ByteBuffer GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef LongBuffer num_keys);
   public native @Cast("char**") @ByPtrPtr byte[] GetCustomMetadataMapKeys(OrtAllocator allocator, @Cast("int64_t*") @ByRef long[] num_keys);
+
+  /** @deprecated use LookupCustomMetadataMapAllocated()
+  * [[deprecated]] 
+  * This interface produces a pointer that must be released
+  * by the specified allocator and is often leaked. Not exception safe.
+  */
   /** Wraps OrtApi::ModelMetadataLookupCustomMetadataMap */
   public native @Cast("char*") BytePointer LookupCustomMetadataMap(@Cast("const char*") BytePointer key, OrtAllocator allocator);
   public native @Cast("char*") ByteBuffer LookupCustomMetadataMap(String key, OrtAllocator allocator);
+
+  /** \brief Looks up a value by a key in the Custom Metadata map
+  * 
+  * @param zero terminated string key to lookup
+  * @param allocator to allocate memory for the copy of the string returned
+  * @return a instance of smart pointer that would deallocate the buffer when out of scope.
+  *  maybe nullptr if key is not found.
+  * 
+  *  The OrtAllocator instances must be valid at the point of memory release.
+  */
+
   /** Wraps OrtApi::ModelMetadataGetVersion */
   public native @Cast("int64_t") long GetVersion();
 }

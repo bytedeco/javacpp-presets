@@ -63,21 +63,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.6-8.3-1.5.8-SNAPSHOT</version>
+            <version>11.8-8.6-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2022.0-1.5.8-SNAPSHOT</version>
+            <version>2022.2-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load the Python module -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.23.1-1.5.8-SNAPSHOT</version>
+            <version>1.23.4-1.5.8-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

@@ -12,14 +12,14 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gym-platform</artifactId>
-            <version>0.25.0-1.5.8-SNAPSHOT</version>
+            <version>0.26.2-1.5.8-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2022.0-1.5.8-SNAPSHOT</version>
+            <version>2022.2-1.5.8-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

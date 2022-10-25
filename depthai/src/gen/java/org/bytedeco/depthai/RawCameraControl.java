@@ -127,15 +127,32 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum AutoFocusMode {
-        /** Autofocus disabled. Suitable for manual focus */
+        /**
+         * Autofocus disabled. Suitable for manual focus
+         */
         OFF((byte)(0)),
-        /** Runs autofocus once at startup, and at subsequent trigger commands */
+        /**
+         * Basic automatic focus mode. In this mode, the lens does not move unless the autofocus trigger action is called.
+         */
         AUTO((byte)(1)),
-        /** TODO */
+        /**
+         * Close-up focusing mode - this mode is optimized for focusing on objects very close to the camera.
+         */
         MACRO((byte)(2)),
-        /** Runs autofocus when the scene is detected as out-of-focus */
+        /**
+         * In this mode, the AF algorithm modifies the lens position continually to attempt to provide a constantly-in-focus image stream.
+         * The focusing behavior should be suitable for good quality video recording; typically this means slower focus movement and no overshoots.
+         */
         CONTINUOUS_VIDEO((byte)(3)),
+        /**
+         * In this mode, the AF algorithm modifies the lens position continually to attempt to provide a constantly-in-focus image stream.
+         * The focusing behavior should be suitable for still image capture; typically this means focusing as fast as possible
+         */
         CONTINUOUS_PICTURE((byte)(4)),
+        /**
+         * Extended depth of field (digital focus) mode. The camera device will produce images with an extended depth of field automatically.
+         * AF triggers are ignored.
+         */
         EDOF((byte)(5));
 
         public final byte value;
@@ -146,14 +163,47 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum AutoWhiteBalanceMode {
+        /**
+         * The camera device's auto-white balance routine is disabled.
+         */
         OFF((byte)(0)),
+        /**
+         * The camera device's auto-white balance routine is active.
+         */
         AUTO((byte)(1)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses incandescent light as the assumed scene illumination for white
+         * balance.
+         */
         INCANDESCENT((byte)(2)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses fluorescent light as the assumed scene illumination for white
+         * balance.
+         */
         FLUORESCENT((byte)(3)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses warm fluorescent light as the assumed scene illumination for white
+         * balance.
+         */
         WARM_FLUORESCENT((byte)(4)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses daylight light as the assumed scene illumination for white
+         * balance.
+         */
         DAYLIGHT((byte)(5)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses cloudy daylight light as the assumed scene illumination for white
+         * balance.
+         */
         CLOUDY_DAYLIGHT((byte)(6)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses twilight light as the assumed scene illumination for white
+         * balance.
+         */
         TWILIGHT((byte)(7)),
+        /**
+         * The camera device's auto-white balance routine is disabled; the camera device uses shade light as the assumed scene illumination for white balance.
+         */
         SHADE((byte)(8));
 
         public final byte value;
@@ -164,22 +214,73 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum SceneMode {
+        /**
+         * Indicates that no scene modes are set for a given capture request.
+         */
         UNSUPPORTED((byte)(0)),
+        /**
+         * If face detection support exists, use face detection data for auto-focus, auto-white balance, and auto-exposure routines.
+         */
         FACE_PRIORITY((byte)(1)),
+        /**
+         * Optimized for photos of quickly moving objects. Similar to SPORTS scene mode.
+         */
         ACTION((byte)(2)),
+        /**
+         * Optimized for still photos of people.
+         */
         PORTRAIT((byte)(3)),
+        /**
+         * Optimized for photos of distant macroscopic objects.
+         */
         LANDSCAPE((byte)(4)),
+        /**
+         * Optimized for low-light settings.
+         */
         NIGHT((byte)(5)),
+        /**
+         * Optimized for still photos of people in low-light settings.
+         */
         NIGHT_PORTRAIT((byte)(6)),
+        /**
+         * Optimized for dim, indoor settings where flash must remain off.
+         */
         THEATRE((byte)(7)),
+        /**
+         * Optimized for bright, outdoor beach settings.
+         */
         BEACH((byte)(8)),
+        /**
+         * Optimized for bright, outdoor settings containing snow.
+         */
         SNOW((byte)(9)),
+        /**
+         * Optimized for scenes of the setting sun.
+         */
         SUNSET((byte)(10)),
+        /**
+         * Optimized to avoid blurry photos due to small amounts of device motion (for example: due to hand shake).
+         */
         STEADYPHOTO((byte)(11)),
+        /**
+         * Optimized for nighttime photos of fireworks.
+         */
         FIREWORKS((byte)(12)),
+        /**
+         * Optimized for photos of quickly moving people.
+         */
         SPORTS((byte)(13)),
+        /**
+         * Optimized for dim, indoor settings with multiple moving people.
+         */
         PARTY((byte)(14)),
+        /**
+         * Optimized for dim settings where the main light source is a candle.
+         */
         CANDLELIGHT((byte)(15)),
+        /**
+         * Optimized for accurately capturing a photo of barcode for use by camera applications that wish to read the barcode value.
+         */
         BARCODE((byte)(16));
 
         public final byte value;
@@ -190,9 +291,22 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum AntiBandingMode {
+        /**
+         * The camera device will not adjust exposure duration to avoid banding problems.
+         */
         OFF((byte)(0)),
+        /**
+         * The camera device will adjust exposure duration to avoid banding problems with 50Hz illumination sources.
+         */
         MAINS_50_HZ((byte)(1)),
+        /**
+         * The camera device will adjust exposure duration to avoid banding problems with 60Hz illumination sources.
+         */
         MAINS_60_HZ((byte)(2)),
+        /**
+         * The camera device will automatically adapt its antibanding routine to the current illumination condition. This is the default mode if AUTO is
+         * available on given camera device.
+         */
         AUTO((byte)(3));
 
         public final byte value;
@@ -203,11 +317,31 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum CaptureIntent {
+        /**
+         * The goal of this request doesn't fall into the other categories. The camera device will default to preview-like behavior.
+         */
         CUSTOM((byte)(0)),
+        /**
+         * This request is for a preview-like use case.
+         */
         PREVIEW((byte)(1)),
+        /**
+         * This request is for a still capture-type use case.
+         */
         STILL_CAPTURE((byte)(2)),
+        /**
+         * This request is for a video recording use case.
+         */
         VIDEO_RECORD((byte)(3)),
+        /**
+         * This request is for a video snapshot (still image while recording video) use case.
+         * The camera device should take the highest-quality image possible (given the other settings)
+         * without disrupting the frame rate of video recording.
+         */
         VIDEO_SNAPSHOT((byte)(4)),
+        /**
+         * This request is for a ZSL usecase; the application will stream full-resolution images and reprocess one or several later for a final capture.
+         */
         ZERO_SHUTTER_LAG((byte)(5));
 
         public final byte value;
@@ -218,8 +352,17 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum ControlMode {
+        /**
+         * Full application control of pipeline. All control by the device's metering and focusing (3A) routines is disabled.
+         */
         OFF((byte)(0)),
+        /**
+         * Use settings for each individual 3A routine. Manual control of capture parameters is disabled.
+         */
         AUTO((byte)(1)),
+        /**
+         * Use a specific scene mode. Enabling this disables Auto-Exposure, AWB and AF controls;
+         */
         USE_SCENE_MODE((byte)(2));
 
         public final byte value;
@@ -230,14 +373,41 @@ public class RawCameraControl extends RawBuffer {
     }
 
     public enum EffectMode {
+        /**
+         *  No color effect will be applied.
+         */
         OFF((byte)(0)),
+        /**
+         * A "monocolor" effect where the image is mapped into a single color. This will typically be grayscale.
+         */
         MONO((byte)(1)),
+        /**
+         * A "photo-negative" effect where the image's colors are inverted.
+         */
         NEGATIVE((byte)(2)),
+        /**
+         * A "solarisation" effect (Sabattier effect) where the image is wholly or partially reversed in tone.
+         */
         SOLARIZE((byte)(3)),
+        /**
+         * A "sepia" effect where the image is mapped into warm gray, red, and brown tones.
+         */
         SEPIA((byte)(4)),
+        /**
+         * A "posterization" effect where the image uses discrete regions of tone rather than a continuous gradient of tones.
+         */
         POSTERIZE((byte)(5)),
+        /**
+         * A "whiteboard" effect where the image is typically displayed as regions of white, with black or grey details.
+         */
         WHITEBOARD((byte)(6)),
+        /**
+         * A "blackboard" effect where the image is typically displayed as regions of black, with white or grey details.
+         */
         BLACKBOARD((byte)(7)),
+        /**
+         * An "aqua" effect where a blue hue is added to the image.
+         */
         AQUA((byte)(8));
 
         public final byte value;

@@ -17,7 +17,7 @@ public class btVectorXf extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btVectorXf(Pointer p) { super(p); }
 
-	public native @ByRef btScalarArray m_storage(); public native btVectorXf m_storage(btScalarArray setter);
+	public native @ByRef btFloatArray m_storage(); public native btVectorXf m_storage(btFloatArray setter);
 
 	public btVectorXf() { super((Pointer)null); allocate(); }
 	private native void allocate();

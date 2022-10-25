@@ -43,5 +43,5 @@ public class btDiscreteDynamicsWorldMt extends btDiscreteDynamicsWorld {
 								  btConstraintSolver constraintSolverMt,
 								  btCollisionConfiguration collisionConfiguration);
 
-	public native int stepSimulation(@Cast("btScalar") float timeStep, int maxSubSteps, @Cast("btScalar") float fixedTimeStep);
+	public native int stepSimulation(@Cast("btScalar") double timeStep, int maxSubSteps, @Cast("btScalar") double fixedTimeStep);
 }

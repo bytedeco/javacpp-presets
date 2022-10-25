@@ -40,7 +40,7 @@ public class btEmptyShape extends btConcaveShape {
 	public native void setLocalScaling(@Const @ByRef btVector3 scaling);
 	public native @Const @ByRef btVector3 getLocalScaling();
 
-	public native void calculateLocalInertia(@Cast("btScalar") float mass, @ByRef btVector3 inertia);
+	public native void calculateLocalInertia(@Cast("btScalar") double mass, @ByRef btVector3 inertia);
 
 	public native @Cast("const char*") BytePointer getName();
 

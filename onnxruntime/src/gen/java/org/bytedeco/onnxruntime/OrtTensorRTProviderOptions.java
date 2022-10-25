@@ -57,6 +57,6 @@ public class OrtTensorRTProviderOptions extends Pointer {
   public native @Cast("const char*") BytePointer trt_engine_decryption_lib_path(); public native OrtTensorRTProviderOptions trt_engine_decryption_lib_path(BytePointer setter);   // specify engine decryption library path
   public native int trt_force_sequential_engine_build(); public native OrtTensorRTProviderOptions trt_force_sequential_engine_build(int setter);        // force building TensorRT engine sequentially. Default 0 = false, nonzero = true
   // This is the legacy struct and don't add new fields here.
-  // For new field that can be represented by string, please add it in include/onnxruntime/core/providers/tensorrt/tensorrt_provider_options.h   
+  // For new field that can be represented by string, please add it in include/onnxruntime/core/providers/tensorrt/tensorrt_provider_options.h
   // For non-string field, need to create a new separate api to handle it.
 }

@@ -98,7 +98,9 @@ public class primitive extends dnnl_primitive_handle {
         /** A PReLU primitive. */
         prelu(dnnl_prelu),
         /** A softmax version 2 primitive. */
-        softmax_v2(dnnl_softmax_v2);
+        softmax_v2(dnnl_softmax_v2),
+        /** A layer normalization version 2 primitive. */
+        layer_normalization_v2(dnnl_layer_normalization_v2);
 
         public final int value;
         private kind(int v) { this.value = v; }

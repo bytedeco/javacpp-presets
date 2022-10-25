@@ -65,17 +65,17 @@ public class btTypedConstraint extends btTypedObject {
 	
 		// integrator parameters: frames per second (1/stepsize), default error
 		// reduction parameter (0..1).
-		public native @Cast("btScalar") float fps(); public native btConstraintInfo2 fps(float setter);
-		public native @Cast("btScalar") float erp(); public native btConstraintInfo2 erp(float setter);
+		public native @Cast("btScalar") double fps(); public native btConstraintInfo2 fps(double setter);
+		public native @Cast("btScalar") double erp(); public native btConstraintInfo2 erp(double setter);
 
 		// for the first and second body, pointers to two (linear and angular)
 		// n*3 jacobian sub matrices, stored by rows. these matrices will have
 		// been initialized to 0 on entry. if the second body is zero then the
 		// J2xx pointers may be 0.
-		public native @Cast("btScalar*") FloatPointer m_J1linearAxis(); public native btConstraintInfo2 m_J1linearAxis(FloatPointer setter);
-		public native @Cast("btScalar*") FloatPointer m_J1angularAxis(); public native btConstraintInfo2 m_J1angularAxis(FloatPointer setter);
-		public native @Cast("btScalar*") FloatPointer m_J2linearAxis(); public native btConstraintInfo2 m_J2linearAxis(FloatPointer setter);
-		public native @Cast("btScalar*") FloatPointer m_J2angularAxis(); public native btConstraintInfo2 m_J2angularAxis(FloatPointer setter);
+		public native @Cast("btScalar*") DoublePointer m_J1linearAxis(); public native btConstraintInfo2 m_J1linearAxis(DoublePointer setter);
+		public native @Cast("btScalar*") DoublePointer m_J1angularAxis(); public native btConstraintInfo2 m_J1angularAxis(DoublePointer setter);
+		public native @Cast("btScalar*") DoublePointer m_J2linearAxis(); public native btConstraintInfo2 m_J2linearAxis(DoublePointer setter);
+		public native @Cast("btScalar*") DoublePointer m_J2angularAxis(); public native btConstraintInfo2 m_J2angularAxis(DoublePointer setter);
 
 		// elements to jump from one row to the next in J's
 		public native int rowskip(); public native btConstraintInfo2 rowskip(int setter);
@@ -83,18 +83,18 @@ public class btTypedConstraint extends btTypedObject {
 		// right hand sides of the equation J*v = c + cfm * lambda. cfm is the
 		// "constraint force mixing" vector. c is set to zero on entry, cfm is
 		// set to a constant value (typically very small or zero) value on entry.
-		public native @Cast("btScalar*") FloatPointer m_constraintError(); public native btConstraintInfo2 m_constraintError(FloatPointer setter);
-		public native @Cast("btScalar*") FloatPointer cfm(); public native btConstraintInfo2 cfm(FloatPointer setter);
+		public native @Cast("btScalar*") DoublePointer m_constraintError(); public native btConstraintInfo2 m_constraintError(DoublePointer setter);
+		public native @Cast("btScalar*") DoublePointer cfm(); public native btConstraintInfo2 cfm(DoublePointer setter);
 
 		// lo and hi limits for variables (set to -/+ infinity on entry).
-		public native @Cast("btScalar*") FloatPointer m_lowerLimit(); public native btConstraintInfo2 m_lowerLimit(FloatPointer setter);
-		public native @Cast("btScalar*") FloatPointer m_upperLimit(); public native btConstraintInfo2 m_upperLimit(FloatPointer setter);
+		public native @Cast("btScalar*") DoublePointer m_lowerLimit(); public native btConstraintInfo2 m_lowerLimit(DoublePointer setter);
+		public native @Cast("btScalar*") DoublePointer m_upperLimit(); public native btConstraintInfo2 m_upperLimit(DoublePointer setter);
 
 		// number of solver iterations
 		public native int m_numIterations(); public native btConstraintInfo2 m_numIterations(int setter);
 
 		//damping of the velocity
-		public native @Cast("btScalar") float m_damping(); public native btConstraintInfo2 m_damping(float setter);
+		public native @Cast("btScalar") double m_damping(); public native btConstraintInfo2 m_damping(double setter);
 	}
 
 	public native int getOverrideNumSolverIterations();
@@ -107,7 +107,7 @@ public class btTypedConstraint extends btTypedObject {
 	public native void buildJacobian();
 
 	/**internal method used by the constraint solver, don't use them directly */
-	public native void setupSolverConstraint(@ByRef btSolverConstraintArray ca, int solverBodyA, int solverBodyB, @Cast("btScalar") float timeStep);
+	public native void setupSolverConstraint(@ByRef btSolverConstraintArray ca, int solverBodyA, int solverBodyB, @Cast("btScalar") double timeStep);
 
 	/**internal method used by the constraint solver, don't use them directly */
 	public native void getInfo1(btConstraintInfo1 info);
@@ -116,20 +116,20 @@ public class btTypedConstraint extends btTypedObject {
 	public native void getInfo2(btConstraintInfo2 info);
 
 	/**internal method used by the constraint solver, don't use them directly */
-	public native void internalSetAppliedImpulse(@Cast("btScalar") float appliedImpulse);
+	public native void internalSetAppliedImpulse(@Cast("btScalar") double appliedImpulse);
 	/**internal method used by the constraint solver, don't use them directly */
-	public native @Cast("btScalar") float internalGetAppliedImpulse();
+	public native @Cast("btScalar") double internalGetAppliedImpulse();
 
-	public native @Cast("btScalar") float getBreakingImpulseThreshold();
+	public native @Cast("btScalar") double getBreakingImpulseThreshold();
 
-	public native void setBreakingImpulseThreshold(@Cast("btScalar") float threshold);
+	public native void setBreakingImpulseThreshold(@Cast("btScalar") double threshold);
 
 	public native @Cast("bool") boolean isEnabled();
 
 	public native void setEnabled(@Cast("bool") boolean enabled);
 
 	/**internal method used by the constraint solver, don't use them directly */
-	public native void solveConstraintObsolete(@ByRef btSolverBody arg0, @ByRef btSolverBody arg1, @Cast("btScalar") float arg2);
+	public native void solveConstraintObsolete(@ByRef btSolverBody arg0, @ByRef btSolverBody arg1, @Cast("btScalar") double arg2);
 
 	public native @ByRef btRigidBody getRigidBodyA();
 	public native @ByRef btRigidBody getRigidBodyB();
@@ -160,21 +160,21 @@ public class btTypedConstraint extends btTypedObject {
 
 	/**getAppliedImpulse is an estimated total applied impulse.
 	 * This feedback could be used to determine breaking constraints or playing sounds. */
-	public native @Cast("btScalar") float getAppliedImpulse();
+	public native @Cast("btScalar") double getAppliedImpulse();
 
 	public native @Cast("btTypedConstraintType") int getConstraintType();
 
-	public native void setDbgDrawSize(@Cast("btScalar") float dbgDrawSize);
-	public native @Cast("btScalar") float getDbgDrawSize();
+	public native void setDbgDrawSize(@Cast("btScalar") double dbgDrawSize);
+	public native @Cast("btScalar") double getDbgDrawSize();
 
 	/**override the default global value of a parameter (such as ERP or CFM), optionally provide the axis (0..5).
 	 * If no axis is provided, it uses the default axis for this constraint. */
-	public native void setParam(int num, @Cast("btScalar") float value, int axis/*=-1*/);
-	public native void setParam(int num, @Cast("btScalar") float value);
+	public native void setParam(int num, @Cast("btScalar") double value, int axis/*=-1*/);
+	public native void setParam(int num, @Cast("btScalar") double value);
 
 	/**return the local value of parameter */
-	public native @Cast("btScalar") float getParam(int num, int axis/*=-1*/);
-	public native @Cast("btScalar") float getParam(int num);
+	public native @Cast("btScalar") double getParam(int num, int axis/*=-1*/);
+	public native @Cast("btScalar") double getParam(int num);
 
 	public native int calculateSerializeBufferSize();
 

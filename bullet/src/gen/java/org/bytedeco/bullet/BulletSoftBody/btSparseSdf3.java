@@ -57,7 +57,7 @@ public class btSparseSdf3 extends Pointer {
 	
 		public native int b(); public native IntFrac b(int setter);
 		public native int i(); public native IntFrac i(int setter);
-		public native @Cast("btScalar") float f(); public native IntFrac f(float setter);
+		public native @Cast("btScalar") double f(); public native IntFrac f(double setter);
 	}
 	public static class Cell extends Pointer {
 	    static { Loader.load(); }
@@ -76,8 +76,8 @@ public class btSparseSdf3 extends Pointer {
 	        return new Cell((Pointer)this).offsetAddress(i);
 	    }
 	
-		public native @Cast("btScalar") float d(int i, int j, int k); public native Cell d(int i, int j, int k, float setter);
-		@MemberGetter public native @Cast("btScalar*") FloatPointer d();
+		public native @Cast("btScalar") double d(int i, int j, int k); public native Cell d(int i, int j, int k, double setter);
+		@MemberGetter public native @Cast("btScalar*") DoublePointer d();
 		public native int c(int i); public native Cell c(int i, int setter);
 		@MemberGetter public native IntPointer c();
 		public native int puid(); public native Cell puid(int setter);
@@ -90,8 +90,8 @@ public class btSparseSdf3 extends Pointer {
 	//
 
 	public native @ByRef btSparseSdf3CellArray cells(); public native btSparseSdf3 cells(btSparseSdf3CellArray setter);
-	public native @Cast("btScalar") float voxelsz(); public native btSparseSdf3 voxelsz(float setter);
-	public native @Cast("btScalar") float m_defaultVoxelsz(); public native btSparseSdf3 m_defaultVoxelsz(float setter);
+	public native @Cast("btScalar") double voxelsz(); public native btSparseSdf3 voxelsz(double setter);
+	public native @Cast("btScalar") double m_defaultVoxelsz(); public native btSparseSdf3 m_defaultVoxelsz(double setter);
 	public native int puid(); public native btSparseSdf3 puid(int setter);
 	public native int ncells(); public native btSparseSdf3 ncells(int setter);
 	public native int m_clampCells(); public native btSparseSdf3 m_clampCells(int setter);
@@ -106,7 +106,7 @@ public class btSparseSdf3 extends Pointer {
 	public native void Initialize();
 	//
 
-	public native void setDefaultVoxelsz(@Cast("btScalar") float sz);
+	public native void setDefaultVoxelsz(@Cast("btScalar") double sz);
 
 	public native void Reset();
 	//
@@ -115,19 +115,19 @@ public class btSparseSdf3 extends Pointer {
 	//
 	public native int RemoveReferences(btCollisionShape pcs);
 	//
-	public native @Cast("btScalar") float Evaluate(@Const @ByRef btVector3 x,
+	public native @Cast("btScalar") double Evaluate(@Const @ByRef btVector3 x,
 						  @Const btCollisionShape shape,
 						  @ByRef btVector3 normal,
-						  @Cast("btScalar") float margin);
+						  @Cast("btScalar") double margin);
 	//
 	public native void BuildCell(@ByRef Cell c);
 	//
-	public static native @Cast("btScalar") float DistanceToShape(@Const @ByRef btVector3 x,
+	public static native @Cast("btScalar") double DistanceToShape(@Const @ByRef btVector3 x,
 											   @Const btCollisionShape shape);
 	//
-	public static native @ByVal IntFrac Decompose(@Cast("btScalar") float x);
+	public static native @ByVal IntFrac Decompose(@Cast("btScalar") double x);
 	//
-	public static native @Cast("btScalar") float Lerp(@Cast("btScalar") float a, @Cast("btScalar") float b, @Cast("btScalar") float t);
+	public static native @Cast("btScalar") double Lerp(@Cast("btScalar") double a, @Cast("btScalar") double b, @Cast("btScalar") double t);
 
 	//
 	public static native @Cast("unsigned int") int Hash(int x, int y, int z, @Const btCollisionShape shape);

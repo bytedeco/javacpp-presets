@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.9.1
+TENSORFLOW_VERSION=2.10.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -23,6 +23,7 @@ echo "Decompressing archives..."
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz || tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 # patch -d tensorflow-$TENSORFLOW_VERSION -Np1 < ../../tensorflow-lite.patch
 sedinplace 's/common.c/common.cc/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c/CMakeLists.txt
+sedinplace 's/value = 1 << 20/value = (1 << 20)/g' tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/interpreter_options.h
 
 mkdir -p build
 cd build
@@ -90,6 +91,7 @@ sedinplace '/main.o/d' objs
 sedinplace '/CMakeCCompilerId.o/d' objs
 sedinplace '/CMakeCXXCompilerId.o/d' objs
 sedinplace '/tensorflowlite_c.dir/d' objs
+sedinplace '/tensorflow_profiler_logger/d' objs
 # convert to DOS paths with short names to prevent exceeding MAX_PATH on Windows
 if which cygpath; then
     cygpath -d -f objs > objs.dos

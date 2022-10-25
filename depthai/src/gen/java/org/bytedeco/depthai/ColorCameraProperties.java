@@ -169,4 +169,13 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
      * Configure scaling for {@code isp} output.
      */
     public native @ByRef IspScale ispScale(); public native ColorCameraProperties ispScale(IspScale setter);
+
+    /**
+     * Pool sizes
+     */
+    public native int numFramesPoolRaw(); public native ColorCameraProperties numFramesPoolRaw(int setter);
+    public native int numFramesPoolIsp(); public native ColorCameraProperties numFramesPoolIsp(int setter);
+    public native int numFramesPoolVideo(); public native ColorCameraProperties numFramesPoolVideo(int setter);
+    public native int numFramesPoolPreview(); public native ColorCameraProperties numFramesPoolPreview(int setter);
+    public native int numFramesPoolStill(); public native ColorCameraProperties numFramesPoolStill(int setter);
 }

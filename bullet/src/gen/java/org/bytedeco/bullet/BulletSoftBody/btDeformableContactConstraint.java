@@ -34,7 +34,7 @@ public class btDeformableContactConstraint extends Pointer {
 
 	// solve the constraint with inelastic impulse and return the error, which is the square of normal component of velocity diffrerence
 	// the constraint is solved by calculating the impulse between object A and B in the contact and apply the impulse to both objects involved in the contact
-	public native @Cast("btScalar") float solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
+	public native @Cast("btScalar") double solveConstraint(@Const @ByRef btContactSolverInfo infoGlobal);
 
 	// get the velocity of the object A in the contact
 	public native @ByVal btVector3 getVa();
@@ -49,5 +49,5 @@ public class btDeformableContactConstraint extends Pointer {
 	public native void applyImpulse(@Const @ByRef btVector3 impulse);
 
 	// scale the penetration depth by erp
-	public native void setPenetrationScale(@Cast("btScalar") float scale);
+	public native void setPenetrationScale(@Cast("btScalar") double scale);
 }

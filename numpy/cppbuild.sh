@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.23.1
+NUMPY_VERSION=1.23.4
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -50,6 +50,10 @@ sedinplace 's/for lib in libraries:/for lib in libraries[:]:/g' ./numpy/distutil
 # https://github.com/numpy/numpy/pull/20354
 sedinplace 's/auto x/double x/g' numpy/core/setup.py
 
+sedinplace '/import numpy.distutils.command.sdist/i\
+import setuptools\
+' setup.py
+
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
@@ -78,11 +82,12 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython==0.29.30; then
+TOOLS="setuptools==59.1.0 cython==0.29.30"
+if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 cython==0.29.30
+    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython
@@ -139,7 +144,11 @@ case $PLATFORM in
         ;;
 esac
 
-ln -snf $PYTHONPATH/numpy-*/ ../python
+if [[ -d $PYTHON_INSTALL_PATH/numpy ]]; then
+    ln -snf $PYTHON_INSTALL_PATH ../python
+else
+    ln -snf $PYTHON_INSTALL_PATH/numpy-*/ ../python
+fi
 rm -Rf $(find ../ -iname __pycache__)
 
 cd ../..

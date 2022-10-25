@@ -33,7 +33,7 @@ public class btContactArray extends GIM_CONTACT_Array_ {
 
 	public native void push_contact(
 			@Const @ByRef btVector3 point, @Const @ByRef btVector3 normal,
-			@Cast("btScalar") float depth, int feature1, int feature2);
+			@Cast("btScalar") double depth, int feature1, int feature2);
 
 	public native void push_triangle_contacts(
 			@Const @ByRef GIM_TRIANGLE_CONTACT tricontact,

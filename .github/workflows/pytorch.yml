@@ -3,9 +3,11 @@ on:
   push:
     paths:
       - pytorch/**
+      - .github/workflows/pytorch.yml
   pull_request:
     paths:
       - pytorch/**
+      - .github/workflows/pytorch.yml
   workflow_dispatch:
 env:
   CI_DEPLOY_NEED_CACHE: 1
@@ -18,7 +20,7 @@ env:
   STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
 jobs:
   linux-x86_64:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container: centos:7
     strategy:
       matrix:
@@ -32,7 +34,7 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
         timeout-minutes: 350
   macosx-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
 #    strategy:
 #      matrix:
 #        ext: ["", -gpu]
@@ -61,6 +63,6 @@ jobs:
         timeout-minutes: 350
   redeploy:
     needs: [linux-x86_64, macosx-x86_64, windows-x86_64]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

@@ -11,8 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>lz4</artifactId>
-  <version>1.9.3-${project.parent.version}</version>
-  <name>JavaCPP Presets for lz4</name>
+  <version>1.9.4-${project.parent.version}</version>
+  <name>JavaCPP Presets for LZ4</name>
 
   <dependencies>
     <dependency>

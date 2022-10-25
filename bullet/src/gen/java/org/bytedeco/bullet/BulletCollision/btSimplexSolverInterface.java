@@ -31,7 +31,7 @@ public class btSimplexSolverInterface extends Pointer {
 
 	public native @Cast("bool") boolean closest(@ByRef btVector3 v);
 
-	public native @Cast("btScalar") float maxVertex();
+	public native @Cast("btScalar") double maxVertex();
 
 	public native @Cast("bool") boolean fullSimplex();
 

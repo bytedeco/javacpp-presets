@@ -21,8 +21,8 @@ public class btCapsuleShapeX extends btCapsuleShape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btCapsuleShapeX(Pointer p) { super(p); }
 
-	public btCapsuleShapeX(@Cast("btScalar") float radius, @Cast("btScalar") float height) { super((Pointer)null); allocate(radius, height); }
-	private native void allocate(@Cast("btScalar") float radius, @Cast("btScalar") float height);
+	public btCapsuleShapeX(@Cast("btScalar") double radius, @Cast("btScalar") double height) { super((Pointer)null); allocate(radius, height); }
+	private native void allocate(@Cast("btScalar") double radius, @Cast("btScalar") double height);
 
 	//debugging
 	public native @Cast("const char*") BytePointer getName();

@@ -31,8 +31,8 @@ public class btPrimitiveTriangle extends Pointer {
 	public native @ByRef btVector3 m_vertices(int i); public native btPrimitiveTriangle m_vertices(int i, btVector3 setter);
 	@MemberGetter public native btVector3 m_vertices();
 	public native @ByRef btVector4 m_plane(); public native btPrimitiveTriangle m_plane(btVector4 setter);
-	public native @Cast("btScalar") float m_margin(); public native btPrimitiveTriangle m_margin(float setter);
-	public native @Cast("btScalar") float m_dummy(); public native btPrimitiveTriangle m_dummy(float setter);
+	public native @Cast("btScalar") double m_margin(); public native btPrimitiveTriangle m_margin(double setter);
+	public native @Cast("btScalar") double m_dummy(); public native btPrimitiveTriangle m_dummy(double setter);
 	public btPrimitiveTriangle() { super((Pointer)null); allocate(); }
 	private native void allocate();
 

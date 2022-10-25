@@ -21,10 +21,10 @@ public class btLemkeAlgorithm extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btLemkeAlgorithm(Pointer p) { super(p); }
 
-	public btLemkeAlgorithm(@Const @ByRef btMatrixXf M_, @Const @ByRef btVectorXf q_, int DEBUGLEVEL_/*=0*/) { super((Pointer)null); allocate(M_, q_, DEBUGLEVEL_); }
-	private native void allocate(@Const @ByRef btMatrixXf M_, @Const @ByRef btVectorXf q_, int DEBUGLEVEL_/*=0*/);
-	public btLemkeAlgorithm(@Const @ByRef btMatrixXf M_, @Const @ByRef btVectorXf q_) { super((Pointer)null); allocate(M_, q_); }
-	private native void allocate(@Const @ByRef btMatrixXf M_, @Const @ByRef btVectorXf q_);
+	public btLemkeAlgorithm(@Const @ByRef btMatrixXd M_, @Const @ByRef btVectorXd q_, int DEBUGLEVEL_/*=0*/) { super((Pointer)null); allocate(M_, q_, DEBUGLEVEL_); }
+	private native void allocate(@Const @ByRef btMatrixXd M_, @Const @ByRef btVectorXd q_, int DEBUGLEVEL_/*=0*/);
+	public btLemkeAlgorithm(@Const @ByRef btMatrixXd M_, @Const @ByRef btVectorXd q_) { super((Pointer)null); allocate(M_, q_); }
+	private native void allocate(@Const @ByRef btMatrixXd M_, @Const @ByRef btVectorXd q_);
 
 	/* GETTER / SETTER */
 	/**
@@ -40,12 +40,12 @@ public class btLemkeAlgorithm extends Pointer {
 	/**
    * \brief set system with Matrix M and vector q
    */
-	public native void setSystem(@Const @ByRef btMatrixXf M_, @Const @ByRef btVectorXf q_);
+	public native void setSystem(@Const @ByRef btMatrixXd M_, @Const @ByRef btVectorXd q_);
 	/***************************************************/
 
 	/**
    * \brief solve algorithm adapted from : Fast Implementation of Lemke’s Algorithm for Rigid Body Contact Simulation (John E. Lloyd)
    */
-	public native @ByVal btVectorXf solve(@Cast("unsigned int") int maxloops/*=0*/);
-	public native @ByVal btVectorXf solve();
+	public native @ByVal btVectorXd solve(@Cast("unsigned int") int maxloops/*=0*/);
+	public native @ByVal btVectorXd solve();
 }

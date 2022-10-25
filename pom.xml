@@ -1190,6 +1190,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>leptonica</module>
+        <module>libpostal</module>
         <module>tesseract</module>
         <module>cuda</module>
         <module>nvcodec</module>
@@ -1447,9 +1448,11 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>
+        <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
       </modules>

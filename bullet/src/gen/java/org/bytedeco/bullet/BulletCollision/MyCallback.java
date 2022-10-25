@@ -24,5 +24,5 @@ public class MyCallback extends btTriangleRaycastCallback {
 
 	public MyCallback(@Const @ByRef btVector3 from, @Const @ByRef btVector3 to, int ignorePart, int ignoreTriangleIndex) { super((Pointer)null); allocate(from, to, ignorePart, ignoreTriangleIndex); }
 	private native void allocate(@Const @ByRef btVector3 from, @Const @ByRef btVector3 to, int ignorePart, int ignoreTriangleIndex);
-	public native @Cast("btScalar") float reportHit(@Const @ByRef btVector3 hitNormalLocal, @Cast("btScalar") float hitFraction, int partId, int triangleIndex);
+	public native @Cast("btScalar") double reportHit(@Const @ByRef btVector3 hitNormalLocal, @Cast("btScalar") double hitFraction, int partId, int triangleIndex);
 }

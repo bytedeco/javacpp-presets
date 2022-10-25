@@ -44,4 +44,6 @@ public class NodeConnectionSchema extends Pointer {
     public native @Cast("int64_t") long node2Id(); public native NodeConnectionSchema node2Id(long setter);
     public native @StdString BytePointer node2InputGroup(); public native NodeConnectionSchema node2InputGroup(BytePointer setter);
     public native @StdString BytePointer node2Input(); public native NodeConnectionSchema node2Input(BytePointer setter);
+
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef NodeConnectionSchema rhs);
 }

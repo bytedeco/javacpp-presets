@@ -60,15 +60,15 @@ public class btDbvtAabbMm extends Pointer {
 	public native @Const @ByRef btVector3 Mins();
 	public native @Const @ByRef btVector3 Maxs();
 	public static native @ByVal btDbvtAabbMm FromCE(@Const @ByRef btVector3 c, @Const @ByRef btVector3 e);
-	public static native @ByVal btDbvtAabbMm FromCR(@Const @ByRef btVector3 c, @Cast("btScalar") float r);
+	public static native @ByVal btDbvtAabbMm FromCR(@Const @ByRef btVector3 c, @Cast("btScalar") double r);
 	public static native @ByVal btDbvtAabbMm FromMM(@Const @ByRef btVector3 mi, @Const @ByRef btVector3 mx);
 	public static native @ByVal btDbvtAabbMm FromPoints(@Const btVector3 pts, int n);
 	public static native @ByVal btDbvtAabbMm FromPoints(@Cast("const btVector3**") PointerPointer ppts, int n);
 	public native void Expand(@Const @ByRef btVector3 e);
 	public native void SignedExpand(@Const @ByRef btVector3 e);
 	public native @Cast("bool") boolean Contain(@Const @ByRef btDbvtAabbMm a);
-	public native int Classify(@Const @ByRef btVector3 n, @Cast("btScalar") float o, int s);
-	public native @Cast("btScalar") float ProjectMinimum(@Const @ByRef btVector3 v, @Cast("unsigned") int signs);
+	public native int Classify(@Const @ByRef btVector3 n, @Cast("btScalar") double o, int s);
+	public native @Cast("btScalar") double ProjectMinimum(@Const @ByRef btVector3 v, @Cast("unsigned") int signs);
 	
 
 	

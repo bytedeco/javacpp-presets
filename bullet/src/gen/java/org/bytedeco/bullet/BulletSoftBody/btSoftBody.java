@@ -264,7 +264,7 @@ public class btSoftBody extends btCollisionObject {
 		public native btSoftBody body(); public native sRayCast body(btSoftBody setter);     /** soft body */
 		public native @Cast("btSoftBody::eFeature::_") int feature(); public native sRayCast feature(int setter);  /** feature type */
 		public native int index(); public native sRayCast index(int setter);            /** feature index */
-		public native @Cast("btScalar") float fraction(); public native sRayCast fraction(float setter);    /** time of impact fraction (rayorg+(rayto-rayfrom)*fraction) */
+		public native @Cast("btScalar") double fraction(); public native sRayCast fraction(double setter);    /** time of impact fraction (rayorg+(rayto-rayfrom)*fraction) */
 	}
 
 	/* ImplicitFn	*/
@@ -273,7 +273,7 @@ public class btSoftBody extends btCollisionObject {
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public ImplicitFn(Pointer p) { super(p); }
 	
-		public native @Cast("btScalar") float Eval(@Const @ByRef btVector3 x);
+		public native @Cast("btScalar") double Eval(@Const @ByRef btVector3 x);
 	}
 
 	//
@@ -300,7 +300,7 @@ public class btSoftBody extends btCollisionObject {
 	
 		public native @Const btCollisionObject m_colObj(); public native sCti m_colObj(btCollisionObject setter); /* Rigid body			*/
 		public native @ByRef btVector3 m_normal(); public native sCti m_normal(btVector3 setter);                /* Outward normal		*/
-		public native @Cast("btScalar") float m_offset(); public native sCti m_offset(float setter);                 /* Offset from origin	*/
+		public native @Cast("btScalar") double m_offset(); public native sCti m_offset(double setter);                 /* Offset from origin	*/
 		public native @ByRef btVector3 m_bary(); public native sCti m_bary(btVector3 setter);                  /* Barycentric weights for faces */
 	}
 
@@ -323,8 +323,8 @@ public class btSoftBody extends btCollisionObject {
 	    }
 	
 		public native @ByRef btVector3 m_velocity(); public native sMedium m_velocity(btVector3 setter); /* Velocity				*/
-		public native @Cast("btScalar") float m_pressure(); public native sMedium m_pressure(float setter);  /* Pressure				*/
-		public native @Cast("btScalar") float m_density(); public native sMedium m_density(float setter);   /* Density				*/
+		public native @Cast("btScalar") double m_pressure(); public native sMedium m_pressure(double setter);  /* Pressure				*/
+		public native @Cast("btScalar") double m_density(); public native sMedium m_density(double setter);   /* Density				*/
 	}
 
 	/* Base type	*/
@@ -364,9 +364,9 @@ public class btSoftBody extends btCollisionObject {
 	        return new Material((Pointer)this).offsetAddress(i);
 	    }
 	
-		public native @Cast("btScalar") float m_kLST(); public native Material m_kLST(float setter);  // Linear stiffness coefficient [0,1]
-		public native @Cast("btScalar") float m_kAST(); public native Material m_kAST(float setter);  // Area/Angular stiffness coefficient [0,1]
-		public native @Cast("btScalar") float m_kVST(); public native Material m_kVST(float setter);  // Volume stiffness coefficient [0,1]
+		public native @Cast("btScalar") double m_kLST(); public native Material m_kLST(double setter);  // Linear stiffness coefficient [0,1]
+		public native @Cast("btScalar") double m_kAST(); public native Material m_kAST(double setter);  // Area/Angular stiffness coefficient [0,1]
+		public native @Cast("btScalar") double m_kVST(); public native Material m_kVST(double setter);  // Volume stiffness coefficient [0,1]
 		public native int m_flags(); public native Material m_flags(int setter);      // Flags
 	}
 
@@ -435,8 +435,8 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_vn(); public native Node m_vn(btVector3 setter);      // Previous step velocity
 		public native @ByRef btVector3 m_f(); public native Node m_f(btVector3 setter);       // Force accumulator
 		public native @ByRef btVector3 m_n(); public native Node m_n(btVector3 setter);       // Normal
-		public native @Cast("btScalar") float m_im(); public native Node m_im(float setter);       // 1/mass
-		public native @Cast("btScalar") float m_area(); public native Node m_area(float setter);     // Area
+		public native @Cast("btScalar") double m_im(); public native Node m_im(double setter);       // 1/mass
+		public native @Cast("btScalar") double m_area(); public native Node m_area(double setter);     // Area
 		public native btDbvtNode m_leaf(); public native Node m_leaf(btDbvtNode setter);  // Leaf data
 		public native int m_constrained(); public native Node m_constrained(int setter);   // depth of penetration
 		public native @NoOffset int m_battach(); public native Node m_battach(int setter);   // Attached
@@ -466,11 +466,11 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_c3(); public native Link m_c3(btVector3 setter);      // gradient
 		public native Node m_n(int i); public native Link m_n(int i, Node setter);
 		@MemberGetter public native @Cast("btSoftBody::Node**") PointerPointer m_n();        // Node pointers
-		public native @Cast("btScalar") float m_rl(); public native Link m_rl(float setter);       // Rest length
+		public native @Cast("btScalar") double m_rl(); public native Link m_rl(double setter);       // Rest length
 		public native @NoOffset int m_bbending(); public native Link m_bbending(int setter);  // Bending link
-		public native @Cast("btScalar") float m_c0(); public native Link m_c0(float setter);       // (ima+imb)*kLST
-		public native @Cast("btScalar") float m_c1(); public native Link m_c1(float setter);       // rl^2
-		public native @Cast("btScalar") float m_c2(); public native Link m_c2(float setter);       // |gradient|^2/c0
+		public native @Cast("btScalar") double m_c0(); public native Link m_c0(double setter);       // (ima+imb)*kLST
+		public native @Cast("btScalar") double m_c1(); public native Link m_c1(double setter);       // rl^2
+		public native @Cast("btScalar") double m_c2(); public native Link m_c2(double setter);       // |gradient|^2/c0
 	}
 	public static class RenderFace extends Pointer {
 	    static { Loader.load(); }
@@ -514,7 +514,7 @@ public class btSoftBody extends btCollisionObject {
 		public native Node m_n(int i); public native Face m_n(int i, Node setter);
 		@MemberGetter public native @Cast("btSoftBody::Node**") PointerPointer m_n();          // Node pointers
 		public native @ByRef btVector3 m_normal(); public native Face m_normal(btVector3 setter);    // Normal
-		public native @Cast("btScalar") float m_ra(); public native Face m_ra(float setter);         // Rest area
+		public native @Cast("btScalar") double m_ra(); public native Face m_ra(double setter);         // Rest area
 		public native btDbvtNode m_leaf(); public native Face m_leaf(btDbvtNode setter);    // Leaf data
 		public native @ByRef btVector4 m_pcontact(); public native Face m_pcontact(btVector4 setter);  // barycentric weights of the persistent contact
 		public native @ByRef btVector3 m_n0(); public native Face m_n0(btVector3 setter);
@@ -542,15 +542,15 @@ public class btSoftBody extends btCollisionObject {
 	
 		public native Node m_n(int i); public native Tetra m_n(int i, Node setter);
 		@MemberGetter public native @Cast("btSoftBody::Node**") PointerPointer m_n();              // Node pointers
-		public native @Cast("btScalar") float m_rv(); public native Tetra m_rv(float setter);             // Rest volume
+		public native @Cast("btScalar") double m_rv(); public native Tetra m_rv(double setter);             // Rest volume
 		public native btDbvtNode m_leaf(); public native Tetra m_leaf(btDbvtNode setter);        // Leaf data
 		public native @ByRef btVector3 m_c0(int i); public native Tetra m_c0(int i, btVector3 setter);
 		@MemberGetter public native btVector3 m_c0();         // gradients
-		public native @Cast("btScalar") float m_c1(); public native Tetra m_c1(float setter);             // (4*kVST)/(im0+im1+im2+im3)
-		public native @Cast("btScalar") float m_c2(); public native Tetra m_c2(float setter);             // m_c1/sum(|g0..3|^2)
+		public native @Cast("btScalar") double m_c1(); public native Tetra m_c1(double setter);             // (4*kVST)/(im0+im1+im2+im3)
+		public native @Cast("btScalar") double m_c2(); public native Tetra m_c2(double setter);             // m_c1/sum(|g0..3|^2)
 		public native @ByRef btMatrix3x3 m_Dm_inverse(); public native Tetra m_Dm_inverse(btMatrix3x3 setter);  // rest Dm^-1
 		public native @ByRef btMatrix3x3 m_F(); public native Tetra m_F(btMatrix3x3 setter);
-		public native @Cast("btScalar") float m_element_measure(); public native Tetra m_element_measure(float setter);
+		public native @Cast("btScalar") double m_element_measure(); public native Tetra m_element_measure(double setter);
 		public native @ByRef btVector4 m_P_inv(int i); public native Tetra m_P_inv(int i, btVector4 setter);
 		@MemberGetter public native btVector4 m_P_inv();  // first three columns of P_inv matrix
 	}
@@ -574,8 +574,8 @@ public class btSoftBody extends btCollisionObject {
 	    }
 	
 		public native @ByRef btMatrix3x3 m_F(); public native TetraScratch m_F(btMatrix3x3 setter);           // deformation gradient F
-		public native @Cast("btScalar") float m_trace(); public native TetraScratch m_trace(float setter);          // trace of F^T * F
-		public native @Cast("btScalar") float m_J(); public native TetraScratch m_J(float setter);              // det(F)
+		public native @Cast("btScalar") double m_trace(); public native TetraScratch m_trace(double setter);          // trace of F^T * F
+		public native @Cast("btScalar") double m_J(); public native TetraScratch m_J(double setter);              // det(F)
 		public native @ByRef btMatrix3x3 m_cofF(); public native TetraScratch m_cofF(btMatrix3x3 setter);        // cofactor of F
 		public native @ByRef btMatrix3x3 m_corotation(); public native TetraScratch m_corotation(btMatrix3x3 setter);  // corotatio of the tetra
 	}
@@ -602,9 +602,9 @@ public class btSoftBody extends btCollisionObject {
 		public native Node m_node(); public native RContact m_node(Node setter);      // Owner node
 		public native @ByRef btMatrix3x3 m_c0(); public native RContact m_c0(btMatrix3x3 setter);  // Impulse matrix
 		public native @ByRef btVector3 m_c1(); public native RContact m_c1(btVector3 setter);    // Relative anchor
-		public native @Cast("btScalar") float m_c2(); public native RContact m_c2(float setter);     // ima*dt
-		public native @Cast("btScalar") float m_c3(); public native RContact m_c3(float setter);     // Friction
-		public native @Cast("btScalar") float m_c4(); public native RContact m_c4(float setter);     // Hardness
+		public native @Cast("btScalar") double m_c2(); public native RContact m_c2(double setter);     // ima*dt
+		public native @Cast("btScalar") double m_c3(); public native RContact m_c3(double setter);     // Friction
+		public native @Cast("btScalar") double m_c4(); public native RContact m_c4(double setter);     // Hardness
 
 		// jacobians and unit impulse responses for multibody
 		public native @ByRef btMultiBodyJacobianData jacobianData_normal(); public native RContact jacobianData_normal(btMultiBodyJacobianData setter);
@@ -634,9 +634,9 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef sCti m_cti(); public native DeformableRigidContact m_cti(sCti setter);        // Contact infos
 		public native @ByRef btMatrix3x3 m_c0(); public native DeformableRigidContact m_c0(btMatrix3x3 setter);  // Impulse matrix
 		public native @ByRef btVector3 m_c1(); public native DeformableRigidContact m_c1(btVector3 setter);    // Relative anchor
-		public native @Cast("btScalar") float m_c2(); public native DeformableRigidContact m_c2(float setter);     // inverse mass of node/face
-		public native @Cast("btScalar") float m_c3(); public native DeformableRigidContact m_c3(float setter);     // Friction
-		public native @Cast("btScalar") float m_c4(); public native DeformableRigidContact m_c4(float setter);     // Hardness
+		public native @Cast("btScalar") double m_c2(); public native DeformableRigidContact m_c2(double setter);     // inverse mass of node/face
+		public native @Cast("btScalar") double m_c3(); public native DeformableRigidContact m_c3(double setter);     // Friction
+		public native @Cast("btScalar") double m_c4(); public native DeformableRigidContact m_c4(double setter);     // Hardness
 		public native @ByRef btMatrix3x3 m_c5(); public native DeformableRigidContact m_c5(btMatrix3x3 setter);  // inverse effective mass
 
 		// jacobians and unit impulse responses for multibody
@@ -732,10 +732,10 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_bary(); public native DeformableFaceNodeContact m_bary(btVector3 setter);     // Barycentric weights
 		public native @ByRef btVector3 m_weights(); public native DeformableFaceNodeContact m_weights(btVector3 setter);  // v_contactPoint * m_weights[i] = m_face->m_node[i]->m_v;
 		public native @ByRef btVector3 m_normal(); public native DeformableFaceNodeContact m_normal(btVector3 setter);   // Normal
-		public native @Cast("btScalar") float m_margin(); public native DeformableFaceNodeContact m_margin(float setter);    // Margin
-		public native @Cast("btScalar") float m_friction(); public native DeformableFaceNodeContact m_friction(float setter);  // Friction
-		public native @Cast("btScalar") float m_imf(); public native DeformableFaceNodeContact m_imf(float setter);       // inverse mass of the face at contact point
-		public native @Cast("btScalar") float m_c0(); public native DeformableFaceNodeContact m_c0(float setter);        // scale of the impulse matrix;
+		public native @Cast("btScalar") double m_margin(); public native DeformableFaceNodeContact m_margin(double setter);    // Margin
+		public native @Cast("btScalar") double m_friction(); public native DeformableFaceNodeContact m_friction(double setter);  // Friction
+		public native @Cast("btScalar") double m_imf(); public native DeformableFaceNodeContact m_imf(double setter);       // inverse mass of the face at contact point
+		public native @Cast("btScalar") double m_c0(); public native DeformableFaceNodeContact m_c0(double setter);        // scale of the impulse matrix;
 		public native @Const btCollisionObject m_colObj(); public native DeformableFaceNodeContact m_colObj(btCollisionObject setter);  // Collision object to collide with.
 	}
 
@@ -761,10 +761,10 @@ public class btSoftBody extends btCollisionObject {
 		public native Face m_face(); public native SContact m_face(Face setter);         // Face
 		public native @ByRef btVector3 m_weights(); public native SContact m_weights(btVector3 setter);  // Weigths
 		public native @ByRef btVector3 m_normal(); public native SContact m_normal(btVector3 setter);   // Normal
-		public native @Cast("btScalar") float m_margin(); public native SContact m_margin(float setter);    // Margin
-		public native @Cast("btScalar") float m_friction(); public native SContact m_friction(float setter);  // Friction
-		public native @Cast("btScalar") float m_cfm(int i); public native SContact m_cfm(int i, float setter);
-		@MemberGetter public native @Cast("btScalar*") FloatPointer m_cfm();    // Constraint force mixing
+		public native @Cast("btScalar") double m_margin(); public native SContact m_margin(double setter);    // Margin
+		public native @Cast("btScalar") double m_friction(); public native SContact m_friction(double setter);  // Friction
+		public native @Cast("btScalar") double m_cfm(int i); public native SContact m_cfm(int i, double setter);
+		@MemberGetter public native @Cast("btScalar*") DoublePointer m_cfm();    // Constraint force mixing
 	}
 	/* Anchor		*/
 	public static class Anchor extends Pointer {
@@ -787,10 +787,10 @@ public class btSoftBody extends btCollisionObject {
 		public native Node m_node(); public native Anchor m_node(Node setter);         // Node pointer
 		public native @ByRef btVector3 m_local(); public native Anchor m_local(btVector3 setter);    // Anchor position in body space
 		public native btRigidBody m_body(); public native Anchor m_body(btRigidBody setter);  // Body
-		public native @Cast("btScalar") float m_influence(); public native Anchor m_influence(float setter);
+		public native @Cast("btScalar") double m_influence(); public native Anchor m_influence(double setter);
 		public native @ByRef btMatrix3x3 m_c0(); public native Anchor m_c0(btMatrix3x3 setter);  // Impulse matrix
 		public native @ByRef btVector3 m_c1(); public native Anchor m_c1(btVector3 setter);    // Relative anchor
-		public native @Cast("btScalar") float m_c2(); public native Anchor m_c2(float setter);     // ima*dt
+		public native @Cast("btScalar") double m_c2(); public native Anchor m_c2(double setter);     // ima*dt
 	}
 	/* Note			*/
 	@NoOffset public static class Note extends Element {
@@ -815,8 +815,8 @@ public class btSoftBody extends btCollisionObject {
 		public native int m_rank(); public native Note m_rank(int setter);            // Rank
 		public native Node m_nodes(int i); public native Note m_nodes(int i, Node setter);
 		@MemberGetter public native @Cast("btSoftBody::Node**") PointerPointer m_nodes();      // Nodes
-		public native @Cast("btScalar") float m_coords(int i); public native Note m_coords(int i, float setter);
-		@MemberGetter public native @Cast("btScalar*") FloatPointer m_coords();  // Coordinates
+		public native @Cast("btScalar") double m_coords(int i); public native Note m_coords(int i, double setter);
+		@MemberGetter public native @Cast("btScalar*") DoublePointer m_coords();  // Coordinates
 	}
 	/* Pose			*/
 	public static class Pose extends Pointer {
@@ -838,7 +838,7 @@ public class btSoftBody extends btCollisionObject {
 	
 		public native @Cast("bool") boolean m_bvolume(); public native Pose m_bvolume(boolean setter);       // Is valid
 		public native @Cast("bool") boolean m_bframe(); public native Pose m_bframe(boolean setter);        // Is frame
-		public native @Cast("btScalar") float m_volume(); public native Pose m_volume(float setter);    // Rest volume
+		public native @Cast("btScalar") double m_volume(); public native Pose m_volume(double setter);    // Rest volume
 		public native @ByRef @Cast("btSoftBody::tVector3Array*") btVector3Array m_pos(); public native Pose m_pos(btVector3Array setter);  // Reference positions
 		public native @ByRef @Cast("btSoftBody::tScalarArray*") btScalarArray m_wgh(); public native Pose m_wgh(btScalarArray setter);   // Weights
 		public native @ByRef btVector3 m_com(); public native Pose m_com(btVector3 setter);      // COM
@@ -865,8 +865,8 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btSoftBodyNodePointerArray m_nodes(); public native Cluster m_nodes(btSoftBodyNodePointerArray setter);
 		public native @ByRef @Cast("btSoftBody::tVector3Array*") btVector3Array m_framerefs(); public native Cluster m_framerefs(btVector3Array setter);
 		public native @ByRef btTransform m_framexform(); public native Cluster m_framexform(btTransform setter);
-		public native @Cast("btScalar") float m_idmass(); public native Cluster m_idmass(float setter);
-		public native @Cast("btScalar") float m_imass(); public native Cluster m_imass(float setter);
+		public native @Cast("btScalar") double m_idmass(); public native Cluster m_idmass(double setter);
+		public native @Cast("btScalar") double m_imass(); public native Cluster m_imass(double setter);
 		public native @ByRef btMatrix3x3 m_locii(); public native Cluster m_locii(btMatrix3x3 setter);
 		public native @ByRef btMatrix3x3 m_invwi(); public native Cluster m_invwi(btMatrix3x3 setter);
 		public native @ByRef btVector3 m_com(); public native Cluster m_com(btVector3 setter);
@@ -879,12 +879,12 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_lv(); public native Cluster m_lv(btVector3 setter);
 		public native @ByRef btVector3 m_av(); public native Cluster m_av(btVector3 setter);
 		public native btDbvtNode m_leaf(); public native Cluster m_leaf(btDbvtNode setter);
-		public native @Cast("btScalar") float m_ndamping(); public native Cluster m_ndamping(float setter); /* Node damping		*/
-		public native @Cast("btScalar") float m_ldamping(); public native Cluster m_ldamping(float setter); /* Linear damping	*/
-		public native @Cast("btScalar") float m_adamping(); public native Cluster m_adamping(float setter); /* Angular damping	*/
-		public native @Cast("btScalar") float m_matching(); public native Cluster m_matching(float setter);
-		public native @Cast("btScalar") float m_maxSelfCollisionImpulse(); public native Cluster m_maxSelfCollisionImpulse(float setter);
-		public native @Cast("btScalar") float m_selfCollisionImpulseFactor(); public native Cluster m_selfCollisionImpulseFactor(float setter);
+		public native @Cast("btScalar") double m_ndamping(); public native Cluster m_ndamping(double setter); /* Node damping		*/
+		public native @Cast("btScalar") double m_ldamping(); public native Cluster m_ldamping(double setter); /* Linear damping	*/
+		public native @Cast("btScalar") double m_adamping(); public native Cluster m_adamping(double setter); /* Angular damping	*/
+		public native @Cast("btScalar") double m_matching(); public native Cluster m_matching(double setter);
+		public native @Cast("btScalar") double m_maxSelfCollisionImpulse(); public native Cluster m_maxSelfCollisionImpulse(double setter);
+		public native @Cast("btScalar") double m_selfCollisionImpulseFactor(); public native Cluster m_selfCollisionImpulseFactor(double setter);
 		public native @Cast("bool") boolean m_containsAnchor(); public native Cluster m_containsAnchor(boolean setter);
 		public native @Cast("bool") boolean m_collide(); public native Cluster m_collide(boolean setter);
 		public native int m_clusterIndex(); public native Cluster m_clusterIndex(int setter);
@@ -913,7 +913,7 @@ public class btSoftBody extends btCollisionObject {
 		public Impulse() { super((Pointer)null); allocate(); }
 		private native void allocate();
 		public native @ByVal @Name("operator -") Impulse subtract();
-		public native @ByVal @Name("operator *") Impulse multiply(@Cast("btScalar") float x);
+		public native @ByVal @Name("operator *") Impulse multiply(@Cast("btScalar") double x);
 	}
 	/* Body			*/
 	@NoOffset public static class Body extends Pointer {
@@ -943,7 +943,7 @@ public class btSoftBody extends btCollisionObject {
 
 		public native void activate();
 		public native @Const @ByRef btMatrix3x3 invWorldInertia();
-		public native @Cast("btScalar") float invMass();
+		public native @Cast("btScalar") double invMass();
 		public native @Const @ByRef btTransform xform();
 		public native @ByVal btVector3 linearVelocity();
 		public native @ByVal btVector3 angularVelocity(@Const @ByRef btVector3 rpos);
@@ -1002,24 +1002,24 @@ public class btSoftBody extends btCollisionObject {
 		
 			public Specs() { super((Pointer)null); allocate(); }
 			private native void allocate();
-			public native @Cast("btScalar") float erp(); public native Specs erp(float setter);
-			public native @Cast("btScalar") float cfm(); public native Specs cfm(float setter);
-			public native @Cast("btScalar") float split(); public native Specs split(float setter);
+			public native @Cast("btScalar") double erp(); public native Specs erp(double setter);
+			public native @Cast("btScalar") double cfm(); public native Specs cfm(double setter);
+			public native @Cast("btScalar") double split(); public native Specs split(double setter);
 		}
 		public native @ByRef Body m_bodies(int i); public native Joint m_bodies(int i, Body setter);
 		@MemberGetter public native Body m_bodies();
 		public native @ByRef btVector3 m_refs(int i); public native Joint m_refs(int i, btVector3 setter);
 		@MemberGetter public native btVector3 m_refs();
-		public native @Cast("btScalar") float m_cfm(); public native Joint m_cfm(float setter);
-		public native @Cast("btScalar") float m_erp(); public native Joint m_erp(float setter);
-		public native @Cast("btScalar") float m_split(); public native Joint m_split(float setter);
+		public native @Cast("btScalar") double m_cfm(); public native Joint m_cfm(double setter);
+		public native @Cast("btScalar") double m_erp(); public native Joint m_erp(double setter);
+		public native @Cast("btScalar") double m_split(); public native Joint m_split(double setter);
 		public native @ByRef btVector3 m_drift(); public native Joint m_drift(btVector3 setter);
 		public native @ByRef btVector3 m_sdrift(); public native Joint m_sdrift(btVector3 setter);
 		public native @ByRef btMatrix3x3 m_massmatrix(); public native Joint m_massmatrix(btMatrix3x3 setter);
 		public native @Cast("bool") boolean m_delete(); public native Joint m_delete(boolean setter);
-		public native void Prepare(@Cast("btScalar") float dt, int iterations);
-		public native void Solve(@Cast("btScalar") float dt, @Cast("btScalar") float sor);
-		public native void Terminate(@Cast("btScalar") float dt);
+		public native void Prepare(@Cast("btScalar") double dt, int iterations);
+		public native void Solve(@Cast("btScalar") double dt, @Cast("btScalar") double sor);
+		public native void Terminate(@Cast("btScalar") double dt);
 		public native @Cast("btSoftBody::Joint::eType::_") int Type();
 	}
 	/* LJoint		*/
@@ -1061,9 +1061,9 @@ public class btSoftBody extends btCollisionObject {
 		}
 		public native @ByRef btVector3 m_rpos(int i); public native LJoint m_rpos(int i, btVector3 setter);
 		@MemberGetter public native btVector3 m_rpos();
-		public native void Prepare(@Cast("btScalar") float dt, int iterations);
-		public native void Solve(@Cast("btScalar") float dt, @Cast("btScalar") float sor);
-		public native void Terminate(@Cast("btScalar") float dt);
+		public native void Prepare(@Cast("btScalar") double dt, int iterations);
+		public native void Solve(@Cast("btScalar") double dt, @Cast("btScalar") double sor);
+		public native void Terminate(@Cast("btScalar") double dt);
 		
 	}
 	/* AJoint		*/
@@ -1102,7 +1102,7 @@ public class btSoftBody extends btCollisionObject {
 		    }
 		
 			public native void Prepare(AJoint arg0);
-			public native @Cast("btScalar") float Speed(AJoint arg0, @Cast("btScalar") float current);
+			public native @Cast("btScalar") double Speed(AJoint arg0, @Cast("btScalar") double current);
 			public static native IControl Default();
 		}
 		@NoOffset public static class Specs extends Joint.Specs {
@@ -1127,9 +1127,9 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_axis(int i); public native AJoint m_axis(int i, btVector3 setter);
 		@MemberGetter public native btVector3 m_axis();
 		public native IControl m_icontrol(); public native AJoint m_icontrol(IControl setter);
-		public native void Prepare(@Cast("btScalar") float dt, int iterations);
-		public native void Solve(@Cast("btScalar") float dt, @Cast("btScalar") float sor);
-		public native void Terminate(@Cast("btScalar") float dt);
+		public native void Prepare(@Cast("btScalar") double dt, int iterations);
+		public native void Solve(@Cast("btScalar") double dt, @Cast("btScalar") double sor);
+		public native void Terminate(@Cast("btScalar") double dt);
 		
 	}
 	/* CJoint		*/
@@ -1155,10 +1155,10 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_rpos(int i); public native CJoint m_rpos(int i, btVector3 setter);
 		@MemberGetter public native btVector3 m_rpos();
 		public native @ByRef btVector3 m_normal(); public native CJoint m_normal(btVector3 setter);
-		public native @Cast("btScalar") float m_friction(); public native CJoint m_friction(float setter);
-		public native void Prepare(@Cast("btScalar") float dt, int iterations);
-		public native void Solve(@Cast("btScalar") float dt, @Cast("btScalar") float sor);
-		public native void Terminate(@Cast("btScalar") float dt);
+		public native @Cast("btScalar") double m_friction(); public native CJoint m_friction(double setter);
+		public native void Prepare(@Cast("btScalar") double dt, int iterations);
+		public native void Solve(@Cast("btScalar") double dt, @Cast("btScalar") double sor);
+		public native void Terminate(@Cast("btScalar") double dt);
 		
 	}
 	/* Config		*/
@@ -1180,26 +1180,26 @@ public class btSoftBody extends btCollisionObject {
 	    }
 	
 		public native @Cast("btSoftBody::eAeroModel::_") int aeromodel(); public native Config aeromodel(int setter);    // Aerodynamic model (default: V_Point)
-		public native @Cast("btScalar") float kVCF(); public native Config kVCF(float setter);              // Velocities correction factor (Baumgarte)
-		public native @Cast("btScalar") float kDP(); public native Config kDP(float setter);               // Damping coefficient [0,1]
-		public native @Cast("btScalar") float kDG(); public native Config kDG(float setter);               // Drag coefficient [0,+inf]
-		public native @Cast("btScalar") float kLF(); public native Config kLF(float setter);               // Lift coefficient [0,+inf]
-		public native @Cast("btScalar") float kPR(); public native Config kPR(float setter);               // Pressure coefficient [-inf,+inf]
-		public native @Cast("btScalar") float kVC(); public native Config kVC(float setter);               // Volume conversation coefficient [0,+inf]
-		public native @Cast("btScalar") float kDF(); public native Config kDF(float setter);               // Dynamic friction coefficient [0,1]
-		public native @Cast("btScalar") float kMT(); public native Config kMT(float setter);               // Pose matching coefficient [0,1]
-		public native @Cast("btScalar") float kCHR(); public native Config kCHR(float setter);              // Rigid contacts hardness [0,1]
-		public native @Cast("btScalar") float kKHR(); public native Config kKHR(float setter);              // Kinetic contacts hardness [0,1]
-		public native @Cast("btScalar") float kSHR(); public native Config kSHR(float setter);              // Soft contacts hardness [0,1]
-		public native @Cast("btScalar") float kAHR(); public native Config kAHR(float setter);              // Anchors hardness [0,1]
-		public native @Cast("btScalar") float kSRHR_CL(); public native Config kSRHR_CL(float setter);          // Soft vs rigid hardness [0,1] (cluster only)
-		public native @Cast("btScalar") float kSKHR_CL(); public native Config kSKHR_CL(float setter);          // Soft vs kinetic hardness [0,1] (cluster only)
-		public native @Cast("btScalar") float kSSHR_CL(); public native Config kSSHR_CL(float setter);          // Soft vs soft hardness [0,1] (cluster only)
-		public native @Cast("btScalar") float kSR_SPLT_CL(); public native Config kSR_SPLT_CL(float setter);       // Soft vs rigid impulse split [0,1] (cluster only)
-		public native @Cast("btScalar") float kSK_SPLT_CL(); public native Config kSK_SPLT_CL(float setter);       // Soft vs rigid impulse split [0,1] (cluster only)
-		public native @Cast("btScalar") float kSS_SPLT_CL(); public native Config kSS_SPLT_CL(float setter);       // Soft vs rigid impulse split [0,1] (cluster only)
-		public native @Cast("btScalar") float maxvolume(); public native Config maxvolume(float setter);         // Maximum volume ratio for pose
-		public native @Cast("btScalar") float timescale(); public native Config timescale(float setter);         // Time scale
+		public native @Cast("btScalar") double kVCF(); public native Config kVCF(double setter);              // Velocities correction factor (Baumgarte)
+		public native @Cast("btScalar") double kDP(); public native Config kDP(double setter);               // Damping coefficient [0,1]
+		public native @Cast("btScalar") double kDG(); public native Config kDG(double setter);               // Drag coefficient [0,+inf]
+		public native @Cast("btScalar") double kLF(); public native Config kLF(double setter);               // Lift coefficient [0,+inf]
+		public native @Cast("btScalar") double kPR(); public native Config kPR(double setter);               // Pressure coefficient [-inf,+inf]
+		public native @Cast("btScalar") double kVC(); public native Config kVC(double setter);               // Volume conversation coefficient [0,+inf]
+		public native @Cast("btScalar") double kDF(); public native Config kDF(double setter);               // Dynamic friction coefficient [0,1]
+		public native @Cast("btScalar") double kMT(); public native Config kMT(double setter);               // Pose matching coefficient [0,1]
+		public native @Cast("btScalar") double kCHR(); public native Config kCHR(double setter);              // Rigid contacts hardness [0,1]
+		public native @Cast("btScalar") double kKHR(); public native Config kKHR(double setter);              // Kinetic contacts hardness [0,1]
+		public native @Cast("btScalar") double kSHR(); public native Config kSHR(double setter);              // Soft contacts hardness [0,1]
+		public native @Cast("btScalar") double kAHR(); public native Config kAHR(double setter);              // Anchors hardness [0,1]
+		public native @Cast("btScalar") double kSRHR_CL(); public native Config kSRHR_CL(double setter);          // Soft vs rigid hardness [0,1] (cluster only)
+		public native @Cast("btScalar") double kSKHR_CL(); public native Config kSKHR_CL(double setter);          // Soft vs kinetic hardness [0,1] (cluster only)
+		public native @Cast("btScalar") double kSSHR_CL(); public native Config kSSHR_CL(double setter);          // Soft vs soft hardness [0,1] (cluster only)
+		public native @Cast("btScalar") double kSR_SPLT_CL(); public native Config kSR_SPLT_CL(double setter);       // Soft vs rigid impulse split [0,1] (cluster only)
+		public native @Cast("btScalar") double kSK_SPLT_CL(); public native Config kSK_SPLT_CL(double setter);       // Soft vs rigid impulse split [0,1] (cluster only)
+		public native @Cast("btScalar") double kSS_SPLT_CL(); public native Config kSS_SPLT_CL(double setter);       // Soft vs rigid impulse split [0,1] (cluster only)
+		public native @Cast("btScalar") double maxvolume(); public native Config maxvolume(double setter);         // Maximum volume ratio for pose
+		public native @Cast("btScalar") double timescale(); public native Config timescale(double setter);         // Time scale
 		public native int viterations(); public native Config viterations(int setter);            // Velocities solver iterations
 		public native int piterations(); public native Config piterations(int setter);            // Positions solver iterations
 		public native int diterations(); public native Config diterations(int setter);            // Drift solver iterations
@@ -1208,8 +1208,8 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef @Cast("btSoftBody::tVSolverArray*") LagrangeMultiplierArray m_vsequence(); public native Config m_vsequence(LagrangeMultiplierArray setter);  // Velocity solvers sequence
 		public native @ByRef @Cast("btSoftBody::tPSolverArray*") LagrangeMultiplierArray m_psequence(); public native Config m_psequence(LagrangeMultiplierArray setter);  // Position solvers sequence
 		public native @ByRef @Cast("btSoftBody::tPSolverArray*") LagrangeMultiplierArray m_dsequence(); public native Config m_dsequence(LagrangeMultiplierArray setter);  // Drift solvers sequence
-		public native @Cast("btScalar") float drag(); public native Config drag(float setter);              // deformable air drag
-		public native @Cast("btScalar") float m_maxStress(); public native Config m_maxStress(float setter);       // Maximum principle first Piola stress
+		public native @Cast("btScalar") double drag(); public native Config drag(double setter);              // deformable air drag
+		public native @Cast("btScalar") double m_maxStress(); public native Config m_maxStress(double setter);       // Maximum principle first Piola stress
 	}
 	/* SolverState	*/
 	@NoOffset public static class SolverState extends Pointer {
@@ -1229,11 +1229,11 @@ public class btSoftBody extends btCollisionObject {
 		//if you add new variables, always initialize them!
 		public SolverState() { super((Pointer)null); allocate(); }
 		private native void allocate();
-		public native @Cast("btScalar") float sdt(); public native SolverState sdt(float setter);     // dt*timescale
-		public native @Cast("btScalar") float isdt(); public native SolverState isdt(float setter);    // 1/sdt
-		public native @Cast("btScalar") float velmrg(); public native SolverState velmrg(float setter);  // velocity margin
-		public native @Cast("btScalar") float radmrg(); public native SolverState radmrg(float setter);  // radial margin
-		public native @Cast("btScalar") float updmrg(); public native SolverState updmrg(float setter);  // Update margin
+		public native @Cast("btScalar") double sdt(); public native SolverState sdt(double setter);     // dt*timescale
+		public native @Cast("btScalar") double isdt(); public native SolverState isdt(double setter);    // 1/sdt
+		public native @Cast("btScalar") double velmrg(); public native SolverState velmrg(double setter);  // velocity margin
+		public native @Cast("btScalar") double radmrg(); public native SolverState radmrg(double setter);  // radial margin
+		public native @Cast("btScalar") double updmrg(); public native SolverState updmrg(double setter);  // Update margin
 	}
 	/** RayFromToCaster takes a ray from, ray to (instead of direction!) */
 	@NoOffset public static class RayFromToCaster extends btDbvt.ICollide {
@@ -1244,21 +1244,21 @@ public class btSoftBody extends btCollisionObject {
 		public native @ByRef btVector3 m_rayFrom(); public native RayFromToCaster m_rayFrom(btVector3 setter);
 		public native @ByRef btVector3 m_rayTo(); public native RayFromToCaster m_rayTo(btVector3 setter);
 		public native @ByRef btVector3 m_rayNormalizedDirection(); public native RayFromToCaster m_rayNormalizedDirection(btVector3 setter);
-		public native @Cast("btScalar") float m_mint(); public native RayFromToCaster m_mint(float setter);
+		public native @Cast("btScalar") double m_mint(); public native RayFromToCaster m_mint(double setter);
 		public native Face m_face(); public native RayFromToCaster m_face(Face setter);
 		public native int m_tests(); public native RayFromToCaster m_tests(int setter);
-		public RayFromToCaster(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo, @Cast("btScalar") float mxt) { super((Pointer)null); allocate(rayFrom, rayTo, mxt); }
-		private native void allocate(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo, @Cast("btScalar") float mxt);
+		public RayFromToCaster(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo, @Cast("btScalar") double mxt) { super((Pointer)null); allocate(rayFrom, rayTo, mxt); }
+		private native void allocate(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo, @Cast("btScalar") double mxt);
 		public native void Process(@Const btDbvtNode leaf);
 
-		public static native @Cast("btScalar") float rayFromToTriangle(@Const @ByRef btVector3 rayFrom,
+		public static native @Cast("btScalar") double rayFromToTriangle(@Const @ByRef btVector3 rayFrom,
 															 @Const @ByRef btVector3 rayTo,
 															 @Const @ByRef btVector3 rayNormalizedDirection,
 															 @Const @ByRef btVector3 a,
 															 @Const @ByRef btVector3 b,
 															 @Const @ByRef btVector3 c,
-															 @Cast("btScalar") float maxt/*=SIMD_INFINITY*/);
-		public static native @Cast("btScalar") float rayFromToTriangle(@Const @ByRef btVector3 rayFrom,
+															 @Cast("btScalar") double maxt/*=SIMD_INFINITY*/);
+		public static native @Cast("btScalar") double rayFromToTriangle(@Const @ByRef btVector3 rayFrom,
 															 @Const @ByRef btVector3 rayTo,
 															 @Const @ByRef btVector3 rayNormalizedDirection,
 															 @Const @ByRef btVector3 a,
@@ -1276,7 +1276,7 @@ public class btSoftBody extends btCollisionObject {
 	    public    psolver_t(Pointer p) { super(p); }
 	    protected psolver_t() { allocate(); }
 	    private native void allocate();
-	    public native void call(btSoftBody arg0, @Cast("btScalar") float arg1, @Cast("btScalar") float arg2);
+	    public native void call(btSoftBody arg0, @Cast("btScalar") double arg1, @Cast("btScalar") double arg2);
 	}
 	public static class vsolver_t extends FunctionPointer {
 	    static { Loader.load(); }
@@ -1284,7 +1284,7 @@ public class btSoftBody extends btCollisionObject {
 	    public    vsolver_t(Pointer p) { super(p); }
 	    protected vsolver_t() { allocate(); }
 	    private native void allocate();
-	    public native void call(btSoftBody arg0, @Cast("btScalar") float arg1);
+	    public native void call(btSoftBody arg0, @Cast("btScalar") double arg1);
 	}
 
 	//
@@ -1315,7 +1315,7 @@ public class btSoftBody extends btCollisionObject {
 	public native @ByRef @Cast("btSoftBody::tSContactArray*") btSoftBodySContactArray m_scontacts(); public native btSoftBody m_scontacts(btSoftBodySContactArray setter);     // Soft contacts
 	public native @ByRef @Cast("btSoftBody::tJointArray*") btSoftBodyJointArray m_joints(); public native btSoftBody m_joints(btSoftBodyJointArray setter);           // Joints
 	public native @ByRef @Cast("btSoftBody::tMaterialArray*") btSoftBodyMaterialArray m_materials(); public native btSoftBody m_materials(btSoftBodyMaterialArray setter);     // Materials
-	public native @Cast("btScalar") float m_timeacc(); public native btSoftBody m_timeacc(float setter);             // Time accumulator
+	public native @Cast("btScalar") double m_timeacc(); public native btSoftBody m_timeacc(double setter);             // Time accumulator
 	public native @ByRef btVector3 m_bounds(int i); public native btSoftBody m_bounds(int i, btVector3 setter);
 	@MemberGetter public native btVector3 m_bounds();          // Spatial bounds
 	public native @Cast("bool") boolean m_bUpdateRtCst(); public native btSoftBody m_bUpdateRtCst(boolean setter);            // Update runtime constants
@@ -1324,12 +1324,12 @@ public class btSoftBody extends btCollisionObject {
 	public native btDbvntNode m_fdbvnt(); public native btSoftBody m_fdbvnt(btDbvntNode setter);          // Faces tree with normals
 	public native @ByRef btDbvt m_cdbvt(); public native btSoftBody m_cdbvt(btDbvt setter);                 // Clusters tree
 	public native @ByRef @Cast("btSoftBody::tClusterArray*") btSoftBodyClusterArray m_clusters(); public native btSoftBody m_clusters(btSoftBodyClusterArray setter);       // Clusters
-	public native @Cast("btScalar") float m_dampingCoefficient(); public native btSoftBody m_dampingCoefficient(float setter);  // Damping Coefficient
-	public native @Cast("btScalar") float m_sleepingThreshold(); public native btSoftBody m_sleepingThreshold(float setter);
-	public native @Cast("btScalar") float m_maxSpeedSquared(); public native btSoftBody m_maxSpeedSquared(float setter);
+	public native @Cast("btScalar") double m_dampingCoefficient(); public native btSoftBody m_dampingCoefficient(double setter);  // Damping Coefficient
+	public native @Cast("btScalar") double m_sleepingThreshold(); public native btSoftBody m_sleepingThreshold(double setter);
+	public native @Cast("btScalar") double m_maxSpeedSquared(); public native btSoftBody m_maxSpeedSquared(double setter);
 	public native @ByRef btVector3Array m_quads(); public native btSoftBody m_quads(btVector3Array setter);  // quadrature points for collision detection
-	public native @Cast("btScalar") float m_repulsionStiffness(); public native btSoftBody m_repulsionStiffness(float setter);
-	public native @Cast("btScalar") float m_gravityFactor(); public native btSoftBody m_gravityFactor(float setter);
+	public native @Cast("btScalar") double m_repulsionStiffness(); public native btSoftBody m_repulsionStiffness(double setter);
+	public native @Cast("btScalar") double m_gravityFactor(); public native btSoftBody m_gravityFactor(double setter);
 	public native @Cast("bool") boolean m_cacheBarycenter(); public native btSoftBody m_cacheBarycenter(boolean setter);
 	public native @ByRef btVector3Array m_X(); public native btSoftBody m_X(btVector3Array setter);  // initial positions
 
@@ -1343,7 +1343,7 @@ public class btSoftBody extends btCollisionObject {
 
 	public native @ByRef btVector3 m_windVelocity(); public native btSoftBody m_windVelocity(btVector3 setter);
 
-	public native @Cast("btScalar") float m_restLengthScale(); public native btSoftBody m_restLengthScale(float setter);
+	public native @Cast("btScalar") double m_restLengthScale(); public native btSoftBody m_restLengthScale(double setter);
 
 	public native @Cast("bool") boolean m_reducedModel(); public native btSoftBody m_reducedModel(boolean setter);	// Reduced deformable model flag
 	
@@ -1352,12 +1352,12 @@ public class btSoftBody extends btCollisionObject {
 	//
 
 	/* ctor																	*/
-	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") FloatPointer m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
-	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") FloatPointer m);
-	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") FloatBuffer m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
-	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") FloatBuffer m);
-	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") float[] m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
-	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") float[] m);
+	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") DoublePointer m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
+	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") DoublePointer m);
+	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") DoubleBuffer m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
+	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") DoubleBuffer m);
+	public btSoftBody(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") double[] m) { super((Pointer)null); allocate(worldInfo, node_count, x, m); }
+	private native void allocate(btSoftBodyWorldInfo worldInfo, int node_count, @Const btVector3 x, @Cast("const btScalar*") double[] m);
 
 	/* ctor																	*/
 	public btSoftBody(btSoftBodyWorldInfo worldInfo) { super((Pointer)null); allocate(worldInfo); }
@@ -1372,7 +1372,7 @@ public class btSoftBody extends btCollisionObject {
 
 	public native btSoftBodyWorldInfo getWorldInfo();
 
-	public native void setDampingCoefficient(@Cast("btScalar") float damping_coeff);
+	public native void setDampingCoefficient(@Cast("btScalar") double damping_coeff);
 
 	/**\todo: avoid internal softbody shape hack and move collision code to collision library */
 	public native void setCollisionShape(btCollisionShape collisionShape);
@@ -1425,7 +1425,7 @@ public class btSoftBody extends btCollisionObject {
 						@Const @ByRef btVector3 o,
 						Face feature);
 	/* Append node															*/
-	public native void appendNode(@Const @ByRef btVector3 x, @Cast("btScalar") float m);
+	public native void appendNode(@Const @ByRef btVector3 x, @Cast("btScalar") double m);
 	/* Append link															*/
 	public native void appendLink(int model/*=-1*/, Material mat/*=0*/);
 	public native void appendLink();
@@ -1467,10 +1467,10 @@ public class btSoftBody extends btCollisionObject {
 	public native void appendDeformableAnchor(int node, btRigidBody body);
 	public native void appendDeformableAnchor(int node, btMultiBodyLinkCollider link);
 	public native void appendAnchor(int node,
-						  btRigidBody body, @Cast("bool") boolean disableCollisionBetweenLinkedBodies/*=false*/, @Cast("btScalar") float influence/*=1*/);
+						  btRigidBody body, @Cast("bool") boolean disableCollisionBetweenLinkedBodies/*=false*/, @Cast("btScalar") double influence/*=1*/);
 	public native void appendAnchor(int node,
 						  btRigidBody body);
-	public native void appendAnchor(int node, btRigidBody body, @Const @ByRef btVector3 localPivot, @Cast("bool") boolean disableCollisionBetweenLinkedBodies/*=false*/, @Cast("btScalar") float influence/*=1*/);
+	public native void appendAnchor(int node, btRigidBody body, @Const @ByRef btVector3 localPivot, @Cast("bool") boolean disableCollisionBetweenLinkedBodies/*=false*/, @Cast("btScalar") double influence/*=1*/);
 	public native void appendAnchor(int node, btRigidBody body, @Const @ByRef btVector3 localPivot);
 	public native void removeAnchor(int node);
 	/* Append linear joint													*/
@@ -1505,21 +1505,21 @@ public class btSoftBody extends btCollisionObject {
 						 int node);
 	/* Set mass																*/
 	public native void setMass(int node,
-					 @Cast("btScalar") float mass);
+					 @Cast("btScalar") double mass);
 	/* Get mass																*/
-	public native @Cast("btScalar") float getMass(int node);
+	public native @Cast("btScalar") double getMass(int node);
 	/* Get total mass														*/
-	public native @Cast("btScalar") float getTotalMass();
+	public native @Cast("btScalar") double getTotalMass();
 	/* Set total mass (weighted by previous masses)							*/
-	public native void setTotalMass(@Cast("btScalar") float mass,
+	public native void setTotalMass(@Cast("btScalar") double mass,
 						  @Cast("bool") boolean fromfaces/*=false*/);
-	public native void setTotalMass(@Cast("btScalar") float mass);
+	public native void setTotalMass(@Cast("btScalar") double mass);
 	/* Set total density													*/
-	public native void setTotalDensity(@Cast("btScalar") float density);
+	public native void setTotalDensity(@Cast("btScalar") double density);
 	/* Set volume mass (using tetrahedrons)									*/
-	public native void setVolumeMass(@Cast("btScalar") float mass);
+	public native void setVolumeMass(@Cast("btScalar") double mass);
 	/* Set volume density (using tetrahedrons)								*/
-	public native void setVolumeDensity(@Cast("btScalar") float density);
+	public native void setVolumeDensity(@Cast("btScalar") double density);
 	/* Get the linear velocity of the center of mass                        */
 	public native @ByVal btVector3 getLinearVelocity();
 	/* Set the linear velocity of the center of mass                        */
@@ -1539,16 +1539,16 @@ public class btSoftBody extends btCollisionObject {
 	/* Scale																*/
 	public native void scale(@Const @ByRef btVector3 scl);
 	/* Get link resting lengths scale										*/
-	public native @Cast("btScalar") float getRestLengthScale();
+	public native @Cast("btScalar") double getRestLengthScale();
 	/* Scale resting length of all springs									*/
-	public native void setRestLengthScale(@Cast("btScalar") float restLength);
+	public native void setRestLengthScale(@Cast("btScalar") double restLength);
 	/* Set current state as pose											*/
 	public native void setPose(@Cast("bool") boolean bvolume,
 					 @Cast("bool") boolean bframe);
 	/* Set current link lengths as resting lengths							*/
 	public native void resetLinkRestLengths();
 	/* Return the volume													*/
-	public native @Cast("btScalar") float getVolume();
+	public native @Cast("btScalar") double getVolume();
 	/* Cluster count														*/
 	public native @ByVal btVector3 getCenterOfMass();
 	public native int clusterCount();
@@ -1583,10 +1583,10 @@ public class btSoftBody extends btCollisionObject {
 	public native int generateClusters(int k, int maxiterations/*=8192*/);
 	public native int generateClusters(int k);
 	/* Refine																*/
-	public native void refine(ImplicitFn ifn, @Cast("btScalar") float accurary, @Cast("bool") boolean cut);
+	public native void refine(ImplicitFn ifn, @Cast("btScalar") double accurary, @Cast("bool") boolean cut);
 	/* CutLink																*/
-	public native @Cast("bool") boolean cutLink(int node0, int node1, @Cast("btScalar") float _position);
-	public native @Cast("bool") boolean cutLink(@Const Node node0, @Const Node node1, @Cast("btScalar") float _position);
+	public native @Cast("bool") boolean cutLink(int node0, int node1, @Cast("btScalar") double _position);
+	public native @Cast("bool") boolean cutLink(@Const Node node0, @Const Node node1, @Cast("btScalar") double _position);
 
 	/**Ray casting using rayFrom and rayTo in worldspace, (not direction!) */
 	public native @Cast("bool") boolean rayTest(@Const @ByRef btVector3 rayFrom,
@@ -1596,15 +1596,15 @@ public class btSoftBody extends btCollisionObject {
 						 @Const @ByRef btVector3 rayTo,
 						 @ByRef sRayCast results);
 	public native int rayFaceTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-						@Cast("btScalar*") @ByRef FloatPointer mint, @ByRef IntPointer index);
+						@Cast("btScalar*") @ByRef DoublePointer mint, @ByRef IntPointer index);
 	public native int rayFaceTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-						@Cast("btScalar*") @ByRef FloatBuffer mint, @ByRef IntBuffer index);
+						@Cast("btScalar*") @ByRef DoubleBuffer mint, @ByRef IntBuffer index);
 	public native int rayFaceTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-						@Cast("btScalar*") @ByRef float[] mint, @ByRef int[] index);
+						@Cast("btScalar*") @ByRef double[] mint, @ByRef int[] index);
 	/* Solver presets														*/
 	public native void setSolver(@Cast("btSoftBody::eSolverPresets::_") int preset);
 	/* predictMotion														*/
-	public native void predictMotion(@Cast("btScalar") float dt);
+	public native void predictMotion(@Cast("btScalar") double dt);
 	/* solveConstraints														*/
 	public native void solveConstraints();
 	/* staticSolve															*/
@@ -1621,7 +1621,7 @@ public class btSoftBody extends btCollisionObject {
 	public native void defaultCollisionHandler(btSoftBody psb);
 	public native void setSelfCollision(@Cast("bool") boolean useSelfCollision);
 	public native @Cast("bool") boolean useSelfCollision();
-	public native void updateDeactivation(@Cast("btScalar") float timeStep);
+	public native void updateDeactivation(@Cast("btScalar") double timeStep);
 	public native void setZeroVelocity();
 	public native @Cast("bool") boolean wantsSleeping();
 
@@ -1677,19 +1677,19 @@ public class btSoftBody extends btCollisionObject {
 	public native void indicesToPointers(@Const int[] map/*=0*/);
 
 	public native int rayTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-					@Cast("btScalar*") @ByRef FloatPointer mint, @Cast("btSoftBody::eFeature::_*") @ByRef IntPointer feature, @ByRef IntPointer index, @Cast("bool") boolean bcountonly);
+					@Cast("btScalar*") @ByRef DoublePointer mint, @Cast("btSoftBody::eFeature::_*") @ByRef IntPointer feature, @ByRef IntPointer index, @Cast("bool") boolean bcountonly);
 	public native int rayTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-					@Cast("btScalar*") @ByRef FloatBuffer mint, @Cast("btSoftBody::eFeature::_*") @ByRef IntBuffer feature, @ByRef IntBuffer index, @Cast("bool") boolean bcountonly);
+					@Cast("btScalar*") @ByRef DoubleBuffer mint, @Cast("btSoftBody::eFeature::_*") @ByRef IntBuffer feature, @ByRef IntBuffer index, @Cast("bool") boolean bcountonly);
 	public native int rayTest(@Const @ByRef btVector3 rayFrom, @Const @ByRef btVector3 rayTo,
-					@Cast("btScalar*") @ByRef float[] mint, @Cast("btSoftBody::eFeature::_*") @ByRef int[] feature, @ByRef int[] index, @Cast("bool") boolean bcountonly);
+					@Cast("btScalar*") @ByRef double[] mint, @Cast("btSoftBody::eFeature::_*") @ByRef int[] feature, @ByRef int[] index, @Cast("bool") boolean bcountonly);
 	public native void initializeFaceTree();
 	public native void rebuildNodeTree();
 	public native @ByVal btVector3 evaluateCom();
-	public native @Cast("bool") boolean checkDeformableContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") float margin, @ByRef sCti cti, @Cast("bool") boolean predict/*=false*/);
-	public native @Cast("bool") boolean checkDeformableContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") float margin, @ByRef sCti cti);
-	public native @Cast("bool") boolean checkDeformableFaceContact(@Const btCollisionObjectWrapper colObjWrap, @ByRef Face f, @ByRef btVector3 contact_point, @ByRef btVector3 bary, @Cast("btScalar") float margin, @ByRef sCti cti, @Cast("bool") boolean predict/*=false*/);
-	public native @Cast("bool") boolean checkDeformableFaceContact(@Const btCollisionObjectWrapper colObjWrap, @ByRef Face f, @ByRef btVector3 contact_point, @ByRef btVector3 bary, @Cast("btScalar") float margin, @ByRef sCti cti);
-	public native @Cast("bool") boolean checkContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") float margin, @ByRef sCti cti);
+	public native @Cast("bool") boolean checkDeformableContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") double margin, @ByRef sCti cti, @Cast("bool") boolean predict/*=false*/);
+	public native @Cast("bool") boolean checkDeformableContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") double margin, @ByRef sCti cti);
+	public native @Cast("bool") boolean checkDeformableFaceContact(@Const btCollisionObjectWrapper colObjWrap, @ByRef Face f, @ByRef btVector3 contact_point, @ByRef btVector3 bary, @Cast("btScalar") double margin, @ByRef sCti cti, @Cast("bool") boolean predict/*=false*/);
+	public native @Cast("bool") boolean checkDeformableFaceContact(@Const btCollisionObjectWrapper colObjWrap, @ByRef Face f, @ByRef btVector3 contact_point, @ByRef btVector3 bary, @Cast("btScalar") double margin, @ByRef sCti cti);
+	public native @Cast("bool") boolean checkContact(@Const btCollisionObjectWrapper colObjWrap, @Const @ByRef btVector3 x, @Cast("btScalar") double margin, @ByRef sCti cti);
 	public native void updateNormals();
 	public native void updateBounds();
 	public native void updatePose();
@@ -1701,24 +1701,24 @@ public class btSoftBody extends btCollisionObject {
 	public native void updateClusters();
 	public native void cleanupClusters();
 	public native void prepareClusters(int iterations);
-	public native void solveClusters(@Cast("btScalar") float sor);
+	public native void solveClusters(@Cast("btScalar") double sor);
 	public native void applyClusters(@Cast("bool") boolean drift);
 	public native void dampClusters();
-	public native void setSpringStiffness(@Cast("btScalar") float k);
-	public native void setGravityFactor(@Cast("btScalar") float gravFactor);
+	public native void setSpringStiffness(@Cast("btScalar") double k);
+	public native void setGravityFactor(@Cast("btScalar") double gravFactor);
 	public native void setCacheBarycenter(@Cast("bool") boolean cacheBarycenter);
 	public native void initializeDmInverse();
 	public native void updateDeformation();
 	public native void advanceDeformation();
 	public native void applyForces();
-	public native void setMaxStress(@Cast("btScalar") float maxStress);
+	public native void setMaxStress(@Cast("btScalar") double maxStress);
 	public native void interpolateRenderMesh();
 	public native void setCollisionQuadrature(int N);
-	public static native void PSolve_Anchors(btSoftBody psb, @Cast("btScalar") float kst, @Cast("btScalar") float ti);
-	public static native void PSolve_RContacts(btSoftBody psb, @Cast("btScalar") float kst, @Cast("btScalar") float ti);
-	public static native void PSolve_SContacts(btSoftBody psb, @Cast("btScalar") float arg1, @Cast("btScalar") float ti);
-	public static native void PSolve_Links(btSoftBody psb, @Cast("btScalar") float kst, @Cast("btScalar") float ti);
-	public static native void VSolve_Links(btSoftBody psb, @Cast("btScalar") float kst);
+	public static native void PSolve_Anchors(btSoftBody psb, @Cast("btScalar") double kst, @Cast("btScalar") double ti);
+	public static native void PSolve_RContacts(btSoftBody psb, @Cast("btScalar") double kst, @Cast("btScalar") double ti);
+	public static native void PSolve_SContacts(btSoftBody psb, @Cast("btScalar") double arg1, @Cast("btScalar") double ti);
+	public static native void PSolve_Links(btSoftBody psb, @Cast("btScalar") double kst, @Cast("btScalar") double ti);
+	public static native void VSolve_Links(btSoftBody psb, @Cast("btScalar") double kst);
 	public static native psolver_t getSolver(@Cast("btSoftBody::ePSolver::_") int solver);
 	public native void geometricCollisionHandler(btSoftBody psb);
 // #define SAFE_EPSILON SIMD_EPSILON * 100.0
@@ -1727,7 +1727,7 @@ public class btSoftBody extends btCollisionObject {
 	public native void updateNodeTree(@Cast("bool") boolean use_velocity, @Cast("bool") boolean margin);
 	public native void updateFaceTree(@Cast("bool") boolean use_velocity, @Cast("bool") boolean margin);
 
-	public native void applyRepulsionForce(@Cast("btScalar") float timeStep, @Cast("bool") boolean applySpringForce);
+	public native void applyRepulsionForce(@Cast("btScalar") double timeStep, @Cast("bool") boolean applySpringForce);
 	public native int calculateSerializeBufferSize();
 
 	/**fills the dataBuffer and returns the struct name (and 0 on failure) */

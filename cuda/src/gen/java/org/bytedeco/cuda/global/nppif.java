@@ -17,7 +17,7 @@ public class nppif extends org.bytedeco.cuda.presets.nppif {
 
 // Parsed from <nppi_filtering_functions.h>
 
- /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
+ /* Copyright 2009-2022 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -31,7 +31,7 @@ public class nppif extends org.bytedeco.cuda.presets.nppif {
   * between NVIDIA and Licensee ("License Agreement") or electronically 
   * accepted by Licensee.  Notwithstanding any terms or conditions to 
   * the contrary in the License Agreement, reproduction or disclosure 
-  * of the Licensed Deliverables to any third party without the express 
+  * of the Licensed Deliverables to any third party without the express
   * written consent of NVIDIA is prohibited. 
   * 
   * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE 
@@ -9040,6 +9040,413 @@ public static native @Cast("NppStatus") int nppiFilterMedianGetBufferSize_32f_AC
 
 /** \} image_filter_median */
 
+/** \defgroup image_filter_median_border FilterMedianBorder
+ * Result pixel value is the median of pixel values under the rectangular mask region.
+ *
+ * <h3><a name="CommonFilterMedianBorderParameters">Common parameters for nppiFilterMedianBorder functions include:</a></h3>
+ *
+ * @param pSrc \ref source_image_pointer.
+ * @param nSrcStep \ref source_image_line_step.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param oMaskSize Width and Height of the neighborhood region for the local
+ *        Median operation.
+ * @param oAnchor X and Y offsets of the kernel origin frame of reference
+ *        relative to the source pixel.
+ * @param pBuffer Pointer to the user-allocated scratch buffer required for the Median operation.
+ * @param eBorderType The border type operation to be applied at source image border boundaries.
+ * @param nppStreamCtx \ref application_managed_stream_context.
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ *
+ * <h3><a name="CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions include:</a></h3>
+ *
+ * @param oSizeROI \ref roi_specification.
+ * @param oMaskSize Width and Height of the neighborhood region for the local Median operation.
+ * @param nBufferSize Pointer to the size of the scratch buffer required for the Median operation.
+ * @return \ref image_data_error_codes
+ *
+ * \{
+ *
+ */
+
+ /**
+  * Single channel 8-bit unsigned median filter.
+  *
+  * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+  *
+  */
+
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Three channel 8-bit unsigned median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Four channel 8-bit unsigned median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 8-bit unsigned median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Single channel 16-bit unsigned median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 16-bit unsigned median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit unsigned median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit unsigned median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Single channel 16-bit signed median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 16-bit signed median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit signed median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_C4R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit signed median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Single channel 32-bit floating-point median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 32-bit floating-point median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 32-bit floating-point median filter.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 32-bit floating-point median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianParameters">Common parameters for nppiFilterMedian functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI,
+    @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Single channel 8-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 8-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 8-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 8-bit unsigned median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_8u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Single channel 16-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 16-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Four channel 16-bit unsigned median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit unsigned median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16u_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Single channel 16-bit signed median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 16-bit signed median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit signed median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 16-bit signed median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_16s_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+
+/**
+ * Single channel 32-bit floating-point median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C1R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Three channel 32-bit floating-point median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C3R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 32-bit floating-point median filter scratch memory size.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_C4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/**
+ * Four channel 32-bit floating-point median filter, ignoring alpha channel.
+ *
+ * For common parameter descriptions, see <a href="#CommonFilterMedianBorderGetBufferSizeParameters">Common parameters for nppiFilterMedianBorderGetBufferSize functions</a>.
+ *
+ */
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntPointer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") IntBuffer nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiFilterMedianBorderGetBufferSize_32f_AC4R_Ctx(@ByVal NppiSize oSizeROI, @ByVal NppiSize oMaskSize, @Cast("Npp32u*") int[] nBufferSize, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
+
+/** \} image_filter_median_border */
+
 /** \} image_rank_filters */
 
 /** \defgroup fixed_filters Fixed Filters
@@ -17499,7 +17906,13 @@ public static native @Cast("NppStatus") int nppiFilterUnsharpGetBufferSize_32f_A
  * Noise removal filtering of an image using an adaptive Wiener filter with border control.
  *
  * Pixels under the source mask are used to generate statistics about the local neighborhood 
- * which are then used to control the amount of adaptive noise filtering locally applied.
+ * which are then used to control the amount of adaptive noise filtering locally applied. 
+ *  
+ * Note that if the noise value for a particular channel is set to 0.0f then the output for that channel will contain the 
+ * square of the variance of local pixels within aMaskSize surrounding each pixel in oSizeROI. Note that is unlikely to be useful unless 
+ * the pixel data type is floating point due to result clamping.  Output from these cases can then be passed through an nppiMean function call 
+ * using the same oSizeROI.  The square root for that channel from the nppiMean call result can then be used as a noise value for a future 
+ * call to this function if there is no known preexisting noise value. 
  *
  * Currently only the NPP_BORDER_REPLICATE border type operation is supported.
  *
@@ -21464,7 +21877,7 @@ public static native @Cast("NppStatus") int nppiFloodFillBoundary_32u_C3IR(@Cast
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification. 
@@ -21507,7 +21920,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C1IR(@Cast("Np
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -21550,7 +21963,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_8u_C3IR(@Cast("Np
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -21593,7 +22006,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C1IR(@Cast("N
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -21636,7 +22049,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_16u_C3IR(@Cast("N
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -21679,7 +22092,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C1IR(@Cast("N
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -21743,7 +22156,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRange_32u_C3IR(@Cast("N
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -21787,7 +22200,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C1IR(@
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -21831,7 +22244,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_8u_C3IR(@
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -21875,7 +22288,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C1IR(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -21919,7 +22332,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_16u_C3IR(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= this value. 
- * @param nMax Valeu of tested pixel must be <= this value. 
+ * @param nMax Value of tested pixel must be <= this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -21963,7 +22376,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C1IR(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22029,7 +22442,7 @@ public static native @Cast("NppStatus") int nppiFloodFillRangeBoundary_32u_C3IR(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification. 
@@ -22060,7 +22473,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C1IR(@Cast(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -22091,7 +22504,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_8u_C3IR(@Cast(
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -22122,7 +22535,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C1IR(@Cast
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -22153,7 +22566,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_16u_C3IR(@Cast
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -22184,7 +22597,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C1IR(@Cast
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
  * @param oSizeROI \ref roi_specification.
@@ -22238,7 +22651,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradient_32u_C3IR(@Cast
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22282,7 +22695,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C1I
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22326,7 +22739,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_8u_C3I
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22370,7 +22783,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C1
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22414,7 +22827,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_16u_C3
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param nMin Value of tested pixel must be >= seed value - this value. 
- * @param nMax Valeu of tested pixel must be <= seed value + this value. 
+ * @param nMax Value of tested pixel must be <= seed value + this value. 
  * @param nNewValue Image pixel value to be used to replace matching pixels. 
  * @param nBoundaryValue Image pixel value to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 
@@ -22458,7 +22871,7 @@ public static native @Cast("NppStatus") int nppiFloodFillGradientBoundary_32u_C1
  * @param nSrcDstStep \ref in_place_image_line_step in bytes. 
  * @param oSeed Image location of seed pixel value to be used for comparison. 
  * @param aMin Value of each element of tested pixel must be >= the corresponding seed value - aMin value. 
- * @param aMax Valeu of each element of tested pixel must be <= the corresponding seed value + aMax value. 
+ * @param aMax Value of each element of tested pixel must be <= the corresponding seed value + aMax value. 
  * @param aNewValues Image pixel values to be used to replace matching pixels. 
  * @param aBoundaryValues Image pixel values to be used for region boundary. 
  * @param eNorm Type of pixel connectivity test to use, nppiNormInf will use 8 way connectivity and nppiNormL1 will use 4 way connectivity. 

@@ -873,7 +873,7 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.9.0";
+public static final String TVM_VERSION = "0.10.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
@@ -2049,13 +2049,22 @@ public static final int TVM_OBJECT_ATOMIC_REF_COUNTER = 1;
 
 // #include <algorithm>
 // #include <memory>
+// #include <type_traits>
 // #include <utility>
 // #include <vector>
 
 // #include "./base.h"
+// #include "./optional.h"
 // Targeting ../ArrayNode.java
 
 
+
+/** \brief Helper struct for type-checking
+ *
+ * is_valid_iterator<T,IterType>::value will be true if IterType can
+ * be dereferenced into a type that can be stored in an Array<T>, and
+ * false otherwise.
+ */
 
 /**
  * \brief Array, container representing a contiguous sequence of ObjectRefs.
@@ -2418,34 +2427,9 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #include <initializer_list>
 // #include <memory>
 // #include <string>
-// #include <unordered_map>
-// #include <utility>
-// We use c++14 std::experimental::string_view for optimizing hash computation
-// only right now, its usage is limited in this file. Any broader usage of
-// std::experiment in our core codebase is discouraged and needs community
-// discussion for each use case. Reference for feature test macros of
-// string_view:
-// https://isocpp.org/std/standing-documents/sd-6-sg10-feature-test-recommendations
-// https://en.cppreference.com/w/User:D41D8CD98F/feature_testing_macros
-// #if defined(__cpp_lib_experimental_string_view) && __cpp_lib_experimental_string_view >= 201411
-public static final int TVM_USE_CXX14_STRING_VIEW_HASH = 1;
-// #else
-// #endif
-
-// Tested with clang version 9.0.1 and c++17. It will detect string_view support
-// correctly.
-// #if defined(__cpp_lib_string_view) && __cpp_lib_string_view >= 201606
-public static final int TVM_USE_CXX17_STRING_VIEW_HASH = 1;
-// #else
-// #endif
-
-// #if TVM_USE_CXX17_STRING_VIEW_HASH
 // #include <string_view>
-// #elif TVM_USE_CXX14_STRING_VIEW_HASH
-// #include <experimental/string_view>
-// #endif
-
 // #include <type_traits>
+// #include <unordered_map>
 // #include <utility>
 // #include <vector>
 

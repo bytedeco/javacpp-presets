@@ -17,7 +17,7 @@ public class nppial extends org.bytedeco.cuda.presets.nppial {
 
 // Parsed from <nppi_arithmetic_and_logical_operations.h>
 
- /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
+ /* Copyright 2009-2022 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -97,7 +97,11 @@ public class nppial extends org.bytedeco.cuda.presets.nppial {
 /** 
  * \defgroup image_addc AddC
  *
- * Adds a constant value to each pixel of an image.
+ * Adds a constant value to each pixel of an image. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
  *
  * \{
  */
@@ -106,7 +110,7 @@ public class nppial extends org.bytedeco.cuda.presets.nppial {
  * One 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory Constant. 
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -128,8 +132,26 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C1RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant pointer to device memory Constant. 
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling. 
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstant, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstant, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstant, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+/** 
  * One 8-bit unsigned char channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory Constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -146,10 +168,24 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C1IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiAddC_8u_C1IRSfs(@Cast("const Npp8u") byte nConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstant pointer to device memory Constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstant, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstant, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel..
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -172,8 +208,27 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C3RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel 8-bit unsigned char in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel..
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -188,12 +243,25 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C3IRSfs_Ctx(@Cast("const
 public static native @Cast("NppStatus") int nppiAddC_8u_C3IRSfs(@Cast("const Npp8u*") BytePointer aConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_8u_C3IRSfs(@Cast("const Npp8u*") ByteBuffer aConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_8u_C3IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
+/** 
+ * Three 8-bit unsigned char channel 8-bit unsigned char in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 
 /** 
  * Four 8-bit unsigned char channel with unmodified alpha image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel..
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -216,8 +284,27 @@ public static native @Cast("NppStatus") int nppiAddC_8u_AC4RSfs(@Cast("const Npp
                           @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                    @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                    @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel..
+ * @param aConstants fixed size host memory array of constant values, one per channel..
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -234,10 +321,24 @@ public static native @Cast("NppStatus") int nppiAddC_8u_AC4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_8u_AC4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel..
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel..
+ * @param aConstants fixed size host memory array of constant values, one per channel..
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -259,8 +360,26 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C4RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel..
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+/** 
  * Four 8-bit unsigned char channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -277,10 +396,24 @@ public static native @Cast("NppStatus") int nppiAddC_8u_C4IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiAddC_8u_C4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -303,8 +436,28 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C1RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstant, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstant, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstant, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * One 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -321,10 +474,24 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16u_C1IRSfs(@Cast("const Npp16u") short nConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstant, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstant, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -347,8 +514,27 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C3RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -365,10 +551,24 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16u_C3IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -390,8 +590,27 @@ public static native @Cast("NppStatus") int nppiAddC_16u_AC4RSfs(@Cast("const Np
                            @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                     @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                     @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                     @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -408,10 +627,24 @@ public static native @Cast("NppStatus") int nppiAddC_16u_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiAddC_16u_AC4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -434,8 +667,27 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C4RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -452,10 +704,24 @@ public static native @Cast("NppStatus") int nppiAddC_16u_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16u_C4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -469,7 +735,6 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C1RSfs_Ctx(@Cast("const
                               @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiAddC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s") short nConstant, 
                               @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiAddC_16s_C1RSfs(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s") short nConstant, 
                           @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_16s_C1RSfs(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s") short nConstant, 
@@ -478,8 +743,27 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C1RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstant, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstant, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstant, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -496,10 +780,24 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16s_C1IRSfs(@Cast("const Npp16s") short nConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstant, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstant, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -513,7 +811,6 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C3RSfs_Ctx(@Cast("const
                               @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiAddC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] aConstants, 
                               @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiAddC_16s_C3RSfs(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer aConstants, 
                           @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_16s_C3RSfs(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer aConstants, 
@@ -522,8 +819,27 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C3RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -540,10 +856,24 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16s_C3IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -566,8 +896,27 @@ public static native @Cast("NppStatus") int nppiAddC_16s_AC4RSfs(@Cast("const Np
                            @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                     @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                     @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                     @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -584,10 +933,24 @@ public static native @Cast("NppStatus") int nppiAddC_16s_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiAddC_16s_AC4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -601,17 +964,34 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C4RSfs_Ctx(@Cast("const
                               @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiAddC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] aConstants, 
                               @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiAddC_16s_C4RSfs(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer aConstants, 
                           @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_16s_C4RSfs(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer aConstants, 
                           @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiAddC_16s_C4RSfs(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] aConstants, 
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
+/** 
+ * Four 16-bit signed short channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 
 /** 
  * Four 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -628,10 +1008,24 @@ public static native @Cast("NppStatus") int nppiAddC_16s_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_16s_C4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
- * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nSrc1Step \ref source_image_line_step. 
+ * @param nConstant host memory constant. 
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -647,7 +1041,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_C1RSfs(@Const Npp16sc 
 
 /** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -663,7 +1057,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_C1IRSfs(@Const @ByVal 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -679,7 +1073,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_C3RSfs(@Const Npp16sc 
 
 /** 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -695,7 +1089,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_C3IRSfs(@Const Npp16sc
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -711,7 +1105,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_AC4RSfs(@Const Npp16sc
 
 /** 
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -727,7 +1121,7 @@ public static native @Cast("NppStatus") int nppiAddC_16sc_AC4IRSfs(@Const Npp16s
  * One 32-bit signed integer channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -750,8 +1144,27 @@ public static native @Cast("NppStatus") int nppiAddC_32s_C1RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstant, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstant, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstant, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed integer channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -768,10 +1181,24 @@ public static native @Cast("NppStatus") int nppiAddC_32s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_32s_C1IRSfs(@Cast("const Npp32s") int nConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstant, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstant, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -794,8 +1221,27 @@ public static native @Cast("NppStatus") int nppiAddC_32s_C3RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel image add constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstants, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstants, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstants, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -812,10 +1258,24 @@ public static native @Cast("NppStatus") int nppiAddC_32s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiAddC_32s_C3IRSfs(@Cast("const Npp32s*") int[] aConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel in place image add constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstants, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstants, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -831,7 +1291,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_C1RSfs(@Const Npp32sc 
 
 /** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image add constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -847,7 +1307,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_C1IRSfs(@Const @ByVal 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -863,7 +1323,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_C3RSfs(@Const Npp32sc 
 
 /** 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -879,7 +1339,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_C3IRSfs(@Const Npp32sc
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha image add constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -895,7 +1355,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_AC4RSfs(@Const Npp32sc
 
 /** 
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha in place image add constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -911,7 +1371,7 @@ public static native @Cast("NppStatus") int nppiAddC_32sc_AC4IRSfs(@Const Npp32s
  * One 16-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -925,8 +1385,26 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C1R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit floating point channel in place image add constant.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -938,10 +1416,23 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C1IR_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiAddC_16f_C1IR(@Cast("const Npp32f") float nConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel in place image add constant.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -963,8 +1454,26 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C3R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel in place image add constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -980,10 +1489,23 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiAddC_16f_C3IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel in place image add constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1005,8 +1527,26 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C4R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel in place image add constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1022,10 +1562,23 @@ public static native @Cast("NppStatus") int nppiAddC_16f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiAddC_16f_C4IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel in place image add constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1047,8 +1600,26 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C1R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel in place image add constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1064,10 +1635,23 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C1IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiAddC_32f_C1IR(@Cast("const Npp32f") float nConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel in place image add constant.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1088,8 +1672,26 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C3R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1105,10 +1707,23 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiAddC_32f_C3IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel in place image add constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1130,8 +1745,26 @@ public static native @Cast("NppStatus") int nppiAddC_32f_AC4R(@Cast("const Npp32
                         @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                  @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                  @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                  @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1147,10 +1780,23 @@ public static native @Cast("NppStatus") int nppiAddC_32f_AC4IR(@Cast("const Npp3
 public static native @Cast("NppStatus") int nppiAddC_32f_AC4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha in place image add constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1172,8 +1818,27 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C4R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel image add constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * Four 32-bit floating point channel in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1189,10 +1854,23 @@ public static native @Cast("NppStatus") int nppiAddC_32f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiAddC_32f_C4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel in place image add constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAddDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1207,7 +1885,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C1R(@Const Npp32fc pSr
 
 /** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image add constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1222,7 +1900,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C1IR(@Const @ByVal Npp
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1236,7 +1914,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C3R(@Const Npp32fc pSr
 
 /** 
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1251,7 +1929,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C3IR(@Const Npp32fc aC
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1266,7 +1944,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_AC4R(@Const Npp32fc pS
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1281,7 +1959,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_AC4IR(@Const Npp32fc a
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image add constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1296,7 +1974,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C4R(@Const Npp32fc pSr
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image add constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1313,7 +1991,11 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C4IR(@Const Npp32fc aC
 /** 
  * \defgroup image_mulc MulC
  *
- * Multiplies each pixel of an image by a constant value.
+ * Multiplies each pixel of an image by a constant value. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
  *
  * \{
  */
@@ -1322,7 +2004,7 @@ public static native @Cast("NppStatus") int nppiAddC_32fc_C4IR(@Const Npp32fc aC
  * One 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1345,8 +2027,27 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C1RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstant, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstant, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstant, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 8-bit unsigned char channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1363,10 +2064,24 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C1IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiMulC_8u_C1IRSfs(@Cast("const Npp8u") byte nConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstant, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstant, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1389,8 +2104,27 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C3RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel 8-bit unsigned char in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1407,10 +2141,24 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C3IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiMulC_8u_C3IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel 8-bit unsigned char in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1433,8 +2181,27 @@ public static native @Cast("NppStatus") int nppiMulC_8u_AC4RSfs(@Cast("const Npp
                           @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                    @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                    @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1451,10 +2218,24 @@ public static native @Cast("NppStatus") int nppiMulC_8u_AC4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_8u_AC4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1477,8 +2258,27 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C4RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1495,10 +2295,24 @@ public static native @Cast("NppStatus") int nppiMulC_8u_C4IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiMulC_8u_C4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1521,8 +2335,28 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C1RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstant, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstant, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstant, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * One 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1539,10 +2373,24 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16u_C1IRSfs(@Cast("const Npp16u") short nConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstant, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstant, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1565,8 +2413,27 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C3RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1583,10 +2450,24 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16u_C3IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1609,8 +2490,27 @@ public static native @Cast("NppStatus") int nppiMulC_16u_AC4RSfs(@Cast("const Np
                            @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                     @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                     @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                     @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1627,10 +2527,24 @@ public static native @Cast("NppStatus") int nppiMulC_16u_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulC_16u_AC4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1653,8 +2567,27 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C4RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1671,10 +2604,24 @@ public static native @Cast("NppStatus") int nppiMulC_16u_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16u_C4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1697,8 +2644,27 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C1RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstant, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstant, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstant, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1715,10 +2681,24 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16s_C1IRSfs(@Cast("const Npp16s") short nConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstant, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstant, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1741,8 +2721,27 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C3RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1759,10 +2758,24 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16s_C3IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1785,8 +2798,27 @@ public static native @Cast("NppStatus") int nppiMulC_16s_AC4RSfs(@Cast("const Np
                            @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                     @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                     @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                     @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1803,10 +2835,24 @@ public static native @Cast("NppStatus") int nppiMulC_16s_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulC_16s_AC4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1829,8 +2875,27 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C4RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1847,10 +2912,24 @@ public static native @Cast("NppStatus") int nppiMulC_16s_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_16s_C4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1866,7 +2945,7 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_C1RSfs(@Const Npp16sc 
 
 /** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1882,7 +2961,7 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_C1IRSfs(@Const @ByVal 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1894,11 +2973,11 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_C3RSfs_Ctx(@Const Npp1
                                Npp16sc pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 
 public static native @Cast("NppStatus") int nppiMulC_16sc_C3RSfs(@Const Npp16sc pSrc1, int nSrc1Step, @Const Npp16sc aConstants, 
-                          Npp16sc pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
+                           Npp16sc pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1914,7 +2993,7 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_C3IRSfs(@Const Npp16sc
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1930,7 +3009,7 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_AC4RSfs(@Const Npp16sc
 
 /** 
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1946,7 +3025,7 @@ public static native @Cast("NppStatus") int nppiMulC_16sc_AC4IRSfs(@Const Npp16s
  * One 32-bit signed integer channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1960,7 +3039,6 @@ public static native @Cast("NppStatus") int nppiMulC_32s_C1RSfs_Ctx(@Cast("const
                               @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiMulC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s") int nConstant, 
                               @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMulC_32s_C1RSfs(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s") int nConstant, 
                           @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiMulC_32s_C1RSfs(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s") int nConstant, 
@@ -1969,8 +3047,27 @@ public static native @Cast("NppStatus") int nppiMulC_32s_C1RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstant, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstant, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstant, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed integer channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -1987,10 +3084,24 @@ public static native @Cast("NppStatus") int nppiMulC_32s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_32s_C1IRSfs(@Cast("const Npp32s") int nConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstant, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstant, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2013,8 +3124,27 @@ public static native @Cast("NppStatus") int nppiMulC_32s_C3RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel image multiply by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstants, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstants, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstants, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2031,10 +3161,24 @@ public static native @Cast("NppStatus") int nppiMulC_32s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiMulC_32s_C3IRSfs(@Cast("const Npp32s*") int[] aConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel in place image multiply by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstants, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstants, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2050,7 +3194,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_C1RSfs(@Const Npp32sc 
 
 /** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2066,7 +3210,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_C1IRSfs(@Const @ByVal 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2082,7 +3226,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_C3RSfs(@Const Npp32sc 
 
 /** 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2098,7 +3242,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_C3IRSfs(@Const Npp32sc
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha image multiply by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2114,7 +3258,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_AC4RSfs(@Const Npp32sc
 
 /** 
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha in place image multiply by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2130,7 +3274,7 @@ public static native @Cast("NppStatus") int nppiMulC_32sc_AC4IRSfs(@Const Npp32s
  * One 16-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant 32-bit floating point host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2144,8 +3288,26 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C1R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant 32-bit floating point device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit floating point channel in place image multiply by constant.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant 32-bit floating point host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2157,10 +3319,23 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C1IR_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulC_16f_C1IR(@Cast("const Npp32f") float nConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel in place image multiply by constant.
+ * @param pConstant 32-bit floating point device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2182,8 +3357,26 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C3R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel in place image multiply by constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2199,10 +3392,23 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiMulC_16f_C3IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel in place image multiply by constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2224,8 +3430,26 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C4R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel in place image multiply by constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2241,10 +3465,23 @@ public static native @Cast("NppStatus") int nppiMulC_16f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiMulC_16f_C4IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel in place image multiply by constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2266,8 +3503,26 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C1R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel in place image multiply by constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2283,10 +3538,23 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C1IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiMulC_32f_C1IR(@Cast("const Npp32f") float nConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel in place image multiply by constant.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2308,8 +3576,26 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C3R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2325,10 +3611,23 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiMulC_32f_C3IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel in place image multiply by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2350,8 +3649,27 @@ public static native @Cast("NppStatus") int nppiMulC_32f_AC4R(@Cast("const Npp32
                         @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                  @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                  @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                  @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2367,10 +3685,23 @@ public static native @Cast("NppStatus") int nppiMulC_32f_AC4IR(@Cast("const Npp3
 public static native @Cast("NppStatus") int nppiMulC_32f_AC4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha in place image multiply by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2392,8 +3723,27 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C4R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel image multiply by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * Four 32-bit floating point channel in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2409,10 +3759,23 @@ public static native @Cast("NppStatus") int nppiMulC_32f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiMulC_32f_C4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel in place image multiply by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2427,7 +3790,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C1R(@Const Npp32fc pSr
 
 /** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image multiply by constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2442,7 +3805,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C1IR(@Const @ByVal Npp
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2457,7 +3820,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C3R(@Const Npp32fc pSr
 
 /** 
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2472,7 +3835,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C3IR(@Const Npp32fc aC
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2487,7 +3850,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_AC4R(@Const Npp32fc pS
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2502,7 +3865,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_AC4IR(@Const Npp32fc a
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image multiply by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2517,7 +3880,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C4R(@Const Npp32fc pSr
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image multiply by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2534,7 +3897,11 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C4IR(@Const Npp32fc aC
  * \defgroup image_mulcscale MulCScale
  *
  * Multiplies each pixel of an image by a constant value then scales the result
- * by the maximum value for the data bit width.
+ * by the maximum value for the data bit width. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
  *
  * \{
  */
@@ -2543,7 +3910,7 @@ public static native @Cast("NppStatus") int nppiMulC_32fc_C4IR(@Const Npp32fc aC
  * One 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2565,8 +3932,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C1R(@Cast("const Np
                            @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstant, 
+                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstant, 
+                                     @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstant, 
+                                     @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 8-bit unsigned char channel in place image multiply by constant and scale by max bit width value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2582,10 +3967,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C1IR(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulCScale_8u_C1IR(@Cast("const Npp8u") byte nConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 8-bit unsigned char channel in place image multiply by constant and scale by max bit width value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1IR_Ctx(@Cast("const Npp8u*") BytePointer pConstant, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1IR_Ctx(@Cast("const Npp8u*") ByteBuffer pConstant, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C1IR_Ctx(@Cast("const Npp8u*") byte[] pConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2607,8 +4005,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C3R(@Cast("const Np
                            @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                     @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                     @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel 8-bit unsigned char in place image multiply by constant and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2624,10 +4040,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C3IR(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulCScale_8u_C3IR(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 8-bit unsigned char channel 8-bit unsigned char in place image multiply by constant and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3IR_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3IR_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C3IR_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2649,8 +4078,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_AC4R(@Cast("const N
                             @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                      @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                      @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha in place image multiply by constant, scale and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2666,10 +4113,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_AC4IR(@Cast("const 
 public static native @Cast("NppStatus") int nppiMulCScale_8u_AC4IR(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha in place image multiply by constant, scale and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4IR_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4IR_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_AC4IR_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2691,8 +4151,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C4R(@Cast("const Np
                            @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 8-bit unsigned char channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                     @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                     @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel in place image multiply by constant and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2708,10 +4186,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_8u_C4IR(@Cast("const N
 public static native @Cast("NppStatus") int nppiMulCScale_8u_C4IR(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 8-bit unsigned char channel in place image multiply by constant and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4IR_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4IR_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_8u_C4IR_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2733,8 +4224,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C1R(@Cast("const N
                             @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstant, 
+                                      @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstant, 
+                                      @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstant, 
+                                      @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2750,10 +4259,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C1IR(@Cast("const 
 public static native @Cast("NppStatus") int nppiMulCScale_16u_C1IR(@Cast("const Npp16u") short nConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1IR_Ctx(@Cast("const Npp16u*") ShortPointer pConstant, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1IR_Ctx(@Cast("const Npp16u*") ShortBuffer pConstant, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C1IR_Ctx(@Cast("const Npp16u*") short[] pConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2775,8 +4297,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C3R(@Cast("const N
                             @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                      @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                      @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                      @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2792,10 +4332,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C3IR(@Cast("const 
 public static native @Cast("NppStatus") int nppiMulCScale_16u_C3IR(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3IR_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3IR_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C3IR_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2817,8 +4370,27 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_AC4R(@Cast("const 
                              @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                       @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                       @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                       @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha in place image multiply by constant and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2834,10 +4406,23 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_AC4IR(@Cast("const
 public static native @Cast("NppStatus") int nppiMulCScale_16u_AC4IR(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha in place image multiply by constant and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4IR_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4IR_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_AC4IR_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2859,8 +4444,26 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C4R(@Cast("const N
                             @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit unsigned short channel image multiply by constant and scale by max bit width value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                      @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                      @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                      @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2875,10 +4478,28 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C4IR(@Cast("const 
 public static native @Cast("NppStatus") int nppiMulCScale_16u_C4IR(@Cast("const Npp16u*") ShortBuffer aConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiMulCScale_16u_C4IR(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
+/** 
+ * Four 16-bit unsigned short channel in place image multiply by constant and scale by max bit width value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4IR_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4IR_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiMulDeviceCScale_16u_C4IR_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
 /** \} image_mulcscale */ 
 
 /** \defgroup image_subc SubC
- * Subtracts a constant value from each pixel of an image.
+ * Subtracts a constant value from each pixel of an image. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
+ *
  * \{
  */
 
@@ -2886,7 +4507,7 @@ public static native @Cast("NppStatus") int nppiMulCScale_16u_C4IR(@Cast("const 
  * One 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2909,8 +4530,27 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C1RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstant, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstant, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstant, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 8-bit unsigned char channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2927,10 +4567,24 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C1IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiSubC_8u_C1IRSfs(@Cast("const Npp8u") byte nConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstant, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstant, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2944,7 +4598,6 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C3RSfs_Ctx(@Cast("const 
                              @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
 public static native @Cast("NppStatus") int nppiSubC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] aConstants, 
                              @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiSubC_8u_C3RSfs(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer aConstants, 
                          @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 public static native @Cast("NppStatus") int nppiSubC_8u_C3RSfs(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer aConstants, 
@@ -2953,8 +4606,27 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C3RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel 8-bit unsigned char in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2971,10 +4643,24 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C3IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiSubC_8u_C3IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel 8-bit unsigned char in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -2997,8 +4683,27 @@ public static native @Cast("NppStatus") int nppiSubC_8u_AC4RSfs(@Cast("const Npp
                           @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                    @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                    @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3015,10 +4720,24 @@ public static native @Cast("NppStatus") int nppiSubC_8u_AC4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_8u_AC4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3041,8 +4760,27 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C4RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3059,10 +4797,24 @@ public static native @Cast("NppStatus") int nppiSubC_8u_C4IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiSubC_8u_C4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3085,8 +4837,27 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C1RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstant, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstant, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstant, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3103,10 +4874,24 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16u_C1IRSfs(@Cast("const Npp16u") short nConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstant, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstant, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3129,8 +4914,27 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C3RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3147,10 +4951,24 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16u_C3IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3173,8 +4991,27 @@ public static native @Cast("NppStatus") int nppiSubC_16u_AC4RSfs(@Cast("const Np
                            @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                     @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                     @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                     @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3191,10 +5028,24 @@ public static native @Cast("NppStatus") int nppiSubC_16u_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiSubC_16u_AC4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3217,8 +5068,27 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C4RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3235,10 +5105,24 @@ public static native @Cast("NppStatus") int nppiSubC_16u_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16u_C4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3261,8 +5145,27 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C1RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstant, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstant, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstant, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3279,10 +5182,24 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16s_C1IRSfs(@Cast("const Npp16s") short nConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstant, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstant, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3305,8 +5222,27 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C3RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3323,10 +5259,24 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16s_C3IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3349,8 +5299,27 @@ public static native @Cast("NppStatus") int nppiSubC_16s_AC4RSfs(@Cast("const Np
                            @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                     @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                     @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                     @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3367,10 +5336,24 @@ public static native @Cast("NppStatus") int nppiSubC_16s_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiSubC_16s_AC4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3393,8 +5376,27 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C4RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3411,10 +5413,24 @@ public static native @Cast("NppStatus") int nppiSubC_16s_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_16s_C4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3430,7 +5446,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_C1RSfs(@Const Npp16sc 
 
 /** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3446,7 +5462,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_C1IRSfs(@Const @ByVal 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3462,7 +5478,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_C3RSfs(@Const Npp16sc 
 
 /** 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3478,7 +5494,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_C3IRSfs(@Const Npp16sc
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3494,7 +5510,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_AC4RSfs(@Const Npp16sc
 
 /** 
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3510,7 +5526,7 @@ public static native @Cast("NppStatus") int nppiSubC_16sc_AC4IRSfs(@Const Npp16s
  * One 32-bit signed integer channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3533,8 +5549,27 @@ public static native @Cast("NppStatus") int nppiSubC_32s_C1RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstant, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstant, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstant, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed integer channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3551,10 +5586,24 @@ public static native @Cast("NppStatus") int nppiSubC_32s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_32s_C1IRSfs(@Cast("const Npp32s") int nConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstant, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstant, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3577,8 +5626,27 @@ public static native @Cast("NppStatus") int nppiSubC_32s_C3RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel image subtract constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstants, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstants, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstants, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3595,10 +5663,24 @@ public static native @Cast("NppStatus") int nppiSubC_32s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiSubC_32s_C3IRSfs(@Cast("const Npp32s*") int[] aConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel in place image subtract constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstants, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstants, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3614,7 +5696,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_C1RSfs(@Const Npp32sc 
 
 /** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image subtract constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3630,7 +5712,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_C1IRSfs(@Const @ByVal 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3646,7 +5728,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_C3RSfs(@Const Npp32sc 
 
 /** 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3662,7 +5744,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_C3IRSfs(@Const Npp32sc
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha image subtract constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3678,7 +5760,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_AC4RSfs(@Const Npp32sc
 
 /** 
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha in place image subtract constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3694,7 +5776,7 @@ public static native @Cast("NppStatus") int nppiSubC_32sc_AC4IRSfs(@Const Npp32s
  * One 16-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3708,8 +5790,26 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C1R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit floating point channel in place image subtract constant.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3721,10 +5821,23 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C1IR_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiSubC_16f_C1IR(@Cast("const Npp32f") float nConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel in place image subtract constant.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3746,8 +5859,26 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C3R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel in place image subtract constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3761,12 +5892,25 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C3IR_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiSubC_16f_C3IR(@Cast("const Npp32f*") FloatPointer aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiSubC_16f_C3IR(@Cast("const Npp32f*") FloatBuffer aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiSubC_16f_C3IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
- 
+
+/** 
+ * Three 16-bit floating point channel in place image subtract constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+  
 /** 
  * Four 16-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3786,10 +5930,28 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C4R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiSubC_16f_C4R(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] aConstants, 
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
+  
+/** 
+ * Four 16-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
 
 /** 
  * Four 16-bit floating point channel in place image subtract constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3805,10 +5967,23 @@ public static native @Cast("NppStatus") int nppiSubC_16f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiSubC_16f_C4IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel in place image subtract constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3830,8 +6005,26 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C1R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel in place image subtract constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3847,10 +6040,23 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C1IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiSubC_32f_C1IR(@Cast("const Npp32f") float nConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel in place image subtract constant.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3872,8 +6078,26 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C3R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3889,10 +6113,23 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiSubC_32f_C3IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel in place image subtract constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3914,8 +6151,26 @@ public static native @Cast("NppStatus") int nppiSubC_32f_AC4R(@Cast("const Npp32
                         @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                  @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                  @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                  @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3931,10 +6186,23 @@ public static native @Cast("NppStatus") int nppiSubC_32f_AC4IR(@Cast("const Npp3
 public static native @Cast("NppStatus") int nppiSubC_32f_AC4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha in place image subtract constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3956,8 +6224,26 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C4R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel image subtract constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3973,10 +6259,23 @@ public static native @Cast("NppStatus") int nppiSubC_32f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiSubC_32f_C4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel in place image subtract constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiSubDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -3991,7 +6290,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C1R(@Const Npp32fc pSr
 
 /** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image subtract constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4006,7 +6305,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C1IR(@Const @ByVal Npp
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4021,7 +6320,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C3R(@Const Npp32fc pSr
 
 /** 
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4036,7 +6335,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C3IR(@Const Npp32fc aC
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4051,7 +6350,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_AC4R(@Const Npp32fc pS
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4066,7 +6365,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_AC4IR(@Const Npp32fc a
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image subtract constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4081,7 +6380,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C4R(@Const Npp32fc pSr
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image subtract constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4097,7 +6396,11 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C4IR(@Const Npp32fc aC
 /** 
  * \defgroup image_divc DivC
  *
- * Divides each pixel of an image by a constant value.
+ * Divides each pixel of an image by a constant value. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
  *
  * \{
  */
@@ -4106,7 +6409,7 @@ public static native @Cast("NppStatus") int nppiSubC_32fc_C4IR(@Const Npp32fc aC
  * One 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4129,8 +6432,27 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C1RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstant, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstant, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstant, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 8-bit unsigned char channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4147,10 +6469,24 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C1IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiDivC_8u_C1IRSfs(@Cast("const Npp8u") byte nConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 8-bit unsigned char channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstant, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstant, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C1IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstant, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4173,8 +6509,27 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C3RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 8-bit unsigned char channel 8-bit unsigned char in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4191,10 +6546,24 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C3IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiDivC_8u_C3IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 8-bit unsigned char channel 8-bit unsigned char in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C3IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4217,8 +6586,27 @@ public static native @Cast("NppStatus") int nppiDivC_8u_AC4RSfs(@Cast("const Npp
                           @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                    @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                    @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4235,10 +6623,24 @@ public static native @Cast("NppStatus") int nppiDivC_8u_AC4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_8u_AC4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_AC4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4261,8 +6663,27 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C4RSfs(@Cast("const Npp8
                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("const Npp8u*") BytePointer pConstants, 
+                                   @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("const Npp8u*") ByteBuffer pConstants, 
+                                   @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4RSfs_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("const Npp8u*") byte[] pConstants, 
+                                   @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 8-bit unsigned char channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4279,10 +6700,24 @@ public static native @Cast("NppStatus") int nppiDivC_8u_C4IRSfs(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiDivC_8u_C4IRSfs(@Cast("const Npp8u*") byte[] aConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 8-bit unsigned char channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") BytePointer pConstants, @Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") ByteBuffer pConstants, @Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_8u_C4IRSfs_Ctx(@Cast("const Npp8u*") byte[] pConstants, @Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4305,8 +6740,27 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C1RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstant, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstant, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstant, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4323,10 +6777,24 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16u_C1IRSfs(@Cast("const Npp16u") short nConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstant, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstant, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C1IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstant, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4349,8 +6817,27 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C3RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4367,10 +6854,24 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16u_C3IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C3IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4393,8 +6894,28 @@ public static native @Cast("NppStatus") int nppiDivC_16u_AC4RSfs(@Cast("const Np
                            @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                     @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                     @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                     @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+
+/** 
  * Four 16-bit unsigned short channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4411,10 +6932,24 @@ public static native @Cast("NppStatus") int nppiDivC_16u_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiDivC_16u_AC4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_AC4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4437,8 +6972,27 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C4RSfs(@Cast("const Npp
                           @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortPointer pConstants, 
+                                    @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16u*") ShortBuffer pConstants, 
+                                    @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4RSfs_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16u*") short[] pConstants, 
+                                    @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4455,10 +7009,24 @@ public static native @Cast("NppStatus") int nppiDivC_16u_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16u_C4IRSfs(@Cast("const Npp16u*") short[] aConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit unsigned short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortPointer pConstants, @Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") ShortBuffer pConstants, @Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16u_C4IRSfs_Ctx(@Cast("const Npp16u*") short[] pConstants, @Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4481,8 +7049,27 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C1RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstant, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstant, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstant, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4499,10 +7086,24 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16s_C1IRSfs(@Cast("const Npp16s") short nConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstant, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstant, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C1IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstant, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4525,8 +7126,27 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C3RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4543,10 +7163,24 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16s_C3IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C3IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4569,8 +7203,27 @@ public static native @Cast("NppStatus") int nppiDivC_16s_AC4RSfs(@Cast("const Np
                            @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                     @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                     @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                     @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4587,10 +7240,24 @@ public static native @Cast("NppStatus") int nppiDivC_16s_AC4IRSfs(@Cast("const N
 public static native @Cast("NppStatus") int nppiDivC_16s_AC4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_AC4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4613,8 +7280,27 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C4RSfs(@Cast("const Npp
                           @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortPointer pConstants, 
+                                    @Cast("Npp16s*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step, @Cast("const Npp16s*") ShortBuffer pConstants, 
+                                    @Cast("Npp16s*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4RSfs_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step, @Cast("const Npp16s*") short[] pConstants, 
+                                    @Cast("Npp16s*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4631,10 +7317,24 @@ public static native @Cast("NppStatus") int nppiDivC_16s_C4IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_16s_C4IRSfs(@Cast("const Npp16s*") short[] aConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Four 16-bit signed short channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortPointer pConstants, @Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") ShortBuffer pConstants, @Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16s_C4IRSfs_Ctx(@Cast("const Npp16s*") short[] pConstants, @Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4650,7 +7350,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_C1RSfs(@Const Npp16sc 
 
 /** 
  * One 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4666,7 +7366,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_C1IRSfs(@Const @ByVal 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4682,7 +7382,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_C3RSfs(@Const Npp16sc 
 
 /** 
  * Three 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4698,7 +7398,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_C3IRSfs(@Const Npp16sc
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4714,7 +7414,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_AC4RSfs(@Const Npp16sc
 
 /** 
  * Four 16-bit signed short complex number (16-bit real, 16-bit imaginary) channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4730,7 +7430,7 @@ public static native @Cast("NppStatus") int nppiDivC_16sc_AC4IRSfs(@Const Npp16s
  * One 32-bit signed integer channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4753,8 +7453,27 @@ public static native @Cast("NppStatus") int nppiDivC_32s_C1RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstant, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstant, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstant, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed integer channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4771,10 +7490,24 @@ public static native @Cast("NppStatus") int nppiDivC_32s_C1IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_32s_C1IRSfs(@Cast("const Npp32s") int nConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * One 32-bit signed integer channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstant, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstant, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C1IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstant, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4797,8 +7530,27 @@ public static native @Cast("NppStatus") int nppiDivC_32s_C3RSfs(@Cast("const Npp
                           @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel image divided by constant, scale, then clamp to saturated value.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntPointer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntPointer pConstants, 
+                                    @Cast("Npp32s*") IntPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") IntBuffer pSrc1, int nSrc1Step, @Cast("const Npp32s*") IntBuffer pConstants, 
+                                    @Cast("Npp32s*") IntBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3RSfs_Ctx(@Cast("const Npp32s*") int[] pSrc1, int nSrc1Step, @Cast("const Npp32s*") int[] pConstants, 
+                                    @Cast("Npp32s*") int[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit signed integer channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4815,10 +7567,24 @@ public static native @Cast("NppStatus") int nppiDivC_32s_C3IRSfs(@Cast("const Np
 public static native @Cast("NppStatus") int nppiDivC_32s_C3IRSfs(@Cast("const Npp32s*") int[] aConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor);
 
 /** 
+ * Three 32-bit signed integer channel in place image divided by constant, scale, then clamp to saturated value.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nScaleFactor \ref integer_result_scaling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntPointer pConstants, @Cast("Npp32s*") IntPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") IntBuffer pConstants, @Cast("Npp32s*") IntBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32s_C3IRSfs_Ctx(@Cast("const Npp32s*") int[] pConstants, @Cast("Npp32s*") int[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, int nScaleFactor, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4834,7 +7600,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_C1RSfs(@Const Npp32sc 
 
 /** 
  * One 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image divided by constant, scale, then clamp to saturated value.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4850,7 +7616,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_C1IRSfs(@Const @ByVal 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4866,7 +7632,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_C3RSfs(@Const Npp32sc 
 
 /** 
  * Three 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4882,7 +7648,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_C3IRSfs(@Const Npp32sc
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha image divided by constant, scale, then clamp to saturated value.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4898,7 +7664,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_AC4RSfs(@Const Npp32sc
 
 /** 
  * Four 32-bit signed complex integer (32-bit real, 32-bit imaginary) channel with unmodified alpha in place image divided by constant, scale, then clamp to saturated value.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4914,7 +7680,7 @@ public static native @Cast("NppStatus") int nppiDivC_32sc_AC4IRSfs(@Const Npp32s
  * One 16-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4928,8 +7694,26 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C1R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 16-bit floating point channel in place image divided by constant.
- * @param nConstant 32-bit floating point constant.
+ * @param nConstant host memory 32-bit floating point constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4941,11 +7725,23 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C1IR_Ctx(@Cast("const N
 public static native @Cast("NppStatus") int nppiDivC_16f_C1IR(@Cast("const Npp32f") float nConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 16-bit floating point channel in place image divided by constant.
+ * @param pConstant device memory 32-bit floating point constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4967,9 +7763,26 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C3R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 16-bit floating point channel in place image divided by constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -4985,10 +7798,23 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiDivC_16f_C3IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 16-bit floating point channel in place image divided by constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5010,8 +7836,26 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C4R(@Const Npp16f pSrc1
                        Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4R_Ctx(@Const Npp16f pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 Npp16f pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 16-bit floating point channel in place image divided by constant.
- * @param aConstants fixed size array of 32-bit floating point constant values, one per channel.
+ * @param aConstants fixed size host memory array of 32-bit floating point constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5027,10 +7871,23 @@ public static native @Cast("NppStatus") int nppiDivC_16f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiDivC_16f_C4IR(@Cast("const Npp32f*") float[] aConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 16-bit floating point channel in place image divided by constant.
+ * @param pConstants fixed size device memory array of 32-bit floating point constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_16f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, Npp16f pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5052,8 +7909,26 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C1R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstant, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstant, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstant, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit floating point channel in place image divided by constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5069,10 +7944,23 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C1IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiDivC_32f_C1IR(@Cast("const Npp32f") float nConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * One 32-bit floating point channel in place image divided by constant.
+ * @param pConstant device memory constant.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstant, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstant, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C1IR_Ctx(@Cast("const Npp32f*") float[] pConstant, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5094,8 +7982,26 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C3R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Three 32-bit floating point channel in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5111,10 +8017,23 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C3IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiDivC_32f_C3IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Three 32-bit floating point channel in place image divided by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C3IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5136,8 +8055,26 @@ public static native @Cast("NppStatus") int nppiDivC_32f_AC4R(@Cast("const Npp32
                         @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                  @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                  @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                  @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel with unmodified alpha in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5153,10 +8090,23 @@ public static native @Cast("NppStatus") int nppiDivC_32f_AC4IR(@Cast("const Npp3
 public static native @Cast("NppStatus") int nppiDivC_32f_AC4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel with unmodified alpha in place image divided by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_AC4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5178,8 +8128,26 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C4R(@Cast("const Npp32f
                        @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel image divided by constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatPointer pConstants, 
+                                 @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("const Npp32f*") FloatBuffer pConstants, 
+                                 @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("const Npp32f*") float[] pConstants, 
+                                 @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * Four 32-bit floating point channel in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size host memory array of constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5195,10 +8163,23 @@ public static native @Cast("NppStatus") int nppiDivC_32f_C4IR(@Cast("const Npp32
 public static native @Cast("NppStatus") int nppiDivC_32f_C4IR(@Cast("const Npp32f*") float[] aConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
 /** 
+ * Four 32-bit floating point channel in place image divided by constant.
+ * @param pConstants fixed size device memory array of constant values, one per channel.
+ * @param pSrcDst \ref in_place_image_pointer.
+ * @param nSrcDstStep \ref in_place_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatPointer pConstants, @Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") FloatBuffer pConstants, @Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiDivDeviceC_32f_C4IR_Ctx(@Cast("const Npp32f*") float[] pConstants, @Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
+
+/** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5213,7 +8194,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C1R(@Const Npp32fc pSr
 
 /** 
  * One 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image divided by constant.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5228,7 +8209,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C1IR(@Const @ByVal Npp
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5243,7 +8224,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C3R(@Const Npp32fc pSr
 
 /** 
  * Three 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5258,7 +8239,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C3IR(@Const Npp32fc aC
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5273,7 +8254,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_AC4R(@Const Npp32fc pS
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel with unmodified alpha in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5288,7 +8269,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_AC4IR(@Const Npp32fc a
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel image divided by constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5303,7 +8284,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C4R(@Const Npp32fc pSr
 
 /** 
  * Four 32-bit complex floating point (32-bit floating point real, 32-bit floating point imaginary) channel in place image divided by constant.
- * @param aConstants fixed size array of constant values, one per channel.
+ * @param aConstants fixed size array of host memory constant values, one per channel.
  * @param pSrcDst \ref in_place_image_pointer.
  * @param nSrcDstStep \ref in_place_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5319,7 +8300,11 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C4IR(@Const Npp32fc aC
 /** 
  * \defgroup image_absdiffc AbsDiffC
  *
- * Determines absolute difference between each pixel of an image and a constant value.
+ * Determines absolute difference between each pixel of an image and a constant value. 
+ *  
+ * Note: If you use one of the device constant versions of these functions and the function called immediately preceeding that 
+ * function generates that device constant you MUST either call cudaStreamSynchronize() or cudaDeviceSynchronize() before calling 
+ * the device constant function. 
  *
  * \{
  */
@@ -5328,7 +8313,7 @@ public static native @Cast("NppStatus") int nppiDivC_32fc_C4IR(@Const Npp32fc aC
  * One 8-bit unsigned char channel image absolute difference with constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
@@ -5344,42 +8329,87 @@ public static native @Cast("NppStatus") int nppiAbsDiffC_8u_C1R(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiAbsDiffC_8u_C1R(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp8u") byte nConstant);
 
 /** 
- * One 16-bit unsigned short channel image absolute difference with constant.
+ * One 8-bit unsigned char channel image absolute difference with constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param pConstant device memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step, @Cast("Npp8u*") BytePointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp8u*") BytePointer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step, @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp8u*") ByteBuffer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step, @Cast("Npp8u*") byte[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp8u*") byte[] pConstant, @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
-public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("Npp16u*") short[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
+/** 
+ * One 16-bit unsigned short channel image absolute difference with constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param nConstant host memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortPointer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("Npp16u*") short[] pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant, @ByVal NppStreamContext nppStreamCtx);
+
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortPointer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
+public static native @Cast("NppStatus") int nppiAbsDiffC_16u_C1R(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("Npp16u*") short[] pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u") short nConstant);
+
+/** 
+ * One 16-bit unsigned short channel image absolute difference with constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortPointer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u*") ShortPointer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u*") ShortBuffer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step, @Cast("Npp16u*") short[] pDst, int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp16u*") short[] pConstant, @ByVal NppStreamContext nppStreamCtx);
 
 /** 
  * One 32-bit floating point channel image absolute difference with constant.
  * @param pSrc1 \ref source_image_pointer.
  * @param nSrc1Step \ref source_image_line_step.
- * @param nConstant Constant.
+ * @param nConstant host memory constant.
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  */
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant, @ByVal NppStreamContext nppStreamCtx);
 
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatPointer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatBuffer pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
-public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("Npp32f*") float[] pDst,  int nDstStep,  @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
+public static native @Cast("NppStatus") int nppiAbsDiffC_32f_C1R(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nConstant);
+
+/** 
+ * One 32-bit floating point channel image absolute difference with constant.
+ * @param pSrc1 \ref source_image_pointer.
+ * @param nSrc1Step \ref source_image_line_step.
+ * @param pConstant device memory constant.
+ * @param pDst \ref destination_image_pointer.
+ * @param nDstStep \ref destination_image_line_step.
+ * @param oSizeROI \ref roi_specification.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ */
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatPointer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") FloatBuffer pConstant, @ByVal NppStreamContext nppStreamCtx);
+public static native @Cast("NppStatus") int nppiAbsDiffDeviceC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("Npp32f*") float[] pConstant, @ByVal NppStreamContext nppStreamCtx);
 
 /** \} image_absdiffc */ 
 
