@@ -1,4 +1,5 @@
 
+ * Disable OpenMP for Tesseract to work around performance issues ([pull #1201](https://github.com/bytedeco/javacpp-presets/pull/1201))
  * Enable NVIDIA GPU acceleration for FFmpeg on ARM and POWER as well ([issue bytedeco/javacv#1894](https://github.com/bytedeco/javacv/issues/1894))
  * Add support for HEVC and Opus to FLV format in presets for FFmpeg ([pull #1228](https://github.com/bytedeco/javacpp-presets/pull/1228))
  * Build Leptonica with OpenJPEG for JPEG 2000 support
