@@ -144,14 +144,20 @@ public class CalibrationHandler extends Pointer {
      *                                      \end{matrix} \right ] \]}</pre>
      *
      */
-    public native @ByVal FloatVectorVector getCameraIntrinsics(
-            CameraBoardSocket cameraId, @ByVal Size2f destShape, @ByVal(nullValue = "dai::Point2f()") Point2f topLeftPixelId, @ByVal(nullValue = "dai::Point2f()") Point2f bottomRightPixelId, @Cast("bool") boolean keepAspectRatio/*=true*/);
-    public native @ByVal FloatVectorVector getCameraIntrinsics(
-            CameraBoardSocket cameraId, @ByVal Size2f destShape);
-    public native @ByVal FloatVectorVector getCameraIntrinsics(
-            @Cast("dai::CameraBoardSocket") int cameraId, @ByVal Size2f destShape, @ByVal(nullValue = "dai::Point2f()") Point2f topLeftPixelId, @ByVal(nullValue = "dai::Point2f()") Point2f bottomRightPixelId, @Cast("bool") boolean keepAspectRatio/*=true*/);
-    public native @ByVal FloatVectorVector getCameraIntrinsics(
-            @Cast("dai::CameraBoardSocket") int cameraId, @ByVal Size2f destShape);
+    public native @ByVal FloatVectorVector getCameraIntrinsics(CameraBoardSocket cameraId,
+                                                            @ByVal Size2f destShape,
+                                                            @ByVal(nullValue = "dai::Point2f()") Point2f topLeftPixelId,
+                                                            @ByVal(nullValue = "dai::Point2f()") Point2f bottomRightPixelId,
+                                                            @Cast("bool") boolean keepAspectRatio/*=true*/);
+    public native @ByVal FloatVectorVector getCameraIntrinsics(CameraBoardSocket cameraId,
+                                                            @ByVal Size2f destShape);
+    public native @ByVal FloatVectorVector getCameraIntrinsics(@Cast("dai::CameraBoardSocket") int cameraId,
+                                                            @ByVal Size2f destShape,
+                                                            @ByVal(nullValue = "dai::Point2f()") Point2f topLeftPixelId,
+                                                            @ByVal(nullValue = "dai::Point2f()") Point2f bottomRightPixelId,
+                                                            @Cast("bool") boolean keepAspectRatio/*=true*/);
+    public native @ByVal FloatVectorVector getCameraIntrinsics(@Cast("dai::CameraBoardSocket") int cameraId,
+                                                            @ByVal Size2f destShape);
 
     /**
      * Get the Camera Intrinsics object

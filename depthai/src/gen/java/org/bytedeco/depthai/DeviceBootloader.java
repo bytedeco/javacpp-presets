@@ -106,44 +106,7 @@ public class DeviceBootloader extends Pointer {
         public static native @ByVal Config fromJson(@ByVal @Cast("nlohmann::json*") Pointer arg0);
     }
 
-    /** Bootloader version structure */
-    @NoOffset public static class Version extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Version(Pointer p) { super(p); }
-    
-        /** Construct Version from string */
-        public Version(@StdString BytePointer v) { super((Pointer)null); allocate(v); }
-        private native void allocate(@StdString BytePointer v);
-        public Version(@StdString ByteBuffer v) { super((Pointer)null); allocate(v); }
-        private native void allocate(@StdString ByteBuffer v);
-        public Version(@StdString String v) { super((Pointer)null); allocate(v); }
-        private native void allocate(@StdString String v);
-        /** Construct Version major, minor and patch numbers */
-        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch) { super((Pointer)null); allocate(major, minor, patch); }
-        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch);
-        /** Construct Version major, minor and patch numbers with buildInfo */
-        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString BytePointer buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
-        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString BytePointer buildInfo);
-        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString ByteBuffer buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
-        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString ByteBuffer buildInfo);
-        public Version(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString String buildInfo) { super((Pointer)null); allocate(major, minor, patch, buildInfo); }
-        private native void allocate(@Cast("unsigned") int major, @Cast("unsigned") int minor, @Cast("unsigned") int patch, @StdString String buildInfo);
-        public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Version other);
-        public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Version other);
-        public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Version rhs);
-        public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef Version rhs);
-        public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef Version rhs);
-        public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef Version rhs);
-        /** Convert Version to string */
-        public native @StdString String toString();
-        /** Convert Version to semver string */
-        public native @StdString BytePointer toStringSemver();
-        /** Get build info */
-        public native @StdString BytePointer getBuildInfo();
-        /** Retrieves semver version (no build information) */
-        public native @ByVal Version getSemver();
-    }
+    // Add an alias to Version
 
     public static class ApplicationInfo extends Pointer {
         static { Loader.load(); }
@@ -476,6 +439,14 @@ public class DeviceBootloader extends Pointer {
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashBootloader(@Cast("dai::bootloader::Memory") int memory, @Cast("dai::bootloader::Type") int type, ProgressCallback progressCallback);
 
     /**
+     * Flashes user bootloader to the current board. Available for NETWORK bootloader type
+     * @param progressCallback Callback that sends back a value between 0..1 which signifies current flashing progress
+     * @param path Optional parameter to custom bootloader to flash
+     */
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashUserBootloader(ProgressCallback progressCallback, @Const @ByRef(nullValue = "dai::Path{}") Path path);
+    public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashUserBootloader(ProgressCallback progressCallback);
+
+    /**
      * Flash boot header which boots same as equivalent GPIO mode would
      * @param gpioMode GPIO mode equivalent
      */
@@ -660,6 +631,11 @@ public class DeviceBootloader extends Pointer {
      */
     public native @ByVal MemoryInfo getMemoryInfo(Memory memory);
     public native @ByVal MemoryInfo getMemoryInfo(@Cast("dai::bootloader::Memory") int memory);
+
+    /**
+     * Retrieves whether current bootloader is User Bootloader (B out of A/B configuration)
+     */
+    public native @Cast("bool") boolean isUserBootloader();
 
     /**
      * Boots a custom FW in memory

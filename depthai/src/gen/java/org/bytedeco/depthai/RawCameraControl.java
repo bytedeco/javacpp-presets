@@ -116,8 +116,13 @@ public class RawCameraControl extends RawBuffer {
                                         */
         CHROMA_DENOISE((byte)(48)),           /* [1] value
                                         */
-        WB_COLOR_TEMP((byte)(49));           /* [1] value
+        WB_COLOR_TEMP((byte)(49)),            /* [1] value
                                         */
+        EXTERNAL_TRIGGER((byte)(50)),
+        AF_LENS_RANGE((byte)(51)),
+        FRAME_SYNC((byte)(52)),
+        STROBE_CONFIG((byte)(53)),
+        STROBE_TIMINGS((byte)(54));
 
         public final byte value;
         private Command(byte v) { this.value = v; }
@@ -417,6 +422,19 @@ public class RawCameraControl extends RawBuffer {
         @Override public String toString() { return intern().name(); }
     }
 
+    public enum FrameSyncMode {
+        OFF((byte)(0)),
+        OUTPUT((byte)(1)),
+        INPUT((byte)(2));
+        // TODO soft sync modes?
+
+        public final byte value;
+        private FrameSyncMode(byte v) { this.value = v; }
+        private FrameSyncMode(FrameSyncMode e) { this.value = e.value; }
+        public FrameSyncMode intern() { for (FrameSyncMode e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
     public static class ManualExposureParams extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -465,6 +483,56 @@ public class RawCameraControl extends RawBuffer {
         public native @Cast("uint32_t") int priority(); public native RegionParams priority(int setter);
     }
 
+    public static class StrobeTimings extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public StrobeTimings() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public StrobeTimings(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public StrobeTimings(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public StrobeTimings position(long position) {
+            return (StrobeTimings)super.position(position);
+        }
+        @Override public StrobeTimings getPointer(long i) {
+            return new StrobeTimings((Pointer)this).offsetAddress(i);
+        }
+    
+        /** Start offset in microseconds, relative to exposure window */
+        public native int exposureBeginOffsetUs(); public native StrobeTimings exposureBeginOffsetUs(int setter);
+        /** End offset in microseconds, relative to exposure window */
+        public native int exposureEndOffsetUs(); public native StrobeTimings exposureEndOffsetUs(int setter);
+        /** Fixed duration in microseconds. If set (non-zero), overrides {@code exposureEndOffsetUs} */
+        public native @Cast("uint32_t") int durationUs(); public native StrobeTimings durationUs(int setter);
+    }
+
+    public static class StrobeConfig extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public StrobeConfig() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public StrobeConfig(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public StrobeConfig(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public StrobeConfig position(long position) {
+            return (StrobeConfig)super.position(position);
+        }
+        @Override public StrobeConfig getPointer(long i) {
+            return new StrobeConfig((Pointer)this).offsetAddress(i);
+        }
+    
+        /** Enable strobe output */
+        public native @Cast("uint8_t") byte enable(); public native StrobeConfig enable(byte setter);
+        /** 1 for normal polarity (high-active), 0 otherwise */
+        public native @Cast("uint8_t") byte activeLevel(); public native StrobeConfig activeLevel(byte setter);
+        /** GPIO number to drive, or -1 if sensor driven */
+        public native byte gpioNumber(); public native StrobeConfig gpioNumber(byte setter);
+    }
+
     public native @Cast("uint64_t") long cmdMask(); public native RawCameraControl cmdMask(long setter);
 
     public native AutoFocusMode autoFocusMode(); public native RawCameraControl autoFocusMode(AutoFocusMode setter);
@@ -477,6 +545,8 @@ public class RawCameraControl extends RawBuffer {
      * - lower values lead to out-of-focus (lens too close to the sensor array)
      */
     public native @Cast("uint8_t") byte lensPosition(); public native RawCameraControl lensPosition(byte setter);
+    public native @Cast("uint8_t") byte lensPosAutoInfinity(); public native RawCameraControl lensPosAutoInfinity(byte setter);
+    public native @Cast("uint8_t") byte lensPosAutoMacro(); public native RawCameraControl lensPosAutoMacro(byte setter);
 
     public native @ByRef ManualExposureParams expManual(); public native RawCameraControl expManual(ManualExposureParams setter);
     public native @ByRef RegionParams aeRegion(); public native RawCameraControl aeRegion(RegionParams setter);
@@ -485,6 +555,9 @@ public class RawCameraControl extends RawBuffer {
     public native SceneMode sceneMode(); public native RawCameraControl sceneMode(SceneMode setter);
     public native AntiBandingMode antiBandingMode(); public native RawCameraControl antiBandingMode(AntiBandingMode setter);
     public native EffectMode effectMode(); public native RawCameraControl effectMode(EffectMode setter);
+    public native FrameSyncMode frameSyncMode(); public native RawCameraControl frameSyncMode(FrameSyncMode setter);
+    public native @ByRef StrobeConfig strobeConfig(); public native RawCameraControl strobeConfig(StrobeConfig setter);
+    public native @ByRef StrobeTimings strobeTimings(); public native RawCameraControl strobeTimings(StrobeTimings setter);
     public native @Cast("bool") boolean aeLockMode(); public native RawCameraControl aeLockMode(boolean setter);
     public native @Cast("bool") boolean awbLockMode(); public native RawCameraControl awbLockMode(boolean setter);
     public native byte expCompensation(); public native RawCameraControl expCompensation(byte setter);  //  -9 ..  9
@@ -495,6 +568,8 @@ public class RawCameraControl extends RawBuffer {
     public native @Cast("uint8_t") byte lumaDenoise(); public native RawCameraControl lumaDenoise(byte setter);     //   0 ..  4
     public native @Cast("uint8_t") byte chromaDenoise(); public native RawCameraControl chromaDenoise(byte setter);   //   0 ..  4
     public native @Cast("uint16_t") short wbColorTemp(); public native RawCameraControl wbColorTemp(short setter);    // 1000 .. 12000
+    public native @Cast("uint8_t") byte lowPowerNumFramesBurst(); public native RawCameraControl lowPowerNumFramesBurst(byte setter);
+    public native @Cast("uint8_t") byte lowPowerNumFramesDiscard(); public native RawCameraControl lowPowerNumFramesDiscard(byte setter);
 
     public native void setCommand(Command cmd, @Cast("bool") boolean value/*=true*/);
     public native void setCommand(Command cmd);

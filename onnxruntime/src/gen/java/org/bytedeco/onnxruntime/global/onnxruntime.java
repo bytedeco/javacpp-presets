@@ -60,7 +60,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 *
 * This value is used by some API functions to behave as this version of the header expects.
 */
-public static final int ORT_API_VERSION = 12;
+public static final int ORT_API_VERSION = 13;
 
 // #ifdef __cplusplus
 // #endif
@@ -341,6 +341,9 @@ public static final int
 // Targeting ../OrtCUDAProviderOptionsV2.java
 
 
+// Targeting ../OrtCANNProviderOptions.java
+
+
 // Targeting ../OrtOp.java
 
 
@@ -435,6 +438,9 @@ public static final int
 // Targeting ../OrtOpenVINOProviderOptions.java
 
 
+// Targeting ../OrtTrainingApi.java
+
+
 // Targeting ../OrtApiBase.java
 
 
@@ -466,7 +472,6 @@ public static native @Const OrtApiBase OrtGetApiBase();
  *   2 Create an OrtCustomOp structure for each op and add them to the domain
  *   3 Call OrtAddCustomOpDomain to add the custom domain of ops to the session options
 */
-// #define OrtCustomOpApi OrtApi
 
 // Specifies some characteristics of inputs/outputs of custom ops:
 // Specify if the inputs/outputs are one of:
@@ -538,8 +543,8 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // #endif
 
 /** \brief All C++ Onnxruntime APIs are defined inside this namespace
-* 
-*/
+ *
+ */
 // Targeting ../OrtException.java
 
 

@@ -16,12 +16,12 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief Used internally by the C++ API. C++ wrapper types inherit from this
-* 
-* This is a zero cost abstraction to wrap the C API objects and delete them on destruction.
-* There is a secondary class 'Unowned<T>' that is used to prevent deletion on destruction (Used for return types that are
-* not owned by the caller)
-* 
-*/
+ *
+ * This is a zero cost abstraction to wrap the C API objects and delete them on destruction.
+ * There is a secondary class 'Unowned<T>' that is used to prevent deletion on destruction (Used for return types that are
+ * not owned by the caller)
+ *
+ */
 @Name("Ort::Base<OrtArenaCfg>") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class BaseArenaCfg extends Pointer {
     static { Loader.load(); }

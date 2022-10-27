@@ -63,6 +63,12 @@ public class Device extends DeviceBase {
         private native void allocate(@ByVal Config config);
         public Device(@ByVal Config config, @Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(config, devInfo); }
         private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo);
+        public Device(@Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(devInfo); }
+        private native void allocate(@Const @ByRef DeviceInfo devInfo);
+        public Device(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+        public Device(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
+        private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Device(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -128,7 +134,7 @@ public class Device extends DeviceBase {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version Pipeline::DEFAULT_OPENVINO_VERSION
+     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
      */
 
     /**

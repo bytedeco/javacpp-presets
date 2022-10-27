@@ -215,7 +215,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.8.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.6.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.14.x  https://developer.nvidia.com/nccl
+   * NCCL 2.15.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
@@ -225,10 +225,10 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.24.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.17.x  https://github.com/luxonis/depthai-core
+ * DepthAI 2.18.x  https://github.com/luxonis/depthai-core
  * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.12.x  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.13.x  https://github.com/microsoft/onnxruntime
  * TVM 0.10.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.24  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/

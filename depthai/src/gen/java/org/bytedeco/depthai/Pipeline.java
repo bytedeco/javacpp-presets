@@ -88,6 +88,7 @@ public class Pipeline extends Pointer {
     public native @Name("create<dai::node::StereoDepth>") @SharedPtr StereoDepth createStereoDepth();
     public native @Name("create<dai::node::SystemLogger>") @SharedPtr SystemLogger createSystemLogger();
     public native @Name("create<dai::node::VideoEncoder>") @SharedPtr VideoEncoder createVideoEncoder();
+    public native @Name("create<dai::node::Warp>") @SharedPtr Warp createWarp();
     public native @Name("create<dai::node::XLinkIn>") @SharedPtr XLinkIn createXLinkIn();
     public native @Name("create<dai::node::XLinkOut>") @SharedPtr XLinkOut createXLinkOut();
 
@@ -155,7 +156,7 @@ public class Pipeline extends Pointer {
     public native @Cast("dai::OpenVINO::Version") int getOpenVINOVersion();
 
     /** Get required OpenVINO version to run this pipeline. Can be none */
-    public native @ByVal VersionOptional getRequiredOpenVINOVersion();
+    public native @ByVal @Cast("tl::optional<dai::OpenVINO::Version>*") IntOptional getRequiredOpenVINOVersion();
 
     /** Set a camera IQ (Image Quality) tuning blob, used for all cameras */
     public native void setCameraTuningBlobPath(@Const @ByRef Path path);

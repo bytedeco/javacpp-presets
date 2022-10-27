@@ -230,4 +230,7 @@ public class BoardConfig extends Pointer {
 
     // log verbosity
     public native @ByRef LogLevelOptional logVerbosity(); public native BoardConfig logVerbosity(LogLevelOptional setter);
+
+    // log device prints
+    public native @ByRef BoolOptional logDevicePrints(); public native BoardConfig logDevicePrints(BoolOptional setter);
 }

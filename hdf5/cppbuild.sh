@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ZLIB=zlib-1.2.12
+ZLIB=zlib-1.2.13
 HDF5_VERSION=1.12.2
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2

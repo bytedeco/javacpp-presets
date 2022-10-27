@@ -12,9 +12,9 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-LLVM_VERSION=15.0.2
+LLVM_VERSION=15.0.3
 OPENSSL_VERSION=3.0.5
-ZLIB_VERSION=1.2.12
+ZLIB_VERSION=1.2.13
 PROTO_VERSION=3.17.3 # cpp/thirdparty/versions.txt
 ARROW_VERSION=6.0.1
 download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz

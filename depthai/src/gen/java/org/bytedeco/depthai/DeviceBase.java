@@ -35,6 +35,14 @@ public class DeviceBase extends Pointer {
     public static final float DEFAULT_SYSTEM_INFORMATION_LOGGING_RATE_HZ = DEFAULT_SYSTEM_INFORMATION_LOGGING_RATE_HZ();
     /** Default UsbSpeed for device connection */
     @MemberGetter public static native UsbSpeed DEFAULT_USB_SPEED();
+    /** Default Timesync period */
+    @MemberGetter public static native @ByRef @Cast("const std::chrono::milliseconds*") Pointer DEFAULT_TIMESYNC_PERIOD();
+    /** Default Timesync number of samples per sync */
+    @MemberGetter public static native int DEFAULT_TIMESYNC_NUM_SAMPLES();
+    public static final int DEFAULT_TIMESYNC_NUM_SAMPLES = DEFAULT_TIMESYNC_NUM_SAMPLES();
+    /** Default Timesync packet interval randomness */
+    @MemberGetter public static native @Cast("const bool") boolean DEFAULT_TIMESYNC_RANDOM();
+    public static final boolean DEFAULT_TIMESYNC_RANDOM = DEFAULT_TIMESYNC_RANDOM();
 
     // Structures
 
@@ -209,7 +217,7 @@ public class DeviceBase extends Pointer {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version Pipeline::DEFAULT_OPENVINO_VERSION
+     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
      */
     public DeviceBase() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -296,9 +304,37 @@ public class DeviceBase extends Pointer {
     private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo);
 
     /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     *
+     * @param devInfo DeviceInfo which specifies which device to connect to
+     */
+    public DeviceBase(@Const @ByRef DeviceInfo devInfo) { super((Pointer)null); allocate(devInfo); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo);
+
+    /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     *
+     * @param devInfo DeviceInfo which specifies which device to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
+    private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+
+    /**
      * Device destructor
      * \note In the destructor of the derived class, remember to call close()
      */
+
+    /**
+     * Gets Bootloader version if it was booted through Bootloader
+     *
+     * @return DeviceBootloader::Version if booted through Bootloader or none otherwise
+     */
+    public native @ByVal VersionOptional getBootloaderVersion();
 
     /**
      * Checks if devices pipeline is already running
@@ -453,6 +489,13 @@ public class DeviceBase extends Pointer {
      * @return Vector of connected cameras
      */
     public native @StdVector @Cast("dai::CameraBoardSocket*") IntPointer getConnectedCameras();
+
+    /**
+     * Get cameras that are connected to the device with their features/properties
+     *
+     * @return Vector of connected camera features
+     */
+    public native @StdVector CameraFeatures getConnectedCameraFeatures();
 
     /**
      * Get sensor names for cameras that are connected to the device
@@ -629,6 +672,17 @@ public class DeviceBase extends Pointer {
      * @return USB connection speed of connected device if applicable. Unknown otherwise.
      */
     public native UsbSpeed getUsbSpeed();
+
+    /**
+     * Configures Timesync service on device. It keeps host and device clocks in sync
+     * First time timesync is started it waits until the initial sync is completed
+     * Afterwards the function changes the following parameters
+     *
+     * @param period Interval between timesync runs
+     * @param numSamples Number of timesync samples per run which are used to compute a better value. Set to zero to disable timesync
+     * @param random If true partial timesync requests will be performed at random intervals, otherwise at fixed intervals
+     */
+    public native void setTimesync(@ByVal @Cast("std::chrono::milliseconds*") Pointer period, int numSamples, @Cast("bool") boolean random);
 
     /**
      * Explicitly closes connection to device.

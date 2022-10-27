@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBFFI_VERSION=3.4.3
+LIBFFI_VERSION=3.4.4
 download https://github.com/libffi/libffi/releases/download/v$LIBFFI_VERSION/libffi-$LIBFFI_VERSION.tar.gz libffi-$LIBFFI_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -17,7 +17,7 @@ echo "Decompressing archives..."
 tar --totals -xzf ../libffi-$LIBFFI_VERSION.tar.gz
 cd libffi-$LIBFFI_VERSION
 
-patch -Np1 < ../../../libffi.patch
+#patch -Np1 < ../../../libffi.patch
 
 case $PLATFORM in
     android-arm)

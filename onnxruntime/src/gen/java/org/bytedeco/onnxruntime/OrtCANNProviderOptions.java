@@ -14,15 +14,10 @@ import static org.bytedeco.dnnl.global.dnnl.*;
 
 import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
-
-/** \brief Wraps an object that inherits from Ort::Base and stops it from deleting the contained pointer on destruction
- *
- * This has the effect of making it not own the memory held by Ort::Base.
- */
-@Name("Ort::Unowned<const Ort::MemoryInfo>") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
-public class UnownedMemoryInfo extends MemoryInfo {
-    static { Loader.load(); }
+@Opaque @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
+public class OrtCANNProviderOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public OrtCANNProviderOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnownedMemoryInfo(Pointer p) { super(p); }
-
+    public OrtCANNProviderOptions(Pointer p) { super(p); }
 }

@@ -23,17 +23,20 @@ import static org.bytedeco.depthai.global.depthai.*;
  *
  *  - Still capture
  *
- *  - Auto focus
+ *  - Auto/manual focus
+ *
+ *  - Auto/manual white balance
+ *
+ *  - Auto/manual exposure
  *
  *  - Anti banding
  *
- *  - Auto white balance
- *
- *  - Scene
- *
- *  - Effect
- *
  *  - ...
+ *
+ *  By default the camera enables 3A, with auto-focus in {@code CONTINUOUS_VIDEO} mode,
+ *  auto-white-balance in {@code AUTO} mode, and auto-exposure with anti-banding for
+ *  50Hz mains frequency.
+ *
  */
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class CameraControl extends Buffer {
@@ -72,9 +75,48 @@ public class CameraControl extends Buffer {
      */
     public native @ByRef CameraControl setStopStreaming();
 
+    /**
+     * Set a command to enable external trigger snapshot mode
+     *
+     * A rising edge on the sensor FSIN pin will make it capture a sequence of
+     * {@code numFramesBurst} frames. First {@code numFramesDiscard} will be skipped as
+     * configured (can be set to 0 as well), as they may have degraded quality
+     */
+    public native @ByRef CameraControl setExternalTrigger(int numFramesBurst, int numFramesDiscard);
+
+    /**
+     * Set the frame sync mode for continuous streaming operation mode,
+     * translating to how the camera pin FSIN/FSYNC is used: input/output/disabled
+     */
+    public native @ByRef CameraControl setFrameSyncMode(RawCameraControl.FrameSyncMode mode);
+    public native @ByRef CameraControl setFrameSyncMode(@Cast("dai::RawCameraControl::FrameSyncMode") byte mode);
+
+    /**
+     * Enable STROBE output on sensor pin, optionally configuring the polarity.
+     * Note: for many sensors the polarity is high-active and not configurable
+     */
+    public native @ByRef CameraControl setStrobeSensor(int activeLevel/*=1*/);
+    public native @ByRef CameraControl setStrobeSensor();
+
+    /**
+     * Enable STROBE output driven by a MyriadX GPIO, optionally configuring the polarity
+     * This normally requires a FSIN/FSYNC/trigger input for MyriadX (usually GPIO 41),
+     * to generate timings
+     */
+    public native @ByRef CameraControl setStrobeExternal(int gpioNumber, int activeLevel/*=1*/);
+    public native @ByRef CameraControl setStrobeExternal(int gpioNumber);
+
+    // TODO API to set strobe line directly high/low (not following the exposure window)
+    // TODO API to set strobe timings, as offsets in relation to exposure window, or fixed duration
+
+    /**
+     * Disable STROBE output
+     */
+    public native @ByRef CameraControl setStrobeDisable();
+
     // Focus
     /**
-     * Set a command to specify autofocus mode
+     * Set a command to specify autofocus mode. Default {@code CONTINUOUS_VIDEO}
      */
     public native @ByRef CameraControl setAutoFocusMode(RawCameraControl.AutoFocusMode mode);
     public native @ByRef CameraControl setAutoFocusMode(@Cast("dai::RawCameraControl::AutoFocusMode") byte mode);
@@ -85,7 +127,14 @@ public class CameraControl extends Buffer {
     public native @ByRef CameraControl setAutoFocusTrigger();
 
     /**
-     * Set a command to specify focus region in pixels
+     * Set autofocus lens range, {@code infinityPosition < macroPosition}, valid values {@code 0..255}.
+     * May help to improve autofocus in case the lens adjustment is not typical/tuned
+     */
+    public native @ByRef CameraControl setAutoFocusLensRange(int infinityPosition, int macroPosition);
+
+    /**
+     * Set a command to specify focus region in pixels.
+     * Note: the region should be mapped to the configured sensor resolution, before ISP scaling
      * @param startX X coordinate of top left corner of region
      * @param startY Y coordinate of top left corner of region
      * @param width Region width
@@ -112,7 +161,8 @@ public class CameraControl extends Buffer {
     public native @ByRef CameraControl setAutoExposureLock(@Cast("bool") boolean lock);
 
     /**
-     * Set a command to specify auto exposure region in pixels
+     * Set a command to specify auto exposure region in pixels.
+     * Note: the region should be mapped to the configured sensor resolution, before ISP scaling
      * @param startX X coordinate of top left corner of region
      * @param startY Y coordinate of top left corner of region
      * @param width Region width
@@ -122,13 +172,20 @@ public class CameraControl extends Buffer {
 
     /**
      * Set a command to specify auto exposure compensation
-     * @param compensation Compensation value between -9..9
+     * @param compensation Compensation value between -9..9, default 0
      */
     public native @ByRef CameraControl setAutoExposureCompensation(int compensation);
 
     /**
-     * Set a command to specify auto banding mode
-     * @param mode Auto banding mode to use
+     * Set a command to specify anti-banding mode. Anti-banding / anti-flicker
+     * works in auto-exposure mode, by controlling the exposure time to be applied
+     * in multiples of half the mains period, for example in multiple of 10ms
+     * for 50Hz (period 20ms) AC-powered illumination sources.
+     *
+     * If the scene would be too bright for the smallest exposure step
+     * (10ms in the example, with ISO at a minimum of 100), anti-banding is not effective.
+     *
+     * @param mode Anti-banding mode to use. Default: {@code MAINS_50_HZ}
      */
     public native @ByRef CameraControl setAntiBandingMode(RawCameraControl.AntiBandingMode mode);
     public native @ByRef CameraControl setAntiBandingMode(@Cast("dai::RawCameraControl::AntiBandingMode") byte mode);
@@ -140,10 +197,17 @@ public class CameraControl extends Buffer {
      */
     public native @ByRef CameraControl setManualExposure(@Cast("uint32_t") int exposureTimeUs, @Cast("uint32_t") int sensitivityIso);
 
+    /**
+     * Set a command to manually specify exposure
+     * @param exposureTime Exposure time
+     * @param sensitivityIso Sensitivity as ISO value, usual range 100..1600
+     */
+    public native void setManualExposure(@ByVal @Cast("std::chrono::microseconds*") Pointer exposureTime, @Cast("uint32_t") int sensitivityIso);
+
     // White Balance
     /**
      * Set a command to specify auto white balance mode
-     * @param mode Auto white balance mode to use
+     * @param mode Auto white balance mode to use. Default {@code AUTO}
      */
     public native @ByRef CameraControl setAutoWhiteBalanceMode(RawCameraControl.AutoWhiteBalanceMode mode);
     public native @ByRef CameraControl setAutoWhiteBalanceMode(@Cast("dai::RawCameraControl::AutoWhiteBalanceMode") byte mode);
@@ -163,37 +227,37 @@ public class CameraControl extends Buffer {
     // Other image controls
     /**
      * Set a command to adjust image brightness
-     * @param value Brightness, range -10..10
+     * @param value Brightness, range -10..10, default 0
      */
     public native @ByRef CameraControl setBrightness(int value);
 
     /**
      * Set a command to adjust image contrast
-     * @param value Contrast, range -10..10
+     * @param value Contrast, range -10..10, default 0
      */
     public native @ByRef CameraControl setContrast(int value);
 
     /**
      * Set a command to adjust image saturation
-     * @param value Saturation, range -10..10
+     * @param value Saturation, range -10..10, default 0
      */
     public native @ByRef CameraControl setSaturation(int value);
 
     /**
      * Set a command to adjust image sharpness
-     * @param value Sharpness, range 0..4
+     * @param value Sharpness, range 0..4, default 1
      */
     public native @ByRef CameraControl setSharpness(int value);
 
     /**
      * Set a command to adjust luma denoise amount
-     * @param value Luma denoise amount, range 0..4
+     * @param value Luma denoise amount, range 0..4, default 1
      */
     public native @ByRef CameraControl setLumaDenoise(int value);
 
     /**
      * Set a command to adjust chroma denoise amount
-     * @param value Chroma denoise amount, range 0..4
+     * @param value Chroma denoise amount, range 0..4, default 1
      */
     public native @ByRef CameraControl setChromaDenoise(int value);
 
@@ -217,4 +281,19 @@ public class CameraControl extends Buffer {
      * @return True if capture still command is set
      */
     public native @Cast("bool") boolean getCaptureStill();
+
+    /**
+     * Retrieves exposure time
+     */
+    public native @ByVal @Cast("std::chrono::microseconds*") Pointer getExposureTime();
+
+    /**
+     * Retrieves sensitivity, as an ISO value
+     */
+    public native int getSensitivity();
+
+    /**
+     * Retrieves lens position, range 0..255. Returns -1 if not available
+     */
+    public native int getLensPosition();
 }

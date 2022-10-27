@@ -95,6 +95,16 @@ public class ColorCamera extends ColorCameraPropertiesNode {
     @MemberGetter public native @ByRef Output raw();
 
     /**
+     * Outputs metadata-only ImgFrame message as an early indicator of an incoming frame.
+     *
+     * It's sent on the MIPI SoF (start-of-frame) event, just after the exposure of the current frame
+     * has finished and before the exposure for next frame starts.
+     * Could be used to synchronize various processes with camera capture.
+     * Fields populated: camera id, sequence number, timestamp
+     */
+    @MemberGetter public native @ByRef Output frameEvent();
+
+    /**
      * Specify which board socket to use
      * @param boardSocket Board socket to use
      */

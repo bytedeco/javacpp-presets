@@ -16,10 +16,10 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief The Env (Environment)
-*
-* The Env holds the logging state used by all other objects.
-* <b>Note:</b> One Env must be created before using any other Onnxruntime functionality
-*/
+ *
+ * The Env holds the logging state used by all other objects.
+ * <b>Note:</b> One Env must be created before using any other Onnxruntime functionality
+ */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class Env extends BaseEnv {
     static { Loader.load(); }
