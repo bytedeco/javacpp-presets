@@ -16,13 +16,13 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief bfloat16 (Brain Floating Point) data type
-  * \details It is necessary for type dispatching to make use of C++ API
-  * The type is implicitly convertible to/from uint16_t.
-  * The size of the structure should align with uint16_t and one can freely cast
-  * uint16_t buffers to/from Ort::BFloat16_t to feed and retrieve data.
-  * 
-  * See also code examples for Float16_t above.
-  */
+ * \details It is necessary for type dispatching to make use of C++ API
+ * The type is implicitly convertible to/from uint16_t.
+ * The size of the structure should align with uint16_t and one can freely cast
+ * uint16_t buffers to/from Ort::BFloat16_t to feed and retrieve data.
+ *
+ * See also code examples for Float16_t above.
+ */
 @Namespace("Ort") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class BFloat16_t extends Pointer {
     static { Loader.load(); }

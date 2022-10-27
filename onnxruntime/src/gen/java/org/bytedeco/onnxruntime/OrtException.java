@@ -16,9 +16,9 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief All C++ methods that can fail will throw an exception of this type
-* 
-* If <tt>ORT_NO_EXCEPTIONS</tt> is defined, then any error will result in a call to abort()
-*/
+ *
+ * If <tt>ORT_NO_EXCEPTIONS</tt> is defined, then any error will result in a call to abort()
+ */
 @Name("Ort::Exception") @NoOffset @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class OrtException extends Pointer {
     static { Loader.load(); }

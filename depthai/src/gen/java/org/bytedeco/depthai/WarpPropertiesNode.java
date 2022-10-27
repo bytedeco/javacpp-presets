@@ -16,18 +16,14 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 import static org.bytedeco.depthai.global.depthai.*;
 
-@NoOffset @Name("tl::optional<dai::Version>") @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
-public class VersionOptional extends Pointer {
+@Name("dai::NodeCRTP<dai::Node,dai::node::Warp,dai::WarpProperties>") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
+public class WarpPropertiesNode extends Node {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public VersionOptional(Pointer p) { super(p); }
-    public VersionOptional(Version value) { this(); put(value); }
-    public VersionOptional()       { allocate();  }
-    private native void allocate();
-    public native @Name("operator =") @ByRef VersionOptional put(@ByRef VersionOptional x);
+    public WarpPropertiesNode(Pointer p) { super(p); }
 
-    public native boolean has_value();
-    public native @Name("value") @ByRef Version get();
-    @ValueSetter public native VersionOptional put(@ByRef Version value);
+    /** Underlying properties */
+    public native @Cast("dai::NodeCRTP<dai::Node,dai::node::Warp,dai::WarpProperties>::Properties*") @ByRef WarpProperties properties(); public native WarpPropertiesNode properties(WarpProperties setter);
+    public native @Override @Cast("const char*") BytePointer getName();
+    public native @UniquePtr @Override Node clone();
 }
-

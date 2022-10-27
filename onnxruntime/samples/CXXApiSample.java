@@ -58,7 +58,7 @@ public class CXXApiSample {
       // iterate over all input nodes
       for (long i = 0; i < num_input_nodes; i++) {
         // print input node names
-        BytePointer input_name = session.GetInputName(i, allocator.asOrtAllocator());
+        BytePointer input_name = session.GetInputNameAllocated(i, allocator.asOrtAllocator());
         System.out.println("Input " + i + " : name=" + input_name.getString());
         input_node_names.put(i, input_name);
 

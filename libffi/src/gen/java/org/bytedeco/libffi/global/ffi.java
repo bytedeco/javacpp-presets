@@ -143,7 +143,7 @@ public static final int FFI_TRAMPOLINE_SIZE = FFI_TRAMPOLINE_SIZE();
 // Parsed from ffi.h
 
 /* -----------------------------------------------------------------*-C-*-
-   libffi 3.4.3
+   libffi 3.4.4
      - Copyright (c) 2011, 2014, 2019, 2021, 2022 Anthony Green
      - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
 

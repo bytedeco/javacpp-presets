@@ -16,8 +16,8 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief Wrapper around ::OrtMapTypeInfo
-*
-*/
+ *
+ */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class MapTypeInfo extends BaseMapTypeInfo {
     static { Loader.load(); }

@@ -61,16 +61,16 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.12.1"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.12.1", "onnxruntime_providers_dnnl"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             extension = "-gpu",
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.12.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -118,7 +118,8 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations())
                .put(new Info("ORT_API_MANUAL_INIT").define(false))
                .put(new Info("USE_CUDA", "USE_DNNL").define(true))
-               .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "Ort::AllocatedStringPtr").skip())
+               .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>").skip())
+               .put(new Info("Ort::AllocatedStringPtr").valueTypes("@UniquePtr(\"char, Ort::detail::AllocatedFree\") @Cast(\"char*\") BytePointer"))
                .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<Ort::Value>").valueTypes("@StdMove ValueVector").pointerTypes("ValueVector").define())
@@ -150,7 +151,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
                .put(new Info("Ort::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
                .put(new Info("Ort::Unowned<Ort::MapTypeInfo>").pointerTypes("UnownedMapTypeInfo").purify())
-               .put(new Info("Ort::MemoryAllocation").purify())
+               .put(new Info("Ort::MemoryAllocation", "OrtApi").purify())
                .put(new Info("Ort::MemoryAllocation::operator =").skip())
                .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
                .put(new Info("Ort::Exception").pointerTypes("OrtException"))

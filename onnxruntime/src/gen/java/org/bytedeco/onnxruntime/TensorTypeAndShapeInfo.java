@@ -16,8 +16,8 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief Wrapper around ::OrtTensorTypeAndShapeInfo
-*
-*/
+ *
+ */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class TensorTypeAndShapeInfo extends BaseTensorTypeAndShapeInfo {
     static { Loader.load(); }

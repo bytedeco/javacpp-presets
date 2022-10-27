@@ -62,4 +62,15 @@ public class IMUReport extends Pointer {
 
     /** Generation timestamp, direct device monotonic clock */
     public native @ByRef Timestamp tsDevice(); public native IMUReport tsDevice(Timestamp setter);
+
+    /**
+     * Retrieves timestamp related to dai::Clock::now()
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestamp();
+
+    /**
+     * Retrieves timestamp directly captured from device's monotonic clock,
+     * not synchronized to host time. Used mostly for debugging
+     */
+    public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
 }

@@ -88,6 +88,26 @@ public class ImgFrame extends Buffer {
      */
     public native RawImgFrame.Type getType();
 
+    /**
+     * Retrieves exposure time
+     */
+    public native @ByVal @Cast("std::chrono::microseconds*") Pointer getExposureTime();
+
+    /**
+     * Retrieves sensitivity, as an ISO value
+     */
+    public native int getSensitivity();
+
+    /**
+     * Retrieves white-balance color temperature of the light source, in kelvins
+     */
+    public native int getColorTemperature();
+
+    /**
+     * Retrieves lens position, range 0..255. Returns -1 if not available
+     */
+    public native int getLensPosition();
+
     // setters
     /**
      * Retrieves image timestamp related to dai::Clock::now()

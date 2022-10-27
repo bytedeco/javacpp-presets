@@ -349,7 +349,7 @@ public class Node extends Pointer {
     @MemberGetter public native @ByRef AssetManager assetManager();
 
     public native @ByRef DaiProperties getProperties();
-    public native @ByVal VersionOptional getRequiredOpenVINOVersion();
+    public native @ByVal @Cast("tl::optional<dai::OpenVINO::Version>*") IntOptional getRequiredOpenVINOVersion();
     @MemberGetter public native @ByRef @Cast("dai::copyable_unique_ptr<dai::Properties>*") Pointer propertiesHolder();
     // Underlying properties
     @MemberGetter public native @ByRef DaiProperties properties();

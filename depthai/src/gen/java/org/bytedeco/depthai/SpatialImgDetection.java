@@ -41,4 +41,5 @@ public class SpatialImgDetection extends ImgDetection {
     }
 
     public native @ByRef Point3f spatialCoordinates(); public native SpatialImgDetection spatialCoordinates(Point3f setter);
+    public native @ByRef SpatialLocationCalculatorConfigData boundingBoxMapping(); public native SpatialImgDetection boundingBoxMapping(SpatialLocationCalculatorConfigData setter);
 }

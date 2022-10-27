@@ -16,8 +16,8 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief Wrapper around ::OrtSequenceTypeInfo
-*
-*/
+ *
+ */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class SequenceTypeInfo extends BaseSequenceTypeInfo {
     static { Loader.load(); }

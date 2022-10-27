@@ -67,7 +67,29 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
     /**
      * Select the camera sensor resolution
      */
-    public enum SensorResolution { THE_1080_P(0), THE_4_K(1), THE_12_MP(2), THE_13_MP(3), THE_720_P(4), THE_800_P(5);
+    public enum SensorResolution {
+        /** 1920 × 1080 */
+        THE_1080_P(0),
+        /** 3840 × 2160 */
+        THE_4_K(1),
+        /** 4056 × 3040 */
+        THE_12_MP(2),
+        /** 4208 × 3120 */
+        THE_13_MP(3),
+        /** 1280 × 720 */
+        THE_720_P(4),
+        /** 1280 × 800 */
+        THE_800_P(5),
+        /** 1920 × 1200 */
+        THE_1200_P(6),
+        /** 2592 × 1944 */
+        THE_5_MP(7),
+        /** 4000 × 3000 */
+        THE_4000X3000(8),
+        /** 5312 × 6000 */
+        THE_5312X6000(9),
+        /** 8000 × 6000 */
+        THE_48_MP(10);
 
         public final int value;
         private SensorResolution(int v) { this.value = v; }

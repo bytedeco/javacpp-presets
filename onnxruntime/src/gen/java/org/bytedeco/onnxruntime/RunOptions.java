@@ -54,15 +54,15 @@ public class RunOptions extends BaseRunOptions {
   public native @ByRef RunOptions AddConfigEntry(String config_key, String config_value);
 
   /** \brief Terminates all currently executing Session::Run calls that were made using this RunOptions instance
-  *
-  * If a currently executing session needs to be force terminated, this can be called from another thread to force it to fail with an error
-  * Wraps OrtApi::RunOptionsSetTerminate 
-  */
+   *
+   * If a currently executing session needs to be force terminated, this can be called from another thread to force it to fail with an error
+   * Wraps OrtApi::RunOptionsSetTerminate
+   */
   public native @ByRef RunOptions SetTerminate();
 
   /** \brief Clears the terminate flag so this RunOptions instance can be used in a new Session::Run call without it instantly terminating
-  *
-  * Wraps OrtApi::RunOptionsUnsetTerminate
-  */
+   *
+   * Wraps OrtApi::RunOptionsUnsetTerminate
+   */
   public native @ByRef RunOptions UnsetTerminate();
 }

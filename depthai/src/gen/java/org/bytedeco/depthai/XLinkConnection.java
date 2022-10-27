@@ -49,14 +49,16 @@ public class XLinkConnection extends Pointer {
     /**
      * Finds a device by MX ID. Example: 14442C10D13EABCE00
      * @param mxId MyraidX ID which uniquely specifies a device
+     * @param state Which state should the device be in
+     * @param skipInvalidDevices Whether or not to skip devices that cannot be fully detected
      * @return Tuple of bool and DeviceInfo. Bool specifies if device was found. DeviceInfo specifies the found device
      */
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString BytePointer arg0, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString BytePointer arg0);
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString ByteBuffer arg0, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString ByteBuffer arg0);
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String arg0, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
-    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String arg0);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString BytePointer mxId, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString BytePointer mxId);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString ByteBuffer mxId, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString ByteBuffer mxId);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String mxId, @Cast("XLinkDeviceState_t") int state/*=X_LINK_ANY_STATE*/, @Cast("bool") boolean skipInvalidDevice/*=true*/);
+    public static native @ByVal @Cast("std::tuple<bool,dai::DeviceInfo>*") Pointer getDeviceByMxId(@StdString String mxId);
 
     /**
      * Tries booting the given device into bootloader state

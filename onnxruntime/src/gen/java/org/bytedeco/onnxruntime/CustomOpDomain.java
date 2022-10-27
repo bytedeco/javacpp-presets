@@ -16,8 +16,8 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 
 /** \brief Custom Op Domain
-*
-*/
+ *
+ */
 @Namespace("Ort") @Properties(inherit = org.bytedeco.onnxruntime.presets.onnxruntime.class)
 public class CustomOpDomain extends BaseCustomOpDomain {
     static { Loader.load(); }
