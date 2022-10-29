@@ -42,8 +42,8 @@ public class SymbolicShape extends Pointer {
   private native void allocate(@ByVal SizeTOptional rank);
 
   // Mix of known and unknown ranks
-  public SymbolicShape(@StdVector LongOptional dims) { super((Pointer)null); allocate(dims); }
-  private native void allocate(@StdVector LongOptional dims);
+  public SymbolicShape(@Const @ByRef LongOptionalVector dims) { super((Pointer)null); allocate(dims); }
+  private native void allocate(@Const @ByRef LongOptionalVector dims);
 
   public native void dump();
 

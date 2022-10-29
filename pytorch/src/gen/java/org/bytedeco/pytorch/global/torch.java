@@ -318,6 +318,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../SymbolVector.java
 
 
+// Targeting ../LongOptionalVector.java
+
+
 // Targeting ../ClassTypeVector.java
 
 
@@ -17503,7 +17506,7 @@ attr_zero_points(2234),
 //
 // DO NOT put the macros for CUDA libraries in this file; they belong in cuda/CUDAConfig.h
 
-// #define AT_MKLDNN_ENABLED() 1
+// #define AT_MKLDNN_ENABLED() 0
 // #define AT_MKL_ENABLED() 0
 // #define AT_MKL_SEQUENTIAL() 0
 // #define AT_FFTW_ENABLED() 1
@@ -74865,7 +74868,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal TensorTensorTuple adaptive_max_pool2d_with_indices(
-    @Const @ByRef Tensor input, @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongPointer output_size);
+    @Const @ByRef Tensor input, @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -74882,7 +74885,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_max_pool2d(@Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongPointer output_size);
+    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -74902,7 +74905,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal TensorTensorTuple adaptive_max_pool3d_with_indices(
-    @Const @ByRef Tensor input, @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size);
+    @Const @ByRef Tensor input, @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -74919,7 +74922,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_max_pool3d(@Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size);
+    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -74961,7 +74964,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_avg_pool2d(@Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongPointer output_size);
+    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -74981,7 +74984,7 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor adaptive_avg_pool3d(@Const @ByRef Tensor input,
-    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size);
+    @ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 

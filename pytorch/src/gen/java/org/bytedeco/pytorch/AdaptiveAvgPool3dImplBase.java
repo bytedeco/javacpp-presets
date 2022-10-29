@@ -21,8 +21,8 @@ public class AdaptiveAvgPool3dImplBase extends AdaptiveAvgPool3dImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveAvgPool3dImplBase(Pointer p) { super(p); }
 
-  public AdaptiveAvgPool3dImplBase(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size);
+  public AdaptiveAvgPool3dImplBase(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
+  private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
   public AdaptiveAvgPool3dImplBase(
       @Const @ByRef AdaptiveAvgPool3dOptions options_) { super((Pointer)null); allocate(options_); }
   private native void allocate(

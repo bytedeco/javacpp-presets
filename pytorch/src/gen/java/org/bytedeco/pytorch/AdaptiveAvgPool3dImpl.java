@@ -35,8 +35,8 @@ public class AdaptiveAvgPool3dImpl extends AdaptiveAvgPool3dImplBase {
     static { Loader.load(); }
 
   
-    public AdaptiveAvgPool3dImpl(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-    private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongPointer output_size);
+    public AdaptiveAvgPool3dImpl(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
+    private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
     public AdaptiveAvgPool3dImpl(
         @Const @ByRef AdaptiveAvgPool3dOptions options_) { super((Pointer)null); allocate(options_); }
     private native void allocate(
