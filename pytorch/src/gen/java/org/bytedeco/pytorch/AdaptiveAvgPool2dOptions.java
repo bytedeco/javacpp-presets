@@ -21,7 +21,7 @@ public class AdaptiveAvgPool2dOptions extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveAvgPool2dOptions(Pointer p) { super(p); }
 
-  public AdaptiveAvgPool2dOptions(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongPointer output_size);
-  public native @Cast("torch::ExpandingArrayWithOptionalElem<2>*") @ByRef @NoException(true) LongPointer output_size();
+  public AdaptiveAvgPool2dOptions(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
+  private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
+  public native @Cast("torch::ExpandingArrayWithOptionalElem<2>*") @ByRef @NoException(true) LongOptional output_size();
 }

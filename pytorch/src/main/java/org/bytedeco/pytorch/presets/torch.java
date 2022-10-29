@@ -1772,9 +1772,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::size_t", "c10::Dict<c10::IValue,c10::IValue>::size_type").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("std::tuple<int64_t,int64_t>", "std::tuple<double,int64_t>",
                              "torch::ExpandingArray<1>", "torch::ExpandingArray<2>", "torch::ExpandingArray<3>", "torch::ExpandingArray<4>",
-                             "torch::ExpandingArray<D*2>", "torch::ExpandingArray<1*2>", "torch::ExpandingArray<2*2>", "torch::ExpandingArray<3*2>",
-                             "torch::ExpandingArrayWithOptionalElem<2>", "torch::ExpandingArrayWithOptionalElem<3>").cast().pointerTypes("LongPointer"))
+                             "torch::ExpandingArray<D*2>", "torch::ExpandingArray<1*2>", "torch::ExpandingArray<2*2>", "torch::ExpandingArray<3*2>").cast().pointerTypes("LongPointer"))
                .put(new Info("torch::ExpandingArray<1,double>", "torch::ExpandingArray<2,double>", "torch::ExpandingArray<3,double>").cast().pointerTypes("DoublePointer"))
+               .put(new Info("torch::ExpandingArrayWithOptionalElem<2>", "torch::ExpandingArrayWithOptionalElem<3>").cast().pointerTypes("LongOptional"))
                .put(new Info("std::array<bool,2>", "std::array<bool,3>", "std::array<bool,4>").cast().pointerTypes("BoolPointer"))
                .put(new Info("std::pair<std::string,c10::IValue>").pointerTypes("EnumNameValue").define())
                .put(new Info("c10::ClassType::Property").pointerTypes("ClassType.Property"))
@@ -1963,6 +1963,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<c10::QEngine>", "std::vector<at::QEngine>").pointerTypes("QEngineVector").define())
                .put(new Info("std::vector<c10::ScalarType>").pointerTypes("ScalarTypeVector").define())
                .put(new Info("std::vector<c10::Symbol>").pointerTypes("SymbolVector").define())
+               .put(new Info("std::vector<c10::optional<int64_t> >").pointerTypes("LongOptionalVector").define())
                .put(new Info("c10::Dict<c10::IValue,c10::IValue>").pointerTypes("GenericDict").define())
                .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
