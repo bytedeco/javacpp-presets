@@ -1,4 +1,5 @@
 
+### November 2, 2022 version 1.5.8
  * Fix mapping of `torch::ExpandingArrayWithOptionalElem` in presets for PyTorch ([issue #1250](https://github.com/bytedeco/javacpp-presets/issues/1250))
  * Disable OpenMP for Tesseract to work around performance issues ([pull #1201](https://github.com/bytedeco/javacpp-presets/pull/1201))
  * Enable NVIDIA GPU acceleration for FFmpeg on ARM and POWER as well ([issue bytedeco/javacv#1894](https://github.com/bytedeco/javacv/issues/1894))
