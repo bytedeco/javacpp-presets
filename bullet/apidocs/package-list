@@ -1,0 +1,10 @@
+org.bytedeco.bullet.Bullet3Collision
+org.bytedeco.bullet.Bullet3Common
+org.bytedeco.bullet.Bullet3Dynamics
+org.bytedeco.bullet.Bullet3OpenCL
+org.bytedeco.bullet.BulletCollision
+org.bytedeco.bullet.BulletDynamics
+org.bytedeco.bullet.BulletSoftBody
+org.bytedeco.bullet.LinearMath
+org.bytedeco.bullet.global
+org.bytedeco.bullet.presets
