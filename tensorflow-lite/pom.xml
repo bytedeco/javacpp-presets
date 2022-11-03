@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.8</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -17,7 +17,7 @@
   <properties>
     <javacpp.packageName>tensorflowlite</javacpp.packageName>
     <tensorflow.version>2.10.0</tensorflow.version>
-    <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}-rc1/</tensorflow.path>
+    <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
   <dependencies>

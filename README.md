@@ -90,27 +90,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.7</version>
+    <version>${moduleVersion}-1.5.8</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.7'
+    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.8'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.7")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.8")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.7"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.8"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -173,7 +173,7 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.7  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.8  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
@@ -196,7 +196,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.6.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 2.7.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.21  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -205,17 +205,17 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.10.x  https://www.python.org/downloads/
  * NumPy 1.23.x  https://github.com/numpy/numpy
  * SciPy 1.9.x  https://github.com/scipy/scipy
- * Gym 0.25.x  https://github.com/openai/gym
- * LLVM 14.0.x  http://llvm.org/releases/download.html
+ * Gym 0.26.x  https://github.com/openai/gym
+ * LLVM 15.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
  * Tesseract 5.2.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.12.x  https://developer.nvidia.com/nccl
+ * CUDA 11.8.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.6.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.15.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
@@ -224,12 +224,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow Lite 2.10.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.24.x  https://developer.nvidia.com/nvidia-triton-inference-server
- * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.17.x  https://github.com/luxonis/depthai-core
+ * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * DepthAI 2.18.x  https://github.com/luxonis/depthai-core
  * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.12.x  https://github.com/microsoft/onnxruntime
- * TVM 0.9.x  https://github.com/apache/tvm
+ * ONNX Runtime 1.13.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.10.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.24  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

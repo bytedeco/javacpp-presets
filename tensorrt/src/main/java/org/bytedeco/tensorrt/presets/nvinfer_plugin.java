@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = nvinfer.class,
     value = @Platform(
         include = {"NvInferPlugin.h", "NvInferPluginUtils.h"},
-        link = "nvinfer_plugin@.8.2.3"),
+        link = "nvinfer_plugin@.8"),
     target = "org.bytedeco.tensorrt.nvinfer_plugin",
     global = "org.bytedeco.tensorrt.global.nvinfer_plugin")
 public class nvinfer_plugin implements InfoMapper {

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.8</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>modsecurity-platform</artifactId>
-  <version>3.0.7-${project.parent.version}</version>
+  <version>3.0.8-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ModSecurity</name>
 
   <properties>

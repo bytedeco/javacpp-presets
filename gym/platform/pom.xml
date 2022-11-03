@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.8</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>gym-platform</artifactId>
-  <version>0.25.2-${project.parent.version}</version>
+  <version>0.26.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Gym</name>
 
   <properties>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.9.0-${project.parent.version}</version>
+      <version>1.9.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

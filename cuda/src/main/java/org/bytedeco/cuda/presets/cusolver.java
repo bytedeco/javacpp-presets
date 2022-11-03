@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -43,7 +43,9 @@ public class cusolver implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDENSEAPI", "CRFWINAPI", "CUSOLVERAPI", "CUSOLVER_CPP_VERSION").cppTypes().annotations().cppText(""))
                .put(new Info("cusolverDnCunmtr_bufferSize", "cusolverDnDormtr_bufferSize", "cusolverDnZunmtr_bufferSize", "cusolverDnZunmtr",
-                             "cusolverDnSormtr_bufferSize", "cusolverDnDormtr", "cusolverDnCunmtr", "cusolverDnSormtr").skip())
+                             "cusolverDnSormtr_bufferSize", "cusolverDnDormtr", "cusolverDnCunmtr", "cusolverDnSormtr",
+                             "cusolverDnLoggerSetCallback", "cusolverDnLoggerSetFile", "cusolverDnLoggerOpenFile",
+                             "cusolverDnLoggerSetLevel", "cusolverDnLoggerSetMask", "cusolverDnLoggerForceDisable").skip())
                .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
                .put(new Info("cusolverDnParams_t").valueTypes("cusolverDnParams").pointerTypes("@ByPtrPtr cusolverDnParams"))
                .put(new Info("syevjInfo_t").valueTypes("syevjInfo").pointerTypes("@ByPtrPtr syevjInfo"))

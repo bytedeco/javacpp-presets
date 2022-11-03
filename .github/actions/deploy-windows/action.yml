@@ -49,36 +49,36 @@ runs:
 
         if not "%CI_DEPLOY_NEED_GCC%"=="" (
           echo Installing an older less buggy version of GCC
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-10.1-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-10.2.0-5-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gdb-10.2-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.35.1-3-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-10.1-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-10.2.0-5-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-10.2.0-5-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gdb-10.2-2-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-10.2.0-11-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.35.1-3-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-9.0.0.6029.ecb4ff54-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
           bash -c "pacman -Rc --noconfirm mingw-w64-i686-libgccjit mingw-w64-x86_64-libgccjit"
           bash -c "pacman -U --noconfirm *.pkg.tar.zst"
         ) else (
@@ -87,24 +87,25 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_511.65_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.3.2/local_installers/11.5/cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.6.0/local_installers/11.8/cudnn-windows-x86_64-8.6.0.163_cuda11-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
-          cuda_11.6.2_511.65_windows.exe -s
-          unzip cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive.zip
+          cuda_11.8.0_522.06_windows.exe -s
+          unzip cudnn-windows-x86_64-8.6.0.163_cuda11-archive.zip
           unzip zlib123dllx64.zip
-          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
-          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\include"
-          move cudnn-windows-x86_64-8.3.2.44_cuda11.5-archive\lib\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\lib\x64"
-          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin"
+          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin"
+          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"
+          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\lib\x64"
+          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin"
 
-          echo Applying hotfix to Visual Studio 2019 for CUDA
-          curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
-          bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
-          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
-          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/include/cub/cub.cuh'"
+          rem echo Applying hotfix to Visual Studio 2019 for CUDA
+          rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
+          rem bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
+          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cublasXt.h'"
+          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
+          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
@@ -116,17 +117,17 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=1jR6H6Vc1jvziLKMrCEIGfbtpaJlge4GC
-          unzip TensorRT-8.2.3.0.Windows10.x86_64.cuda-11.4.cudnn8.2.zip
-          move TensorRT-8.2.3.0 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1mOqxIW-mzGNnnIiZx2DEPLdvFgmM2vT7
+          unzip TensorRT-8.4.3.1.Windows10.x86_64.cuda-11.6.cudnn8.4.zip
+          move TensorRT-8.4.3.1 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18414/w_onemkl_p_2022.0.0.115_offline.exe
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18418/w_BaseKit_32bit_p_2022.1.0.37_offline.exe
-          w_onemkl_p_2022.0.0.115_offline.exe -s -a -s --eula accept
-          w_BaseKit_32bit_p_2022.1.0.37_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18899/w_onemkl_p_2022.2.0.9563_offline.exe
+          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18851/w_BaseKit_32bit_p_2022.3.0.9568_offline.exe
+          w_onemkl_p_2022.2.0.9563_offline.exe -s -a -s --eula accept
+          w_BaseKit_32bit_p_2022.3.0.9568_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
@@ -201,10 +202,10 @@ runs:
           C:/msys64/usr/bin/bazel.exe version
         )
         if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
-          set "CUDA_PATH_V11_6=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6"
-          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;%PATH%"
-          echo CUDA Version 11.6.1>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.6\version.txt"
+          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8"
+          set "CUDA_PATH_V11_8=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8"
+          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\libnvvp;%PATH%"
+          echo CUDA Version 11.8.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\version.txt"
         )
         set "CCACHE_DIR=%USERPROFILE%\ccache"
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.8-SNAPSHOT</version>
+  <version>1.5.8</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -1451,6 +1451,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>libraw</module>
+        <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>

@@ -108,7 +108,8 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::handle_traits", "dnnl::primitive_attr(dnnl_primitive_attr_t)",
                              "dnnl::reorder::primitive_desc(dnnl_primitive_desc_t)",
                              "dnnl::concat::primitive_desc(dnnl_primitive_desc_t)",
-                             "dnnl::sum::primitive_desc(dnnl_primitive_desc_t)").skip())
+                             "dnnl::sum::primitive_desc(dnnl_primitive_desc_t)",
+                             "dnnl::post_ops(dnnl_post_ops_t)").skip())
                .put(new Info("dnnl::handle<dnnl_engine_t>", "dnnl::handle<dnnl_engine_t,traits>").pointerTypes("dnnl_engine_handle"))
                .put(new Info("dnnl::handle<dnnl_memory_t>", "dnnl::handle<dnnl_memory_t,traits>").pointerTypes("dnnl_memory_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_desc_t>", "dnnl::handle<dnnl_primitive_desc_t,traits>").pointerTypes("dnnl_primitive_desc_handle"))
