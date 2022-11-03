@@ -130,7 +130,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 public static final int TRITONSERVER_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONSERVER_API_VERSION_MINOR = 13;
+public static final int TRITONSERVER_API_VERSION_MINOR = 17;
 
 /** Get the TRITONBACKEND API version supported by the Triton shared
  *  library. This value can be compared against the
@@ -240,7 +240,7 @@ public static final int
   TRITONSERVER_PARAMETER_BOOL = 2,
   TRITONSERVER_PARAMETER_BYTES = 3;
 
-/** Get the string representation of a parmeter type. The returned
+/** Get the string representation of a parameter type. The returned
  *  string is not owned by the caller and so should not be modified or
  *  freed.
  * 
@@ -327,6 +327,19 @@ public static final int
   TRITONSERVER_LOG_WARN = 1,
   TRITONSERVER_LOG_ERROR = 2,
   TRITONSERVER_LOG_VERBOSE = 3;
+
+/**
+ *  Format of logging.
+ * 
+ *  TRITONSERVER_LOG_DEFAULT: the log severity (L) and timestamp will be
+ *  logged as "LMMDD hh:mm:ss.ssssss".
+ * 
+ *  TRITONSERVER_LOG_ISO8601: the log format will be "YYYY-MM-DDThh:mm:ssZ L".
+ *  */
+/** enum TRITONSERVER_LogFormat */
+public static final int
+  TRITONSERVER_LOG_DEFAULT = 0,
+  TRITONSERVER_LOG_ISO8601 = 1;
 
 /** Is a log level enabled?
  * 
@@ -1996,12 +2009,37 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetExitTimeout
 
 /** Set the number of threads used in buffer manager in a server options.
  * 
+ *  @param options The server options object.
  *  @param thread_count The number of threads.
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetBufferManagerThreadCount(
     TRITONSERVER_ServerOptions options, @Cast("unsigned int") int thread_count);
+
+/** Set the number of threads to concurrently load models in a server options.
+ * 
+ *  @param options The server options object.
+ *  @param thread_count The number of threads.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetModelLoadThreadCount(
+    TRITONSERVER_ServerOptions options, @Cast("unsigned int") int thread_count);
+
+/** Provide a log output file.
+ * 
+ *  @param options The server options object.
+ *  @param file a string defining the file where the log outputs will be saved.
+ *  An empty string for the file name will cause triton to direct logging
+ *  facilities to the console
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetLogFile(
+    TRITONSERVER_ServerOptions options, String file);
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetLogFile(
+    TRITONSERVER_ServerOptions options, @Cast("const char*") BytePointer file);
 
 /** Enable or disable info level logging.
  * 
@@ -2032,6 +2070,16 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetLogWarn(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetLogError(
     TRITONSERVER_ServerOptions options, @Cast("bool") boolean log);
+
+/** Set the logging format.
+ * 
+ *  @param options The server options object.
+ *  @param format The logging format.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetLogFormat(
+    TRITONSERVER_ServerOptions options, @Cast("const TRITONSERVER_LogFormat") int format);
 
 /** Set verbose logging level. Level zero disables verbose logging.
  * 
@@ -2064,6 +2112,18 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetMetrics(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetGpuMetrics(
     TRITONSERVER_ServerOptions options, @Cast("bool") boolean gpu_metrics);
+
+/** Enable or disable CPU metrics collection in a server options. CPU
+ *  metrics are collected if both this option and
+ *  TRITONSERVER_ServerOptionsSetMetrics are true.
+ * 
+ *  @param options The server options object.
+ *  @param cpu_metrics True to enable CPU metrics, false to disable.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetCpuMetrics(
+    TRITONSERVER_ServerOptions options, @Cast("bool") boolean cpu_metrics);
 
 /** Set the interval for metrics collection in a server options.
  *  This is 2000 milliseconds by default.
@@ -2103,10 +2163,30 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetBackendDire
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
+///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetRepoAgentDirectory(
     TRITONSERVER_ServerOptions options, String repoagent_dir);
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetRepoAgentDirectory(
     TRITONSERVER_ServerOptions options, @Cast("const char*") BytePointer repoagent_dir);
+
+/** Specify the limit on memory usage as a fraction on the device identified by
+ *  'kind' and 'device_id'. If model loading on the device is requested and the
+ *  current memory usage exceeds the limit, the load will be rejected. If not
+ *  specified, the limit will not be set.
+ * 
+ *  Currently support TRITONSERVER_INSTANCEGROUPKIND_GPU
+ * 
+ *  @param options The server options object.
+ *  @param kind The kind of the device.
+ *  @param device_id The id of the device.
+ *  @param fraction The limit on memory usage as a fraction
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetModelLoadDeviceLimit(
+    TRITONSERVER_ServerOptions options,
+    @Cast("const TRITONSERVER_InstanceGroupKind") int kind, int device_id,
+    double fraction);
 
 /** Set a configuration setting for a named backend in a server
  *  options.
@@ -2643,6 +2723,9 @@ public static native TRITONSERVER_Error TRITONSERVER_MetricFamilyNew(
     @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer description);
 
 /** Delete a metric family object.
+ *  A TRITONSERVER_MetricFamily* object should be deleted AFTER its
+ *  corresponding TRITONSERVER_Metric* objects have been deleted.
+ *  Attempting to delete a family before its metrics will return an error.
  * 
  *  @param family The metric family object to delete.
  *  @return a TRITONSERVER_Error indicating success or failure. */
@@ -2653,7 +2736,10 @@ public static native TRITONSERVER_Error TRITONSERVER_MetricFamilyDelete(
 
 /** Create a new metric object. The caller takes ownership of the
  *  TRITONSERVER_Metric object and must call
- *  TRITONSERVER_MetricDelete to release the object.
+ *  TRITONSERVER_MetricDelete to release the object. The caller is also
+ *  responsible for ownership of the labels passed in. Each label can be deleted
+ *  immediately after creating the metric with TRITONSERVER_ParameterDelete
+ *  if not re-using the labels.
  * 
  *  @param metric Returns the new metric object.
  *  @param family The metric family to add this new metric to.
@@ -2670,6 +2756,9 @@ public static native TRITONSERVER_Error TRITONSERVER_MetricNew(
     @Const @ByPtrPtr TRITONSERVER_Parameter labels, @Cast("const uint64_t") long label_count);
 
 /** Delete a metric object.
+ *  All TRITONSERVER_Metric* objects should be deleted BEFORE their
+ *  corresponding TRITONSERVER_MetricFamily* objects have been deleted.
+ *  If a family is deleted before its metrics, an error will be returned.
  * 
  *  @param metric The metric object to delete.
  *  @return a TRITONSERVER_Error indicating success or failure. */
@@ -2822,6 +2911,9 @@ public static native TRITONSERVER_Error TRITONSERVER_GetMetricKind(
 // Targeting ../tritonserver/TRITONBACKEND_ModelInstance.java
 
 
+// Targeting ../tritonserver/TRITONBACKEND_BackendAttribute.java
+
+
 
 /**
  *  TRITONBACKEND API Version
@@ -2851,7 +2943,7 @@ public static native TRITONSERVER_Error TRITONSERVER_GetMetricKind(
 public static final int TRITONBACKEND_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONBACKEND_API_VERSION_MINOR = 9;
+public static final int TRITONBACKEND_API_VERSION_MINOR = 10;
 
 /** Get the TRITONBACKEND API version supported by Triton. This value
  *  can be compared against the TRITONBACKEND_API_VERSION_MAJOR and
@@ -4155,12 +4247,16 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
     TRITONBACKEND_Model model, @Cast("bool*") BoolPointer auto_complete_config);
 
 /** Set the model configuration in Triton server. Only the inputs, outputs,
- *  and max batch size can be changed. Any other changes to the model
- *  configuration will be ignored by Triton. This function can only be called
- *  from TRITONBACKEND_ModelInitialize, calling in any other context will result
- *  in an error being returned. The function does not take ownership of the
- *  message object and so the caller should call TRITONSERVER_MessageDelete to
- *  release the object once the function returns.
+ *  max batch size, and scheduling choice can be changed. A caveat being
+ *  scheduling choice can only be changed if none is previously set. Any other
+ *  changes to the model configuration will be ignored by Triton. This function
+ *  can only be called from TRITONBACKEND_ModelInitialize, calling in any other
+ *  context will result in an error being returned. Additionally, Triton server
+ *  can add some of the missing fields in the provided config with this call.
+ *  The backend must get the complete configuration again by using
+ *  TRITONBACKEND_ModelConfig. TRITONBACKEND_ModelSetConfig does not take
+ *  ownership of the message object and so the caller should call
+ *  TRITONSERVER_MessageDelete to release the object once the function returns.
  * 
  *  @param model The model.
  *  @param config_version The format version of the model configuration.
@@ -4525,7 +4621,6 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportStatist
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 
-
 ///
 ///
 ///
@@ -4533,7 +4628,6 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportBatchSt
     TRITONBACKEND_ModelInstance instance, @Cast("const uint64_t") long batch_size,
     @Cast("const uint64_t") long exec_start_ns, @Cast("const uint64_t") long compute_start_ns,
     @Cast("const uint64_t") long compute_end_ns, @Cast("const uint64_t") long exec_end_ns);
-
 
 /**
  *  The following functions can be implemented by a backend. Functions
@@ -4648,6 +4742,8 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceFinalize(
  *  @param requests The requests.
  *  @param request_count The number of requests in the batch.
  *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceExecute(
     TRITONBACKEND_ModelInstance instance, @Cast("TRITONBACKEND_Request**") PointerPointer requests,
     @Cast("const uint32_t") int request_count);
@@ -4655,6 +4751,60 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceExecute(
     TRITONBACKEND_ModelInstance instance, @ByPtrPtr TRITONBACKEND_Request requests,
     @Cast("const uint32_t") int request_count);
 
+/** Query the backend for different model attributes. This function is optional,
+ *  a backend is not required to implement it. The backend is also not required
+ *  to set all backend attribute listed. This function is called when
+ *  Triton requires further backend / model information to perform operations.
+ *  This function may be called multiple times within the lifetime of the
+ *  backend (between TRITONBACKEND_Initialize and TRITONBACKEND_Finalize).
+ *  The backend may return error to indicate failure to set the backend
+ *  attributes, and the attributes specified in the same function call will be
+ *  ignored. Triton will update the specified attributes if 'nullptr' is
+ *  returned.
+ * 
+ *  @param backend The backend.
+ *  @param backend_attributes Return the backend attribute.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+///
+///
+public static native TRITONSERVER_Error TRITONBACKEND_GetBackendAttribute(
+    TRITONBACKEND_Backend backend,
+    TRITONBACKEND_BackendAttribute backend_attributes);
+
+/** TRITONBACKEND_BackendAttribute
+ * 
+ *  API to modify attributes associated with a backend.
+ * 
+ <p>
+ *  Add the preferred instance group of the backend. This function
+ *  can be called multiple times to cover different instance group kinds that
+ *  the backend supports, given the priority order that the first call describes
+ *  the most preferred group. In the case where instance group are not
+ *  explicitly provided, Triton will use this attribute to create model
+ *  deployment that aligns more with the backend preference.
+ * 
+ *  @param backend_attributes The backend attributes object.
+ *  @param kind The kind of the instance group.
+ *  @param count The number of instances per device. Triton default will be used
+ *  if 0 is provided.
+ *  @param device_ids The devices where instances should be available. Triton
+ *  default will be used if 'nullptr' is provided.
+ *  @param id_count The number of devices in 'device_ids'.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+public static native TRITONSERVER_Error TRITONBACKEND_BackendAttributeAddPreferredInstanceGroup(
+    TRITONBACKEND_BackendAttribute backend_attributes,
+    @Cast("const TRITONSERVER_InstanceGroupKind") int kind, @Cast("const uint64_t") long count,
+    @Cast("const uint64_t*") LongPointer device_ids, @Cast("const uint64_t") long id_count);
+public static native TRITONSERVER_Error TRITONBACKEND_BackendAttributeAddPreferredInstanceGroup(
+    TRITONBACKEND_BackendAttribute backend_attributes,
+    @Cast("const TRITONSERVER_InstanceGroupKind") int kind, @Cast("const uint64_t") long count,
+    @Cast("const uint64_t*") LongBuffer device_ids, @Cast("const uint64_t") long id_count);
+public static native TRITONSERVER_Error TRITONBACKEND_BackendAttributeAddPreferredInstanceGroup(
+    TRITONBACKEND_BackendAttribute backend_attributes,
+    @Cast("const TRITONSERVER_InstanceGroupKind") int kind, @Cast("const uint64_t") long count,
+    @Cast("const uint64_t*") long[] device_ids, @Cast("const uint64_t") long id_count);
 
 // #ifdef __cplusplus
 // #endif
