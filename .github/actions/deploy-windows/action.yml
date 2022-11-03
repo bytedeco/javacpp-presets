@@ -56,7 +56,7 @@ runs:
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-10.2.0-11-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.35.1-3-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.36.1-3-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
@@ -71,7 +71,7 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-10.2.0-11-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-10.2.0-11-any.pkg.tar.zst
-          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.35.1-3-any.pkg.tar.zst
+          curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.36.1-3-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-9.0.0.6166.0a00d0ea-1-any.pkg.tar.zst
