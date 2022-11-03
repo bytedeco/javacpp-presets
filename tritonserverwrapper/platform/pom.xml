@@ -7,43 +7,35 @@
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
     <version>1.5.8-SNAPSHOT</version>
-    <relativePath>../../../</relativePath>
+    <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
-  <artifactId>tritonserver-wrapper-platform-redist</artifactId>
+  <artifactId>tritonserverwrapper-platform</artifactId>
   <version>2.26-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform Redist for Triton Inference Server</name>
+  <name>JavaCPP Presets Platform for Triton Inference Server Wrapper</name>
 
   <properties>
-    <javacpp.moduleId>tritonserver-wrapper</javacpp.moduleId>
-    <javacpp.platform.extension>-redist</javacpp.platform.extension>
+    <javacpp.moduleId>tritonserverwrapper</javacpp.moduleId>
   </properties>
 
   <dependencies>
+    <!-- <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>tritonserver-platform</artifactId>
+      <version>2.26-${project.parent.version}</version>
+    </dependency> -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}-platform</artifactId>
+      <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
-<!--      <version>${project.version}</version>-->
-<!--      <classifier>${javacpp.platform.linux-arm64}</classifier>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
-<!--      <version>${project.version}</version>-->
-<!--      <classifier>${javacpp.platform.windows-x86_64}</classifier>-->
-<!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -56,7 +48,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64-redist.jar ${javacpp.moduleId}-linux-x86_64-redist.jar ${javacpp.moduleId}-windows-x86_64-redist.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -100,14 +92,30 @@
                 <module>
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
-                    module org.bytedeco.${javacpp.moduleId}.platform.redist {
-//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64.redist;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.redist;
-//                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.redist;
+                    module org.bytedeco.${javacpp.moduleId}.platform {
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
+                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>
                 </module>
               </modules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
             </configuration>
           </execution>
         </executions>

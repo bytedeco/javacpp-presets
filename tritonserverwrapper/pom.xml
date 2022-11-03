@@ -10,11 +10,16 @@
   </parent>
 
   <groupId>org.bytedeco</groupId>
-  <artifactId>tritonserver-wrapper</artifactId>
+  <artifactId>tritonserverwrapper</artifactId>
   <version>2.26-${project.parent.version}</version>
-  <name>JavaCPP Presets for Triton Inference Server</name>
+  <name>JavaCPP Presets for Triton Inference Server Wrapper</name>
 
   <dependencies>
+    <!-- <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>tritonserver</artifactId>
+      <version>2.26-${project.parent.version}</version>
+    </dependency> -->
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
@@ -36,6 +41,20 @@
           <encoding>ISO-8859-1</encoding>
         </configuration>
       </plugin>
+      <!-- <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <encoding>ISO-8859-1</encoding>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tritonserver</artifactId>
+            <version>2.26-${project.parent.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin> -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
@@ -48,7 +67,7 @@
             <configuration>
               <classifier>${javacpp.platform}</classifier>
               <includes>
-                <include>org/bytedeco/tritonserver-wrapper/${javacpp.platform}/*jni*</include>
+                <include>org/bytedeco/tritonserverwrapper/${javacpp.platform}/*jni*</include>
                 <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
             </configuration>
@@ -63,11 +82,11 @@
               <classifier>${javacpp.platform}-redist</classifier>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <includes>
-                <include>org/bytedeco/tritonserver-wrapper/${javacpp.platform}/</include>
+                <include>org/bytedeco/tritonserverwrapper/${javacpp.platform}/</include>
                 <include>META-INF/native-image/${javacpp.platform}/</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/tritonserver-wrapper/${javacpp.platform}/*jni*</exclude>
+                <exclude>org/bytedeco/tritonserverwrapper/${javacpp.platform}/*jni*</exclude>
               </excludes>
             </configuration>
           </execution>
