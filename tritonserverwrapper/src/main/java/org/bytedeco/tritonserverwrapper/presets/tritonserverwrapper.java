@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-// import org.bytedeco.tritonserver.presets.tritonserver;
+import org.bytedeco.tritonserver.presets.tritonserver;
 
 /**
  *
@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
-            include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h","server_wrapper.h", "infer_requested_output.h", "common.h"},
+            include = {"server_wrapper.h", "infer_requested_output.h", "common.h"},
             link = "tritonserverwrapper",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools"},
             linkpath = {"/opt/tritonserver/lib/"}

@@ -15,11 +15,11 @@
   <name>JavaCPP Presets for Triton Inference Server Wrapper</name>
 
   <dependencies>
-    <!-- <dependency>
+    <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver</artifactId>
       <version>2.26-${project.parent.version}</version>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
