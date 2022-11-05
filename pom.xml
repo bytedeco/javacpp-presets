@@ -1669,8 +1669,8 @@
         <module>gym</module>
         <module>llvm</module>
         <module>libffi</module>
-        <module>libraw</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
