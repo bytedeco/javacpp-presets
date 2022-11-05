@@ -584,7 +584,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libraw</module>
         <module>librealsense</module>
         <module>librealsense2</module>
         <module>videoinput</module>
@@ -610,6 +609,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1366,7 +1366,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libraw</module>
         <module>librealsense</module>
         <module>librealsense2</module>
         <module>artoolkitplus</module>
@@ -1391,6 +1390,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1450,12 +1450,12 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
-        <module>libraw</module>
         <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
       </modules>
@@ -1494,7 +1494,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libraw</module>
         <module>librealsense</module>
         <module>librealsense2</module>
         <module>artoolkitplus</module>
@@ -1519,6 +1518,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1645,7 +1645,6 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
-        <module>libraw</module>
         <module>librealsense</module>
         <module>librealsense2</module>
         <module>videoinput</module>
@@ -1670,6 +1669,7 @@
         <module>gym</module>
         <module>llvm</module>
         <module>libffi</module>
+        <module>libraw</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>

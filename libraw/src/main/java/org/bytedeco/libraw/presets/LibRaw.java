@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2020 Samuel Audet, Jarek Sacha
+ * Copyright (C) 2022 Jarek Sacha, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,26 +42,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         value = {
                 @Platform(
                         include = {
-                                "libraw_const.h",
-                                "libraw_version.h",
-                                "libraw_types.h",
-                                "libraw_datastream.h",
-                                "libraw.h",
-                        }
-                ),
-                @Platform(value = {"linux-x86_64"},
-                        link = {"raw_r"},
+                                "libraw/libraw_const.h",
+                                "libraw/libraw_version.h",
+                                "libraw/libraw_types.h",
+                                "libraw/libraw_datastream.h",
+                                "libraw/libraw.h",
+                        },
+                        link = "raw_r@.20",
                         preload = "gomp@.1"
                 ),
-                @Platform(value = {"macosx-arm64"},
-                        link = {"raw_r"},
-                        preload = "gomp@.1"
-                ),
-                @Platform(value = {"macosx-x86_64"},
-                        link = {"raw_r"}
-                ),
-                @Platform(value = {"windows-x86_64"},
-                        link = {"libraw_static"},
+                @Platform(value = "windows",
+                        link = "libraw_static",
                         define = {
                                 // To avoid errors like: "winsock2.h error C2011 'struct' type redefinition"
                                 "WIN32_LEAN_AND_MEAN",

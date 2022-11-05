@@ -16,7 +16,7 @@ unzip -o LibRaw-$LIBRAW_VERSION.zip
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-mkdir -p include lib
+mkdir -p include/libraw lib
 unzip -o ../LibRaw-$LIBRAW_VERSION.zip
 cd LibRaw-$LIBRAW_VERSION
 
@@ -25,28 +25,27 @@ cd LibRaw-$LIBRAW_VERSION
 case $PLATFORM in
     linux-x86_64)
         autoreconf --install
-        ./configure --disable-examples --disable-static --with-pic
+        ./configure --prefix=$INSTALL_PATH --disable-examples --disable-static --with-pic
         make -j $MAKEJ
-        cp libraw/*.h ../include
-        cp lib/.libs/*.so* ../lib
+        make install
         ;;
     macosx-arm64)
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" autoreconf --install
-        CC="clang -arch arm64" CXX="clang++ -arch arm64" ./configure --disable-examples --enable-static --with-pic --host="aarch64-apple-darwin"
+        export CC="clang -arch arm64"
+        export CXX="clang++ -arch arm64"
+        autoreconf --install
+        ./configure --prefix=$INSTALL_PATH --disable-examples --enable-static --with-pic --host="aarch64-apple-darwin"
         make -j $MAKEJ
-        cp libraw/*.h ../include
-        cp lib/.libs/*.a ../lib
+        make install
         ;;
     macosx-x86_64)
         autoreconf --install
-        ./configure --disable-examples --enable-static --with-pic
+        ./configure --prefix=$INSTALL_PATH --disable-examples --enable-static --with-pic
         make -j $MAKEJ
-        cp libraw/*.h ../include
-        cp lib/.libs/*.a ../lib
+        make install
         ;;
     windows-x86_64)
         nmake -f Makefile.msvc
-        cp libraw/*.h ../include
+        cp libraw/*.h ../include/libraw
         cp lib/*.lib ../lib
         ;;
     *)

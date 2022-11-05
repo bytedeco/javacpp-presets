@@ -22,7 +22,6 @@
     <module>../libdc1394/platform</module>
     <module>../libfreenect/platform</module>
     <module>../libfreenect2/platform</module>
-    <module>../libraw/platform</module>
     <module>../librealsense/platform</module>
     <module>../librealsense2/platform</module>
     <module>../videoinput/platform</module>
@@ -48,6 +47,7 @@
     <module>../llvm/platform</module>
     <module>../libffi/platform</module>
     <module>../libpostal/platform</module>
+    <module>../libraw/platform</module>
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
     <module>../caffe/platform</module>
@@ -117,11 +117,6 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>libfreenect2-platform</artifactId>
       <version>0.2.0-${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>libraw</artifactId>
-      <version>0.20.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -247,6 +242,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>libpostal-platform</artifactId>
       <version>1.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>libraw</artifactId>
+      <version>0.20.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
