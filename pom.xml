@@ -609,6 +609,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1389,6 +1390,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1453,6 +1455,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
       </modules>
@@ -1515,6 +1518,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1666,6 +1670,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>

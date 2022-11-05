@@ -47,6 +47,7 @@
     <module>../llvm/platform</module>
     <module>../libffi/platform</module>
     <module>../libpostal/platform</module>
+    <module>../libraw/platform</module>
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
     <module>../caffe/platform</module>
@@ -241,6 +242,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>libpostal-platform</artifactId>
       <version>1.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>libraw</artifactId>
+      <version>0.20.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
