@@ -35,6 +35,7 @@ JavaCPP Presets
 [![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)
 [![libffi](https://github.com/bytedeco/javacpp-presets/workflows/libffi/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibffi)
 [![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)
+[![libraw](https://github.com/bytedeco/javacpp-presets/workflows/libraw/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibraw)
 [![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)
 [![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)
 [![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)
@@ -209,6 +210,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 15.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
+ * LibRaw 0.20.2  https://www.libraw.org/download
  * Leptonica 1.82.x  http://www.leptonica.org/download.html
  * Tesseract 5.2.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
