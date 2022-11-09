@@ -23,7 +23,12 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.12.1
+export PYTHON_BIN_PATH=$(which python3)
+if [[ $PLATFORM == windows* ]]; then
+    export PYTHON_BIN_PATH=$(which python.exe)
+fi
+
+PYTORCH_VERSION=1.13.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -160,7 +165,9 @@ sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None
 sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h
+sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
+#USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib
