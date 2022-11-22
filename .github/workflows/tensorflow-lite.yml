@@ -37,6 +37,11 @@ jobs:
     container: centos:7
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+  linux-armhf:
+    runs-on: ubuntu-20.04
+    container: ubuntu:bionic
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-arm64:
     runs-on: ubuntu-20.04
     container: ubuntu:bionic
@@ -56,7 +61,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
-    needs: [android-arm, android-arm64, android-x86, android-x86_64, linux-arm64, linux-x86_64, macosx-x86_64, windows-x86_64]
+    needs: [android-arm, android-arm64, android-x86, android-x86_64, linux-armhf, linux-arm64, linux-x86_64, macosx-x86_64, windows-x86_64]
     runs-on: ubuntu-20.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions

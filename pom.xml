@@ -1131,6 +1131,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>leptonica</module>
+        <module>tensorflow-lite</module>
         <module>tesseract</module>
         <module>depthai</module>
         <module>cpu_features</module>
