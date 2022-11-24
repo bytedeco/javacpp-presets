@@ -1132,6 +1132,7 @@
         <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>tensorflow-lite</module>
         <module>depthai</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1321,6 +1322,7 @@
         <module>caffe</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>ale</module>
         <module>depthai</module>
         <module>bullet</module>
