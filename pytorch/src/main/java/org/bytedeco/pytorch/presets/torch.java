@@ -163,8 +163,8 @@ import org.bytedeco.openblas.presets.openblas;
 //                "ATen/core/DeprecatedTypePropertiesRegistry.h",
 //                "ATen/core/LegacyTypeDispatch.h",
 //                "ATen/core/QuantizerBase.h",
-//                "ATen/core/Dict.h",
 //                "ATen/core/IListRef.h",
+                "ATen/core/Dict.h",
                 "ATen/core/List.h",
                 "ATen/core/NamedTensor.h",
                 "ATen/core/Reduction.h",
@@ -1852,7 +1852,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("auto", "c10::reverse_iterator", "ska::flat_hash_map", "std::atomic", "std::conditional", "std::iterator_traits",
                              "std::initializer_list", "std::integral_constant", "std::mutex", "std::reverse_iterator", "std::weak_ptr").skip())
                .put(new Info("at::CheckedFrom").cast().valueTypes("BytePointer", "String").pointerTypes("PointerPointer"))
-               .put(new Info("c10::IValue", "at::IValue").pointerTypes("IValue"))
+               .put(new Info("c10::IValue", "at::IValue", "decltype(auto)").pointerTypes("IValue"))
                .put(new Info("c10::ScalarType", "at::ScalarType", "torch::Dtype").enumerate().valueTypes("ScalarType").pointerTypes("@Cast(\"c10::ScalarType*\") BytePointer"))
                .put(new Info("torch::jit::AttributeKind").enumerate().valueTypes("JitAttributeKind"))
                .put(new Info("torch::jit::PickleOpCode").enumerate().translate(false).valueTypes("PickleOpCode"))
@@ -1935,7 +1935,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::optional<std::tuple<std::string,size_t,size_t> >").pointerTypes("StringSizeTSizeTTupleOptional").define())
                .put(new Info("torch::optional<std::tuple<at::Tensor,at::Tensor> >").pointerTypes("TensorTensorOptional").define())
 
-               .put(new Info("c10::Type::SingletonOrSharedTypePtr<c10::Type>", "c10::TypePtr", "c10::Type::TypePtr", "decltype(auto)").pointerTypes("Type.TypePtr").define())
+               .put(new Info("c10::Type::SingletonOrSharedTypePtr<c10::Type>", "c10::TypePtr", "c10::Type::TypePtr").pointerTypes("Type.TypePtr").define())
                .put(new Info("c10::Type::SingletonOrSharedTypePtr<c10::Type>(c10::SingletonTypePtr<c10::Type>)",
                              "c10::ComplexType::get", "c10::FloatType::get", "c10::IntType::get").skip())
                .put(new Info("c10::SingletonTypePtr<c10::Type>").pointerTypes("SingletonTypePtr").define())
@@ -2058,7 +2058,10 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("std::vector<c10::Symbol>").pointerTypes("SymbolVector").define())
                .put(new Info("std::vector<c10::optional<int64_t> >").pointerTypes("LongOptionalVector").define())
                .put(new Info("std::vector<c10::optional<at::IValue> >").pointerTypes("IValueOptionalVector").define())
-               .put(new Info("c10::Dict<c10::IValue,c10::IValue>").pointerTypes("GenericDict").define())
+               .put(new Info("c10::Dict<c10::IValue,c10::IValue>").purify().pointerTypes("GenericDict").define())
+               .put(new Info("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>",
+                             "c10::Dict<c10::IValue,c10::IValue>::iterator").purify().pointerTypes("GenericDictIterator").define())
+               .put(new Info("c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>").pointerTypes("GenericDictEntryRef").define())
                .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
                .put(new Info("std::map<std::string,int64_t>").pointerTypes("StringLongMap").define())
@@ -2215,7 +2218,7 @@ public class torch implements LoadEnabled, InfoMapper {
                              "torch::jit::Object::Property", "torch::jit::Operator", "torch::jit::OperatorSet", "torch::jit::SourceRangePickler", "torch::jit::Suspend", "torch::jit::Unpickler").purify())
 
                .put(new Info("c10::intrusive_ptr", "c10::weak_intrusive_ptr", "c10::guts::is_fundamental", "c10::operator !=", "c10::operator ==", "c10::operator <<",
-                             "c10::detail::CaptureKernelCall", "c10::detail::MultiDispatchKeySet", "c10::ExclusivelyOwnedTraits", "c10::FunctionSchema::dump",
+                             "c10::detail::CaptureKernelCall", "c10::detail::DictImpl", "c10::detail::MultiDispatchKeySet", "c10::ExclusivelyOwnedTraits", "c10::FunctionSchema::dump",
                              "c10::domain_prefix", "c10::C10FlagsRegistry", "c10::enforce_detail::EnforceFailMessage", "c10::impl::build_feature_required_feature_not_available",
                              "c10::detail::getMaybeFakeTypePtr_", "c10::complex_literals::operator \"\"_if", "c10::complex_literals::operator \"\"_id", "c10::complex<c10::Half>",
                              "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::ComplexHalf>::t)", "c10::BoxedKernel", "c10::ExtraMeta", "c10::remove_symint",
@@ -2794,7 +2797,8 @@ public class torch implements LoadEnabled, InfoMapper {
                              "std::is_same<torch::detail::pack<true>,torch::detail::pack<true> >", "at::cuda::NVRTC", "at::RecordFunctionCallback", "at::StepCallbacks", "THCState", "THHState",
                              "torch::autograd::ViewInfo", "torch::jit::InlinedCallStackPtr", "InlinedCallStackPtr", "torch::jit::ScopePtr", "torch::jit::BackendDebugInfoRecorder",
                              "torch::detail::TensorDataContainer", "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
-                             "c10::impl::PyInterpreter", "std::function<at::Tensor(const at::Tensor&)>",
+                             "c10::impl::PyInterpreter", "std::function<at::Tensor(const at::Tensor&)>", "c10::detail::DictImpl::dict_map_type::iterator",
+                             "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
 
                              "c10::optional<PyObject*>", "c10::optional<c10::string_view>", "c10::optional<std::vector<c10::string_view> >", "c10::optional<std::chrono::milliseconds>",
                              "c10::intrusive_ptr<c10::ivalue::Object>", "c10::ArrayRef<c10::intrusive_ptr<c10::ivalue::Object> >", "c10::intrusive_ptr<c10::TensorImpl>",
