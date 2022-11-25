@@ -13494,6 +13494,49 @@ attr_zero_points(2325),
  // namespace at
 
 
+// Parsed from ATen/core/Dict.h
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/TypeTraits.h>
+// #include <c10/util/TypeList.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <c10/util/order_preserving_flat_hash_map.h>
+// #include <c10/util/Optional.h>
+// #include <ATen/core/TensorBody.h>
+// #include <ATen/core/jit_type_base.h>
+
+// Targeting ../DictKeyHash.java
+
+
+// Targeting ../DictKeyEqualTo.java
+
+
+
+
+// Targeting ../GenericDictEntryRef.java
+
+
+// Targeting ../GenericDictIterator.java
+
+
+
+// Targeting ../GenericDict.java
+
+
+// GenericDict is how IValue stores dicts. It is, however, not part of the
+// public API. Kernels should use Dicts with concrete Key, Value types instead
+// (maybe except for some internal prim ops).
+
+
+
+
+
+// #include <ATen/core/Dict_inl.h>  // IWYU pragma: keep
+
+
 // Parsed from ATen/core/List.h
 
 // #pragma once
@@ -16481,10 +16524,7 @@ attr_zero_points(2325),
 
 
  // namespace jit
-
-// Targeting ../GenericDict.java
-
-
+ // namespace torch
 // Targeting ../RRefInterface.java
 
 
