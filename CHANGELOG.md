@@ -2,7 +2,7 @@
  * Map `c10::impl::GenericDict` as returned by `c10::IValue::toGenericDict()` in presets for PyTorch
  * Introduce `linux-armhf` and `linux-x86` builds to presets for TensorFlow Lite ([pull #1268](https://github.com/bytedeco/javacpp-presets/pull/1268))
  * Add presets for LibRaw 0.20.2 ([pull #1211](https://github.com/bytedeco/javacpp-presets/pull/1211))
- * Upgrade presets for PyTorch 1.13.0, and their dependencies
+ * Upgrade presets for DNNL 2.7.2, LLVM 15.0.6, PyTorch 1.13.0, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
 
 ### November 2, 2022 version 1.5.8
  * Fix mapping of `torch::ExpandingArrayWithOptionalElem` in presets for PyTorch ([issue #1250](https://github.com/bytedeco/javacpp-presets/issues/1250))

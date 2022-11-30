@@ -67,7 +67,7 @@ jobs:
         ext: ["", -gpu]
 #        ext: ["", -gpu, -python, -python-gpu]
     steps:
-      - uses: al-cheb/configure-pagefile-action@v1.2
+      - uses: al-cheb/configure-pagefile-action@v1.3
         with:
           minimum-size: 16GB
           maximum-size: 32GB
