@@ -192,7 +192,6 @@ public class LLVM implements InfoMapper {
                .put(new Info("defined(_MSC_VER) && !defined(inline)", "GPU_CODEGEN").define(false))
                .put(new Info("LLVMErrorTypeId").annotations("@Const").valueTypes("LLVMErrorTypeId"))
                .put(new Info("llvm::raw_ostream").cast().pointerTypes("Pointer"))
-               // These things were never actually implemented, see http://llvm.org/PR41362
-               .put(new Info("LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMOrcObjectLayerAddObjectFileWithRT").skip());
+               .put(new Info("LLVMOrcObjectLayerAddObjectFileWithRT").skip());
     }
 }

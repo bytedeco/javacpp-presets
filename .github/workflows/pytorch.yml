@@ -49,7 +49,7 @@ jobs:
         BUILD_DIR: C:\build
         CI_DEPLOY_OPTIONS: -Djavacpp.parser.skip -Dmaven.javadoc.skip
     steps:
-      - uses: al-cheb/configure-pagefile-action@v1.2
+      - uses: al-cheb/configure-pagefile-action@v1.3
         with:
           minimum-size: 16GB
           maximum-size: 32GB
