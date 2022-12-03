@@ -115,15 +115,15 @@ if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.10/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.11/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)

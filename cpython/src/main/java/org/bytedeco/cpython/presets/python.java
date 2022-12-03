@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -59,6 +59,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "pymath.h",
                 "cpython/pytime.h",
                 "pymem.h",
+                "pytypedefs.h",
+                "pybuffer.h",
                 "cpython/pymem.h",
 
                 "object.h",
@@ -77,7 +79,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "unicodeobject.h",
                 "cpython/unicodeobject.h",
                 "longobject.h",
-                "longintrepr.h",
+                "cpython/longintrepr.h",
                 "boolobject.h",
                 "floatobject.h",
                 "complexobject.h",
@@ -96,8 +98,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "methodobject.h",
                 "cpython/methodobject.h",
                 "moduleobject.h",
-                "funcobject.h",
-                "classobject.h",
+                "cpython/funcobject.h",
+                "cpython/classobject.h",
                 "fileobject.h",
                 "cpython/fileobject.h",
                 "frameobject.h",
@@ -107,14 +109,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "traceback.h",
                 "cpython/traceback.h",
                 "sliceobject.h",
-                "cellobject.h",
+                "cpython/cellobject.h",
                 "iterobject.h",
-                "genobject.h",
+                "cpython/genobject.h",
                 "genericaliasobject.h",
                 "warnings.h",
                 "weakrefobject.h",
                 "structseq.h",
-                "namespaceobject.h",
+//                "cpython/namespaceobject.h",
                 "cpython/picklebufobject.h",
 
                 "codecs.h",
@@ -123,7 +125,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "internal/pycore_pyarena.h",
                 "pythread.h",
                 "pystate.h",
-                "context.h",
+                "cpython/context.h",
                 "cpython/initconfig.h",
                 "cpython/pystate.h",
                 "modsupport.h",
@@ -142,7 +144,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "internal/pycore_asdl.h",
 //                "internal/pycore_ast.h",
 //                "node.h",
-                "code.h",
+//                "code.h",
                 "cpython/code.h",
                 "compile.h",
                 "cpython/compile.h",
@@ -151,7 +153,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/pythonrun.h",
                 "pylifecycle.h",
                 "cpython/pylifecycle.h",
-                "eval.h",
+//                "cpython/eval.h",
 
                 "cpython/pyctype.h",
                 "pystrtod.h",
@@ -191,7 +193,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/pylifecycle.h",
                 "cpython/fileutils.h",
             },
-            link = "python3.10@.1.0!",
+            link = "python3.11@.1.0!",
             preload = {"ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
@@ -201,8 +203,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "macosx",  link = "python3.10!"),
-        @Platform(value = "windows", link = "python310"),
+        @Platform(value = "macosx",  link = "python3.11!"),
+        @Platform(value = "windows", link = "python311"),
     },
     target = "org.bytedeco.cpython",
     global = "org.bytedeco.cpython.global.python",
@@ -220,7 +222,7 @@ public class python implements InfoMapper {
             return packageFile;
         }
         File pythonFile = Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform());
-        File configDir = new File(pythonFile, "lib/python3.10/");
+        File configDir = new File(pythonFile, "lib/python3.11/");
         if (configDir.exists()) {
             String pythonPath = pythonFile.getAbsolutePath();
             Pattern pattern = Pattern.compile("'prefix': '(.*)'");
@@ -259,10 +261,10 @@ public class python implements InfoMapper {
         return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.10"), new File(f, "python3.10/lib-dynload"), new File(f, "python3.10/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
+    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.11"), new File(f, "python3.11/lib-dynload"), new File(f, "python3.11/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
         File f = new File(cachePackage(), "lib");
-        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.10"), new File(f, "python3.10/lib-dynload"), new File(f, "python3.10/site-packages")};
+        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.11"), new File(f, "python3.11/lib-dynload"), new File(f, "python3.11/site-packages")};
     }
 
     public void map(InfoMap infoMap) {
@@ -271,7 +273,7 @@ public class python implements InfoMapper {
 
                .put(new Info("COMPILER", "TIMEMODULE_LIB", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
                              "copysign", "hypot", "timezone", "daylight", "tzname",
-                             "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented",
+                             "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented", "_Py_NULL", "Py_NO_INLINE",
                              "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T", "PY_SIZE_MAX",
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "_Py_HOT_FUNCTION", "_Py_NO_INLINE", "PyMODINIT_FUNC", "Py_VA_COPY",
                              "_Py_SET_53BIT_PRECISION_HEADER", "_Py_SET_53BIT_PRECISION_START", "_Py_SET_53BIT_PRECISION_END",
@@ -291,7 +293,7 @@ public class python implements InfoMapper {
                              "_Py_COMP_DIAG_PUSH", "_Py_COMP_DIAG_IGNORE_DEPR_DECLS", "_Py_COMP_DIAG_POP", "Py_EXPORTED_SYMBOL",
                              "_PyCompilerFlags_INIT", "_PyInterpreterState_Get", "PyOS_strnicmp", "PyOS_stricmp", "Py_FrozenMain",
                              "_PyObject_Vectorcall", "_PyObject_VectorcallMethod", "_PyObject_FastCallDict", "_PyVectorcall_Function",
-                             "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg", "_PyTZINFO_HEAD",
+                             "_PyObject_CallOneArg", "_PyObject_CallMethodNoArgs", "_PyObject_CallMethodOneArg", "_PyObject_LookupSpecial", "_PyTZINFO_HEAD",
                              "_PyDateTime_TIMEHEAD", "_PyDateTime_DATETIMEHEAD", "PyDateTime_IMPORT", "PyDateTime_TimeZone_UTC").cppTypes().annotations())
 
                .put(new Info("PyAPI_DATA").cppText("#define PyAPI_DATA(RTYPE) RTYPE"))
@@ -315,6 +317,9 @@ public class python implements InfoMapper {
                              "Py_DEBUG", "Py_TRACE_REFS",
                              "defined(MS_WIN32) && !defined(HAVE_SNPRINTF)",
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
+                             "!defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000",
+                             "defined(Py_REF_DEBUG)",
+                             "defined(Py_REF_DEBUG) && defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000",
                              "defined(Py_REF_DEBUG) && !(defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000)",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
@@ -341,7 +346,7 @@ public class python implements InfoMapper {
                .put(new Info("_is").cast().pointerTypes("PyInterpreterState"))
                .put(new Info("_ts").cast().pointerTypes("PyThreadState"))
 
-               .put(new Info("PyThreadFrameGetter", "jmp_buf").cast().pointerTypes("Pointer"))
+               .put(new Info("PyThreadFrameGetter", "jmp_buf", "_PyInterpreterFrame", "_stack_chunk").cast().pointerTypes("Pointer"))
 
                .put(new Info("_Py_memory_order", "PyThreadState::_preserve_36_ABI_1", "PyThreadState::_preserve_36_ABI_2",
                              "_PyGC_generation0", "_PyBytes_InsertThousandsGroupingLocale",

@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpython</artifactId>
-  <version>3.10.8-${project.parent.version}</version>
+  <version>3.11.0-${project.parent.version}</version>
   <name>JavaCPP Presets for CPython</name>
 
   <dependencies>
@@ -35,7 +35,7 @@
         <configuration>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/python3.10/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/python3.11/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>

@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy-platform</artifactId>
-  <version>1.23.4-${project.parent.version}</version>
+  <version>1.23.5-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NumPy</name>
 
   <properties>
@@ -28,13 +28,31 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.10.8-${project.parent.version}</version>
+      <version>3.11.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-armhf}</classifier>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-arm64}</classifier>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-ppc64le}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -46,24 +64,6 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-armhf}</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-arm64}</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -95,7 +95,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -140,11 +140,11 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.armhf;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.arm64;
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;

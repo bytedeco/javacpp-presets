@@ -18,12 +18,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl</artifactId>
-      <version>2.7.1-${project.parent.version}</version>
+      <version>2.7.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm</artifactId>
-      <version>15.0.3-${project.parent.version}</version>
+      <version>15.0.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -56,12 +56,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>dnnl-platform</artifactId>
-            <version>2.7.1-${project.parent.version}</version>
+            <version>2.7.2-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>15.0.3-${project.parent.version}</version>
+            <version>15.0.6-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -110,7 +110,7 @@
             <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.10/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.11/</includePath>
             <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
             <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/python/numpy/core/include/</includePath>
@@ -163,7 +163,7 @@
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
-            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.10/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.11/</includeResource>
             <includeResource>/org/bytedeco/numpy/include/</includeResource>
             <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/</includeResource>
             <includeResource>/org/bytedeco/numpy/${javacpp.platform}/python/numpy/core/include/numpy/</includeResource>
