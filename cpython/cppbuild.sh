@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENSSL=openssl-3.0.5
-CPYTHON_VERSION=3.10.8
+OPENSSL=openssl-3.0.7
+CPYTHON_VERSION=3.11.0
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -54,7 +54,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
         make -j $MAKEJ
         make install
         ;;
@@ -75,7 +75,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
         make -j $MAKEJ
         make install
         ;;
@@ -100,7 +100,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="powerpc64le-linux-gnu-gcc -m64" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="powerpc64le-linux-gnu-gcc -m64" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
         make -j $MAKEJ
         make install
         ;;
