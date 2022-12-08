@@ -73,8 +73,7 @@ public class avutil implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "ffmpeg"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("channel_layout.h").linePatterns("#define AV_CHANNEL_LAYOUT_MASK.*", "struct AVBPrint;").skip())
-               .put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
+        infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("NAN", "INFINITY").cppTypes("double"))
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG", "FF_CEIL_RSHIFT",
                              "av_ceil_log2", "av_clip", "av_clip64", "av_clip_uint8", "av_clip_int8", "av_clip_uint16", "av_clip_int16",
@@ -123,6 +122,11 @@ public class avutil implements InfoMapper {
                              "AV_CH_SURROUND_DIRECT_LEFT",
                              "AV_CH_SURROUND_DIRECT_RIGHT",
                              "AV_CH_LOW_FREQUENCY_2",
+                             "AV_CH_TOP_SIDE_LEFT",
+                             "AV_CH_TOP_SIDE_RIGHT",
+                             "AV_CH_BOTTOM_FRONT_CENTER",
+                             "AV_CH_BOTTOM_FRONT_LEFT",
+                             "AV_CH_BOTTOM_FRONT_RIGHT",
                              "AV_CH_LAYOUT_NATIVE",
                              "AV_CH_LAYOUT_MONO",
                              "AV_CH_LAYOUT_STEREO",
@@ -151,7 +155,38 @@ public class avutil implements InfoMapper {
                              "AV_CH_LAYOUT_7POINT1_WIDE_BACK",
                              "AV_CH_LAYOUT_OCTAGONAL",
                              "AV_CH_LAYOUT_HEXADECAGONAL",
-                             "AV_CH_LAYOUT_STEREO_DOWNMIX").translate().cppTypes("long"))
+                             "AV_CH_LAYOUT_STEREO_DOWNMIX",
+                             "AV_CH_LAYOUT_22POINT2").translate(true).cppTypes("long"))
+               .put(new Info("AV_CHANNEL_LAYOUT_MONO",
+                             "AV_CHANNEL_LAYOUT_STEREO",
+                             "AV_CHANNEL_LAYOUT_2POINT1",
+                             "AV_CHANNEL_LAYOUT_2_1",
+                             "AV_CHANNEL_LAYOUT_SURROUND",
+                             "AV_CHANNEL_LAYOUT_3POINT1",
+                             "AV_CHANNEL_LAYOUT_4POINT0",
+                             "AV_CHANNEL_LAYOUT_4POINT1",
+                             "AV_CHANNEL_LAYOUT_2_2",
+                             "AV_CHANNEL_LAYOUT_QUAD",
+                             "AV_CHANNEL_LAYOUT_5POINT0",
+                             "AV_CHANNEL_LAYOUT_5POINT1",
+                             "AV_CHANNEL_LAYOUT_5POINT0_BACK",
+                             "AV_CHANNEL_LAYOUT_5POINT1_BACK",
+                             "AV_CHANNEL_LAYOUT_6POINT0",
+                             "AV_CHANNEL_LAYOUT_6POINT0_FRONT",
+                             "AV_CHANNEL_LAYOUT_HEXAGONAL",
+                             "AV_CHANNEL_LAYOUT_6POINT1",
+                             "AV_CHANNEL_LAYOUT_6POINT1_BACK",
+                             "AV_CHANNEL_LAYOUT_6POINT1_FRONT",
+                             "AV_CHANNEL_LAYOUT_7POINT0",
+                             "AV_CHANNEL_LAYOUT_7POINT0_FRONT",
+                             "AV_CHANNEL_LAYOUT_7POINT1",
+                             "AV_CHANNEL_LAYOUT_7POINT1_WIDE",
+                             "AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK",
+                             "AV_CHANNEL_LAYOUT_OCTAGONAL",
+                             "AV_CHANNEL_LAYOUT_HEXADECAGONAL",
+                             "AV_CHANNEL_LAYOUT_STEREO_DOWNMIX",
+                             "AV_CHANNEL_LAYOUT_22POINT2",
+                             "AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER").translate(false).cppTypes("AVChannelLayout"))
                .put(new Info("MKTAG", "MKBETAG").cppTypes("int", "char", "char", "char", "char"))
                .put(new Info("int (*)(const void*, const void*)").cast().pointerTypes("Cmp_Const_Pointer_Const_Pointer"))
                .put(new Info("int (*)(void*, void*, int)").pointerTypes("Int_func_Pointer_Pointer_int"));
