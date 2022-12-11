@@ -162,6 +162,10 @@ sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUIL
 sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
+sedinplace '/using ExampleType = ExampleType_;/a\
+  using BatchType = ChunkType;\
+  using DataType = ExampleType;\
+' torch/csrc/api/include/torch/data/datasets/chunk.h
 sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h

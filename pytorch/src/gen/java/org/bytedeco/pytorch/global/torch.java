@@ -195,6 +195,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringSizeTSizeTTupleOptional.java
 
 
+// Targeting ../ExampleVectorOptional.java
+
+
+// Targeting ../ExampleOptional.java
+
+
 // Targeting ../TensorTensorOptional.java
 
 
@@ -430,6 +436,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../ExampleVector.java
+
+
+// Targeting ../TensorExampleVector.java
 
 
 // Targeting ../EnumNameValue.java
@@ -74703,6 +74712,9 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // Targeting ../Example.java
 
 
+// Targeting ../TensorExample.java
+
+
 // Targeting ../NoTarget.java
 
 
@@ -74744,6 +74756,9 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 
 
 // Targeting ../ExampleVectorIterator.java
+
+
+// Targeting ../ExampleVectorOptionalIterator.java
 
 
  // namespace data
@@ -74819,6 +74834,9 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // #include <type_traits>
 // #include <utility>
 // #include <vector>
+// Targeting ../ChunkRandomDataLoaderBase.java
+
+
 // Targeting ../MNISTRandomDataLoaderBase.java
 
 
@@ -74855,19 +74873,9 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // #include <cstddef>
 // #include <thread>
 // #include <utility>
+// Targeting ../ChunkRandomDataLoader.java
 
-/** A dataloader for stateful datasets.
- * 
- *  A dataloader for stateful datatasets differs from one for stateless
- *  datasets one in that the dataset is shared among worker threads, and that
- *  this dataset is itself responsible for producing batches rather than
- *  depending on a sampler. The statefulness here actually refers to the
- *  dataset. The StatefulDataLoader simply alters the data loading algorithm to
- *  accommodate the stateful, shared nature of the dataset. Note that the
- *  dataset must be thread safe if more than one worker thread is used.
- * 
- *  A stateful dataloader is created by calling {@code make_data_loader} with a
- *  stateful dataset. */
+
  // namespace data
  // namespace torch
 
@@ -74925,19 +74933,67 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
  // namespace data
  // namespace torch
 
+// Targeting ../ChunkBatchDataset.java
+
+
+// Targeting ../ChunkBatchSharedBatchDataset.java
+
+
+// Targeting ../ChunkMapBatchDataset.java
+
+
 // Targeting ../MNISTBatchDataset.java
 
 
 // Targeting ../MNISTMapBatchDataset.java
 
 
-// Targeting ../MNISTDataSet.java
+// Targeting ../TensorExampleBatchDataset.java
+
+
+// Targeting ../MNISTDataset.java
+
+
+// Targeting ../TensorExampleDataset.java
 
 
 
 /** A {@code StreamDataset} represents a dataset that is a potentially infinite
  *  stream. It takes as batch index only a number, which is the batch size, and
  *  yields that many elements from the stream. */
+ // namespace datasets
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/datasets/chunk.h
+
+// #pragma once
+
+// #include <c10/util/irange.h>
+// #include <torch/arg.h>
+// #include <torch/csrc/utils/memory.h>
+// #include <torch/data/datasets/stateful.h>
+// #include <torch/data/samplers.h>
+// #include <queue>
+// #include <thread>
+
+// #include <torch/serialize.h>
+// Targeting ../ChunkDataReader.java
+
+
+/** BatchDataBuffer manages a queue of UnwrappedBatchData. After a new chunk is
+ *  loaded, BatchDataBuffer splits it into small batches and push them into the
+ *  queue. When get_batch is called from data loader, it pops cached batches and
+ *  return. If the cache is empty, it either waits to load more chunks or return
+ *  null if all chunks are loaded. */
+
+// Targeting ../ChunkDatasetOptions.java
+
+
+// Targeting ../ChunkDataset.java
+
+
  // namespace datasets
  // namespace data
  // namespace torch
@@ -74955,6 +75011,9 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // #include <cstddef>
 // #include <type_traits>
 // #include <utility>
+
+// Targeting ../ChunkMapDataset.java
+
 
 // Targeting ../MNISTMapDataset.java
 
@@ -74980,6 +75039,69 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // #include <cstddef>
 // #include <string>
 // Targeting ../MNIST.java
+
+
+ // namespace datasets
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/datasets/shared.h
+
+// #pragma once
+
+// #include <torch/data/datasets/base.h>
+
+// #include <memory>
+// #include <utility>
+// Targeting ../ChunkSharedBatchDataset.java
+
+
+
+/** Constructs a new {@code SharedBatchDataset} by creating a
+ *  {@code shared_ptr<UnderlyingDatase>}. All arguments are forwarded to
+ *  {@code make_shared<UnderlyingDataset>}. */
+ // namespace datasets
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/datasets/stateful.h
+
+// #pragma once
+
+// #include <torch/data/datasets/base.h>
+// #include <torch/data/example.h>
+
+// #include <cstddef>
+// #include <vector>
+ // namespace serialize
+ // namespace torch
+// Targeting ../ChunkStatefulDataset.java
+
+
+
+/** Serializes a statefulDataset to {@code OutputArchive}. */
+
+/** Deserializes a statefulDataset from an {@code InputArchive}. */
+
+ // namespace datasets
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/datasets/tensor.h
+
+// #pragma once
+
+// #include <torch/data/datasets/base.h>
+// #include <torch/data/example.h>
+// #include <torch/types.h>
+
+// #include <cstddef>
+// #include <vector>
+// Targeting ../TensorDataset.java
+
 
 
  // namespace datasets
@@ -75034,6 +75156,27 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
  // namespace serialize
  // namespace torch
 // Targeting ../RandomSampler.java
+
+
+ // namespace samplers
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/samplers/sequential.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+// #include <torch/data/samplers/base.h>
+// #include <torch/types.h>
+
+// #include <cstddef>
+// #include <vector>
+ // namespace serialize
+ // namespace torch
+// Targeting ../SequentialSampler.java
+
 
 
  // namespace samplers

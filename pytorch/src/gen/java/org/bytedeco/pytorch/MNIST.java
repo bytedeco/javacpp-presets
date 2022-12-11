@@ -17,7 +17,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** The MNIST dataset. */
 @Namespace("torch::data::datasets") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class MNIST extends MNISTDataSet {
+public class MNIST extends MNISTDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MNIST(Pointer p) { super(p); }

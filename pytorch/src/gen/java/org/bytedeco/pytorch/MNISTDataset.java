@@ -23,10 +23,10 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  access indexing function for each index in the requested batch of indices.
  *  This can be customized. */
 @Name("torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class MNISTDataSet extends MNISTBatchDataset {
+public class MNISTDataset extends MNISTBatchDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public MNISTDataSet(Pointer p) { super(p); }
+    public MNISTDataset(Pointer p) { super(p); }
 
 
   /** Returns the example at the given index. */

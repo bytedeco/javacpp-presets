@@ -1,4 +1,5 @@
 
+ * Map `torch::data::datasets::ChunkDataReader` and related data loading classes from PyTorch ([issue #1215](https://github.com/bytedeco/javacpp-presets/issues/1215))
  * Add missing predefined `AVChannelLayout` in presets for FFmpeg ([issue #1286](https://github.com/bytedeco/javacpp-presets/issues/1286))
  * Map `c10::impl::GenericDict` as returned by `c10::IValue::toGenericDict()` in presets for PyTorch
  * Introduce `linux-armhf` and `linux-x86` builds to presets for TensorFlow Lite ([pull #1268](https://github.com/bytedeco/javacpp-presets/pull/1268))
