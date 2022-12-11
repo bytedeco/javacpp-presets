@@ -14,9 +14,7 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
- // namespace detail
 
-/** A {@code MapDataset} is a dataset that applies a transform to a source dataset. */
 @Name("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTMapDataset extends MNISTMapBatchDataset {
     static { Loader.load(); }
