@@ -157,3 +157,24 @@ public class SimpleMNIST {
     }
 }
 ```
+
+### Scala examples
+```scala
+//2 layer lstm
+import org.bytedeco.pytorch._
+val rnn: LSTMImpl = register_module(
+  "lstm" + mName,
+  new LSTMImpl(new LSTMOptions(hidden_size, hidden_size) { num_layers().put(n_layers) })
+)
+
+// create tensor
+val decoder_input_init: Tensor =
+  AbstractTensor.create(
+    Array(outLen),
+    1
+  )
+```
+
+### additional info
+
+check here for various discussion :  https://github.com/bytedeco/javacpp-presets/issues/623
