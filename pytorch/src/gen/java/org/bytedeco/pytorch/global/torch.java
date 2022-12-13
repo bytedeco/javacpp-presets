@@ -201,6 +201,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../ExampleOptional.java
 
 
+// Targeting ../BatchSizeOptional.java
+
+
 // Targeting ../TensorTensorOptional.java
 
 
@@ -75137,6 +75140,49 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
 // Targeting ../Sampler.java
 
 
+// Targeting ../BatchSizeSampler.java
+
+
+
+ // namespace samplers
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/samplers/custom_batch_request.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+// #include <cstddef>
+// Targeting ../CustomBatchRequest.java
+
+
+ // namespace samplers
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/samplers/distributed.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+// #include <torch/data/samplers/base.h>
+
+// #include <cstddef>
+// #include <vector>
+ // namespace serialize
+ // namespace torch
+// Targeting ../DistributedSampler.java
+
+
+// Targeting ../DistributedRandomSampler.java
+
+
+// Targeting ../DistributedSequentialSampler.java
+
+
 
  // namespace samplers
  // namespace data
@@ -75176,6 +75222,44 @@ public static final long kSourceRangeTagIndex = kSourceRangeTagIndex();
  // namespace serialize
  // namespace torch
 // Targeting ../SequentialSampler.java
+
+
+
+ // namespace samplers
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/samplers/serialize.h
+
+// #pragma once
+
+// #include <torch/data/samplers/base.h>
+// #include <torch/serialize/archive.h>
+/** Serializes a {@code Sampler} into an {@code OutputArchive}. */
+
+/** Deserializes a {@code Sampler} from an {@code InputArchive}. */
+ // namespace samplers
+ // namespace data
+ // namespace torch
+
+
+// Parsed from torch/data/samplers/stream.h
+
+// #pragma once
+
+// #include <torch/csrc/Export.h>
+// #include <torch/data/samplers/base.h>
+// #include <torch/data/samplers/custom_batch_request.h>
+// #include <torch/types.h>
+
+// #include <cstddef>
+ // namespace serialize
+ // namespace torch
+// Targeting ../BatchSize.java
+
+
+// Targeting ../StreamSampler.java
 
 
 
