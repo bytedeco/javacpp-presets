@@ -1611,12 +1611,12 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/data/datasets/tensor.h",
                 "torch/data/samplers.h",
                 "torch/data/samplers/base.h",
-//                "torch/data/samplers/custom_batch_request.h",
-//                "torch/data/samplers/distributed.h",
+                "torch/data/samplers/custom_batch_request.h",
+                "torch/data/samplers/distributed.h",
                 "torch/data/samplers/random.h",
                 "torch/data/samplers/sequential.h",
-//                "torch/data/samplers/serialize.h",
-//                "torch/data/samplers/stream.h",
+                "torch/data/samplers/serialize.h",
+                "torch/data/samplers/stream.h",
                 "torch/data/transforms.h",
                 "torch/data/transforms/base.h",
                 "torch/data/transforms/collate.h",
@@ -2548,11 +2548,14 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::data::Iterator<std::vector<torch::data::Example<> > >").purify().pointerTypes("ExampleVectorIterator"))
                .put(new Info("torch::data::Iterator<c10::optional<std::vector<torch::data::Example<> > > >").purify().pointerTypes("ExampleVectorOptionalIterator"))
                .put(new Info("torch::data::samplers::Sampler<std::vector<size_t> >", "torch::data::samplers::Sampler<>").pointerTypes("Sampler"))
+               .put(new Info("torch::data::samplers::Sampler<torch::data::samplers::BatchSize>").pointerTypes("BatchSizeSampler"))
+               .put(new Info("torch::data::samplers::RandomSampler").pointerTypes("RandomSampler"))
+               .put(new Info("torch::data::samplers::DistributedSampler<std::vector<size_t> >", "torch::data::samplers::DistributedSampler<>").purify().pointerTypes("DistributedSampler"))
+               .put(new Info("c10::optional<torch::data::samplers::BatchSize>").pointerTypes("BatchSizeOptional").define())
                .put(new Info("torch::data::transforms::BatchTransform<std::vector<torch::data::Example<> >, torch::data::Example<> >",
                              "torch::data::transforms::Collation<torch::data::Example<> >").pointerTypes("ExampleCollation"))
                .put(new Info("torch::data::transforms::Stack<torch::data::Example<> >").pointerTypes("ExampleStack"))
 
-               .put(new Info("torch::data::samplers::RandomSampler").pointerTypes("RandomSampler"))
                .put(new Info("torch::data::datasets::ChunkDataReader<torch::data::Example<>,std::vector<torch::data::Example<> > >", VirtualChunkDataReader).pointerTypes("ChunkDataReader").virtualize())
                .put(new Info("torch::data::datasets::ChunkDataset<" + VirtualChunkDataReader + ",torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>").pointerTypes("ChunkDataset"))
                .put(new Info("torch::data::datasets::ChunkDataset<" + VirtualChunkDataReader + ",torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>::ChunkDataset").javaText(
