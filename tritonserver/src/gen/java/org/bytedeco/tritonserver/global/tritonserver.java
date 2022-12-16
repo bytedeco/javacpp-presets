@@ -4246,17 +4246,20 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
 public static native TRITONSERVER_Error TRITONBACKEND_ModelAutoCompleteConfig(
     TRITONBACKEND_Model model, @Cast("bool*") BoolPointer auto_complete_config);
 
-/** Set the model configuration in Triton server. Only the inputs, outputs,
- *  max batch size, and scheduling choice can be changed. A caveat being
- *  scheduling choice can only be changed if none is previously set. Any other
- *  changes to the model configuration will be ignored by Triton. This function
- *  can only be called from TRITONBACKEND_ModelInitialize, calling in any other
- *  context will result in an error being returned. Additionally, Triton server
- *  can add some of the missing fields in the provided config with this call.
- *  The backend must get the complete configuration again by using
- *  TRITONBACKEND_ModelConfig. TRITONBACKEND_ModelSetConfig does not take
- *  ownership of the message object and so the caller should call
- *  TRITONSERVER_MessageDelete to release the object once the function returns.
+/** Set the model configuration in Triton server. This API should only be called
+ *  when the backend implements the auto-completion of model configuration
+ *  and TRITONBACKEND_ModelAutoCompleteConfig returns true in
+ *  auto_complete_config. Only the inputs, outputs, max batch size, and
+ *  scheduling choice can be changed. A caveat being scheduling choice can only
+ *  be changed if none is previously set. Any other changes to the model
+ *  configuration will be ignored by Triton. This function can only be called
+ *  from TRITONBACKEND_ModelInitialize, calling in any other context will result
+ *  in an error being returned. Additionally, Triton server can add some of the
+ *  missing fields in the provided config with this call. The backend must get
+ *  the complete configuration again by using TRITONBACKEND_ModelConfig.
+ *  TRITONBACKEND_ModelSetConfig does not take ownership of the message object
+ *  and so the caller should call TRITONSERVER_MessageDelete to release the
+ *  object once the function returns.
  * 
  *  @param model The model.
  *  @param config_version The format version of the model configuration.
