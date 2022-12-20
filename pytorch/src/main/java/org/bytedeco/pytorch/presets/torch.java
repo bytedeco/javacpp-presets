@@ -2338,7 +2338,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::ArrayRef<at::Dimname>::iterator", "c10::ArrayRef<at::Dimname>::const_iterator").cast().pointerTypes("Dimname"))
                .put(new Info("c10::ArrayRef<at::Scalar>", "at::ArrayRef<at::Scalar>").pointerTypes("ScalarArrayRef"))
                .put(new Info("c10::ArrayRef<at::Scalar>::iterator", "c10::ArrayRef<at::Scalar>::const_iterator").cast().pointerTypes("Scalar"))
-               .put(new Info("c10::ArrayRef<at::Tensor>", "at::ArrayRef<at::Tensor>", "at::TensorList").pointerTypes("TensorArrayRef"))
+               .put(new Info("c10::ArrayRef<at::Tensor>", "at::ArrayRef<at::Tensor>", "at::TensorList", "at::ITensorListRef").pointerTypes("TensorArrayRef"))
                .put(new Info("c10::ArrayRef<at::Tensor>(std::vector<at::Tensor,A>&)").javaText(
                        "public TensorArrayRef(@ByRef TensorVector Vec) { super((Pointer)null); allocate(Vec); }\n"
                      + "private native void allocate(@ByRef TensorVector Vec);"))
@@ -2366,7 +2366,7 @@ public class torch implements LoadEnabled, InfoMapper {
                              "c10::ArrayRef<at::Tensor>::equals", "c10::ArrayRef<at::indexing::TensorIndex>::equals",
                              "c10::ArrayRef<c10::optional<at::Tensor> >::equals", "c10::ArrayRef<torch::jit::NamedValue>::equals",
                              "c10::ArrayRef<torch::autograd::SavedVariable>::equals", "c10::ArrayRef<torch::autograd::SavedVariable>::vec",
-                             "at::ITensorListRef", "std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").skip())
+                             "std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").skip())
                .put(new Info("c10::OptionalArray<int64_t>").pointerTypes("OptionalLongArray"))
                .put(new Info("c10::OptionalArray<double>").pointerTypes("OptionalDoubleArray"))
                .put(new Info("c10::OptionalArrayRef<int64_t>").pointerTypes("OptionalIntArrayRef"))

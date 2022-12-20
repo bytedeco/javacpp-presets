@@ -18139,6 +18139,7 @@ public static final int AT_PARALLEL_NATIVE_TBB = 0;
 /** Return the Device of a TensorList, if the list is non-empty and
  *  the first Tensor is defined.  (This function implicitly assumes
  *  that all tensors in the list have the same device.) */
+@Namespace("at") public static native @ByVal DeviceOptional device_of(@ByVal TensorArrayRef t);
 
  // namespace at
 
@@ -21292,6 +21293,8 @@ body of your function, only data pointers.
 // #include <ATen/core/DimVector.h>
 // #include <ATen/core/Tensor.h>
 // #include <functional>
+
+@Namespace("at") public static native @Cast("bool") boolean has_names(@ByVal TensorArrayRef tensors);
 
 // Converts dim to an positional index. Errors if `dim` cannot be used to
 // refer to any dimension of tensor.
@@ -37093,10 +37096,15 @@ body of your function, only data pointers.
 
 
 // aten::cat(Tensor[] tensors, int dim=0) -> Tensor
+@Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorArrayRef tensors);
 
 // aten::cat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorArrayRef tensors);
 
 // aten::cat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
+@Namespace("at") public static native @ByRef Tensor cat_outf(@Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
 // aten::cat.names(Tensor[] tensors, Dimname dim) -> Tensor
 @Namespace("at") public static native @ByVal Tensor cat(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
