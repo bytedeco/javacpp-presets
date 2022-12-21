@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avutil",
     global = "org.bytedeco.ffmpeg.global.avutil",
     value = {
-        @Platform(define = {"__STDC_CONSTANT_MACROS", "__STDC_FORMAT_MACROS"},
+        @Platform(define = {"__STDC_CONSTANT_MACROS", "__STDC_FORMAT_MACROS", "STRING_BYTES_CHARSET \"UTF-8\""},
             cinclude = {"<libavutil/avutil.h>", /*"<libavutil/attributes.h>",*/ "<libavutil/error.h>", "<libavutil/mem.h>", "<libavutil/time.h>",
             "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
             "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
