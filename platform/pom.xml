@@ -251,12 +251,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.82.0-${project.version}</version>
+      <version>1.83.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>5.2.0-${project.version}</version>
+      <version>5.3.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

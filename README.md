@@ -211,8 +211,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.20.2  https://www.libraw.org/download
- * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 5.2.x  https://github.com/tesseract-ocr/tesseract
+ * Leptonica 1.83.x  http://www.leptonica.org/download.html
+ * Tesseract 5.3.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 11.8.x  https://developer.nvidia.com/cuda-downloads
