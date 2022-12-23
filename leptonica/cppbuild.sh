@@ -10,17 +10,17 @@ fi
 NASM_VERSION=2.14
 ZLIB=zlib-1.2.13
 GIFLIB=giflib-5.2.1
-LIBJPEG=libjpeg-turbo-2.1.3
-LIBPNG=libpng-1.6.37 # warning: libpng16 doesn't work on CentOS 6 for some reason
-LIBTIFF=tiff-4.3.0
-LIBWEBP=libwebp-1.2.2
+LIBJPEG=libjpeg-turbo-2.1.4
+LIBPNG=libpng-1.6.39 # warning: libpng16 doesn't work on CentOS 6 for some reason
+LIBTIFF=tiff-4.5.0
+LIBWEBP=libwebp-1.2.4
 OPENJPEG_VERSION=2.5.0
-LEPTONICA_VERSION=1.82.0
+LEPTONICA_VERSION=1.83.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.4/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download https://sourceforge.net/projects/libpng/files/libpng16/1.6.39/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download https://github.com/uclouvain/openjpeg/archive/refs/tags/v$OPENJPEG_VERSION.tar.gz openjpeg-$OPENJPEG_VERSION.tar.gz
@@ -48,10 +48,10 @@ sedinplace 's/add_library(zlib SHARED/add_library(zlib STATIC/g' $ZLIB/CMakeList
 sedinplace 's/add_library(giflib SHARED/add_library(giflib STATIC/g' $GIFLIB/CMakeLists.txt
 sedinplace 's/if(WIN32)/if(FALSE)/g' $GIFLIB/CMakeLists.txt
 sedinplace 's/include(OpenGLChecks)/set(HAVE_OPENGL FALSE)/g' $LIBTIFF/CMakeLists.txt
-sedinplace 's/SOVERSION 5..../SOVERSION 5/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
-sedinplace 's/VERSION   ${VERSION_PLAIN}/VERSION   5/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
-sedinplace 's/leptonica-${VERSION_PLAIN}/leptonica-5/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
-sedinplace 's/message(FATAL_ERROR/message(WARNING/g' leptonica-$LEPTONICA_VERSION/CMakeLists.txt
+sedinplace 's/SOVERSION 6..../SOVERSION 6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
+sedinplace 's/VERSION   ${VERSION_PLAIN}/VERSION   6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
+sedinplace 's/leptonica-${VERSION_PLAIN}/leptonica-6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
+sedinplace 's/FATAL_ERROR/WARNING/g' leptonica-$LEPTONICA_VERSION/CMakeLists.txt
 
 cd nasm-$NASM_VERSION
 # fix for build with GCC 8.x
@@ -95,7 +95,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        patch -Np1 < ../../../libwebp-arm.patch
+        sedinplace '/define WEBP_ANDROID_NEON/d' src/dsp/cpu.h
+        sedinplace '/define WEBP_USE_NEON/d' src/dsp/cpu.h
         $CMAKE $CMAKE_CONFIG $WEBP_CONFIG -DWEBP_ENABLE_SIMD=OFF .
         make -j $MAKEJ
         make install
@@ -107,9 +108,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -140,7 +140,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        patch -Np1 < ../../../libwebp-arm.patch
+        sedinplace '/define WEBP_ANDROID_NEON/d' src/dsp/cpu.h
+        sedinplace '/define WEBP_USE_NEON/d' src/dsp/cpu.h
         $CMAKE $CMAKE_CONFIG $WEBP_CONFIG -DWEBP_ENABLE_SIMD=OFF .
         make -j $MAKEJ
         make install
@@ -152,9 +153,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -197,9 +197,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -242,9 +241,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -284,9 +282,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -326,9 +323,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -359,7 +355,8 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-        patch -Np1 < ../../../libwebp-arm.patch
+        sedinplace '/define WEBP_ANDROID_NEON/d' src/dsp/cpu.h
+        sedinplace '/define WEBP_USE_NEON/d' src/dsp/cpu.h
         $CMAKE $CMAKE_CONFIG $WEBP_CONFIG -DWEBP_ENABLE_SIMD=OFF .
         make -j $MAKEJ
         make install
@@ -371,9 +368,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -414,9 +410,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -457,9 +452,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -499,9 +493,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ -DCMAKE_MACOSX_RPATH=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -540,9 +533,8 @@ case $PLATFORM in
         $CMAKE $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ -DCMAKE_MACOSX_RPATH=ON .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -581,9 +573,8 @@ case $PLATFORM in
         $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install
         ;;
@@ -622,9 +613,8 @@ case $PLATFORM in
         $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_CODEC=OFF .
         make -j $MAKEJ
         make install
-        ln -sf openjpeg-2.5 ../include/openjpeg-2.4
         cd ../leptonica-$LEPTONICA_VERSION
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DSW_BUILD=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -DBUILD_SHARED_LIBS=ON -DOpenJPEG_DIR=$INSTALL_PATH/lib/openjpeg-2.5/ -DSW_BUILD=OFF .
         make -j $MAKEJ
         make install
         ;;
@@ -634,6 +624,7 @@ case $PLATFORM in
 esac
 
 # fix broken dependencies from files for cmake
+sedinplace 's:.6.0.0::g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:bin/libleptonica:libleptonica:g' ../lib/cmake/leptonica/LeptonicaTargets-release.cmake
 sedinplace 's:INTERFACE_LINK_LIBRARIES *".*"::g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
 sedinplace 's:INTERFACE_INCLUDE_DIRECTORIES *".*":INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/../../../include":g' ../lib/cmake/leptonica/LeptonicaConfig.cmake ../lib/cmake/leptonica/LeptonicaTargets.cmake
