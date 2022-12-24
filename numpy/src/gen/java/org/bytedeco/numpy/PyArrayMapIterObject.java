@@ -89,7 +89,10 @@ public class PyArrayMapIterObject extends Pointer {
         public native @Cast("npy_intp") long fancy_dims(int i); public native PyArrayMapIterObject fancy_dims(int i, long setter);
         @MemberGetter public native @Cast("npy_intp*") SizeTPointer fancy_dims();
 
-        /* Whether the iterator (any of the iterators) requires API */
+        /*
+         * Whether the iterator (any of the iterators) requires API.  This is
+         * unused by NumPy itself; ArrayMethod flags are more precise.
+         */
         public native int needs_api(); public native PyArrayMapIterObject needs_api(int setter);
 
         /*

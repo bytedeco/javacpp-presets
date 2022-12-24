@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.9.3-${project.parent.version}</version>
+      <version>1.10.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -76,7 +76,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.9.3-${project.parent.version}</version>
+            <version>1.10.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
