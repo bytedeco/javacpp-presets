@@ -65,7 +65,13 @@ public static final int __STDC_FORMAT_MACROS = 1;
 /*
  * On Mac OS X, because there is only one configuration stage for all the archs
  * in universal builds, any macro which depends on the arch needs to be
- * hardcoded
+ * hardcoded.
+ *
+ * Note that distutils/pip will attempt a universal2 build when Python itself
+ * is built as universal2, hence this hardcoding is needed even if we do not
+ * support universal2 wheels anymore (see gh-22796).
+ * This code block can be removed after we have dropped the setup.py based
+ * build completely.
  */
 // #ifdef __APPLE__
 //     #undef NPY_SIZEOF_LONG
@@ -77,15 +83,24 @@ public static final int __STDC_FORMAT_MACROS = 1;
 
 //     #undef NPY_SIZEOF_LONGDOUBLE
 //     #undef NPY_SIZEOF_COMPLEX_LONGDOUBLE
+//     #ifdef HAVE_LDOUBLE_IEEE_DOUBLE_LE
+//       #undef HAVE_LDOUBLE_IEEE_DOUBLE_LE
+//     #endif
+//     #ifdef HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE
+//       #undef HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE
+//     #endif
 
 //     #if defined(__arm64__)
+        public static final int HAVE_LDOUBLE_IEEE_DOUBLE_LE = 1;
 //     #elif defined(__x86_64)
+        public static final int HAVE_LDOUBLE_INTEL_EXTENDED_16_BYTES_LE = 1;
 //     #elif defined (__i386)
 //     #elif defined(__ppc__) || defined (__ppc64__)
 //     #else
 //         #error "unknown architecture"
 //     #endif
 // #endif
+
 
 /**
  * To help with the NPY_NO_DEPRECATED_API macro, we include API version
@@ -111,6 +126,7 @@ public static final int NPY_1_20_API_VERSION = 0x0000000e;
 public static final int NPY_1_21_API_VERSION = 0x0000000e;
 public static final int NPY_1_22_API_VERSION = 0x0000000f;
 public static final int NPY_1_23_API_VERSION = 0x00000010;
+public static final int NPY_1_24_API_VERSION = 0x00000010;
 
 // #endif  /* NUMPY_CORE_INCLUDE_NUMPY_NPY_NUMPYCONFIG_H_ */
 
@@ -923,6 +939,8 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_OS_MINGW
 // #elif defined(__APPLE__)
 //     #define NPY_OS_DARWIN
+// #elif defined(__HAIKU__)
+//     #define NPY_OS_HAIKU
 // #else
 //     #define NPY_OS_UNKNOWN
 // #endif
@@ -1203,9 +1221,6 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 // #include <numpy/npy_common.h>
 
 // #include <math.h>
-// #ifdef __SUNPRO_CC
-// #include <sunmath.h>
-// #endif
 
 /* By adding static inline specifiers to npy_math function definitions when
    appropriate, compiler is given the opportunity to optimize */
@@ -1355,52 +1370,25 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 @NoException public static native @Cast("uint8_t") byte npy_popcountll(@Cast("npy_longlong") long a);
 
 /*
- * C99 double math funcs
+ * C99 double math funcs that need fixups or are blocklist-able
  */
 @NoException public static native double npy_sin(double x);
 @NoException public static native double npy_cos(double x);
 @NoException public static native double npy_tan(double x);
-@NoException public static native double npy_sinh(double x);
-@NoException public static native double npy_cosh(double x);
-@NoException public static native double npy_tanh(double x);
-
-@NoException public static native double npy_asin(double x);
-@NoException public static native double npy_acos(double x);
-@NoException public static native double npy_atan(double x);
-
-@NoException public static native double npy_log(double x);
-@NoException public static native double npy_log10(double x);
-@NoException public static native double npy_exp(double x);
-@NoException public static native double npy_sqrt(double x);
-@NoException public static native double npy_cbrt(double x);
-
-@NoException public static native double npy_fabs(double x);
-@NoException public static native double npy_ceil(double x);
-@NoException public static native double npy_fmod(double x, double y);
-@NoException public static native double npy_floor(double x);
-
-@NoException public static native double npy_expm1(double x);
-@NoException public static native double npy_log1p(double x);
 @NoException public static native double npy_hypot(double x, double y);
-@NoException public static native double npy_acosh(double x);
-@NoException public static native double npy_asinh(double xx);
-@NoException public static native double npy_atanh(double x);
-@NoException public static native double npy_rint(double x);
-@NoException public static native double npy_trunc(double x);
-@NoException public static native double npy_exp2(double x);
 @NoException public static native double npy_log2(double x);
-
 @NoException public static native double npy_atan2(double x, double y);
-@NoException public static native double npy_pow(double x, double y);
-@NoException public static native double npy_modf(double x, DoublePointer y);
-@NoException public static native double npy_modf(double x, DoubleBuffer y);
-@NoException public static native double npy_modf(double x, double[] y);
-@NoException public static native double npy_frexp(double x, IntPointer y);
-@NoException public static native double npy_frexp(double x, IntBuffer y);
-@NoException public static native double npy_frexp(double x, int[] y);
-@NoException public static native double npy_ldexp(double n, int y);
 
-@NoException public static native double npy_copysign(double x, double y);
+/* Mandatory C99 double math funcs, no blocklisting or fixups */
+/* defined for legacy reasons, should be deprecated at some point */
+
+// #if defined(__arm64__) && defined(__APPLE__)
+/* due to a build problem with scipy, export these as functions */
+@NoException public static native double npy_asinh(double x);
+@NoException public static native double npy_copysign(double y, double x);
+@NoException public static native double npy_log1p(double x);
+// #else
+// #endif
 @NoException public static native double npy_nextafter(double x, double y);
 @NoException public static native double npy_spacing(double x);
 
@@ -1453,96 +1441,47 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 // #endif
 
 /*
- * float C99 math functions
+ * float C99 math funcs that need fixups or are blocklist-able
  */
 @NoException public static native float npy_sinf(float x);
 @NoException public static native float npy_cosf(float x);
 @NoException public static native float npy_tanf(float x);
-@NoException public static native float npy_sinhf(float x);
-@NoException public static native float npy_coshf(float x);
-@NoException public static native float npy_tanhf(float x);
-@NoException public static native float npy_fabsf(float x);
-@NoException public static native float npy_floorf(float x);
-@NoException public static native float npy_ceilf(float x);
-@NoException public static native float npy_rintf(float x);
-@NoException public static native float npy_truncf(float x);
-@NoException public static native float npy_sqrtf(float x);
-@NoException public static native float npy_cbrtf(float x);
-@NoException public static native float npy_log10f(float x);
-@NoException public static native float npy_logf(float x);
 @NoException public static native float npy_expf(float x);
-@NoException public static native float npy_expm1f(float x);
-@NoException public static native float npy_asinf(float x);
-@NoException public static native float npy_acosf(float x);
-@NoException public static native float npy_atanf(float x);
-@NoException public static native float npy_asinhf(float x);
-@NoException public static native float npy_acoshf(float x);
-@NoException public static native float npy_atanhf(float x);
-@NoException public static native float npy_log1pf(float x);
-@NoException public static native float npy_exp2f(float x);
-@NoException public static native float npy_log2f(float x);
-
-@NoException public static native float npy_atan2f(float x, float y);
+@NoException public static native float npy_sqrtf(float x);
 @NoException public static native float npy_hypotf(float x, float y);
+@NoException public static native float npy_log2f(float x);
+@NoException public static native float npy_atan2f(float x, float y);
 @NoException public static native float npy_powf(float x, float y);
-@NoException public static native float npy_fmodf(float x, float y);
-
 @NoException public static native float npy_modff(float x, FloatPointer y);
 @NoException public static native float npy_modff(float x, FloatBuffer y);
 @NoException public static native float npy_modff(float x, float[] y);
-@NoException public static native float npy_frexpf(float x, IntPointer y);
-@NoException public static native float npy_frexpf(float x, IntBuffer y);
-@NoException public static native float npy_frexpf(float x, int[] y);
-@NoException public static native float npy_ldexpf(float x, int y);
 
-@NoException public static native float npy_copysignf(float x, float y);
+/* Mandatory C99 float math funcs, no blocklisting or fixups */
+/* defined for legacy reasons, should be deprecated at some point */
+
+
 @NoException public static native float npy_nextafterf(float x, float y);
 @NoException public static native float npy_spacingf(float x);
 
 /*
- * long double C99 math functions
+ * long double C99 double math funcs that need fixups or are blocklist-able
  */
 @NoException public static native @Cast("npy_longdouble") double npy_sinl(@Cast("npy_longdouble") double x);
 @NoException public static native @Cast("npy_longdouble") double npy_cosl(@Cast("npy_longdouble") double x);
 @NoException public static native @Cast("npy_longdouble") double npy_tanl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_sinhl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_coshl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_tanhl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_fabsl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_floorl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_ceill(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_rintl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_truncl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_sqrtl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_cbrtl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_log10l(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_logl(@Cast("npy_longdouble") double x);
 @NoException public static native @Cast("npy_longdouble") double npy_expl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_expm1l(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_asinl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_acosl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_atanl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_asinhl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_acoshl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_atanhl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_log1pl(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_exp2l(@Cast("npy_longdouble") double x);
-@NoException public static native @Cast("npy_longdouble") double npy_log2l(@Cast("npy_longdouble") double x);
-
-@NoException public static native @Cast("npy_longdouble") double npy_atan2l(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
+@NoException public static native @Cast("npy_longdouble") double npy_sqrtl(@Cast("npy_longdouble") double x);
 @NoException public static native @Cast("npy_longdouble") double npy_hypotl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
+@NoException public static native @Cast("npy_longdouble") double npy_log2l(@Cast("npy_longdouble") double x);
+@NoException public static native @Cast("npy_longdouble") double npy_atan2l(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
 @NoException public static native @Cast("npy_longdouble") double npy_powl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
-@NoException public static native @Cast("npy_longdouble") double npy_fmodl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
-
 @NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") DoublePointer y);
 @NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") DoubleBuffer y);
 @NoException public static native @Cast("npy_longdouble") double npy_modfl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble*") double[] y);
-@NoException public static native @Cast("npy_longdouble") double npy_frexpl(@Cast("npy_longdouble") double x, IntPointer y);
-@NoException public static native @Cast("npy_longdouble") double npy_frexpl(@Cast("npy_longdouble") double x, IntBuffer y);
-@NoException public static native @Cast("npy_longdouble") double npy_frexpl(@Cast("npy_longdouble") double x, int[] y);
-@NoException public static native @Cast("npy_longdouble") double npy_ldexpl(@Cast("npy_longdouble") double x, int y);
 
-@NoException public static native @Cast("npy_longdouble") double npy_copysignl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
+/* Mandatory C99 double math funcs, no blocklisting or fixups */
+/* defined for legacy reasons, should be deprecated at some point */
+
 @NoException public static native @Cast("npy_longdouble") double npy_nextafterl(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double y);
 @NoException public static native @Cast("npy_longdouble") double npy_spacingl(@Cast("npy_longdouble") double x);
 
@@ -1579,13 +1518,7 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
                            @Cast("npy_longdouble*") double[] modulus);
 @NoException public static native @Cast("npy_longdouble") double npy_heavisidel(@Cast("npy_longdouble") double x, @Cast("npy_longdouble") double h0);
 
-// #define npy_degrees npy_rad2deg
-// #define npy_degreesf npy_rad2degf
-// #define npy_degreesl npy_rad2degl
 
-// #define npy_radians npy_deg2rad
-// #define npy_radiansf npy_deg2radf
-// #define npy_radiansl npy_deg2radl
 
 /*
  * Complex declarations
@@ -2607,9 +2540,6 @@ public static final int NPY_ARRAY_ENSURECOPY =      0x0020;
  * This flag may be requested in constructor functions.
  */
 public static final int NPY_ARRAY_ENSUREARRAY =     0x0040;
-
-// #if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
-// #endif  /* NPY_INTERNAL_BUILD */
 
 /*
  * Make sure that the strides are in units of the element size Needed

@@ -28,7 +28,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=1.13.0
+PYTORCH_VERSION=1.13.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"

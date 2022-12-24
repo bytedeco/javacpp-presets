@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch</artifactId>
-  <version>1.13.0-${project.parent.version}</version>
+  <version>1.13.1-${project.parent.version}</version>
   <name>JavaCPP Presets for PyTorch</name>
 
   <dependencies>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy</artifactId>
-      <version>1.23.5-${project.parent.version}</version>
+      <version>1.24.0-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -52,7 +52,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.23.5-${project.parent.version}</version>
+            <version>1.24.0-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
