@@ -1,6 +1,5 @@
-diff -ruN ffmpeg-5.1.1/configure ffmpeg-5.1.1-patch/configure
---- ffmpeg-5.1.1/configure	2022-09-01 03:58:25.000000000 +0900
-+++ ffmpeg-5.1.1-patch/configure	2022-09-07 09:45:10.985165854 +0900
+--- ffmpeg-5.1.2/configure	2022-09-01 04:58:25.000000000 +1000
++++ ffmpeg-5.1.2-patch/configure	2022-12-29 18:19:06.145172040 +1100
 @@ -6548,7 +6548,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
@@ -10,6 +9,15 @@ diff -ruN ffmpeg-5.1.1/configure ffmpeg-5.1.1-patch/configure
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
  enabled libglslang && { check_lib spirv_compiler glslang/Include/glslang_c_interface.h glslang_initialize_process \
                              -lglslang -lMachineIndependent -lOSDependent -lHLSL -lOGLCompiler -lGenericCodeGen \
+@@ -6565,7 +6565,7 @@
+ enabled libjxl            && require_pkg_config libjxl "libjxl >= 0.7.0" jxl/decode.h JxlDecoderVersion &&
+                              require_pkg_config libjxl_threads "libjxl_threads >= 0.7.0" jxl/thread_parallel_runner.h JxlThreadParallelRunner
+ enabled libklvanc         && require libklvanc libklvanc/vanc.h klvanc_context_create -lklvanc
+-enabled libkvazaar        && require_pkg_config libkvazaar "kvazaar >= 0.8.1" kvazaar.h kvz_api_get
++enabled libkvazaar        && check_lib libkvazaar kvazaar.h kvz_api_get -lkvazaar
+ enabled liblensfun        && require_pkg_config liblensfun lensfun lensfun.h lf_db_new
+ # While it may appear that require is being used as a pkg-config
+ # fallback for libmfx, it is actually being used to detect a different
 @@ -6573,11 +6573,7 @@
  # Media SDK or Intel Media Server Studio, these don't come with
  # pkg-config support.  Instead, users should make sure that the build
