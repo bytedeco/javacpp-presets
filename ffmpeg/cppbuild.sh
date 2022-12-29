@@ -1521,7 +1521,7 @@ EOF
         make install
         
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --host=aarch64-apple-darwin
         make -j $MAKEJ
         make install
         
