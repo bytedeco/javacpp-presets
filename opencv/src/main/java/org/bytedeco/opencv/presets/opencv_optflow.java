@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_ximgproc.class, opencv_video.class},
     value = {
-        @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.406"),
+        @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.407"),
         @Platform(value = "ios", preload = "libopencv_optflow"),
-        @Platform(value = "windows", link = "opencv_optflow460")},
+        @Platform(value = "windows", link = "opencv_optflow470")},
     target = "org.bytedeco.opencv.opencv_optflow",
     global = "org.bytedeco.opencv.global.opencv_optflow"
 )

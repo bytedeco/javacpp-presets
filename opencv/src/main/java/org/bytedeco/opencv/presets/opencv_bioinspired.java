@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Maurice Betzel, Samuel Audet
+ * Copyright (C) 2016-2022 Maurice Betzel, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_highgui.class,
     value = {
         @Platform(include = {"<opencv2/bioinspired.hpp>", "opencv2/bioinspired/bioinspired.hpp", "opencv2/bioinspired/retina.hpp",
-            "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.406"),
+            "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.407"),
         @Platform(value = "ios", preload = "libopencv_bioinspired"),
-        @Platform(value = "windows", link = "opencv_bioinspired460")
+        @Platform(value = "windows", link = "opencv_bioinspired470")
     },
     target = "org.bytedeco.opencv.opencv_bioinspired",
     global = "org.bytedeco.opencv.global.opencv_bioinspired"

@@ -1,5 +1,5 @@
 
- * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to fix that functionality. ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
+ * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to allow callbacks ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
  * Define `STRING_BYTES_CHARSET` to "UTF-8" for FFmpeg since it appears to assume that ([issue bytedeco/javacv#1945](https://github.com/bytedeco/javacv/issues/1945))
  * Map `at::ITensorListRef` as used by `at::cat()` in presets for PyTorch ([issue #1293](https://github.com/bytedeco/javacpp-presets/issues/1293))
  * Map `torch::data::datasets::ChunkDataReader` and related data loading classes from PyTorch ([issue #1215](https://github.com/bytedeco/javacpp-presets/issues/1215))
@@ -7,7 +7,7 @@
  * Map `c10::impl::GenericDict` as returned by `c10::IValue::toGenericDict()` in presets for PyTorch
  * Introduce `linux-armhf` and `linux-x86` builds to presets for TensorFlow Lite ([pull #1268](https://github.com/bytedeco/javacpp-presets/pull/1268))
  * Add presets for LibRaw 0.20.2 ([pull #1211](https://github.com/bytedeco/javacpp-presets/pull/1211))
- * Upgrade presets for DNNL 2.7.2, CPython 3.11.1, NumPy 1.24.0, SciPy 1.10.0, LLVM 15.0.6, Leptonica 1.83.0, Tesseract 5.3.0, PyTorch 1.13.1, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
+ * Upgrade presets for OpenCV 4.7.0, DNNL 2.7.2, CPython 3.11.1, NumPy 1.24.0, SciPy 1.10.0, LLVM 15.0.6, Leptonica 1.83.0, Tesseract 5.3.0, PyTorch 1.13.1, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
 
 ### November 2, 2022 version 1.5.8
  * Fix mapping of `torch::ExpandingArrayWithOptionalElem` in presets for PyTorch ([issue #1250](https://github.com/bytedeco/javacpp-presets/issues/1250))

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Samuel Audet
+ * Copyright (C) 2019-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,12 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudastereo.hpp>",
-            link = "opencv_cudastereo@.406",
+            link = "opencv_cudastereo@.407",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudastereo460",
+            link = "opencv_cudastereo470",
             extension = "-gpu"
         )
     },

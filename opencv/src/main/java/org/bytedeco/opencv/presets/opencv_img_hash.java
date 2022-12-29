@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,10 +42,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/img_hash/phash.hpp>",
                 "<opencv2/img_hash/radial_variance_hash.hpp>",
             },
-            link = "opencv_img_hash@.406"
+            link = "opencv_img_hash@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_img_hash"),
-        @Platform(value = "windows", link = "opencv_img_hash460")
+        @Platform(value = "windows", link = "opencv_img_hash470")
     },
     target = "org.bytedeco.opencv.opencv_img_hash",
     global = "org.bytedeco.opencv.global.opencv_img_hash"

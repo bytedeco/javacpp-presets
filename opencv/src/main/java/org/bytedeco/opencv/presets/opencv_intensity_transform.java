@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_core.class,
     value = {
-        @Platform(include = "<opencv2/intensity_transform.hpp>", link = "opencv_intensity_transform@.406"),
+        @Platform(include = "<opencv2/intensity_transform.hpp>", link = "opencv_intensity_transform@.407"),
         @Platform(value = "ios", preload = "libopencv_intensity_transform"),
-        @Platform(value = "windows", link = "opencv_intensity_transform460")
+        @Platform(value = "windows", link = "opencv_intensity_transform470")
     },
     global = "org.bytedeco.opencv.global.opencv_intensity_transform"
 )

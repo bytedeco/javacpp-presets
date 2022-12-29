@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_calib3d.class,
     value = {
-        @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.406"),
+        @Platform(include = "<opencv2/rapid.hpp>", link = "opencv_rapid@.407"),
         @Platform(value = "ios", preload = "libopencv_rapid"),
-        @Platform(value = "windows", link = "opencv_rapid460")
+        @Platform(value = "windows", link = "opencv_rapid470")
     },
     target = "org.bytedeco.opencv.opencv_rapid",
     global = "org.bytedeco.opencv.global.opencv_rapid"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Samuel Audet
+ * Copyright (C) 2019-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,12 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             not = "macosx",
             include = "<opencv2/cudacodec.hpp>",
-            link = "opencv_cudacodec@.406",
+            link = "opencv_cudacodec@.407",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudacodec460",
+            link = "opencv_cudacodec470",
             extension = "-gpu"
         )
     },
@@ -51,6 +51,7 @@ public class opencv_cudacodec implements InfoMapper {
     @Override
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CV_DOXYGEN").define())
+               .put(new Info("cv::cudacodec::operator ==").skip())
                .put(new Info("cv::cudacodec::VideoWriter").pointerTypes("org.bytedeco.opencv.opencv_cudacodec.VideoWriter"))
                .put(new Info("cv::cudacodec::VideoReader").pointerTypes("org.bytedeco.opencv.opencv_cudacodec.VideoReader"));
     }

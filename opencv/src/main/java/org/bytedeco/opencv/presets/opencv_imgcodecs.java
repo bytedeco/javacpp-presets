@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_imgproc.class,
     value = {
-        @Platform(include = {/*"<opencv2/imgcodecs/imgcodecs_c.h>",*/ "<opencv2/imgcodecs.hpp>"}, link = "opencv_imgcodecs@.406"),
+        @Platform(include = {/*"<opencv2/imgcodecs/imgcodecs_c.h>",*/ "<opencv2/imgcodecs.hpp>"}, link = "opencv_imgcodecs@.407"),
         @Platform(value = "ios", preload = "libopencv_imgcodecs"),
-        @Platform(value = "windows", link = "opencv_imgcodecs460")},
+        @Platform(value = "windows", link = "opencv_imgcodecs470")},
     global = "org.bytedeco.opencv.global.opencv_imgcodecs",
     helper = "org.bytedeco.opencv.helper.opencv_imgcodecs"
 )

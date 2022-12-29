@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,10 +37,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/phase_unwrapping/phase_unwrapping.hpp>",
                 "<opencv2/phase_unwrapping/histogramphaseunwrapping.hpp>",
             },
-            link = "opencv_phase_unwrapping@.406"
+            link = "opencv_phase_unwrapping@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_phase_unwrapping"),
-        @Platform(value = "windows", link = "opencv_phase_unwrapping460")
+        @Platform(value = "windows", link = "opencv_phase_unwrapping470")
     },
     target = "org.bytedeco.opencv.opencv_phase_unwrapping",
     global = "org.bytedeco.opencv.global.opencv_phase_unwrapping"

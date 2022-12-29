@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Audet
+ * Copyright (C) 2016-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/version.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
-            link = "opencv_dnn@.406"),
+            link = "opencv_dnn@.407"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn460")},
+        @Platform(value = "windows", link = "opencv_dnn470")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )

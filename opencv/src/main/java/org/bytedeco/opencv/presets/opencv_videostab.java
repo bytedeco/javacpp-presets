@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2019 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -45,15 +45,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",
             "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/inpainting.hpp>",
             "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/wobble_suppression.hpp>", "<opencv2/videostab/stabilizer.hpp>",
-            "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.406",
-            preload = {"opencv_cuda@.406", "opencv_cudaarithm@.406", "opencv_cudafilters@.406",
-                "opencv_cudaimgproc@.406", "opencv_cudafeatures2d@.406", "opencv_cudalegacy@.406",
-                "opencv_cudaoptflow@.406", "opencv_cudawarping@.406"}),
+            "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.407",
+            preload = {"opencv_cuda@.407", "opencv_cudaarithm@.407", "opencv_cudafilters@.407",
+                "opencv_cudaimgproc@.407", "opencv_cudafeatures2d@.407", "opencv_cudalegacy@.407",
+                "opencv_cudaoptflow@.407", "opencv_cudawarping@.407"}),
         @Platform(value = "ios", preload = "libopencv_videostab"),
-        @Platform(value = "windows", link = "opencv_videostab460",
-            preload = {"opencv_cuda460", "opencv_cudaarithm460", "opencv_cudafilters460",
-                "opencv_cudaimgproc460", "opencv_cudafeatures2d460", "opencv_cudalegacy460",
-                "opencv_cudaoptflow460", "opencv_cudawarping460"})},
+        @Platform(value = "windows", link = "opencv_videostab470",
+            preload = {"opencv_cuda470", "opencv_cudaarithm470", "opencv_cudafilters470",
+                "opencv_cudaimgproc470", "opencv_cudafeatures2d470", "opencv_cudalegacy470",
+                "opencv_cudaoptflow470", "opencv_cudawarping470"})},
     target = "org.bytedeco.opencv.opencv_videostab",
     global = "org.bytedeco.opencv.global.opencv_videostab"
 )

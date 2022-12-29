@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
             "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
             "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-            link = "opencv_stitching@.406", preload = {"opencv_cuda@.406", "opencv_cudaarithm@.406", "opencv_cudafilters@.406",
-            "opencv_cudaimgproc@.406", "opencv_cudawarping@.406", "opencv_cudafeatures2d@.406", "opencv_cudalegacy@.406"}),
+            link = "opencv_stitching@.407", preload = {"opencv_cuda@.407", "opencv_cudaarithm@.407", "opencv_cudafilters@.407",
+            "opencv_cudaimgproc@.407", "opencv_cudawarping@.407", "opencv_cudafeatures2d@.407", "opencv_cudalegacy@.407"}),
         @Platform(value = "ios", preload = "libopencv_stitching"),
-        @Platform(value = "windows", link = "opencv_stitching460", preload = {"opencv_cuda460", "opencv_cudaarithm460", "opencv_cudafilters460",
-            "opencv_cudaimgproc460", "opencv_cudawarping460", "opencv_cudafeatures2d460", "opencv_cudalegacy460"})},
+        @Platform(value = "windows", link = "opencv_stitching470", preload = {"opencv_cuda470", "opencv_cudaarithm470", "opencv_cudafilters470",
+            "opencv_cudaimgproc470", "opencv_cudawarping470", "opencv_cudafeatures2d470", "opencv_cudalegacy470"})},
     target = "org.bytedeco.opencv.opencv_stitching",
     global = "org.bytedeco.opencv.global.opencv_stitching"
 )

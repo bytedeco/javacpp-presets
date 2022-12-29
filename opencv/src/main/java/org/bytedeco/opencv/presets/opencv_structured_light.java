@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/structured_light/graycodepattern.hpp>",
                 "<opencv2/structured_light/sinusoidalpattern.hpp>",
             },
-            link = "opencv_structured_light@.406"
+            link = "opencv_structured_light@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_structured_light"),
-        @Platform(value = "windows", link = "opencv_structured_light460")
+        @Platform(value = "windows", link = "opencv_structured_light470")
     },
     target = "org.bytedeco.opencv.opencv_structured_light",
     global = "org.bytedeco.opencv.global.opencv_structured_light"

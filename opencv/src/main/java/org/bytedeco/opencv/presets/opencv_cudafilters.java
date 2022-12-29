@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Sam Carlberg, Samuel Audet
+ * Copyright (C) 2017-2022 Sam Carlberg, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudafilters.hpp>",
-            link = "opencv_cudafilters@.406",
+            link = "opencv_cudafilters@.407",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudafilters460",
+            link = "opencv_cudafilters470",
             extension = "-gpu"
         )
     },

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,11 +36,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_ml.class, opencv_shape.class},
     value = {
-        @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.406",
-            preload = {"opencv_cuda@.406", "opencv_cudaarithm@.406"}),
+        @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.407",
+            preload = {"opencv_cuda@.407", "opencv_cudaarithm@.407"}),
         @Platform(value = "ios", preload = "libopencv_xfeatures2d"),
-        @Platform(value = "windows", link = "opencv_xfeatures2d460",
-            preload = {"opencv_cuda460", "opencv_cudaarithm460"})},
+        @Platform(value = "windows", link = "opencv_xfeatures2d470",
+            preload = {"opencv_cuda470", "opencv_cudaarithm470"})},
     target = "org.bytedeco.opencv.opencv_xfeatures2d",
     global = "org.bytedeco.opencv.global.opencv_xfeatures2d"
 )
