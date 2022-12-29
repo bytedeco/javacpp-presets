@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_core.class,
     value = {
-        @Platform(include = {"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link = "opencv_flann@.406"),
+        @Platform(include = {"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link = "opencv_flann@.407"),
         @Platform(value = "ios", preload = "libopencv_flann"),
-        @Platform(value = "windows", link = "opencv_flann460")},
+        @Platform(value = "windows", link = "opencv_flann470")},
     target = "org.bytedeco.opencv.opencv_flann",
     global = "org.bytedeco.opencv.global.opencv_flann"
 )

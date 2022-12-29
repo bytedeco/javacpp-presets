@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "<opencv2/tracking/tracking_internals.hpp>",
 //                "<opencv2/tracking/tracking_legacy.hpp>",
             },
-            link = "opencv_tracking@.406"
+            link = "opencv_tracking@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_tracking"),
-        @Platform(value = "windows", link = "opencv_tracking460")
+        @Platform(value = "windows", link = "opencv_tracking470")
     },
     target = "org.bytedeco.opencv.opencv_tracking",
     global = "org.bytedeco.opencv.global.opencv_tracking"

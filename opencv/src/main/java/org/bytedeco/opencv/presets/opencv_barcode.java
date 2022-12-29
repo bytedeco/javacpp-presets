@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Samuel Audet
+ * Copyright (C) 2021-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_dnn.class,
     value = {
-        @Platform(include = "<opencv2/barcode.hpp>", link = "opencv_barcode@.406"),
+        @Platform(include = "<opencv2/barcode.hpp>", link = "opencv_barcode@.407"),
         @Platform(value = "ios", preload = "libopencv_barcode"),
-        @Platform(value = "windows", link = "opencv_barcode460")
+        @Platform(value = "windows", link = "opencv_barcode470")
     },
     target = "org.bytedeco.opencv.opencv_barcode",
     global = "org.bytedeco.opencv.global.opencv_barcode"

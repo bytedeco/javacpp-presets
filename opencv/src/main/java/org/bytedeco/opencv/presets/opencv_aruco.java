@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,14 +29,14 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = opencv_calib3d.class,
+    inherit = opencv_objdetect.class,
     value = {
         @Platform(
-            include = {"<opencv2/aruco/dictionary.hpp>", "<opencv2/aruco.hpp>", "<opencv2/aruco/charuco.hpp>"},
-            link = "opencv_aruco@.406"
+            include = {/*"<opencv2/aruco/dictionary.hpp>",*/ "<opencv2/aruco.hpp>", "<opencv2/aruco/aruco_calib.hpp>", "<opencv2/aruco/charuco.hpp>"},
+            link = "opencv_aruco@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_aruco"),
-        @Platform(value = "windows", link = "opencv_aruco460")
+        @Platform(value = "windows", link = "opencv_aruco470")
     },
     target = "org.bytedeco.opencv.opencv_aruco",
     global = "org.bytedeco.opencv.global.opencv_aruco"

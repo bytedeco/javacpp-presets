@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Bram Biesbrouck, Samuel Audet
+ * Copyright (C) 2016-2022 Bram Biesbrouck, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = {opencv_dnn.class, opencv_features2d.class, opencv_ml.class},
     value = {
         @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>", "opencv2/text/textDetector.hpp"},
-            link = "opencv_text@.406"),
+            link = "opencv_text@.407"),
         @Platform(value = "ios", preload = "libopencv_text"),
-        @Platform(value = "windows", link = "opencv_text460")},
+        @Platform(value = "windows", link = "opencv_text470")},
     target = "org.bytedeco.opencv.opencv_text",
     global = "org.bytedeco.opencv.global.opencv_text"
 )

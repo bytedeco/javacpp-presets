@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Samuel Audet
+ * Copyright (C) 2021-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/wechat_qrcode.hpp>",
-            link = "opencv_wechat_qrcode@.406"
+            link = "opencv_wechat_qrcode@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_wechat_qrcode"),
-        @Platform(value = "windows", link = "opencv_wechat_qrcode460")
+        @Platform(value = "windows", link = "opencv_wechat_qrcode470")
     },
     target = "org.bytedeco.opencv.opencv_wechat_qrcode",
     global = "org.bytedeco.opencv.global.opencv_wechat_qrcode"

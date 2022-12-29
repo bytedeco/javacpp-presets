@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_highgui.class, opencv_flann.class},
     value = {
-        @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.406"),
+        @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.407"),
         @Platform(value = "ios", preload = "libopencv_features2d"),
-        @Platform(value = "windows", link = "opencv_features2d460")},
+        @Platform(value = "windows", link = "opencv_features2d470")},
     target = "org.bytedeco.opencv.opencv_features2d",
     global = "org.bytedeco.opencv.global.opencv_features2d"
 )
