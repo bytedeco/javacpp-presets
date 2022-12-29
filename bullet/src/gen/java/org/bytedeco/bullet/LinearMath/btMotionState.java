@@ -16,12 +16,24 @@ import static org.bytedeco.bullet.global.LinearMath.*;
 @Properties(inherit = org.bytedeco.bullet.presets.LinearMath.class)
 public class btMotionState extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public btMotionState() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public btMotionState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public btMotionState(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public btMotionState position(long position) {
+        return (btMotionState)super.position(position);
+    }
+    @Override public btMotionState getPointer(long i) {
+        return new btMotionState((Pointer)this).offsetAddress(i);
+    }
 
 
-	public native void getWorldTransform(@ByRef btTransform worldTrans);
+	@Virtual(true) public native @Const({false, false, true}) void getWorldTransform(@ByRef btTransform worldTrans);
 
 	//Bullet only calls the update of worldtransform for active objects
-	public native void setWorldTransform(@Const @ByRef btTransform worldTrans);
+	@Virtual(true) public native void setWorldTransform(@Const @ByRef btTransform worldTrans);
 }

@@ -38,9 +38,9 @@ public class btDefaultMotionState extends btMotionState {
 	private native void allocate();
 
 	/**synchronizes world transform from user to physics */
-	public native void getWorldTransform(@ByRef btTransform centerOfMassWorldTrans);
+	@Virtual public native @Const({false, false, true}) void getWorldTransform(@ByRef btTransform centerOfMassWorldTrans);
 
 	/**synchronizes world transform from physics to user
 	 * Bullet only calls the update of worldtransform for active objects */
-	public native void setWorldTransform(@Const @ByRef btTransform centerOfMassWorldTrans);
+	@Virtual public native void setWorldTransform(@Const @ByRef btTransform centerOfMassWorldTrans);
 }
