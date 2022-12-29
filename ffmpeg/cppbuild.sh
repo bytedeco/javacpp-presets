@@ -370,6 +370,12 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -625,6 +631,12 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
