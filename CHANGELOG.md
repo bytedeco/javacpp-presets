@@ -1,4 +1,5 @@
 
+ * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to fix that functionality. ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
  * Define `STRING_BYTES_CHARSET` to "UTF-8" for FFmpeg since it appears to assume that ([issue bytedeco/javacv#1945](https://github.com/bytedeco/javacv/issues/1945))
  * Map `at::ITensorListRef` as used by `at::cat()` in presets for PyTorch ([issue #1293](https://github.com/bytedeco/javacpp-presets/issues/1293))
  * Map `torch::data::datasets::ChunkDataReader` and related data loading classes from PyTorch ([issue #1215](https://github.com/bytedeco/javacpp-presets/issues/1215))

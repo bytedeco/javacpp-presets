@@ -148,7 +148,7 @@ public class LinearMath implements InfoMapper {
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 
-            .put(new Info("btIDebugDraw").virtualize())
+            .put(new Info("btIDebugDraw", "btMotionState", "btDefaultMotionState").virtualize())
 
             .put(new Info(
                     "BT_DECLARE_ALIGNED_ALLOCATOR",
