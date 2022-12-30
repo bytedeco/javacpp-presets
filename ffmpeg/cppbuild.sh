@@ -370,12 +370,6 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
-
-        cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=aarch64-linux
-        make -j $MAKEJ
-        make install
-
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -631,12 +625,6 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
-
-        cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-linux
-        make -j $MAKEJ
-        make install
-
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -762,6 +750,12 @@ EOF
             LIBS="-lva-drm -lva-x11 -lva"
         fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-linux
+        make -j $MAKEJ
+        make install
+
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
@@ -890,7 +884,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared
+        CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared
         make -j $MAKEJ
         make install
 
@@ -1407,9 +1401,9 @@ EOF
         cd ../kvazaar-$KVAZAAR_VERSION
         sed -i s/elf64ppc/elf64lppc/ configure
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared
+          CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared
         else
-          CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --enable-static --enable-pic  --disable-shared 
+          CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --enable-static --with-pic  --disable-shared 
         fi
         make -j $MAKEJ
         make install
@@ -1649,7 +1643,7 @@ EOF
         make install
                 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
 
@@ -1770,6 +1764,12 @@ EOF
         make -j $MAKEJ
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-w64-mingw32
+        make -j $MAKEJ
+        make install
+
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid"
@@ -1888,6 +1888,12 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-w64-mingw32
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid"
         make -j $MAKEJ
