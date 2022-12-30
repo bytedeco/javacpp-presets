@@ -372,7 +372,7 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=aarch64-linux
         make -j $MAKEJ
         make install
 
@@ -633,7 +633,7 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=x86_64-linux
+        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-linux
         make -j $MAKEJ
         make install
 
