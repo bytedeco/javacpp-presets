@@ -42,7 +42,8 @@ NVCODEC_VERSION=11.1.5.1
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.0
 WEBP_VERSION=1.2.4
-KVAZAAR_VERSION=2.1.0
+KVAZAAR_VERSION=a4005046ae2ebb3c88e92ff06736ce57b60fdcc7
+# https://codeload.github.com/ultravideo/kvazaar/zip/a4005046ae2ebb3c88e92ff06736ce57b60fdcc7
 FFMPEG_VERSION=5.1.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -63,7 +64,7 @@ download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
-download https://github.com/ultravideo/kvazaar/releases/download/v$KVAZAAR_VERSION/kvazaar-$KVAZAAR_VERSION.tar.gz kvazaar-$KVAZAAR_VERSION.tar.gz
+download https://codeload.github.com/ultravideo/kvazaar/zip/a4005046ae2ebb3c88e92ff06736ce57b60fdcc7 kvazaar-$KVAZAAR_VERSION.zip
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -88,7 +89,7 @@ tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
-tar --totals -xzf ../kvazaar-$KVAZAAR_VERSION.tar.gz
+unzip -qo ../kvazaar-$KVAZAAR_VERSION.zip
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -239,6 +240,13 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -370,6 +378,13 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -498,6 +513,13 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -625,6 +647,13 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
+
+        cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux
+        make -j $MAKEJ
+        make install
+
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
         LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
@@ -753,6 +782,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-linux
         make -j $MAKEJ
         make install
@@ -884,6 +914,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared
         make -j $MAKEJ
         make install
@@ -1065,7 +1096,8 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        CC="arm-linux-gnueabihf-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=arm-linux-gnueabihf
+        ./autogen.sh
+        CC="arm-linux-gnueabihf-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
 
@@ -1204,7 +1236,8 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        CC="aarch64-linux-gnu-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-shared --host=aarch64-linux-gnu
+        ./autogen.sh
+        CC="aarch64-linux-gnu-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
 
@@ -1399,6 +1432,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         sed -i s/elf64ppc/elf64lppc/ configure
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared
@@ -1527,7 +1561,8 @@ EOF
         make install
         
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --host=aarch64-apple-darwin
+        ./autogen.sh
+        ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ
         make install
         
@@ -1643,6 +1678,7 @@ EOF
         make install
                 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
@@ -1767,6 +1803,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
@@ -1890,6 +1927,7 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
+        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-w64-mingw32
         make -j $MAKEJ
         make install
