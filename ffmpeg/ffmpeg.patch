@@ -14,7 +14,7 @@
                               require_pkg_config libjxl_threads "libjxl_threads >= 0.7.0" jxl/thread_parallel_runner.h JxlThreadParallelRunner
  enabled libklvanc         && require libklvanc libklvanc/vanc.h klvanc_context_create -lklvanc
 -enabled libkvazaar        && require_pkg_config libkvazaar "kvazaar >= 0.8.1" kvazaar.h kvz_api_get
-+enabled libkvazaar        && check_lib libkvazaar kvazaar.h kvz_api_get -lkvazaar
++enabled libkvazaar        && require libkvazaar kvazaar.h kvz_api_get -lkvazaar
  enabled liblensfun        && require_pkg_config liblensfun lensfun lensfun.h lf_db_new
  # While it may appear that require is being used as a pkg-config
  # fallback for libmfx, it is actually being used to detect a different
