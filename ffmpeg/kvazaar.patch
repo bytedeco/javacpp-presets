@@ -4,7 +4,7 @@
  AC_SEARCH_LIBS([log], [m c], [], [exit 1])
  AC_SEARCH_LIBS([pow], [m c], [], [exit 1])
  AC_SEARCH_LIBS([sqrt], [m c], [], [exit 1])
-+AC_SEARCH_LIBS([sem_init], [rt c], [], [exit 1])
++AC_SEARCH_LIBS([sem_init], [pthread rt posix4], [], [exit 1])
  
  AC_ARG_WITH([cryptopp],
      AS_HELP_STRING([--with-cryptopp],
