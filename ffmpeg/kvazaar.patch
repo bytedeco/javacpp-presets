@@ -1,0 +1,18 @@
+--- kvazaar-a4005046ae2ebb3c88e92ff06736ce57b60fdcc7/configure.ac	2022-10-12 20:19:40.000000000 +1100
++++ kvazaar-a4005046ae2ebb3c88e92ff06736ce57b60fdcc7-patch/configure.ac	2022-12-31 13:27:15.482424499 +1100
+@@ -79,6 +79,7 @@
+ AC_SEARCH_LIBS([log], [m c], [], [exit 1])
+ AC_SEARCH_LIBS([pow], [m c], [], [exit 1])
+ AC_SEARCH_LIBS([sqrt], [m c], [], [exit 1])
++AC_SEARCH_LIBS([sem_init], [rt c], [], [exit 1])
+ 
+ AC_ARG_WITH([cryptopp],
+     AS_HELP_STRING([--with-cryptopp],
+@@ -157,7 +158,6 @@
+         [linux*|*kfreebsd*], [
+          ASFLAGS="$ASFLAGS -f elf$BITS"
+          LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+-         LIBS="$LIBS -lrt"
+         ], [
+          ASFLAGS="$ASFLAGS -f elf$BITS"
+          LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"

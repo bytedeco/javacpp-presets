@@ -109,6 +109,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
+patch -Np1 -d kvazaar-$KVAZAAR_VERSION < ../../kvazaar.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
