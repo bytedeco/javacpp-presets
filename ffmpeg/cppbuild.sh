@@ -1804,7 +1804,7 @@ EOF
 
         cd ../kvazaar-$KVAZAAR_VERSION
         ./autogen.sh
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-w64-mingw32 || cat config.log
+        CC="clang -D_WIN32" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-w64-mingw32 || cat config.log
         make -j $MAKEJ
         make install
 
@@ -1928,7 +1928,7 @@ EOF
 
         cd ../kvazaar-$KVAZAAR_VERSION
         ./autogen.sh
-        ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-w64-mingw32 || cat config.log
+        CC="clang -D_WIN32" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-w64-mingw32 || cat config.log
         make -j $MAKEJ
         make install
 
