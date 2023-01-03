@@ -1,4 +1,5 @@
 
+ * Remove mapping for `c10::OptionalArrayRef` to simplify calls in presets for PyTorch ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
  * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to allow callbacks ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
  * Define `STRING_BYTES_CHARSET` to "UTF-8" for FFmpeg since it appears to assume that ([issue bytedeco/javacv#1945](https://github.com/bytedeco/javacv/issues/1945))
  * Map `at::ITensorListRef` as used by `at::cat()` in presets for PyTorch ([issue #1293](https://github.com/bytedeco/javacpp-presets/issues/1293))
