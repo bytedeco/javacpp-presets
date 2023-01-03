@@ -739,11 +739,11 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor amax(@ByVal(nullValue = "at::IntArrayRef{}") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
   public native @ByVal Tensor mean(@ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor mean();
-  public native @ByVal Tensor mean(@ByVal OptionalIntArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
-  public native @ByVal Tensor mean(@ByVal OptionalIntArrayRef dim);
+  public native @ByVal Tensor mean(@ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+  public native @ByVal Tensor mean(@ByVal LongArrayRefOptional dim);
   public native @ByVal Tensor mean(@ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor mean(@ByVal DimnameArrayRef dim);
-  public native @ByVal Tensor nanmean(@ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") OptionalIntArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+  public native @ByVal Tensor nanmean(@ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor nanmean();
   public native @ByVal Tensor median();
   public native @ByVal TensorTensorTuple median(@Cast("int64_t") long dim, @Cast("bool") boolean keepdim/*=false*/);
@@ -918,11 +918,11 @@ public class Tensor extends TensorBase {
   public native @Cast("int64_t") long stride(@ByVal Dimname dim);
   public native @ByVal Tensor sum(@ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor sum();
-  public native @ByVal Tensor sum(@ByVal OptionalIntArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
-  public native @ByVal Tensor sum(@ByVal OptionalIntArrayRef dim);
+  public native @ByVal Tensor sum(@ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+  public native @ByVal Tensor sum(@ByVal LongArrayRefOptional dim);
   public native @ByVal Tensor sum(@ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor sum(@ByVal DimnameArrayRef dim);
-  public native @ByVal Tensor nansum(@ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") OptionalIntArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+  public native @ByVal Tensor nansum(@ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
   public native @ByVal Tensor nansum();
   public native @ByVal Tensor sum_to_size(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef size);
   public native @ByVal Tensor sum_to_size(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... size);
@@ -932,10 +932,10 @@ public class Tensor extends TensorBase {
   public native @ByRef Tensor square_();
   public native @ByVal Tensor std(@Cast("bool") boolean unbiased/*=true*/);
   public native @ByVal Tensor std();
-  public native @ByVal Tensor std(@ByVal OptionalIntArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
-  public native @ByVal Tensor std(@ByVal OptionalIntArrayRef dim);
-  public native @ByVal Tensor std(@ByVal OptionalIntArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-  public native @ByVal Tensor std(@ByVal OptionalIntArrayRef dim, @ByVal LongOptional correction);
+  public native @ByVal Tensor std(@ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+  public native @ByVal Tensor std(@ByVal LongArrayRefOptional dim);
+  public native @ByVal Tensor std(@ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+  public native @ByVal Tensor std(@ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
   public native @ByVal Tensor std(@ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
   public native @ByVal Tensor std(@ByVal DimnameArrayRef dim);
   public native @ByVal Tensor std(@ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
@@ -980,10 +980,10 @@ public class Tensor extends TensorBase {
   public native @ByRef Tensor unsqueeze_(@Cast("int64_t") long dim);
   public native @ByVal Tensor var(@Cast("bool") boolean unbiased/*=true*/);
   public native @ByVal Tensor var();
-  public native @ByVal Tensor var(@ByVal OptionalIntArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
-  public native @ByVal Tensor var(@ByVal OptionalIntArrayRef dim);
-  public native @ByVal Tensor var(@ByVal OptionalIntArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
-  public native @ByVal Tensor var(@ByVal OptionalIntArrayRef dim, @ByVal LongOptional correction);
+  public native @ByVal Tensor var(@ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+  public native @ByVal Tensor var(@ByVal LongArrayRefOptional dim);
+  public native @ByVal Tensor var(@ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+  public native @ByVal Tensor var(@ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
   public native @ByVal Tensor var(@ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
   public native @ByVal Tensor var(@ByVal DimnameArrayRef dim);
   public native @ByVal Tensor var(@ByVal DimnameArrayRef dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
@@ -1427,7 +1427,7 @@ public class Tensor extends TensorBase {
   public native @ByVal Tensor inner(@Const @ByRef Tensor other);
   public native @ByVal Tensor outer(@Const @ByRef Tensor vec2);
   public native @ByVal Tensor ger(@Const @ByRef Tensor vec2);
-  public native @ByVal Tensor to_padded_tensor(double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") OptionalIntArrayRef output_size);
+  public native @ByVal Tensor to_padded_tensor(double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional output_size);
   public native @ByVal Tensor to_padded_tensor(double padding);
   public native @ByVal Tensor _nested_tensor_layer_norm(@Const @ByRef TensorOptional weight, @Const @ByRef TensorOptional bias, double eps);
 

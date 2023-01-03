@@ -106,7 +106,7 @@ import org.bytedeco.openblas.presets.openblas;
                 "c10/util/Registry.h",
                 "c10/util/Flags.h",
                 "c10/util/Logging.h",
-                "c10/util/OptionalArrayRef.h",
+//                "c10/util/OptionalArrayRef.h",
                 "c10/core/DeviceType.h",
                 "c10/core/Device.h",
                 "c10/core/DeviceGuard.h",
@@ -1881,9 +1881,12 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::optional<std::vector<c10::ShapeSymbol> >").pointerTypes("ShapeSymbolVectorOptional").define())
                .put(new Info("c10::optional<std::vector<at::Tensor> >").pointerTypes("TensorVectorOptional").define())
                .put(new Info("c10::optional<c10::Device>", "c10::optional<at::Device>", "c10::optional<torch::Device>").pointerTypes("DeviceOptional").define())
-               .put(new Info("c10::optional<c10::ArrayRef<int64_t> >", "c10::optional<c10::IntArrayRef>", "c10::optional<at::IntArrayRef>").pointerTypes("LongArrayRefOptional").define())
-               .put(new Info("c10::optional<c10::ArrayRef<double> >", "c10::optional<at::ArrayRef<double> >").pointerTypes("DoubleArrayRefOptional").define())
-               .put(new Info("c10::optional<c10::ArrayRef<c10::SymInt> >", "c10::optional<at::ArrayRef<c10::SymInt> >").pointerTypes("SymIntArrayRefOptional").define())
+               .put(new Info("c10::optional<c10::ArrayRef<int64_t> >", "c10::optional<c10::IntArrayRef>", "c10::optional<at::IntArrayRef>",
+                             "c10::OptionalArrayRef<int64_t>", "c10::OptionalIntArrayRef", "at::OptionalIntArrayRef").pointerTypes("LongArrayRefOptional").define())
+               .put(new Info("c10::optional<c10::ArrayRef<double> >", "c10::optional<at::ArrayRef<double> >",
+                             "c10::OptionalArrayRef<double>").pointerTypes("DoubleArrayRefOptional").define())
+               .put(new Info("c10::optional<c10::ArrayRef<c10::SymInt> >", "c10::optional<at::ArrayRef<c10::SymInt> >",
+                             "c10::OptionalArrayRef<c10::SymInt>", "c10::OptionalSymIntArrayRef", "at::OptionalSymIntArrayRef").pointerTypes("SymIntArrayRefOptional").define())
                .put(new Info("c10::optional<c10::Layout>", "c10::optional<at::Layout>").pointerTypes("LayoutOptional").define())
                .put(new Info("c10::optional<c10::MemoryFormat>", "c10::optional<at::MemoryFormat>").pointerTypes("MemoryFormatOptional").define())
                .put(new Info("c10::optional<c10::Scalar>", "c10::optional<at::Scalar>").pointerTypes("ScalarOptional").define())
@@ -2296,12 +2299,12 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("c10::ArrayRef<jint>", "c10::ArrayRef<int>", "c10::ArrayRef<int32_t>", "c10::ArrayRef<uint32_t>",
                              "c10::ArrayRef<at::Tag>", "at::ArrayRef<at::Tag>").cast().pointerTypes("IntArrayRef"))
                .put(new Info("c10::ArrayRef<jint>::iterator", "c10::ArrayRef<jint>::const_iterator").cast().pointerTypes("IntPointer"))
-               .put(new Info("c10::ArrayRef<int64_t>", "c10::IntArrayRef", "at::IntArrayRef")
+               .put(new Info("c10::ArrayRef<int64_t>", "c10::IntArrayRef", "at::IntArrayRef", "c10::OptionalArray<int64_t>")
                        .pointerTypes("@Cast(\"c10::ArrayRef<int64_t>*\") LongArrayRef", "@Cast({\"int64_t*\", \"c10::ArrayRef<int64_t>\", \"std::vector<int64_t>&\"}) @StdVector long..."))
                .put(new Info("c10::ArrayRef<jlong>::iterator", "c10::ArrayRef<jlong>::const_iterator").cast().pointerTypes("LongPointer"))
                .put(new Info("c10::ArrayRef<float>").pointerTypes("FloatArrayRef"))
                .put(new Info("c10::ArrayRef<float>::iterator", "c10::ArrayRef<float>::const_iterator").cast().pointerTypes("FloatPointer"))
-               .put(new Info("c10::ArrayRef<double>").pointerTypes("DoubleArrayRef"))
+               .put(new Info("c10::ArrayRef<double>", "c10::OptionalArray<double>").pointerTypes("DoubleArrayRef"))
                .put(new Info("c10::ArrayRef<double>::iterator", "c10::ArrayRef<double>::const_iterator").cast().pointerTypes("DoublePointer"))
                .put(new Info("c10::ArrayRef<size_t>", "at::ArrayRef<size_t>").pointerTypes("SizeTArrayRef"))
                .put(new Info("c10::ArrayRef<size_t>::iterator", "c10::ArrayRef<size_t>::const_iterator").cast().pointerTypes("SizeTPointer"))
@@ -2367,11 +2370,6 @@ public class torch implements LoadEnabled, InfoMapper {
                              "c10::ArrayRef<c10::optional<at::Tensor> >::equals", "c10::ArrayRef<torch::jit::NamedValue>::equals",
                              "c10::ArrayRef<torch::autograd::SavedVariable>::equals", "c10::ArrayRef<torch::autograd::SavedVariable>::vec",
                              "std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").skip())
-               .put(new Info("c10::OptionalArray<int64_t>").pointerTypes("OptionalLongArray"))
-               .put(new Info("c10::OptionalArray<double>").pointerTypes("OptionalDoubleArray"))
-               .put(new Info("c10::OptionalArrayRef<int64_t>").pointerTypes("OptionalIntArrayRef"))
-               .put(new Info("c10::OptionalArrayRef<double>").pointerTypes("OptionalDoubleArrayRef"))
-               .put(new Info("c10::OptionalArrayRef<c10::SymInt>").pointerTypes("OptionalSymIntArrayRef"))
                .put(new Info("c10::VaryingShape<int64_t>").pointerTypes("LongVaryingShape"))
                .put(new Info("c10::VaryingShape<c10::Stride>").pointerTypes("StrideVaryingShape"))
 
