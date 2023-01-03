@@ -21617,6 +21617,15 @@ body of your function, only data pointers.
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device self_device,
     @Const @ByRef LongArrayRefOptional self_sizes);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySlice(
+    @Const @ByRef Tensor self,
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long start,
+    @Cast("int64_t") long stop,
+    @Cast("int64_t") long step,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device self_device,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... self_sizes);
 
 @Namespace("at::indexing::impl") public static native @ByVal Tensor applySelect(
     @Const @ByRef Tensor self,
@@ -21625,6 +21634,13 @@ body of your function, only data pointers.
     @Cast("int64_t") long real_dim,
     @Const @ByRef Device arg4,
     @Const @ByRef LongArrayRefOptional self_sizes);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySelect(
+    @Const @ByRef Tensor self,
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long index,
+    @Cast("int64_t") long real_dim,
+    @Const @ByRef Device arg4,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... self_sizes);
 
 @Namespace("at::indexing::impl") public static native @ByVal Tensor boolToIndexingTensorCPUOrCUDA(
     @Const @ByRef Tensor self,
@@ -21719,7 +21735,7 @@ body of your function, only data pointers.
     @ByRef TensorVector outIndices,
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device original_tensor_device,
-    @Const @ByRef LongArrayRefOptional prev_dim_result_sizes);
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... prev_dim_result_sizes);
 @Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
     @Const @ByRef Tensor prev_dim_result,
     @Const @ByRef Tensor original_tensor,
@@ -21731,6 +21747,39 @@ body of your function, only data pointers.
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device original_tensor_device,
     @Const @ByRef LongArrayRefOptional prev_dim_result_sizes);
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") LongPointer dim_ptr,
+    @Cast("int64_t*") LongPointer specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... prev_dim_result_sizes);
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") LongBuffer dim_ptr,
+    @Cast("int64_t*") LongBuffer specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
+    @Const @ByRef LongArrayRefOptional prev_dim_result_sizes);
+@Namespace("at::indexing") public static native @ByVal Tensor handleDimInMultiDimIndexing(
+    @Const @ByRef Tensor prev_dim_result,
+    @Const @ByRef Tensor original_tensor,
+    @Const @ByRef TensorIndex index,
+    @Cast("int64_t*") long[] dim_ptr,
+    @Cast("int64_t*") long[] specified_dims_ptr,
+    @Cast("int64_t") long real_dim,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device original_tensor_device,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... prev_dim_result_sizes);
 // This mirrors `applySlicing` in
 // torch/csrc/autograd/python_variable_indexing.cpp
 @Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
@@ -21740,6 +21789,13 @@ body of your function, only data pointers.
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device self_device,
     @Const @ByRef LongArrayRefOptional self_sizes);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexArrayRef indices,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device self_device,
+    @ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... self_sizes);
  // namespace impl
 
 @Namespace("at::indexing") public static native @ByVal Tensor dispatch_index(
@@ -22729,6 +22785,7 @@ body of your function, only data pointers.
 // aten::_assert_tensor_metadata(Tensor a, int[]? size=None, int[]? stride=None, ScalarType? dtype=None) -> ()
 @Namespace("at") public static native void _assert_tensor_metadata(@Const @ByRef Tensor a, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional size, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional stride, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native void _assert_tensor_metadata(@Const @ByRef Tensor a);
+@Namespace("at") public static native void _assert_tensor_metadata(@Const @ByRef Tensor a, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] size, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 
 
@@ -28473,6 +28530,8 @@ body of your function, only data pointers.
 // aten::_nested_sum_backward(Tensor grad, Tensor self, int[1]? dim, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _nested_sum_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor _nested_sum_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor _nested_sum_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor _nested_sum_backward(@Const @ByRef Tensor grad, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 
 
@@ -31124,9 +31183,11 @@ body of your function, only data pointers.
 
 // aten::_test_optional_filled_intlist.out(Tensor values, int[2]? addends, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _test_optional_filled_intlist_out(@ByRef Tensor out, @Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends);
+@Namespace("at") public static native @ByRef Tensor _test_optional_filled_intlist_out(@ByRef Tensor out, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... addends);
 
 // aten::_test_optional_filled_intlist.out(Tensor values, int[2]? addends, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _test_optional_filled_intlist_outf(@Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _test_optional_filled_intlist_outf(@Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] addends, @ByRef Tensor out);
 
 
 
@@ -31196,9 +31257,11 @@ body of your function, only data pointers.
 
 // aten::_test_optional_intlist.out(Tensor values, int[]? addends, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _test_optional_intlist_out(@ByRef Tensor out, @Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends);
+@Namespace("at") public static native @ByRef Tensor _test_optional_intlist_out(@ByRef Tensor out, @Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... addends);
 
 // aten::_test_optional_intlist.out(Tensor values, int[]? addends, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _test_optional_intlist_outf(@Const @ByRef Tensor values, @ByVal LongArrayRefOptional addends, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _test_optional_intlist_outf(@Const @ByRef Tensor values, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] addends, @ByRef Tensor out);
 
 
 
@@ -32089,6 +32152,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_bicubic2d_aa.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bicubic2d_aa.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32122,9 +32186,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_bicubic2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bicubic2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_bicubic2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32161,7 +32227,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_bicubic2d_aa_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bicubic2d_aa_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bicubic2d_aa_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32195,11 +32261,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_bicubic2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bicubic2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_bicubic2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bicubic2d_aa_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32236,6 +32302,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_bilinear2d_aa.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bilinear2d_aa.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32269,9 +32336,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_bilinear2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bilinear2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_bilinear2d_aa.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32308,7 +32377,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_bilinear2d_aa_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bilinear2d_aa_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_bilinear2d_aa_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32342,11 +32411,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_bilinear2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_bilinear2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_bilinear2d_aa_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_bilinear2d_aa_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32383,6 +32452,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact1d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact1d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32416,9 +32486,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32455,7 +32527,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact1d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32489,11 +32561,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact1d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32530,6 +32602,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact2d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact2d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32563,9 +32636,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32602,7 +32677,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact2d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32636,11 +32711,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact2d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32677,6 +32752,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact3d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact3d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32710,9 +32786,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32749,7 +32827,7 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor _upsample_nearest_exact3d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -32783,11 +32861,11 @@ body of your function, only data pointers.
 
 // aten::_upsample_nearest_exact3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::_upsample_nearest_exact3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::_upsample_nearest_exact3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor _upsample_nearest_exact3d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -38689,7 +38767,7 @@ body of your function, only data pointers.
 
 // aten::convolution_backward(Tensor grad_output, Tensor input, Tensor weight, SymInt[]? bias_sizes, int[] stride, int[] padding, int[] dilation, bool transposed, int[] output_padding, int groups, bool[3] output_mask) -> (Tensor, Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple convolution_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal TensorTensorTensorTuple convolution_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
+@Namespace("at") public static native @ByVal TensorTensorTensorTuple convolution_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 
 // aten::convolution_backward(Tensor grad_output, Tensor input, Tensor weight, SymInt[]? bias_sizes, int[] stride, int[] padding, int[] dilation, bool transposed, int[] output_padding, int groups, bool[3] output_mask) -> (Tensor, Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTensorTuple convolution_backward_symint(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal SymIntArrayRefOptional bias_sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
@@ -38697,11 +38775,11 @@ body of your function, only data pointers.
 
 // aten::convolution_backward.out(Tensor grad_output, Tensor input, Tensor weight, SymInt[]? bias_sizes, int[] stride, int[] padding, int[] dilation, bool transposed, int[] output_padding, int groups, bool[3] output_mask, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2) -> (Tensor(a!), Tensor(b!), Tensor(c!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
 
 // aten::convolution_backward.out(Tensor grad_output, Tensor input, Tensor weight, SymInt[]? bias_sizes, int[] stride, int[] padding, int[] dilation, bool transposed, int[] output_padding, int groups, bool[3] output_mask, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2) -> (Tensor(a!), Tensor(b!), Tensor(c!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2);
-@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal LongArrayRefOptional bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] bias_sizes, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("bool") boolean transposed, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2);
 
 // aten::convolution_backward.out(Tensor grad_output, Tensor input, Tensor weight, SymInt[]? bias_sizes, int[] stride, int[] padding, int[] dilation, bool transposed, int[] output_padding, int groups, bool[3] output_mask, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2) -> (Tensor(a!), Tensor(b!), Tensor(c!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> convolution_backward_symint_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor input, @Const @ByRef Tensor weight, @ByVal SymIntArrayRefOptional bias_sizes, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef stride, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef padding, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dilation, @Cast("bool") boolean transposed, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef output_padding, @Cast("int64_t") long groups, @ByVal @Cast("std::array<bool,3>*") BoolPointer output_mask);
@@ -40952,6 +41030,7 @@ body of your function, only data pointers.
 // aten::einsum(str equation, Tensor[] tensors, *, int[]? path=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional path);
 @Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... path);
 
 
 
@@ -42526,16 +42605,16 @@ body of your function, only data pointers.
 // aten::fft_fft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_fft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_fft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -42608,13 +42687,16 @@ body of your function, only data pointers.
 // aten::fft_fftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_fftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_fftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -42646,6 +42728,7 @@ body of your function, only data pointers.
 // aten::fft_fftshift(Tensor self, int[1]? dim=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim);
 @Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_fftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 
 
@@ -42715,16 +42798,16 @@ body of your function, only data pointers.
 // aten::fft_hfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_hfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_hfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
 
 
 
@@ -42756,13 +42839,16 @@ body of your function, only data pointers.
 // aten::fft_hfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_hfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_hfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
 
 
 
@@ -42832,16 +42918,16 @@ body of your function, only data pointers.
 // aten::fft_ifft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ifft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ifft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -42873,13 +42959,16 @@ body of your function, only data pointers.
 // aten::fft_ifftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ifftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ifftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -42911,6 +43000,7 @@ body of your function, only data pointers.
 // aten::fft_ifftshift(Tensor self, int[1]? dim=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim);
 @Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_ifftshift(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 
 
@@ -42980,16 +43070,16 @@ body of your function, only data pointers.
 // aten::fft_ihfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ihfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ihfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
 
 
 
@@ -43021,13 +43111,16 @@ body of your function, only data pointers.
 // aten::fft_ihfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ihfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_ihfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
 
 
 
@@ -43097,16 +43190,16 @@ body of your function, only data pointers.
 // aten::fft_irfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_irfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_irfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -43138,13 +43231,16 @@ body of your function, only data pointers.
 // aten::fft_irfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_irfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_irfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -43214,16 +43310,16 @@ body of your function, only data pointers.
 // aten::fft_rfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_rfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_rfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -43296,13 +43392,16 @@ body of your function, only data pointers.
 // aten::fft_rfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_rfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
 
 // aten::fft_rfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
 
 
 
@@ -49389,24 +49488,30 @@ body of your function, only data pointers.
 // aten::linalg_norm(Tensor self, Scalar? ord=None, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_norm.ord_str(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_norm.out(Tensor self, Scalar? ord=None, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_norm.out(Tensor self, Scalar? ord=None, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::linalg_norm.ord_str_out(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_norm.ord_str_out(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -49811,13 +49916,16 @@ body of your function, only data pointers.
 // aten::linalg_tensorsolve(Tensor self, Tensor other, int[]? dims=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dims);
 @Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByVal Tensor linalg_tensorsolve(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
 
 // aten::linalg_tensorsolve.out(Tensor self, Tensor other, int[]? dims=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dims);
 @Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other);
+@Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
 
 // aten::linalg_tensorsolve.out(Tensor self, Tensor other, int[]? dims=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal LongArrayRefOptional dims, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_tensorsolve_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dims, @ByRef Tensor out);
 
 
 
@@ -49918,13 +50026,16 @@ body of your function, only data pointers.
 // aten::linalg_vector_norm(Tensor self, Scalar ord=2, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor linalg_vector_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_vector_norm(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor linalg_vector_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_vector_norm.out(Tensor self, Scalar ord=2, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_vector_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_vector_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_vector_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "at::Scalar(2)") Scalar ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_vector_norm.out(Tensor self, Scalar ord=2, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_vector_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_vector_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -52049,13 +52160,18 @@ body of your function, only data pointers.
 // aten::mean.dim(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::mean.out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::mean.out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::mean.names_dim(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -54005,13 +54121,16 @@ body of your function, only data pointers.
 // aten::nanmean(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor nanmean(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor nanmean(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor nanmean(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::nanmean.out(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor nanmean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor nanmean_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor nanmean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::nanmean.out(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor nanmean_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanmean_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -54150,13 +54269,16 @@ body of your function, only data pointers.
 // aten::nansum(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor nansum(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor nansum(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor nansum(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::nansum.out(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor nansum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor nansum_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor nansum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::nansum.out(Tensor self, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor nansum_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nansum_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -54799,6 +54921,7 @@ body of your function, only data pointers.
 // aten::nested_to_padded_tensor(Tensor self, float padding, int[]? output_size=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor nested_to_padded_tensor(@Const @ByRef Tensor self, double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional output_size);
 @Namespace("at") public static native @ByVal Tensor nested_to_padded_tensor(@Const @ByRef Tensor self, double padding);
+@Namespace("at") public static native @ByVal Tensor nested_to_padded_tensor(@Const @ByRef Tensor self, double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
 
 
 
@@ -64972,24 +65095,34 @@ body of your function, only data pointers.
 // aten::std.dim(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::std.correction(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::std.out(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::std.out(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::std.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::std.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::std.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -65047,10 +65180,14 @@ body of your function, only data pointers.
 // aten::std_mean.dim(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::std_mean.correction(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::std_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -65063,9 +65200,12 @@ body of your function, only data pointers.
 // aten::std_mean.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::std_mean.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out0, @ByRef Tensor out1);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> std_mean_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out0, @ByRef Tensor out1);
 
 
 
@@ -65256,6 +65396,8 @@ body of your function, only data pointers.
 // aten::sum.dim_IntList(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::sum.dim_DimnameList(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -65264,9 +65406,12 @@ body of your function, only data pointers.
 // aten::sum.IntList_out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::sum.IntList_out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::sum.DimnameList_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -66109,9 +66254,11 @@ body of your function, only data pointers.
 // aten::to_padded_tensor.out(Tensor self, float padding, int[]? output_size=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor to_padded_tensor_out(@ByRef Tensor out, @Const @ByRef Tensor self, double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional output_size);
 @Namespace("at") public static native @ByRef Tensor to_padded_tensor_out(@ByRef Tensor out, @Const @ByRef Tensor self, double padding);
+@Namespace("at") public static native @ByRef Tensor to_padded_tensor_out(@ByRef Tensor out, @Const @ByRef Tensor self, double padding, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... output_size);
 
 // aten::to_padded_tensor.out(Tensor self, float padding, int[]? output_size=None, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor to_padded_tensor_outf(@Const @ByRef Tensor self, double padding, @ByVal LongArrayRefOptional output_size, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor to_padded_tensor_outf(@Const @ByRef Tensor self, double padding, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByRef Tensor out);
 
 
 
@@ -67464,6 +67611,7 @@ body of your function, only data pointers.
 
 // aten::upsample_bicubic2d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bicubic2d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_bicubic2d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bicubic2d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bicubic2d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67497,9 +67645,11 @@ body of your function, only data pointers.
 
 // aten::upsample_bicubic2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bicubic2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_bicubic2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67536,7 +67686,7 @@ body of your function, only data pointers.
 
 // aten::upsample_bicubic2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bicubic2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_bicubic2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_bicubic2d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bicubic2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bicubic2d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67570,11 +67720,11 @@ body of your function, only data pointers.
 
 // aten::upsample_bicubic2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bicubic2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_bicubic2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bicubic2d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67611,6 +67761,7 @@ body of your function, only data pointers.
 
 // aten::upsample_bilinear2d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bilinear2d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_bilinear2d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bilinear2d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bilinear2d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67644,9 +67795,11 @@ body of your function, only data pointers.
 
 // aten::upsample_bilinear2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bilinear2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_bilinear2d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67683,7 +67836,7 @@ body of your function, only data pointers.
 
 // aten::upsample_bilinear2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bilinear2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_bilinear2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_bilinear2d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bilinear2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_bilinear2d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67717,11 +67870,11 @@ body of your function, only data pointers.
 
 // aten::upsample_bilinear2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_bilinear2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_bilinear2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_bilinear2d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67758,6 +67911,7 @@ body of your function, only data pointers.
 
 // aten::upsample_linear1d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_linear1d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_linear1d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_linear1d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_linear1d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67791,9 +67945,11 @@ body of your function, only data pointers.
 
 // aten::upsample_linear1d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_linear1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_linear1d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_linear1d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_linear1d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67830,7 +67986,7 @@ body of your function, only data pointers.
 
 // aten::upsample_linear1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_linear1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_linear1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_linear1d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_linear1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_linear1d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67864,11 +68020,11 @@ body of your function, only data pointers.
 
 // aten::upsample_linear1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_linear1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_linear1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_linear1d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67905,6 +68061,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest1d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest1d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest1d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest1d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest1d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67938,9 +68095,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest1d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -67977,7 +68136,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_nearest1d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest1d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest1d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest1d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68011,11 +68170,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest1d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest1d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68052,6 +68211,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest2d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest2d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest2d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest2d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest2d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68085,9 +68245,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest2d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68124,7 +68286,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_nearest2d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest2d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest2d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest2d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68158,11 +68320,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest2d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest2d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68199,6 +68361,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest3d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest3d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest3d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest3d.vec(Tensor input, SymInt[]? output_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest3d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68232,9 +68395,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest3d.vec_out(Tensor input, SymInt[]? output_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68271,7 +68436,7 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_nearest3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_nearest3d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_nearest3d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68305,11 +68470,11 @@ body of your function, only data pointers.
 
 // aten::upsample_nearest3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_nearest3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_nearest3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_nearest3d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68346,6 +68511,7 @@ body of your function, only data pointers.
 
 // aten::upsample_trilinear3d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_trilinear3d(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_trilinear3d(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_trilinear3d.vec(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_trilinear3d_symint(@Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68379,9 +68545,11 @@ body of your function, only data pointers.
 
 // aten::upsample_trilinear3d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_trilinear3d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_outf(@Const @ByRef Tensor input, @ByVal LongArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_outf(@Const @ByRef Tensor input, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_trilinear3d.vec_out(Tensor input, SymInt[]? output_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_symint_out(@ByRef Tensor out, @Const @ByRef Tensor input, @ByVal SymIntArrayRefOptional output_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68418,7 +68586,7 @@ body of your function, only data pointers.
 
 // aten::upsample_trilinear3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_trilinear3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByVal Tensor upsample_trilinear3d_backward(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByVal Tensor upsample_trilinear3d_backward(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_trilinear3d_backward.vec(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor upsample_trilinear3d_backward_symint(@Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68452,11 +68620,11 @@ body of your function, only data pointers.
 
 // aten::upsample_trilinear3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
-@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
+@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
 
 // aten::upsample_trilinear3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal LongArrayRefOptional output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_outf(@Const @ByRef Tensor grad_output, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] output_size, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors, @ByRef Tensor out);
 
 // aten::upsample_trilinear3d_backward.vec_out(Tensor grad_output, SymInt[]? output_size, SymInt[] input_size, bool align_corners, float[]? scale_factors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor upsample_trilinear3d_backward_symint_out(@ByRef Tensor out, @Const @ByRef Tensor grad_output, @ByVal SymIntArrayRefOptional output_size, @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef input_size, @Cast("bool") boolean align_corners, @ByVal DoubleArrayRefOptional scale_factors);
@@ -68624,24 +68792,34 @@ body of your function, only data pointers.
 // aten::var.dim(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::var.correction(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::var.out(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::var.out(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::var.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::var.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::var.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -68699,10 +68877,14 @@ body of your function, only data pointers.
 // aten::var_mean.dim(Tensor self, int[1]? dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dim);
 
 // aten::var_mean.correction(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::var_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal TensorTensorTuple var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased/*=true*/, @Cast("bool") boolean keepdim/*=false*/);
@@ -68715,9 +68897,12 @@ body of your function, only data pointers.
 // aten::var_mean.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction);
 
 // aten::var_mean.correction_out(Tensor self, int[1]? dim, *, int? correction, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out0, @ByRef Tensor out1);
+@Namespace("at") public static native @ByVal @Cast("std::tuple<at::Tensor&,at::Tensor&>*") PointerPointer<Tensor> var_mean_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal LongOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out0, @ByRef Tensor out1);
 
 
 
@@ -71650,10 +71835,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("torch::jit::tracer") public static native void addInputs(
     JitNode n,
     @Cast("const char*") BytePointer name,
-    @Const @ByRef LongArrayRefOptional value);
-@Namespace("torch::jit::tracer") public static native void addInputs(
-    JitNode n,
-    String name,
     @Const @ByRef LongArrayRefOptional value);
 @Namespace("torch::jit::tracer") public static native void addInputs(
     JitNode n,

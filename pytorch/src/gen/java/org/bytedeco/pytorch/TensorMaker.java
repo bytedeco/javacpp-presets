@@ -35,6 +35,7 @@ public class TensorMaker extends Pointer {
 
 
   public native @ByRef @NoException(true) TensorMaker strides(@ByVal LongArrayRefOptional value);
+  public native @ByRef @NoException(true) TensorMaker strides(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... value);
 
   public native @ByRef @NoException(true) TensorMaker storage_offset(@ByVal LongOptional value);
 
