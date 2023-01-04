@@ -42,7 +42,7 @@ NVCODEC_VERSION=11.1.5.1
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.0
 WEBP_VERSION=1.2.4
-KVAZAAR_VERSION=a4005046ae2ebb3c88e92ff06736ce57b60fdcc7
+KVAZAAR_VERSION=2.2.0
 FFMPEG_VERSION=5.1.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -63,7 +63,7 @@ download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
-download https://codeload.github.com/ultravideo/kvazaar/zip/a4005046ae2ebb3c88e92ff06736ce57b60fdcc7 kvazaar-$KVAZAAR_VERSION.zip
+download https://github.com/ultravideo/kvazaar/releases/download/v$KVAZAAR_VERSION/kvazaar-$KVAZAAR_VERSION.tar.gz kvazaar-$KVAZAAR_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -88,7 +88,7 @@ tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
-unzip -qo ../kvazaar-$KVAZAAR_VERSION.zip
+tar --totals -xzf ../kvazaar-$KVAZAAR_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -242,7 +242,6 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux || cat config.log
         make -j $MAKEJ
         make install
@@ -380,7 +379,6 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-linux || cat config.log
         make -j $MAKEJ
         make install
@@ -515,7 +513,6 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux || cat config.log
         make -j $MAKEJ
         make install
@@ -649,7 +646,6 @@ EOF
         make install
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux || cat config.log
         make -j $MAKEJ
         make install
@@ -782,7 +778,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-linux || cat config.log
         make -j $MAKEJ
         make install
@@ -914,7 +909,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared || cat config.log
         make -j $MAKEJ
         make install
@@ -1096,7 +1090,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="arm-linux-gnueabihf-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=arm-linux-gnueabihf || cat config.log
         make -j $MAKEJ
         make install
@@ -1236,7 +1229,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="aarch64-linux-gnu-gcc" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=aarch64-linux-gnu || cat config.log
         make -j $MAKEJ
         make install
@@ -1432,7 +1424,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         sed -i s/elf64ppc/elf64lppc/ configure
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared || cat config.log
@@ -1561,7 +1552,6 @@ EOF
         make install
         
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-apple-darwin || cat config.log
         make -j $MAKEJ
         make install
@@ -1678,7 +1668,6 @@ EOF
         make install
                 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         ./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic || cat config.log
         make -j $MAKEJ
         make install
@@ -1803,7 +1792,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="gcc -m32" CFLAGS="-D_WIN32" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=i686-w64-mingw32 || cat config.log
         make -j $MAKEJ
         make install
@@ -1927,7 +1915,6 @@ EOF
         make install PREFIX=$INSTALL_PATH
 
         cd ../kvazaar-$KVAZAAR_VERSION
-        ./autogen.sh
         CC="gcc -m64" CFLAGS="-D_WIN32" ./configure --prefix=$INSTALL_PATH --enable-static --with-pic --disable-shared --host=x86_64-w64-mingw32 || cat config.log
         make -j $MAKEJ
         make install
