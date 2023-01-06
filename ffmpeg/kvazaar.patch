@@ -1,5 +1,87 @@
---- kvazaar-a4005046ae2ebb3c88e92ff06736ce57b60fdcc7/configure.ac	2022-10-12 20:19:40.000000000 +1100
-+++ kvazaar-a4005046ae2ebb3c88e92ff06736ce57b60fdcc7-patch/configure.ac	2022-12-31 13:27:15.482424499 +1100
+Only in kvazaar-2.2.0-patch: autom4te.cache
+diff -aur kvazaar-2.2.0/configure kvazaar-2.2.0-patch/configure
+--- kvazaar-2.2.0/configure	2023-01-04 20:47:30.000000000 +1100
++++ kvazaar-2.2.0-patch/configure	2023-01-06 12:51:27.863126084 +1100
+@@ -18088,6 +18088,67 @@
+   exit 1
+ fi
+ 
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing sem_init" >&5
++printf %s "checking for library containing sem_init... " >&6; }
++if test ${ac_cv_search_sem_init+y}
++then :
++  printf %s "(cached) " >&6
++else $as_nop
++  ac_func_search_save_LIBS=$LIBS
++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++char sem_init ();
++int
++main (void)
++{
++return sem_init ();
++  ;
++  return 0;
++}
++_ACEOF
++for ac_lib in '' pthread rt posix4
++do
++  if test -z "$ac_lib"; then
++    ac_res="none required"
++  else
++    ac_res=-l$ac_lib
++    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
++  fi
++  if ac_fn_c_try_link "$LINENO"
++then :
++  ac_cv_search_sem_init=$ac_res
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.beam \
++    conftest$ac_exeext
++  if test ${ac_cv_search_sem_init+y}
++then :
++  break
++fi
++done
++if test ${ac_cv_search_sem_init+y}
++then :
++
++else $as_nop
++  ac_cv_search_sem_init=no
++fi
++rm conftest.$ac_ext
++LIBS=$ac_func_search_save_LIBS
++fi
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_sem_init" >&5
++printf "%s\n" "$ac_cv_search_sem_init" >&6; }
++ac_res=$ac_cv_search_sem_init
++if test "$ac_res" != no
++then :
++  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
++
++else $as_nop
++  exit 1
++fi
++
+ 
+ 
+ # Check whether --with-cryptopp was given.
+@@ -19641,7 +19702,6 @@
+ 
+          ASFLAGS="$ASFLAGS -f elf$BITS"
+          LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+-         LIBS="$LIBS -lrt"
+          ;; #(
+   *) :
+ 
+Only in kvazaar-2.2.0-patch: configure~
+diff -aur kvazaar-2.2.0/configure.ac kvazaar-2.2.0-patch/configure.ac
+--- kvazaar-2.2.0/configure.ac	2023-01-04 20:40:58.000000000 +1100
++++ kvazaar-2.2.0-patch/configure.ac	2023-01-06 12:43:27.493134043 +1100
 @@ -79,6 +79,7 @@
  AC_SEARCH_LIBS([log], [m c], [], [exit 1])
  AC_SEARCH_LIBS([pow], [m c], [], [exit 1])
@@ -16,3 +98,16 @@
          ], [
           ASFLAGS="$ASFLAGS -f elf$BITS"
           LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+diff -aur kvazaar-2.2.0/Makefile.in kvazaar-2.2.0-patch/Makefile.in
+--- kvazaar-2.2.0/Makefile.in	2023-01-04 20:47:30.000000000 +1100
++++ kvazaar-2.2.0-patch/Makefile.in	2023-01-06 12:51:28.115125299 +1100
+@@ -200,7 +200,8 @@
+ 	$(top_srcdir)/build-aux/ltmain.sh \
+ 	$(top_srcdir)/build-aux/missing README.md build-aux/ar-lib \
+ 	build-aux/compile build-aux/config.guess build-aux/config.sub \
+-	build-aux/install-sh build-aux/ltmain.sh build-aux/missing
++	build-aux/depcomp build-aux/install-sh build-aux/ltmain.sh \
++	build-aux/missing
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)

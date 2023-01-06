@@ -63,7 +63,7 @@ download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
-download https://github.com/ultravideo/kvazaar/releases/download/v$KVAZAAR_VERSION/kvazaar-$KVAZAAR_VERSION.tar.gz kvazaar-$KVAZAAR_VERSION.tar.gz
+download https://github.com/ultravideo/kvazaar/archive/refs/tags/v$KVAZAAR_VERSION.tar.gz kvazaar-$KVAZAAR_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
