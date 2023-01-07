@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Samuel Audet
+ * Copyright (C) 2019-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -107,6 +107,7 @@ public class numpy implements InfoMapper {
                                                                 "#define PyDataMem_DefaultHandler .*").skip())
                .put(new Info("__ufunc_api.h").linePatterns("#define PyUFunc_Type .*",
                                                            "         PyUFunc_API\\[42\\]\\)").skip())
+               .put(new Info("npy_math.h").linePatterns("#define npy_.*").skip())
 
                .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
                              "NPY_GCC_TARGET_AVX", "NPY_GCC_TARGET_FMA", "NPY_GCC_TARGET_AVX2", "NPY_GCC_TARGET_AVX512F", "NPY_GCC_TARGET_AVX512_SKX",

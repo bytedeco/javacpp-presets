@@ -8,10 +8,9 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-HIGHS=1.1.1
-SCIPY_VERSION=1.8.0
+SCIPY_VERSION=1.10.0rc1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download https://github.com/ERGO-Code/HiGHS/archive/refs/tags/v$HIGHS.tar.gz HiGHS-$HIGHS.tar.gz
+download https://github.com/scipy/HiGHS/archive/refs/heads/main.tar.gz HiGHS-main.tar.gz
 download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
 download https://github.com/scipy/PROPACK/archive/refs/heads/main.tar.gz PROPACK-main.tar.gz
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
@@ -52,33 +51,34 @@ NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../boost_$BOOST.tar.gz
-tar --totals -xzf ../HiGHS-$HIGHS.tar.gz
+tar --totals -xzf ../HiGHS-main.tar.gz
 tar --totals -xzf ../unuran-main.tar.gz
 tar --totals -xzf ../PROPACK-main.tar.gz
 tar --totals -xzf ../scipy-$SCIPY_VERSION.tar.gz
 cp -a boost_$BOOST/* scipy-$SCIPY_VERSION/scipy/_lib/boost/
-#cp -a HiGHS-$HIGHS/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
+cp -a HiGHS-main/* scipy-$SCIPY_VERSION/scipy/_lib/highs/
 cp -a unuran-main/* scipy-$SCIPY_VERSION/scipy/_lib/unuran/
 cp -a PROPACK-main/* scipy-$SCIPY_VERSION/scipy/sparse/linalg/_propack/PROPACK/
 cd scipy-$SCIPY_VERSION
 
 # prevent setuptools from trying to build NumPy
 sedinplace '/req_np/d' setup.py
+sedinplace 's/README.rst/README.md/g' scipy/_lib/setup.py
 
 echo "[openblas]"                                  > site.cfg
 echo "libraries = openblas"                       >> site.cfg
 echo "library_dirs = $OPENBLAS_PATH/lib/"         >> site.cfg
 echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 
-if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.10/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.11/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -97,39 +97,38 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 # https://github.com/scipy/scipy/issues/15281
 export SCIPY_USE_PYTHRAN=0
 
-TOOLS="setuptools==59.1.0 cython==0.29.24 pybind11==2.6.2 pythran==0.10.0 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.4.0 gast==0.5.0"
+TOOLS="setuptools==59.1.0 cython==0.29.30 pybind11==2.10.1 pythran==0.10.0 decorator==5.1.0 six==1.16.0 networkx==2.6.3 ply==3.11 beniget==0.4.0 gast==0.5.0"
 if ! $PYTHON_BIN_PATH -m pip install --no-deps --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    chmod +x "$CPYTHON_HOST_PATH/bin/python3.10"
+    chmod +x "$CPYTHON_HOST_PATH/bin/python3.11"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.10/" crossenv==1.0 numpy==1.22.2 $TOOLS
-    "$CPYTHON_HOST_PATH/bin/python3.10" -m crossenv "$PYTHON_BIN_PATH" crossenv
-    cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.10/"
-#    cp -a "$CPYTHON_HOST_PATH/lib/python3.10/include" "$PYTHON_LIB_PATH"
+    "$CPYTHON_HOST_PATH/bin/python3.11" -m pip install --no-deps --target="$CPYTHON_HOST_PATH/lib/python3.11/" crossenv==1.0 numpy==1.24.0 $TOOLS
+    "$CPYTHON_HOST_PATH/bin/python3.11" -m crossenv "$PYTHON_BIN_PATH" crossenv
+    cp -a "$NUMPY_PATH/python/numpy" "$CPYTHON_HOST_PATH/lib/python3.11/"
+#    cp -a "$CPYTHON_HOST_PATH/lib/python3.11/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
     cross-expose cython numpy pybind11 pythran
-    chmod +x $CPYTHON_HOST_PATH/lib/python3.10/bin/*
-    export PATH="$CPYTHON_HOST_PATH/lib/python3.10/bin/:$PATH"
+    chmod +x $CPYTHON_HOST_PATH/lib/python3.11/bin/*
+    export PATH="$CPYTHON_HOST_PATH/lib/python3.11/bin/:$PATH"
     export PYTHON_BIN_PATH="python"
     export NUMPY_MADVISE_HUGEPAGE=1
 
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.10-config)
+    PREFIX_HOST_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_HOST_PATH/bin/python3.11-config)
     mkdir -p $PREFIX_HOST_PATH
     cp -a $CPYTHON_HOST_PATH/* $PREFIX_HOST_PATH
 fi
 
 if [[ $PLATFORM == linux* ]]; then
     # For some reason, setup.py fails on Linux if the Python installation is not at its original prefix
-    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.10-config)
+    PREFIX_PATH=$(sed -n 's/^prefix="\(.*\)"/\1/p' $CPYTHON_PATH/bin/python3.11-config)
     mkdir -p $PREFIX_PATH
     cp -a $CPYTHON_PATH/* $PREFIX_PATH
 fi
 
 case $PLATFORM in
     linux-armhf)
-        FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99" F77="arm-linux-gnueabihf-gfortran" F90="$F77" FFLAGS="-fPIC" LDFLAGS="-shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
@@ -149,7 +148,7 @@ case $PLATFORM in
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
-        export F77="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export F77="$(ls -1 /usr/local/bin/gfortran-* | head -n 1)"
         export F90="$F77"
         export LDFLAGS="-L/usr/lib/"
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas -lpthread -lgfortran install --prefix $INSTALL_PATH
@@ -170,6 +169,7 @@ case $PLATFORM in
         export INSTALL_PATH=$(cygpath -w $INSTALL_PATH)
         export ATLAS=None
         cmd.exe //c "cd \\scipy & $PYTHON_BIN_PATH setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH"
+        cmd.exe //c "rmdir \\scipy"
         ;;
     windows-x86_64)
         # parameters required by clang-cl
@@ -192,7 +192,11 @@ case $PLATFORM in
         ;;
 esac
 
-ln -snf $PYTHON_INSTALL_PATH/scipy-*/ ../python
+if [[ -d $PYTHON_INSTALL_PATH/scipy ]]; then
+    ln -snf $PYTHON_INSTALL_PATH ../python
+else
+    ln -snf $PYTHON_INSTALL_PATH/scipy-*/ ../python
+fi
 rm -Rf $(find ../ -iname __pycache__)
 
 cd ../..

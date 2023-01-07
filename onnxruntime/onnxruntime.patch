@@ -1,8 +1,8 @@
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 2534b99ff..f5591e599 100644
+index 522b3e550..aad16fc02 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
-@@ -302,8 +302,8 @@ endif()
+@@ -340,8 +339,8 @@ endif()
  # Enable space optimization for gcc/clang
  # Cannot use "-ffunction-sections -fdata-sections" if we enable bitcode (iOS)
  if (NOT MSVC AND NOT onnxruntime_ENABLE_BITCODE)
@@ -12,12 +12,12 @@ index 2534b99ff..f5591e599 100644
 +  string(APPEND CMAKE_C_FLAGS " -Wextra -I/usr/local/include")
  endif()
  
- if (onnxruntime_BUILD_WEBASSEMBLY)
+ if (onnxruntime_ENABLE_EAGER_MODE)
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index be50c0d88..4cdfeacde 100644
+index 78e3c1b61..8ba7a909a 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -104,9 +104,9 @@ target_compile_definitions(onnxruntime PRIVATE VER_STRING=\"${VERSION_STRING}\")
+@@ -109,9 +109,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
@@ -30,13 +30,14 @@ index be50c0d88..4cdfeacde 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index ee196644e..aec7dbdb0 100644
+index 582042339..d2a5909d0 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -878,12 +878,31 @@ struct ProviderHostImpl : ProviderHost {
-   ProviderHostCPU& GetProviderHostCPU() override { return onnxruntime::GetProviderHostCPU(); }
- } provider_host_;
- 
+@@ -1009,12 +1009,32 @@ struct ProviderHostImpl : ProviderHost {
+ #if defined(_MSC_VER) && !defined(__clang__)
+ #pragma warning(pop)
+ #endif
++
 +#ifdef __APPLE__
 +#include <mach-o/dyld.h>
 +#endif
@@ -45,9 +46,9 @@ index ee196644e..aec7dbdb0 100644
 +
 +  std::string libpath;
 +
-   bool Ensure() {
+   void Ensure() {
      if (handle_)
-       return true;
+       return;
  
      std::string full_path = Env::Default().GetRuntimePath() + std::string(LIBRARY_PREFIX "onnxruntime_providers_shared" LIBRARY_EXTENSION);
 +#ifdef __APPLE__
@@ -62,10 +63,10 @@ index ee196644e..aec7dbdb0 100644
 +    }
 +}
 +#endif
-     auto error = Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_);
-     if (!error.IsOK()) {
-       LOGS_DEFAULT(ERROR) << error.ErrorMessage();
-@@ -904,7 +923,7 @@ struct ProviderSharedLibrary {
+     ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
+ 
+     void (*PProvider_SetHost)(void*);
+@@ -1033,7 +1053,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -74,10 +75,10 @@ index ee196644e..aec7dbdb0 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -935,6 +954,18 @@ struct ProviderLibrary {
-       return nullptr;
+@@ -1066,6 +1086,18 @@ struct ProviderLibrary {
+         s_library_shared.Ensure();
  
-     std::string full_path = Env::Default().GetRuntimePath() + std::string(filename_);
+         std::string full_path = Env::Default().GetRuntimePath() + std::string(filename_);
 +#ifdef __APPLE__
 +full_path = s_library_shared.libpath + std::string(filename_);
 +size_t len1 = strlen(filename_);
@@ -90,14 +91,14 @@ index ee196644e..aec7dbdb0 100644
 +    }
 +}
 +#endif
-     auto error = Env::Default().LoadDynamicLibrary(full_path, false, &handle_);
-     if (!error.IsOK()) {
-       LOGS_DEFAULT(ERROR) << error.ErrorMessage();
+         ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, false, &handle_));
+ 
+         Provider* (*PGetProvider)();
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index a731a7701..e1c44868e 100644
+index 0824a82c2..1c9b637d0 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -87,18 +87,21 @@ struct OnUnload {
+@@ -99,18 +99,21 @@ struct OnUnload {
  
  } g_on_unload;
  
@@ -116,12 +117,12 @@ index a731a7701..e1c44868e 100644
    return g_host->AllocatorManager__InsertAllocator(this, allocator);
  }
  
- AllocatorPtr AllocatorManager::GetAllocator(int id, OrtMemType mem_type) const {
+ AllocatorPtr AllocatorManager::GetAllocator(OrtMemType mem_type, OrtDevice device) const {
 +  g_host = Provider_GetHost();
-   return g_host->AllocatorManager__GetAllocator(this, id, mem_type);
+   return g_host->AllocatorManager__GetAllocator(this, mem_type, device);
  }
  
-@@ -198,10 +201,12 @@ MLDataType DataTypeImpl::GetSparseTensorType<MLFloat16>() { return Provider_GetH
+@@ -210,19 +213,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<MLFloat16>() { return Provider_GetH
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -134,16 +135,38 @@ index a731a7701..e1c44868e 100644
    return g_host->IDataTransfer__CopyTensors(this, src_dst_pairs);
  }
  #if !defined(DISABLE_SPARSE_TENSORS)
-@@ -210,7 +215,7 @@ Status IDataTransfer::CopySparseTensors(const std::vector<SparseSrcDstPair>& src
+ Status IDataTransfer::CopySparseTensors(const std::vector<SparseSrcDstPair>& src_dst_pairs) const {
++  g_host = Provider_GetHost();
+   return g_host->IDataTransfer__CopySparseTensors(this, src_dst_pairs);
  }
  #endif
  
 -const Node& OpKernel::Node() const { return g_host->OpKernel__Node(this); }
 +const Node& OpKernel::Node() const { g_host = Provider_GetHost(); return g_host->OpKernel__Node(this); }
  
- TensorShape::TensorShape(const int64_t* dimension_sizes, size_t dimension_count)
-     : std::vector<int64_t>(dimension_count) {
-@@ -231,6 +236,7 @@ int64_t TensorShape::Size() const {
+ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+   Allocate(dims.size());
+@@ -230,16 +236,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+ }
+ 
+ TensorShape& TensorShape::operator=(const TensorShape& other) {
++  g_host = Provider_GetHost();
+   g_host->TensorShape__operator_assign(this, other);
+   return *this;
+ }
+ 
+ TensorShape& TensorShape::operator=(TensorShape&& other) noexcept {
++  g_host = Provider_GetHost();
+   g_host->TensorShape__operator_move_assign(this, std::move(other));
+   return *this;
+ }
+ 
+ void TensorShape::Allocate(size_t size) {
++  g_host = Provider_GetHost();
+   g_host->TensorShape__Allocate(this, size);
+ }
+ 
+@@ -250,6 +259,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -151,7 +174,7 @@ index a731a7701..e1c44868e 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -244,6 +250,7 @@ TensorShape TensorShape::Slice(size_t dimstart) const {
+@@ -259,6 +269,7 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -159,7 +182,7 @@ index a731a7701..e1c44868e 100644
    return g_host->TensorShape__ToString(this);
  }
  
-@@ -253,54 +260,66 @@ int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->
+@@ -268,77 +279,94 @@ int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->
  std::ostream& operator<<(std::ostream& out, const TensorShape& shape) { return g_host->operator_left_shift(out, shape); }
  
  AllocatorPtr CreateAllocator(AllocatorCreationInfo info) {
@@ -187,46 +210,59 @@ index a731a7701..e1c44868e 100644
    g_host->IExecutionProvider__InsertAllocator(this, allocator);
  }
  
- void IExecutionProvider::TryInsertAllocator(AllocatorPtr allocator) {
-+  g_host = Provider_GetHost();
-   g_host->IExecutionProvider__TryInsertAllocator(this, allocator);
- }
- 
  std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapability(const onnxruntime::GraphViewer& graph_viewer,
-                                                                                   const std::vector<const KernelRegistry*>& kernel_registries) const {
+                                                                                   const IKernelLookup& kernel_lookup) const {
 +  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_registries);
+   return g_host->IExecutionProvider__GetCapability(this, graph_viewer, kernel_lookup);
  }
- 
- common::Status IExecutionProvider::Compile(const std::vector<onnxruntime::Node*>& fused_nodes,
-                                            std::vector<NodeComputeInfo>& node_compute_funcs) {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__Compile(this, fused_nodes, node_compute_funcs);
- }
- 
- common::Status IExecutionProvider::Compile(const std::vector<onnxruntime::Node*>& fused_nodes,
-                                            std::string& dll_path) {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__Compile(this, fused_nodes, dll_path);
- }
- 
  common::Status IExecutionProvider::Compile(const std::vector<FusedNodeAndGraph>& fused_nodes_and_graphs,
                                             std::vector<NodeComputeInfo>& node_compute_funcs) {
 +  g_host = Provider_GetHost();
    return g_host->IExecutionProvider__Compile(this, fused_nodes_and_graphs, node_compute_funcs);
  }
  
- int IExecutionProvider::GenerateMetaDefId(const onnxruntime::GraphViewer& graph_viewer, uint64_t& model_hash) const {
+ int IExecutionProvider::GenerateMetaDefId(const onnxruntime::GraphViewer& graph_viewer, HashValue& model_hash) const {
 +  g_host = Provider_GetHost();
    return g_host->IExecutionProvider__GenerateMetaDefId(this, graph_viewer, model_hash);
  }
  
- void IExecutionProvider::RegisterAllocator(std::shared_ptr<AllocatorManager> allocator_manager) {
+ void IExecutionProvider::RegisterAllocator(AllocatorManager& allocator_manager) {
 +  g_host = Provider_GetHost();
    return g_host->IExecutionProvider__RegisterAllocator(this, allocator_manager);
  }
  
-@@ -319,6 +338,7 @@ std::unique_ptr<IDataTransfer> CreateGPUDataTransfer(void* stream) {
+ #ifdef USE_TENSORRT
+ std::unique_ptr<IAllocator> CreateCUDAAllocator(int16_t device_id, const char* name) {
++  g_host = Provider_GetHost();
+   return g_host->CreateCUDAAllocator(device_id, name);
+ }
+ 
+ std::unique_ptr<IAllocator> CreateCUDAPinnedAllocator(int16_t device_id, const char* name) {
++  g_host = Provider_GetHost();
+   return g_host->CreateCUDAPinnedAllocator(device_id, name);
+ }
+ 
+ std::unique_ptr<IDataTransfer> CreateGPUDataTransfer(void* stream) {
++  g_host = Provider_GetHost();
+   return g_host->CreateGPUDataTransfer(stream);
+ }
+ #endif
+ 
+ #ifdef USE_MIGRAPHX
+ std::unique_ptr<IAllocator> CreateROCMAllocator(int16_t device_id, const char* name) {
++  g_host = Provider_GetHost();
+   return g_host->CreateROCMAllocator(device_id, name);
+ }
+ 
+ std::unique_ptr<IAllocator> CreateROCMPinnedAllocator(int16_t device_id, const char* name) {
++  g_host = Provider_GetHost();
+   return g_host->CreateROCMPinnedAllocator(device_id, name);
+ }
+ 
+ std::unique_ptr<IDataTransfer> CreateGPUDataTransfer(void* stream) {
++  g_host = Provider_GetHost();
+   return g_host->CreateGPUDataTransfer(stream);
+ }
  #endif
  
  std::string GetEnvironmentVar(const std::string& var_name) {
@@ -234,15 +270,14 @@ index a731a7701..e1c44868e 100644
    return g_host->GetEnvironmentVar(var_name);
  }
  
-@@ -326,6 +346,7 @@ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewe
-                                                    const std::string& provider_type,
-                                                    const std::vector<const KernelRegistry*>& kernel_registries,
-                                                    const std::vector<NodeIndex>& tentative_nodes) {
+ std::unordered_set<NodeIndex> GetCpuPreferredNodes(const onnxruntime::GraphViewer& graph,
+                                                    const IExecutionProvider::IKernelLookup& kernel_lookup,
+                                                    gsl::span<const NodeIndex> tentative_nodes) {
 +  g_host = Provider_GetHost();
-   return g_host->GetCpuPreferredNodes(graph, provider_type, kernel_registries, tentative_nodes);
+   return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes);
  }
  
-@@ -412,10 +433,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -439,10 +467,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -256,12 +291,12 @@ index a731a7701..e1c44868e 100644
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index b44902f7c..ace972721 100644
+index fa3a64689..9c8edf51f 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -708,6 +708,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+@@ -839,6 +839,9 @@ def generate_build_tree(
+         cmake_dir,
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
-         "-Donnxruntime_BUILD_WINML_TESTS=" + ("OFF" if args.skip_winml_tests else "ON"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
 +        "-Donnxruntime_DEV_MODE=OFF",
 +        "-Donnxruntime_ENABLE_LTO=OFF",
@@ -269,18 +304,18 @@ index b44902f7c..ace972721 100644
          # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
          # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
          # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2150,6 +2153,9 @@ def main():
-             path_to_protoc_exe = build_protoc_for_host(
-                 cmake_path, source_dir, build_dir, args)
+@@ -2602,6 +2605,9 @@ def main():
+             # Cross-compiling for Android, iOS, and WebAssembly
+             path_to_protoc_exe = build_protoc_for_host(cmake_path, source_dir, build_dir, args)
  
 +        if is_linux() and args.arm64:
 +            cmake_extra_args = ["-DCMAKE_SYSTEM_NAME=Linux", "-DCMAKE_SYSTEM_PROCESSOR=aarch64"]
 +
          if is_ubuntu_1604():
-             if (args.arm or args.arm64):
+             if args.arm or args.arm64:
                  raise BuildError(
-@@ -2165,11 +2171,7 @@ def main():
-             setup_test_data(build_dir, configs)
+@@ -2614,11 +2620,7 @@ def main():
+             install_python_deps(args.numpy_version)
  
          if args.use_cuda and args.cuda_version is None:
 -            if is_windows():

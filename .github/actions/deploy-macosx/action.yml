@@ -6,42 +6,60 @@ runs:
       shell: bash
       run: |
         cd $HOME
+        mkdir -p .ccache
+        echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
+        echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
+        echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
-        export MACOSX_DEPLOYMENT_TARGET=10.15
-        echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
+        # export MACOSX_DEPLOYMENT_TARGET=10.15
+        # echo "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
+
+        echo Removing broken stuff from Mono
+        sudo rm -Rf /Library/Frameworks/Mono.framework
 
         if [[ "$CI_DEPLOY_PLATFORM" == "macosx-arm64" ]]; then
           echo Removing old SDKs without ARM support
           sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/MacOSX10*
         fi
 
-        brew install boost ccache gcc swig autoconf-archive automake cmake libomp libtool libusb ant maven nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew uninstall --force --ignore-dependencies gcc gcc@7 gcc@8 gcc@9 gcc@10 gcc@11 gcc@12 little-cms2 maven openblas r
+        brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
+        brew link --force libomp
+
+        echo Installing an older less buggy version of CMake
+        curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
+        brew unlink cmake
+        brew install cmake.rb
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
-          brew uninstall --force gcc
-          brew install gcc@7
-          brew link --overwrite gcc@7
+          echo Installing an older less buggy version of GCC
+          brew install gcc@10
+          brew link --overwrite gcc@10
 
           echo Removing "fixed" header files that are actually broken
-          sudo rm -Rf $(find /usr/local/Cellar/gcc@7/ -iname include-fixed)
+          sudo rm -Rf $(find /usr/local/Cellar/gcc@10/ -iname include-fixed)
 
           echo Fixing up some binaries to support rpath
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
-          sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
-          sudo install_name_tool -change $(otool -L /usr/local/lib/gcc/7/libgfortran.4.dylib | grep /usr/local/Cellar/gcc@7/ | cut -f1 -d ' ') @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
-          sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
-          otool -L /usr/local/lib/gcc/7/*.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/10/libgomp.1.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/10/libstdc++.6.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgfortran.5.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
+          sudo install_name_tool -add_rpath /usr/local/lib/gcc/10/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgcc_s.1.dylib
+          sudo install_name_tool -change $(otool -L /usr/local/lib/gcc/10/libgfortran.5.dylib | grep /usr/local/Cellar/gcc@10/ | cut -f1 -d ' ') @rpath/libquadmath.0.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgomp.1.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libstdc++.6.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libgfortran.5.dylib
+          sudo install_name_tool -change /usr/local/lib/gcc/10/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/10/libquadmath.0.dylib
+          otool -L /usr/local/lib/gcc/10/*.dylib
         fi
 
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libomp.dylib /usr/local/opt/libomp/lib/libomp.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL2-2.0.0.dylib /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib
         sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/opt/libusb/lib/libusb-1.0.0.dylib
+
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        sudo tar -xzf apache-maven-3.6.3-bin.tar.gz -C /usr/local/opt
+        sudo ln -sf /usr/local/opt/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
 
         python3 -m pip install gdown || python3 -m pip install gdown
 
@@ -53,9 +71,9 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18346/m_onemkl_p_2022.0.0.105_offline.dmg
-          hdiutil mount m_onemkl_p_2022.0.0.105_offline.dmg
-          sudo /Volumes/m_onemkl_p_2022.0.0.105_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18900/m_onemkl_p_2022.2.0.8687_offline.dmg
+          hdiutil mount m_onemkl_p_2022.2.0.8687_offline.dmg
+          sudo /Volumes/m_onemkl_p_2022.2.0.8687_offline/bootstrapper.app/Contents/MacOS/install.sh -s -a -s --eula accept
         fi
 
         GRADLE_TASK=publishToMavenLocal
@@ -79,12 +97,13 @@ runs:
       run: |
         git --version
         clang --version
-        /usr/local/bin/gcc-? --version
+        /usr/local/bin/gcc-* --version || true
         cmake --version
         gradle --version
         mvn -version
         gpg --version
         python3 --version
+        ccache -s --version
         df -h
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)

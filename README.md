@@ -35,6 +35,7 @@ JavaCPP Presets
 [![llvm](https://github.com/bytedeco/javacpp-presets/workflows/llvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Allvm)
 [![libffi](https://github.com/bytedeco/javacpp-presets/workflows/libffi/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibffi)
 [![libpostal](https://github.com/bytedeco/javacpp-presets/workflows/libpostal/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibpostal)
+[![libraw](https://github.com/bytedeco/javacpp-presets/workflows/libraw/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Alibraw)
 [![leptonica](https://github.com/bytedeco/javacpp-presets/workflows/leptonica/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aleptonica)
 [![tesseract](https://github.com/bytedeco/javacpp-presets/workflows/tesseract/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atesseract)
 [![caffe](https://github.com/bytedeco/javacpp-presets/workflows/caffe/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Acaffe)
@@ -54,6 +55,7 @@ JavaCPP Presets
 [![ngraph](https://github.com/bytedeco/javacpp-presets/workflows/ngraph/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Angraph)
 [![onnxruntime](https://github.com/bytedeco/javacpp-presets/workflows/onnxruntime/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aonnxruntime)
 [![tvm](https://github.com/bytedeco/javacpp-presets/workflows/tvm/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atvm)
+[![bullet](https://github.com/bytedeco/javacpp-presets/workflows/bullet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Abullet)
 [![liquidfun](https://github.com/bytedeco/javacpp-presets/workflows/liquidfun/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aliquidfun)
 [![qt](https://github.com/bytedeco/javacpp-presets/workflows/qt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aqt)
 [![skia](https://github.com/bytedeco/javacpp-presets/workflows/skia/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Askia)
@@ -89,27 +91,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5.7</version>
+    <version>${moduleVersion}-1.5.8</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.7'
+    implementation group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.8'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.7")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.8")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.7"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.8"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available to Gradle users is [Gradle JavaCPP](https://github.com/bytedeco/gradle-javacpp), and similarly for Scala users there is [SBT-JavaCPP](https://github.com/bytedeco/sbt-javacpp).
@@ -142,6 +144,11 @@ Eclipse (Java SE 7 or newer):
 
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
+ 
+Visual Studio Code (Java SE 7 or newer):
+
+ 1. Navigate to Java Projects > Referenced Libraries, and click `+`.
+ 2. Locate the JAR files, select them, and click OK.
 
 IntelliJ IDEA (Android 7.0 or newer):
 
@@ -167,12 +174,12 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5.7  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.8  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.5.5  https://opencv.org/releases.html
- * FFmpeg 5.0.x  http://ffmpeg.org/download.html
+ * OpenCV 4.7.x  https://opencv.org/releases/
+ * FFmpeg 5.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 2.4.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -190,44 +197,46 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2022.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 2.5.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.19  http://www.openblas.net/
+ * DNNL 2.7.x  https://github.com/oneapi-src/oneDNN
+ * OpenBLAS 0.3.21  http://www.openblas.net/
  * ARPACK-NG 3.8.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.10.x  https://www.python.org/downloads/
- * NumPy 1.22.x  https://github.com/numpy/numpy
- * SciPy 1.8.x  https://github.com/scipy/scipy
- * Gym 0.21.x  https://github.com/openai/gym
- * LLVM 13.0.x  http://llvm.org/releases/download.html
+ * CPython 3.11.x  https://www.python.org/downloads/
+ * NumPy 1.24.x  https://github.com/numpy/numpy
+ * SciPy 1.10.x  https://github.com/scipy/scipy
+ * Gym 0.26.x  https://github.com/openai/gym
+ * LLVM 15.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
- * Leptonica 1.82.x  http://www.leptonica.org/download.html
- * Tesseract 5.0.x  https://github.com/tesseract-ocr/tesseract
+ * LibRaw 0.20.2  https://www.libraw.org/download
+ * Leptonica 1.83.x  http://www.leptonica.org/download.html
+ * Tesseract 5.3.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 11.6.x  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 8.3.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.11.x  https://developer.nvidia.com/nccl
+ * CUDA 11.8.x  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 8.6.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.15.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
- * MXNet 1.9.0  https://github.com/apache/incubator-mxnet
- * PyTorch 1.10.x  https://github.com/pytorch/pytorch
+ * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
+ * PyTorch 1.13.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.8.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.11.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.18.x  https://developer.nvidia.com/nvidia-triton-inference-server
- * The Arcade Learning Environment 0.7.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.14.x  https://github.com/luxonis/depthai-core
- * ONNX 1.10.x  https://github.com/onnx/onnx
+ * Triton Inference Server 2.24.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * DepthAI 2.19.x  https://github.com/luxonis/depthai-core
+ * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 1.10.x  https://github.com/microsoft/onnxruntime
- * TVM 0.8.x  https://github.com/apache/tvm
+ * ONNX Runtime 1.13.x  https://github.com/microsoft/onnxruntime
+ * TVM 0.10.x  https://github.com/apache/tvm
+ * Bullet Physics SDK 3.24  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/
- * Mono/Skia 2.80.x  https://github.com/mono/skia
- * cpu_features 0.6.0  https://github.com/google/cpu_features
+ * Mono/Skia 2.88.x  https://github.com/mono/skia
+ * cpu_features 0.7.0  https://github.com/google/cpu_features
  * ModSecurity 3.0.x  https://github.com/SpiderLabs/ModSecurity
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
@@ -256,7 +265,25 @@ With the above in working order, the scripts get launched automatically as part 
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: 
+
+* `android-arm`
+* `android-arm64`
+* `android-x86`
+* `android-x86_64`
+* `ios-arm64`
+* `ios-x86_64`
+* `linux-armhf`
+* `linux-arm64`
+* `linux-ppc64le`
+* `linux-x86`
+* `linux-x86_64`
+* `macosx-arm64`
+* `macosx-x86_64`
+* `windows-x86`
+* `windows-x86_64`
+
+The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 

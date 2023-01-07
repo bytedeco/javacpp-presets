@@ -95,35 +95,26 @@ if [[ -z ${ANDROID_NDK:-} ]]; then
     ANDROID_NDK=~/Android/android-ndk/
 fi
 export ANDROID_NDK
+export ANDROID_BIN="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/"
 export ANDROID_CC="$ANDROID_NDK/toolchains/llvm/prebuilt/$KERNEL-$ARCH/bin/clang"
 export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/llvm-libc++/"
+export ANDROID_PREFIX="$ANDROID_BIN/bin/llvm"
+export ANDROID_ROOT=
 case $PLATFORM in
     android-arm)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$KERNEL-$ARCH/"
-        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-24/arch-arm/"
-        export ANDROID_FLAGS="--gcc-toolchain=$ANDROID_BIN --sysroot=$ANDROID_ROOT -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/../llvm-libc++abi/include/ -isystem $ANDROID_NDK/sources/android/support/include/ -isystem $ANDROID_CPP/libs/armeabi-v7a/include/ -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/arm-linux-androideabi/ -isystem $ANDROID_ROOT/usr/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=24 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target armv7-none-linux-androideabi -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -Wl,--fix-cortex-a8 -L$ANDROID_CPP/libs/armeabi-v7a/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined -nostdlib++"
-        export ANDROID_PREFIX="$ANDROID_BIN/bin/arm-linux-androideabi"
+        export ANDROID_FLAGS="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target armv7a-linux-android24 -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -Wl,--fix-cortex-a8 -Wl,--no-undefined -nostdlib++"
         export ANDROID_LIBS="-llog -lc++_static -lc++abi -landroid_support -ldl -lm -lc"
         ;;
     android-arm64)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/aarch64-linux-android-4.9/prebuilt/$KERNEL-$ARCH/"
-        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-24/arch-arm64/"
-        export ANDROID_FLAGS="--gcc-toolchain=$ANDROID_BIN --sysroot=$ANDROID_ROOT -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/../llvm-libc++abi/include/ -isystem $ANDROID_NDK/sources/android/support/include/ -isystem $ANDROID_CPP/libs/arm64-v8a/include/ -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/aarch64-linux-android/ -isystem $ANDROID_ROOT/usr/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=24 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target aarch64-none-linux-android -march=armv8-a -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -L$ANDROID_CPP/libs/arm64-v8a/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined -nostdlib++"
-        export ANDROID_PREFIX="$ANDROID_BIN/bin/aarch64-linux-android"
+        export ANDROID_FLAGS="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target aarch64-linux-android24 -march=armv8-a -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -Wl,--no-undefined -nostdlib++"
         export ANDROID_LIBS="-llog -lc++_static -lc++abi -ldl -lm -lc"
         ;;
     android-x86)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86-4.9/prebuilt/$KERNEL-$ARCH/"
-        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-24/arch-x86/"
-        export ANDROID_FLAGS="--gcc-toolchain=$ANDROID_BIN --sysroot=$ANDROID_ROOT -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/../llvm-libc++abi/include/ -isystem $ANDROID_NDK/sources/android/support/include/ -isystem $ANDROID_CPP/libs/x86/include/ -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/i686-linux-android/ -isystem $ANDROID_ROOT/usr/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=24 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target i686-none-linux-android -march=i686 -mtune=atom -mssse3 -mfpmath=sse -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -L$ANDROID_CPP/libs/x86/ -L$ANDROID_ROOT/usr/lib/ -Wl,--no-undefined -nostdlib++"
-        export ANDROID_PREFIX="$ANDROID_BIN/bin/i686-linux-android"
+        export ANDROID_FLAGS="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target i686-linux-android24 -march=i686 -mtune=atom -mssse3 -mfpmath=sse -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -Wl,--no-undefined -nostdlib++"
         export ANDROID_LIBS="-llog -lc++_static -lc++abi -landroid_support -ldl -lm -lc"
         ;;
     android-x86_64)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86_64-4.9/prebuilt/$KERNEL-$ARCH/"
-        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-24/arch-x86_64/"
-        export ANDROID_FLAGS="--gcc-toolchain=$ANDROID_BIN --sysroot=$ANDROID_ROOT -isystem $ANDROID_CPP/include/ -isystem $ANDROID_CPP/../llvm-libc++abi/include/ -isystem $ANDROID_NDK/sources/android/support/include/ -isystem $ANDROID_CPP/libs/x86_64/include/ -isystem $ANDROID_NDK/sysroot/usr/include/ -isystem $ANDROID_NDK/sysroot/usr/include/x86_64-linux-android/ -isystem $ANDROID_ROOT/usr/include/ -isystem $ANDROID_NDK/sources/android/cpufeatures/ -D__ANDROID_API__=24 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target x86_64-none-linux-android -march=x86-64 -mtune=atom -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -L$ANDROID_CPP/libs/x86_64/ -L$ANDROID_ROOT/usr/lib64/ -Wl,--no-undefined -nostdlib++"
-        export ANDROID_PREFIX="$ANDROID_BIN/bin/x86_64-linux-android"
+        export ANDROID_FLAGS="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector-strong -target x86_64-linux-android24 -march=x86-64 -mtune=atom -z text -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-ignored-optimization-argument -Wl,--no-undefined -nostdlib++"
         export ANDROID_LIBS="-llog -lc++_static -lc++abi -ldl -lm -lc"
         ;;
 esac
@@ -167,7 +158,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan lz4 mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal leptonica tesseract caffe openpose cuda nvcodec opencl mxnet pytorch tensorflow tensorflow-lite tensorrt tritonserver depthai ale onnx ngraph onnxruntime tvm liquidfun qt skia cpu_features modsecurity systems)
+    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense librealsense2 videoinput artoolkitplus chilitags flandmark arrow hdf5 hyperscan lz4 mkl mkl-dnn dnnl openblas arpack-ng cminpack fftw gsl cpython numpy scipy gym llvm libpostal libraw leptonica tesseract caffe openpose cuda nvcodec opencl mxnet pytorch tensorflow tensorflow-lite tensorrt tritonserver depthai ale onnx ngraph onnxruntime tvm bullet liquidfun qt skia cpu_features modsecurity systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

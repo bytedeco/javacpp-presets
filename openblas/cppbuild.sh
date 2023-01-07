@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.19
+OPENBLAS_VERSION=0.3.21
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -44,7 +44,6 @@ case $PLATFORM in
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
         export LDFLAGS="-ldl -lm -lc"
         if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
-            export NO_LAPACK=1
             export NOFORTRAN=1
         fi
         export BINARY=32
@@ -60,7 +59,6 @@ case $PLATFORM in
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
         export LDFLAGS="-ldl -lm -lc"
         if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
-            export NO_LAPACK=1
             export NOFORTRAN=1
         fi
         export BINARY=64
@@ -74,7 +72,6 @@ case $PLATFORM in
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
         export LDFLAGS="-ldl -lm -lc"
         if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
-            export NO_LAPACK=1
             export NOFORTRAN=1
         fi
         export BINARY=32
@@ -88,7 +85,6 @@ case $PLATFORM in
         export CROSS_SUFFIX="$ANDROID_PREFIX-"
         export LDFLAGS="-ldl -lm -lc"
         if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
-            export NO_LAPACK=1
             export NOFORTRAN=1
         fi
         export BINARY=64
@@ -99,7 +95,6 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7 -miphoneos-version-min=5.0"
         export FC=
-        export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
         export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK: use Accelerate to optimize
@@ -113,7 +108,6 @@ case $PLATFORM in
         cp kernel/arm/KERNEL.ARMV5 ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/arm64/KERNEL.ARMV8
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64 -miphoneos-version-min=5.0"
         export FC=
-        export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=64
         export TARGET=ARMV8
@@ -124,7 +118,6 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686 -mios-simulator-version-min=5.0"
         export FC=
-        export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=32
         export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
@@ -135,7 +128,6 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64 -mios-simulator-version-min=5.0"
         export FC=
-        export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=64
         export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
@@ -202,7 +194,6 @@ case $PLATFORM in
         export CC="clang -arch arm64"
         export FC=
         export LDFLAGS='-s -Wl,-rpath,@loader_path/'
-        export NO_LAPACK=1
         export NOFORTRAN=1
         export BINARY=64
         export TARGET=ARMV8
@@ -210,8 +201,8 @@ case $PLATFORM in
     macosx-x86_64)
         patch -Np1 < ../../../OpenBLAS-macosx.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
-        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
-        export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export CC="$(ls -1 /usr/local/bin/gcc-* | head -n 1)"
+        export FC="$(ls -1 /usr/local/bin/gfortran-* | head -n 1)"
         export LDFLAGS='-s -Wl,-rpath,@loader_path/ -lgfortran'
         export BINARY=64
         export DYNAMIC_ARCH=1

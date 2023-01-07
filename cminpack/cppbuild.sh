@@ -81,7 +81,7 @@ case $PLATFORM in
         make DESTDIR="$INSTALL_PATH" LIBSUFFIX=s install
         ;;
     macosx-*)
-        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
+        export CC="$(ls -1 /usr/local/bin/gcc-* | head -n 1)"
         make -j $MAKEJ CC="$CC -fPIC" double
         make -j $MAKEJ CC="$CC -fPIC" lapack
         make -j $MAKEJ CC="$CC -fPIC" float

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.9-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.19-${project.parent.version}</version>
+      <version>0.3.21-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -45,12 +45,12 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.19-${project.parent.version}</version>
+            <version>0.3.21-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.19-${project.parent.version}</version>
+            <version>0.3.21-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -103,6 +103,21 @@
             <id>javacpp-compiler</id>
             <configuration>
               <classOrPackageName>org.bytedeco.arpackng.**</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>javacpp-postbuild</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.compiler.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>postbuild.sh</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}</workingDirectory>
             </configuration>
           </execution>
         </executions>

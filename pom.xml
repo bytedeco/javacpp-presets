@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.8-SNAPSHOT</version>
+  <version>1.5.9-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -609,6 +609,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -628,6 +629,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -777,14 +779,16 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/armv7a-linux-androideabi24-clang++</javacpp.platform.compiler>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
@@ -826,14 +830,16 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/aarch64-linux-android24-clang++</javacpp.platform.compiler>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
@@ -875,14 +881,16 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/i686-linux-android24-clang++</javacpp.platform.compiler>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86>
@@ -924,14 +932,16 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
+        <module>bullet</module>
         <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
-        <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/x86_64-linux-android24-clang++</javacpp.platform.compiler>
+        <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
@@ -1122,6 +1132,7 @@
         <module>libffi</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>tensorflow-lite</module>
         <module>depthai</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1181,6 +1192,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>leptonica</module>
+        <module>libpostal</module>
         <module>tesseract</module>
         <module>cuda</module>
         <module>nvcodec</module>
@@ -1310,8 +1322,10 @@
         <module>caffe</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorflow-lite</module>
         <module>ale</module>
         <module>depthai</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>cpu_features</module>
@@ -1378,6 +1392,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1397,6 +1412,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1436,8 +1452,14 @@
       <modules>
         <module>opencv</module>
         <module>ffmpeg</module>
+        <module>lz4</module>
         <module>openblas</module>
         <module>llvm</module>
+        <module>libffi</module>
+        <module>libpostal</module>
+        <module>libraw</module>
+        <module>leptonica</module>
+        <module>tesseract</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1498,6 +1520,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>caffe</module>
@@ -1514,6 +1537,7 @@
         <module>ngraph</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1581,6 +1605,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>cpu_features</module>
         <module>systems</module>
@@ -1647,6 +1672,7 @@
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
+        <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
@@ -1661,6 +1687,7 @@
         <module>onnx</module>
         <module>onnxruntime</module>
         <module>tvm</module>
+        <module>bullet</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>cpu_features</module>

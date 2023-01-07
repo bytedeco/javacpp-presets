@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,14 +35,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_objdetect.class, opencv_optflow.class},
     value = {
-        @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.405",
-            preload = {"opencv_cuda@.405", "opencv_cudacodec@.405", "opencv_cudaarithm@.405", "opencv_cudafilters@.405",
-                "opencv_cudaimgproc@.405", "opencv_cudafeatures2d@.405", "opencv_cudalegacy@.405",
-                "opencv_cudaoptflow@.405", "opencv_cudawarping@.405"}),
-        @Platform(value = "windows", link = "opencv_superres455",
-            preload = {"opencv_cuda455", "opencv_cudacodec455", "opencv_cudaarithm455", "opencv_cudafilters455",
-                "opencv_cudaimgproc455", "opencv_cudafeatures2d455", "opencv_cudalegacy455",
-                "opencv_cudaoptflow455", "opencv_cudawarping455"})},
+        @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.407",
+            preload = {"opencv_cuda@.407", "opencv_cudacodec@.407", "opencv_cudaarithm@.407", "opencv_cudafilters@.407",
+                "opencv_cudaimgproc@.407", "opencv_cudafeatures2d@.407", "opencv_cudalegacy@.407",
+                "opencv_cudaoptflow@.407", "opencv_cudawarping@.407"}),
+        @Platform(value = "windows", link = "opencv_superres470",
+            preload = {"opencv_cuda470", "opencv_cudacodec470", "opencv_cudaarithm470", "opencv_cudafilters470",
+                "opencv_cudaimgproc470", "opencv_cudafeatures2d470", "opencv_cudalegacy470",
+                "opencv_cudaoptflow470", "opencv_cudawarping470"})},
     target = "org.bytedeco.opencv.opencv_superres",
     global = "org.bytedeco.opencv.global.opencv_superres"
 )

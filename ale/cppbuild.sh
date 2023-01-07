@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ALE_VERSION=0.7.4
+ALE_VERSION=0.8.0
 SDL_VERSION=2.0.16
 download https://github.com/mgbellemare/Arcade-Learning-Environment/archive/v$ALE_VERSION.tar.gz ale-v$ALE_VERSION.tar.gz
 download https://github.com/libsdl-org/SDL/archive/refs/tags/release-$SDL_VERSION.tar.gz SDL-release-$SDL_VERSION.tar.gz
@@ -23,6 +23,7 @@ cd Arcade-Learning-Environment-$ALE_VERSION
 
 sedinplace 's/message(FATAL_ERROR/message(WARNING/g' CMakeLists.txt
 sedinplace 's/UNIX AND//g' src/CMakeLists.txt
+rm vcpkg.json
 
 case $PLATFORM in
     linux-x86)

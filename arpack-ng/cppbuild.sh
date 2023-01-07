@@ -85,9 +85,9 @@ case $PLATFORM in
         ;;
     macosx-*)
         sed -i="" 's/install_name \\$rpath/install_name @rpath/g' configure m4/libtool.m4
-        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
-        export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
-        export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1) -nodefaultlibs -lSystem -static-libgcc -static-libgfortran -lgcc -lgfortran $(ls -1 /usr/local/lib/gcc/?/libquadmath.a | head -n 1)"
+        export CC="$(ls -1 /usr/local/bin/gcc-* | head -n 1)"
+        export CXX="$(ls -1 /usr/local/bin/g++-* | head -n 1)"
+        export FC="$(ls -1 /usr/local/bin/gfortran-* | head -n 1) -Wl,-rpath,@loader_path/ -Wl,-rpath,$(ls -1d /usr/local/lib/gcc/*/ | head -n 1)"
         export F77="$FC"
         export FLIBS="-lgfortran"
         ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas

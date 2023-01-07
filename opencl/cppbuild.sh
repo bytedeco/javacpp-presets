@@ -7,11 +7,11 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCL_VERSION=2022.01.04
-CLHPP_VERSION=2.0.16
+OPENCL_VERSION=2022.09.30
+CLHPP_VERSION=2022.09.30
 download https://github.com/KhronosGroup/OpenCL-Headers/archive/v$OPENCL_VERSION.tar.gz OpenCL-Headers-$OPENCL_VERSION.tar.gz
-download https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/v$OPENCL_VERSION.tar.gz OpenCL-ICD-Loader-$OPENCL_VERSION.tar.bz2
-download https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v$CLHPP_VERSION.tar.gz OpenCL-CLHPP-$CLHPP_VERSION.tar.bz2
+download https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/v$OPENCL_VERSION.tar.gz OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
+download https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v$CLHPP_VERSION.tar.gz OpenCL-CLHPP-$CLHPP_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -19,8 +19,8 @@ INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xf ../OpenCL-Headers-$OPENCL_VERSION.tar.gz
-tar --totals -xf ../OpenCL-ICD-Loader-$OPENCL_VERSION.tar.bz2
-tar --totals -xf ../OpenCL-CLHPP-$CLHPP_VERSION.tar.bz2
+tar --totals -xf ../OpenCL-ICD-Loader-$OPENCL_VERSION.tar.gz
+tar --totals -xf ../OpenCL-CLHPP-$CLHPP_VERSION.tar.gz
 
 case $PLATFORM in
     linux-arm64)
@@ -35,7 +35,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$CLHPP_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -49,7 +49,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$CLHPP_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -63,7 +63,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         cd ../OpenCL-CLHPP-$CLHPP_VERSION
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -79,7 +79,7 @@ case $PLATFORM in
         ninja -j $MAKEJ
         ninja install
         cd ../OpenCL-CLHPP-$CLHPP_VERSION
-        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF .
+        cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_PREFIX_PATH=$INSTALL_PATH -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF .
         ninja -j $MAKEJ
         ninja install
         ;;

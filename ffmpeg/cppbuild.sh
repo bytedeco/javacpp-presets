@@ -11,8 +11,8 @@ DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disab
 ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp"
 
 if [[ "$EXTENSION" == *gpl ]]; then
-    # Enable GPL and nonfree modules
-    ENABLE="$ENABLE --enable-gpl --enable-nonfree --enable-libx264 --enable-libx265"
+    # Enable GPLv3 modules
+    ENABLE="$ENABLE --enable-gpl --enable-version3 --enable-libx264 --enable-libx265"
 fi
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
@@ -24,25 +24,25 @@ SRT_CONFIG="-DENABLE_APPS:BOOL=OFF -DENABLE_ENCRYPTION:BOOL=ON -DENABLE_SHARED:B
 WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBP_JS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib"
 
 NASM_VERSION=2.14
-ZLIB=zlib-1.2.11
+ZLIB=zlib-1.2.13
 LAME=lame-3.100
-SPEEX=speex-1.2.0
+SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
-OPENCORE_AMR=opencore-amr-0.1.5
+OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.1m
-OPENH264_VERSION=2.1.1
+OPENSSL=openssl-3.0.5
+OPENH264_VERSION=2.3.0
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.11.0
-ALSA_VERSION=1.2.6.1
-FREETYPE_VERSION=2.11.1
+VPX_VERSION=1.12.0
+ALSA_VERSION=1.2.7.2
+FREETYPE_VERSION=2.12.1
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=11.1.5.0
+NVCODEC_VERSION=11.1.5.1
 XML2=libxml2-2.9.12
-LIBSRT_VERSION=1.4.4
-WEBP_VERSION=1.2.1
-FFMPEG_VERSION=5.0
+LIBSRT_VERSION=1.5.0
+WEBP_VERSION=1.2.4
+FFMPEG_VERSION=5.1.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -61,7 +61,7 @@ download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx
 download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
-download https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
+download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -98,12 +98,15 @@ sedinplace 's/void pure_func/void/g' include/nasmlib.h
 ./configure --prefix=$INSTALL_PATH
 make -j $MAKEJ V=0
 make install
-export PATH=$INSTALL_PATH/bin:$PATH
 cd ..
+
+export PATH=$INSTALL_PATH/bin:$PATH
+export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
+patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 
@@ -129,7 +132,7 @@ case $PLATFORM in
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -147,7 +150,7 @@ case $PLATFORM in
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -166,7 +169,7 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -177,7 +180,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=arm-linux
@@ -261,7 +264,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -279,7 +282,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -298,7 +301,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm64 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-arm64 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -309,7 +312,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux
         make -j $MAKEJ V=0
@@ -392,7 +395,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -410,7 +413,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -429,7 +432,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -440,7 +443,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm
@@ -520,7 +523,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -538,7 +541,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         cd libspeex
         make -j $MAKEJ V=0
         make install
@@ -557,7 +560,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86_64 no-shared no-tests -D__ANDROID_API__=24
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH --libdir=lib android-x86_64 no-shared no-tests -D__ANDROID_API__=24
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_dev
         cd ../srt-$LIBSRT_VERSION
@@ -568,7 +571,7 @@ EOF
         cd ../openh264-$OPENH264_VERSION
         sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
         sedinplace 's/12/24/g' codec/build/android/dec/jni/Application.mk build/platform-android.mk
-        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="$ANDROID_ROOT" install-static
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" NDK_TOOLCHAIN_VERSION="clang" TARGET="android-24" install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux
         make -j $MAKEJ V=0
@@ -643,7 +646,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -661,7 +664,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -677,7 +680,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -768,7 +771,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -786,7 +789,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -802,7 +805,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -879,7 +882,7 @@ EOF
     linux-armhf)
         tar --totals -xjf ../alsa-lib-$ALSA_VERSION.tar.bz2
 
-        export CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard -I$INSTALL_PATH/include -L$INSTALL_PATH/lib"
+        export CFLAGS="-I$INSTALL_PATH/include -L$INSTALL_PATH/lib"
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         HOST_ARCH="$(uname -m)"
@@ -907,7 +910,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -925,7 +928,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -943,16 +946,16 @@ EOF
         cd ../$OPENSSL
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          ./Configure linux-generic32 -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH --cross-compile-prefix=arm-linux-gnueabihf-
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=arm-linux-gnueabihf-
         else
-          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-generic32 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabih .
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabihf .
         else
           $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $SRT_CONFIG .
         fi
@@ -1043,15 +1046,17 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
-          mkdir -p ../lib
-          cp $USERLAND_PATH/build/lib/* ../lib
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-"
+          if [[ ! -d $USERLAND_PATH ]]; then
+            USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
+          fi
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-"
         else
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm"
         fi
         make -j $MAKEJ
         make install
@@ -1079,7 +1084,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1097,7 +1102,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1113,7 +1118,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --libdir=lib --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1174,8 +1179,13 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-"
+        if [[ ! -d $USERLAND_PATH ]]; then
+          USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
+        fi
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2/ -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-"
         make -j $MAKEJ
         make install
         ;;
@@ -1202,7 +1212,7 @@ EOF
         echo ""
         cd ../$LAME
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+          ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         else
           CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" ./configure --host=powerpc64le-linux-gnu --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         fi
@@ -1228,9 +1238,9 @@ EOF
         echo ""
         cd ../$SPEEX
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
         else
-          ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
+          PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=powerpc64le-linux-gnu --build=ppc64le-linux CFLAGS="-m64"
         fi
         make -j $MAKEJ V=0
         make install
@@ -1260,9 +1270,9 @@ EOF
         make install
         cd ../$OPENSSL
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         else
-          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH
+          ./Configure linux-ppc64le -fPIC no-shared --cross-compile-prefix=powerpc64le-linux-gnu- --prefix=$INSTALL_PATH --libdir=lib
         fi
         make -s -j $MAKEJ
         make install_sw
@@ -1358,12 +1368,14 @@ EOF
         fi
         make -j $MAKEJ
         make install 
+        cd ../nv-codec-headers-n$NVCODEC_VERSION
+        make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec
         else
           echo "configure ffmpeg cross compile"
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec
         fi
         make -j $MAKEJ
         make install
@@ -1388,7 +1400,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1406,7 +1418,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1422,7 +1434,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-arm64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1499,7 +1511,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1517,7 +1529,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1533,7 +1545,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1606,7 +1618,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1624,7 +1636,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1640,7 +1652,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION
@@ -1723,7 +1735,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        ./configure --prefix=$INSTALL_PATH --disable-frontend --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -1741,7 +1753,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        PKG_CONFIG= ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
@@ -1757,7 +1769,7 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
+        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
         make install_sw
         cd ../srt-$LIBSRT_VERSION

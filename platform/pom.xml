@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.9-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -47,6 +47,7 @@
     <module>../llvm/platform</module>
     <module>../libffi/platform</module>
     <module>../libpostal/platform</module>
+    <module>../libraw/platform</module>
     <module>../leptonica/platform</module>
     <module>../tesseract/platform</module>
     <module>../caffe/platform</module>
@@ -66,6 +67,7 @@
     <module>../ngraph/platform</module>
     <module>../onnxruntime/platform</module>
     <module>../tvm/platform</module>
+    <module>../bullet/platform</module>
     <module>../liquidfun/platform</module>
     <module>../qt/platform</module>
     <module>../skia/platform</module>
@@ -84,12 +86,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>4.5.5-${project.version}</version>
+      <version>4.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>5.0-${project.version}</version>
+      <version>5.1.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -154,7 +156,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.12.1-${project.version}</version>
+      <version>1.12.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -164,12 +166,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>lz4-platform</artifactId>
-      <version>1.9.3-${project.version}</version>
+      <version>1.9.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2022.0-${project.version}</version>
+      <version>2022.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -179,12 +181,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>2.5.2-${project.version}</version>
+      <version>2.7.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.19-${project.version}</version>
+      <version>0.3.21-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -209,32 +211,32 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.10.2-${project.version}</version>
+      <version>3.11.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.22.2-${project.version}</version>
+      <version>1.24.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.8.0-${project.version}</version>
+      <version>1.10.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>gym-platform</artifactId>
-      <version>0.22.0-${project.version}</version>
+      <version>0.26.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>13.0.1-${project.version}</version>
+      <version>15.0.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>libffi-platform</artifactId>
-      <version>3.4.2-${project.version}</version>
+      <version>3.4.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -243,13 +245,18 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>libraw</artifactId>
+      <version>0.20.2-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.82.0-${project.version}</version>
+      <version>1.83.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>5.0.1-${project.version}</version>
+      <version>5.3.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -264,7 +271,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>11.6-8.3-${project.version}</version>
+      <version>11.8-8.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -279,12 +286,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.9.0-${project.version}</version>
+      <version>1.9.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>pytorch-platform</artifactId>
-      <version>1.10.2-${project.version}</version>
+      <version>1.13.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -294,32 +301,32 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-lite-platform</artifactId>
-      <version>2.8.0-${project.version}</version>
+      <version>2.11.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>8.2-${project.version}</version>
+      <version>8.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver-platform</artifactId>
-      <version>2.18-${project.version}</version>
+      <version>2.26-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ale-platform</artifactId>
-      <version>0.7.4-${project.version}</version>
+      <version>0.8.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>depthai-platform</artifactId>
-      <version>2.14.1-${project.version}</version>
+      <version>2.19.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnx-platform</artifactId>
-      <version>1.11.0-${project.version}</version>
+      <version>1.12.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -329,12 +336,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.10.0-${project.version}</version>
+      <version>1.13.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
-      <version>0.8.0-${project.version}</version>
+      <version>0.10.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>bullet-platform</artifactId>
+      <version>3.24-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -349,17 +361,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>skia-platform</artifactId>
-      <version>2.80.3-${project.version}</version>
+      <version>2.88.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.6.0-${project.version}</version>
+      <version>0.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>modsecurity-platform</artifactId>
-      <version>3.0.6-${project.version}</version>
+      <version>3.0.8-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

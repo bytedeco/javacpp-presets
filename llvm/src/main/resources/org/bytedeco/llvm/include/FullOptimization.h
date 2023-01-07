@@ -30,7 +30,7 @@
 #include "llvm/IR/Verifier.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm/MC/TargetRegistry.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/MC/SubtargetFeature.h"
@@ -89,7 +89,7 @@ LLVMErrorRef optimizeModule(
     PassManagerBuilder builder2;
     builder2.VerifyInput = true;
     builder2.Inliner = createFunctionInliningPass();
-    builder2.populateLTOPassManager(passes);
+//    builder2.populateLTOPassManager(passes);
 
     fnPasses.doInitialization();
     for (Function &func : *module) {

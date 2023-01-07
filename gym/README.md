@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Gym 0.22.0  https://gym.openai.com/
+ * Gym 0.26.2  https://gym.openai.com/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gym</groupId>
     <artifactId>listenvs</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.8</version>
     <properties>
         <exec.mainClass>ListEnvs</exec.mainClass>
     </properties>
@@ -48,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gym-platform</artifactId>
-            <version>0.22.0-1.5.8-SNAPSHOT</version>
+            <version>0.26.2-1.5.8</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2022.0-1.5.8-SNAPSHOT</version>
+            <version>2022.2-1.5.8</version>
         </dependency>
 
     </dependencies>
@@ -87,7 +87,7 @@ public class ListEnvs {
         PyObject globals = PyModule_GetDict(PyImport_AddModule("__main__"));
 
         PyRun_StringFlags("from gym import envs\n"
-                + "envids = [spec.id for spec in envs.registry.all()]\n"
+                + "envids = [spec.id for spec in envs.registry.values()]\n"
                 + "for envid in sorted(envids):\n"
                 + "    print(envid)\n", Py_file_input, globals, globals, null);
 

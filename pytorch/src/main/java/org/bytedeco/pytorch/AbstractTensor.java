@@ -65,6 +65,20 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     public abstract long nbytes();
     public abstract Pointer data_ptr();
 
+    /**
+     * Convenience method, similar to {@code sizes().vec().get()}.
+     *
+     * Returns a new {@code long[]} with each call since e.g. transpose_() and squeeze_() can change the shape of the tensor,
+     * and the caller could otherwise modify the contents, surprising subsequent callers.
+     *
+     * Please memoize externally if you're concerned about performance.
+     */
+    public long[] shape() {
+        long[] out = new long[(int) ndimension()];
+        for (int i = 0; i < out.length; i++) out[i] = size(i);
+        return out;
+    }
+
     /** Returns {@code createBuffer(0)}. */
     public <B extends Buffer> B createBuffer() {
         return (B)createBuffer(0);

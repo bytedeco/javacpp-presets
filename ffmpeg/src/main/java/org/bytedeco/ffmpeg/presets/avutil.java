@@ -44,8 +44,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avutil",
     global = "org.bytedeco.ffmpeg.global.avutil",
     value = {
-        @Platform(define = {"__STDC_CONSTANT_MACROS", "__STDC_FORMAT_MACROS"},
-            cinclude = {"<libavutil/avutil.h>", "<libavutil/error.h>", "<libavutil/mem.h>", "<libavutil/time.h>",
+        @Platform(define = {"__STDC_CONSTANT_MACROS", "__STDC_FORMAT_MACROS", "STRING_BYTES_CHARSET \"UTF-8\""},
+            cinclude = {"<libavutil/avutil.h>", /*"<libavutil/attributes.h>",*/ "<libavutil/error.h>", "<libavutil/mem.h>", "<libavutil/time.h>",
             "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
             "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
             "<libavutil/opt.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>", "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>",
@@ -81,7 +81,8 @@ public class avutil implements InfoMapper {
                              "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity",
                              "av_sat_add64", "av_sat_sub64", "LIBAVUTIL_VERSION").cppTypes().translate())
                .put(new Info("LIBAVUTIL_VERSION_INT", "LIBAVUTIL_IDENT").translate(false))
-               .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY").define().translate().cppTypes("bool"))
+               .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY", "FF_API_FIFO_PEEK2",
+                             "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
@@ -121,6 +122,11 @@ public class avutil implements InfoMapper {
                              "AV_CH_SURROUND_DIRECT_LEFT",
                              "AV_CH_SURROUND_DIRECT_RIGHT",
                              "AV_CH_LOW_FREQUENCY_2",
+                             "AV_CH_TOP_SIDE_LEFT",
+                             "AV_CH_TOP_SIDE_RIGHT",
+                             "AV_CH_BOTTOM_FRONT_CENTER",
+                             "AV_CH_BOTTOM_FRONT_LEFT",
+                             "AV_CH_BOTTOM_FRONT_RIGHT",
                              "AV_CH_LAYOUT_NATIVE",
                              "AV_CH_LAYOUT_MONO",
                              "AV_CH_LAYOUT_STEREO",
@@ -149,7 +155,38 @@ public class avutil implements InfoMapper {
                              "AV_CH_LAYOUT_7POINT1_WIDE_BACK",
                              "AV_CH_LAYOUT_OCTAGONAL",
                              "AV_CH_LAYOUT_HEXADECAGONAL",
-                             "AV_CH_LAYOUT_STEREO_DOWNMIX").translate().cppTypes("long"))
+                             "AV_CH_LAYOUT_STEREO_DOWNMIX",
+                             "AV_CH_LAYOUT_22POINT2").translate(true).cppTypes("long"))
+               .put(new Info("AV_CHANNEL_LAYOUT_MONO",
+                             "AV_CHANNEL_LAYOUT_STEREO",
+                             "AV_CHANNEL_LAYOUT_2POINT1",
+                             "AV_CHANNEL_LAYOUT_2_1",
+                             "AV_CHANNEL_LAYOUT_SURROUND",
+                             "AV_CHANNEL_LAYOUT_3POINT1",
+                             "AV_CHANNEL_LAYOUT_4POINT0",
+                             "AV_CHANNEL_LAYOUT_4POINT1",
+                             "AV_CHANNEL_LAYOUT_2_2",
+                             "AV_CHANNEL_LAYOUT_QUAD",
+                             "AV_CHANNEL_LAYOUT_5POINT0",
+                             "AV_CHANNEL_LAYOUT_5POINT1",
+                             "AV_CHANNEL_LAYOUT_5POINT0_BACK",
+                             "AV_CHANNEL_LAYOUT_5POINT1_BACK",
+                             "AV_CHANNEL_LAYOUT_6POINT0",
+                             "AV_CHANNEL_LAYOUT_6POINT0_FRONT",
+                             "AV_CHANNEL_LAYOUT_HEXAGONAL",
+                             "AV_CHANNEL_LAYOUT_6POINT1",
+                             "AV_CHANNEL_LAYOUT_6POINT1_BACK",
+                             "AV_CHANNEL_LAYOUT_6POINT1_FRONT",
+                             "AV_CHANNEL_LAYOUT_7POINT0",
+                             "AV_CHANNEL_LAYOUT_7POINT0_FRONT",
+                             "AV_CHANNEL_LAYOUT_7POINT1",
+                             "AV_CHANNEL_LAYOUT_7POINT1_WIDE",
+                             "AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK",
+                             "AV_CHANNEL_LAYOUT_OCTAGONAL",
+                             "AV_CHANNEL_LAYOUT_HEXADECAGONAL",
+                             "AV_CHANNEL_LAYOUT_STEREO_DOWNMIX",
+                             "AV_CHANNEL_LAYOUT_22POINT2",
+                             "AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER").translate(false).cppTypes("AVChannelLayout"))
                .put(new Info("MKTAG", "MKBETAG").cppTypes("int", "char", "char", "char", "char"))
                .put(new Info("int (*)(const void*, const void*)").cast().pointerTypes("Cmp_Const_Pointer_Const_Pointer"))
                .put(new Info("int (*)(void*, void*, int)").pointerTypes("Int_func_Pointer_Pointer_int"));

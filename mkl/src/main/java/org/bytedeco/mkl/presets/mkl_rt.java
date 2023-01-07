@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 Samuel Audet
+ * Copyright (C) 2017-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ public class mkl_rt implements InfoMapper {
 
                .put(new Info("dss_delete_").javaText("public static native int dss_delete_(@Cast(\"void**\") @ByPtrPtr _MKL_DSS_HANDLE_t arg0, IntPointer arg1);"))
 
-               .put(new Info("!defined(MKL_CALL_CONV)").define(false))
+               .put(new Info("!defined(MKL_CALL_CONV)", "defined(_WIN64) || defined(__MINGW64__) || defined(__x86_64__)").define(false))
                .put(new Info("!defined(_WIN32) & !defined(_WIN64)").define(true))
 
                .put(new Info("VSL_SS_DNAN").cppTypes("long long"))

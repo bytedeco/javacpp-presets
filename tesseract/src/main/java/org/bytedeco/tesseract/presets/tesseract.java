@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2021 Samuel Audet
+ * Copyright (C) 2014-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,19 +32,19 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-import org.bytedeco.leptonica.presets.lept;
+import org.bytedeco.leptonica.presets.leptonica;
 
 /**
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.tesseract", global = "org.bytedeco.tesseract.global.tesseract", inherit = lept.class, value = {
-    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/export.h", "tesseract/osdetect.h", "tesseract/unichar.h",
+@Properties(target = "org.bytedeco.tesseract", global = "org.bytedeco.tesseract.global.tesseract", inherit = leptonica.class, value = {
+    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/export.h", /*"tesseract/osdetect.h",*/ "tesseract/unichar.h",
         "tesseract/version.h", "tesseract/publictypes.h", "tesseract/pageiterator.h", "tesseract/ocrclass.h", "tesseract/ltrresultiterator.h",
         "tesseract/renderer.h", "tesseract/resultiterator.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
-        compiler = "cpp11", link = "tesseract@.5"/*, resource = {"include", "lib"}*/),
+        compiler = "cpp11", link = "tesseract@.5.3.0"/*, resource = {"include", "lib"}*/),
     @Platform(value = "android", link = "tesseract"),
-    @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-5") })
+    @Platform(value = "windows", link = "tesseract53", preload = "libtesseract53") })
 public class tesseract implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tesseract"); }
 
@@ -110,7 +110,7 @@ public class tesseract implements InfoMapper {
 
                .put(new Info("TessBaseAPISetFillLatticeFunc", "TessBaseGetBlockTextOrientations", "TessBaseAPIInit", "TessCallbackUtils_::FailIsRepeatable", "LPBLOB", "kPolyBlockNames",
                              "tesseract::TessBaseAPI::SetFillLatticeFunc", "tesseract::ImageThresholder::GetPixRectGrey", "tesseract::ImageThresholder::GetPixRect",
-                             "tesseract::ImageThresholder::SetRectangle", "tesseract::ImageThresholder::SetImage", "tesseract::ImageThresholder::IsEmpty",
+                             "tesseract::ImageThresholder::SetRectangle", "tesseract::ImageThresholder::SetImage", "tesseract::ImageThresholder::IsEmpty", "tesseract::HOcrEscape",
                              "tesseract::ResultIterator::kComplexWord", "tesseract::ResultIterator::kMinorRunEnd", "tesseract::ResultIterator::kMinorRunStart",
                              "UNICHAR::utf8_step", "UNICHAR::utf8_str", "UNICHAR::first_uni", "UNICHAR::UNICHAR(char*, int)", "UNICHAR::UNICHAR(int)").skip());
     }

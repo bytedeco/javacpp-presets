@@ -19,28 +19,6 @@ diff -ruN tesseract-5.0.0-rc1/Makefile.am tesseract-5.0.0-rc1-android/Makefile.a
  endif
  
  # Rules for training tools.
-diff -ruN tesseract-5.0.0-rc1/Makefile.in tesseract-5.0.0-rc1-android/Makefile.in
---- tesseract-5.0.0-rc1/Makefile.in	2021-11-05 11:05:15.509139117 +0900
-+++ tesseract-5.0.0-rc1-android/Makefile.in	2021-11-05 11:01:56.247912934 +0900
-@@ -243,7 +243,7 @@
- @OPENCL_TRUE@am__append_43 = -I$(top_srcdir)/src/opencl
- @VISIBILITY_TRUE@am__append_44 = -DTESS_IMPORTS
- @T_WIN_TRUE@am__append_45 = -lws2_32
--@ADD_RT_TRUE@am__append_46 = -lrt
-+@ADD_RT_TRUE@am__append_46 =
- @ENABLE_TRAINING_TRUE@am__append_47 = $(EXTRA_PROGRAMS)
- @DISABLED_LEGACY_ENGINE_TRUE@am__append_48 = -DDISABLED_LEGACY_ENGINE
- 
-@@ -2185,8 +2185,7 @@
- lib_LTLIBRARIES = libtesseract.la
- libtesseract_la_LDFLAGS = $(LEPTONICA_LIBS) $(OPENCL_LDFLAGS) \
- 	$(libarchive_LIBS) $(libcurl_LIBS) $(TENSORFLOW_LIBS) \
--	$(am__append_4) $(am__append_5) -version-info \
--	$(GENERIC_LIBRARY_VERSION)
-+	$(am__append_4) $(am__append_5) -avoid-version
- libtesseract_la_SOURCES = src/api/baseapi.cpp src/api/altorenderer.cpp \
- 	src/api/capi.cpp src/api/hocrrenderer.cpp \
- 	src/api/lstmboxrenderer.cpp src/api/pdfrenderer.cpp \
 diff -ruN tesseract-5.0.0-rc1/src/api/baseapi.cpp tesseract-5.0.0-rc1-android/src/api/baseapi.cpp
 --- tesseract-5.0.0-rc1/src/api/baseapi.cpp	2021-10-30 05:32:11.000000000 +0900
 +++ tesseract-5.0.0-rc1-android/src/api/baseapi.cpp	2021-11-05 11:03:45.115036510 +0900
@@ -55,22 +33,6 @@ diff -ruN tesseract-5.0.0-rc1/src/api/baseapi.cpp tesseract-5.0.0-rc1-android/sr
  #include <cmath>    // for round, M_PI
  #include <cstdint>  // for int32_t
  #include <cstring>  // for strcmp, strcpy
-diff -ruN tesseract-5.0.0-rc1/src/arch/simddetect.cpp tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp
---- tesseract-5.0.0-rc1/src/arch/simddetect.cpp	2021-10-30 05:32:11.000000000 +0900
-+++ tesseract-5.0.0-rc1-android/src/arch/simddetect.cpp	2021-11-05 11:18:31.426042560 +0900
-@@ -211,11 +211,7 @@
- 
- #if defined(HAVE_NEON) && !defined(__aarch64__)
- #  ifdef ANDROID
--  {
--    AndroidCpuFamily family = android_getCpuFamily();
--    if (family == ANDROID_CPU_FAMILY_ARM)
--      neon_available_ = (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON);
--  }
-+  neon_available_ = false;
- #  else
-   /* Assume linux */
-   neon_available_ = getauxval(AT_HWCAP) & HWCAP_NEON;
 diff -ruN tesseract-5.0.0-rc1/src/lstm/lstm.cpp tesseract-5.0.0-rc1-android/src/lstm/lstm.cpp
 --- tesseract-5.0.0-rc1/src/lstm/lstm.cpp	2021-10-30 05:32:11.000000000 +0900
 +++ tesseract-5.0.0-rc1-android/src/lstm/lstm.cpp	2021-11-05 10:59:57.888778584 +0900
@@ -116,7 +78,7 @@ diff -ruN tesseract-5.0.0-rc1/src/training/unicharset/fileio.cpp tesseract-5.0.0
 -    globfree(&pglob);
 -  }
 -  return all_deleted;
-+  return false
++  return false;
  }
  #endif
  

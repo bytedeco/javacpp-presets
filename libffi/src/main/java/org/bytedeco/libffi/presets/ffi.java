@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Samuel Audet
+ * Copyright (C) 2021-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -61,17 +61,18 @@ public class ffi implements InfoMapper {
         infoMap.put(new Info("FFI_EXTRA_CIF_FIELDS", "FFI_NATIVE_RAW_API", "_CET_NOTRACK",
                              "FFI_LONG_LONG_MAX", "FFI_API", "FFI_EXTERN").cppTypes().annotations())
                .put(new Info("defined (POWERPC64)", "LONG_LONG_MAX", "1").define(true))
-               .put(new Info("!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE",
+               .put(new Info("FFI_GO_CLOSURES", "!FFI_NATIVE_RAW_API", "FFI_TARGET_HAS_COMPLEX_TYPE",
                              "defined(_WIN32)", "defined(X86_WIN32)", "defined(X86_WIN64)", "X86_WIN64",
+                             "defined(_MSC_VER) && defined(_M_IX86)",
                              "defined __x86_64__ && defined __ILP32__",
                              "defined(X86_64) || (defined (__x86_64__) && defined (X86_DARWIN))",
                              "defined(__ARM_PCS_VFP) || defined(_M_ARM)",
                              "defined(__ARM_PCS_VFP) || defined(_WIN32)",
                              "defined(POWERPC_DARWIN) || defined(POWERPC_AIX)",
-                             "defined (POWERPC_AIX)", "defined (POWERPC_DARWIN)").define(false))
+                             "defined (POWERPC_AIX)", "defined (POWERPC_DARWIN)").define(false).translate(true))
                .put(new Info("FFI_TYPE_SMALL_STRUCT_1B", "FFI_TYPE_SMALL_STRUCT_2B",
-                             "FFI_TYPE_SMALL_STRUCT_4B", "FFI_TYPE_MS_STRUCT", "FFI_TRAMPOLINE_SIZE",
-                             "FFI_PPC_TYPE_LAST", "FFI_SIZEOF_ARG", "FFI_SIZEOF_JAVA_RAW").translate(false))
+                             "FFI_TYPE_SMALL_STRUCT_4B", "FFI_TYPE_MS_STRUCT", "FFI_PPC_TYPE_LAST").cppTypes())
+               .put(new Info("FFI_TRAMPOLINE_SIZE", "FFI_SIZEOF_ARG", "FFI_SIZEOF_JAVA_RAW").translate(false))
                .put(new Info("ffi_type_uchar", "ffi_type_schar", "ffi_type_ushort", "ffi_type_sshort",
                              "ffi_type_uint", "ffi_type_sint", "ffi_type_ulong", "ffi_type_slong",
                              "ffi_type_longdouble").cppTypes("ffi_type").translate(false))

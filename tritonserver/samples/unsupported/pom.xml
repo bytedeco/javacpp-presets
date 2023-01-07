@@ -1,0 +1,33 @@
+
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.tritonserver</groupId>
+    <artifactId>simplegpu</artifactId>
+    <version>1.5.8</version>
+    <properties>
+        <exec.mainClass>SimpleGPU</exec.mainClass>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda-platform</artifactId>
+            <version>11.8-8.6-1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorrt-platform</artifactId>
+            <version>8.4-1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tritonserver-platform</artifactId>
+            <version>2.26-1.5.8</version>
+            <classifier>shaded</classifier>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

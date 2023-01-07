@@ -8,10 +8,14 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 export BUILD_TEST=0
+export CUDACXX="/usr/local/cuda/bin/nvcc"
+export CUDA_HOME="/usr/local/cuda"
+export CUDNN_HOME="/usr/local/cuda"
 export MAX_JOBS=$MAKEJ
 export USE_CUDA=0
 export USE_NUMPY=0
 export USE_OPENMP=1
+export USE_SYSTEM_NCCL=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
     export USE_FAST_NVCC=0
@@ -19,7 +23,12 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export TORCH_CUDA_ARCH_LIST="3.5+PTX"
 fi
 
-PYTORCH_VERSION=1.10.2
+export PYTHON_BIN_PATH=$(which python3)
+if [[ $PLATFORM == windows* ]]; then
+    export PYTHON_BIN_PATH=$(which python.exe)
+fi
+
+PYTORCH_VERSION=1.13.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -35,7 +44,7 @@ git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
 # https://github.com/pytorch/pytorch/pull/66219
-patch -Np1 < ../../../pytorch.patch
+#patch -Np1 < ../../../pytorch.patch
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
@@ -60,14 +69,14 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-if [[ -f "$CPYTHON_PATH/include/python3.10/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.10"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.10/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.10/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.10/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.10/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -97,16 +106,24 @@ case $PLATFORM in
         export CXX="g++ -m64"
         ;;
     macosx-*)
-        ln -sf pytorch/torch/lib ../lib
-        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
-        chmod +w ../lib/libiomp5.dylib
-        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        export CC="clang -L$INSTALL_PATH/lib -Wl,-rpath,$INSTALL_PATH/lib -liomp5 -Wno-unused-command-line-argument"
-        export CXX="clang++ -L$INSTALL_PATH/lib -Wl,-rpath,$INSTALL_PATH/lib -liomp5 -Wno-unused-command-line-argument"
+        export CC="clang"
+        export CXX="clang++"
         ;;
     windows-x86_64)
-        export CC="cl.exe"
-        export CXX="cl.exe"
+        if which ccache.exe; then
+            export CC="ccache.exe cl.exe"
+            export CXX="ccache.exe cl.exe"
+#            export CUDAHOSTCC="cl.exe"
+#            export CUDAHOSTCXX="cl.exe"
+        else
+            export CC="cl.exe"
+            export CXX="cl.exe"
+        fi
+        if [[ -n "${CUDA_PATH:-}" ]]; then
+            export CUDACXX="$CUDA_PATH/bin/nvcc"
+            export CUDA_HOME="$CUDA_PATH"
+            export CUDNN_HOME="$CUDA_PATH"
+        fi
         export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/"
         ;;
     *)
@@ -115,9 +132,12 @@ case $PLATFORM in
         ;;
 esac
 
-sedinplace '/Werror/d' CMakeLists.txt
+# work around issues with the build system
+sedinplace '/Werror/d' CMakeLists.txt third_party/fbgemm/CMakeLists.txt third_party/fmt/CMakeLists.txt
 sedinplace 's/build_python=True/build_python=False/g' setup.py
 sedinplace 's/    build_deps()/    build_deps(); sys.exit()/g' setup.py
+sedinplace 's/AND NOT DEFINED ENV{CUDAHOSTCXX}//g' cmake/public/cuda.cmake
+sedinplace 's/CMAKE_CUDA_FLAGS "/CMAKE_CUDA_FLAGS " --use-local-env /g' CMakeLists.txt
 
 # work around some compiler bugs
 sedinplace 's/!defined(__INTEL_COMPILER))/!defined(__INTEL_COMPILER) \&\& (__GNUC__ < 11))/g' third_party/XNNPACK/src/xnnpack/intrinsics-polyfill.h
@@ -135,22 +155,38 @@ sedinplace '/#include <thrust\/device_vector.h>/a\
 ' caffe2/utils/math_gpu.cu
 
 # allow setting the build directory and passing CUDA options
-sedinplace "s/BUILD_DIR = 'build'/BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
+sedinplace "s/BUILD_DIR = .build./BUILD_DIR = os.environ['BUILD_DIR'] if 'BUILD_DIR' in os.environ else 'build'/g" tools/setup_helpers/env.py
 sedinplace "s/var.startswith(('BUILD_', 'USE_', 'CMAKE_'))/var.startswith(('BUILD_', 'USE_', 'CMAKE_', 'CUDA_'))/g" tools/setup_helpers/cmake.py
 
 # allow resizing std::vector<at::indexing::TensorIndex>
 sedinplace 's/TensorIndex(c10::nullopt_t)/TensorIndex(c10::nullopt_t none = None)/g' aten/src/ATen/TensorIndexing.h
 
 # add missing declarations
+sedinplace '/using ExampleType = ExampleType_;/a\
+  using BatchType = ChunkType;\
+  using DataType = ExampleType;\
+' torch/csrc/api/include/torch/data/datasets/chunk.h
 sedinplace '/^};/a\
 TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& module);\
 ' torch/csrc/api/include/torch/nn/module.h
+sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
+#USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib
 ln -sf pytorch/torch/include ../include
 ln -sf pytorch/torch/lib ../lib
 ln -sf pytorch/torch/bin ../bin
+
+# fix library with correct rpath on Mac
+case $PLATFORM in
+    macosx-*)
+        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
+        chmod +w ../lib/libiomp5.dylib
+        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
+        install_name_tool -change @rpath/libomp.dylib @rpath/libiomp5.dylib ../lib/libtorch_cpu.dylib
+        ;;
+esac
 
 cd ../..

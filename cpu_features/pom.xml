@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.9-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpu_features</artifactId>
-  <version>0.6.0-${project.parent.version}</version>
+  <version>0.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets for cpu_features</name>
 
   <dependencies>

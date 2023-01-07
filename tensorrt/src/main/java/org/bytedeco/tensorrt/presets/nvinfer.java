@@ -48,8 +48,8 @@ import org.bytedeco.cuda.presets.nvrtc;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
-            link = "nvinfer@.8.2.3",
-            preload = "nvinfer_builder_resource@.8.2.3"
+            link = "nvinfer@.8",
+            preload = "nvinfer_builder_resource@.8.4.3"
         ),
         @Platform(
             value = "linux-arm64",
@@ -88,6 +88,9 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
+        if (platform.startsWith("windows")) {
+            preloads.add(i++, "zlibwapi");
+        }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
                          "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
                          "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Samuel Audet
+ * Copyright (C) 2020-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import org.bytedeco.mkl.presets.*;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            compiler = "cpp14",
+            compiler = "cpp17",
             define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()", "DMLC_USE_LOGGING_LIBRARY <tvm/runtime/logging.h>"},
             exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
             include = {
@@ -115,6 +115,9 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
+        if (platform.startsWith("windows")) {
+            preloads.add(i++, "zlibwapi");
+        }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
                          "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
                          "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
@@ -137,6 +140,7 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("org_apache_tvm_native_c_api.cc").skip())
+               .put(new Info().javaText("import org.bytedeco.tvm.Module;"))
                .put(new Info("DLPACK_EXTERN_C", "DLPACK_DLL", "DMLC_STRICT_CXX11", "DMLC_CXX11_THREAD_LOCAL",
                              "DMLC_ATTRIBUTE_UNUSED", "DMLC_SUPPRESS_UBSAN", "DMLC_NO_INLINE", "DMLC_ALWAYS_INLINE", "TVM_WEAK", "TVM_DLL",
                              "TVM_ATTRIBUTE_UNUSED", "TVM_OBJECT_REG_VAR_DEF", "TVM_ADD_FILELINE", "TVM_ALWAYS_INLINE",
@@ -178,6 +182,7 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                .put(new Info("tvm::runtime::ObjectPtr<tvm::runtime::ArrayNode>").pointerTypes("ArrayNodePtr"))
                .put(new Info("tvm::runtime::ObjectPtr<tvm::runtime::MapNode>").pointerTypes("MapNodePtr"))
                .put(new Info("tvm::runtime::Optional<tvm::runtime::String>").pointerTypes("TVMStringOptional"))
+               .put(new Info("tvm::runtime::Optional<tvm::runtime::String>::ContainerType").pointerTypes("StringObj"))
                .put(new Info("tvm::runtime::Object").pointerTypes("TVMObject"))
                .put(new Info("tvm::runtime::String").pointerTypes("TVMString"))
                .put(new Info("tvm::runtime::StringObj::FromStd", "tvm::runtime::ShapeTupleObj::FromStd",

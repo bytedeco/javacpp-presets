@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LZ4 1.9.3  https://github.com/lz4/lz4/
+ * LZ4 1.9.4  https://github.com/lz4/lz4/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.lz4</groupId>
     <artifactId>lz4-frame-compression-example</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8</version>
     <properties>
         <exec.mainClass>LZ4FrameCompressionExample</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>lz4-platform</artifactId>
-            <version>1.9.3-1.5.7</version>
+            <version>1.9.4-1.5.8</version>
         </dependency>
     </dependencies>
     <build>

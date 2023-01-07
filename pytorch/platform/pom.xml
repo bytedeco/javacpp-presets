@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.9-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>pytorch-platform</artifactId>
-  <version>1.10.2-${project.parent.version}</version>
+  <version>1.13.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for PyTorch</name>
 
   <properties>
@@ -28,12 +28,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.19-${project.parent.version}</version>
+      <version>0.3.21-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.22.2-${project.parent.version}</version>
+      <version>1.24.0-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>

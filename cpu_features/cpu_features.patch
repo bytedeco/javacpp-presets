@@ -101,18 +101,3 @@ diff -ruN cpu_features-0.4.0/include/cpuinfo_x86.h cpu_features-0.4.0-patch/incl
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_X86_H_
-diff -ruN cpu_features-0.4.0/include/internal/hwcaps.h cpu_features-0.4.0-patch/include/internal/hwcaps.h
---- cpu_features-0.4.0/include/internal/hwcaps.h	2019-07-05 15:47:41.000000000 +0900
-+++ cpu_features-0.4.0-patch/include/internal/hwcaps.h	2019-07-16 18:03:58.910537799 +0900
-@@ -133,6 +133,11 @@
- 
- PlatformType CpuFeatures_GetPlatformType(void);
- 
-+#if defined(__cplusplus) && defined(CPU_FEATURES_ARCH_X86)
-+HardwareCapabilities CpuFeatures_GetHardwareCapabilities(void) { return HardwareCapabilities(); }
-+PlatformType CpuFeatures_GetPlatformType(void) { return PlatformType(); }
-+#endif
-+
- CPU_FEATURES_END_CPP_NAMESPACE
- 
- #endif  // CPU_FEATURES_INCLUDE_INTERNAL_HWCAPS_H_

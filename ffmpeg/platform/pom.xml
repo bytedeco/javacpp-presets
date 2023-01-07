@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.8-SNAPSHOT</version>
+    <version>1.5.9-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ffmpeg-platform</artifactId>
-  <version>5.0-${project.parent.version}</version>
+  <version>5.1.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for FFmpeg</name>
 
   <properties>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(include = {/*"<opencv2/photo/photo_c.h>",*/ "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
-            link = "opencv_photo@.405",
-            preload = {"opencv_cuda@.405", "opencv_cudaarithm@.405", "opencv_cudafilters@.405", "opencv_cudaimgproc@.405"}),
+            link = "opencv_photo@.407",
+            preload = {"opencv_cuda@.407", "opencv_cudaarithm@.407", "opencv_cudafilters@.407", "opencv_cudaimgproc@.407"}),
         @Platform(value = "ios", preload = "libopencv_photo"),
-        @Platform(value = "windows", link = "opencv_photo455",
-            preload = {"opencv_cuda455", "opencv_cudaarithm455", "opencv_cudafilters455", "opencv_cudaimgproc455"})},
+        @Platform(value = "windows", link = "opencv_photo470",
+            preload = {"opencv_cuda470", "opencv_cudaarithm470", "opencv_cudafilters470", "opencv_cudaimgproc470"})},
     target = "org.bytedeco.opencv.opencv_photo",
     global = "org.bytedeco.opencv.global.opencv_photo"
 )

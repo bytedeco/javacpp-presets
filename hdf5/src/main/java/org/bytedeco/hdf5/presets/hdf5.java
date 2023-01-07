@@ -65,13 +65,20 @@ public class hdf5 implements InfoMapper {
                              "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL").translate(false))
                .put(new Info("ssize_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
                .put(new Info("hsize_t", "hssize_t", "haddr_t", "hid_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g",
+               .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g", "H5Eappend_stack",
                              "H5::Attribute::getName(size_t, std::string&)", "H5::FileAccPropList::getFileAccDirect", "H5::FileAccPropList::setFileAccDirect").skip())
 
                .put(new Info("H5_OVERRIDE").cppText("#define H5_OVERRIDE override").cppTypes())
                .put(new Info("override").annotations("@Override"))
 
                .put(new Info("H5::H5Location").purify())
+               .put(new Info("H5::Attribute::close").javaText("public native @Name(\"close\") /*@Override*/ void _close();"))
+               .put(new Info("H5::Attribute::getId").javaText("public native @Cast(\"hid_t\") /*@Override*/ long getId();"))
+               .put(new Info("H5::DataSet::close").javaText("public native @Name(\"close\") /*@Override*/ void _close();"))
+               .put(new Info("H5::DataSet::getId").javaText("public native @Cast(\"hid_t\") /*@Override*/ long getId();"))
+               .put(new Info("H5::DataSet::getSpace").javaText("public native @ByVal /*@Override*/ DataSpace getSpace();"))
+               .put(new Info("H5::DataSet::getStorageSize").javaText("public native @Cast(\"hsize_t\") /*@Override*/ long getStorageSize();"))
+               .put(new Info("H5::DataSet::getInMemDataSize").javaText("public native @Cast(\"size_t\") /*@Override*/ long getInMemDataSize();"))
                .put(new Info("H5::Group::getLocId").javaText("public native @Cast(\"hid_t\") /*@Override*/ long getLocId();"))
                .put(new Info("H5::attr_operator_t").valueTypes("attr_operator_t").pointerTypes("@ByPtrPtr attr_operator_t").javaText(
                        "public static class attr_operator_t extends FunctionPointer {\n"

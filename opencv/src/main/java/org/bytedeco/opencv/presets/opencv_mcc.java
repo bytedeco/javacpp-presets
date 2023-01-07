@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Samuel Audet
+ * Copyright (C) 2020-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,16 +31,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_calib3d.class, opencv_dnn.class},
     value = {
-        @Platform(include = {"<opencv2/mcc.hpp>", "<opencv2/mcc/checker_model.hpp>", "<opencv2/mcc/checker_detector.hpp>"}, link = "opencv_mcc@.405"),
+        @Platform(include = {
+            "<opencv2/mcc.hpp>",
+            "<opencv2/mcc/checker_model.hpp>",
+            "<opencv2/mcc/checker_detector.hpp>",
+            "<opencv2/mcc/ccm.hpp>"}, link = "opencv_mcc@.407"),
         @Platform(value = "ios", preload = "libopencv_mcc"),
-        @Platform(value = "windows", link = "opencv_mcc455")
+        @Platform(value = "windows", link = "opencv_mcc470")
     },
     target = "org.bytedeco.opencv.opencv_mcc",
     global = "org.bytedeco.opencv.global.opencv_mcc"
 )
 public class opencv_mcc implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-
+        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
+               .put(new Info("cv::Ptr<cv::mcc::CChecker> ").annotations("@Ptr").valueTypes("CChecker"))
+               .put(new Info("std::vector<cv::Ptr<cv::mcc::CChecker> >").pointerTypes("CCheckerVector").define());
     }
 }
 

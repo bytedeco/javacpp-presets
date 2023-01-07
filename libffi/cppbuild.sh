@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBFFI_VERSION=3.4.2
+LIBFFI_VERSION=3.4.4
 download https://github.com/libffi/libffi/releases/download/v$LIBFFI_VERSION/libffi-$LIBFFI_VERSION.tar.gz libffi-$LIBFFI_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -16,6 +16,8 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../libffi-$LIBFFI_VERSION.tar.gz
 cd libffi-$LIBFFI_VERSION
+
+#patch -Np1 < ../../../libffi.patch
 
 case $PLATFORM in
     android-arm)
@@ -83,7 +85,13 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
-    macosx-*)
+    macosx-arm64)
+        sedinplace 's/\\\$rpath/@rpath/g' configure
+        CC="clang -arch arm64" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory --host="aarch64-apple-darwin"
+        make -j $MAKEJ
+        make install-strip
+        ;;
+    macosx-x86_64)
         sedinplace 's/\\\$rpath/@rpath/g' configure
         CC="clang" ./configure --prefix="$INSTALL_PATH" --disable-multi-os-directory
         make -j $MAKEJ

@@ -23,7 +23,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Triton Inference Server 2.18.0  https://github.com/triton-inference-server/server
+ * Triton Inference Server 2.26.0  https://github.com/triton-inference-server/server
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -39,9 +39,9 @@ Sample Usage
 ------------
 Here is a simple example of Triton Inference Server ported to Java from the `simple.cc` sample file available at:
 
- * https://github.com/triton-inference-server/server/tree/main/src/servers
+ * https://github.com/triton-inference-server/server/blob/main/src/simple.cc
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/`](samples/) subdirectory, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files from the [`samples/simple`](samples/simple) subdirectory, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="-r /path/to/models"
 ```
@@ -51,9 +51,9 @@ This sample intends to show how to call the Java-mapped C API of Triton to execu
 
  1. Get the source code of Triton Inference Server to prepare the model repository:
 ```bash
- $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.18.0.tar.gz
- $ tar zxvf v2.18.0.tar.gz
- $ cd server-2.18.0/docs/examples/model_repository
+ $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.26.0.tar.gz
+ $ tar zxvf v2.26.0.tar.gz
+ $ cd server-2.26.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
 ```
@@ -61,7 +61,7 @@ Now, this `models` directory will be our model repository.
 
  2. Start the Docker container to run the sample (assuming we are under the `models` directory created above):
 ```bash
- $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:22.01-py3 bash
+ $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:22.09-py3 bash
  $ apt update
  $ apt install -y openjdk-11-jdk
  $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
@@ -69,15 +69,23 @@ Now, this `models` directory will be our model repository.
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets
+```
+
+3. Compile the `tritonserver` and `tritonserver/platform` modules with Maven, which will generate the necessary bindings:
+```bash
  $ mvn clean install --projects .,tritonserver
  $ mvn clean install -f platform --projects ../tritonserver/platform -Djavacpp.platform=linux-x86_64
- $ cd tritonserver/samples
- $ mvn compile exec:java -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
+```
+
+4. Execute `Simple.java`:
+```bash
+ $ cd tritonserver/samples/simple
+ $ mvn compile exec:java -Dexec.mainClass=Simple -Djavacpp.platform=linux-x86_64 -Dexec.args="-r /workspace/models"
 ```
 
 This sample is the Java implementation of the simple example written for the [C API](https://github.com/triton-inference-server/server/blob/main/docs/inference_protocols.md#c-api).
 
-### Steps to run any binary linked to Triton Inference Server using JavaCPP inside an NGC container
+### Steps to run your *.java files with Triton Inference Server using Maven inside an NGC container
 
 To run your code, you will need to:
 
@@ -85,4 +93,12 @@ To run your code, you will need to:
  2. Similar to the `pom.xml` for `Simple.java`, execute with:
 ```bash
  $ mvn compile exec:java
+```
+
+### Steps to run your *.java files with Triton Inference Server using the "uber JAR" inside an NGC container
+
+After generating `tritonserver/platform/target/tritonserver-platform-*-shaded.jar` by following [steps 1 to 3](#steps-to-run-this-sample-inside-an-ngc-container) above, you can then execute the following to run directly your application:
+```bash
+ $ cd tritonserver/samples/simple
+ $ java -cp ../platform/target/tritonserver-platform-*-shaded.jar Simple.java -r /workspace/models
 ```

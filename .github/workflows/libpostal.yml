@@ -3,9 +3,11 @@ on:
   push:
     paths:
       - libpostal/**
+      - .github/workflows/libpostal.yml
   pull_request:
     paths:
       - libpostal/**
+      - .github/workflows/libpostal.yml
   workflow_dispatch:
 env:
   CI_DEPLOY_MODULE: ${{ github.workflow }}
@@ -15,13 +17,22 @@ env:
   CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
   STAGING_REPOSITORY: ${{ secrets.STAGING_REPOSITORY }}
 jobs:
+  linux-arm64:
+    runs-on: ubuntu-20.04
+    container: ubuntu:bionic
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container: centos:7
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+  macosx-arm64:
+    runs-on: macos-11
+    steps:
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   macosx-x86_64:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   windows-x86_64:
@@ -29,7 +40,7 @@ jobs:
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
-    needs: [linux-x86_64, macosx-x86_64, windows-x86_64]
-    runs-on: ubuntu-18.04
+    needs: [linux-arm64, linux-x86_64, macosx-x86_64, windows-x86_64]
+    runs-on: ubuntu-20.04
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/redeploy@actions
