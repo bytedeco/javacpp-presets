@@ -1,4 +1,5 @@
 
+ * Build FFmpeg with AOMedia AV1 and SVT-AV1 codecs ([pull #1303](https://github.com/bytedeco/javacpp-presets/pull/1303))
  * Map `c10::OptionalArrayRef<int64_t>` from PyTorch to `long...` as well for convenience ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
  * Remove mapping for `c10::OptionalArrayRef` to simplify calls in presets for PyTorch ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
  * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to allow callbacks ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
