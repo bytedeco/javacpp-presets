@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 Samuel Audet
+ * Copyright (C) 2019-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "librealsense2/rs_advanced_mode.h",
                 "librealsense2/rsutil.h"
             },
-            link = "realsense2@.2.50"
+            link = "realsense2@.2.53"
         ),
         @Platform(value = "macosx", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/")
     },
