@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 LIBREALSENSE2_VERSION=2.50.0
-LIBUSB_VERSION=1.0.22
+LIBUSB_VERSION=1.0.26
 download https://github.com/IntelRealSense/librealsense/archive/v$LIBREALSENSE2_VERSION.tar.gz librealsense-$LIBREALSENSE2_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
@@ -67,6 +67,12 @@ case $PLATFORM in
         ;;
     macosx-x86_64)
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF .
+        make -j $MAKEJ
+        make install/strip
+        install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib
+        ;;
+    macosx-arm64)
+        "$CMAKE" -DCMAKE_OSX_ARCHITECTURES="arm64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF -DCMAKE_THREAD_LIBS_INIT="-lpthread" -DBUILD_WITH_OPENMP=false -DHWM_OVER_XU=false .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/librealsense2.dylib

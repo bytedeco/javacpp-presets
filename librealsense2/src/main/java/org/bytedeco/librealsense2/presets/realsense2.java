@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = javacpp.class,
     value = {
         @Platform(
-            value = {"linux-armhf", "linux-arm64", "linux-x86", "macosx-x86", "windows-x86"},
+            value = {"linux-armhf", "linux-arm64", "linux-x86", "macosx-x86", "macosx-arm64", "windows-x86"},
             compiler = "cpp11",
             include = {
                 "librealsense2/h/rs_types.h",
