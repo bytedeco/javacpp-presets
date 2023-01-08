@@ -1,0 +1,11 @@
+--- SVT-AV1-v1.4.1/Source/Lib/Common/Codec/EbThreads.h	2022-12-10 09:30:47.000000000 +1100
++++ SVT-AV1-v1.4.1-patch/Source/Lib/Common/Codec/EbThreads.h	2023-01-06 08:15:06.978001264 +1100
+@@ -78,7 +78,7 @@
+ #endif
+ #include <sched.h>
+ #include <pthread.h>
+-#if defined(__linux__)
++#if defined(__linux__) && !defined(__ANDROID__)
+ #define EB_CREATE_THREAD(pointer, thread_function, thread_context)                           \
+     do {                                                                                     \
+         pointer = svt_create_thread(thread_function, thread_context);                        \
