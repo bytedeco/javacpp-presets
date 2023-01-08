@@ -126,7 +126,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>librealsense2-platform</artifactId>
-      <version>2.50.0-${project.version}</version>
+      <version>2.53.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
