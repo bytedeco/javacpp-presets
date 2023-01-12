@@ -1736,7 +1736,17 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
-            preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.11.8"},
+            preloadpath = {
+                "/usr/local/cuda-11.8/lib64/",
+                "/usr/local/cuda-11.8/extras/CUPTI/lib64/",
+                "/usr/local/cuda/lib64/",
+                "/usr/local/cuda/extras/CUPTI/lib64/",
+                "/usr/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
+            },
             extension = "-gpu"
         ),
     },
