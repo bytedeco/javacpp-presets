@@ -1309,7 +1309,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ ..
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ $LIBSVTAV1_CONFIG ..
         make -j $MAKEJ
         make install
         cd ..
@@ -1651,7 +1651,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_BUILD_TYPE=Release ..
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG -DCMAKE_BUILD_TYPE=Release ..
         make -j $MAKEJ
         make install
         cd ..
@@ -1775,7 +1775,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_BUILD_TYPE=Release ..
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG -DCMAKE_BUILD_TYPE=Release ..
         make -j $MAKEJ
         make install
         cd ..
@@ -1907,7 +1907,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" $LIBSVTAV1_CONFIG -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
         make -j $MAKEJ
         make install
         cd ..
@@ -2038,7 +2038,7 @@ EOF
         cd ../SVT-AV1-v$SVTAV1_VERSION
         mkdir -p build_release
         cd build_release
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_BUILD_TYPE=Release ..
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG -DCMAKE_BUILD_TYPE=Release ..
         make -j $MAKEJ
         make install
         cd ..
