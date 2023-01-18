@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                            "<TransportLayerStreamC.h>",
                            "<TransportLayerSystemC.h>",
                 },
-                link = {"SpinVideo_C@.2", "Spinnaker_C@.2"},
+                link = {"SpinVideo_C@.3", "Spinnaker_C@.3"},
                 linkpath = {"/opt/spinnaker/lib/",
                             "/usr/lib/"},
                 includepath = {"/opt/spinnaker/include/spinc/",
@@ -96,5 +96,9 @@ public class Spinnaker_C implements InfoMapper {
                // To avoid errors like: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol spinCameraForceIP
                .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand").skip())
         ;
+
+        infoMap.put(new Info("SPINNAKER_TLPAYLOAD_TYPE_LOSSLESS_COMPRESSED").skip());
+        infoMap.put(new Info("SPINNAKER_TLPAYLOAD_TYPE_LOSSY_COMPRESSED").skip());
+        infoMap.put(new Info("SPINNAKER_TLPAYLOAD_TYPE_JPEG_LOSSLESS_COMPRESSED").skip());
     }
 }
