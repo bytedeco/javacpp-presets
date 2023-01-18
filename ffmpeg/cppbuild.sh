@@ -114,13 +114,11 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1.patch
+patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1-2059.diff
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
-sedinplace 's/aom_sum_squares_i16)/aom_sum_squares_i16_opt)/g' SVT-AV1-*/Source/Lib/Common/Codec/common_dsp_rtcd.h
-sedinplace 's/aom_sum_squares_i16,/aom_sum_squares_i16_opt,/g' SVT-AV1-*/Source/Lib/Common/Codec/common_dsp_rtcd.c
-sedinplace 's/aom_sum_squares_i16(/aom_sum_squares_i16_opt(/g' SVT-AV1-*/Source/Lib/Encoder/Codec/EbEncInterPrediction.c
 
 case $PLATFORM in
     android-arm)
