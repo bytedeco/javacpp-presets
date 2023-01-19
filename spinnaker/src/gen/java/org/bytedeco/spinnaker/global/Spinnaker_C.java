@@ -7065,9 +7065,7 @@ public enum spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native spinError spinRegisterSetEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const uint8_t*") BytePointer pBuf, @Cast("int64_t") long length);
-    public static native @Cast("spinError") int spinRegisterSetEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const uint8_t*") ByteBuffer pBuf, @Cast("int64_t") long length);
-    public static native spinError spinRegisterSetEx(spinNodeHandle hNode, @Cast("bool8_t") byte bVerify, @Cast("const uint8_t*") byte[] pBuf, @Cast("int64_t") long length);
+    
 
     /**
      * Uses a second node as a reference for a register node
@@ -7556,14 +7554,7 @@ public enum spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native spinError spinSystemSendActionCommand(
-            spinSystem hSystem,
-            @Cast("size_t") long iDeviceKey,
-            @Cast("size_t") long iGroupKey,
-            @Cast("size_t") long iGroupMask,
-            @Cast("size_t") long iActionTime,
-            @Cast("size_t*") SizeTPointer piResultSize,
-            actionCommandResult results);
+    
 
     /**
      * Get current library version of Spinnaker.
@@ -8110,14 +8101,7 @@ public enum spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native spinError spinInterfaceSendActionCommand(
-            spinInterface hInterface,
-            @Cast("size_t") long iDeviceKey,
-            @Cast("size_t") long iGroupKey,
-            @Cast("size_t") long iGroupMask,
-            @Cast("size_t") long iActionTime,
-            @Cast("size_t*") SizeTPointer piResultSize,
-            actionCommandResult results);
+    
     /*@}*/
 
     /**
@@ -8499,7 +8483,7 @@ public enum spinInputDirection {
      *
      * @return spinError The error code; returns SPINNAKER_ERR_SUCCESS (or 0) for no error
      */
-    public static native spinError spinCameraForceIP();
+    
     /*@}*/
 
     /**
