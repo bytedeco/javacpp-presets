@@ -1,0 +1,41 @@
+diff --git a/Source/Lib/Common/Codec/common_dsp_rtcd.c b/Source/Lib/Common/Codec/common_dsp_rtcd.c
+index 525f5333be9988a7a6f81d1bc9b4ab3f683cb77a..4507c7788242f1a0a2a92930b37c32a578bf6d1c 100644
+--- a/Source/Lib/Common/Codec/common_dsp_rtcd.c
++++ b/Source/Lib/Common/Codec/common_dsp_rtcd.c
+@@ -354,7 +354,7 @@ void setup_common_rtcd_internal(EbCpuFlags flags) {
+     SET_AVX2(svt_aom_highbd_paeth_predictor_64x16, svt_aom_highbd_paeth_predictor_64x16_c, svt_aom_highbd_paeth_predictor_64x16_avx2);
+     SET_AVX2(svt_aom_highbd_paeth_predictor_64x32, svt_aom_highbd_paeth_predictor_64x32_c, svt_aom_highbd_paeth_predictor_64x32_avx2);
+     SET_AVX2(svt_aom_highbd_paeth_predictor_64x64, svt_aom_highbd_paeth_predictor_64x64_c, svt_aom_highbd_paeth_predictor_64x64_avx2);
+-    SET_SSE2(aom_sum_squares_i16, svt_aom_sum_squares_i16_c, svt_aom_sum_squares_i16_sse2);
++    SET_SSE2(svt_aom_sum_squares_i16, svt_aom_sum_squares_i16_c, svt_aom_sum_squares_i16_sse2);
+     SET_SSE2(svt_aom_dc_predictor_4x4, svt_aom_dc_predictor_4x4_c, svt_aom_dc_predictor_4x4_sse2);
+     SET_SSE2(svt_aom_dc_predictor_4x8, svt_aom_dc_predictor_4x8_c, svt_aom_dc_predictor_4x8_sse2);
+     SET_SSE2(svt_aom_dc_predictor_4x16, svt_aom_dc_predictor_4x16_c, svt_aom_dc_predictor_4x16_sse2);
+diff --git a/Source/Lib/Common/Codec/common_dsp_rtcd.h b/Source/Lib/Common/Codec/common_dsp_rtcd.h
+index 698afd5f3e0f7dac47fcfbe33e065d4431fd772b..c055fb4ca613f5eb38551fe858b871e1a89584ca 100644
+--- a/Source/Lib/Common/Codec/common_dsp_rtcd.h
++++ b/Source/Lib/Common/Codec/common_dsp_rtcd.h
+@@ -1008,7 +1008,7 @@ extern "C" {
+     void svt_aom_highbd_paeth_predictor_8x8_c(uint16_t *dst, ptrdiff_t y_stride, const uint16_t *above, const uint16_t *left, int bd);
+     RTCD_EXTERN void(*svt_aom_highbd_paeth_predictor_8x8)(uint16_t *dst, ptrdiff_t y_stride, const uint16_t *above, const uint16_t *left, int bd);
+     uint64_t svt_aom_sum_squares_i16_c(const int16_t *src, uint32_t N);
+-    RTCD_EXTERN uint64_t(*aom_sum_squares_i16)(const int16_t *src, uint32_t N);
++    RTCD_EXTERN uint64_t(*svt_aom_sum_squares_i16)(const int16_t *src, uint32_t N);
+ 
+     uint8_t svt_aom_cdef_find_dir_c(const uint16_t *img, int32_t stride, int32_t *var, int32_t coeff_shift);
+     uint8_t svt_aom_cdef_find_dir_sse4_1(const uint16_t *img, int32_t stride, int32_t *var, int32_t coeff_shift);
+diff --git a/Source/Lib/Encoder/Codec/EbEncInterPrediction.c b/Source/Lib/Encoder/Codec/EbEncInterPrediction.c
+index 7a16fdf1f1bddb0e45cb6861d2ae2c00257ae036..263b3661373151debf5ee4f332d774052216365f 100644
+--- a/Source/Lib/Encoder/Codec/EbEncInterPrediction.c
++++ b/Source/Lib/Encoder/Codec/EbEncInterPrediction.c
+@@ -454,8 +454,8 @@ static void pick_wedge(PictureControlSet *picture_control_set_ptr, ModeDecisionC
+         svt_aom_subtract_block(
+             bh, bw, residual0, bw, src_buf /*src->buf*/, src_pic->stride_y /*src->stride*/, p0, bw);
+     }
+-    int64_t sign_limit = ((int64_t)aom_sum_squares_i16(residual0, N) -
+-                          (int64_t)aom_sum_squares_i16(residual1, N)) *
++    int64_t sign_limit = ((int64_t)svt_aom_sum_squares_i16(residual0, N) -
++                          (int64_t)svt_aom_sum_squares_i16(residual1, N)) *
+         (1 << WEDGE_WEIGHT_BITS) / 2;
+     int16_t *ds = residual0;
+ 
