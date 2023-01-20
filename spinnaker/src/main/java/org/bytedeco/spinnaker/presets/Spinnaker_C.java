@@ -94,10 +94,10 @@ public class Spinnaker_C implements InfoMapper {
                .put(new Info("SPINC_NO_DECLSPEC_STATEMENTS", "EXTERN_C").define())
                // Skip to avoid linker errors, somehow Spinnaker SDK does not export those functions,
                // To avoid errors like: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol spinCameraForceIP
-               .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand").skip())
-               .put(new Info("SPINNAKER_TLPAYLOAD_TYPE_LOSSLESS_COMPRESSED").skip())
-               .put(new Info("SPINNAKER_TLPAYLOAD_TYPE_LOSSY_COMPRESSED").skip())
-               .put(new Info("SPINNAKER_TLPAYLOAD_TYPE_JPEG_LOSSLESS_COMPRESSED").skip())
+               .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand",
+                             "SPINNAKER_TLPAYLOAD_TYPE_LOSSLESS_COMPRESSED",
+                             "SPINNAKER_TLPAYLOAD_TYPE_LOSSY_COMPRESSED",
+                             "SPINNAKER_TLPAYLOAD_TYPE_JPEG_LOSSLESS_COMPRESSED").skip())
         ;
     }
 }
