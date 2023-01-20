@@ -18,6 +18,7 @@ runs:
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
 
         echo Removing broken stuff from WSL, MSYS2, etc
+        rm "C:/msys64/usr/bin/curl.exe" "C:/msys64/mingw32/bin/curl.exe" "C:/msys64/mingw64/bin/curl.exe"
         rm "C:/WINDOWS/system32/bash.EXE" "C:/msys64/usr/bin/link.exe" "C:/msys64/usr/bin/timeout.exe" "C:/msys64/usr/bin/python.exe" "C:/msys64/usr/bin/python3.exe"
         rm "C:/ProgramData/chocolatey/bin/gfortran.exe" "C:/msys64/mingw32/bin/gfortran.exe" "C:/msys64/mingw32/bin/python.exe" "C:/msys64/mingw32/bin/python3.exe"
         rm "C:/Strawberry/c/bin/gfortran.exe" "C:/msys64/mingw64/bin/gfortran.exe" "C:/msys64/mingw64/bin/python.exe" "C:/msys64/mingw64/bin/python3.exe"
@@ -212,6 +213,7 @@ runs:
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"
 
         where bash
+        where curl
         where git
         where cl
         where gcc
