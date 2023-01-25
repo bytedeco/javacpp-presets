@@ -1,4 +1,5 @@
 
+ * Add an RPATH to the `tesseract` program to avoid loading issues ([issue #1314](https://github.com/bytedeco/javacpp-presets/issues/1314))
  * Bundle the CUPTI module of CUDA in the presets for PyTorch ([pull #1307](https://github.com/bytedeco/javacpp-presets/pull/1307))
  * Build FFmpeg with AOMedia AV1 and SVT-AV1 codecs ([pull #1303](https://github.com/bytedeco/javacpp-presets/pull/1303))
  * Map `c10::OptionalArrayRef<int64_t>` from PyTorch to `long...` as well for convenience ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
