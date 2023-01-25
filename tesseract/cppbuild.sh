@@ -51,74 +51,74 @@ CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$LEPTONICA_PATH -DC
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../tesseract-android.patch
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     android-arm64)
         patch -Np1 < ../../../tesseract-android.patch
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     android-x86)
         patch -Np1 < ../../../tesseract-android.patch
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     android-x86_64)
         patch -Np1 < ../../../tesseract-android.patch
-        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc -fPIC"
         export CXX="arm-linux-gnueabihf-g++ -fPIC"
-        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-arm64)
         export CC="aarch64-linux-gnu-gcc -fPIC"
         export CXX="aarch64-linux-gnu-g++ -fPIC"
-        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-ppc64le)
         export CC="powerpc64le-linux-gnu-gcc -fPIC"
         export CXX="powerpc64le-linux-gnu-g++ -fPIC"
-        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le $CMAKE_CONFIG .
+        $CMAKE -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86)
         export CC="gcc -m32 -fPIC"
         export CXX="g++ -m32 -fPIC"
-        $CMAKE $CMAKE_CONFIG .
+        $CMAKE $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     linux-x86_64)
         export CC="gcc -m64 -fPIC"
         export CXX="g++ -m64 -fPIC"
-        $CMAKE $CMAKE_CONFIG .
+        $CMAKE $CMAKE_CONFIG -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-arm64)
         export CC="clang -arch arm64 -fPIC"
         export CXX="clang++ -arch arm64 -fPIC"
-        $CMAKE -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm64 $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON -DCMAKE_CXX_FLAGS='-Wl,-rpath,@loader_path/' .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-x86_64)
         export CC="clang -arch x86_64 -fPIC"
         export CXX="clang++ -arch x86_64 -fPIC"
-        $CMAKE $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON .
+        $CMAKE $CMAKE_CONFIG -DCMAKE_MACOSX_RPATH=ON -DCMAKE_CXX_FLAGS='-Wl,-rpath,@loader_path/' .
         make -j $MAKEJ
         make install/strip
         ;;
