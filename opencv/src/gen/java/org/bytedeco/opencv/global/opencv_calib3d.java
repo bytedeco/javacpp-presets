@@ -5172,46 +5172,11 @@ optimization. It is the {@code max(width,height)/\pi} or the provided {@code f_x
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal Mat K, @ByVal Mat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal Mat K, @ByVal Mat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
-                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
 
     /** \brief Stereo rectification for fisheye camera model
     <p>
