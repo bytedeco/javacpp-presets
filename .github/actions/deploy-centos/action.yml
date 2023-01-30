@@ -147,7 +147,7 @@ runs:
           echo Installing Spinnaker amd64
           python3 -m gdown.cli https://drive.google.com/uc?id=1B91OxuFgT-T29fNlBc2gsgr-K2l2LNtw
           tar -xzvf spinnaker-3.0.0.118-amd64-pkg.tar.gz
-          find -name *.deb | while read f; do ar -xv $f; tar -I zstd --totals -xvf data.tar.zst -C /; done;
+          find -name *.deb | while read f; do ar -xv $f; tar --totals -xvf data.tar.zst -C /; done;
         fi
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
