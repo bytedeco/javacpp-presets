@@ -414,7 +414,14 @@ public class Acquisition_C {
             if (printOnError(err, "Unable to create image. Non-fatal error.")) {
                 hasFailed = true;
             }
-            err = spinImageConvert(hResultImage, spinPixelFormatEnums.PixelFormat_Mono8, hConvertedImage);
+
+            spinImageProcessor hImageProcessor = new spinImageProcessor(); // NULL;
+            err = spinImageProcessorCreate(hImageProcessor);
+            if (printOnError(err, "Unable to create image processor. Non-fatal error.")) {
+                hasFailed = true;
+            }
+
+            err = spinImageProcessorConvert(hImageProcessor, hResultImage, hConvertedImage, spinPixelFormatEnums.PixelFormat_Mono8);
             if (printOnError(err, "\"Unable to convert image. Non-fatal error.")) {
                 hasFailed = true;
             }
@@ -433,7 +440,7 @@ public class Acquisition_C {
                 // numbers to keep images of one device from overwriting those of
                 // another.
                 //
-                err = spinImageSave(hConvertedImage, new BytePointer(filename), spinImageFileFormat.JPEG);
+                err = spinImageSave(hConvertedImage, new BytePointer(filename), spinImageFileFormat.SPINNAKER_IMAGE_FILE_FORMAT_JPEG);
                 if (!printOnError(err, "Unable to save image. Non-fatal error.")) {
                     System.out.println("Image saved at " + filename + "\n");
                 }

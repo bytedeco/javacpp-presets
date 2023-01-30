@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
- * Wrapper for Point Grey Spinnaker_C library (the C API v.2).
+ * Wrapper for Point Grey Spinnaker_C library (the C API v.3).
  *
  * @author Jarek Sacha
  */
@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                            "<TransportLayerStreamC.h>",
                            "<TransportLayerSystemC.h>",
                 },
-                link = {"SpinVideo_C@.2", "Spinnaker_C@.2"},
+                link = {"SpinVideo_C@.3", "Spinnaker_C@.3"},
                 linkpath = {"/opt/spinnaker/lib/",
                             "/usr/lib/"},
                 includepath = {"/opt/spinnaker/include/spinc/",
@@ -94,7 +94,10 @@ public class Spinnaker_C implements InfoMapper {
                .put(new Info("SPINC_NO_DECLSPEC_STATEMENTS", "EXTERN_C").define())
                // Skip to avoid linker errors, somehow Spinnaker SDK does not export those functions,
                // To avoid errors like: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol spinCameraForceIP
-               .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand").skip())
+               .put(new Info("spinCameraForceIP", "spinRegisterSetEx", "spinSystemSendActionCommand", "spinInterfaceSendActionCommand",
+                             "SPINNAKER_TLPAYLOAD_TYPE_LOSSLESS_COMPRESSED",
+                             "SPINNAKER_TLPAYLOAD_TYPE_LOSSY_COMPRESSED",
+                             "SPINNAKER_TLPAYLOAD_TYPE_JPEG_LOSSLESS_COMPRESSED").skip())
         ;
     }
 }

@@ -12,14 +12,16 @@ import static org.bytedeco.spinnaker.global.Spinnaker_C.*;
 
 
 /**
- * Handle for image statistics functionality. Created by calling
- * spinImageStatisticsCreate(), which requires a call to
- * spinImageStatisticsDestroy() to destroy.
+ * Handle for image list functionality. Created by calling
+ * spinCameraGetNextImageSync(), which require a call to
+ * spinImageRelease() to remove from buffer, or
+ * spinImageCreateEmpty(), spinImageCreateEx(), or spinImageCreate(),
+ * which require a call to spinImageDestroy() to destroy.
  */
 @Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.spinnaker.presets.Spinnaker_C.class)
-public class spinImageStatistics extends Pointer {
+public class spinImageList extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public spinImageStatistics() { super((Pointer)null); }
+    public spinImageList() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public spinImageStatistics(Pointer p) { super(p); }
+    public spinImageList(Pointer p) { super(p); }
 }
