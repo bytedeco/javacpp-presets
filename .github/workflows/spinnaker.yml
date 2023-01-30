@@ -21,15 +21,15 @@ jobs:
     runs-on: ubuntu-20.04
     container: centos:7
     steps:
-      - uses: ihmcrobotics/javacpp-presets/.github/actions/deploy-centos@spinnaker-upgrade
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
   windows-x86:
     runs-on: windows-2019
     steps:
-      - uses: ihmcrobotics/javacpp-presets/.github/actions/deploy-windows@spinnaker-upgrade
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   windows-x86_64:
     runs-on: windows-2019
     steps:
-      - uses: ihmcrobotics/javacpp-presets/.github/actions/deploy-windows@spinnaker-upgrade
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-windows@actions
   redeploy:
     needs: [linux-x86_64, windows-x86, windows-x86_64]
     runs-on: ubuntu-20.04
