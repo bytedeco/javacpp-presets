@@ -103,4 +103,5 @@ public class ffi implements InfoMapper {
     public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX_LONG_DOUBLE_128();
     public static native @MemberGetter @Platform(pattern = ".*-ppc64.*") int FFI_LINUX_LONG_DOUBLE_IEEE128();
     public static native @MemberGetter int FFI_LAST_ABI();
+    public static native @MemberGetter int FFI_DEFAULT_ABI();
 }
