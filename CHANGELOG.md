@@ -1,5 +1,5 @@
 
- * Remove mapping for platform-dependent `enum` values in presets for libffi ([issue #1318](https://github.com/bytedeco/javacpp-presets/issues/1318))
+ * Remove mapping for platform-dependent `enum` values in presets for libffi ([pull #1318](https://github.com/bytedeco/javacpp-presets/pull/1318))
  * Fix mapping of `cv::fisheye::calibrate()` function from `opencv_calib3d` ([issue #1185](https://github.com/bytedeco/javacpp-presets/issues/1185))
  * Add an RPATH to the `tesseract` program to avoid loading issues ([issue #1314](https://github.com/bytedeco/javacpp-presets/issues/1314))
  * Bundle the CUPTI module of CUDA in the presets for PyTorch ([pull #1307](https://github.com/bytedeco/javacpp-presets/pull/1307))
