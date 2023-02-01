@@ -1,4 +1,5 @@
 
+ * Remove mapping for platform-dependent `enum` values in presets for libffi ([pull #1318](https://github.com/bytedeco/javacpp-presets/pull/1318))
  * Fix mapping of `cv::fisheye::calibrate()` function from `opencv_calib3d` ([issue #1185](https://github.com/bytedeco/javacpp-presets/issues/1185))
  * Add an RPATH to the `tesseract` program to avoid loading issues ([issue #1314](https://github.com/bytedeco/javacpp-presets/issues/1314))
  * Bundle the CUPTI module of CUDA in the presets for PyTorch ([pull #1307](https://github.com/bytedeco/javacpp-presets/pull/1307))
@@ -13,7 +14,7 @@
  * Map `c10::impl::GenericDict` as returned by `c10::IValue::toGenericDict()` in presets for PyTorch
  * Introduce `linux-armhf` and `linux-x86` builds to presets for TensorFlow Lite ([pull #1268](https://github.com/bytedeco/javacpp-presets/pull/1268))
  * Add presets for LibRaw 0.20.2 ([pull #1211](https://github.com/bytedeco/javacpp-presets/pull/1211))
- * Upgrade presets for OpenCV 4.7.0, librealsense2 2.53.1 ([pull #1305](https://github.com/bytedeco/javacpp-presets/pull/1305)), DNNL 2.7.2, CPython 3.11.1, NumPy 1.24.0, SciPy 1.10.0, LLVM 15.0.6, Leptonica 1.83.0, Tesseract 5.3.0, PyTorch 1.13.1, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
+ * Upgrade presets for OpenCV 4.7.0, Spinnaker 3.0.0.118 ([pull #1313](https://github.com/bytedeco/javacpp-presets/pull/1313)), librealsense2 2.53.1 ([pull #1305](https://github.com/bytedeco/javacpp-presets/pull/1305)), DNNL 2.7.2, CPython 3.11.1, NumPy 1.24.0, SciPy 1.10.0, LLVM 15.0.6, Leptonica 1.83.0, Tesseract 5.3.0, PyTorch 1.13.1, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
 
 ### November 2, 2022 version 1.5.8
  * Fix mapping of `torch::ExpandingArrayWithOptionalElem` in presets for PyTorch ([issue #1250](https://github.com/bytedeco/javacpp-presets/issues/1250))

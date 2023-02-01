@@ -79,6 +79,9 @@ public class ffi implements InfoMapper {
                .put(new Info("_ffi_type").pointerTypes("ffi_type"))
                .put(new Info("void (*)(void)").cast().pointerTypes("Pointer"))
                .put(new Info("__attribute__((deprecated))").annotations("@Deprecated"))
+               .put(new Info("FFI_FIRST_ABI", "FFI_SYSV", "FFI_THISCALL", "FFI_FASTCALL",
+                             "FFI_STDCALL", "FFI_PASCAL", "FFI_REGISTER", "FFI_MS_CDECL",
+                             "FFI_LAST_ABI", "FFI_DEFAULT_ABI").skip())
         ;
     }
 
