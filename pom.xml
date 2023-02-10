@@ -636,6 +636,7 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
+        <module>mamba</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
