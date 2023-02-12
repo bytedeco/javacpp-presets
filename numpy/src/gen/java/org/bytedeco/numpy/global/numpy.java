@@ -1382,14 +1382,8 @@ public static final double NPY_SQRT1_2l =  0.70710678118654752440084436210484903
 /* Mandatory C99 double math funcs, no blocklisting or fixups */
 /* defined for legacy reasons, should be deprecated at some point */
 
-// #if defined(__arm64__) && defined(__APPLE__)
-/* due to a build problem with scipy, export these as functions */
-@NoException public static native double npy_asinh(double x);
-@NoException public static native double npy_copysign(double y, double x);
-@NoException public static native double npy_log1p(double x);
-// #else
-// #endif
 @NoException public static native double npy_nextafter(double x, double y);
+
 @NoException public static native double npy_spacing(double x);
 
 /*

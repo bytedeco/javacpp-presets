@@ -71,16 +71,16 @@ runs:
         apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
 
         find /usr/lib/jvm/default-java/
-        curl -LO https://github.com/Kitware/CMake/releases/download/v3.18.6/cmake-3.18.6-Linux-x86_64.tar.gz
+        curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.tar.gz
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
-        tar -xzf cmake-3.18.6-Linux-x86_64.tar.gz -C /opt/
+        tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
         tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
         tar -xzf git-2.18.3.tar.gz
         unzip gradle-7.1.1-bin.zip -d /opt/
         pushd git-2.18.3; make -j2 prefix=/usr/local/; make -j2 prefix=/usr/local/ install; popd
-        ln -sf /opt/cmake-3.18.6-Linux-x86_64/bin/* /usr/bin/
+        ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
         ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 

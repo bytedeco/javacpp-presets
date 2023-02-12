@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Dynamics/shared/b3IntegrateTransforms.h",
                 "Bullet3Dynamics/b3CpuRigidBodyPipeline.h",
             },
-            link = "Bullet3Dynamics@.3.24"
+            link = "Bullet3Dynamics@.3.25"
         )
     },
     target = "org.bytedeco.bullet.Bullet3Dynamics",

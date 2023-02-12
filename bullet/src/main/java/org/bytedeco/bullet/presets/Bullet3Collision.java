@@ -63,7 +63,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3Collision/NarrowPhaseCollision/shared/b3QuantizedBvhNodeData.h",
                 "Bullet3Collision/NarrowPhaseCollision/shared/b3ReduceContacts.h",
             },
-            link = {"Bullet3Geometry@.3.24", "Bullet3Collision@.3.24"}
+            link = {"Bullet3Geometry@.3.25", "Bullet3Collision@.3.25"}
         ),
     },
     target = "org.bytedeco.bullet.Bullet3Collision",

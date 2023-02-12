@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>bullet-platform</artifactId>
-  <version>3.24-${project.parent.version}</version>
+  <version>3.25-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Bullet Physics SDK</name>
 
   <properties>

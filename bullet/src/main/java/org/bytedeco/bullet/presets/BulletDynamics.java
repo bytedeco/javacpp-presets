@@ -100,7 +100,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletDynamics/Character/btCharacterControllerInterface.h",
                 "BulletDynamics/Character/btKinematicCharacterController.h",
             },
-            link = "BulletDynamics@.3.24"
+            link = "BulletDynamics@.3.25"
         )
     },
     target = "org.bytedeco.bullet.BulletDynamics",
