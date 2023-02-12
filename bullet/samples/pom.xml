@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.bullet</groupId>
     <artifactId>samples</artifactId>
-    <version>1.5.8</version>
+    <version>1.5.9-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SimpleBox</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>bullet-platform</artifactId>
-            <version>3.24-1.5.8</version>
+            <version>3.25-1.5.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

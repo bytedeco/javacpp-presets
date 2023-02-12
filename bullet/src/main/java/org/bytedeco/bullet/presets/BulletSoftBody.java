@@ -74,7 +74,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "BulletSoftBody/btSparseSDF.h",
                 "BulletSoftBody/DeformableBodyInplaceSolverIslandCallback.h",
             },
-            link = "BulletSoftBody@.3.24"
+            link = "BulletSoftBody@.3.25"
         )
     },
     target = "org.bytedeco.bullet.BulletSoftBody",
