@@ -5064,6 +5064,12 @@ CV_64FC2) (or vector\<Point2f\> ).
     @param map1 The first output map.
     @param map2 The second output map.
      */
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal Mat K, @ByVal Mat D, @ByVal Mat R, @ByVal Mat P,
+            @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal UMat K, @ByVal UMat D, @ByVal UMat R, @ByVal UMat P,
+            @Const @ByRef Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2);
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMat R, @ByVal GpuMat P,
+            @Const @ByRef Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
 
     /** \brief Transforms an image to compensate for fisheye lens distortion.
     <p>
