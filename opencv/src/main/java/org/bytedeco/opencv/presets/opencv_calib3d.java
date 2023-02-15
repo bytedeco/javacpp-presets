@@ -151,6 +151,7 @@ public class opencv_calib3d implements InfoMapper {
                .put(new Info("cv::fisheye::CALIB_FIX_PRINCIPAL_POINT").javaNames("FISHEYE_CALIB_FIX_PRINCIPAL_POINT").translate())
                .put(new Info("cv::fisheye::CALIB_ZERO_DISPARITY").javaNames("FISHEYE_CALIB_ZERO_DISPARITY").translate())
                .put(new Info("cv::fisheye::CALIB_FIX_FOCAL_LENGTH").javaNames("FISHEYE_CALIB_FIX_FOCAL_LENGTH").translate())
+               .put(new Info("cv::fisheye::initUndistortRectifyMap").javaNames("fisheyeInitUndistortRectifyMap"))
                .put(new Info("cv::fisheye::calibrate").javaText(
                         "@Namespace(\"cv::fisheye\") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,\n"
                       + "        @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,\n"
