@@ -42,7 +42,7 @@ import org.bytedeco.tritonserver.presets.tritonserver;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             include = {"common.h", "generic_server_wrapper.h"},
-            link = "tritonserverwrapper",
+            link = "tritondevelopertoolsserver",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools", "/opt/tritonserver/include/triton/developer_tools/src"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
