@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2020 Samuel Audet
+ * Copyright (C) 2016-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,36 +37,45 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = javacpp.class, target = "org.bytedeco.hdf5", global = "org.bytedeco.hdf5.global.hdf5", value = {
     @Platform(value = {"linux", "macosx", "windows"},
-            define = {"GENERIC_EXCEPTION_CLASS H5::Exception", "GENERIC_EXCEPTION_TOSTRING getCDetailMsg()"},
+            define = {"GENERIC_EXCEPTION_CLASS H5::Exception", "GENERIC_EXCEPTION_TOSTRING getCDetailMsg()",
+                      "H5A_MODULE", "H5D_MODULE", "H5F_MODULE", "H5G_MODULE", "H5L_MODULE",  "H5M_MODULE", "H5O_MODULE", "H5R_MODULE", "H5T_MODULE", "H5VL_MODULE"},
             include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",
         "H5FDpublic.h", "H5Gpublic.h", "H5MMpublic.h", "H5Ppublic.h", "H5PLpublic.h", "H5Rpublic.h", "H5Spublic.h", "H5FDcore.h", "H5FDdirect.h",
         "H5FDfamily.h", "H5FDlog.h", "H5FDmpi.h", "H5FDmulti.h", "H5FDsec2.h", "H5FDstdio.h", /* "H5FDwindows.h", */ "H5DOpublic.h", "H5DSpublic.h",
         "H5LTpublic.h", "H5IMpublic.h", "H5TBpublic.h", "H5PTpublic.h", "H5LDpublic.h", "H5PacketTable.h",
+        "H5ESdevelop.h", "H5FDdevelop.h", "H5Idevelop.h", "H5Ldevelop.h", "H5Tdevelop.h", "H5TSdevelop.h", "H5Zdevelop.h",
 
         "H5Cpp.h", "H5Include.h", "H5Exception.h", "H5IdComponent.h", "H5DataSpace.h", "H5PropList.h", "H5AbstractDs.h", "H5Attribute.h",
         "H5OcreatProp.h", "H5DcreatProp.h", "H5LaccProp.h", "H5DaccProp.h", "H5LcreatProp.h", "H5Location.h", "H5Object.h", "H5CommonFG.h", "H5DataType.h", "H5DxferProp.h",
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
-            link = {"hdf5@.200", "hdf5_cpp@.200", "hdf5_hl@.200", "hdf5_hl_cpp@.200"}, resource = {"include", "lib"}),
+            link = {"hdf5@.310", "hdf5_cpp@.310", "hdf5_hl@.310", "hdf5_hl_cpp@.310"}, resource = {"include", "lib"}),
     @Platform(value = "windows", link = {"zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp"}) })
 public class hdf5 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5"); }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5_HLDLL", "H5_DLLCPP", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
-                             "H5G_link_t", "H5std_string", "H5O_TOKEN_UNDEF", "PRIdHID", "PRIxHID", "PRIXHID", "PRIoHID").cppTypes().annotations())
+                             "H5G_link_t", "H5std_string", "H5O_TOKEN_UNDEF", "PRIdHID", "PRIxHID", "PRIXHID", "PRIoHID",
+                             "PRIdHSIZE", "PRIiHSIZE", "PRIoHSIZE", "PRIuHSIZE", "PRIxHSIZE", "PRIXHSIZE",
+                             "PRIdHADDR", "PRIoHADDR", "PRIuHADDR", "PRIxHADDR", "PRIxHADDR", "PRIXHADDR", "H5_PRINTF_HADDR_FMT").cppTypes().annotations())
                .put(new Info("((__GNUC__ * 100) + __GNUC_MINOR__) >= 406", "H5_HAVE_PARALLEL", "NEW_HYPERSLAB_API", "H5_HAVE_DIRECT",
-                             "BOOL_NOTDEFINED", "H5_NO_STD", "H5_HAVE_MAP_API").define(false))
-               .put(new Info("H5_NO_DEPRECATED_SYMBOLS", "H5_HAVE_STDBOOL_H", "H5_SIZEOF_UINT32_T>=4", "H5_SIZEOF_INT64_T>=8", "H5_SIZEOF_UINT64_T>=8").define(true))
+                             "BOOL_NOTDEFINED", "H5_NO_STD", "H5_HAVE_MAP_API", "H5_DOXYGEN").define(false))
+               .put(new Info("H5_NO_DEPRECATED_SYMBOLS", "H5_HAVE_STDBOOL_H", "H5_SIZEOF_UINT32_T>=4", "H5_SIZEOF_INT64_T>=8", "H5_SIZEOF_UINT64_T>=8",
+                             "H5A_MODULE", "H5D_MODULE", "H5F_MODULE", "H5G_MODULE", "H5L_MODULE",  "H5M_MODULE", "H5O_MODULE", "H5R_MODULE", "H5T_MODULE", "H5VL_MODULE").define(true))
                .put(new Info("HSIZE_UNDEF", "HADDR_UNDEF", "HADDR_AS_MPI_TYPE", "H5L_MAX_LINK_NAME_LEN", "H5L_SAME_LOC", "H5O_SHMESG_SDSPACE_FLAG",
                              "H5O_SHMESG_DTYPE_FLAG", "H5O_SHMESG_FILL_FLAG", "H5O_SHMESG_PLINE_FLAG", "H5O_SHMESG_ATTR_FLAG", "H5T_VARIABLE",
                              "H5T_NATIVE_CHAR", "H5D_CHUNK_CACHE_NSLOTS_DEFAULT", "H5D_CHUNK_CACHE_NBYTES_DEFAULT", "H5E_DEFAULT",
-                             "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL").translate(false))
+                             "H5F_ACC_SWMR_WRITE", "H5F_ACC_SWMR_READ", "H5F_FAMILY_DEFAULT", "H5F_UNLIMITED", "H5P_DEFAULT", "H5S_ALL",
+                             "H5_VFD_INVALID", "H5_VFD_SEC2", "H5_VFD_CORE", "H5_VFD_LOG", "H5_VFD_FAMILY", "H5_VFD_MULTI", "H5_VFD_STDIO", "H5_VFD_SPLITTER",
+                             "H5_VFD_MPIO", "H5_VFD_DIRECT", "H5_VFD_MIRROR", "H5_VFD_HDFS", "H5_VFD_ROS3", "H5_VFD_SUBFILING", "H5_VFD_IOC", "H5_VFD_ONION").translate(false))
                .put(new Info("ssize_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
-               .put(new Info("hsize_t", "hssize_t", "haddr_t", "hid_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("H5FD_class_value_t", "H5S_seloper_t").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("chid_t", "hsize_t", "hssize_t", "haddr_t", "hid_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("H5FD_FLMAP_SINGLE", "H5FD_FLMAP_DICHOTOMY", "H5FD_FLMAP_DEFAULT", "H5E_ERR_CLS_g", "H5Eappend_stack",
-                             "H5::Attribute::getName(size_t, std::string&)", "H5::FileAccPropList::getFileAccDirect", "H5::FileAccPropList::setFileAccDirect").skip())
+                             "H5::Attribute::getName(size_t, std::string&)", "H5::FileAccPropList::getFileAccDirect", "H5::FileAccPropList::setFileAccDirect",
+                             "H5TSmutex_acquire", "H5TSmutex_release", "H5TSmutex_get_attempt_count").skip())
 
                .put(new Info("H5_OVERRIDE").cppText("#define H5_OVERRIDE override").cppTypes())
                .put(new Info("override").annotations("@Override"))

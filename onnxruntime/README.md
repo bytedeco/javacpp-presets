@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX Runtime 1.13.1  https://microsoft.github.io/onnxruntime/
+ * ONNX Runtime 1.14.0  https://microsoft.github.io/onnxruntime/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,14 +46,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>1.13.1-1.5.9-SNAPSHOT</version>
+            <version>1.14.0-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform-gpu</artifactId>
-            <version>1.13.1-1.5.9-SNAPSHOT</version>
+            <version>1.14.0-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
@@ -96,7 +96,7 @@ public class CXXApiSample {
       // If onnxruntime.dll is built with CUDA enabled, we can uncomment out this line to use CUDA for this
       // session (we also need to include cuda_provider_factory.h above which defines it)
       // #include "cuda_provider_factory.h"
-      // OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 1);
+      // OrtSessionOptionsAppendExecutionProvider_CUDA(session_options.asOrtSessionOptions(), 0);
       OrtSessionOptionsAppendExecutionProvider_Dnnl(session_options.asOrtSessionOptions(), 1);
 
       // Sets graph optimization level
@@ -132,13 +132,13 @@ public class CXXApiSample {
       // iterate over all input nodes
       for (long i = 0; i < num_input_nodes; i++) {
         // print input node names
-        BytePointer input_name = session.GetInputName(i, allocator.asOrtAllocator());
+        BytePointer input_name = session.GetInputNameAllocated(i, new OrtAllocator(allocator.asUnownedAllocator()));
         System.out.println("Input " + i + " : name=" + input_name.getString());
         input_node_names.put(i, input_name);
 
         // print input node types
         TypeInfo type_info = session.GetInputTypeInfo(i);
-        TensorTypeAndShapeInfo tensor_info = type_info.GetTensorTypeAndShapeInfo();
+        ConstTensorTypeAndShapeInfo tensor_info = type_info.GetTensorTypeAndShapeInfo();
 
         int type = tensor_info.GetElementType();
         System.out.println("Input " + i + " : type=" + type);
