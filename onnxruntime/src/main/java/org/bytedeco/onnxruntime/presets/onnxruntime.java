@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2019-2023 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -61,16 +61,16 @@ import org.bytedeco.dnnl.presets.*;
 //                "onnxruntime/core/providers/rocm/rocm_provider_factory.h",
 //                "onnxruntime/core/providers/dml/dml_provider_factory.h",
             },
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.14.0"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1", "onnxruntime_providers_dnnl"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.14.0", "onnxruntime_providers_dnnl"}
         ),
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             extension = "-gpu",
-            link = {"onnxruntime_providers_shared", "onnxruntime@.1.13.1", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
+            link = {"onnxruntime_providers_shared", "onnxruntime@.1.14.0", "onnxruntime_providers_dnnl", "onnxruntime_providers_cuda"}
         ),
     },
     target = "org.bytedeco.onnxruntime",
@@ -120,7 +120,7 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("USE_CUDA", "USE_DNNL").define(true))
                .put(new Info("Ort::stub_api", "Ort::Global<T>::api_", "std::nullptr_t", "Ort::Env::s_api", "std::vector<Ort::AllocatedStringPtr>").skip())
                .put(new Info("Ort::AllocatedStringPtr").valueTypes("@UniquePtr(\"char, Ort::detail::AllocatedFree\") @Cast(\"char*\") BytePointer"))
-               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
+//               .put(new Info("std::string").annotations("@Cast({\"char*\", \"std::string&&\"}) @StdString").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<Ort::Value>").valueTypes("@StdMove ValueVector").pointerTypes("ValueVector").define())
                .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("StringStringMap").define())
@@ -136,41 +136,87 @@ public class onnxruntime implements LoadEnabled, InfoMapper {
                .put(new Info("Ort::Value::CreateTensor<uint32_t>").javaNames("CreateTensorUInt"))
                .put(new Info("Ort::Value::CreateTensor<uint64_t>").javaNames("CreateTensorULong"))
                .put(new Info("Ort::Value::CreateTensor<bool>").javaNames("CreateTensorBool"))
-               .put(new Info("Ort::Value::GetTensorMutableData<float>").javaNames("GetTensorMutableDataFloat"))
-               .put(new Info("Ort::Value::GetTensorMutableData<double>").javaNames("GetTensorMutableDataDouble"))
-               .put(new Info("Ort::Value::GetTensorMutableData<int8_t>").javaNames("GetTensorMutableDataByte"))
-               .put(new Info("Ort::Value::GetTensorMutableData<int16_t>").javaNames("GetTensorMutableDataShort"))
-               .put(new Info("Ort::Value::GetTensorMutableData<int32_t>").javaNames("GetTensorMutableDataInt"))
-               .put(new Info("Ort::Value::GetTensorMutableData<int64_t>").javaNames("GetTensorMutableDataLong"))
-               .put(new Info("Ort::Value::GetTensorMutableData<uint8_t>").javaNames("GetTensorMutableDataUByte"))
-               .put(new Info("Ort::Value::GetTensorMutableData<uint16_t>").javaNames("GetTensorMutableDataUShort"))
-               .put(new Info("Ort::Value::GetTensorMutableData<uint32_t>").javaNames("GetTensorMutableDataUInt"))
-               .put(new Info("Ort::Value::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
-               .put(new Info("Ort::Value::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
-               .put(new Info("Ort::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())
-               .put(new Info("Ort::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
-               .put(new Info("Ort::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
-               .put(new Info("Ort::Unowned<Ort::MapTypeInfo>").pointerTypes("UnownedMapTypeInfo").purify())
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<float>").javaNames("GetTensorMutableDataFloat"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<double>").javaNames("GetTensorMutableDataDouble"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<int8_t>").javaNames("GetTensorMutableDataByte"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<int16_t>").javaNames("GetTensorMutableDataShort"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<int32_t>").javaNames("GetTensorMutableDataInt"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<int64_t>").javaNames("GetTensorMutableDataLong"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint8_t>").javaNames("GetTensorMutableDataUByte"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint16_t>").javaNames("GetTensorMutableDataUShort"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint32_t>").javaNames("GetTensorMutableDataUInt"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<uint64_t>").javaNames("GetTensorMutableDataULong"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>::GetTensorMutableData<bool>").javaNames("GetTensorMutableDataBool"))
+               .put(new Info("Ort::detail::Unowned<OrtAllocator>").pointerTypes("UnownedAllocator").purify())
+               .put(new Info("Ort::detail::Unowned<const Ort::MemoryInfo>").pointerTypes("UnownedMemoryInfo").purify())
+               .put(new Info("Ort::detail::Unowned<Ort::TensorTypeAndShapeInfo>").pointerTypes("UnownedTensorTypeAndShapeInfo").purify())
+               .put(new Info("Ort::detail::Unowned<Ort::SequenceTypeInfo>").pointerTypes("UnownedSequenceTypeInfo").purify())
+               .put(new Info("Ort::detail::Unowned<Ort::MapTypeInfo>").pointerTypes("UnownedMapTypeInfo").purify())
                .put(new Info("Ort::MemoryAllocation", "OrtApi").purify())
                .put(new Info("Ort::MemoryAllocation::operator =").skip())
                .put(new Info("Ort::RunOptions::GetRunLogSeverityLevel").skip())
-               .put(new Info("Ort::Exception").pointerTypes("OrtException"))
-               .put(new Info("Ort::Base<OrtArenaCfg>").pointerTypes("BaseArenaCfg"))
-               .put(new Info("Ort::Base<OrtAllocator>").pointerTypes("BaseAllocator"))
-               .put(new Info("Ort::Base<OrtIoBinding>").pointerTypes("BaseIoBinding"))
-               .put(new Info("Ort::Base<OrtMemoryInfo>", "Ort::BaseMemoryInfo<Ort::Base<OrtMemoryInfo> >",
-                                                         "Ort::BaseMemoryInfo<Ort::Base<const OrtMemoryInfo> >").pointerTypes("BaseMemoryInfo"))
-               .put(new Info("Ort::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
-               .put(new Info("Ort::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
-               .put(new Info("Ort::Base<OrtEnv>").pointerTypes("BaseEnv"))
-               .put(new Info("Ort::Base<OrtRunOptions>").pointerTypes("BaseRunOptions"))
-               .put(new Info("Ort::Base<OrtSession>").pointerTypes("BaseSession"))
-               .put(new Info("Ort::Base<OrtSessionOptions>").pointerTypes("BaseSessionOptions"))
-               .put(new Info("Ort::Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BaseTensorTypeAndShapeInfo"))
-               .put(new Info("Ort::Base<OrtSequenceTypeInfo>").pointerTypes("BaseSequenceTypeInfo"))
-               .put(new Info("Ort::Base<OrtMapTypeInfo>").pointerTypes("BaseMapTypeInfo"))
-               .put(new Info("Ort::Base<OrtTypeInfo>").pointerTypes("BaseTypeInfo"))
-               .put(new Info("Ort::Base<OrtValue>").pointerTypes("BaseValue"))
+               .put(new Info("Ort::Exception").pointerTypes("OrtException").purify())
+
+               .put(new Info("Ort::detail::ConstValueImpl<detail::Unowned<const OrtValue> >").pointerTypes("ConstValue"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >").pointerTypes("BaseConstValue"))
+               .put(new Info("Ort::detail::ConstSessionOptionsImpl<detail::Unowned<const OrtSessionOptions> >").pointerTypes("ConstSessionOptions"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtSessionOptions> >").pointerTypes("BaseConstSessionOptions"))
+               .put(new Info("Ort::detail::ConstSessionImpl<detail::Unowned<const OrtSession> >").pointerTypes("ConstSession"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtSession> >").pointerTypes("BaseConstSession"))
+               .put(new Info("Ort::detail::MapTypeInfoImpl<detail::Unowned<const OrtMapTypeInfo> >").pointerTypes("ConstMapTypeInfo"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtMapTypeInfo> >").pointerTypes("BaseConstMapTypeInfo"))
+               .put(new Info("Ort::detail::ConstIoBindingImpl<detail::Unowned<const OrtIoBinding> >").pointerTypes("ConstIoBinding"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtIoBinding> >").pointerTypes("BaseConstIoBinding"))
+               .put(new Info("Ort::detail::TensorTypeAndShapeInfoImpl<detail::Unowned<const OrtTensorTypeAndShapeInfo> >").pointerTypes("ConstTensorTypeAndShapeInfo"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >").pointerTypes("BaseConstTensorTypeAndShapeInfo"))
+               .put(new Info("Ort::detail::AllocatorImpl<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("AllocatorWithDefaultOptionsImpl"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >").pointerTypes("BaseAllocatorWithDefaultOptions"))
+               .put(new Info("Ort::detail::Base<Ort::detail::Unowned<const OrtValue> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtSessionOptions> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtSession> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtMapTypeInfo> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtIoBinding> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<const OrtTensorTypeAndShapeInfo> >::release",
+                             "Ort::detail::Base<Ort::detail::Unowned<OrtAllocator> >::release").skip())
+
+               .put(new Info("Ort::detail::Base<OrtArenaCfg>", "Ort::detail::Base<OrtArenaCfg>").pointerTypes("BaseArenaCfg"))
+               .put(new Info("Ort::detail::AllocatorImpl<OrtAllocator>").pointerTypes("AllocatorImpl"))
+               .put(new Info("Ort::detail::Base<OrtAllocator>").pointerTypes("BaseAllocator"))
+               .put(new Info("Ort::detail::ConstIoBindingImpl<OrtIoBinding>").pointerTypes("ConstIoBindingImpl"))
+               .put(new Info("Ort::detail::IoBindingImpl<OrtIoBinding>").pointerTypes("IoBindingImpl"))
+               .put(new Info("Ort::detail::Base<OrtIoBinding>").pointerTypes("BaseIoBinding"))
+               .put(new Info("Ort::detail::MemoryInfoImpl<OrtMemoryInfo>").pointerTypes("MemoryInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtMemoryInfo>",
+                             "Ort::detail::BaseMemoryInfo<Ort::detail::Base<OrtMemoryInfo> >",
+                             "Ort::detail::BaseMemoryInfo<Ort::detail::Base<const OrtMemoryInfo> >").pointerTypes("BaseMemoryInfo"))
+               .put(new Info("Ort::detail::Base<OrtModelMetadata>", "Ort::detail::Base<OrtModelMetadata>").pointerTypes("BaseModelMetadata"))
+               .put(new Info("Ort::detail::Base<OrtCustomOpDomain>", "Ort::detail::Base<OrtCustomOpDomain>").pointerTypes("BaseCustomOpDomain"))
+               .put(new Info("Ort::detail::Base<OrtEnv>", "Ort::detail::Base<OrtEnv> ").pointerTypes("BaseEnv"))
+               .put(new Info("Ort::detail::Base<OrtRunOptions>", "Ort::detail::Base<OrtRunOptions>").pointerTypes("BaseRunOptions"))
+               .put(new Info("Ort::detail::ConstSessionImpl<OrtSession>").pointerTypes("ConstSessionImpl"))
+               .put(new Info("Ort::detail::SessionImpl<OrtSession>").pointerTypes("SessionImpl"))
+               .put(new Info("Ort::detail::Base<OrtSession>").pointerTypes("BaseSession"))
+               .put(new Info("Ort::detail::SessionOptionsImpl<OrtSessionOptions>").pointerTypes("SessionOptionsImpl"))
+               .put(new Info("Ort::detail::ConstSessionOptionsImpl<OrtSessionOptions>").pointerTypes("ConstSessionOptionsImpl"))
+               .put(new Info("Ort::detail::Base<OrtSessionOptions>").pointerTypes("BaseSessionOptions"))
+               .put(new Info("Ort::detail::TensorTypeAndShapeInfoImpl<OrtTensorTypeAndShapeInfo>").pointerTypes("TensorTypeAndShapeInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtTensorTypeAndShapeInfo>").pointerTypes("BaseTensorTypeAndShapeInfo"))
+               .put(new Info("Ort::detail::SequenceTypeInfoImpl<OrtSequenceTypeInfo>").pointerTypes("BaseSequenceTypeInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtSequenceTypeInfo>").pointerTypes("BaseSequenceTypeInfo"))
+               .put(new Info("Ort::detail::MapTypeInfoImpl<OrtMapTypeInfo>").pointerTypes("MapTypeInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtMapTypeInfo>").pointerTypes("BaseMapTypeInfo"))
+               .put(new Info("Ort::detail::TypeInfoImpl<OrtTypeInfo>").pointerTypes("TypeInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtTypeInfo>").pointerTypes("BaseTypeInfo"))
+               .put(new Info("Ort::detail::ConstValueImpl<OrtValue>").pointerTypes("ConstValueImpl"))
+               .put(new Info("Ort::detail::ValueImpl<OrtValue>").pointerTypes("ValueImpl"))
+               .put(new Info("Ort::detail::Base<OrtValue>").pointerTypes("BaseValue"))
+               .put(new Info("Ort::detail::Base<OrtOp>").pointerTypes("BaseOrtOp"))
+               .put(new Info("Ort::detail::Base<OrtOpAttr>").pointerTypes("BaseOpAttr"))
+               .put(new Info("Ort::detail::Base<OrtStatus>").pointerTypes("BaseStatus"))
+               .put(new Info("Ort::detail::KernelInfoImpl<OrtKernelInfo>").pointerTypes("KernelInfoImpl"))
+               .put(new Info("Ort::detail::Base<OrtKernelInfo>").pointerTypes("BaseKernelInfo"))
+               .put(new Info("Ort::detail::Base<OrtThreadingOptions>").pointerTypes("BaseThreadingOptions"))
+
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_MIGraphX").skip())
                .put(new Info("OrtSessionOptionsAppendExecutionProvider_CUDA").annotations("@Platform(extension=\"-gpu\")").javaNames("OrtSessionOptionsAppendExecutionProvider_CUDA"));
     }

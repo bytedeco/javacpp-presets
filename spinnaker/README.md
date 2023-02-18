@@ -22,7 +22,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/spinnaker/apidocs/
 
- 
+
 Sample Usage
 ------------
 Here is a simple example of Spinnaker C API code ported to Java from the `Acquisition_C.cpp` example distributed with Spinnaker SDK.

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.5.8</version>
+    <version>1.5.9-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.12.2-1.5.8</version>
+            <version>1.14.0-1.5.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

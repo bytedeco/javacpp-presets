@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.13.1
+ONNXRUNTIME=1.14.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -65,6 +65,7 @@ if [[ -n "$ARCH_FLAGS" ]]; then
 fi
 
 sedinplace 's/cmake_minimum_required(VERSION 3...)/cmake_minimum_required(VERSION 3.16)/g' cmake/CMakeLists.txt
+sedinplace '/COMPILE_WARNING_AS_ERROR/d' cmake/CMakeLists.txt
 sedinplace '/CMP0104/d' cmake/CMakeLists.txt
 sedinplace '/Werror/d' cmake/CMakeLists.txt
 sedinplace '/WX/d' cmake/CMakeLists.txt
@@ -79,11 +80,11 @@ sedinplace '/--Werror/d' cmake/CMakeLists.txt
 sedinplace "s/return 'ON'/return 'OFF'/g" tools/ci_build/build.py
 sedinplace "s/default='Visual Studio 1. 201.'/default='Ninja'/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/onnxruntime_providers.cmake
+sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.7.2)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.7.3)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -98,6 +99,7 @@ sedinplace 's/floor(/floorf(/g' onnxruntime/core/providers/cuda/tensor/resize_im
 sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_impl.cu
 sedinplace 's/, dims_span);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_reduce.cc
 sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_squeeze.cc
+sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-arch=sm_35/g' cmake/CMakeLists.txt
