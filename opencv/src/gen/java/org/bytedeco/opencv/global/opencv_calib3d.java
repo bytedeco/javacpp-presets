@@ -4988,26 +4988,32 @@ CV_64FC2) (or vector\<Point2f\> ).
     image points coordinates (as functions of all the input parameters) with respect to the particular
     parameters, intrinsic and/or extrinsic.
      */
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
             @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat jacobian);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
             @ByVal Mat K, @ByVal Mat D);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @Const @ByRef Mat affine,
             @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat jacobian);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @Const @ByRef Mat affine,
             @ByVal UMat K, @ByVal UMat D);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
             @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @Const @ByRef Mat affine,
             @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \overload */
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
             @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat jacobian);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @ByVal UMat rvec, @ByVal UMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
+            @ByVal Mat K, @ByVal Mat D);
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @ByVal UMat rvec, @ByVal UMat tvec,
             @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat jacobian);
-    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal UMat objectPoints, @ByVal UMat imagePoints, @ByVal UMat rvec, @ByVal UMat tvec,
+            @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @ByVal GpuMat rvec, @ByVal GpuMat tvec,
             @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian);
+    @Namespace("cv::fisheye") public static native @Name("projectPoints") void fisheyeProjectPoints(@ByVal GpuMat objectPoints, @ByVal GpuMat imagePoints, @ByVal GpuMat rvec, @ByVal GpuMat tvec,
+            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Distorts 2D points using fisheye model.
     <p>
@@ -5021,12 +5027,12 @@ CV_64FC2) (or vector\<Point2f\> ).
     Note that the function assumes the camera intrinsic matrix of the undistorted points to be identity.
     This means if you want to distort image points you have to multiply them with {@code K^{-1}}.
      */
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/);
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D);
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/);
-    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D, double alpha/*=0*/);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal UMat undistorted, @ByVal UMat distorted, @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D, double alpha/*=0*/);
+    @Namespace("cv::fisheye") public static native @Name("distortPoints") void fisheyeDistortPoints(@ByVal GpuMat undistorted, @ByVal GpuMat distorted, @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Undistorts 2D points using fisheye model
     <p>
@@ -5040,15 +5046,21 @@ CV_64FC2) (or vector\<Point2f\> ).
     @param criteria Termination criteria
     @param undistorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
      */
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
             @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat P,
                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D);
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
             @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P,
                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
+            @ByVal UMat K, @ByVal UMat D);
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P,
                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 10, 1e-8)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native @Name("undistortPoints") void fisheyeUndistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Computes undistortion and rectification maps for image transform by #remap. If D is empty zero
     distortion is used, if R or P is empty identity matrixes are used.
@@ -5064,6 +5076,12 @@ CV_64FC2) (or vector\<Point2f\> ).
     @param map1 The first output map.
     @param map2 The second output map.
      */
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal Mat K, @ByVal Mat D, @ByVal Mat R, @ByVal Mat P,
+            @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal UMat K, @ByVal UMat D, @ByVal UMat R, @ByVal UMat P,
+            @Const @ByRef Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2);
+    @Namespace("cv::fisheye") public static native @Name("initUndistortRectifyMap") void fisheyeInitUndistortRectifyMap(@ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMat R, @ByVal GpuMat P,
+            @Const @ByRef Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
 
     /** \brief Transforms an image to compensate for fisheye lens distortion.
     <p>
@@ -5093,17 +5111,17 @@ CV_64FC2) (or vector\<Point2f\> ).
     <p>
     ![image](pics/fisheye_undistorted.jpg)
      */
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
             @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat Knew, @Const @ByRef(nullValue = "cv::Size()") Size new_size);
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
             @ByVal Mat K, @ByVal Mat D);
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal UMat distorted, @ByVal UMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal UMat distorted, @ByVal UMat undistorted,
             @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat Knew, @Const @ByRef(nullValue = "cv::Size()") Size new_size);
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal UMat distorted, @ByVal UMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal UMat distorted, @ByVal UMat undistorted,
             @ByVal UMat K, @ByVal UMat D);
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat Knew, @Const @ByRef(nullValue = "cv::Size()") Size new_size);
-    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
+    @Namespace("cv::fisheye") public static native @Name("undistortImage") void fisheyeUndistortImage(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
             @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Estimates new camera intrinsic matrix for undistortion or rectification.
@@ -5119,17 +5137,17 @@ CV_64FC2) (or vector\<Point2f\> ).
     @param new_size the new size
     @param fov_scale Divisor for new focal length.
      */
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
             @ByVal Mat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
             @ByVal Mat P);
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal UMat K, @ByVal UMat D, @Const @ByRef Size image_size, @ByVal UMat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal UMat K, @ByVal UMat D, @Const @ByRef Size image_size, @ByVal UMat R,
             @ByVal UMat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal UMat K, @ByVal UMat D, @Const @ByRef Size image_size, @ByVal UMat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal UMat K, @ByVal UMat D, @Const @ByRef Size image_size, @ByVal UMat R,
             @ByVal UMat P);
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
             @ByVal GpuMat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
+    @Namespace("cv::fisheye") public static native @Name("estimateNewCameraMatrixForUndistortRectify") void fisheyeEstimateNewCameraMatrixForUndistortRectify(@ByVal GpuMat K, @ByVal GpuMat D, @Const @ByRef Size image_size, @ByVal GpuMat R,
             @ByVal GpuMat P);
 
     /** \brief Performs camera calibration
@@ -5167,15 +5185,15 @@ optimization. It stays at the center or at a different location specified when \
 optimization. It is the {@code max(width,height)/\pi} or the provided {@code f_x}, {@code f_y} when \ref fisheye::CALIB_USE_INTRINSIC_GUESS is set too.
     @param criteria Termination criteria for the iterative optimization algorithm.
      */
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native @Name("calibrate") double fisheyeCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native @Name("calibrate") double fisheyeCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native @Name("calibrate") double fisheyeCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native @Name("calibrate") double fisheyeCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
 
     /** \brief Stereo rectification for fisheye camera model
@@ -5208,20 +5226,20 @@ optimization. It is the {@code max(width,height)/\pi} or the provided {@code f_x
     length. Balance is in range of [0, 1].
     @param fov_scale Divisor for new focal length.
      */
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
             @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags, @Const @ByRef(nullValue = "cv::Size()") Size newImageSize,
             double balance/*=0.0*/, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
             @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags);
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @Const @ByRef Size imageSize, @ByVal UMat R, @ByVal UMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @Const @ByRef Size imageSize, @ByVal UMat R, @ByVal UMat tvec,
             @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat Q, int flags, @Const @ByRef(nullValue = "cv::Size()") Size newImageSize,
             double balance/*=0.0*/, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @Const @ByRef Size imageSize, @ByVal UMat R, @ByVal UMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @Const @ByRef Size imageSize, @ByVal UMat R, @ByVal UMat tvec,
             @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat Q, int flags);
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
             @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat Q, int flags, @Const @ByRef(nullValue = "cv::Size()") Size newImageSize,
             double balance/*=0.0*/, double fov_scale/*=1.0*/);
-    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
+    @Namespace("cv::fisheye") public static native @Name("stereoRectify") void fisheyeStereoRectify(@ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @Const @ByRef Size imageSize, @ByVal GpuMat R, @ByVal GpuMat tvec,
             @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat Q, int flags);
 
     /** \brief Performs stereo calibration
@@ -5265,10 +5283,20 @@ optimization. It is the {@code max(width,height)/\pi} or the provided {@code f_x
     zero.
     @param criteria Termination criteria for the iterative optimization algorithm.
      */
-    
+    @Namespace("cv::fisheye") public static native @Name("stereoCalibrate") double fisheyeStereoCalibrate(@ByVal Point3fVectorVector objectPoints,
+                                         @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,
+                                         @ByVal Mat K1, @ByVal Mat D1,
+                                         @ByVal Mat K2, @ByVal Mat D2,
+                                         @ByVal Size imageSize, @ByVal Mat R, @ByVal Mat T,
+                                         int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                         @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
+    @Namespace("cv::fisheye") public static native @Name("stereoCalibrate") double fisheyeStereoCalibrate(@ByVal Point3fVectorVector objectPoints,
+                                         @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,
+                                         @ByVal Mat K1, @ByVal Mat D1,
+                                         @ByVal Mat K2, @ByVal Mat D2,
+                                         @ByVal Size imageSize, @ByVal Mat R, @ByVal Mat T);
 
     /** \overload */
-    
 
 /** \} calib3d_fisheye */
  // end namespace fisheye
