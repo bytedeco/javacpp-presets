@@ -1,4 +1,5 @@
 
+ * Map missing `cblas_?axpby()` functions in presets for MKL ([issue #1326](https://github.com/bytedeco/javacpp-presets/issues/1326))
  * Prefix with "fisheye" all functions from the `cv::fisheye::` namespace to avoid collisions ([pull #1324](https://github.com/bytedeco/javacpp-presets/pull/1324))
  * Remove mapping for platform-dependent `enum` values in presets for libffi ([pull #1318](https://github.com/bytedeco/javacpp-presets/pull/1318))
  * Fix mapping of `cv::fisheye::calibrate()` function from `opencv_calib3d` ([issue #1185](https://github.com/bytedeco/javacpp-presets/issues/1185))

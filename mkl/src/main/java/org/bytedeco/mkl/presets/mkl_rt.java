@@ -131,7 +131,7 @@ public class mkl_rt implements InfoMapper {
 
                .put(new Info("DFTI_DESCRIPTOR_DM_HANDLE").valueTypes("_DFTI_DESCRIPTOR_DM").pointerTypes("@ByPtrPtr _DFTI_DESCRIPTOR_DM"))
 
-               .put(new Info("cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby", "mklfreetls", "MKLFREETLS", "MKLFreeTls",
+               .put(new Info("mklfreetls", "MKLFREETLS", "MKLFreeTls",
                              "mkl_sparse_c_create_vector", "mkl_sparse_d_create_vector", "mkl_sparse_s_create_vector", "mkl_sparse_z_create_vector",
                              "mkl_sparse_c_export_vector", "mkl_sparse_d_export_vector", "mkl_sparse_s_export_vector", "mkl_sparse_z_export_vector",
                              "mkl_sparse_destroy_vector", "mkl_sparse_c_spmspvd", "mkl_sparse_d_spmspvd", "mkl_sparse_s_spmspvd", "mkl_sparse_z_spmspvd",
