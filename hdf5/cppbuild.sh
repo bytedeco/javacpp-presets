@@ -138,8 +138,7 @@ case $PLATFORM in
 esac
 
 # Do we need this? We already built the classes once ...
-cp -r java ../
-rm -r ../java/test
-rm -r ../java/examples
+cp -r java/src ../
+mv ../src ../java
 
 cd ../..

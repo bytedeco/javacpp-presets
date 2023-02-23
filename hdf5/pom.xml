@@ -69,6 +69,7 @@
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.la</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.dylib</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.jar</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/zlib*</exclude>
               </excludes>
             </configuration>
