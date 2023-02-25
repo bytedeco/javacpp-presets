@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 BOOST=1_75_0
-SCIPY_VERSION=1.10.0
+SCIPY_VERSION=1.10.1
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download https://github.com/scipy/HiGHS/archive/refs/heads/main.tar.gz HiGHS-main.tar.gz
 download https://github.com/scipy/unuran/archive/refs/heads/main.tar.gz unuran-main.tar.gz
