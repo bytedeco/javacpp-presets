@@ -13,7 +13,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>15.0.6-1.5.9-SNAPSHOT</version>
+            <version>15.0.7-1.5.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
