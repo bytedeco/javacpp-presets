@@ -23,28 +23,31 @@ import static org.bytedeco.ffmpeg.global.swscale.*;
 import static org.bytedeco.ffmpeg.global.avfilter.*;
 
 
-// #if FF_API_BUFFERSINK_ALLOC
 /**
- * Deprecated and unused struct to use for initializing a buffersink context.
+ * A filterchain is a list of filter specifications.
+ *
+ * Created as a child of AVFilterGraphSegment by avfilter_graph_segment_parse().
+ * Freed in avfilter_graph_segment_free().
  */
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avfilter.class)
-public class AVBufferSinkParams extends Pointer {
+public class AVFilterChain extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVBufferSinkParams() { super((Pointer)null); allocate(); }
+    public AVFilterChain() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AVBufferSinkParams(long size) { super((Pointer)null); allocateArray(size); }
+    public AVFilterChain(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVBufferSinkParams(Pointer p) { super(p); }
+    public AVFilterChain(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public AVBufferSinkParams position(long position) {
-        return (AVBufferSinkParams)super.position(position);
+    @Override public AVFilterChain position(long position) {
+        return (AVFilterChain)super.position(position);
     }
-    @Override public AVBufferSinkParams getPointer(long i) {
-        return new AVBufferSinkParams((Pointer)this).offsetAddress(i);
+    @Override public AVFilterChain getPointer(long i) {
+        return new AVFilterChain((Pointer)this).offsetAddress(i);
     }
 
-    /** list of allowed pixel formats, terminated by AV_PIX_FMT_NONE */
-    public native @Cast("const AVPixelFormat*") IntPointer pixel_fmts(); public native AVBufferSinkParams pixel_fmts(IntPointer setter);
+    public native AVFilterParams filters(int i); public native AVFilterChain filters(int i, AVFilterParams setter);
+    public native @Cast("AVFilterParams**") PointerPointer filters(); public native AVFilterChain filters(PointerPointer setter);
+    public native @Cast("size_t") long nb_filters(); public native AVFilterChain nb_filters(long setter);
 }

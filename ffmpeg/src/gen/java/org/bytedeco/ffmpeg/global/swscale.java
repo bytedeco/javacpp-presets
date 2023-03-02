@@ -261,6 +261,7 @@ public static final int SWS_CS_BT2020 =         9;
  * - sws_receive_slice(0, dst->height)
  * - sws_frame_end()
  *
+ * @param c   The scaling context
  * @param dst The destination frame. See documentation for sws_frame_start() for
  *            more details.
  * @param src The source frame.
@@ -276,6 +277,7 @@ public static final int SWS_CS_BT2020 =         9;
  * This function will retain references to src and dst, so they must both use
  * refcounted buffers (if allocated by the caller, in case of dst).
  *
+ * @param c   The scaling context
  * @param dst The destination frame.
  *
  *            The data buffers may either be already allocated by the caller or
@@ -300,6 +302,8 @@ public static final int SWS_CS_BT2020 =         9;
  * submitted with sws_frame_start(). Must be called after all sws_send_slice()
  * and sws_receive_slice() calls are done, before any new sws_frame_start()
  * calls.
+ *
+ * @param c   The scaling context
  */
 @NoException public static native void sws_frame_end(SwsContext c);
 
@@ -309,6 +313,7 @@ public static final int SWS_CS_BT2020 =         9;
  * any order, but may not overlap. For vertically subsampled pixel formats, the
  * slices must be aligned according to subsampling.
  *
+ * @param c   The scaling context
  * @param slice_start first row of the slice
  * @param slice_height number of rows in the slice
  *
@@ -321,6 +326,7 @@ public static final int SWS_CS_BT2020 =         9;
  * Request a horizontal slice of the output data to be written into the frame
  * previously provided to sws_frame_start().
  *
+ * @param c   The scaling context
  * @param slice_start first row of the slice; must be a multiple of
  *                    sws_receive_slice_alignment()
  * @param slice_height number of rows in the slice; must be a multiple of
@@ -337,6 +343,9 @@ public static final int SWS_CS_BT2020 =         9;
                       @Cast("unsigned int") int slice_height);
 
 /**
+ * Get the alignment required for slices
+ *
+ * @param c   The scaling context
  * @return alignment required for output slices requested with sws_receive_slice().
  *         Slice offsets and sizes passed to sws_receive_slice() must be
  *         multiples of the value returned from this function.
@@ -344,6 +353,7 @@ public static final int SWS_CS_BT2020 =         9;
 @NoException public static native @Cast("unsigned int") int sws_receive_slice_alignment(@Const SwsContext c);
 
 /**
+ * @param c the scaling context
  * @param dstRange flag indicating the while-black range of the output (1=jpeg / 0=mpeg)
  * @param srcRange flag indicating the while-black range of the input (1=jpeg / 0=mpeg)
  * @param table the yuv2rgb coefficients describing the output yuv space, normally ff_yuv2rgb_coeffs[x]
@@ -351,11 +361,9 @@ public static final int SWS_CS_BT2020 =         9;
  * @param brightness 16.16 fixed point brightness correction
  * @param contrast 16.16 fixed point contrast correction
  * @param saturation 16.16 fixed point saturation correction
-#if LIBSWSCALE_VERSION_MAJOR > 6
- * @return negative error code on error, non negative otherwise
-#else
- * @return -1 if not supported
-#endif
+ *
+ * @return A negative error code on error, non negative otherwise.
+ *         If {@code LIBSWSCALE_VERSION_MAJOR < 7}, returns -1 if not supported.
  */
 @NoException public static native int sws_setColorspaceDetails(SwsContext c, @Const IntPointer inv_table,
                              int srcRange, @Const IntPointer table, int dstRange,
@@ -368,11 +376,8 @@ public static final int SWS_CS_BT2020 =         9;
                              int brightness, int contrast, int saturation);
 
 /**
-#if LIBSWSCALE_VERSION_MAJOR > 6
- * @return negative error code on error, non negative otherwise
-#else
- * @return -1 if not supported
-#endif
+ * @return A negative error code on error, non negative otherwise.
+ *         If {@code LIBSWSCALE_VERSION_MAJOR < 7}, returns -1 if not supported.
  */
 @NoException public static native int sws_getColorspaceDetails(SwsContext c, @Cast("int**") PointerPointer inv_table,
                              IntPointer srcRange, @Cast("int**") PointerPointer table, IntPointer dstRange,
@@ -515,7 +520,7 @@ public static final int SWS_CS_BT2020 =         9;
  * swscale version macros
  */
 
-public static final int LIBSWSCALE_VERSION_MAJOR =   6;
+public static final int LIBSWSCALE_VERSION_MAJOR =   7;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
@@ -558,7 +563,7 @@ public static final int LIBSWSCALE_VERSION_MAJOR =   6;
 
 // #include "version_major.h"
 
-public static final int LIBSWSCALE_VERSION_MINOR =   7;
+public static final int LIBSWSCALE_VERSION_MINOR =   1;
 public static final int LIBSWSCALE_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBSWSCALE_VERSION_INT();

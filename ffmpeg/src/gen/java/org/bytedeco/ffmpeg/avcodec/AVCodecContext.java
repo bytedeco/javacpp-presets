@@ -165,8 +165,7 @@ public static final int FF_COMPRESSION_DEFAULT = -1;
      * (fixed_vop_rate == 0 implies that it is different from the framerate)
      *
      * - encoding: MUST be set by user.
-     * - decoding: the use of this field for decoding is deprecated.
-     *             Use framerate instead.
+     * - decoding: unused.
      */
     public native @ByRef AVRational time_base(); public native AVCodecContext time_base(AVRational setter);
 
@@ -709,6 +708,7 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public native int frame_size(); public native AVCodecContext frame_size(int setter);
 
+// #if FF_API_AVCTX_FRAME_NUMBER
     /**
      * Frame counter, set by libavcodec.
      *
@@ -717,8 +717,10 @@ public static final int FF_MB_DECISION_RD =     2;
      *
      *   \note the counter is not incremented if encoding/decoding resulted in
      *   an error.
+     *   @deprecated use frame_num instead
      */
-    public native int frame_number(); public native AVCodecContext frame_number(int setter);
+    public native @Deprecated int frame_number(); public native AVCodecContext frame_number(int setter);
+// #endif
 
     /**
      * number of bytes per packet if constant and known or 0
@@ -990,17 +992,9 @@ public static final int FF_BUG_IEDGE =           32768;
      * unofficial and experimental (that is, they always try to decode things
      * when they can) unless they are explicitly asked to behave stupidly
      * (=strictly conform to the specs)
+     * This may only be set to one of the FF_COMPLIANCE_* values in defs.h.
      */
     public native int strict_std_compliance(); public native AVCodecContext strict_std_compliance(int setter);
-/** Strictly conform to an older more strict version of the spec or reference software. */
-public static final int FF_COMPLIANCE_VERY_STRICT =   2;
-/** Strictly conform to all the things in the spec no matter what consequences. */
-public static final int FF_COMPLIANCE_STRICT =        1;
-public static final int FF_COMPLIANCE_NORMAL =        0;
-/** Allow unofficial extensions */
-public static final int FF_COMPLIANCE_UNOFFICIAL =   -1;
-/** Allow nonstandardized experimental things. */
-public static final int FF_COMPLIANCE_EXPERIMENTAL = -2;
 
     /**
      * error concealment flags
@@ -1036,35 +1030,14 @@ public static final int FF_DEBUG_NOMC =        0x01000000;
 
     /**
      * Error recognition; may misdetect some more or less valid parts as errors.
+     * This is a bitfield of the AV_EF_* values defined in defs.h.
+     *
      * - encoding: Set by user.
      * - decoding: Set by user.
      */
     public native int err_recognition(); public native AVCodecContext err_recognition(int setter);
 
-/**
- * Verify checksums embedded in the bitstream (could be of either encoded or
- * decoded data, depending on the codec) and print an error message on mismatch.
- * If AV_EF_EXPLODE is also set, a mismatching checksum will result in the
- * decoder returning an error.
- */
-public static final int AV_EF_CRCCHECK =  (1<<0);
-/** detect bitstream specification deviations */
-public static final int AV_EF_BITSTREAM = (1<<1);
-/** detect improper bitstream length */
-public static final int AV_EF_BUFFER =    (1<<2);
-/** abort decoding on minor error detection */
-public static final int AV_EF_EXPLODE =   (1<<3);
-
-/** ignore errors and continue */
-public static final int AV_EF_IGNORE_ERR = (1<<15);
-/** consider things that violate the spec, are fast to calculate and have not been seen in the wild as errors */
-public static final int AV_EF_CAREFUL =    (1<<16);
-/** consider all spec non compliances as errors */
-public static final int AV_EF_COMPLIANT =  (1<<17);
-/** consider things that a sane encoder should not do as an error */
-public static final int AV_EF_AGGRESSIVE = (1<<18);
-
-
+// #if FF_API_REORDERED_OPAQUE
     /**
      * opaque 64-bit number (generally a PTS) that will be reordered and
      * output in AVFrame.reordered_opaque
@@ -1073,8 +1046,11 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
      *             supported by encoders with the
      *             AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE capability.
      * - decoding: Set by user.
+     *
+     * @deprecated Use AV_CODEC_FLAG_COPY_OPAQUE instead
      */
-    public native @Cast("int64_t") long reordered_opaque(); public native AVCodecContext reordered_opaque(long setter);
+    public native @Cast("int64_t") @Deprecated long reordered_opaque(); public native AVCodecContext reordered_opaque(long setter);
+// #endif
 
     /**
      * Hardware accelerator in use
@@ -1084,13 +1060,26 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
     public native @Const AVHWAccel hwaccel(); public native AVCodecContext hwaccel(AVHWAccel setter);
 
     /**
-     * Hardware accelerator context.
-     * For some hardware accelerators, a global context needs to be
-     * provided by the user. In that case, this holds display-dependent
-     * data FFmpeg cannot instantiate itself. Please refer to the
-     * FFmpeg HW accelerator documentation to know how to fill this.
-     * - encoding: unused
-     * - decoding: Set by user
+     * Legacy hardware accelerator context.
+     *
+     * For some hardware acceleration methods, the caller may use this field to
+     * signal hwaccel-specific data to the codec. The struct pointed to by this
+     * pointer is hwaccel-dependent and defined in the respective header. Please
+     * refer to the FFmpeg HW accelerator documentation to know how to fill
+     * this.
+     *
+     * In most cases this field is optional - the necessary information may also
+     * be provided to libavcodec through \ref hw_frames_ctx or \ref
+     * hw_device_ctx (see avcodec_get_hw_config()). However, in some cases it
+     * may be the only method of signalling some (optional) information.
+     *
+     * The struct and its contents are owned by the caller.
+     *
+     * - encoding: May be set by the caller before avcodec_open2(). Must remain
+     *             valid until avcodec_free_context().
+     * - decoding: May be set by the caller in the get_format() callback.
+     *             Must remain valid until the next get_format() call,
+     *             or avcodec_free_context() (whichever comes first).
      */
     public native Pointer hwaccel_context(); public native AVCodecContext hwaccel_context(Pointer setter);
 
@@ -1188,26 +1177,6 @@ public static final int FF_THREAD_SLICE =   2;
      * - decoding: Set by libavcodec.
      */
     public native int active_thread_type(); public native AVCodecContext active_thread_type(int setter);
-
-// #if FF_API_THREAD_SAFE_CALLBACKS
-    /**
-     * Set by the client if its custom get_buffer() callback can be called
-     * synchronously from another thread, which allows faster multithreaded decoding.
-     * draw_horiz_band() will be called from other threads regardless of this setting.
-     * Ignored if the default get_buffer() is used.
-     * - encoding: Set by user.
-     * - decoding: Set by user.
-     *
-     * @deprecated the custom get_buffer2() callback should always be
-     *   thread-safe. Thread-unsafe get_buffer2() implementations will be
-     *   invalid starting with LIBAVCODEC_VERSION_MAJOR=60; in other words,
-     *   libavcodec will behave as if this field was always set to 1.
-     *   Callers that want to be forward compatible with future libavcodec
-     *   versions should wrap access to this field in
-     *     #if LIBAVCODEC_VERSION_MAJOR < 60
-     */
-    public native @Deprecated int thread_safe_callbacks(); public native AVCodecContext thread_safe_callbacks(int setter);
-// #endif
 
     /**
      * The codec may call this to execute several independent things.
@@ -1545,16 +1514,6 @@ public static final int FF_SUB_CHARENC_MODE_IGNORE =       2;
      */
     public native int seek_preroll(); public native AVCodecContext seek_preroll(int setter);
 
-// #if FF_API_DEBUG_MV
-    /**
-     * @deprecated unused
-     */
-    public native @Deprecated int debug_mv(); public native AVCodecContext debug_mv(int setter);
-public static final int FF_DEBUG_VIS_MV_P_FOR =  0x00000001; //visualize forward predicted MVs of P frames
-public static final int FF_DEBUG_VIS_MV_B_FOR =  0x00000002; //visualize forward predicted MVs of B frames
-public static final int FF_DEBUG_VIS_MV_B_BACK = 0x00000004; //visualize backward predicted MVs of B frames
-// #endif
-
     /**
      * custom intra quantization matrix
      * - encoding: Set by user, can be NULL.
@@ -1620,14 +1579,6 @@ public static final int FF_CODEC_PROPERTY_FILM_GRAIN =      0x00000004;
      *             This field should be set before avcodec_open2() is called.
      */
     public native AVBufferRef hw_frames_ctx(); public native AVCodecContext hw_frames_ctx(AVBufferRef setter);
-
-// #if FF_API_SUB_TEXT_FORMAT
-    /**
-     * @deprecated unused
-     */
-    public native @Deprecated int sub_text_format(); public native AVCodecContext sub_text_format(int setter);
-public static final int FF_SUB_TEXT_FMT_ASS =              0;
-// #endif
 
     /**
      * Audio only. The amount of padding (in samples) appended by the encoder to
@@ -1803,4 +1754,15 @@ public static final int FF_SUB_TEXT_FMT_ASS =              0;
      *             The decoder can then override during decoding as needed.
      */
     public native @ByRef AVChannelLayout ch_layout(); public native AVCodecContext ch_layout(AVChannelLayout setter);
+
+    /**
+     * Frame counter, set by libavcodec.
+     *
+     * - decoding: total number of frames returned from the decoder so far.
+     * - encoding: total number of frames passed to the encoder so far.
+     *
+     *   \note the counter is not incremented if encoding/decoding resulted in
+     *   an error.
+     */
+    public native @Cast("int64_t") long frame_num(); public native AVCodecContext frame_num(long setter);
 }

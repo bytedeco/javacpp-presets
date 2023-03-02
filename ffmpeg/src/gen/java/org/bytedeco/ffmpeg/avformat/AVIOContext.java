@@ -244,15 +244,6 @@ public class AVIOContext extends Pointer {
      */
     public native int ignore_boundary_point(); public native AVIOContext ignore_boundary_point(int setter);
 
-// #if FF_API_AVIOCONTEXT_WRITTEN
-    /**
-     * @deprecated field utilized privately by libavformat. For a public
-     *             statistic of how many bytes were written out, see
-     *             AVIOContext::bytes_written.
-     */
-    public native @Cast("int64_t") @Deprecated long written(); public native AVIOContext written(long setter);
-// #endif
-
     /**
      * Maximum reached position before a backward seek in the write buffer,
      * used keeping track of already written data for a later flush.

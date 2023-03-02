@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -39,9 +39,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(cinclude = {"<libavcodec/codec_id.h>", "<libavcodec/codec_desc.h>", "<libavcodec/codec_par.h>", "<libavcodec/defs.h>", "<libavcodec/packet.h>",
                               "<libavcodec/bsf.h>", "<libavcodec/codec.h>", "<libavcodec/avcodec.h>", "<libavcodec/jni.h>", "<libavcodec/avfft.h>", "<libavcodec/version_major.h>", "<libavcodec/version.h>"},
-                  link = "avcodec@.59"),
+                  link = "avcodec@.60"),
         @Platform(value = "linux-arm", preload = {"asound@.2", "vchiq_arm", "vcos", "vcsm", "bcm_host", "mmal_core", "mmal_util", "mmal_vc_client"}),
-        @Platform(value = "windows", preload = "avcodec-59")
+        @Platform(value = "windows", preload = "avcodec-60")
     }
 )
 public class avcodec implements InfoMapper {
@@ -52,9 +52,11 @@ public class avcodec implements InfoMapper {
                .put(new Info("LIBAVCODEC_VERSION_INT", "LIBAVCODEC_IDENT").translate(false))
                .put(new Info("FF_API_OPENH264_SLICE_MODE", "FF_API_OPENH264_CABAC", "FF_API_UNUSED_CODEC_CAPS", "FF_API_THREAD_SAFE_CALLBACKS",
                              "FF_API_DEBUG_MV", "FF_API_GET_FRAME_CLASS", "FF_API_AUTO_THREADS", "FF_API_INIT_PACKET", "FF_API_AVCTX_TIMEBASE",
-                             "FF_API_MPEGVIDEO_OPTS", "FF_API_FLAG_TRUNCATED", "FF_API_SUB_TEXT_FORMAT", "FF_API_IDCT_NONE", "FF_API_SVTAV1_OPTS").define().translate().cppTypes("bool"))
+                             "FF_API_MPEGVIDEO_OPTS", "FF_API_FLAG_TRUNCATED", "FF_API_SUB_TEXT_FORMAT", "FF_API_IDCT_NONE", "FF_API_SVTAV1_OPTS",
+                             "FF_API_AYUV_CODECID", "FF_API_VT_OUTPUT_CALLBACK", "FF_API_AVCODEC_CHROMA_POS", "FF_API_VT_HWACCEL_CONTEXT",
+                             "FF_API_AVCTX_FRAME_NUMBER", "FF_CODEC_CRYSTAL_HD").define().translate().cppTypes("bool"))
                .put(new Info("AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
-               .put(new Info("AVCodec::hw_configs").skip())
+               .put(new Info("AVCodec::hw_configs", "av_mdct_init", "av_imdct_calc", "av_imdct_half", "av_mdct_calc", "av_mdct_end").skip())
                .putFirst(new Info("AVPanScan").pointerTypes("AVPanScan"))
                .putFirst(new Info("AVCodecContext").pointerTypes("AVCodecContext"));
     }

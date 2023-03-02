@@ -45,6 +45,8 @@ public class avcodec extends org.bytedeco.ffmpeg.presets.avcodec {
 // #include "libavutil/avutil.h"
 // #include "libavutil/samplefmt.h"
 
+// #include "version_major.h"
+
 /**
  * \addtogroup lavc_core
  * \{
@@ -277,7 +279,9 @@ public static final int
     AV_CODEC_ID_AVRP = 198,
     AV_CODEC_ID_012V = 199,
     AV_CODEC_ID_AVUI = 200,
+// #if FF_API_AYUV_CODECID
     AV_CODEC_ID_AYUV = 201,
+// #endif
     AV_CODEC_ID_TARGA_Y216 = 202,
     AV_CODEC_ID_V308 = 203,
     AV_CODEC_ID_V408 = 204,
@@ -338,6 +342,10 @@ public static final int
     AV_CODEC_ID_JPEGXL = 259,
     AV_CODEC_ID_QOI = 260,
     AV_CODEC_ID_PHM = 261,
+    AV_CODEC_ID_RADIANCE_HDR = 262,
+    AV_CODEC_ID_WBMP = 263,
+    AV_CODEC_ID_MEDIA100 = 264,
+    AV_CODEC_ID_VQC = 265,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -432,6 +440,7 @@ public static final int
     AV_CODEC_ID_ADPCM_IMA_CUNNING = 0x11000 + 48,
     AV_CODEC_ID_ADPCM_IMA_MOFLEX = 0x11000 + 49,
     AV_CODEC_ID_ADPCM_IMA_ACORN = 0x11000 + 50,
+    AV_CODEC_ID_ADPCM_XMD = 0x11000 + 51,
 
     /* AMR */
     AV_CODEC_ID_AMR_NB = 0x12000,
@@ -449,6 +458,8 @@ public static final int
     AV_CODEC_ID_SDX2_DPCM = 0x14000 + 4,
     AV_CODEC_ID_GREMLIN_DPCM = 0x14000 + 5,
     AV_CODEC_ID_DERF_DPCM = 0x14000 + 6,
+    AV_CODEC_ID_WADY_DPCM = 0x14000 + 7,
+    AV_CODEC_ID_CBD2_DPCM = 0x14000 + 8,
 
     /* audio codecs */
     AV_CODEC_ID_MP2 = 0x15000,
@@ -550,6 +561,12 @@ public static final int
     AV_CODEC_ID_FASTAUDIO = 0x15000 + 94,
     AV_CODEC_ID_MSNSIREN = 0x15000 + 95,
     AV_CODEC_ID_DFPWM = 0x15000 + 96,
+    AV_CODEC_ID_BONK = 0x15000 + 97,
+    AV_CODEC_ID_MISC4 = 0x15000 + 98,
+    AV_CODEC_ID_APAC = 0x15000 + 99,
+    AV_CODEC_ID_FTR = 0x15000 + 100,
+    AV_CODEC_ID_WAVARC = 0x15000 + 101,
+    AV_CODEC_ID_RKA = 0x15000 + 102,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -612,7 +629,17 @@ public static final int
     /** Dummy codec for streams containing only metadata information. */
     AV_CODEC_ID_FFMETADATA = 0x21000,
     /** Passthrough codec, AVFrames wrapped in AVPacket */
-    AV_CODEC_ID_WRAPPED_AVFRAME = 0x21001;
+    AV_CODEC_ID_WRAPPED_AVFRAME = 0x21001,
+    /**
+     * Dummy null video codec, useful mainly for development and debugging.
+     * Null encoder/decoder discard all input and never return any output.
+     */
+    AV_CODEC_ID_VNULL = 0x21001 + 1,
+    /**
+     * Dummy null audio codec, useful mainly for development and debugging.
+     * Null encoder/decoder discard all input and never return any output.
+     */
+    AV_CODEC_ID_ANULL = 0x21001 + 2;
 
 /**
  * Get the type of the given codec.
@@ -803,16 +830,21 @@ public static final int AV_CODEC_PROP_TEXT_SUB =      (1 << 17);
 
 /**
  * \addtogroup lavc_core
+ * \{
  */
 
 /** enum AVFieldOrder */
 public static final int
     AV_FIELD_UNKNOWN = 0,
     AV_FIELD_PROGRESSIVE = 1,
-    AV_FIELD_TT = 2,          //< Top coded_first, top displayed first
-    AV_FIELD_BB = 3,          //< Bottom coded first, bottom displayed first
-    AV_FIELD_TB = 4,          //< Top coded first, bottom displayed first
-    AV_FIELD_BT = 5;          //< Bottom coded first, top displayed first
+    /** Top coded_first, top displayed first */
+    AV_FIELD_TT = 2,
+    /** Bottom coded first, bottom displayed first */
+    AV_FIELD_BB = 3,
+    /** Top coded first, bottom displayed first */
+    AV_FIELD_TB = 4,
+    /** Bottom coded first, top displayed first */
+    AV_FIELD_BT = 5;
 // Targeting ../avcodec/AVCodecParameters.java
 
 
@@ -894,6 +926,39 @@ public static final int
  * MPEG bitstreams could cause overread and segfault.
  */
 public static final int AV_INPUT_BUFFER_PADDING_SIZE = 64;
+
+/**
+ * Verify checksums embedded in the bitstream (could be of either encoded or
+ * decoded data, depending on the format) and print an error message on mismatch.
+ * If AV_EF_EXPLODE is also set, a mismatching checksum will result in the
+ * decoder/demuxer returning an error.
+ */
+public static final int AV_EF_CRCCHECK =       (1<<0);
+/** detect bitstream specification deviations */
+public static final int AV_EF_BITSTREAM =      (1<<1);
+/** detect improper bitstream length */
+public static final int AV_EF_BUFFER =         (1<<2);
+/** abort decoding on minor error detection */
+public static final int AV_EF_EXPLODE =        (1<<3);
+
+/** ignore errors and continue */
+public static final int AV_EF_IGNORE_ERR =     (1<<15);
+/** consider things that violate the spec, are fast to calculate and have not been seen in the wild as errors */
+public static final int AV_EF_CAREFUL =        (1<<16);
+/** consider all spec non compliances as errors */
+public static final int AV_EF_COMPLIANT =      (1<<17);
+/** consider things that a sane encoder/muxer should not do as an error */
+public static final int AV_EF_AGGRESSIVE =     (1<<18);
+
+/** Strictly conform to an older more strict version of the spec or reference software. */
+public static final int FF_COMPLIANCE_VERY_STRICT =   2;
+/** Strictly conform to all the things in the spec no matter what consequences. */
+public static final int FF_COMPLIANCE_STRICT =        1;
+public static final int FF_COMPLIANCE_NORMAL =        0;
+/** Allow unofficial extensions */
+public static final int FF_COMPLIANCE_UNOFFICIAL =   -1;
+/** Allow nonstandardized experimental things. */
+public static final int FF_COMPLIANCE_EXPERIMENTAL = -2;
 
 /**
  * \ingroup lavc_decoding
@@ -1131,7 +1196,7 @@ public static final int
      * the packet may contain "dual mono" audio specific to Japanese DTV
      * and if it is true, recommends only the selected channel to be used.
      * <pre>{@code
-     * u8    selected channels (0=mail/left, 1=sub/right, 2=both)
+     * u8    selected channels (0=main/left, 1=sub/right, 2=both)
      * }</pre>
      */
     AV_PKT_DATA_JP_DUALMONO = 12,
@@ -1686,6 +1751,8 @@ public static final int
 /**
  * Prepare the filter for use, after all the parameters and options have been
  * set.
+ *
+ * @param ctx a AVBSFContext previously allocated with av_bsf_alloc()
  */
 @NoException public static native int av_bsf_init(AVBSFContext ctx);
 
@@ -1696,6 +1763,7 @@ public static final int
  * av_bsf_receive_packet() repeatedly until it returns AVERROR(EAGAIN) or
  * AVERROR_EOF.
  *
+ * @param ctx an initialized AVBSFContext
  * @param pkt the packet to filter. The bitstream filter will take ownership of
  * the packet and reset the contents of pkt. pkt is not touched if an error occurs.
  * If pkt is empty (i.e. NULL, or pkt->data is NULL and pkt->side_data_elems zero),
@@ -1714,6 +1782,7 @@ public static final int
 /**
  * Retrieve a filtered packet.
  *
+ * @param ctx an initialized AVBSFContext
  * @param pkt [out] this struct will be filled with the contents of the filtered
  *                 packet. It is owned by the caller and must be freed using
  *                 av_packet_unref() when it is no longer needed.
@@ -1909,12 +1978,6 @@ public static final int AV_CODEC_CAP_DRAW_HORIZ_BAND =     (1 <<  0);
  * avcodec_default_get_buffer2 or avcodec_default_get_encode_buffer.
  */
 public static final int AV_CODEC_CAP_DR1 =                 (1 <<  1);
-// #if FF_API_FLAG_TRUNCATED
-/**
- * @deprecated Use parsers to always send proper frames.
- */
-public static final int AV_CODEC_CAP_TRUNCATED =           (1 <<  3);
-// #endif
 /**
  * Encoder or decoder requires flushing with NULL input at the end in order to
  * give the complete and correct output.
@@ -1984,9 +2047,6 @@ public static final int AV_CODEC_CAP_PARAM_CHANGE =        (1 << 14);
  * multithreading-capable external libraries.
  */
 public static final int AV_CODEC_CAP_OTHER_THREADS =       (1 << 15);
-// #if FF_API_AUTO_THREADS
-public static final int AV_CODEC_CAP_AUTO_THREADS =        AV_CODEC_CAP_OTHER_THREADS;
-// #endif
 /**
  * Audio encoder supports receiving a different number of samples in each call.
  */
@@ -2001,17 +2061,6 @@ public static final int AV_CODEC_CAP_VARIABLE_FRAME_SIZE = (1 << 16);
  * choice for probing.
  */
 public static final int AV_CODEC_CAP_AVOID_PROBING =       (1 << 17);
-
-// #if FF_API_UNUSED_CODEC_CAPS
-/**
- * Deprecated and unused. Use AVCodecDescriptor.props instead
- */
-public static final int AV_CODEC_CAP_INTRA_ONLY =       0x40000000;
-/**
- * Deprecated and unused. Use AVCodecDescriptor.props instead
- */
-public static final int AV_CODEC_CAP_LOSSLESS =         0x80000000;
-// #endif
 
 /**
  * Codec is backed by a hardware implementation. Typically used to
@@ -2028,9 +2077,9 @@ public static final int AV_CODEC_CAP_HARDWARE =            (1 << 18);
 public static final int AV_CODEC_CAP_HYBRID =              (1 << 19);
 
 /**
- * This codec takes the reordered_opaque field from input AVFrames
- * and returns it in the corresponding field in AVCodecContext after
- * encoding.
+ * This encoder can reorder user opaque values from input AVFrames and return
+ * them with corresponding output packets.
+ * @see AV_CODEC_FLAG_COPY_OPAQUE
  */
 public static final int AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = (1 << 20);
 
@@ -2040,6 +2089,14 @@ public static final int AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = (1 << 20);
  * remain pending.
  */
 public static final int AV_CODEC_CAP_ENCODER_FLUSH =   (1 << 21);
+
+/**
+ * The encoder is able to output reconstructed frame data, i.e. raw frames that
+ * would be produced by decoding the encoded bitstream.
+ *
+ * Reconstructed frame output is enabled by the AV_CODEC_FLAG_RECON_FRAME flag.
+ */
+public static final int AV_CODEC_CAP_ENCODER_RECON_FRAME = (1 << 22);
 // Targeting ../avcodec/AVProfile.java
 
 
@@ -2399,6 +2456,58 @@ public static final int AV_CODEC_FLAG_QPEL =            (1 <<  4);
  */
 public static final int AV_CODEC_FLAG_DROPCHANGED =     (1 <<  5);
 /**
+ * Request the encoder to output reconstructed frames, i.e.\ frames that would
+ * be produced by decoding the encoded bistream. These frames may be retrieved
+ * by calling avcodec_receive_frame() immediately after a successful call to
+ * avcodec_receive_packet().
+ *
+ * Should only be used with encoders flagged with the
+ * \ref AV_CODEC_CAP_ENCODER_RECON_FRAME capability.
+ */
+public static final int AV_CODEC_FLAG_RECON_FRAME =     (1 <<  6);
+/**
+ * \par decoding
+ * Request the decoder to propagate each packets AVPacket.opaque and
+ * AVPacket.opaque_ref to its corresponding output AVFrame.
+ *
+ * \par encoding:
+ * Request the encoder to propagate each frame's AVFrame.opaque and
+ * AVFrame.opaque_ref values to its corresponding output AVPacket.
+ *
+ * \par
+ * May only be set on encoders that have the
+ * \ref AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE capability flag.
+ *
+ * \note
+ * While in typical cases one input frame produces exactly one output packet
+ * (perhaps after a delay), in general the mapping of frames to packets is
+ * M-to-N, so
+ * - Any number of input frames may be associated with any given output packet.
+ *   This includes zero - e.g. some encoders may output packets that carry only
+ *   metadata about the whole stream.
+ * - A given input frame may be associated with any number of output packets.
+ *   Again this includes zero - e.g. some encoders may drop frames under certain
+ *   conditions.
+ * .
+ * This implies that when using this flag, the caller must NOT assume that
+ * - a given input frame's opaques will necessarily appear on some output packet;
+ * - every output packet will have some non-NULL opaque value.
+ * .
+ * When an output packet contains multiple frames, the opaque values will be
+ * taken from the first of those.
+ *
+ * \note
+ * The converse holds for decoders, with frames and packets switched.
+ */
+public static final int AV_CODEC_FLAG_COPY_OPAQUE =     (1 <<  7);
+/**
+ * Signal to the encoder that the values of AVFrame.duration are valid and
+ * should be used (typically for transferring them to output packets).
+ *
+ * If this flag is not set, frame durations are ignored.
+ */
+public static final int AV_CODEC_FLAG_FRAME_DURATION =  (1 <<  8);
+/**
  * Use internal 2pass ratecontrol in first pass mode.
  */
 public static final int AV_CODEC_FLAG_PASS1 =           (1 <<  9);
@@ -2418,15 +2527,6 @@ public static final int AV_CODEC_FLAG_GRAY =            (1 << 13);
  * error[?] variables will be set during encoding.
  */
 public static final int AV_CODEC_FLAG_PSNR =            (1 << 15);
-// #if FF_API_FLAG_TRUNCATED
-/**
- * Input bitstream might be truncated at a random location
- * instead of only at frame boundaries.
- *
- * @deprecated use codec parsers for packetizing input
- */
-public static final int AV_CODEC_FLAG_TRUNCATED =       (1 << 16);
-// #endif
 /**
  * Use interlaced DCT.
  */
@@ -2468,11 +2568,6 @@ public static final int AV_CODEC_FLAG2_NO_OUTPUT =      (1 <<  2);
 public static final int AV_CODEC_FLAG2_LOCAL_HEADER =   (1 <<  3);
 
 /**
- * timecode is in drop frame format. DEPRECATED!!!!
- */
-public static final int AV_CODEC_FLAG2_DROP_FRAME_TIMECODE = (1 << 13);
-
-/**
  * Input bitstream might be truncated at a packet boundaries
  * instead of only at frame boundaries.
  */
@@ -2498,13 +2593,12 @@ public static final int AV_CODEC_FLAG2_SKIP_MANUAL =    (1 << 29);
  * Do not reset ASS ReadOrder field on flush (subtitles decoding)
  */
 public static final int AV_CODEC_FLAG2_RO_FLUSH_NOOP =  (1 << 30);
-
-/* Unsupported options :
- *              Syntax Arithmetic coding (SAC)
- *              Reference Picture Selection
- *              Independent Segment Decoding */
-/* /Fx */
-/* codec capabilities */
+/**
+ * Generate/parse ICC profiles on encode/decode, as appropriate for the type of
+ * file. No effect on codecs which cannot contain embedded ICC profiles, or
+ * when compiled without support for lcms2.
+ */
+public static final int AV_CODEC_FLAG2_ICC_PROFILES =   (1 << 31);
 
 /* Exported side data.
    These flags can be passed in AVCodecContext.export_side_data before initialization.
@@ -2584,6 +2678,22 @@ public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
 public static final int AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH = (1 << 2);
 
 /**
+ * Some hardware decoders (namely nvdec) can either output direct decoder
+ * surfaces, or make an on-device copy and return said copy.
+ * There is a hard limit on how many decoder surfaces there can be, and it
+ * cannot be accurately guessed ahead of time.
+ * For some processing chains, this can be okay, but others will run into the
+ * limit and in turn produce very confusing errors that require fine tuning of
+ * more or less obscure options by the user, or in extreme cases cannot be
+ * resolved at all without inserting an avfilter that forces a copy.
+ *
+ * Thus, the hwaccel will by default make a copy for safety and resilience.
+ * If a users really wants to minimize the amount of copies, they can set this
+ * flag and ensure their processing chain does not exhaust the surface pool.
+ */
+public static final int AV_HWACCEL_FLAG_UNSAFE_OUTPUT = (1 << 3);
+
+/**
  * \}
  */
 
@@ -2658,13 +2768,6 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * @see av_opt_find().
  */
 @NoException public static native @Const AVClass avcodec_get_class();
-
-// #if FF_API_GET_FRAME_CLASS
-/**
- * @deprecated This function should not be used.
- */
-@NoException public static native @Const @Deprecated AVClass avcodec_get_frame_class();
-// #endif
 
 /**
  * Get the AVClass for AVSubtitleRect. It can be used in combination with
@@ -2803,6 +2906,7 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
 @NoException public static native void avcodec_align_dimensions2(AVCodecContext s, int[] width, int[] height,
                                int[] linesize_align);
 
+// #ifdef FF_API_AVCODEC_CHROMA_POS
 /**
  * Converts AVChromaLocation to swscale x/y chroma position.
  *
@@ -2811,10 +2915,11 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *
  * @param xpos  horizontal chroma sample position
  * @param ypos  vertical   chroma sample position
+ * @deprecated Use av_chroma_location_enum_to_pos() instead.
  */
-@NoException public static native int avcodec_enum_to_chroma_pos(IntPointer xpos, IntPointer ypos, @Cast("AVChromaLocation") int pos);
-@NoException public static native int avcodec_enum_to_chroma_pos(IntBuffer xpos, IntBuffer ypos, @Cast("AVChromaLocation") int pos);
-@NoException public static native int avcodec_enum_to_chroma_pos(int[] xpos, int[] ypos, @Cast("AVChromaLocation") int pos);
+ @NoException public static native @Deprecated int avcodec_enum_to_chroma_pos(IntPointer xpos, IntPointer ypos, @Cast("AVChromaLocation") int pos);
+ @NoException public static native @Deprecated int avcodec_enum_to_chroma_pos(IntBuffer xpos, IntBuffer ypos, @Cast("AVChromaLocation") int pos);
+ @NoException public static native @Deprecated int avcodec_enum_to_chroma_pos(int[] xpos, int[] ypos, @Cast("AVChromaLocation") int pos);
 
 /**
  * Converts swscale x/y chroma position to AVChromaLocation.
@@ -2824,8 +2929,10 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *
  * @param xpos  horizontal chroma sample position
  * @param ypos  vertical   chroma sample position
+ * @deprecated Use av_chroma_location_pos_to_enum() instead.
  */
-@NoException public static native @Cast("AVChromaLocation") int avcodec_chroma_pos_to_enum(int xpos, int ypos);
+ @NoException public static native @Cast("AVChromaLocation") @Deprecated int avcodec_chroma_pos_to_enum(int xpos, int ypos);
+// #endif
 
 /**
  * Decode a subtitle message.
@@ -2855,14 +2962,11 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * @param avpkt [in] The input AVPacket containing the input buffer.
  */
 @NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
-                            IntPointer got_sub_ptr,
-                            AVPacket avpkt);
+                             IntPointer got_sub_ptr, @Const AVPacket avpkt);
 @NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
-                            IntBuffer got_sub_ptr,
-                            AVPacket avpkt);
+                             IntBuffer got_sub_ptr, @Const AVPacket avpkt);
 @NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
-                            int[] got_sub_ptr,
-                            AVPacket avpkt);
+                             int[] got_sub_ptr, @Const AVPacket avpkt);
 
 /**
  * Supply raw packet data as input to a decoder.
@@ -2898,40 +3002,41 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *                  still has frames buffered, it will return them after sending
  *                  a flush packet.
  *
- * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   input is not accepted in the current state - user
- *                         must read output with avcodec_receive_frame() (once
- *                         all output is read, the packet should be resent, and
- *                         the call will not fail with EAGAIN).
- *      AVERROR_EOF:       the decoder has been flushed, and no new packets can
- *                         be sent to it (also returned if more than 1 flush
- *                         packet is sent)
- *      AVERROR(EINVAL):   codec not opened, it is an encoder, or requires flush
- *      AVERROR(ENOMEM):   failed to add packet to internal queue, or similar
- *      other errors: legitimate decoding errors
+ * \retval 0                 success
+ * \retval AVERROR(EAGAIN)   input is not accepted in the current state - user
+ *                           must read output with avcodec_receive_frame() (once
+ *                           all output is read, the packet should be resent,
+ *                           and the call will not fail with EAGAIN).
+ * \retval AVERROR_EOF       the decoder has been flushed, and no new packets can be
+ *                           sent to it (also returned if more than 1 flush
+ *                           packet is sent)
+ * \retval AVERROR(EINVAL)   codec not opened, it is an encoder, or requires flush
+ * \retval AVERROR(ENOMEM)   failed to add packet to internal queue, or similar
+ * \retval "another negative error code" legitimate decoding errors
  */
 @NoException public static native int avcodec_send_packet(AVCodecContext avctx, @Const AVPacket avpkt);
 
 /**
- * Return decoded output data from a decoder.
+ * Return decoded output data from a decoder or encoder (when the
+ * AV_CODEC_FLAG_RECON_FRAME flag is used).
  *
  * @param avctx codec context
  * @param frame This will be set to a reference-counted video or audio
  *              frame (depending on the decoder type) allocated by the
- *              decoder. Note that the function will always call
+ *              codec. Note that the function will always call
  *              av_frame_unref(frame) before doing anything else.
  *
- * @return
- *      0:                 success, a frame was returned
- *      AVERROR(EAGAIN):   output is not available in this state - user must try
- *                         to send new input
- *      AVERROR_EOF:       the decoder has been fully flushed, and there will be
- *                         no more output frames
- *      AVERROR(EINVAL):   codec not opened, or it is an encoder
- *      AVERROR_INPUT_CHANGED:   current decoded frame has changed parameters
- *                               with respect to first decoded frame. Applicable
- *                               when flag AV_CODEC_FLAG_DROPCHANGED is set.
- *      other negative values: legitimate decoding errors
+ * \retval 0                success, a frame was returned
+ * \retval AVERROR(EAGAIN)  output is not available in this state - user must
+ *                          try to send new input
+ * \retval AVERROR_EOF      the codec has been fully flushed, and there will be
+ *                          no more output frames
+ * \retval AVERROR(EINVAL)  codec not opened, or it is an encoder without the
+ *                          AV_CODEC_FLAG_RECON_FRAME flag enabled
+ * \retval AVERROR_INPUT_CHANGED current decoded frame has changed parameters with
+ *                          respect to first decoded frame. Applicable when flag
+ *                          AV_CODEC_FLAG_DROPCHANGED is set.
+ * \retval "other negative error code" legitimate decoding errors
  */
 @NoException public static native int avcodec_receive_frame(AVCodecContext avctx, AVFrame frame);
 
@@ -2958,16 +3063,16 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *                  If it is not set, frame->nb_samples must be equal to
  *                  avctx->frame_size for all frames except the last.
  *                  The final frame may be smaller than avctx->frame_size.
- * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   input is not accepted in the current state - user
- *                         must read output with avcodec_receive_packet() (once
- *                         all output is read, the packet should be resent, and
- *                         the call will not fail with EAGAIN).
- *      AVERROR_EOF:       the encoder has been flushed, and no new frames can
- *                         be sent to it
- *      AVERROR(EINVAL):   codec not opened, it is a decoder, or requires flush
- *      AVERROR(ENOMEM):   failed to add packet to internal queue, or similar
- *      other errors: legitimate encoding errors
+ * \retval 0                 success
+ * \retval AVERROR(EAGAIN)   input is not accepted in the current state - user must
+ *                           read output with avcodec_receive_packet() (once all
+ *                           output is read, the packet should be resent, and the
+ *                           call will not fail with EAGAIN).
+ * \retval AVERROR_EOF       the encoder has been flushed, and no new frames can
+ *                           be sent to it
+ * \retval AVERROR(EINVAL)   codec not opened, it is a decoder, or requires flush
+ * \retval AVERROR(ENOMEM)   failed to add packet to internal queue, or similar
+ * \retval "another negative error code" legitimate encoding errors
  */
 @NoException public static native int avcodec_send_frame(AVCodecContext avctx, @Const AVFrame frame);
 
@@ -2978,13 +3083,13 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * @param avpkt This will be set to a reference-counted packet allocated by the
  *              encoder. Note that the function will always call
  *              av_packet_unref(avpkt) before doing anything else.
- * @return 0 on success, otherwise negative error code:
- *      AVERROR(EAGAIN):   output is not available in the current state - user
- *                         must try to send input
- *      AVERROR_EOF:       the encoder has been fully flushed, and there will be
- *                         no more output packets
- *      AVERROR(EINVAL):   codec not opened, or it is a decoder
- *      other errors: legitimate encoding errors
+ * \retval 0               success
+ * \retval AVERROR(EAGAIN) output is not available in the current state - user must
+ *                         try to send input
+ * \retval AVERROR_EOF     the encoder has been fully flushed, and there will be no
+ *                         more output packets
+ * \retval AVERROR(EINVAL) codec not opened, or it is a decoder
+ * \retval "another negative error code" legitimate encoding errors
  */
 @NoException public static native int avcodec_receive_packet(AVCodecContext avctx, AVPacket avpkt);
 
@@ -3103,10 +3208,14 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
 
 /** enum AVPictureStructure */
 public static final int
-    AV_PICTURE_STRUCTURE_UNKNOWN = 0,      //< unknown
-    AV_PICTURE_STRUCTURE_TOP_FIELD = 1,    //< coded as top field
-    AV_PICTURE_STRUCTURE_BOTTOM_FIELD = 2, //< coded as bottom field
-    AV_PICTURE_STRUCTURE_FRAME = 3;        //< coded as frame
+    /** unknown */
+    AV_PICTURE_STRUCTURE_UNKNOWN = 0,
+    /** coded as top field */
+    AV_PICTURE_STRUCTURE_TOP_FIELD = 1,
+    /** coded as bottom field */
+    AV_PICTURE_STRUCTURE_BOTTOM_FIELD = 2,
+    /** coded as frame */
+    AV_PICTURE_STRUCTURE_FRAME = 3;
 // Targeting ../avcodec/AVCodecParserContext.java
 
 
@@ -3488,17 +3597,11 @@ public static final int
 
 @NoException public static native void av_fft_end(FFTContext s);
 
-@NoException public static native FFTContext av_mdct_init(int nbits, int inverse, double scale);
-@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
-@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
-@NoException public static native void av_imdct_calc(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
-@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
-@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
-@NoException public static native void av_imdct_half(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
-@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") FloatPointer output, @Cast("const FFTSample*") FloatPointer input);
-@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") FloatBuffer output, @Cast("const FFTSample*") FloatBuffer input);
-@NoException public static native void av_mdct_calc(FFTContext s, @Cast("FFTSample*") float[] output, @Cast("const FFTSample*") float[] input);
-@NoException public static native void av_mdct_end(FFTContext s);
+
+
+
+
+
 
 /* Real Discrete Fourier Transform */
 
@@ -3585,7 +3688,7 @@ public static final int
  * Libavcodec version macros.
  */
 
-public static final int LIBAVCODEC_VERSION_MAJOR =  59;
+public static final int LIBAVCODEC_VERSION_MAJOR =  60;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
@@ -3597,19 +3700,17 @@ public static final int LIBAVCODEC_VERSION_MAJOR =  59;
  * at once through the bump. This improves the git bisect-ability of the change.
  */
 
-public static final boolean FF_API_OPENH264_SLICE_MODE = (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_OPENH264_CABAC =      (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_UNUSED_CODEC_CAPS =   (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_THREAD_SAFE_CALLBACKS = (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_DEBUG_MV =          (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_GET_FRAME_CLASS =     (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_AUTO_THREADS =        (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_INIT_PACKET =         (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_AVCTX_TIMEBASE =    (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_FLAG_TRUNCATED =      (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_SUB_TEXT_FORMAT =     (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_IDCT_NONE =           (LIBAVCODEC_VERSION_MAJOR < 60);
-public static final boolean FF_API_SVTAV1_OPTS =         (LIBAVCODEC_VERSION_MAJOR < 60);
+public static final boolean FF_API_INIT_PACKET =         (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_IDCT_NONE =           (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_SVTAV1_OPTS =         (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_AYUV_CODECID =        (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_VT_OUTPUT_CALLBACK =  (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_AVCODEC_CHROMA_POS =  (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_VT_HWACCEL_CONTEXT =  (LIBAVCODEC_VERSION_MAJOR < 61);
+public static final boolean FF_API_AVCTX_FRAME_NUMBER =  (LIBAVCODEC_VERSION_MAJOR < 61);
+
+// reminder to remove CrystalHD decoders on next major bump
+public static final boolean FF_CODEC_CRYSTAL_HD =        (LIBAVCODEC_VERSION_MAJOR < 61);
 
 // #endif /* AVCODEC_VERSION_MAJOR_H */
 
@@ -3647,7 +3748,7 @@ public static final boolean FF_API_SVTAV1_OPTS =         (LIBAVCODEC_VERSION_MAJ
 
 // #include "version_major.h"
 
-public static final int LIBAVCODEC_VERSION_MINOR =  37;
+public static final int LIBAVCODEC_VERSION_MINOR =   3;
 public static final int LIBAVCODEC_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVCODEC_VERSION_INT();

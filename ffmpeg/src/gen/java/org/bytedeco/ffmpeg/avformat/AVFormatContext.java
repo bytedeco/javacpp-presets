@@ -197,10 +197,6 @@ public static final int AVFMT_FLAG_FLUSH_PACKETS =    0x0200;
 public static final int AVFMT_FLAG_BITEXACT =         0x0400;
 /** try to interleave outputted packets by dts (using this flag can slow demuxing down) */
 public static final int AVFMT_FLAG_SORT_DTS =    0x10000;
-// #if FF_API_LAVF_PRIV_OPT
-/** Enable use of private options by delaying codec open (deprecated, does nothing) */
-public static final int AVFMT_FLAG_PRIV_OPT =    0x20000;
-// #endif
 /** Enable fast, but inaccurate seeks for some formats */
 public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
 /** Stop muxing when the shortest stream stops. */
@@ -641,8 +637,11 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
     }
     public native Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer io_open(); public native AVFormatContext io_open(Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer setter);
 
+// #if FF_API_AVFORMAT_IO_CLOSE
     /**
      * A callback for closing the streams opened with AVFormatContext.io_open().
+     *
+     * @deprecated use io_close2
      */
     public static class Io_close_AVFormatContext_AVIOContext extends FunctionPointer {
         static { Loader.load(); }
@@ -650,9 +649,10 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
         public    Io_close_AVFormatContext_AVIOContext(Pointer p) { super(p); }
         protected Io_close_AVFormatContext_AVIOContext() { allocate(); }
         private native void allocate();
-        public native void call(AVFormatContext s, AVIOContext pb);
+        public native @Deprecated void call(AVFormatContext s, AVIOContext pb);
     }
     public native Io_close_AVFormatContext_AVIOContext io_close(); public native AVFormatContext io_close(Io_close_AVFormatContext_AVIOContext setter);
+// #endif
 
     /**
      * ',' separated list of disallowed protocols.

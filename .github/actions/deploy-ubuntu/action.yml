@@ -4,6 +4,8 @@ runs:
   steps:
     - name: Install environment
       shell: bash
+      env:
+        GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         cd /root
         mkdir -p .ccache
@@ -175,7 +177,7 @@ runs:
         if [[ -n ${CI_DEPLOY_USERNAME:-} ]] && [[ ! "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
           GRADLE_TASK=publish
           MAVEN_PHASE=deploy
-          if [[ "${{ github.event.head_commit.message }}" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
+          if [[ "$GITHUB_EVENT_HEAD_COMMIT_MESSAGE" == Release* ]] || [[ "${GITHUB_REF#refs/heads/}" == "release" ]]; then
             python3 -m gdown.cli -q -O settings.tar.gz https://drive.google.com/uc?id=$CI_DEPLOY_SETTINGS
             tar -xzf settings.tar.gz
             MAVEN_OPTIONS="$MAVEN_OPTIONS -Dgpg.homedir=$(pwd)/.gnupg/ -DperformRelease -DstagingRepositoryId=$STAGING_REPOSITORY"

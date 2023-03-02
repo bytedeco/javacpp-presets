@@ -10,6 +10,9 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.ffmpeg.global.avutil.*;
 
+/**
+ * \}
+ */
 
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVDictionaryEntry extends Pointer {
