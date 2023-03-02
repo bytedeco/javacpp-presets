@@ -633,86 +633,6 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * \{
  */
 
-// #if FF_API_DECLARE_ALIGNED
-/**
- *
- * \defgroup lavu_mem_macros Alignment Macros
- * Helper macros for declaring aligned variables.
- * \{
- */
-
-/**
- * \def DECLARE_ALIGNED(n,t,v)
- * Declare a variable that is aligned in memory.
- *
- * <pre>{@code {.c}
- * DECLARE_ALIGNED(16, uint16_t, aligned_int) = 42;
- * DECLARE_ALIGNED(32, uint8_t, aligned_array)[128];
- *
- * // The default-alignment equivalent would be
- * uint16_t aligned_int = 42;
- * uint8_t aligned_array[128];
- * }</pre>
- *
- * @param n Minimum alignment in bytes
- * @param t Type of the variable (or array element)
- * @param v Name of the variable
- */
-
-/**
- * \def DECLARE_ASM_ALIGNED(n,t,v)
- * Declare an aligned variable appropriate for use in inline assembly code.
- *
- * <pre>{@code {.c}
- * DECLARE_ASM_ALIGNED(16, uint64_t, pw_08) = UINT64_C(0x0008000800080008);
- * }</pre>
- *
- * @param n Minimum alignment in bytes
- * @param t Type of the variable (or array element)
- * @param v Name of the variable
- */
-
-/**
- * \def DECLARE_ASM_CONST(n,t,v)
- * Declare a static constant aligned variable appropriate for use in inline
- * assembly code.
- *
- * <pre>{@code {.c}
- * DECLARE_ASM_CONST(16, uint64_t, pw_08) = UINT64_C(0x0008000800080008);
- * }</pre>
- *
- * @param n Minimum alignment in bytes
- * @param t Type of the variable (or array element)
- * @param v Name of the variable
- */
-
-// #if defined(__INTEL_COMPILER) && __INTEL_COMPILER < 1110 || defined(__SUNPRO_C)
-//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-//     #define DECLARE_ASM_ALIGNED(n,t,v)  t __attribute__ ((aligned (n))) v
-//     #define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
-// #elif defined(__DJGPP__)
-//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (FFMIN(n, 16)))) v
-//     #define DECLARE_ASM_ALIGNED(n,t,v)  t av_used __attribute__ ((aligned (FFMIN(n, 16)))) v
-//     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (FFMIN(n, 16)))) v
-// #elif defined(__GNUC__) || defined(__clang__)
-//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-//     #define DECLARE_ASM_ALIGNED(n,t,v)  t av_used __attribute__ ((aligned (n))) v
-//     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
-// #elif defined(_MSC_VER)
-//     #define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
-//     #define DECLARE_ASM_ALIGNED(n,t,v)  __declspec(align(n)) t v
-//     #define DECLARE_ASM_CONST(n,t,v)    __declspec(align(n)) static const t v
-// #else
-//     #define DECLARE_ALIGNED(n,t,v)      t v
-//     #define DECLARE_ASM_ALIGNED(n,t,v)  t v
-//     #define DECLARE_ASM_CONST(n,t,v)    static const t v
-// #endif
-
-/**
- * \}
- */
-// #endif
-
 /**
  * \defgroup lavu_mem_attrs Function Attributes
  * Function attributes applicable to memory handling functions.
@@ -820,13 +740,6 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * @see av_malloc_array()
  */
 @NoException public static native Pointer av_calloc(@Cast("size_t") long nmemb, @Cast("size_t") long size);
-
-// #if FF_API_AV_MALLOCZ_ARRAY
-/**
- * @deprecated use av_calloc()
- */
-@NoException public static native @Deprecated Pointer av_mallocz_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
-// #endif
 
 /**
  * Allocate, reallocate, or free a block of memory.
@@ -1266,7 +1179,8 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 /**
  * Multiply two {@code size_t} values checking for overflow.
  *
- * @param a [in] ,b Operands of multiplication
+ * @param a [in]   Operand of multiplication
+ * @param b [in]   Operand of multiplication
  * @param r [out]   Pointer to the result of the operation
  * @return 0 on success, AVERROR(EINVAL) on overflow
  */
@@ -1477,7 +1391,8 @@ public static final int
 /**
  * Compute the greatest common divisor of two integer operands.
  *
- * @param a,b Operands
+ * @param a Operand
+ * @param b Operand
  * @return GCD of a and b up to sign; if a >= 0 and b >= 0, return value is >= 0;
  * if a == 0 and b == 0, returns 0.
  */
@@ -1552,7 +1467,8 @@ public static final int
  * av_compare_mod(0x11, 0x02, 0x20) > 0 // since 0x11 % 0x20 (0x11) > 0x02 % 0x20 (0x02)
  * }</pre>
  *
- * @param a,b Operands
+ * @param a Operand
+ * @param b Operand
  * @param mod Divisor; must be a power of 2
  * @return
  *         - a negative value if {@code a % mod < b % mod}
@@ -1755,7 +1671,8 @@ public static final int
  * Find which of the two rationals is closer to another rational.
  *
  * @param q     Rational to be compared against
- * @param q1,q2 Rationals to be tested
+ * @param q1    Rational to be tested
+ * @param q2    Rational to be tested
  * @return One of the following values:
  *         - 1 if {@code q1} is nearer to {@code q} than {@code q2}
  *         - -1 if {@code q2} is nearer to {@code q} than {@code q1}
@@ -2670,8 +2587,36 @@ public static final int
     /** planar GBRA 4:4:4:4 64bpp, little-endian */
     AV_PIX_FMT_GBRAP16LE = AV_PIX_FMT_GBRP + 42,
     /**
-     *  HW acceleration through QSV, data[3] contains a pointer to the
-     *  mfxFrameSurface1 structure.
+     * HW acceleration through QSV, data[3] contains a pointer to the
+     * mfxFrameSurface1 structure.
+     *
+     * Before FFmpeg 5.0:
+     * mfxFrameSurface1.Data.MemId contains a pointer when importing
+     * the following frames as QSV frames:
+     *
+     * VAAPI:
+     * mfxFrameSurface1.Data.MemId contains a pointer to VASurfaceID
+     *
+     * DXVA2:
+     * mfxFrameSurface1.Data.MemId contains a pointer to IDirect3DSurface9
+     *
+     * FFmpeg 5.0 and above:
+     * mfxFrameSurface1.Data.MemId contains a pointer to the mfxHDLPair
+     * structure when importing the following frames as QSV frames:
+     *
+     * VAAPI:
+     * mfxHDLPair.first contains a VASurfaceID pointer.
+     * mfxHDLPair.second is always MFX_INFINITE.
+     *
+     * DXVA2:
+     * mfxHDLPair.first contains IDirect3DSurface9 pointer.
+     * mfxHDLPair.second is always MFX_INFINITE.
+     *
+     * D3D11:
+     * mfxHDLPair.first contains a ID3D11Texture2D pointer.
+     * mfxHDLPair.second contains the texture array index of the frame if the
+     * ID3D11Texture2D is an array texture, or always MFX_INFINITE if it is a
+     * normal texture.
      */
     AV_PIX_FMT_QSV = AV_PIX_FMT_GBRP + 43,
     /**
@@ -2916,8 +2861,49 @@ public static final int
     /** interleaved chroma YUV 4:4:4, 48bpp, little-endian */
     AV_PIX_FMT_P416LE = AV_PIX_FMT_GBRP + 134,
 
+    /** packed VUYA 4:4:4, 32bpp, VUYAVUYA... */
+    AV_PIX_FMT_VUYA = AV_PIX_FMT_GBRP + 135,
+
+    /** IEEE-754 half precision packed RGBA 16:16:16:16, 64bpp, RGBARGBA..., big-endian */
+    AV_PIX_FMT_RGBAF16BE = AV_PIX_FMT_GBRP + 136,
+    /** IEEE-754 half precision packed RGBA 16:16:16:16, 64bpp, RGBARGBA..., little-endian */
+    AV_PIX_FMT_RGBAF16LE = AV_PIX_FMT_GBRP + 137,
+
+    /** packed VUYX 4:4:4, 32bpp, Variant of VUYA where alpha channel is left undefined */
+    AV_PIX_FMT_VUYX = AV_PIX_FMT_GBRP + 138,
+
+    /** like NV12, with 12bpp per component, data in the high bits, zeros in the low bits, little-endian */
+    AV_PIX_FMT_P012LE = AV_PIX_FMT_GBRP + 139,
+    /** like NV12, with 12bpp per component, data in the high bits, zeros in the low bits, big-endian */
+    AV_PIX_FMT_P012BE = AV_PIX_FMT_GBRP + 140,
+
+    /** packed YUV 4:2:2 like YUYV422, 24bpp, data in the high bits, zeros in the low bits, big-endian */
+    AV_PIX_FMT_Y212BE = AV_PIX_FMT_GBRP + 141,
+    /** packed YUV 4:2:2 like YUYV422, 24bpp, data in the high bits, zeros in the low bits, little-endian */
+    AV_PIX_FMT_Y212LE = AV_PIX_FMT_GBRP + 142,
+
+    /** packed XVYU 4:4:4, 32bpp, (msb)2X 10V 10Y 10U(lsb), big-endian, variant of Y410 where alpha channel is left undefined */
+    AV_PIX_FMT_XV30BE = AV_PIX_FMT_GBRP + 143,
+    /** packed XVYU 4:4:4, 32bpp, (msb)2X 10V 10Y 10U(lsb), little-endian, variant of Y410 where alpha channel is left undefined */
+    AV_PIX_FMT_XV30LE = AV_PIX_FMT_GBRP + 144,
+
+    /** packed XVYU 4:4:4, 48bpp, data in the high bits, zeros in the low bits, big-endian, variant of Y412 where alpha channel is left undefined */
+    AV_PIX_FMT_XV36BE = AV_PIX_FMT_GBRP + 145,
+    /** packed XVYU 4:4:4, 48bpp, data in the high bits, zeros in the low bits, little-endian, variant of Y412 where alpha channel is left undefined */
+    AV_PIX_FMT_XV36LE = AV_PIX_FMT_GBRP + 146,
+
+    /** IEEE-754 single precision packed RGB 32:32:32, 96bpp, RGBRGB..., big-endian */
+    AV_PIX_FMT_RGBF32BE = AV_PIX_FMT_GBRP + 147,
+    /** IEEE-754 single precision packed RGB 32:32:32, 96bpp, RGBRGB..., little-endian */
+    AV_PIX_FMT_RGBF32LE = AV_PIX_FMT_GBRP + 148,
+
+    /** IEEE-754 single precision packed RGBA 32:32:32:32, 128bpp, RGBARGBA..., big-endian */
+    AV_PIX_FMT_RGBAF32BE = AV_PIX_FMT_GBRP + 149,
+    /** IEEE-754 single precision packed RGBA 32:32:32:32, 128bpp, RGBARGBA..., little-endian */
+    AV_PIX_FMT_RGBAF32LE = AV_PIX_FMT_GBRP + 150,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 135;
+    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 151;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -3071,11 +3057,19 @@ public static native @MemberGetter int AV_PIX_FMT_AYUV64();
 public static final int AV_PIX_FMT_AYUV64 = AV_PIX_FMT_AYUV64();
 public static native @MemberGetter int AV_PIX_FMT_P010();
 public static final int AV_PIX_FMT_P010 = AV_PIX_FMT_P010();
+public static native @MemberGetter int AV_PIX_FMT_P012();
+public static final int AV_PIX_FMT_P012 = AV_PIX_FMT_P012();
 public static native @MemberGetter int AV_PIX_FMT_P016();
 public static final int AV_PIX_FMT_P016 = AV_PIX_FMT_P016();
 
 public static native @MemberGetter int AV_PIX_FMT_Y210();
 public static final int AV_PIX_FMT_Y210 = AV_PIX_FMT_Y210();
+public static native @MemberGetter int AV_PIX_FMT_Y212();
+public static final int AV_PIX_FMT_Y212 = AV_PIX_FMT_Y212();
+public static native @MemberGetter int AV_PIX_FMT_XV30();
+public static final int AV_PIX_FMT_XV30 = AV_PIX_FMT_XV30();
+public static native @MemberGetter int AV_PIX_FMT_XV36();
+public static final int AV_PIX_FMT_XV36 = AV_PIX_FMT_XV36();
 public static native @MemberGetter int AV_PIX_FMT_X2RGB10();
 public static final int AV_PIX_FMT_X2RGB10 = AV_PIX_FMT_X2RGB10();
 public static native @MemberGetter int AV_PIX_FMT_X2BGR10();
@@ -3089,6 +3083,14 @@ public static native @MemberGetter int AV_PIX_FMT_P216();
 public static final int AV_PIX_FMT_P216 = AV_PIX_FMT_P216();
 public static native @MemberGetter int AV_PIX_FMT_P416();
 public static final int AV_PIX_FMT_P416 = AV_PIX_FMT_P416();
+
+public static native @MemberGetter int AV_PIX_FMT_RGBAF16();
+public static final int AV_PIX_FMT_RGBAF16 = AV_PIX_FMT_RGBAF16();
+
+public static native @MemberGetter int AV_PIX_FMT_RGBF32();
+public static final int AV_PIX_FMT_RGBF32 = AV_PIX_FMT_RGBF32();
+public static native @MemberGetter int AV_PIX_FMT_RGBAF32();
+public static final int AV_PIX_FMT_RGBAF32 = AV_PIX_FMT_RGBAF32();
 
 /**
   * Chromaticity coordinates of the source primaries.
@@ -3516,7 +3518,12 @@ public static final int
      * an AVDynamicHDRVivid type and contains information for color
      * volume transform - CUVA 005.1-2021.
      */
-    AV_FRAME_DATA_DYNAMIC_HDR_VIVID = 25;
+    AV_FRAME_DATA_DYNAMIC_HDR_VIVID = 25,
+
+    /**
+     * Ambient viewing environment metadata, as defined by H.274.
+     */
+    AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT = 26;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3538,14 +3545,6 @@ public static final int
 
 
 
-// #if FF_API_COLORSPACE_NAME
-/**
- * Get the name of a colorspace.
- * @return a static string identifying the colorspace; can be NULL.
- * @deprecated use av_color_space_name()
- */
-@NoException public static native @Deprecated @Cast("const char*") BytePointer av_get_colorspace_name(@Cast("AVColorSpace") int val);
-// #endif
 /**
  * Allocate an AVFrame and set its fields to default values.  The resulting
  * struct must be freed using av_frame_free().
@@ -3651,7 +3650,8 @@ public static final int
  * Ensure that the frame data is writable, avoiding data copy if possible.
  *
  * Do nothing if the frame is writable, allocate new buffers and copy the data
- * if it is not.
+ * if it is not. Non-refcounted frames behave as non-writable, i.e. a copy
+ * is always made.
  *
  * @return 0 on success, a negative AVERROR on error.
  *
@@ -3686,6 +3686,7 @@ public static final int
 /**
  * Get the buffer reference a given data plane is stored in.
  *
+ * @param frame the frame to get the plane's buffer from
  * @param plane index of the data plane of interest in frame->extended_data.
  *
  * @return the buffer reference that contains the plane or NULL if the input
@@ -4029,6 +4030,7 @@ public static final int
  * @param linesize [out]    aligned size for audio buffer(s), may be NULL
  * @param nb_channels      number of audio channels
  * @param nb_samples       number of samples per channel
+ * @param sample_fmt       the sample format
  * @param align            buffer size alignment (0 = default, 1 = no alignment)
  * @return                 >=0 on success or a negative error code on failure
  * \todo return the size of the allocated buffer in case of success at the next bump
@@ -4143,11 +4145,17 @@ public static final int
 
 /**
  * \file
- * audio channel layout utility functions
+ * \ingroup lavu_audio_channels
+ * Public libavutil channel layout APIs header.
  */
 
+
 /**
- * \addtogroup lavu_audio
+ * \defgroup lavu_audio_channels Audio channels
+ * \ingroup lavu_audio
+ *
+ * Audio channel layout utility functions
+ *
  * \{
  */
 
@@ -4197,9 +4205,9 @@ public static final int
      * Range of channels between AV_CHAN_AMBISONIC_BASE and
      * AV_CHAN_AMBISONIC_END represent Ambisonic components using the ACN system.
      *
-     * Given a channel id <i> between AV_CHAN_AMBISONIC_BASE and
-     * AV_CHAN_AMBISONIC_END (inclusive), the ACN index of the channel <n> is
-     * <n> = <i> - AV_CHAN_AMBISONIC_BASE.
+     * Given a channel id {@code <i>} between AV_CHAN_AMBISONIC_BASE and
+     * AV_CHAN_AMBISONIC_END (inclusive), the ACN index of the channel {@code <n>} is
+     * {@code <n> = <i> - AV_CHAN_AMBISONIC_BASE}.
      *
      * \note these values are only used for AV_CHANNEL_ORDER_CUSTOM channel
      * orderings, the AV_CHANNEL_ORDER_AMBISONIC ordering orders the channels
@@ -4338,7 +4346,9 @@ public static final long AV_CH_LAYOUT_7POINT0_FRONT =     (AV_CH_LAYOUT_5POINT0|
 public static final long AV_CH_LAYOUT_7POINT1 =           (AV_CH_LAYOUT_5POINT1|AV_CH_BACK_LEFT|AV_CH_BACK_RIGHT);
 public static final long AV_CH_LAYOUT_7POINT1_WIDE =      (AV_CH_LAYOUT_5POINT1|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER);
 public static final long AV_CH_LAYOUT_7POINT1_WIDE_BACK = (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER);
+public static final long AV_CH_LAYOUT_7POINT1_TOP_BACK =  (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT);
 public static final long AV_CH_LAYOUT_OCTAGONAL =         (AV_CH_LAYOUT_5POINT0|AV_CH_BACK_LEFT|AV_CH_BACK_CENTER|AV_CH_BACK_RIGHT);
+public static final long AV_CH_LAYOUT_CUBE =              (AV_CH_LAYOUT_QUAD|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT);
 public static final long AV_CH_LAYOUT_HEXADECAGONAL =     (AV_CH_LAYOUT_OCTAGONAL|AV_CH_WIDE_LEFT|AV_CH_WIDE_RIGHT|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT|AV_CH_TOP_BACK_CENTER|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT);
 public static final long AV_CH_LAYOUT_STEREO_DOWNMIX =    (AV_CH_STEREO_LEFT|AV_CH_STEREO_RIGHT);
 public static final long AV_CH_LAYOUT_22POINT2 =          (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER|AV_CH_BACK_CENTER|AV_CH_LOW_FREQUENCY_2|AV_CH_SIDE_LEFT|AV_CH_SIDE_RIGHT|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_CENTER|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT|AV_CH_TOP_SIDE_LEFT|AV_CH_TOP_SIDE_RIGHT|AV_CH_TOP_BACK_CENTER|AV_CH_BOTTOM_FRONT_CENTER|AV_CH_BOTTOM_FRONT_LEFT|AV_CH_BOTTOM_FRONT_RIGHT);
@@ -4363,6 +4373,10 @@ public static final int
 // #define AV_CHANNEL_LAYOUT_MASK(nb, m)
 //     { .order = AV_CHANNEL_ORDER_NATIVE, .nb_channels = (nb), . = { .mask = (m) }}
 
+/**
+ * \name Common pre-defined channel layouts
+ * \{
+ */
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_MONO();
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_MONO = AV_CHANNEL_LAYOUT_MONO();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_STEREO();
@@ -4413,8 +4427,12 @@ public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_7POI
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_7POINT1_WIDE = AV_CHANNEL_LAYOUT_7POINT1_WIDE();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK();
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK = AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK();
+public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK();
+public static final AVChannelLayout AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK = AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_OCTAGONAL();
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_OCTAGONAL = AV_CHANNEL_LAYOUT_OCTAGONAL();
+public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_CUBE();
+public static final AVChannelLayout AV_CHANNEL_LAYOUT_CUBE = AV_CHANNEL_LAYOUT_CUBE();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_HEXADECAGONAL();
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_HEXADECAGONAL = AV_CHANNEL_LAYOUT_HEXADECAGONAL();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_STEREO_DOWNMIX();
@@ -4423,8 +4441,14 @@ public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_22PO
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_22POINT2 = AV_CHANNEL_LAYOUT_22POINT2();
 public static native @MemberGetter @ByVal AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER();
 public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER();
+/** \} */
 
 // #if FF_API_OLD_CHANNEL_LAYOUT
+/**
+ * \name Deprecated Functions
+ * \{
+ */
+
 /**
  * Return a channel layout id that matches name, or 0 if no match is found.
  *
@@ -4473,6 +4497,8 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  *
  * @param buf put here the string containing the channel layout
  * @param buf_size size in bytes of the buffer
+ * @param nb_channels number of channels
+ * @param channel_layout channel layout bitset
  * @deprecated use av_channel_layout_describe()
  */
 @NoException public static native @Deprecated void av_get_channel_layout_string(@Cast("char*") BytePointer buf, int buf_size, int nb_channels, @Cast("uint64_t") long channel_layout);
@@ -4501,6 +4527,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
 /**
  * Get the index of a channel in channel_layout.
  *
+ * @param channel_layout channel layout bitset
  * @param channel a channel layout describing exactly one channel which must be
  *                present in channel_layout.
  *
@@ -4554,6 +4581,9 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
                                    @Cast("const char**") @ByPtrPtr ByteBuffer name);
 @NoException public static native @Deprecated int av_get_standard_channel_layout(@Cast("unsigned") int index, @Cast("uint64_t*") long[] layout,
                                    @Cast("const char**") @ByPtrPtr byte[] name);
+/**
+ * \}
+ */
 // #endif
 
 /**
@@ -4562,6 +4592,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  *
  * @param buf pre-allocated buffer where to put the generated string
  * @param buf_size size in bytes of the buffer.
+ * @param channel the AVChannel whose name to get
  * @return amount of bytes needed to hold the output string, or a negative AVERROR
  *         on failure. If the returned value is bigger than buf_size, then the
  *         string was truncated.
@@ -4582,6 +4613,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  *
  * @param buf pre-allocated buffer where to put the generated string
  * @param buf_size size in bytes of the buffer.
+ * @param channel the AVChannel whose description to get
  * @return amount of bytes needed to hold the output string, or a negative AVERROR
  *         on failure. If the returned value is bigger than buf_size, then the
  *         string was truncated.
@@ -4643,7 +4675,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
 /**
  * Get the default channel layout for a given number of channels.
  *
- * @param channel_layout the layout structure to be initialized
+ * @param ch_layout the layout structure to be initialized
  * @param nb_channels number of channels
  */
 @NoException public static native void av_channel_layout_default(AVChannelLayout ch_layout, int nb_channels);
@@ -4713,6 +4745,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  * Get the channel with the given index in a channel layout.
  *
  * @param channel_layout input channel layout
+ * @param idx index of the channel
  * @return channel with the index idx in channel_layout on success or
  *         AV_CHAN_NONE on failure (if idx is not valid or the channel order is
  *         unspecified)
@@ -4724,6 +4757,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  * channels are found, only the first match will be returned.
  *
  * @param channel_layout input channel layout
+ * @param channel the channel whose index to obtain
  * @return index of channel in channel_layout on success or a negative number if
  *         channel is not present in channel_layout.
  */
@@ -4738,6 +4772,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  * \ref av_channel_from_string().
  *
  * @param channel_layout input channel layout
+ * @param name string describing the channel whose index to obtain
  * @return a channel index described by the given string, or a negative AVERROR
  *         value.
  */
@@ -4753,6 +4788,7 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
  * \ref av_channel_from_string().
  *
  * @param channel_layout input channel layout
+ * @param name string describing the channel to obtain
  * @return a channel described by the given string in channel_layout on success
  *         or AV_CHAN_NONE on failure (if the string is not valid or the channel
  *         order is unspecified)
@@ -4799,7 +4835,6 @@ public static final AVChannelLayout AV_CHANNEL_LAYOUT_AMBISONIC_FIRST_ORDER = AV
 @NoException public static native int av_channel_layout_compare(@Const AVChannelLayout chl, @Const AVChannelLayout chl1);
 
 /**
- * \}
  * \}
  */
 
@@ -4920,6 +4955,24 @@ public static final int AV_CPU_FLAG_MSA =          (1 << 1);
 public static final int AV_CPU_FLAG_LSX =          (1 << 0);
 public static final int AV_CPU_FLAG_LASX =         (1 << 1);
 
+// RISC-V extensions
+/** I (full GPR bank) */
+public static final int AV_CPU_FLAG_RVI =          (1 << 0);
+/** F (single precision FP) */
+public static final int AV_CPU_FLAG_RVF =          (1 << 1);
+/** D (double precision FP) */
+public static final int AV_CPU_FLAG_RVD =          (1 << 2);
+/** Vectors of 8/16/32-bit int's */
+public static final int AV_CPU_FLAG_RVV_I32 =      (1 << 3);
+/** Vectors of float's */
+public static final int AV_CPU_FLAG_RVV_F32 =      (1 << 4);
+/** Vectors of 64-bit int's */
+public static final int AV_CPU_FLAG_RVV_I64 =      (1 << 5);
+/** Vectors of double's */
+public static final int AV_CPU_FLAG_RVV_F64 =      (1 << 6);
+/** Basic bit-manipulations */
+public static final int AV_CPU_FLAG_RVB_BASIC =    (1 << 7);
+
 /**
  * Return the flags which specify extensions supported by the CPU.
  * The returned value is affected by av_force_cpu_flags() if that was used
@@ -5014,13 +5067,15 @@ public static final int AV_CPU_FLAG_LASX =         (1 << 1);
  * \brief Simple key:value store
  *
  * \{
- * Dictionaries are used for storing key:value pairs. To create
- * an AVDictionary, simply pass an address of a NULL pointer to
- * av_dict_set(). NULL can be used as an empty dictionary wherever
- * a pointer to an AVDictionary is required.
- * Use av_dict_get() to retrieve an entry or iterate over all
- * entries and finally av_dict_free() to free the dictionary
- * and all its contents.
+ * Dictionaries are used for storing key-value pairs.
+ *
+ * - To **create an AVDictionary**, simply pass an address of a NULL
+ *   pointer to av_dict_set(). NULL can be used as an empty dictionary
+ *   wherever a pointer to an AVDictionary is required.
+ * - To **insert an entry**, use av_dict_set().
+ * - Use av_dict_get() to **retrieve an entry**.
+ * - To **iterate over all entries**, use av_dict_iterate().
+ * - In order to **free the dictionary and all its contents**, use av_dict_free().
  *
  <pre>{@code
    AVDictionary *d = NULL;           // "create" an empty dictionary
@@ -5032,13 +5087,18 @@ public static final int AV_CPU_FLAG_LASX =         (1 << 1);
    char *v = av_strdup("value");     // you can avoid copying them like this
    av_dict_set(&d, k, v, AV_DICT_DONT_STRDUP_KEY | AV_DICT_DONT_STRDUP_VAL);
 
-   while (t = av_dict_get(d, "", t, AV_DICT_IGNORE_SUFFIX)) {
-       <....>                             // iterate over all entries in d
+   while ((t = av_dict_iterate(d, t))) {
+       <....>                        // iterate over all entries in d
    }
    av_dict_free(&d);
  }</pre>
  */
 
+/**
+ * \name AVDictionary Flags
+ * Flags that influence behavior of the matching of keys or insertion to the dictionary.
+ * \{
+ */
 /** Only get an entry with exact-case key match. Only relevant in av_dict_get(). */
 public static final int AV_DICT_MATCH_CASE =      1;
 /** Return first entry in a dictionary whose first part corresponds to the search key,
@@ -5053,7 +5113,7 @@ public static final int AV_DICT_DONT_STRDUP_VAL = 8;
 /** Don't overwrite existing entries. */
 public static final int AV_DICT_DONT_OVERWRITE = 16;
 /** If the entry already exists, append to it.  Note that no
-                                      delimiter is added, the strings are simply concatenated. */
+                                         delimiter is added, the strings are simply concatenated. */
 public static final int AV_DICT_APPEND =         32;
 /** Allow to store several equal keys in the dictionary */
 public static final int AV_DICT_MULTIKEY =       64;
@@ -5070,19 +5130,45 @@ public static final int AV_DICT_MULTIKEY =       64;
  * The returned entry key or value must not be changed, or it will
  * cause undefined behavior.
  *
- * To iterate through all the dictionary entries, you can set the matching key
- * to the null string "" and set the AV_DICT_IGNORE_SUFFIX flag.
+ * @param prev  Set to the previous matching element to find the next.
+ *              If set to NULL the first matching element is returned.
+ * @param key   Matching key
+ * @param flags A collection of AV_DICT_* flags controlling how the
+ *              entry is retrieved
  *
- * @param prev Set to the previous matching element to find the next.
- *             If set to NULL the first matching element is returned.
- * @param key matching key
- * @param flags a collection of AV_DICT_* flags controlling how the entry is retrieved
- * @return found entry or NULL in case no matching entry was found in the dictionary
+ * @return      Found entry or NULL in case no matching entry was found in the dictionary
  */
 @NoException public static native AVDictionaryEntry av_dict_get(@Const AVDictionary m, @Cast("const char*") BytePointer key,
                                @Const AVDictionaryEntry prev, int flags);
 @NoException public static native AVDictionaryEntry av_dict_get(@Const AVDictionary m, String key,
                                @Const AVDictionaryEntry prev, int flags);
+
+/**
+ * Iterate over a dictionary
+ *
+ * Iterates through all entries in the dictionary.
+ *
+ * \warning The returned AVDictionaryEntry key/value must not be changed.
+ *
+ * \warning As av_dict_set() invalidates all previous entries returned
+ * by this function, it must not be called while iterating over the dict.
+ *
+ * Typical usage:
+ * <pre>{@code
+ * const AVDictionaryEntry *e = NULL;
+ * while ((e = av_dict_iterate(m, e))) {
+ *     // ...
+ * }
+ * }</pre>
+ *
+ * @param m     The dictionary to iterate over
+ * @param prev  Pointer to the previous AVDictionaryEntry, NULL initially
+ *
+ * \retval AVDictionaryEntry* The next element in the dictionary
+ * \retval NULL               No more elements in the dictionary
+ */
+@NoException public static native @Const AVDictionaryEntry av_dict_iterate(@Const AVDictionary m,
+                                         @Const AVDictionaryEntry prev);
 
 /**
  * Get number of entries in dictionary.
@@ -5098,25 +5184,26 @@ public static final int AV_DICT_MULTIKEY =       64;
  * Note: If AV_DICT_DONT_STRDUP_KEY or AV_DICT_DONT_STRDUP_VAL is set,
  * these arguments will be freed on error.
  *
- * Warning: Adding a new entry to a dictionary invalidates all existing entries
- * previously returned with av_dict_get.
+ * \warning Adding a new entry to a dictionary invalidates all existing entries
+ * previously returned with av_dict_get() or av_dict_iterate().
  *
- * @param pm pointer to a pointer to a dictionary struct. If *pm is NULL
- * a dictionary struct is allocated and put in *pm.
- * @param key entry key to add to *pm (will either be av_strduped or added as a new key depending on flags)
- * @param value entry value to add to *pm (will be av_strduped or added as a new key depending on flags).
- *        Passing a NULL value will cause an existing entry to be deleted.
- * @return >= 0 on success otherwise an error code <0
+ * @param pm        Pointer to a pointer to a dictionary struct. If *pm is NULL
+ *                  a dictionary struct is allocated and put in *pm.
+ * @param key       Entry key to add to *pm (will either be av_strduped or added as a new key depending on flags)
+ * @param value     Entry value to add to *pm (will be av_strduped or added as a new key depending on flags).
+ *                  Passing a NULL value will cause an existing entry to be deleted.
+ *
+ * @return          >= 0 on success otherwise an error code <0
  */
 @NoException public static native int av_dict_set(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, @Cast("const char*") BytePointer value, int flags);
 @NoException public static native int av_dict_set(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, @Cast("const char*") BytePointer value, int flags);
 @NoException public static native int av_dict_set(@ByPtrPtr AVDictionary pm, String key, String value, int flags);
 
 /**
- * Convenience wrapper for av_dict_set that converts the value to a string
+ * Convenience wrapper for av_dict_set() that converts the value to a string
  * and stores it.
  *
- * Note: If AV_DICT_DONT_STRDUP_KEY is set, key will be freed on error.
+ * Note: If ::AV_DICT_DONT_STRDUP_KEY is set, key will be freed on error.
  */
 @NoException public static native int av_dict_set_int(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, @Cast("int64_t") long value, int flags);
 @NoException public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, @Cast("int64_t") long value, int flags);
@@ -5128,14 +5215,15 @@ public static final int AV_DICT_MULTIKEY =       64;
  * In case of failure, all the successfully set entries are stored in
  * *pm. You may need to manually free the created dictionary.
  *
- * @param key_val_sep  a 0-terminated list of characters used to separate
+ * @param key_val_sep  A 0-terminated list of characters used to separate
  *                     key from value
- * @param pairs_sep    a 0-terminated list of characters used to separate
+ * @param pairs_sep    A 0-terminated list of characters used to separate
  *                     two pairs from each other
- * @param flags        flags to use when adding to dictionary.
- *                     AV_DICT_DONT_STRDUP_KEY and AV_DICT_DONT_STRDUP_VAL
+ * @param flags        Flags to use when adding to the dictionary.
+ *                     ::AV_DICT_DONT_STRDUP_KEY and ::AV_DICT_DONT_STRDUP_VAL
  *                     are ignored since the key/value tokens will always
  *                     be duplicated.
+ *
  * @return             0 on success, negative AVERROR code on failure
  */
 @NoException public static native int av_dict_parse_string(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer str,
@@ -5150,11 +5238,14 @@ public static final int AV_DICT_MULTIKEY =       64;
 
 /**
  * Copy entries from one AVDictionary struct into another.
- * @param dst pointer to a pointer to a AVDictionary struct. If *dst is NULL,
- *            this function will allocate a struct for you and put it in *dst
- * @param src pointer to source AVDictionary struct
- * @param flags flags to use when setting entries in *dst
- * \note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
+ *
+ * \note Metadata is read using the ::AV_DICT_IGNORE_SUFFIX flag
+ *
+ * @param dst   Pointer to a pointer to a AVDictionary struct to copy into. If *dst is NULL,
+ *              this function will allocate a struct for you and put it in *dst
+ * @param src   Pointer to the source AVDictionary struct to copy items from.
+ * @param flags Flags to use when setting entries in *dst
+ *
  * @return 0 on success, negative AVERROR code on failure. If dst was allocated
  *           by this function, callers should free the associated memory.
  */
@@ -5175,13 +5266,15 @@ public static final int AV_DICT_MULTIKEY =       64;
  * Such string may be passed back to av_dict_parse_string().
  * \note String is escaped with backslashes ('\').
  *
- * @param m [in]             dictionary
+ * \warning Separators cannot be neither '\' nor '\0'. They also cannot be the same.
+ *
+ * @param m [in]             The dictionary
  * @param buffer [out]        Pointer to buffer that will be allocated with string containg entries.
  *                           Buffer must be freed by the caller when is no longer needed.
- * @param key_val_sep [in]   character used to separate key from value
- * @param pairs_sep [in]     character used to separate two pairs from each other
+ * @param key_val_sep [in]   Character used to separate key from value
+ * @param pairs_sep [in]     Character used to separate two pairs from each other
+ *
  * @return                   >= 0 on success, negative on error
- * \warning Separators cannot be neither '\' nor '\0'. They also cannot be the same.
  */
 @NoException public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") PointerPointer buffer,
                        @Cast("const char") byte key_val_sep, @Cast("const char") byte pairs_sep);
@@ -6328,6 +6421,30 @@ public static final int AV_PIX_FMT_FLAG_FLOAT =        (1 << 9);
 @NoException public static native int av_chroma_location_from_name(String name);
 
 /**
+ * Converts AVChromaLocation to swscale x/y chroma position.
+ *
+ * The positions represent the chroma (0,0) position in a coordinates system
+ * with luma (0,0) representing the origin and luma(1,1) representing 256,256
+ *
+ * @param xpos  horizontal chroma sample position
+ * @param ypos  vertical   chroma sample position
+ */
+@NoException public static native int av_chroma_location_enum_to_pos(IntPointer xpos, IntPointer ypos, @Cast("AVChromaLocation") int pos);
+@NoException public static native int av_chroma_location_enum_to_pos(IntBuffer xpos, IntBuffer ypos, @Cast("AVChromaLocation") int pos);
+@NoException public static native int av_chroma_location_enum_to_pos(int[] xpos, int[] ypos, @Cast("AVChromaLocation") int pos);
+
+/**
+ * Converts swscale x/y chroma position to AVChromaLocation.
+ *
+ * The positions represent the chroma (0,0) position in a coordinates system
+ * with luma (0,0) representing the origin and luma(1,1) representing 256,256
+ *
+ * @param xpos  horizontal chroma sample position
+ * @param ypos  vertical   chroma sample position
+ */
+@NoException public static native @Cast("AVChromaLocation") int av_chroma_location_pos_to_enum(int xpos, int ypos);
+
+/**
  * Return the pixel format corresponding to name.
  *
  * If there is no pixel format with name name, then looks for a
@@ -6465,17 +6582,22 @@ public static final int AV_PIX_FMT_FLAG_FLOAT =        (1 << 9);
 @NoException public static native @Cast("AVPixelFormat") int av_pix_fmt_swap_endianness(@Cast("AVPixelFormat") int pix_fmt);
 
 /** loss due to resolution change */
-public static final int FF_LOSS_RESOLUTION =  0x0001;
+public static final int FF_LOSS_RESOLUTION =        0x0001;
 /** loss due to color depth change */
-public static final int FF_LOSS_DEPTH =       0x0002;
+public static final int FF_LOSS_DEPTH =             0x0002;
 /** loss due to color space conversion */
-public static final int FF_LOSS_COLORSPACE =  0x0004;
+public static final int FF_LOSS_COLORSPACE =        0x0004;
 /** loss of alpha bits */
-public static final int FF_LOSS_ALPHA =       0x0008;
+public static final int FF_LOSS_ALPHA =             0x0008;
 /** loss due to color quantization */
-public static final int FF_LOSS_COLORQUANT =  0x0010;
+public static final int FF_LOSS_COLORQUANT =        0x0010;
 /** loss of chroma (e.g. RGB to gray conversion) */
-public static final int FF_LOSS_CHROMA =      0x0020;
+public static final int FF_LOSS_CHROMA =            0x0020;
+/** loss due to unneeded extra resolution */
+public static final int FF_LOSS_EXCESS_RESOLUTION = 0x0040;
+/** loss due to unneeded extra color depth */
+public static final int FF_LOSS_EXCESS_DEPTH =      0x0080;
+
 
 /**
  * Compute what kind of losses will occur when converting from one specific
@@ -6579,6 +6701,7 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * component in the plane with the max pixel step.
  * @param max_pixstep_comps an array which is filled with the component
  * for each plane which has the max pixel step. May be NULL.
+ * @param pixdesc the AVPixFmtDescriptor for the image, describing its format
  */
 @NoException public static native void av_image_fill_max_pixsteps(IntPointer max_pixsteps, IntPointer max_pixstep_comps,
                                 @Const AVPixFmtDescriptor pixdesc);
@@ -6600,6 +6723,8 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * width width.
  *
  * @param linesizes array to be filled with the linesize for each plane
+ * @param pix_fmt the AVPixelFormat of the image
+ * @param width width of the image in pixels
  * @return >= 0 in case of success, a negative error code otherwise
  */
 @NoException public static native int av_image_fill_linesizes(IntPointer linesizes, @Cast("AVPixelFormat") int pix_fmt, int width);
@@ -6610,6 +6735,8 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * Fill plane sizes for an image with pixel format pix_fmt and height height.
  *
  * @param size the array to be filled with the size of each image plane
+ * @param pix_fmt the AVPixelFormat of the image
+ * @param height height of the image in pixels
  * @param linesizes the array containing the linesize for each
  *        plane, should be filled by av_image_fill_linesizes()
  * @return >= 0 in case of success, a negative error code otherwise
@@ -6625,6 +6752,8 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * height height.
  *
  * @param data pointers array to be filled with the pointer for each image plane
+ * @param pix_fmt the AVPixelFormat of the image
+ * @param height height of the image in pixels
  * @param ptr the pointer to a buffer which will contain the image
  * @param linesizes the array containing the linesize for each
  * plane, should be filled by av_image_fill_linesizes()
@@ -6646,6 +6775,11 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * The allocated image buffer has to be freed by using
  * av_freep(&pointers[0]).
  *
+ * @param pointers array to be filled with the pointer for each image plane
+ * @param linesizes the array filled with the linesize for each plane
+ * @param w width of the image in pixels
+ * @param h height of the image in pixels
+ * @param pix_fmt the AVPixelFormat of the image
  * @param align the value to use for buffer size alignment
  * @return the size in bytes required for the image buffer, a negative
  * error code in case of failure
@@ -6668,8 +6802,11 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * bytewidth must be contained by both absolute values of dst_linesize
  * and src_linesize, otherwise the function behavior is undefined.
  *
+ * @param dst          destination plane to copy to
  * @param dst_linesize linesize for the image plane in dst
+ * @param src          source plane to copy from
  * @param src_linesize linesize for the image plane in src
+ * @param height       height (number of lines) of the plane
  */
 @NoException public static native void av_image_copy_plane(@Cast("uint8_t*") BytePointer dst, int dst_linesize,
                          @Cast("const uint8_t*") BytePointer src, int src_linesize,
@@ -6708,8 +6845,13 @@ public static final int FF_LOSS_CHROMA =      0x0020;
 /**
  * Copy image in src_data to dst_data.
  *
+ * @param dst_data      destination image data buffer to copy to
  * @param dst_linesizes linesizes for the image in dst_data
+ * @param src_data      source image data buffer to copy from
  * @param src_linesizes linesizes for the image in src_data
+ * @param pix_fmt       the AVPixelFormat of the image
+ * @param width         width of the image in pixels
+ * @param height        height of the image in pixels
  */
 @NoException public static native void av_image_copy(@Cast("uint8_t**") PointerPointer dst_data, IntPointer dst_linesizes,
                    @Cast("const uint8_t**") PointerPointer src_data, @Const IntPointer src_linesizes,
@@ -7025,6 +7167,7 @@ public static final int
 
 /**
  * \file
+ * \ingroup lavu_video_stereo3d
  * Stereoscopic video
  */
 
@@ -7036,19 +7179,15 @@ public static final int
 // #include "frame.h"
 
 /**
- * \addtogroup lavu_video
- * \{
- *
  * \defgroup lavu_video_stereo3d Stereo3D types and functions
- * \{
- */
-
-/**
- * \addtogroup lavu_video_stereo3d
+ * \ingroup lavu_video
+ *
  * A stereoscopic video file consists in multiple views embedded in a single
  * frame, usually describing two views of a scene. This file describes all
  * possible codec-independent view arrangements.
- * */
+ *
+ * \{
+ */
 
 /**
  * List of possible 3D Types
@@ -7212,7 +7351,6 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 
 /**
  * \}
- * \}
  */
 
 // #endif /* AVUTIL_STEREO3D_H */
@@ -7223,7 +7361,7 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "5.1.2";
+public static final String FFMPEG_VERSION = "6.0";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -7280,7 +7418,8 @@ public static final String FFMPEG_VERSION = "5.1.2";
 
 /**
  * \file
- * a very simple circular buffer FIFO implementation
+ * \ingroup lavu_fifo
+ * A generic FIFO API
  */
 
 // #ifndef AVUTIL_FIFO_H
@@ -7336,7 +7475,13 @@ public static final int AV_FIFO_FLAG_AUTO_GROW =      (1 << 0);
 @NoException public static native @Cast("size_t") long av_fifo_can_read(@Const AVFifo f);
 
 /**
- * @return number of elements that can be written into the given FIFO.
+ * @return Number of elements that can be written into the given FIFO without
+ *         growing it.
+ *
+ *         In other words, this number of elements or less is guaranteed to fit
+ *         into the FIFO. More data may be written when the
+ *         AV_FIFO_FLAG_AUTO_GROW flag was specified at FIFO creation, but this
+ *         may involve memory allocation, which can fail.
  */
 @NoException public static native @Cast("size_t") long av_fifo_can_write(@Const AVFifo f);
 
@@ -7357,8 +7502,11 @@ public static final int AV_FIFO_FLAG_AUTO_GROW =      (1 << 0);
 /**
  * Write data into a FIFO.
  *
- * In case nb_elems > av_fifo_can_write(f), nothing is written and an error
+ * In case nb_elems > av_fifo_can_write(f) and the AV_FIFO_FLAG_AUTO_GROW flag
+ * was not specified at FIFO creation, nothing is written and an error
  * is returned.
+ *
+ * Calling function is guaranteed to succeed if nb_elems <= av_fifo_can_write(f).
  *
  * @param f the FIFO buffer
  * @param buf Data to be written. nb_elems * av_fifo_elem_size(f) bytes will be
@@ -7619,6 +7767,10 @@ public static final int AV_FIFO_FLAG_AUTO_GROW =      (1 << 0);
 // #endif
 // #endif
 
+/**
+ * \}
+ */
+
 // #endif /* AVUTIL_FIFO_H */
 
 
@@ -7877,7 +8029,7 @@ public static final int
 /**
  * Iterate over supported device types.
  *
- * @param type AV_HWDEVICE_TYPE_NONE initially, then the previous type
+ * @param prev AV_HWDEVICE_TYPE_NONE initially, then the previous type
  *             returned by this function in subsequent iterations.
  * @return The next usable device type from enum AVHWDeviceType, or
  *         AV_HWDEVICE_TYPE_NONE if there are no more.
@@ -8207,6 +8359,7 @@ public static final int
  *
  * @param derived_frame_ctx  On success, a reference to the newly created
  *                           AVHWFramesContext.
+ * @param format             The AVPixelFormat for the derived context.
  * @param derived_device_ctx A reference to the device to create the new
  *                           AVHWFramesContext on.
  * @param source_frame_ctx   A reference to an existing AVHWFramesContext
@@ -8346,6 +8499,9 @@ public static final int
 
 /**
  * Initialize an AVAES context.
+ *
+ * @param a The AVAES context
+ * @param key Pointer to the key
  * @param key_bits 128, 192 or 256
  * @param decrypt 0 for encryption, 1 for decryption
  */
@@ -8355,9 +8511,11 @@ public static final int
 
 /**
  * Encrypt or decrypt a buffer using a previously initialized context.
- * @param count number of 16 byte blocks
+ *
+ * @param a The AVAES context
  * @param dst destination array, can be equal to src
  * @param src source array, can be equal to dst
+ * @param count number of 16 byte blocks
  * @param iv initialization vector for CBC mode, if NULL then ECB will be used
  * @param decrypt 0 for encryption, 1 for decryption
  */
@@ -8398,6 +8556,12 @@ public static final int
 // #ifndef AVUTIL_AES_CTR_H
 // #define AVUTIL_AES_CTR_H
 
+/**
+ * \defgroup lavu_aes_ctr AES-CTR
+ * \ingroup lavu_crypto
+ * \{
+ */
+
 // #include <stdint.h>
 
 // #include "attributes.h"
@@ -8415,6 +8579,8 @@ public static final int AES_CTR_IV_SIZE = (8);
 
 /**
  * Initialize an AVAESCTR context.
+ *
+ * @param a The AVAESCTR context to initialize
  * @param key encryption key, must have a length of AES_CTR_KEY_SIZE
  */
 @NoException public static native int av_aes_ctr_init(AVAESCTR a, @Cast("const uint8_t*") BytePointer key);
@@ -8423,11 +8589,15 @@ public static final int AES_CTR_IV_SIZE = (8);
 
 /**
  * Release an AVAESCTR context.
+ *
+ * @param a The AVAESCTR context
  */
 @NoException public static native void av_aes_ctr_free(AVAESCTR a);
 
 /**
  * Process a buffer using a previously initialized context.
+ *
+ * @param a The AVAESCTR context
  * @param dst destination array, can be equal to src
  * @param src source array, can be equal to dst
  * @param size the size of src and dst
@@ -8806,7 +8976,7 @@ public static final int AV_BF_ROUNDS = 16;
   * @param dst destination array, can be equal to src
   * @param src source array, can be equal to dst
   * @param count number of 16 byte blocks
-  * \paran iv initialization vector for CBC mode, NULL for ECB mode
+  * @param iv initialization vector for CBC mode, NULL for ECB mode
   * @param decrypt 0 for encryption, 1 for decryption
  */
 @NoException public static native void av_camellia_crypt(AVCAMELLIA ctx, @Cast("uint8_t*") BytePointer dst, @Cast("const uint8_t*") BytePointer src, int count, @Cast("uint8_t*") BytePointer iv, int decrypt);
@@ -8907,7 +9077,10 @@ public static final int
 
 /**
  * Calculate the CRC of a block.
+ * @param ctx initialized AVCRC array (see av_crc_init())
  * @param crc CRC of previous blocks if any or initial value for CRC
+ * @param buffer buffer whose CRC to calculate
+ * @param length length of the buffer
  * @return CRC updated with the data from the given block
  *
  * @see av_crc_init() "le" parameter
@@ -8965,6 +9138,8 @@ public static final int
 /**
  * \brief Initializes an AVDES context.
  *
+ * @param d pointer to a AVDES structure to initialize
+ * @param key pointer to the key to use
  * @param key_bits must be 64 or 192
  * @param decrypt 0 for encryption/CBC-MAC, 1 for decryption
  * @return zero on success, negative value otherwise
@@ -8976,9 +9151,10 @@ public static final int
 /**
  * \brief Encrypts / decrypts using the DES algorithm.
  *
- * @param count number of 8 byte blocks
+ * @param d pointer to the AVDES structure
  * @param dst destination array, can be equal to src, must be 8-byte aligned
  * @param src source array, can be equal to dst, must be 8-byte aligned, may be NULL
+ * @param count number of 8 byte blocks
  * @param iv initialization vector for CBC mode, if NULL then ECB will be used,
  *           must be 8-byte aligned
  * @param decrypt 0 for encryption, 1 for decryption
@@ -8990,9 +9166,10 @@ public static final int
 /**
  * \brief Calculates CBC-MAC using the DES algorithm.
  *
- * @param count number of 8 byte blocks
+ * @param d pointer to the AVDES structure
  * @param dst destination array, can be equal to src, must be 8-byte aligned
  * @param src source array, can be equal to dst, must be 8-byte aligned, may be NULL
+ * @param count number of 8 byte blocks
  */
 @NoException public static native void av_des_mac(AVDES d, @Cast("uint8_t*") BytePointer dst, @Cast("const uint8_t*") BytePointer src, int count);
 @NoException public static native void av_des_mac(AVDES d, @Cast("uint8_t*") ByteBuffer dst, @Cast("const uint8_t*") ByteBuffer src, int count);
@@ -9041,7 +9218,7 @@ public static final int
 /**
  * Seed the state of the ALFG using binary data.
  *
- * Return value: 0 on success, negative value (AVERROR) on failure.
+ * @return 0 on success, negative value (AVERROR) on failure.
  */
 @NoException public static native int av_lfg_init_from_data(AVLFG c, @Cast("const uint8_t*") BytePointer data, @Cast("unsigned int") int length);
 @NoException public static native int av_lfg_init_from_data(AVLFG c, @Cast("const uint8_t*") ByteBuffer data, @Cast("unsigned int") int length);
@@ -9066,6 +9243,7 @@ public static final int
  * Get the next two numbers generated by a Box-Muller Gaussian
  * generator using the random numbers issued by lfg.
  *
+ * @param lfg pointer to the contex structure
  * @param out array where the two generated numbers are placed
  */
 @NoException public static native void av_bmg_get(AVLFG lfg, DoublePointer out);
@@ -9329,6 +9507,8 @@ public static final int
 /**
  * \brief Initializes an AVRC4 context.
  *
+ * @param d pointer to the AVRC4 context
+ * @param key buffer containig the key
  * @param key_bits must be a multiple of 8
  * @param decrypt 0 for encryption, 1 for decryption, currently has no effect
  * @return zero on success, negative value otherwise
@@ -9340,6 +9520,7 @@ public static final int
 /**
  * \brief Encrypts / decrypts using the RC4 algorithm.
  *
+ * @param d pointer to the AVRC4 context
  * @param count number of bytes
  * @param dst destination array, can be equal to src
  * @param src source array, can be equal to dst, may be NULL
@@ -9597,7 +9778,7 @@ public static final int
   * @param dst destination array, can be equal to src
   * @param src source array, can be equal to dst
   * @param count number of 16 byte blocks
-  * \paran iv initialization vector for CBC mode, NULL for ECB mode
+  * @param iv initialization vector for CBC mode, NULL for ECB mode
   * @param decrypt 0 for encryption, 1 for decryption
  */
 @NoException public static native void av_twofish_crypt(AVTWOFISH ctx, @Cast("uint8_t*") BytePointer dst, @Cast("const uint8_t*") BytePointer src, int count, @Cast("uint8_t*") BytePointer iv, int decrypt);
@@ -10079,6 +10260,7 @@ public static final int
 /**
  * Get the count of continuous non zero chars starting from the beginning.
  *
+ * @param s   the string whose length to count
  * @param len maximum number of characters to check in the string, that
  *            is the maximum value which is returned by the function
  */
@@ -10095,14 +10277,6 @@ public static final int
  */
 @NoException public static native @Cast("char*") BytePointer av_asprintf(@Cast("const char*") BytePointer fmt);
 @NoException public static native @Cast("char*") ByteBuffer av_asprintf(String fmt);
-
-// #if FF_API_D2STR
-/**
- * Convert a number to an av_malloced string.
- * @deprecated  use av_asprintf() with "%f" or a more specific format
- */
-@NoException public static native @Cast("char*") @Deprecated BytePointer av_d2str(double d);
-// #endif
 
 /**
  * Unescape the given string until a non escaped terminating char,
@@ -10420,6 +10594,12 @@ public static final int AV_UTF8_FLAG_ACCEPT_ALL =
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+/**
+ * \file
+ * \ingroup lavu_avbprint
+ * AVBPrint public header
+ */
+
 // #ifndef AVUTIL_BPRINT_H
 // #define AVUTIL_BPRINT_H
 
@@ -10427,6 +10607,14 @@ public static final int AV_UTF8_FLAG_ACCEPT_ALL =
 
 // #include "attributes.h"
 // #include "avstring.h"
+
+/**
+ * \defgroup lavu_avbprint AVBPrint
+ * \ingroup lavu_data
+ *
+ * A buffer to print data progressively
+ * \{
+ */
 
 /**
  * Define a structure with extra padding to a fixed size
@@ -10447,12 +10635,31 @@ public static final int AV_UTF8_FLAG_ACCEPT_ALL =
 
 
 /**
+ * \name Max size special values
  * Convenience macros for special values for av_bprint_init() size_max
  * parameter.
+ * \{
+ */
+
+/**
+ * Buffer will be reallocated as necessary, with an amortized linear cost.
  */
 public static final int AV_BPRINT_SIZE_UNLIMITED =  ((int)-1);
+/**
+ * Use the exact size available in the AVBPrint structure itself.
+ *
+ * Thus ensuring no dynamic memory allocation. The internal buffer is large
+ * enough to hold a reasonable paragraph of text, such as the current paragraph.
+ */
 public static final int AV_BPRINT_SIZE_AUTOMATIC =  1;
+/**
+ * Do not write anything to the buffer, only calculate the total length.
+ *
+ * The write operations can then possibly be repeated in a buffer with
+ * exactly the necessary size (using {@code size_init = size_max = AVBPrint.len + 1}).
+ */
 public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
+/** \} */
 
 /**
  * Init a print buffer.
@@ -10460,12 +10667,12 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  * @param buf        buffer to init
  * @param size_init  initial size (including the final 0)
  * @param size_max   maximum size;
- *                   0 means do not write anything, just count the length;
- *                   1 is replaced by the maximum value for automatic storage;
- *                   any large value means that the internal buffer will be
- *                   reallocated as needed up to that limit; -1 is converted to
- *                   UINT_MAX, the largest limit possible.
- *                   Check also AV_BPRINT_SIZE_* macros.
+ *                   - {@code 0} means do not write anything, just count the length
+ *                   - {@code 1} is replaced by the maximum value for automatic storage
+ *                       any large value means that the internal buffer will be
+ *                       reallocated as needed up to that limit
+ *                   - {@code -1} is converted to {@code UINT_MAX}, the largest limit possible.
+ *                   Check also {@code AV_BPRINT_SIZE_*} macros.
  */
 @NoException public static native void av_bprint_init(AVBPrint buf, @Cast("unsigned") int size_init, @Cast("unsigned") int size_max);
 
@@ -10589,6 +10796,8 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
                       @Cast("AVEscapeMode") int mode, int flags);
 @NoException public static native void av_bprint_escape(AVBPrint dstbuf, String src, String special_chars,
                       @Cast("AVEscapeMode") int mode, int flags);
+
+/** \} */
 
 // #endif /* AVUTIL_BPRINT_H */
 
@@ -11089,6 +11298,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 
 /**
  * \file
+ * \ingroup lavu_video_display
  * Display matrix
  */
 
@@ -11098,15 +11308,9 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #include <stdint.h>
 
 /**
- * \addtogroup lavu_video
- * \{
- *
  * \defgroup lavu_video_display Display transformation matrix functions
- * \{
- */
-
-/**
- * \addtogroup lavu_video_display
+ * \ingroup lavu_video
+ *
  * The display transformation matrix specifies an affine transformation that
  * should be applied to video frames for correct presentation. It is compatible
  * with the matrices stored in the ISO/IEC 14496-12 container format.
@@ -11140,6 +11344,8 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  *   q' = (b * p + d * q + y) / z;
  *   z  =  u * p + v * q + w
  * }</pre>
+ *
+ * \{
  */
 
 /**
@@ -11161,8 +11367,8 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  * Initialize a transformation matrix describing a pure clockwise
  * rotation by the specified angle (in degrees).
  *
- * @param matrix an allocated transformation matrix (will be fully overwritten
- *               by this function)
+ * @param matrix [out] a transformation matrix (will be fully overwritten
+ *                    by this function)
  * @param angle rotation angle in degrees.
  */
 @NoException public static native void av_display_rotation_set(IntPointer matrix, double angle);
@@ -11172,7 +11378,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 /**
  * Flip the input matrix horizontally and/or vertically.
  *
- * @param matrix an allocated transformation matrix
+ * @param matrix [in,out] a transformation matrix
  * @param hflip whether the matrix should be flipped horizontally
  * @param vflip whether the matrix should be flipped vertically
  */
@@ -11181,7 +11387,6 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 @NoException public static native void av_display_matrix_flip(int[] matrix, int hflip, int vflip);
 
 /**
- * \}
  * \}
  */
 
@@ -11275,6 +11480,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  * @param funcs1 NULL terminated array of function pointers for functions which take 1 argument
  * @param func2_names NULL terminated array of zero terminated strings of funcs2 identifiers
  * @param funcs2 NULL terminated array of function pointers for functions which take 2 arguments
+ * @param log_offset log level offset, can be used to silence error messages
  * @param log_ctx parent logging context
  * @return >= 0 in case of success, a negative value corresponding to an
  * AVERROR code otherwise
@@ -11318,6 +11524,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 /**
  * Evaluate a previously parsed expression.
  *
+ * @param e the AVExpr to evaluate
  * @param const_values a zero terminated array of values for the identifiers from av_expr_parse() const_names
  * @param opaque a pointer which will be passed to all functions from funcs1 and funcs2
  * @return the value of the expression
@@ -11329,6 +11536,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 /**
  * Track the presence of variables and their number of occurrences in a parsed expression
  *
+ * @param e the AVExpr to track variables in
  * @param counter a zero-initialized array where the count of each variable will be stored
  * @param size size of array
  * @return 0 on success, a negative value indicates that no expression or array was passed
@@ -11342,6 +11550,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  * Track the presence of user provided functions and their number of occurrences
  * in a parsed expression.
  *
+ * @param e the AVExpr to track user provided functions in
  * @param counter a zero-initialized array where the count of each function will be stored
  *                if you passed 5 functions with 2 arguments to av_expr_parse()
  *                then for arg=2 this will use upto 5 entries.
@@ -11537,6 +11746,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 // #include <stddef.h>
 // #include <stdint.h>
 
+// #include "version.h"
 // #include "attributes.h"
 
 /**
@@ -11553,6 +11763,9 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  * case *bufptr will be set to NULL and *size will be set to 0.
  * The returned buffer must be released with av_file_unmap().
  *
+ * @param filename path to the file
+ * @param bufptr [out] pointee is set to the mapped or allocated buffer
+ * @param size [out] pointee is set to the size in bytes of the buffer
  * @param log_offset loglevel offset used for logging
  * @param log_ctx context used for logging
  * @return a non negative number in case of success, a negative value
@@ -11576,6 +11789,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 /**
  * Unmap or free the buffer bufptr created by av_file_map().
  *
+ * @param bufptr the buffer previously created with av_file_map()
  * @param size size in bytes of bufptr, must be the same as returned
  * by av_file_map()
  */
@@ -11583,6 +11797,7 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
 @NoException public static native void av_file_unmap(@Cast("uint8_t*") ByteBuffer bufptr, @Cast("size_t") long size);
 @NoException public static native void av_file_unmap(@Cast("uint8_t*") byte[] bufptr, @Cast("size_t") long size);
 
+// #if FF_API_AV_FOPEN_UTF8
 /**
  * Wrapper to work around the lack of mkstemp() on mingw.
  * Also, tries to create file in /tmp first, if possible.
@@ -11595,13 +11810,14 @@ public static final int AV_BPRINT_SIZE_COUNT_ONLY = 0;
  *       libraries and could interfere with the calling application.
  * @deprecated as fd numbers cannot be passed saftely between libs on some platforms
  */
-@NoException public static native int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") PointerPointer filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr BytePointer filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr ByteBuffer filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr byte[] filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr BytePointer filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr ByteBuffer filename, int log_offset, Pointer log_ctx);
-@NoException public static native int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr byte[] filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") PointerPointer filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr BytePointer filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr ByteBuffer filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr byte[] filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr BytePointer filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(@Cast("const char*") BytePointer prefix, @Cast("char**") @ByPtrPtr ByteBuffer filename, int log_offset, Pointer log_ctx);
+@NoException public static native @Deprecated int av_tempfile(String prefix, @Cast("char**") @ByPtrPtr byte[] filename, int log_offset, Pointer log_ctx);
+// #endif
 
 // #endif /* AVUTIL_FILE_H */
 
@@ -12847,6 +13063,8 @@ public static final int
 /**
  * Put the RGBA values that correspond to color_string in rgba_color.
  *
+ * @param rgba_color 4-elements array of uint8_t values, where the respective
+ * red, green, blue and alpha component values are written.
  * @param color_string a string specifying a color. It can be the name of
  * a color (case insensitive match) or a [0x|#]RRGGBB[AA] sequence,
  * possibly followed by "\" and a string representing the alpha
@@ -12860,6 +13078,8 @@ public static final int
  * @param slen length of the initial part of color_string containing the
  * color. It can be set to -1 if color_string is a null terminated string
  * containing nothing else than the color.
+ * @param log_ctx a pointer to an arbitrary struct of which the first field
+ * is a pointer to an AVClass struct (used for av_log()). Can be NULL.
  * @return >= 0 in case of success, a negative value in case of
  * failure (for example if color_string cannot be parsed).
  */
@@ -12884,7 +13104,7 @@ public static final int
  * av_parse_color().
  *
  * @param color_idx index of the requested color, starting from 0
- * @param rgbp      if not NULL, will point to a 3-elements array with the color value in RGB
+ * @param rgb      if not NULL, will point to a 3-elements array with the color value in RGB
  * @return the color name string or NULL if color_idx is not in the array
  */
 @NoException public static native @Cast("const char*") BytePointer av_get_known_color_name(int color_idx, @Cast("const uint8_t**") PointerPointer rgb);
@@ -12953,19 +13173,19 @@ public static final int
  * by the standard strptime().
  *
  * The supported input field descriptors are listed below.
- * - %H: the hour as a decimal number, using a 24-hour clock, in the
+ * - {@code %%H}: the hour as a decimal number, using a 24-hour clock, in the
  *   range '00' through '23'
- * - %J: hours as a decimal number, in the range '0' through INT_MAX
- * - %M: the minute as a decimal number, using a 24-hour clock, in the
+ * - {@code %%J}: hours as a decimal number, in the range '0' through INT_MAX
+ * - {@code %%M}: the minute as a decimal number, using a 24-hour clock, in the
  *   range '00' through '59'
- * - %S: the second as a decimal number, using a 24-hour clock, in the
+ * - {@code %%S}: the second as a decimal number, using a 24-hour clock, in the
  *   range '00' through '59'
- * - %Y: the year as a decimal number, using the Gregorian calendar
- * - %m: the month as a decimal number, in the range '1' through '12'
- * - %d: the day of the month as a decimal number, in the range '1'
+ * - {@code %%Y}: the year as a decimal number, using the Gregorian calendar
+ * - {@code %%m}: the month as a decimal number, in the range '1' through '12'
+ * - {@code %%d}: the day of the month as a decimal number, in the range '1'
  *   through '31'
- * - %T: alias for '%H:%M:%S'
- * - %%: a literal '%'
+ * - {@code %%T}: alias for {@code %%H:%%M:%%S}
+ * - {@code %%}: a literal {@code %}
  *
  * @return a pointer to the first character not processed in this function
  *         call. In case the input string contains more characters than
@@ -13139,6 +13359,7 @@ public static final int
 
 /**
  * \file
+ * \ingroup lavu_video_spherical
  * Spherical video
  */
 
@@ -13149,19 +13370,14 @@ public static final int
 // #include <stdint.h>
 
 /**
- * \addtogroup lavu_video
- * \{
- *
  * \defgroup lavu_video_spherical Spherical video mapping
- * \{
- */
-
-/**
- * \addtogroup lavu_video_spherical
+ * \ingroup lavu_video
+ *
  * A spherical video file contains surfaces that need to be mapped onto a
  * sphere. Depending on how the frame was converted, a different distortion
  * transformation or surface recomposition function needs to be applied before
  * the video should be mapped and displayed.
+ * \{
  */
 
 /**
@@ -13238,7 +13454,6 @@ public static final int
 @NoException public static native int av_spherical_from_name(@Cast("const char*") BytePointer name);
 @NoException public static native int av_spherical_from_name(String name);
 /**
- * \}
  * \}
  */
 
@@ -13849,7 +14064,9 @@ public static final int
      * the double variant, it's a 'double'. If scale is NULL, 1.0 will be used
      * as a default.
      *
-     * The stride parameter must be set to the size of a single sample in bytes.
+     * For forward transforms (R2C), stride must be the spacing between two
+     * samples in bytes. For inverse transforms, the stride must be set
+     * to the spacing between two complex values in bytes.
      *
      * The forward transform performs a real-to-complex DFT of N samples to
      * N/2+1 complex values.
@@ -13863,8 +14080,22 @@ public static final int
     AV_TX_DOUBLE_RDFT = 7,
     AV_TX_INT32_RDFT  = 8,
 
+    /**
+     * Real to real (DCT) transforms.
+     *
+     * The forward transform is a DCT-II.
+     * The inverse transform is a DCT-III.
+     *
+     * The input array is always overwritten. DCT-III requires that the
+     * input be padded with 2 extra samples. Stride must be set to the
+     * spacing between two samples in bytes.
+     */
+    AV_TX_FLOAT_DCT  = 9,
+    AV_TX_DOUBLE_DCT = 10,
+    AV_TX_INT32_DCT  = 11,
+
     /* Not part of the API, do not use */
-    AV_TX_NB = 9;
+    AV_TX_NB = 12;
 // Targeting ../avutil/av_tx_fn.java
 
 
@@ -13875,9 +14106,8 @@ public static final int
 /** enum AVTXFlags */
 public static final long
     /**
-     * Performs an in-place transformation on the input. The output argument
-     * of av_tn_fn() MUST match the input. May be unsupported or slower for some
-     * transform types.
+     * Allows for in-place transformations, where input == output.
+     * May be unsupported or slower for some transform types.
      */
     AV_TX_INPLACE = 1L << 0,
 
@@ -14005,8 +14235,8 @@ public static final long
  * \{
  */
 
-public static final int LIBAVUTIL_VERSION_MAJOR =  57;
-public static final int LIBAVUTIL_VERSION_MINOR =  28;
+public static final int LIBAVUTIL_VERSION_MAJOR =  58;
+public static final int LIBAVUTIL_VERSION_MINOR =   2;
 public static final int LIBAVUTIL_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVUTIL_VERSION_INT();
@@ -14032,15 +14262,14 @@ public static final String LIBAVUTIL_IDENT = LIBAVUTIL_IDENT();
  * \{
  */
 
-public static final boolean FF_API_D2STR =                    (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_DECLARE_ALIGNED =          (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_COLORSPACE_NAME =          (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_AV_MALLOCZ_ARRAY =         (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_FIFO_PEEK2 =               (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_FIFO_OLD_API =             (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_XVMC =                     (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_OLD_CHANNEL_LAYOUT =       (LIBAVUTIL_VERSION_MAJOR < 58);
-public static final boolean FF_API_AV_FOPEN_UTF8 =            (LIBAVUTIL_VERSION_MAJOR < 58);
+public static final boolean FF_API_FIFO_PEEK2 =               (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_FIFO_OLD_API =             (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_XVMC =                     (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_OLD_CHANNEL_LAYOUT =       (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_AV_FOPEN_UTF8 =            (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_PKT_DURATION =             (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_REORDERED_OPAQUE =         (LIBAVUTIL_VERSION_MAJOR < 59);
+public static final boolean FF_API_FRAME_PICTURE_NUMBER =     (LIBAVUTIL_VERSION_MAJOR < 59);
 
 /**
  * \}

@@ -11,6 +11,14 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.ffmpeg.global.avutil.*;
 
 
+/**
+ * \defgroup lavu_fifo AVFifo
+ * \ingroup lavu_data
+ *
+ * \{
+ * A generic FIFO API
+ */
+
 @Opaque @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)
 public class AVFifo extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

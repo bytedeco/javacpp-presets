@@ -1,6 +1,6 @@
-diff -ruN ffmpeg-5.1.1/libavformat/flv.h ffmpeg-5.1.1-patch/libavformat/flv.h
---- ffmpeg-5.1.1/libavformat/flv.h	2022-07-23 01:58:39.000000000 +0800
-+++ ffmpeg-5.1.1-patch/libavformat/flv.h	2022-09-13 20:06:17.000000000 +0800
+diff -ruN ffmpeg-6.0/libavformat/flv.h ffmpeg-6.0-patch/libavformat/flv.h
+--- ffmpeg-6.0/libavformat/flv.h	2022-11-05 05:16:28.000000000 +0900
++++ ffmpeg-6.0-patch/libavformat/flv.h	2023-03-02 18:25:23.133640776 +0900
 @@ -99,6 +99,7 @@
      FLV_CODECID_PCM_MULAW            = 8 << FLV_AUDIO_CODECID_OFFSET,
      FLV_CODECID_AAC                  = 10<< FLV_AUDIO_CODECID_OFFSET,
@@ -17,10 +17,10 @@ diff -ruN ffmpeg-5.1.1/libavformat/flv.h ffmpeg-5.1.1-patch/libavformat/flv.h
  };
  
  enum {
-diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvdec.c
---- ffmpeg-5.1.1/libavformat/flvdec.c	2022-07-23 01:58:39.000000000 +0800
-+++ ffmpeg-5.1.1-patch/libavformat/flvdec.c	2022-09-13 19:44:38.000000000 +0800
-@@ -37,6 +37,7 @@
+diff -ruN ffmpeg-6.0/libavformat/flvdec.c ffmpeg-6.0-patch/libavformat/flvdec.c
+--- ffmpeg-6.0/libavformat/flvdec.c	2023-02-28 05:43:45.000000000 +0900
++++ ffmpeg-6.0-patch/libavformat/flvdec.c	2023-03-02 18:25:23.135640776 +0900
+@@ -38,6 +38,7 @@
  #include "demux.h"
  #include "internal.h"
  #include "flv.h"
@@ -28,7 +28,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
  
  #define VALIDATE_INDEX_TS_THRESH 2500
  
-@@ -236,6 +237,11 @@
+@@ -237,6 +238,11 @@
      case FLV_CODECID_PCM_ALAW:
          return apar->sample_rate == 8000 &&
                 apar->codec_id    == AV_CODEC_ID_PCM_ALAW;
@@ -40,7 +40,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
      default:
          return apar->codec_tag == (flv_codecid >> FLV_AUDIO_CODECID_OFFSET);
      }
-@@ -294,6 +300,12 @@
+@@ -295,6 +301,12 @@
          apar->sample_rate = 8000;
          apar->codec_id    = AV_CODEC_ID_PCM_ALAW;
          break;
@@ -53,7 +53,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
      default:
          avpriv_request_sample(s, "Audio codec (%x)",
                 flv_codecid >> FLV_AUDIO_CODECID_OFFSET);
-@@ -321,6 +333,8 @@
+@@ -322,6 +334,8 @@
          return vpar->codec_id == AV_CODEC_ID_VP6A;
      case FLV_CODECID_H264:
          return vpar->codec_id == AV_CODEC_ID_H264;
@@ -62,7 +62,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
      default:
          return vpar->codec_tag == flv_codecid;
      }
-@@ -371,6 +385,11 @@
+@@ -372,6 +386,11 @@
          par->codec_id = AV_CODEC_ID_MPEG4;
          ret = 3;
          break;
@@ -74,7 +74,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
      default:
          avpriv_request_sample(s, "Video codec (%x)", flv_codecid);
          par->codec_tag = flv_codecid;
-@@ -1240,7 +1259,8 @@
+@@ -1242,7 +1261,8 @@
  
      if (st->codecpar->codec_id == AV_CODEC_ID_AAC ||
          st->codecpar->codec_id == AV_CODEC_ID_H264 ||
@@ -84,7 +84,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
          int type = avio_r8(s->pb);
          size--;
  
-@@ -1249,7 +1269,7 @@
+@@ -1251,7 +1271,7 @@
              goto leave;
          }
  
@@ -93,7 +93,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
              // sign extension
              int32_t cts = (avio_rb24(s->pb) + 0xff800000) ^ 0xff800000;
              pts = av_sat_add64(dts, cts);
-@@ -1265,7 +1285,8 @@
+@@ -1267,7 +1287,8 @@
              }
          }
          if (type == 0 && (!st->codecpar->extradata || st->codecpar->codec_id == AV_CODEC_ID_AAC ||
@@ -103,10 +103,10 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvdec.c ffmpeg-5.1.1-patch/libavformat/flvde
              AVDictionaryEntry *t;
  
              if (st->codecpar->extradata) {
-diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flvenc.c
---- ffmpeg-5.1.1/libavformat/flvenc.c	2022-07-23 01:58:39.000000000 +0800
-+++ ffmpeg-5.1.1-patch/libavformat/flvenc.c	2022-09-13 20:07:09.000000000 +0800
-@@ -27,6 +27,7 @@
+diff -ruN ffmpeg-6.0/libavformat/flvenc.c ffmpeg-6.0-patch/libavformat/flvenc.c
+--- ffmpeg-6.0/libavformat/flvenc.c	2023-02-28 05:43:45.000000000 +0900
++++ ffmpeg-6.0-patch/libavformat/flvenc.c	2023-03-02 18:32:58.506600856 +0900
+@@ -28,6 +28,7 @@
  #include "libavcodec/mpeg4audio.h"
  #include "avio.h"
  #include "avc.h"
@@ -114,7 +114,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
  #include "avformat.h"
  #include "flv.h"
  #include "internal.h"
-@@ -34,7 +35,6 @@
+@@ -35,7 +36,6 @@
  #include "libavutil/opt.h"
  #include "libavcodec/put_bits.h"
  
@@ -122,7 +122,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
  static const AVCodecTag flv_video_codec_ids[] = {
      { AV_CODEC_ID_FLV1,     FLV_CODECID_H263 },
      { AV_CODEC_ID_H263,     FLV_CODECID_REALH263 },
-@@ -45,6 +45,7 @@
+@@ -46,6 +46,7 @@
      { AV_CODEC_ID_VP6,      FLV_CODECID_VP6 },
      { AV_CODEC_ID_VP6A,     FLV_CODECID_VP6A },
      { AV_CODEC_ID_H264,     FLV_CODECID_H264 },
@@ -130,7 +130,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
      { AV_CODEC_ID_NONE,     0 }
  };
  
-@@ -59,6 +60,7 @@
+@@ -60,6 +61,7 @@
      { AV_CODEC_ID_PCM_MULAW,  FLV_CODECID_PCM_MULAW  >> FLV_AUDIO_CODECID_OFFSET },
      { AV_CODEC_ID_PCM_ALAW,   FLV_CODECID_PCM_ALAW   >> FLV_AUDIO_CODECID_OFFSET },
      { AV_CODEC_ID_SPEEX,      FLV_CODECID_SPEEX      >> FLV_AUDIO_CODECID_OFFSET },
@@ -148,7 +148,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
      else if (par->codec_id == AV_CODEC_ID_SPEEX) {
          if (par->sample_rate != 16000) {
              av_log(s, AV_LOG_ERROR,
-@@ -490,7 +495,7 @@
+@@ -492,7 +497,7 @@
      FLVContext *flv = s->priv_data;
  
      if (par->codec_id == AV_CODEC_ID_AAC || par->codec_id == AV_CODEC_ID_H264
@@ -157,7 +157,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
          int64_t pos;
          avio_w8(pb,
                  par->codec_type == AVMEDIA_TYPE_VIDEO ?
-@@ -536,7 +541,11 @@
+@@ -538,7 +543,11 @@
              avio_w8(pb, par->codec_tag | FLV_FRAME_KEY); // flags
              avio_w8(pb, 0); // AVC sequence header
              avio_wb24(pb, 0); // composition time
@@ -170,16 +170,16 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
          }
          data_size = avio_tell(pb) - pos;
          avio_seek(pb, -data_size - 10, SEEK_CUR);
-@@ -783,7 +792,7 @@
+@@ -785,7 +794,7 @@
              AVCodecParameters *par = s->streams[i]->codecpar;
              FLVStreamContext *sc = s->streams[i]->priv_data;
              if (par->codec_type == AVMEDIA_TYPE_VIDEO &&
 -                    (par->codec_id == AV_CODEC_ID_H264 || par->codec_id == AV_CODEC_ID_MPEG4))
 +                    (par->codec_id == AV_CODEC_ID_H264 || par->codec_id == AV_CODEC_ID_MPEG4 || par->codec_id == AV_CODEC_ID_HEVC))
-                 put_avc_eos_tag(pb, sc->last_ts);
+                 put_eos_tag(pb, sc->last_ts, par->codec_id);
          }
      }
-@@ -834,13 +843,13 @@
+@@ -836,13 +845,13 @@
      if (par->codec_id == AV_CODEC_ID_VP6F || par->codec_id == AV_CODEC_ID_VP6A ||
          par->codec_id == AV_CODEC_ID_VP6  || par->codec_id == AV_CODEC_ID_AAC)
          flags_size = 2;
@@ -195,7 +195,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
          size_t side_size;
          uint8_t *side = av_packet_get_side_data(pkt, AV_PKT_DATA_NEW_EXTRADATA, &side_size);
          if (side && side_size > 0 && (side_size != par->extradata_size || memcmp(side, par->extradata, side_size))) {
-@@ -905,7 +914,11 @@
+@@ -907,7 +916,11 @@
          if (par->extradata_size > 0 && *(uint8_t*)par->extradata != 1)
              if ((ret = ff_avc_parse_nal_units_buf(pkt->data, &data, &size)) < 0)
                  return ret;
@@ -208,7 +208,7 @@ diff -ruN ffmpeg-5.1.1/libavformat/flvenc.c ffmpeg-5.1.1-patch/libavformat/flven
                 (AV_RB16(pkt->data) & 0xfff0) == 0xfff0) {
          if (!s->streams[pkt->stream_index]->nb_frames) {
              av_log(s, AV_LOG_ERROR, "Malformed AAC bitstream detected: "
-@@ -977,7 +990,7 @@
+@@ -979,7 +992,7 @@
                               (FFALIGN(par->height, 16) - par->height));
          } else if (par->codec_id == AV_CODEC_ID_AAC)
              avio_w8(pb, 1); // AAC raw

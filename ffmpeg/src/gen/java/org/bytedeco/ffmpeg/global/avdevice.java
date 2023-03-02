@@ -399,45 +399,6 @@ public static final int
 @NoException public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
                                         @Cast("AVDevToAppMessageType") int type,
                                         Pointer data, @Cast("size_t") long data_size);
-// Targeting ../avdevice/AVDeviceCapabilitiesQuery.java
-
-
-
-/**
- * AVOption table used by devices to implement device capabilities API. Should not be used by a user.
- */
-
-
-/**
- * Initialize capabilities probing API based on AVOption API.
- *
- * avdevice_capabilities_free() must be called when query capabilities API is
- * not used anymore.
- *
- * @param caps [out]      Device capabilities data. Pointer to a NULL pointer must be passed.
- * @param s              Context of the device.
- * @param device_options An AVDictionary filled with device-private options.
- *                       On return this parameter will be destroyed and replaced with a dict
- *                       containing options that were not found. May be NULL.
- *                       The same options must be passed later to avformat_write_header() for output
- *                       devices or avformat_open_input() for input devices, or at any other place
- *                       that affects device-private options.
- *
- * @return >= 0 on success, negative otherwise.
- */
-@NoException public static native @Deprecated int avdevice_capabilities_create(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s,
-                                 @Cast("AVDictionary**") PointerPointer device_options);
-@NoException public static native @Deprecated int avdevice_capabilities_create(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s,
-                                 @ByPtrPtr AVDictionary device_options);
-
-/**
- * Free resources created by avdevice_capabilities_create()
- *
- * @param caps Device capabilities data to be freed.
- * @param s    Context of the device.
- */
-@NoException public static native @Deprecated void avdevice_capabilities_free(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s);
-@NoException public static native @Deprecated void avdevice_capabilities_free(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s);
 // Targeting ../avdevice/AVDeviceInfo.java
 
 
@@ -464,7 +425,7 @@ public static final int
 /**
  * Convenient function to free result of avdevice_list_devices().
  *
- * @param devices device list to be freed.
+ * @param device_list device list to be freed.
  */
 @NoException public static native void avdevice_free_list_devices(@Cast("AVDeviceInfoList**") PointerPointer device_list);
 @NoException public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList device_list);
@@ -535,14 +496,13 @@ public static final int
  * Libavdevice version macros
  */
 
-public static final int LIBAVDEVICE_VERSION_MAJOR =  59;
+public static final int LIBAVDEVICE_VERSION_MAJOR =  60;
 
 /**
  * FF_API_* defines may be placed below to indicate public API that will be
  * dropped at a future version bump. The defines themselves are not part of
  * the public API and may change, break or disappear at any time.
  */
-public static final boolean FF_API_DEVICE_CAPABILITIES = (LIBAVDEVICE_VERSION_MAJOR < 60);
 
 // #endif /* AVDEVICE_VERSION_MAJOR_H */
 
@@ -580,7 +540,7 @@ public static final boolean FF_API_DEVICE_CAPABILITIES = (LIBAVDEVICE_VERSION_MA
 
 // #include "version_major.h"
 
-public static final int LIBAVDEVICE_VERSION_MINOR =   7;
+public static final int LIBAVDEVICE_VERSION_MINOR =   1;
 public static final int LIBAVDEVICE_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBAVDEVICE_VERSION_INT();

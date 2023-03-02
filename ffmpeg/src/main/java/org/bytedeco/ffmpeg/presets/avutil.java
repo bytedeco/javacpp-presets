@@ -62,10 +62,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
             "<libavutil/tx.h>", "<libavutil/version.h>", "<libavutil/macros.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-            link = "avutil@.57", compiler = {"default", "nodeprecated"}),
+            link = "avutil@.58", compiler = {"default", "nodeprecated"}),
         @Platform(value = "linux-x86", preload = {"va@.1", "drm@.2", "va-drm@.1"}, preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
-        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-57"),
+        @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-58"),
         @Platform(extension = "-gpl")
     }
 )
@@ -82,7 +82,8 @@ public class avutil implements InfoMapper {
                              "av_sat_add64", "av_sat_sub64", "LIBAVUTIL_VERSION").cppTypes().translate())
                .put(new Info("LIBAVUTIL_VERSION_INT", "LIBAVUTIL_IDENT").translate(false))
                .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY", "FF_API_FIFO_PEEK2",
-                             "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8").define().translate().cppTypes("bool"))
+                             "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8", "FF_API_PKT_DURATION",
+                             "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
@@ -182,7 +183,9 @@ public class avutil implements InfoMapper {
                              "AV_CHANNEL_LAYOUT_7POINT1",
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE",
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK",
+                             "AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK",
                              "AV_CHANNEL_LAYOUT_OCTAGONAL",
+                             "AV_CHANNEL_LAYOUT_CUBE",
                              "AV_CHANNEL_LAYOUT_HEXADECAGONAL",
                              "AV_CHANNEL_LAYOUT_STEREO_DOWNMIX",
                              "AV_CHANNEL_LAYOUT_22POINT2",

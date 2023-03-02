@@ -17,6 +17,7 @@ import static org.bytedeco.ffmpeg.global.avcodec.*;
 import static org.bytedeco.ffmpeg.global.avformat.*;
 
 
+// #if FF_API_AVIODIRCONTEXT
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avformat.class)
 public class AVIODirContext extends Pointer {
     static { Loader.load(); }

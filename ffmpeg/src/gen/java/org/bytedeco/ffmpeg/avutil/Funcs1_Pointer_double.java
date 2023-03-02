@@ -25,6 +25,7 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * @param func2_names NULL terminated array of zero terminated strings of funcs2 identifiers
  * @param funcs2 NULL terminated array of function pointers for functions which take 2 arguments
  * @param opaque a pointer which will be passed to all functions from funcs1 and funcs2
+ * @param log_offset log level offset, can be used to silence error messages
  * @param log_ctx parent logging context
  * @return >= 0 in case of success, a negative value corresponding to an
  * AVERROR code otherwise

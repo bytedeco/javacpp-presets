@@ -92,7 +92,7 @@ public class swresample extends org.bytedeco.ffmpeg.presets.swresample {
  *
  * Once all values have been set, it must be initialized with swr_init(). If
  * you need to change the conversion parameters, you can change the parameters
- * using \ref AVOptions, as described above in the first example; or by using
+ * using \ref avoptions, as described above in the first example; or by using
  * swr_alloc_set_opts2(), but with the first argument the allocated context.
  * You must then call swr_init() again.
  *
@@ -304,12 +304,12 @@ public static final int
  *         On error, the Swr context is freed and *ps set to NULL.
  */
 @NoException public static native int swr_alloc_set_opts2(@Cast("SwrContext**") PointerPointer ps,
-                        AVChannelLayout out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
-                        AVChannelLayout in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
+                        @Const AVChannelLayout out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
+                        @Const AVChannelLayout in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
                         int log_offset, Pointer log_ctx);
 @NoException public static native int swr_alloc_set_opts2(@ByPtrPtr SwrContext ps,
-                        AVChannelLayout out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
-                        AVChannelLayout in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
+                        @Const AVChannelLayout out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
+                        @Const AVChannelLayout in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
                         int log_offset, Pointer log_ctx);
 /**
  * \}
@@ -383,8 +383,8 @@ public static final int
  *              in this case the output timestamps will match output sample numbers.
  *              See ffmpeg-resampler(1) for the two modes of compensation.
  *
- * @param s[in]     initialized Swr context
- * @param pts[in]   timestamp for the next input sample, INT64_MIN if unknown
+ * @param s [in]     initialized Swr context
+ * @param pts [in]   timestamp for the next input sample, INT64_MIN if unknown
  * @see swr_set_compensation(), swr_drop_output(), and swr_inject_silence() are
  *      function used internally for timestamp compensation.
  * @return the output timestamp for the next output sample
@@ -692,8 +692,8 @@ public static final int
  * @see swr_close();
  *
  * @param swr             audio resample context
- * @param output          output AVFrame
- * @param input           input AVFrame
+ * @param out             output AVFrame
+ * @param in              input AVFrame
  * @return                0 on success, AVERROR on failure.
  */
 @NoException public static native int swr_config_frame(SwrContext swr, @Const AVFrame out, @Const AVFrame in);
@@ -775,7 +775,7 @@ public static final int LIBSWRESAMPLE_VERSION_MAJOR =   4;
 
 // #include "version_major.h"
 
-public static final int LIBSWRESAMPLE_VERSION_MINOR =   7;
+public static final int LIBSWRESAMPLE_VERSION_MINOR =  10;
 public static final int LIBSWRESAMPLE_VERSION_MICRO = 100;
 
 public static native @MemberGetter int LIBSWRESAMPLE_VERSION_INT();

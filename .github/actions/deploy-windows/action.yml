@@ -4,6 +4,8 @@ runs:
   steps:
     - name: Install environment
       shell: cmd
+      env:
+        GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
         cd /d %USERPROFILE%
 
@@ -166,7 +168,7 @@ runs:
 
         set GRADLE_TASK=publishToMavenLocal
         set MAVEN_PHASE=install
-        set "MESSAGE=${{ github.event.head_commit.message }}"
+        set "MESSAGE=%GITHUB_EVENT_HEAD_COMMIT_MESSAGE%"
         if "%MESSAGE:~0,7%"=="Release" set DEPLOY=RELEASE
         if "%GITHUB_REF:~11%"=="release" set DEPLOY=RELEASE
         if not "%CI_DEPLOY_USERNAME%"=="" if not "%GITHUB_EVENT_NAME%"=="pull_request" (

@@ -186,14 +186,16 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native @ByRef AVRational time_base(); public native AVFrame time_base(AVRational setter);
 
+// #if FF_API_FRAME_PICTURE_NUMBER
     /**
      * picture number in bitstream order
      */
-    public native int coded_picture_number(); public native AVFrame coded_picture_number(int setter);
+    public native @Deprecated int coded_picture_number(); public native AVFrame coded_picture_number(int setter);
     /**
      * picture number in display order
      */
-    public native int display_picture_number(); public native AVFrame display_picture_number(int setter);
+    public native @Deprecated int display_picture_number(); public native AVFrame display_picture_number(int setter);
+// #endif
 
     /**
      * quality (between 1 (good) and FF_LAMBDA_MAX (bad))
@@ -226,6 +228,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native int palette_has_changed(); public native AVFrame palette_has_changed(int setter);
 
+// #if FF_API_REORDERED_OPAQUE
     /**
      * reordered opaque 64 bits (generally an integer or a double precision float
      * PTS but can be anything).
@@ -233,8 +236,11 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * that time,
      * the decoder reorders values as needed and sets AVFrame.reordered_opaque
      * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
+     *
+     * @deprecated Use AV_CODEC_FLAG_COPY_OPAQUE instead
      */
-    public native @Cast("int64_t") long reordered_opaque(); public native AVFrame reordered_opaque(long setter);
+    public native @Cast("int64_t") @Deprecated long reordered_opaque(); public native AVFrame reordered_opaque(long setter);
+// #endif
 
     /**
      * Sample rate of the audio data.
@@ -346,13 +352,17 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
      */
     public native @Cast("int64_t") long pkt_pos(); public native AVFrame pkt_pos(long setter);
 
+// #if FF_API_PKT_DURATION
     /**
      * duration of the corresponding packet, expressed in
      * AVStream->time_base units, 0 if unknown.
      * - encoding: unused
      * - decoding: Read by user.
+     *
+     * @deprecated use duration instead
      */
-    public native @Cast("int64_t") long pkt_duration(); public native AVFrame pkt_duration(long setter);
+    public native @Cast("int64_t") @Deprecated long pkt_duration(); public native AVFrame pkt_duration(long setter);
+// #endif
 
     /**
      * metadata.
@@ -443,4 +453,9 @@ public static final int FF_DECODE_ERROR_DECODE_SLICES =       8;
      * Channel layout of the audio data.
      */
     public native @ByRef AVChannelLayout ch_layout(); public native AVFrame ch_layout(AVChannelLayout setter);
+
+    /**
+     * Duration of the frame, in the same units as pts. 0 if unknown.
+     */
+    public native @Cast("int64_t") long duration(); public native AVFrame duration(long setter);
 }
