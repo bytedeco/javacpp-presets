@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.hdf5.presets.*;
 
 /**
- * This is only a placeholder to facilitate loading the {@code opencv_java} module with JavaCPP.
+ * This is only a placeholder to facilitate loading the {@code hdf5_java} module with JavaCPP.
  * <p>
  * Call {@code Loader.load(hdf5_java.class)} before using the API in the {@code hdf.hdf5group} namespace.
  *
