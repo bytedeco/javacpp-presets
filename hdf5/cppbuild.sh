@@ -137,8 +137,7 @@ case $PLATFORM in
         ;;
 esac
 
-# Do we need this? We already built the classes once ...
-cp -r java/src ../
-mv ../src ../java
+[ -d "../java" ] && rm -r ../java
+cp -r java/src ../java
 
 cd ../..
