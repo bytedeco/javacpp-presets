@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Samuel Audet
+ * Copyright (C) 2023 Mark Kittisopikul
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.bytedeco.hdf5.presets.*;
  * <p>
  * Call {@code Loader.load(hdf5_java.class)} before using the API in the {@code hdf.hdf5group} namespace.
  *
- * @author Samuel Audet
+ * @author Mark Kittisopikul
  */
 @Properties(
     inherit = {
