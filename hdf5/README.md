@@ -20,6 +20,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/hdf5/apidocs/
 
+&lowast; Call `Loader.load(hdf5_java.class)` before using the API in the `hdf.hdf5lib` namespace.
+
 
 Sample Usage
 ------------

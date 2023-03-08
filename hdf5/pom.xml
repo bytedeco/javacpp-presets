@@ -19,6 +19,12 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
 
   <build>
@@ -43,6 +49,15 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>hdf/hdf5lib/**</include>
+                <include>org/bytedeco/hdf5/**</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
             <id>javacpp-${javacpp.platform}</id>
             <phase>package</phase>
             <configuration>
@@ -55,6 +70,7 @@
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.la</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.dylib</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.jar</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/zlib*</exclude>
               </excludes>
             </configuration>
