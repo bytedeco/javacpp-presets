@@ -1,4 +1,5 @@
 
+ * Bundle the official Java API of HDF5 via the `hdf5_java` library ([pull #1327](https://github.com/bytedeco/javacpp-presets/pull/1327))
  * Map missing `cblas_?axpby()` functions in presets for MKL ([issue #1326](https://github.com/bytedeco/javacpp-presets/issues/1326))
  * Prefix with "fisheye" all functions from the `cv::fisheye::` namespace to avoid collisions ([pull #1324](https://github.com/bytedeco/javacpp-presets/pull/1324))
  * Remove mapping for platform-dependent `enum` values in presets for libffi ([pull #1318](https://github.com/bytedeco/javacpp-presets/pull/1318))
