@@ -9,20 +9,37 @@ fi
 
 ZLIB=zlib-1.2.13
 HDF5_VERSION=1.14.0
+AEC_VERSION=1.0.6
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
+#download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
+download "https://github.com/MathisRosenhauer/libaec/releases/download/v$AEC_VERSION/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
+tar --totals -xf ../libaec-$AEC_VERSION.tar.gz
 cd hdf5-$HDF5_VERSION
 
 #sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
 sedinplace 's/# *cmakedefine/#cmakedefine/g' config/cmake/H5pubconf.h.in
 sedinplace 's/COMPATIBILITY SameMinorVersion/COMPATIBILITY AnyNewerVersion/g' CMakeInstallation.cmake
 sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
+
+# As of 1.14.0 the integrated cmake process for building aec is broken
+# Revisit if this is needed with 1.14.1
+build_aec_szip() {
+    cd ..
+    cd libaec-$AEC_VERSION
+    mkdir -p build
+    cd build
+    "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+    make -j $MAKEJ
+    make install
+    cd ../../
+}
 
 case $PLATFORM in
 # HDF5 does not currently support cross-compiling:
@@ -74,12 +91,19 @@ case $PLATFORM in
         fi
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" --enable-cxx --enable-java
+        # Build libaec for szip first
+        build_aec_szip
+
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" --enable-cxx --enable-java --with-szlib
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java
+        # Build libaec for szip first
+        build_aec_szip
+
+        cd hdf5-$HDF5_VERSION
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
         make -j $MAKEJ
         make install-strip
         ;;
@@ -124,7 +148,7 @@ case $PLATFORM in
         cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
         ninja -j $MAKEJ HDF5_ZLIB
         ninja -j $MAKEJ
