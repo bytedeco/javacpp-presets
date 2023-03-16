@@ -32,7 +32,7 @@ sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
 # Revisit if this is needed with 1.14.1
 build_aec_szip() {
     mkdir -p ../libaec-$AEC_VERSION/build
-    cd ../libaec-$AEC_VERSION/bulid
+    cd ../libaec-$AEC_VERSION/build
     "$CMAKE" $@ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
     make -j $MAKEJ
     make install
