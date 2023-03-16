@@ -31,13 +31,12 @@ sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
 # As of 1.14.0 the integrated cmake process for building aec is broken
 # Revisit if this is needed with 1.14.1
 build_aec_szip() {
-    cd ../libaec-$AEC_VERSION
-    mkdir -p build
-    cd build
-    "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+    mkdir -p ../libaec-$AEC_VERSION/build
+    cd ../libaec-$AEC_VERSION/bulid
+    "$CMAKE" $@ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
     make -j $MAKEJ
     make install
-    cd ../../
+    cd ../../hdf5-$HDF5_VERSION
 }
 
 case $PLATFORM in
@@ -92,8 +91,6 @@ case $PLATFORM in
     linux-x86)
         # Build libaec for szip first
         build_aec_szip
-
-        cd hdf5-$HDF5_VERSION
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" --enable-cxx --enable-java --with-szlib
         make -j $MAKEJ
         make install-strip
@@ -101,8 +98,6 @@ case $PLATFORM in
     linux-x86_64)
         # Build libaec for szip first
         build_aec_szip
-
-        cd hdf5-$HDF5_VERSION
         ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
         make -j $MAKEJ
         make install-strip
@@ -111,8 +106,6 @@ case $PLATFORM in
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           build_aec_szip
-
-          cd hdf5-$HDF5_VERSION
           ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx --enable-java --with-szlib
           make -j $MAKEJ
           make install-strip
@@ -130,9 +123,6 @@ case $PLATFORM in
     macosx-*)
         # Build libaec for szip first
         build_aec_szip
-
-
-        cd hdf5-$HDF5_VERSION
         patch -Np1 < ../../../hdf5-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-cxx --enable-java --with-szlib
         make -j $MAKEJ
@@ -141,18 +131,7 @@ case $PLATFORM in
     windows-x86)
         export CC="cl.exe"
         export CXX="cl.exe"
-
-        # Build szip via libaec
-        cd ..
-        cd libaec-$AEC_VERSION
-        #patch -Np1 < ../../../szaec.patch
-        mkdir -p build
-        cd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-        ninja -j $MAKEJ
-        ninja install
-        cd ../../hdf5-$HDF5_VERSION
-
+        build_aec_szip -G "Ninja"
         mkdir -p build
         cd build
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
@@ -166,18 +145,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-
-        # Build szip via libaec
-        cd ..
-        cd libaec-$AEC_VERSION
-        #patch -Np1 < ../../../szaec.patch
-        mkdir -p build
-        cd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
-        ninja -j $MAKEJ
-        ninja install
-        cd ../../hdf5-$HDF5_VERSION
-
+        build_aec_szip -G "Ninja"
         mkdir -p build
         cd build
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
