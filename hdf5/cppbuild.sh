@@ -31,8 +31,7 @@ sedinplace '/C_RUN (/{N;N;d;}' config/cmake/ConfigureChecks.cmake
 # As of 1.14.0 the integrated cmake process for building aec is broken
 # Revisit if this is needed with 1.14.1
 build_aec_szip() {
-    cd ..
-    cd libaec-$AEC_VERSION
+    cd ../libaec-$AEC_VERSION
     mkdir -p build
     cd build
     "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
@@ -140,11 +139,24 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        mkdir -p build
-        cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+
+
+        # Build szip via libaec
+        cd ..
+        cd libaec-$AEC_VERSION
+        #patch -Np1 < ../../../szaec.patch
+        mkdir -p build
+        cd build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        ninja -j $MAKEJ
+        ninja install
+        cd ../hdf5-$HDF5_VERSION
+
+        mkdir -p build
+        cd build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/libsz.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
         ninja -j $MAKEJ HDF5_ZLIB
         ninja -j $MAKEJ
@@ -153,11 +165,24 @@ case $PLATFORM in
         cd ..
         ;;
     windows-x86_64)
-        mkdir -p build
-        cd build
         export CC="cl.exe"
         export CXX="cl.exe"
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+
+        # Build szip via libaec
+        cd ..
+        cd libaec-$AEC_VERSION
+        #patch -Np1 < ../../../szaec.patch
+        mkdir -p build
+        cd build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        ninja -j $MAKEJ
+        ninja install
+        cd ../../hdf5-$HDF5_VERSION
+
+        mkdir -p build
+        cd build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/libsz.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
+
         sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
         ninja -j $MAKEJ HDF5_ZLIB
         ninja -j $MAKEJ
