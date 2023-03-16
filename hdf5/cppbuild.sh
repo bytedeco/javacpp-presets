@@ -142,7 +142,6 @@ case $PLATFORM in
         export CC="cl.exe"
         export CXX="cl.exe"
 
-
         # Build szip via libaec
         cd ..
         cd libaec-$AEC_VERSION
@@ -152,7 +151,7 @@ case $PLATFORM in
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
         ninja -j $MAKEJ
         ninja install
-        cd ../hdf5-$HDF5_VERSION
+        cd ../../hdf5-$HDF5_VERSION
 
         mkdir -p build
         cd build
