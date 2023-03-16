@@ -38,6 +38,15 @@ build_aec_szip() {
     make install
     cd ../../hdf5-$HDF5_VERSION
 }
+build_aec_szip_windows() {
+    mkdir -p ../libaec-$AEC_VERSION/build
+    cd ../libaec-$AEC_VERSION/build
+    "$CMAKE" $@ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+    ninja -j $MAKEJ
+    ninja install
+    cd ../../hdf5-$HDF5_VERSION
+}
+
 
 case $PLATFORM in
 # HDF5 does not currently support cross-compiling:
@@ -131,7 +140,7 @@ case $PLATFORM in
     windows-x86)
         export CC="cl.exe"
         export CXX="cl.exe"
-        build_aec_szip -G "Ninja"
+        build_aec_szip_windows -G "Ninja"
         mkdir -p build
         cd build
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
@@ -145,7 +154,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        build_aec_szip -G "Ninja"
+        build_aec_szip_windows -G "Ninja"
         mkdir -p build
         cd build
         "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
