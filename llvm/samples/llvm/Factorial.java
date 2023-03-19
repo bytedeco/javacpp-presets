@@ -114,7 +114,7 @@ public class Factorial {
 
         // Stage 4: Create a pass pipeline using the legacy pass manager
         LLVMPassManagerRef pm = LLVMCreatePassManager();
-        LLVMAddAggressiveInstCombinerPass(pm);
+//        LLVMAddAggressiveInstCombinerPass(pm);
         LLVMAddNewGVNPass(pm);
         LLVMAddCFGSimplificationPass(pm);
         LLVMRunPassManager(pm, module);

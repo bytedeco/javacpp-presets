@@ -81,7 +81,7 @@ LLVMErrorRef optimizeModule(
     builder1.Inliner = createFunctionInliningPass(optLevel, sizeLevel, false);
     builder1.LoopVectorize = optLevel > 1 && sizeLevel < 2;
     builder1.SLPVectorize = optLevel > 1 && sizeLevel < 2;
-    machine->adjustPassManager(builder1);
+//    machine->adjustPassManager(builder1);
     builder1.populateFunctionPassManager(fnPasses);
     builder1.populateModulePassManager(passes);
 

@@ -490,6 +490,740 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
 
 
 
+// Parsed from <clang-c/CXFile.h>
+
+/*===-- clang-c/CXFile.h - C Index File ---------------------------*- C -*-===*\
+|*                                                                            *|
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
+|* Exceptions.                                                                *|
+|* See https://llvm.org/LICENSE.txt for license information.                  *|
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This header provides the interface to C Index files.                       *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_CLANG_C_CXFILE_H
+// #define LLVM_CLANG_C_CXFILE_H
+
+// #include <time.h>
+
+// #include "clang-c/CXString.h"
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
+// Targeting ../clang/CXFile.java
+
+
+
+/**
+ * Retrieve the complete file and path name of the given file.
+ */
+public static native @ByVal CXString clang_getFileName(CXFile SFile);
+
+/**
+ * Retrieve the last modification time of the given file.
+ */
+public static native @ByVal @Cast("time_t*") Pointer clang_getFileTime(CXFile SFile);
+// Targeting ../clang/CXFileUniqueID.java
+
+
+
+/**
+ * Retrieve the unique ID for the given \c file.
+ *
+ * @param file the file to get the ID for.
+ * @param outID stores the returned CXFileUniqueID.
+ * @return If there was a failure getting the unique ID, returns non-zero,
+ * otherwise returns 0.
+ */
+public static native int clang_getFileUniqueID(CXFile file, CXFileUniqueID outID);
+
+/**
+ * Returns non-zero if the \c file1 and \c file2 point to the same file,
+ * or they are both NULL.
+ */
+public static native int clang_File_isEqual(CXFile file1, CXFile file2);
+
+/**
+ * Returns the real path name of \c file.
+ *
+ * An empty string may be returned. Use \c clang_getFileName() in that case.
+ */
+public static native @ByVal CXString clang_File_tryGetRealPathName(CXFile file);
+
+/**
+ * \}
+ */
+
+// #endif
+
+
+// Parsed from <clang-c/CXSourceLocation.h>
+
+/*===-- clang-c/CXSourceLocation.h - C Index Source Location ------*- C -*-===*\
+|*                                                                            *|
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
+|* Exceptions.                                                                *|
+|* See https://llvm.org/LICENSE.txt for license information.                  *|
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This header provides the interface to C Index source locations.            *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_CLANG_C_CXSOURCE_LOCATION_H
+// #define LLVM_CLANG_C_CXSOURCE_LOCATION_H
+
+// #include "clang-c/CXFile.h"
+// #include "clang-c/CXString.h"
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
+// Targeting ../clang/CXSourceLocation.java
+
+
+// Targeting ../clang/CXSourceRange.java
+
+
+
+/**
+ * Retrieve a NULL (invalid) source location.
+ */
+public static native @ByVal CXSourceLocation clang_getNullLocation();
+
+/**
+ * Determine whether two source locations, which must refer into
+ * the same translation unit, refer to exactly the same point in the source
+ * code.
+ *
+ * @return non-zero if the source locations refer to the same location, zero
+ * if they refer to different locations.
+ */
+public static native @Cast("unsigned") int clang_equalLocations(@ByVal CXSourceLocation loc1,
+                                             @ByVal CXSourceLocation loc2);
+
+/**
+ * Returns non-zero if the given source location is in a system header.
+ */
+public static native int clang_Location_isInSystemHeader(@ByVal CXSourceLocation location);
+
+/**
+ * Returns non-zero if the given source location is in the main file of
+ * the corresponding translation unit.
+ */
+public static native int clang_Location_isFromMainFile(@ByVal CXSourceLocation location);
+
+/**
+ * Retrieve a NULL (invalid) source range.
+ */
+public static native @ByVal CXSourceRange clang_getNullRange();
+
+/**
+ * Retrieve a source range given the beginning and ending source
+ * locations.
+ */
+public static native @ByVal CXSourceRange clang_getRange(@ByVal CXSourceLocation begin,
+                                            @ByVal CXSourceLocation end);
+
+/**
+ * Determine whether two ranges are equivalent.
+ *
+ * @return non-zero if the ranges are the same, zero if they differ.
+ */
+public static native @Cast("unsigned") int clang_equalRanges(@ByVal CXSourceRange range1,
+                                          @ByVal CXSourceRange range2);
+
+/**
+ * Returns non-zero if \p range is null.
+ */
+public static native int clang_Range_isNull(@ByVal CXSourceRange range);
+
+/**
+ * Retrieve the file, line, column, and offset represented by
+ * the given source location.
+ *
+ * If the location refers into a macro expansion, retrieves the
+ * location of the macro expansion.
+ *
+ * @param location the location within a source file that will be decomposed
+ * into its parts.
+ *
+ * @param file [out] if non-NULL, will be set to the file to which the given
+ * source location points.
+ *
+ * @param line [out] if non-NULL, will be set to the line to which the given
+ * source location points.
+ *
+ * @param column [out] if non-NULL, will be set to the column to which the given
+ * source location points.
+ *
+ * @param offset [out] if non-NULL, will be set to the offset into the
+ * buffer to which the given source location points.
+ */
+public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
+                                               @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
+                                               @Cast("unsigned*") IntPointer column,
+                                               @Cast("unsigned*") IntPointer offset);
+public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
+                                               @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
+                                               @Cast("unsigned*") IntBuffer column,
+                                               @Cast("unsigned*") IntBuffer offset);
+public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
+                                               @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
+                                               @Cast("unsigned*") int[] column,
+                                               @Cast("unsigned*") int[] offset);
+
+/**
+ * Retrieve the file, line and column represented by the given source
+ * location, as specified in a # line directive.
+ *
+ * Example: given the following source code in a file somefile.c
+ *
+ * <pre>{@code
+ * #123 "dummy.c" 1
+ *
+ * static int func(void)
+ * {
+ *     return 0;
+ * }
+ * }</pre>
+ *
+ * the location information returned by this function would be
+ *
+ * File: dummy.c Line: 124 Column: 12
+ *
+ * whereas clang_getExpansionLocation would have returned
+ *
+ * File: somefile.c Line: 3 Column: 12
+ *
+ * @param location the location within a source file that will be decomposed
+ * into its parts.
+ *
+ * @param filename [out] if non-NULL, will be set to the filename of the
+ * source location. Note that filenames returned will be for "virtual" files,
+ * which don't necessarily exist on the machine running clang - e.g. when
+ * parsing preprocessed output obtained from a different environment. If
+ * a non-NULL value is passed in, remember to dispose of the returned value
+ * using \c clang_disposeString() once you've finished with it. For an invalid
+ * source location, an empty string is returned.
+ *
+ * @param line [out] if non-NULL, will be set to the line number of the
+ * source location. For an invalid source location, zero is returned.
+ *
+ * @param column [out] if non-NULL, will be set to the column number of the
+ * source location. For an invalid source location, zero is returned.
+ */
+public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
+                                              CXString filename,
+                                              @Cast("unsigned*") IntPointer line, @Cast("unsigned*") IntPointer column);
+public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
+                                              CXString filename,
+                                              @Cast("unsigned*") IntBuffer line, @Cast("unsigned*") IntBuffer column);
+public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
+                                              CXString filename,
+                                              @Cast("unsigned*") int[] line, @Cast("unsigned*") int[] column);
+
+/**
+ * Legacy API to retrieve the file, line, column, and offset represented
+ * by the given source location.
+ *
+ * This interface has been replaced by the newer interface
+ * #clang_getExpansionLocation(). See that interface's documentation for
+ * details.
+ */
+public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
+                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
+                                                   @Cast("unsigned*") IntPointer column,
+                                                   @Cast("unsigned*") IntPointer offset);
+public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
+                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
+                                                   @Cast("unsigned*") IntBuffer column,
+                                                   @Cast("unsigned*") IntBuffer offset);
+public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
+                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
+                                                   @Cast("unsigned*") int[] column,
+                                                   @Cast("unsigned*") int[] offset);
+
+/**
+ * Retrieve the file, line, column, and offset represented by
+ * the given source location.
+ *
+ * If the location refers into a macro instantiation, return where the
+ * location was originally spelled in the source file.
+ *
+ * @param location the location within a source file that will be decomposed
+ * into its parts.
+ *
+ * @param file [out] if non-NULL, will be set to the file to which the given
+ * source location points.
+ *
+ * @param line [out] if non-NULL, will be set to the line to which the given
+ * source location points.
+ *
+ * @param column [out] if non-NULL, will be set to the column to which the given
+ * source location points.
+ *
+ * @param offset [out] if non-NULL, will be set to the offset into the
+ * buffer to which the given source location points.
+ */
+public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
+                                              @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
+                                              @Cast("unsigned*") IntPointer column,
+                                              @Cast("unsigned*") IntPointer offset);
+public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
+                                              @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
+                                              @Cast("unsigned*") IntBuffer column,
+                                              @Cast("unsigned*") IntBuffer offset);
+public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
+                                              @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
+                                              @Cast("unsigned*") int[] column,
+                                              @Cast("unsigned*") int[] offset);
+
+/**
+ * Retrieve the file, line, column, and offset represented by
+ * the given source location.
+ *
+ * If the location refers into a macro expansion, return where the macro was
+ * expanded or where the macro argument was written, if the location points at
+ * a macro argument.
+ *
+ * @param location the location within a source file that will be decomposed
+ * into its parts.
+ *
+ * @param file [out] if non-NULL, will be set to the file to which the given
+ * source location points.
+ *
+ * @param line [out] if non-NULL, will be set to the line to which the given
+ * source location points.
+ *
+ * @param column [out] if non-NULL, will be set to the column to which the given
+ * source location points.
+ *
+ * @param offset [out] if non-NULL, will be set to the offset into the
+ * buffer to which the given source location points.
+ */
+public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
+                                          @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
+                                          @Cast("unsigned*") IntPointer column, @Cast("unsigned*") IntPointer offset);
+public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
+                                          @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
+                                          @Cast("unsigned*") IntBuffer column, @Cast("unsigned*") IntBuffer offset);
+public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
+                                          @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
+                                          @Cast("unsigned*") int[] column, @Cast("unsigned*") int[] offset);
+
+/**
+ * Retrieve a source location representing the first character within a
+ * source range.
+ */
+public static native @ByVal CXSourceLocation clang_getRangeStart(@ByVal CXSourceRange range);
+
+/**
+ * Retrieve a source location representing the last character within a
+ * source range.
+ */
+public static native @ByVal CXSourceLocation clang_getRangeEnd(@ByVal CXSourceRange range);
+// Targeting ../clang/CXSourceRangeList.java
+
+
+
+/**
+ * Destroy the given \c CXSourceRangeList.
+ */
+public static native void clang_disposeSourceRangeList(CXSourceRangeList ranges);
+
+/**
+ * \}
+ */
+
+// #endif
+
+
+// Parsed from <clang-c/CXDiagnostic.h>
+
+/*===-- clang-c/CXDiagnostic.h - C Index Diagnostics --------------*- C -*-===*\
+|*                                                                            *|
+|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
+|* Exceptions.                                                                *|
+|* See https://llvm.org/LICENSE.txt for license information.                  *|
+|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This header provides the interface to C Index diagnostics.                 *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_CLANG_C_CXDIAGNOSTIC_H
+// #define LLVM_CLANG_C_CXDIAGNOSTIC_H
+
+// #include "clang-c/CXSourceLocation.h"
+// #include "clang-c/CXString.h"
+// #include "clang-c/ExternC.h"
+// #include "clang-c/Platform.h"
+
+/**
+ * \defgroup CINDEX_DIAG Diagnostic reporting
+ *
+ * \{
+ */
+
+/**
+ * Describes the severity of a particular diagnostic.
+ */
+/** enum CXDiagnosticSeverity */
+public static final int
+  /**
+   * A diagnostic that has been suppressed, e.g., by a command-line
+   * option.
+   */
+  CXDiagnostic_Ignored = 0,
+
+  /**
+   * This diagnostic is a note that should be attached to the
+   * previous (non-note) diagnostic.
+   */
+  CXDiagnostic_Note = 1,
+
+  /**
+   * This diagnostic indicates suspicious code that may not be
+   * wrong.
+   */
+  CXDiagnostic_Warning = 2,
+
+  /**
+   * This diagnostic indicates that the code is ill-formed.
+   */
+  CXDiagnostic_Error = 3,
+
+  /**
+   * This diagnostic indicates that the code is ill-formed such
+   * that future parser recovery is unlikely to produce useful
+   * results.
+   */
+  CXDiagnostic_Fatal = 4;
+// Targeting ../clang/CXDiagnostic.java
+
+
+// Targeting ../clang/CXDiagnosticSet.java
+
+
+
+/**
+ * Determine the number of diagnostics in a CXDiagnosticSet.
+ */
+public static native @Cast("unsigned") int clang_getNumDiagnosticsInSet(CXDiagnosticSet Diags);
+
+/**
+ * Retrieve a diagnostic associated with the given CXDiagnosticSet.
+ *
+ * @param Diags the CXDiagnosticSet to query.
+ * @param Index the zero-based diagnostic number to retrieve.
+ *
+ * @return the requested diagnostic. This diagnostic must be freed
+ * via a call to \c clang_disposeDiagnostic().
+ */
+public static native CXDiagnostic clang_getDiagnosticInSet(CXDiagnosticSet Diags,
+                                                     @Cast("unsigned") int Index);
+
+/**
+ * Describes the kind of error that occurred (if any) in a call to
+ * \c clang_loadDiagnostics.
+ */
+/** enum CXLoadDiag_Error */
+public static final int
+  /**
+   * Indicates that no error occurred.
+   */
+  CXLoadDiag_None = 0,
+
+  /**
+   * Indicates that an unknown error occurred while attempting to
+   * deserialize diagnostics.
+   */
+  CXLoadDiag_Unknown = 1,
+
+  /**
+   * Indicates that the file containing the serialized diagnostics
+   * could not be opened.
+   */
+  CXLoadDiag_CannotLoad = 2,
+
+  /**
+   * Indicates that the serialized diagnostics file is invalid or
+   * corrupt.
+   */
+  CXLoadDiag_InvalidFile = 3;
+
+/**
+ * Deserialize a set of diagnostics from a Clang diagnostics bitcode
+ * file.
+ *
+ * @param file The name of the file to deserialize.
+ * @param error A pointer to a enum value recording if there was a problem
+ *        deserializing the diagnostics.
+ * @param errorString A pointer to a CXString for recording the error string
+ *        if the file was not successfully loaded.
+ *
+ * @return A loaded CXDiagnosticSet if successful, and NULL otherwise.  These
+ * diagnostics should be released using clang_disposeDiagnosticSet().
+ */
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") IntPointer error, CXString errorString);
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    String file, @Cast("CXLoadDiag_Error*") IntBuffer error, CXString errorString);
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") int[] error, CXString errorString);
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    String file, @Cast("CXLoadDiag_Error*") IntPointer error, CXString errorString);
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") IntBuffer error, CXString errorString);
+public static native CXDiagnosticSet clang_loadDiagnostics(
+    String file, @Cast("CXLoadDiag_Error*") int[] error, CXString errorString);
+
+/**
+ * Release a CXDiagnosticSet and all of its contained diagnostics.
+ */
+public static native void clang_disposeDiagnosticSet(CXDiagnosticSet Diags);
+
+/**
+ * Retrieve the child diagnostics of a CXDiagnostic.
+ *
+ * This CXDiagnosticSet does not need to be released by
+ * clang_disposeDiagnosticSet.
+ */
+public static native CXDiagnosticSet clang_getChildDiagnostics(CXDiagnostic D);
+
+/**
+ * Destroy a diagnostic.
+ */
+public static native void clang_disposeDiagnostic(CXDiagnostic Diagnostic);
+
+/**
+ * Options to control the display of diagnostics.
+ *
+ * The values in this enum are meant to be combined to customize the
+ * behavior of \c clang_formatDiagnostic().
+ */
+/** enum CXDiagnosticDisplayOptions */
+public static final int
+  /**
+   * Display the source-location information where the
+   * diagnostic was located.
+   *
+   * When set, diagnostics will be prefixed by the file, line, and
+   * (optionally) column to which the diagnostic refers. For example,
+   *
+   * <pre>{@code
+   * test.c:28: warning: extra tokens at end of #endif directive
+   * }</pre>
+   *
+   * This option corresponds to the clang flag \c -fshow-source-location.
+   */
+  CXDiagnostic_DisplaySourceLocation = 0x01,
+
+  /**
+   * If displaying the source-location information of the
+   * diagnostic, also include the column number.
+   *
+   * This option corresponds to the clang flag \c -fshow-column.
+   */
+  CXDiagnostic_DisplayColumn = 0x02,
+
+  /**
+   * If displaying the source-location information of the
+   * diagnostic, also include information about source ranges in a
+   * machine-parsable format.
+   *
+   * This option corresponds to the clang flag
+   * \c -fdiagnostics-print-source-range-info.
+   */
+  CXDiagnostic_DisplaySourceRanges = 0x04,
+
+  /**
+   * Display the option name associated with this diagnostic, if any.
+   *
+   * The option name displayed (e.g., -Wconversion) will be placed in brackets
+   * after the diagnostic text. This option corresponds to the clang flag
+   * \c -fdiagnostics-show-option.
+   */
+  CXDiagnostic_DisplayOption = 0x08,
+
+  /**
+   * Display the category number associated with this diagnostic, if any.
+   *
+   * The category number is displayed within brackets after the diagnostic text.
+   * This option corresponds to the clang flag
+   * \c -fdiagnostics-show-category=id.
+   */
+  CXDiagnostic_DisplayCategoryId = 0x10,
+
+  /**
+   * Display the category name associated with this diagnostic, if any.
+   *
+   * The category name is displayed within brackets after the diagnostic text.
+   * This option corresponds to the clang flag
+   * \c -fdiagnostics-show-category=name.
+   */
+  CXDiagnostic_DisplayCategoryName = 0x20;
+
+/**
+ * Format the given diagnostic in a manner that is suitable for display.
+ *
+ * This routine will format the given diagnostic to a string, rendering
+ * the diagnostic according to the various options given. The
+ * \c clang_defaultDiagnosticDisplayOptions() function returns the set of
+ * options that most closely mimics the behavior of the clang compiler.
+ *
+ * @param Diagnostic The diagnostic to print.
+ *
+ * @param Options A set of options that control the diagnostic display,
+ * created by combining \c CXDiagnosticDisplayOptions values.
+ *
+ * @return A new string containing for formatted diagnostic.
+ */
+public static native @ByVal CXString clang_formatDiagnostic(CXDiagnostic Diagnostic,
+                                               @Cast("unsigned") int Options);
+
+/**
+ * Retrieve the set of display options most similar to the
+ * default behavior of the clang compiler.
+ *
+ * @return A set of display options suitable for use with \c
+ * clang_formatDiagnostic().
+ */
+public static native @Cast("unsigned") int clang_defaultDiagnosticDisplayOptions();
+
+/**
+ * Determine the severity of the given diagnostic.
+ */
+public static native @Cast("CXDiagnosticSeverity") int clang_getDiagnosticSeverity(CXDiagnostic arg0);
+
+/**
+ * Retrieve the source location of the given diagnostic.
+ *
+ * This location is where Clang would print the caret ('^') when
+ * displaying the diagnostic on the command line.
+ */
+public static native @ByVal CXSourceLocation clang_getDiagnosticLocation(CXDiagnostic arg0);
+
+/**
+ * Retrieve the text of the given diagnostic.
+ */
+public static native @ByVal CXString clang_getDiagnosticSpelling(CXDiagnostic arg0);
+
+/**
+ * Retrieve the name of the command-line option that enabled this
+ * diagnostic.
+ *
+ * @param Diag The diagnostic to be queried.
+ *
+ * @param Disable If non-NULL, will be set to the option that disables this
+ * diagnostic (if any).
+ *
+ * @return A string that contains the command-line option used to enable this
+ * warning, such as "-Wconversion" or "-pedantic".
+ */
+public static native @ByVal CXString clang_getDiagnosticOption(CXDiagnostic Diag,
+                                                  CXString Disable);
+
+/**
+ * Retrieve the category number for this diagnostic.
+ *
+ * Diagnostics can be categorized into groups along with other, related
+ * diagnostics (e.g., diagnostics under the same warning flag). This routine
+ * retrieves the category number for the given diagnostic.
+ *
+ * @return The number of the category that contains this diagnostic, or zero
+ * if this diagnostic is uncategorized.
+ */
+public static native @Cast("unsigned") int clang_getDiagnosticCategory(CXDiagnostic arg0);
+
+/**
+ * Retrieve the name of a particular diagnostic category.  This
+ *  is now deprecated.  Use clang_getDiagnosticCategoryText()
+ *  instead.
+ *
+ * @param Category A diagnostic category number, as returned by
+ * \c clang_getDiagnosticCategory().
+ *
+ * @return The name of the given diagnostic category.
+ */
+public static native @ByVal CXString clang_getDiagnosticCategoryName(@Cast("unsigned") int Category);
+
+/**
+ * Retrieve the diagnostic category text for a given diagnostic.
+ *
+ * @return The text of the given diagnostic category.
+ */
+public static native @ByVal CXString clang_getDiagnosticCategoryText(CXDiagnostic arg0);
+
+/**
+ * Determine the number of source ranges associated with the given
+ * diagnostic.
+ */
+public static native @Cast("unsigned") int clang_getDiagnosticNumRanges(CXDiagnostic arg0);
+
+/**
+ * Retrieve a source range associated with the diagnostic.
+ *
+ * A diagnostic's source ranges highlight important elements in the source
+ * code. On the command line, Clang displays source ranges by
+ * underlining them with '~' characters.
+ *
+ * @param Diagnostic the diagnostic whose range is being extracted.
+ *
+ * @param Range the zero-based index specifying which range to
+ *
+ * @return the requested source range.
+ */
+public static native @ByVal CXSourceRange clang_getDiagnosticRange(CXDiagnostic Diagnostic,
+                                                      @Cast("unsigned") int Range);
+
+/**
+ * Determine the number of fix-it hints associated with the
+ * given diagnostic.
+ */
+public static native @Cast("unsigned") int clang_getDiagnosticNumFixIts(CXDiagnostic Diagnostic);
+
+/**
+ * Retrieve the replacement information for a given fix-it.
+ *
+ * Fix-its are described in terms of a source range whose contents
+ * should be replaced by a string. This approach generalizes over
+ * three kinds of operations: removal of source code (the range covers
+ * the code to be removed and the replacement string is empty),
+ * replacement of source code (the range covers the code to be
+ * replaced and the replacement string provides the new code), and
+ * insertion (both the start and end of the range point at the
+ * insertion location, and the replacement string provides the text to
+ * insert).
+ *
+ * @param Diagnostic The diagnostic whose fix-its are being queried.
+ *
+ * @param FixIt The zero-based index of the fix-it.
+ *
+ * @param ReplacementRange The source range whose contents will be
+ * replaced with the returned replacement string. Note that source
+ * ranges are half-open ranges [a, b), so the source code should be
+ * replaced from a and up to (but not including) b.
+ *
+ * @return A string containing text that should be replace the source
+ * code indicated by the \c ReplacementRange.
+ */
+public static native @ByVal CXString clang_getDiagnosticFixIt(
+    CXDiagnostic Diagnostic, @Cast("unsigned") int FixIt, CXSourceRange ReplacementRange);
+
+/**
+ * \}
+ */
+
+// #endif
+
+
 // Parsed from <clang-c/Index.h>
 
 /*===-- clang-c/Index.h - Indexing Public C Interface -------------*- C -*-===*\
@@ -510,10 +1244,11 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
 // #ifndef LLVM_CLANG_C_INDEX_H
 // #define LLVM_CLANG_C_INDEX_H
 
-// #include <time.h>
-
 // #include "clang-c/BuildSystem.h"
+// #include "clang-c/CXDiagnostic.h"
 // #include "clang-c/CXErrorCode.h"
+// #include "clang-c/CXFile.h"
+// #include "clang-c/CXSourceLocation.h"
 // #include "clang-c/CXString.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Platform.h"
@@ -527,7 +1262,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
  * compatible, thus CINDEX_VERSION_MAJOR is expected to remain stable.
  */
 public static final int CINDEX_VERSION_MAJOR = 0;
-public static final int CINDEX_VERSION_MINOR = 62;
+public static final int CINDEX_VERSION_MINOR = 63;
 
 // #define CINDEX_VERSION_ENCODE(major, minor) (((major)*10000) + ((minor)*1))
 
@@ -758,32 +1493,6 @@ public static native @Cast("unsigned") int clang_CXIndex_getGlobalOptions(CXInde
  */
 public static native void clang_CXIndex_setInvocationEmissionPathOption(CXIndex arg0, @Cast("const char*") BytePointer Path);
 public static native void clang_CXIndex_setInvocationEmissionPathOption(CXIndex arg0, String Path);
-// Targeting ../clang/CXFile.java
-
-
-
-/**
- * Retrieve the complete file and path name of the given file.
- */
-public static native @ByVal CXString clang_getFileName(CXFile SFile);
-
-/**
- * Retrieve the last modification time of the given file.
- */
-public static native @ByVal @Cast("time_t*") Pointer clang_getFileTime(CXFile SFile);
-// Targeting ../clang/CXFileUniqueID.java
-
-
-
-/**
- * Retrieve the unique ID for the given \c file.
- *
- * @param file the file to get the ID for.
- * @param outID stores the returned CXFileUniqueID.
- * @return If there was a failure getting the unique ID, returns non-zero,
- * otherwise returns 0.
- */
-public static native int clang_getFileUniqueID(CXFile file, CXFileUniqueID outID);
 
 /**
  * Determine whether the given header is guarded against
@@ -824,41 +1533,6 @@ public static native @Cast("const char*") BytePointer clang_getFileContents(CXTr
                                                  CXFile file, @Cast("size_t*") SizeTPointer size);
 
 /**
- * Returns non-zero if the \c file1 and \c file2 point to the same file,
- * or they are both NULL.
- */
-public static native int clang_File_isEqual(CXFile file1, CXFile file2);
-
-/**
- * Returns the real path name of \c file.
- *
- * An empty string may be returned. Use \c clang_getFileName() in that case.
- */
-public static native @ByVal CXString clang_File_tryGetRealPathName(CXFile file);
-// Targeting ../clang/CXSourceLocation.java
-
-
-// Targeting ../clang/CXSourceRange.java
-
-
-
-/**
- * Retrieve a NULL (invalid) source location.
- */
-public static native @ByVal CXSourceLocation clang_getNullLocation();
-
-/**
- * Determine whether two source locations, which must refer into
- * the same translation unit, refer to exactly the same point in the source
- * code.
- *
- * @return non-zero if the source locations refer to the same location, zero
- * if they refer to different locations.
- */
-public static native @Cast("unsigned") int clang_equalLocations(@ByVal CXSourceLocation loc1,
-                                             @ByVal CXSourceLocation loc2);
-
-/**
  * Retrieves the source location associated with a given file/line/column
  * in a particular translation unit.
  */
@@ -872,231 +1546,6 @@ public static native @ByVal CXSourceLocation clang_getLocation(CXTranslationUnit
 public static native @ByVal CXSourceLocation clang_getLocationForOffset(CXTranslationUnit tu,
                                                            CXFile file,
                                                            @Cast("unsigned") int offset);
-
-/**
- * Returns non-zero if the given source location is in a system header.
- */
-public static native int clang_Location_isInSystemHeader(@ByVal CXSourceLocation location);
-
-/**
- * Returns non-zero if the given source location is in the main file of
- * the corresponding translation unit.
- */
-public static native int clang_Location_isFromMainFile(@ByVal CXSourceLocation location);
-
-/**
- * Retrieve a NULL (invalid) source range.
- */
-public static native @ByVal CXSourceRange clang_getNullRange();
-
-/**
- * Retrieve a source range given the beginning and ending source
- * locations.
- */
-public static native @ByVal CXSourceRange clang_getRange(@ByVal CXSourceLocation begin,
-                                            @ByVal CXSourceLocation end);
-
-/**
- * Determine whether two ranges are equivalent.
- *
- * @return non-zero if the ranges are the same, zero if they differ.
- */
-public static native @Cast("unsigned") int clang_equalRanges(@ByVal CXSourceRange range1,
-                                          @ByVal CXSourceRange range2);
-
-/**
- * Returns non-zero if \p range is null.
- */
-public static native int clang_Range_isNull(@ByVal CXSourceRange range);
-
-/**
- * Retrieve the file, line, column, and offset represented by
- * the given source location.
- *
- * If the location refers into a macro expansion, retrieves the
- * location of the macro expansion.
- *
- * @param location the location within a source file that will be decomposed
- * into its parts.
- *
- * @param file [out] if non-NULL, will be set to the file to which the given
- * source location points.
- *
- * @param line [out] if non-NULL, will be set to the line to which the given
- * source location points.
- *
- * @param column [out] if non-NULL, will be set to the column to which the given
- * source location points.
- *
- * @param offset [out] if non-NULL, will be set to the offset into the
- * buffer to which the given source location points.
- */
-public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
-                                               @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
-                                               @Cast("unsigned*") IntPointer column,
-                                               @Cast("unsigned*") IntPointer offset);
-public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
-                                               @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
-                                               @Cast("unsigned*") IntBuffer column,
-                                               @Cast("unsigned*") IntBuffer offset);
-public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
-                                               @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
-                                               @Cast("unsigned*") int[] column,
-                                               @Cast("unsigned*") int[] offset);
-
-/**
- * Retrieve the file, line and column represented by the given source
- * location, as specified in a # line directive.
- *
- * Example: given the following source code in a file somefile.c
- *
- * <pre>{@code
- * #123 "dummy.c" 1
- *
- * static int func(void)
- * {
- *     return 0;
- * }
- * }</pre>
- *
- * the location information returned by this function would be
- *
- * File: dummy.c Line: 124 Column: 12
- *
- * whereas clang_getExpansionLocation would have returned
- *
- * File: somefile.c Line: 3 Column: 12
- *
- * @param location the location within a source file that will be decomposed
- * into its parts.
- *
- * @param filename [out] if non-NULL, will be set to the filename of the
- * source location. Note that filenames returned will be for "virtual" files,
- * which don't necessarily exist on the machine running clang - e.g. when
- * parsing preprocessed output obtained from a different environment. If
- * a non-NULL value is passed in, remember to dispose of the returned value
- * using \c clang_disposeString() once you've finished with it. For an invalid
- * source location, an empty string is returned.
- *
- * @param line [out] if non-NULL, will be set to the line number of the
- * source location. For an invalid source location, zero is returned.
- *
- * @param column [out] if non-NULL, will be set to the column number of the
- * source location. For an invalid source location, zero is returned.
- */
-public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
-                                              CXString filename,
-                                              @Cast("unsigned*") IntPointer line, @Cast("unsigned*") IntPointer column);
-public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
-                                              CXString filename,
-                                              @Cast("unsigned*") IntBuffer line, @Cast("unsigned*") IntBuffer column);
-public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
-                                              CXString filename,
-                                              @Cast("unsigned*") int[] line, @Cast("unsigned*") int[] column);
-
-/**
- * Legacy API to retrieve the file, line, column, and offset represented
- * by the given source location.
- *
- * This interface has been replaced by the newer interface
- * #clang_getExpansionLocation(). See that interface's documentation for
- * details.
- */
-public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
-                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
-                                                   @Cast("unsigned*") IntPointer column,
-                                                   @Cast("unsigned*") IntPointer offset);
-public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
-                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
-                                                   @Cast("unsigned*") IntBuffer column,
-                                                   @Cast("unsigned*") IntBuffer offset);
-public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation location,
-                                                   @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
-                                                   @Cast("unsigned*") int[] column,
-                                                   @Cast("unsigned*") int[] offset);
-
-/**
- * Retrieve the file, line, column, and offset represented by
- * the given source location.
- *
- * If the location refers into a macro instantiation, return where the
- * location was originally spelled in the source file.
- *
- * @param location the location within a source file that will be decomposed
- * into its parts.
- *
- * @param file [out] if non-NULL, will be set to the file to which the given
- * source location points.
- *
- * @param line [out] if non-NULL, will be set to the line to which the given
- * source location points.
- *
- * @param column [out] if non-NULL, will be set to the column to which the given
- * source location points.
- *
- * @param offset [out] if non-NULL, will be set to the offset into the
- * buffer to which the given source location points.
- */
-public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
-                                              @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
-                                              @Cast("unsigned*") IntPointer column,
-                                              @Cast("unsigned*") IntPointer offset);
-public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
-                                              @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
-                                              @Cast("unsigned*") IntBuffer column,
-                                              @Cast("unsigned*") IntBuffer offset);
-public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
-                                              @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
-                                              @Cast("unsigned*") int[] column,
-                                              @Cast("unsigned*") int[] offset);
-
-/**
- * Retrieve the file, line, column, and offset represented by
- * the given source location.
- *
- * If the location refers into a macro expansion, return where the macro was
- * expanded or where the macro argument was written, if the location points at
- * a macro argument.
- *
- * @param location the location within a source file that will be decomposed
- * into its parts.
- *
- * @param file [out] if non-NULL, will be set to the file to which the given
- * source location points.
- *
- * @param line [out] if non-NULL, will be set to the line to which the given
- * source location points.
- *
- * @param column [out] if non-NULL, will be set to the column to which the given
- * source location points.
- *
- * @param offset [out] if non-NULL, will be set to the offset into the
- * buffer to which the given source location points.
- */
-public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
-                                          @ByPtrPtr CXFile file, @Cast("unsigned*") IntPointer line,
-                                          @Cast("unsigned*") IntPointer column, @Cast("unsigned*") IntPointer offset);
-public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
-                                          @ByPtrPtr CXFile file, @Cast("unsigned*") IntBuffer line,
-                                          @Cast("unsigned*") IntBuffer column, @Cast("unsigned*") IntBuffer offset);
-public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
-                                          @ByPtrPtr CXFile file, @Cast("unsigned*") int[] line,
-                                          @Cast("unsigned*") int[] column, @Cast("unsigned*") int[] offset);
-
-/**
- * Retrieve a source location representing the first character within a
- * source range.
- */
-public static native @ByVal CXSourceLocation clang_getRangeStart(@ByVal CXSourceRange range);
-
-/**
- * Retrieve a source location representing the last character within a
- * source range.
- */
-public static native @ByVal CXSourceLocation clang_getRangeEnd(@ByVal CXSourceRange range);
-// Targeting ../clang/CXSourceRangeList.java
-
-
 
 /**
  * Retrieve all ranges that were skipped by the preprocessor.
@@ -1115,147 +1564,6 @@ public static native CXSourceRangeList clang_getSkippedRanges(CXTranslationUnit 
  * if/ifdef/ifndef directive whose condition does not evaluate to true.
  */
 public static native CXSourceRangeList clang_getAllSkippedRanges(CXTranslationUnit tu);
-
-/**
- * Destroy the given \c CXSourceRangeList.
- */
-public static native void clang_disposeSourceRangeList(CXSourceRangeList ranges);
-
-/**
- * \}
- */
-
-/**
- * \defgroup CINDEX_DIAG Diagnostic reporting
- *
- * \{
- */
-
-/**
- * Describes the severity of a particular diagnostic.
- */
-/** enum CXDiagnosticSeverity */
-public static final int
-  /**
-   * A diagnostic that has been suppressed, e.g., by a command-line
-   * option.
-   */
-  CXDiagnostic_Ignored = 0,
-
-  /**
-   * This diagnostic is a note that should be attached to the
-   * previous (non-note) diagnostic.
-   */
-  CXDiagnostic_Note = 1,
-
-  /**
-   * This diagnostic indicates suspicious code that may not be
-   * wrong.
-   */
-  CXDiagnostic_Warning = 2,
-
-  /**
-   * This diagnostic indicates that the code is ill-formed.
-   */
-  CXDiagnostic_Error = 3,
-
-  /**
-   * This diagnostic indicates that the code is ill-formed such
-   * that future parser recovery is unlikely to produce useful
-   * results.
-   */
-  CXDiagnostic_Fatal = 4;
-// Targeting ../clang/CXDiagnostic.java
-
-
-// Targeting ../clang/CXDiagnosticSet.java
-
-
-
-/**
- * Determine the number of diagnostics in a CXDiagnosticSet.
- */
-public static native @Cast("unsigned") int clang_getNumDiagnosticsInSet(CXDiagnosticSet Diags);
-
-/**
- * Retrieve a diagnostic associated with the given CXDiagnosticSet.
- *
- * @param Diags the CXDiagnosticSet to query.
- * @param Index the zero-based diagnostic number to retrieve.
- *
- * @return the requested diagnostic. This diagnostic must be freed
- * via a call to \c clang_disposeDiagnostic().
- */
-public static native CXDiagnostic clang_getDiagnosticInSet(CXDiagnosticSet Diags,
-                                                     @Cast("unsigned") int Index);
-
-/**
- * Describes the kind of error that occurred (if any) in a call to
- * \c clang_loadDiagnostics.
- */
-/** enum CXLoadDiag_Error */
-public static final int
-  /**
-   * Indicates that no error occurred.
-   */
-  CXLoadDiag_None = 0,
-
-  /**
-   * Indicates that an unknown error occurred while attempting to
-   * deserialize diagnostics.
-   */
-  CXLoadDiag_Unknown = 1,
-
-  /**
-   * Indicates that the file containing the serialized diagnostics
-   * could not be opened.
-   */
-  CXLoadDiag_CannotLoad = 2,
-
-  /**
-   * Indicates that the serialized diagnostics file is invalid or
-   * corrupt.
-   */
-  CXLoadDiag_InvalidFile = 3;
-
-/**
- * Deserialize a set of diagnostics from a Clang diagnostics bitcode
- * file.
- *
- * @param file The name of the file to deserialize.
- * @param error A pointer to a enum value recording if there was a problem
- *        deserializing the diagnostics.
- * @param errorString A pointer to a CXString for recording the error string
- *        if the file was not successfully loaded.
- *
- * @return A loaded CXDiagnosticSet if successful, and NULL otherwise.  These
- * diagnostics should be released using clang_disposeDiagnosticSet().
- */
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") IntPointer error, CXString errorString);
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    String file, @Cast("CXLoadDiag_Error*") IntBuffer error, CXString errorString);
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") int[] error, CXString errorString);
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    String file, @Cast("CXLoadDiag_Error*") IntPointer error, CXString errorString);
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    @Cast("const char*") BytePointer file, @Cast("CXLoadDiag_Error*") IntBuffer error, CXString errorString);
-public static native CXDiagnosticSet clang_loadDiagnostics(
-    String file, @Cast("CXLoadDiag_Error*") int[] error, CXString errorString);
-
-/**
- * Release a CXDiagnosticSet and all of its contained diagnostics.
- */
-public static native void clang_disposeDiagnosticSet(CXDiagnosticSet Diags);
-
-/**
- * Retrieve the child diagnostics of a CXDiagnostic.
- *
- * This CXDiagnosticSet does not need to be released by
- * clang_disposeDiagnosticSet.
- */
-public static native CXDiagnosticSet clang_getChildDiagnostics(CXDiagnostic D);
 
 /**
  * Determine the number of diagnostics produced for the given
@@ -1282,230 +1590,6 @@ public static native CXDiagnostic clang_getDiagnostic(CXTranslationUnit Unit,
  * @param Unit the translation unit to query.
  */
 public static native CXDiagnosticSet clang_getDiagnosticSetFromTU(CXTranslationUnit Unit);
-
-/**
- * Destroy a diagnostic.
- */
-public static native void clang_disposeDiagnostic(CXDiagnostic Diagnostic);
-
-/**
- * Options to control the display of diagnostics.
- *
- * The values in this enum are meant to be combined to customize the
- * behavior of \c clang_formatDiagnostic().
- */
-/** enum CXDiagnosticDisplayOptions */
-public static final int
-  /**
-   * Display the source-location information where the
-   * diagnostic was located.
-   *
-   * When set, diagnostics will be prefixed by the file, line, and
-   * (optionally) column to which the diagnostic refers. For example,
-   *
-   * <pre>{@code
-   * test.c:28: warning: extra tokens at end of #endif directive
-   * }</pre>
-   *
-   * This option corresponds to the clang flag \c -fshow-source-location.
-   */
-  CXDiagnostic_DisplaySourceLocation = 0x01,
-
-  /**
-   * If displaying the source-location information of the
-   * diagnostic, also include the column number.
-   *
-   * This option corresponds to the clang flag \c -fshow-column.
-   */
-  CXDiagnostic_DisplayColumn = 0x02,
-
-  /**
-   * If displaying the source-location information of the
-   * diagnostic, also include information about source ranges in a
-   * machine-parsable format.
-   *
-   * This option corresponds to the clang flag
-   * \c -fdiagnostics-print-source-range-info.
-   */
-  CXDiagnostic_DisplaySourceRanges = 0x04,
-
-  /**
-   * Display the option name associated with this diagnostic, if any.
-   *
-   * The option name displayed (e.g., -Wconversion) will be placed in brackets
-   * after the diagnostic text. This option corresponds to the clang flag
-   * \c -fdiagnostics-show-option.
-   */
-  CXDiagnostic_DisplayOption = 0x08,
-
-  /**
-   * Display the category number associated with this diagnostic, if any.
-   *
-   * The category number is displayed within brackets after the diagnostic text.
-   * This option corresponds to the clang flag
-   * \c -fdiagnostics-show-category=id.
-   */
-  CXDiagnostic_DisplayCategoryId = 0x10,
-
-  /**
-   * Display the category name associated with this diagnostic, if any.
-   *
-   * The category name is displayed within brackets after the diagnostic text.
-   * This option corresponds to the clang flag
-   * \c -fdiagnostics-show-category=name.
-   */
-  CXDiagnostic_DisplayCategoryName = 0x20;
-
-/**
- * Format the given diagnostic in a manner that is suitable for display.
- *
- * This routine will format the given diagnostic to a string, rendering
- * the diagnostic according to the various options given. The
- * \c clang_defaultDiagnosticDisplayOptions() function returns the set of
- * options that most closely mimics the behavior of the clang compiler.
- *
- * @param Diagnostic The diagnostic to print.
- *
- * @param Options A set of options that control the diagnostic display,
- * created by combining \c CXDiagnosticDisplayOptions values.
- *
- * @return A new string containing for formatted diagnostic.
- */
-public static native @ByVal CXString clang_formatDiagnostic(CXDiagnostic Diagnostic,
-                                               @Cast("unsigned") int Options);
-
-/**
- * Retrieve the set of display options most similar to the
- * default behavior of the clang compiler.
- *
- * @return A set of display options suitable for use with \c
- * clang_formatDiagnostic().
- */
-public static native @Cast("unsigned") int clang_defaultDiagnosticDisplayOptions();
-
-/**
- * Determine the severity of the given diagnostic.
- */
-public static native @Cast("CXDiagnosticSeverity") int clang_getDiagnosticSeverity(CXDiagnostic arg0);
-
-/**
- * Retrieve the source location of the given diagnostic.
- *
- * This location is where Clang would print the caret ('^') when
- * displaying the diagnostic on the command line.
- */
-public static native @ByVal CXSourceLocation clang_getDiagnosticLocation(CXDiagnostic arg0);
-
-/**
- * Retrieve the text of the given diagnostic.
- */
-public static native @ByVal CXString clang_getDiagnosticSpelling(CXDiagnostic arg0);
-
-/**
- * Retrieve the name of the command-line option that enabled this
- * diagnostic.
- *
- * @param Diag The diagnostic to be queried.
- *
- * @param Disable If non-NULL, will be set to the option that disables this
- * diagnostic (if any).
- *
- * @return A string that contains the command-line option used to enable this
- * warning, such as "-Wconversion" or "-pedantic".
- */
-public static native @ByVal CXString clang_getDiagnosticOption(CXDiagnostic Diag,
-                                                  CXString Disable);
-
-/**
- * Retrieve the category number for this diagnostic.
- *
- * Diagnostics can be categorized into groups along with other, related
- * diagnostics (e.g., diagnostics under the same warning flag). This routine
- * retrieves the category number for the given diagnostic.
- *
- * @return The number of the category that contains this diagnostic, or zero
- * if this diagnostic is uncategorized.
- */
-public static native @Cast("unsigned") int clang_getDiagnosticCategory(CXDiagnostic arg0);
-
-/**
- * Retrieve the name of a particular diagnostic category.  This
- *  is now deprecated.  Use clang_getDiagnosticCategoryText()
- *  instead.
- *
- * @param Category A diagnostic category number, as returned by
- * \c clang_getDiagnosticCategory().
- *
- * @return The name of the given diagnostic category.
- */
-public static native @ByVal CXString clang_getDiagnosticCategoryName(@Cast("unsigned") int Category);
-
-/**
- * Retrieve the diagnostic category text for a given diagnostic.
- *
- * @return The text of the given diagnostic category.
- */
-public static native @ByVal CXString clang_getDiagnosticCategoryText(CXDiagnostic arg0);
-
-/**
- * Determine the number of source ranges associated with the given
- * diagnostic.
- */
-public static native @Cast("unsigned") int clang_getDiagnosticNumRanges(CXDiagnostic arg0);
-
-/**
- * Retrieve a source range associated with the diagnostic.
- *
- * A diagnostic's source ranges highlight important elements in the source
- * code. On the command line, Clang displays source ranges by
- * underlining them with '~' characters.
- *
- * @param Diagnostic the diagnostic whose range is being extracted.
- *
- * @param Range the zero-based index specifying which range to
- *
- * @return the requested source range.
- */
-public static native @ByVal CXSourceRange clang_getDiagnosticRange(CXDiagnostic Diagnostic,
-                                                      @Cast("unsigned") int Range);
-
-/**
- * Determine the number of fix-it hints associated with the
- * given diagnostic.
- */
-public static native @Cast("unsigned") int clang_getDiagnosticNumFixIts(CXDiagnostic Diagnostic);
-
-/**
- * Retrieve the replacement information for a given fix-it.
- *
- * Fix-its are described in terms of a source range whose contents
- * should be replaced by a string. This approach generalizes over
- * three kinds of operations: removal of source code (the range covers
- * the code to be removed and the replacement string is empty),
- * replacement of source code (the range covers the code to be
- * replaced and the replacement string provides the new code), and
- * insertion (both the start and end of the range point at the
- * insertion location, and the replacement string provides the text to
- * insert).
- *
- * @param Diagnostic The diagnostic whose fix-its are being queried.
- *
- * @param FixIt The zero-based index of the fix-it.
- *
- * @param ReplacementRange The source range whose contents will be
- * replaced with the returned replacement string. Note that source
- * ranges are half-open ranges [a, b), so the source code should be
- * replaced from a and up to (but not including) b.
- *
- * @return A string containing text that should be replace the source
- * code indicated by the \c ReplacementRange.
- */
-public static native @ByVal CXString clang_getDiagnosticFixIt(
-    CXDiagnostic Diagnostic, @Cast("unsigned") int FixIt, CXSourceRange ReplacementRange);
-
-/**
- * \}
- */
 
 /**
  * \defgroup CINDEX_TRANSLATION_UNIT Translation unit manipulation
@@ -2698,7 +2782,13 @@ public static final int
    */
   CXCursor_RequiresExpr = 154,
 
-  CXCursor_LastExpr = CXCursor_RequiresExpr,
+  /**
+   * Expression that references a C++20 parenthesized list aggregate
+   * initializer.
+   */
+  CXCursor_CXXParenListInitExpr = 155,
+
+  CXCursor_LastExpr = CXCursor_CXXParenListInitExpr,
 
   /* Statements */
   CXCursor_FirstStmt = 200,
@@ -3145,7 +3235,11 @@ public static final int
    */
   CXCursor_OMPParallelMaskedTaskLoopSimdDirective = 304,
 
-  CXCursor_LastStmt = CXCursor_OMPParallelMaskedTaskLoopSimdDirective,
+  /** OpenMP error directive.
+   */
+  CXCursor_OMPErrorDirective = 305,
+
+  CXCursor_LastStmt = CXCursor_OMPErrorDirective,
 
   /**
    * Cursor that represents the translation unit itself.
@@ -4041,8 +4135,8 @@ public static final int
   CXTemplateArgumentKind_Invalid = 9;
 
 /**
- *Returns the number of template args of a function decl representing a
- * template specialization.
+ * Returns the number of template args of a function, struct, or class decl
+ * representing a template specialization.
  *
  * If the argument cursor cannot be converted into a template function
  * declaration, -1 is returned.
@@ -4061,8 +4155,9 @@ public static native int clang_Cursor_getNumTemplateArguments(@ByVal CXCursor C)
 /**
  * Retrieve the kind of the I'th template argument of the CXCursor C.
  *
- * If the argument CXCursor does not represent a FunctionDecl, an invalid
- * template argument kind is returned.
+ * If the argument CXCursor does not represent a FunctionDecl, StructDecl, or
+ * ClassTemplatePartialSpecialization, an invalid template argument kind is
+ * returned.
  *
  * For example, for the following declaration and specialization:
  *   template <typename T, int kInt, bool kBool>
@@ -4080,9 +4175,9 @@ public static native @Cast("CXTemplateArgumentKind") int clang_Cursor_getTemplat
  * Retrieve a CXType representing the type of a TemplateArgument of a
  *  function decl representing a template specialization.
  *
- * If the argument CXCursor does not represent a FunctionDecl whose I'th
- * template argument has a kind of CXTemplateArgKind_Integral, an invalid type
- * is returned.
+ * If the argument CXCursor does not represent a FunctionDecl, StructDecl,
+ * ClassDecl or ClassTemplatePartialSpecialization whose I'th template argument
+ * has a kind of CXTemplateArgKind_Integral, an invalid type is returned.
  *
  * For example, for the following declaration and specialization:
  *   template <typename T, int kInt, bool kBool>
@@ -4102,7 +4197,8 @@ public static native @ByVal CXType clang_Cursor_getTemplateArgumentType(@ByVal C
  *  decl representing a template specialization) as a signed long long.
  *
  * It is undefined to call this function on a CXCursor that does not represent a
- * FunctionDecl or whose I'th template argument is not an integral value.
+ * FunctionDecl, StructDecl, ClassDecl or ClassTemplatePartialSpecialization
+ * whose I'th template argument is not an integral value.
  *
  * For example, for the following declaration and specialization:
  *   template <typename T, int kInt, bool kBool>
@@ -4122,7 +4218,8 @@ public static native long clang_Cursor_getTemplateArgumentValue(@ByVal CXCursor 
  *  decl representing a template specialization) as an unsigned long long.
  *
  * It is undefined to call this function on a CXCursor that does not represent a
- * FunctionDecl or whose I'th template argument is not an integral value.
+ * FunctionDecl, StructDecl, ClassDecl or ClassTemplatePartialSpecialization or
+ * whose I'th template argument is not an integral value.
  *
  * For example, for the following declaration and specialization:
  *   template <typename T, int kInt, bool kBool>
@@ -4207,6 +4304,54 @@ public static native @ByVal CXString clang_getTypedefName(@ByVal CXType CT);
  * For pointer types, returns the type of the pointee.
  */
 public static native @ByVal CXType clang_getPointeeType(@ByVal CXType T);
+
+/**
+ * Retrieve the unqualified variant of the given type, removing as
+ * little sugar as possible.
+ *
+ * For example, given the following series of typedefs:
+ *
+ * <pre>{@code
+ * typedef int Integer;
+ * typedef const Integer CInteger;
+ * typedef CInteger DifferenceType;
+ * }</pre>
+ *
+ * Executing \c clang_getUnqualifiedType() on a \c CXType that
+ * represents \c DifferenceType, will desugar to a type representing
+ * \c Integer, that has no qualifiers.
+ *
+ * And, executing \c clang_getUnqualifiedType() on the type of the
+ * first argument of the following function declaration:
+ *
+ * <pre>{@code
+ * void foo(const int);
+ * }</pre>
+ *
+ * Will return a type representing \c int, removing the \c const
+ * qualifier.
+ *
+ * Sugar over array types is not desugared.
+ *
+ * A type can be checked for qualifiers with \c
+ * clang_isConstQualifiedType(), \c clang_isVolatileQualifiedType()
+ * and \c clang_isRestrictQualifiedType().
+ *
+ * A type that resulted from a call to \c clang_getUnqualifiedType
+ * will return \c false for all of the above calls.
+ */
+public static native @ByVal CXType clang_getUnqualifiedType(@ByVal CXType CT);
+
+/**
+ * For reference types (e.g., "const int&"), returns the type that the
+ * reference refers to (e.g "const int").
+ *
+ * Otherwise, returns the type itself.
+ *
+ * A type that has kind \c CXType_LValueReference or
+ * \c CXType_RValueReference is a reference type.
+ */
+public static native @ByVal CXType clang_getNonReferenceType(@ByVal CXType CT);
 
 /**
  * Return the cursor for the declaration of the given type.
@@ -5293,6 +5438,11 @@ public static native @Cast("unsigned") int clang_CXXField_isMutable(@ByVal CXCur
 public static native @Cast("unsigned") int clang_CXXMethod_isDefaulted(@ByVal CXCursor C);
 
 /**
+ * Determine if a C++ method is declared '= delete'.
+ */
+public static native @Cast("unsigned") int clang_CXXMethod_isDeleted(@ByVal CXCursor C);
+
+/**
  * Determine if a C++ member function or member function template is
  * pure virtual.
  */
@@ -5310,6 +5460,56 @@ public static native @Cast("unsigned") int clang_CXXMethod_isStatic(@ByVal CXCur
  * one of the base classes.
  */
 public static native @Cast("unsigned") int clang_CXXMethod_isVirtual(@ByVal CXCursor C);
+
+/**
+ * Determine if a C++ member function is a copy-assignment operator,
+ * returning 1 if such is the case and 0 otherwise.
+ *
+ * > A copy-assignment operator {@code X::operator=} is a non-static,
+ * > non-template member function of _class_ {@code X} with exactly one
+ * > parameter of type {@code X}, {@code X&}, {@code const X&}, {@code volatile X&} or {@code const
+ * > volatile X&}.
+ *
+ * That is, for example, the {@code operator=} in:
+ *
+ *    class Foo {
+ *        bool operator=(const volatile Foo&);
+ *    };
+ *
+ * Is a copy-assignment operator, while the {@code operator=} in:
+ *
+ *    class Bar {
+ *        bool operator=(const int&);
+ *    };
+ *
+ * Is not.
+ */
+public static native @Cast("unsigned") int clang_CXXMethod_isCopyAssignmentOperator(@ByVal CXCursor C);
+
+/**
+ * Determine if a C++ member function is a move-assignment operator,
+ * returning 1 if such is the case and 0 otherwise.
+ *
+ * > A move-assignment operator {@code X::operator=} is a non-static,
+ * > non-template member function of _class_ {@code X} with exactly one
+ * > parameter of type {@code X&&}, {@code const X&&}, {@code volatile X&&} or {@code const
+ * > volatile X&&}.
+ *
+ * That is, for example, the {@code operator=} in:
+ *
+ *    class Foo {
+ *        bool operator=(const volatile Foo&&);
+ *    };
+ *
+ * Is a move-assignment operator, while the {@code operator=} in:
+ *
+ *    class Bar {
+ *        bool operator=(const int&&);
+ *    };
+ *
+ * Is not.
+ */
+public static native @Cast("unsigned") int clang_CXXMethod_isMoveAssignmentOperator(@ByVal CXCursor C);
 
 /**
  * Determine if a C++ record is abstract, i.e. whether a class or struct
@@ -7055,6 +7255,7 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 // #ifndef LLVM_CLANG_C_DOCUMENTATION_H
 // #define LLVM_CLANG_C_DOCUMENTATION_H
 
+// #include "clang-c/CXErrorCode.h"
 // #include "clang-c/ExternC.h"
 // #include "clang-c/Index.h"
 // Targeting ../clang/CXComment.java
@@ -7544,6 +7745,69 @@ public static native @ByVal CXString clang_FullComment_getAsHTML(@ByVal CXCommen
  * @return string containing an XML document.
  */
 public static native @ByVal CXString clang_FullComment_getAsXML(@ByVal CXComment Comment);
+// Targeting ../clang/CXAPISet.java
+
+
+
+/**
+ * Traverses the translation unit to create a \c CXAPISet.
+ *
+ * @param tu is the \c CXTranslationUnit to build the \c CXAPISet for.
+ *
+ * @param out_api is a pointer to the output of this function. It is needs to be
+ * disposed of by calling clang_disposeAPISet.
+ *
+ * @return Error code indicating success or failure of the APISet creation.
+ */
+public static native @Cast("CXErrorCode") int clang_createAPISet(CXTranslationUnit tu,
+                                                   @ByPtrPtr CXAPISet out_api);
+public static native @Cast("CXErrorCode") int clang_createAPISet(CXTranslationUnit tu,
+                                                   @Cast("CXAPISet*") PointerPointer out_api);
+
+/**
+ * Dispose of an APISet.
+ *
+ * The provided \c CXAPISet can not be used after this function is called.
+ */
+public static native void clang_disposeAPISet(CXAPISet api);
+
+/**
+ * Generate a single symbol symbol graph for the given USR. Returns a null
+ * string if the associated symbol can not be found in the provided \c CXAPISet.
+ *
+ * The output contains the symbol graph as well as some additional information
+ * about related symbols.
+ *
+ * @param usr is a string containing the USR of the symbol to generate the
+ * symbol graph for.
+ *
+ * @param api the \c CXAPISet to look for the symbol in.
+ *
+ * @return a string containing the serialized symbol graph representation for
+ * the symbol being queried or a null string if it can not be found in the
+ * APISet.
+ */
+public static native @ByVal CXString clang_getSymbolGraphForUSR(@Cast("const char*") BytePointer usr,
+                                                   CXAPISet api);
+public static native @ByVal CXString clang_getSymbolGraphForUSR(String usr,
+                                                   CXAPISet api);
+
+/**
+ * Generate a single symbol symbol graph for the declaration at the given
+ * cursor. Returns a null string if the AST node for the cursor isn't a
+ * declaration.
+ *
+ * The output contains the symbol graph as well as some additional information
+ * about related symbols.
+ *
+ * @param cursor the declaration for which to generate the single symbol symbol
+ * graph.
+ *
+ * @return a string containing the serialized symbol graph representation for
+ * the symbol being queried or a null string if it can not be found in the
+ * APISet.
+ */
+public static native @ByVal CXString clang_getSymbolGraphForCursor(@ByVal CXCursor cursor);
 
 /**
  * \}

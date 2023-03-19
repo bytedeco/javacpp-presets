@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2015-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -28,8 +28,9 @@ import org.bytedeco.javacpp.tools.*;
 @Properties(inherit = LLVM.class, target = "org.bytedeco.llvm.clang", global = "org.bytedeco.llvm.global.clang", value = {@Platform(
     value = {"linux", "macosx", "windows"},
     include = {"<clang-c/Platform.h>", "<clang-c/CXErrorCode.h>", "<clang-c/CXString.h>", "<clang-c/CXCompilationDatabase.h>",
-               "<clang-c/BuildSystem.h>", "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
-    compiler = "cpp14", link = "clang@.15"), @Platform(value = "windows", link = "libclang") })
+               "<clang-c/BuildSystem.h>", "<clang-c/CXFile.h>", "<clang-c/CXSourceLocation.h>", "<clang-c/CXDiagnostic.h>",
+               "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
+    compiler = "cpp17", link = "clang@.16"), @Platform(value = "windows", link = "libclang") })
 @NoException
 public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -73,11 +74,13 @@ public class clang implements InfoMapper {
                .put(new Info("CXTargetInfoImpl").pointerTypes("CXTargetInfo"))
                .put(new Info("CXTranslationUnitImpl").pointerTypes("CXTranslationUnit"))
                .put(new Info("CXCursorSetImpl").pointerTypes("CXCursorSet"))
+               .put(new Info("CXAPISetImpl").pointerTypes("CXAPISet"))
 
                .put(new Info("CXVirtualFileOverlay").valueTypes("CXVirtualFileOverlay").pointerTypes("@ByPtrPtr CXVirtualFileOverlay", "@Cast(\"CXVirtualFileOverlay*\") PointerPointer"))
                .put(new Info("CXModuleMapDescriptor").valueTypes("CXModuleMapDescriptor").pointerTypes("@ByPtrPtr CXModuleMapDescriptor", "@Cast(\"CXModuleMapDescriptor*\") PointerPointer"))
                .put(new Info("CXTargetInfo").valueTypes("CXTargetInfo").pointerTypes("@ByPtrPtr CXTargetInfo", "@Cast(\"CXTargetInfo*\") PointerPointer"))
                .put(new Info("CXTranslationUnit").valueTypes("CXTranslationUnit").pointerTypes("@ByPtrPtr CXTranslationUnit", "@Cast(\"CXTranslationUnit*\") PointerPointer"))
-               .put(new Info("CXCursorSet").valueTypes("CXCursorSet").pointerTypes("@ByPtrPtr CXCursorSet", "@Cast(\"CXCursorSet*\") PointerPointer"));
+               .put(new Info("CXCursorSet").valueTypes("CXCursorSet").pointerTypes("@ByPtrPtr CXCursorSet", "@Cast(\"CXCursorSet*\") PointerPointer"))
+               .put(new Info("CXAPISet").valueTypes("CXAPISet").pointerTypes("@ByPtrPtr CXAPISet", "@Cast(\"CXAPISet*\") PointerPointer"));
     }
 }

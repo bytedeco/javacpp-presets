@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2022 Samuel Audet
+ * Copyright (C) 2014-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
                "<llvm-c/Comdat.h>", "<llvm-c/DebugInfo.h>", "<llvm-c/Error.h>", "<llvm-c/ErrorHandling.h>", "<llvm-c/Orc.h>", "<llvm-c/Remarks.h>",
-               "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", "<llvm-c/Transforms/AggressiveInstCombine.h>", /*"<llvm-c/Transforms/Coroutines.h>",*/ "<llvm-c/Transforms/InstCombine.h>",
+               "<llvm-c/OrcEE.h>", "<llvm-c/LLJIT.h>", /*"<llvm-c/Transforms/AggressiveInstCombine.h>", "<llvm-c/Transforms/Coroutines.h>",*/ "<llvm-c/Transforms/InstCombine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>",
                "<llvm-c/Transforms/PassBuilder.h>", "<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>", "<TargetStubs.h>"},
-    compiler = "cpp14", link = {"LLVM-15", "LTO@.15", "Remarks@.15"}, resource = {"include", "lib", "libexec", "share"}),
+    compiler = "cpp17", link = {"LLVM-16", "LTO@.16", "Remarks@.16"}, resource = {"include", "lib", "libexec", "share"}),
         @Platform(value = "macosx", link = {"LLVM", "LTO", "Remarks"}),
         @Platform(value = "windows", link = {"LLVM", "LTO", "Remarks"})})
 @NoException

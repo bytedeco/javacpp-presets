@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.10.0
+TVM_VERSION=0.11.1
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -82,6 +82,7 @@ sedinplace '/                "tornado",/a\
 # Fix compiler errors
 sedinplace 's/uint32_t _type_child_slots_can_overflow/bool _type_child_slots_can_overflow/g' include/tvm/runtime/ndarray.h
 sedinplace 's/bias\[OC\]/bias\[256\]/g' src/runtime/contrib/dnnl/dnnl_json_runtime.cc
+sedinplace 's/llvm::None/std::nullopt/g' src/target/llvm/codegen_llvm.cc
 sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
@@ -89,6 +90,7 @@ sedinplace '/candidate_path/d' python/setup.py
 sedinplace '/find_library/a\
 include_directories(SYSTEM ${USE_DNNL}/include)\
 ' cmake/modules/contrib/DNNL.cmake
+sedinplace 's/find_opencl(${USE_OPENCL})/find_package(OpenCL REQUIRED)/g' cmake/modules/OpenCL.cmake
 
 # https://github.com/apache/tvm/pull/6717
 # https://github.com/apache/tvm/pull/9138
@@ -109,7 +111,7 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-15.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-16.dylib
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib

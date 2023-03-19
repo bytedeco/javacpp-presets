@@ -83,7 +83,7 @@ runs:
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-9.0.0.6454.b4445ee52-1-any.pkg.tar.zst.sig
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-9.0.0.6454.b4445ee52-1-any.pkg.tar.zst.sig
           curl -LO http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-9.0.0.6454.b4445ee52-1-any.pkg.tar.zst.sig
-          bash -c "pacman -Rc --noconfirm mingw-w64-i686-libgccjit mingw-w64-x86_64-libgccjit"
+          bash -c "pacman -Rc --noconfirm mingw-w64-i686-libgccjit mingw-w64-x86_64-libgccjit mingw-w64-i686-gdb-multiarch mingw-w64-x86_64-gdb-multiarch"
           bash -c "pacman -U --noconfirm *.pkg.tar.zst"
         ) else (
           bash -c "pacman -Rc --noconfirm mingw-w64-i686-headers-git mingw-w64-x86_64-headers-git mingw-w64-i686-zlib mingw-w64-x86_64-zlib"
