@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>15.0.7-${project.version}</version>
+      <version>16.0.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -336,12 +336,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.14.0-${project.version}</version>
+      <version>1.14.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tvm-platform</artifactId>
-      <version>0.10.0-${project.version}</version>
+      <version>0.11.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

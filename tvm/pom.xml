@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tvm</artifactId>
-  <version>0.10.0-${project.parent.version}</version>
+  <version>0.11.1-${project.parent.version}</version>
   <name>JavaCPP Presets for TVM</name>
 
   <dependencies>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm</artifactId>
-      <version>15.0.7-${project.parent.version}</version>
+      <version>16.0.0-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -61,7 +61,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>15.0.7-${project.parent.version}</version>
+            <version>16.0.0-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>

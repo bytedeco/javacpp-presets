@@ -207,7 +207,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.24.x  https://github.com/numpy/numpy
  * SciPy 1.10.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 15.0.x  http://llvm.org/releases/download.html
+ * LLVM 16.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.20.2  https://www.libraw.org/download
@@ -231,7 +231,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.12.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.14.x  https://github.com/microsoft/onnxruntime
- * TVM 0.10.x  https://github.com/apache/tvm
+ * TVM 0.11.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

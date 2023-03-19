@@ -14,10 +14,6 @@ import static org.bytedeco.llvm.global.clang.*;
 
 
 /**
- * \}
- */
-
-/**
  * \defgroup CINDEX_LOCATIONS Physical source locations
  *
  * Clang represents physical source locations in its abstract syntax tree in

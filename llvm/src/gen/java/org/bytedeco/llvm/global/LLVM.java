@@ -467,7 +467,9 @@ public static final int
   /** 16 bit brain floating point type */
   LLVMBFloatTypeKind = 18,
   /** X86 AMX */
-  LLVMX86_AMXTypeKind = 19;
+  LLVMX86_AMXTypeKind = 19,
+  /** Target extension type */
+  LLVMTargetExtTypeKind = 20;
 
 /** enum LLVMLinkage */
 public static final int
@@ -610,7 +612,8 @@ public static final int
   LLVMInlineAsmValueKind = 23,
 
   LLVMInstructionValueKind = 24,
-  LLVMPoisonValueValueKind = 25;
+  LLVMPoisonValueValueKind = 25,
+  LLVMConstantTargetNoneValueKind = 26;
 
 /** enum LLVMIntPredicate */
 public static final int
@@ -851,6 +854,18 @@ public static native void LLVMInitializeCore(LLVMPassRegistryRef R);
     @see llvm::llvm_shutdown
     @see ManagedStatic */
 public static native void LLVMShutdown();
+
+/*===-- Version query -----------------------------------------------------===*/
+
+/**
+ * Return the major, minor, and patch version of LLVM
+ *
+ * The version components are returned via the function's three output
+ * parameters or skipped if a NULL pointer was supplied.
+ */
+public static native void LLVMGetVersion(@Cast("unsigned*") IntPointer Major, @Cast("unsigned*") IntPointer Minor, @Cast("unsigned*") IntPointer Patch);
+public static native void LLVMGetVersion(@Cast("unsigned*") IntBuffer Major, @Cast("unsigned*") IntBuffer Minor, @Cast("unsigned*") IntBuffer Patch);
+public static native void LLVMGetVersion(@Cast("unsigned*") int[] Major, @Cast("unsigned*") int[] Minor, @Cast("unsigned*") int[] Patch);
 
 /*===-- Error handling ----------------------------------------------------===*/
 
@@ -2008,6 +2023,40 @@ public static native LLVMTypeRef LLVMX86MMXType();
 public static native LLVMTypeRef LLVMX86AMXType();
 
 /**
+ * Create a target extension type in LLVM context.
+ */
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, @Cast("const char*") BytePointer Name,
+                                       @ByPtrPtr LLVMTypeRef TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") IntPointer IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, String Name,
+                                       @Cast("LLVMTypeRef*") PointerPointer TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") IntBuffer IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, @Cast("const char*") BytePointer Name,
+                                       @ByPtrPtr LLVMTypeRef TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") int[] IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, String Name,
+                                       @Cast("LLVMTypeRef*") PointerPointer TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") IntPointer IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, @Cast("const char*") BytePointer Name,
+                                       @ByPtrPtr LLVMTypeRef TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") IntBuffer IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+public static native LLVMTypeRef LLVMTargetExtTypeInContext(LLVMContextRef C, String Name,
+                                       @Cast("LLVMTypeRef*") PointerPointer TypeParams,
+                                       @Cast("unsigned") int TypeParamCount,
+                                       @Cast("unsigned*") int[] IntParams,
+                                       @Cast("unsigned") int IntParamCount);
+
+/**
  * \}
  */
 
@@ -2725,7 +2774,6 @@ public static native LLVMValueRef LLVMSizeOf(LLVMTypeRef Ty);
 public static native LLVMValueRef LLVMConstNeg(LLVMValueRef ConstantVal);
 public static native LLVMValueRef LLVMConstNSWNeg(LLVMValueRef ConstantVal);
 public static native LLVMValueRef LLVMConstNUWNeg(LLVMValueRef ConstantVal);
-public static native LLVMValueRef LLVMConstFNeg(LLVMValueRef ConstantVal);
 public static native LLVMValueRef LLVMConstNot(LLVMValueRef ConstantVal);
 public static native LLVMValueRef LLVMConstAdd(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstNSWAdd(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
@@ -2746,12 +2794,10 @@ public static native LLVMValueRef LLVMConstFCmp(@Cast("LLVMRealPredicate") int P
 public static native LLVMValueRef LLVMConstShl(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstLShr(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
 public static native LLVMValueRef LLVMConstAShr(LLVMValueRef LHSConstant, LLVMValueRef RHSConstant);
-
 public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
                            @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
                            @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
-
 public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
                                    @ByPtrPtr LLVMValueRef ConstantIndices,
                                    @Cast("unsigned") int NumIndices);
@@ -2977,8 +3023,6 @@ public static native void LLVMSetExternallyInitialized(LLVMValueRef GlobalVar, @
  *
  * \{
  */
-
-
 
 /**
  * Add a GlobalAlias with the given value type, address space and aliasee.
@@ -4363,7 +4407,6 @@ public static native LLVMValueRef LLVMBuildSwitch(LLVMBuilderRef arg0, LLVMValue
                              LLVMBasicBlockRef Else, @Cast("unsigned") int NumCases);
 public static native LLVMValueRef LLVMBuildIndirectBr(LLVMBuilderRef B, LLVMValueRef Addr,
                                  @Cast("unsigned") int NumDests);
-
 public static native LLVMValueRef LLVMBuildInvoke2(LLVMBuilderRef arg0, LLVMTypeRef Ty, LLVMValueRef Fn,
                               @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
                               LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
@@ -4642,15 +4685,11 @@ public static native LLVMValueRef LLVMBuildArrayAlloca(LLVMBuilderRef arg0, LLVM
 public static native LLVMValueRef LLVMBuildArrayAlloca(LLVMBuilderRef arg0, LLVMTypeRef Ty,
                                   LLVMValueRef Val, String Name);
 public static native LLVMValueRef LLVMBuildFree(LLVMBuilderRef arg0, LLVMValueRef PointerVal);
-
 public static native LLVMValueRef LLVMBuildLoad2(LLVMBuilderRef arg0, LLVMTypeRef Ty,
                             LLVMValueRef PointerVal, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildLoad2(LLVMBuilderRef arg0, LLVMTypeRef Ty,
                             LLVMValueRef PointerVal, String Name);
 public static native LLVMValueRef LLVMBuildStore(LLVMBuilderRef arg0, LLVMValueRef Val, LLVMValueRef Ptr);
-
-
-
 public static native LLVMValueRef LLVMBuildGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
                            LLVMValueRef Pointer, @ByPtrPtr LLVMValueRef Indices,
                            @Cast("unsigned") int NumIndices, @Cast("const char*") BytePointer Name);
@@ -4796,7 +4835,6 @@ public static native LLVMValueRef LLVMBuildFCmp(LLVMBuilderRef arg0, @Cast("LLVM
 /* Miscellaneous instructions */
 public static native LLVMValueRef LLVMBuildPhi(LLVMBuilderRef arg0, LLVMTypeRef Ty, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildPhi(LLVMBuilderRef arg0, LLVMTypeRef Ty, String Name);
-
 public static native LLVMValueRef LLVMBuildCall2(LLVMBuilderRef arg0, LLVMTypeRef arg1, LLVMValueRef Fn,
                             @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
                             @Cast("const char*") BytePointer Name);
@@ -4852,7 +4890,6 @@ public static native LLVMValueRef LLVMBuildIsNotNull(LLVMBuilderRef arg0, LLVMVa
                                 @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildIsNotNull(LLVMBuilderRef arg0, LLVMValueRef Val,
                                 String Name);
-
 public static native LLVMValueRef LLVMBuildPtrDiff2(LLVMBuilderRef arg0, LLVMTypeRef ElemTy,
                                LLVMValueRef LHS, LLVMValueRef RHS,
                                @Cast("const char*") BytePointer Name);
@@ -5639,12 +5676,9 @@ public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContex
  */
 public static native void LLVMInitializeTransformUtils(LLVMPassRegistryRef R);
 public static native void LLVMInitializeScalarOpts(LLVMPassRegistryRef R);
-public static native void LLVMInitializeObjCARCOpts(LLVMPassRegistryRef R);
 public static native void LLVMInitializeVectorization(LLVMPassRegistryRef R);
 public static native void LLVMInitializeInstCombine(LLVMPassRegistryRef R);
-public static native void LLVMInitializeAggressiveInstCombiner(LLVMPassRegistryRef R);
 public static native void LLVMInitializeIPO(LLVMPassRegistryRef R);
-public static native void LLVMInitializeInstrumentation(LLVMPassRegistryRef R);
 public static native void LLVMInitializeAnalysis(LLVMPassRegistryRef R);
 public static native void LLVMInitializeIPA(LLVMPassRegistryRef R);
 public static native void LLVMInitializeCodeGen(LLVMPassRegistryRef R);
@@ -7996,10 +8030,19 @@ public static final int
   LLVMDWARFSourceLanguageFortran08 = 34,
   LLVMDWARFSourceLanguageRenderScript = 35,
   LLVMDWARFSourceLanguageBLISS = 36,
+  LLVMDWARFSourceLanguageKotlin = 37,
+  LLVMDWARFSourceLanguageZig = 38,
+  LLVMDWARFSourceLanguageCrystal = 39,
+  LLVMDWARFSourceLanguageC_plus_plus_17 = 40,
+  LLVMDWARFSourceLanguageC_plus_plus_20 = 41,
+  LLVMDWARFSourceLanguageC17 = 42,
+  LLVMDWARFSourceLanguageFortran18 = 43,
+  LLVMDWARFSourceLanguageAda2005 = 44,
+  LLVMDWARFSourceLanguageAda2012 = 45,
   // Vendor extensions:
-  LLVMDWARFSourceLanguageMips_Assembler = 37,
-  LLVMDWARFSourceLanguageGOOGLE_RenderScript = 38,
-  LLVMDWARFSourceLanguageBORLAND_Delphi = 39;
+  LLVMDWARFSourceLanguageMips_Assembler = 46,
+  LLVMDWARFSourceLanguageGOOGLE_RenderScript = 47,
+  LLVMDWARFSourceLanguageBORLAND_Delphi = 48;
 
 /**
  * The amount of debug information to emit.
@@ -8049,7 +8092,8 @@ public static final int
   LLVMDICommonBlockMetadataKind = 31,
   LLVMDIStringTypeMetadataKind = 32,
   LLVMDIGenericSubrangeMetadataKind = 33,
-  LLVMDIArgListMetadataKind = 34;
+  LLVMDIArgListMetadataKind = 34,
+  LLVMDIAssignIDMetadataKind = 35;
 
 /**
  * An LLVM DWARF type encoding.
@@ -10978,6 +11022,12 @@ public static native @Cast("uint32_t") int LLVMRemarkVersion();
 // #include "llvm-c/Orc.h"
 // #include "llvm-c/TargetMachine.h"
 // #include "llvm-c/Types.h"
+// Targeting ../LLVM/LLVMMemoryManagerCreateContextCallback.java
+
+
+// Targeting ../LLVM/LLVMMemoryManagerNotifyTerminatingCallback.java
+
+
 
 /**
  * \defgroup LLVMCExecutionEngineORCEE ExecutionEngine-based ORC Utils
@@ -10992,6 +11042,39 @@ public static native @Cast("uint32_t") int LLVMRemarkVersion();
  */
 public static native LLVMOrcObjectLayerRef LLVMOrcCreateRTDyldObjectLinkingLayerWithSectionMemoryManager(
     LLVMOrcExecutionSessionRef ES);
+
+/**
+ * Create a RTDyldObjectLinkingLayer instance using MCJIT-memory-manager-like
+ * callbacks.
+ *
+ * This is intended to simplify transitions for existing MCJIT clients. The
+ * callbacks used are similar (but not identical) to the callbacks for
+ * LLVMCreateSimpleMCJITMemoryManager: Unlike MCJIT, RTDyldObjectLinkingLayer
+ * will create a new memory manager for each object linked by calling the given
+ * CreateContext callback. This allows for code removal by destroying each
+ * allocator individually. Every allocator will be destroyed (if it has not been
+ * already) at RTDyldObjectLinkingLayer destruction time, and the
+ * NotifyTerminating callback will be called to indicate that no further
+ * allocation contexts will be created.
+ *
+ * To implement MCJIT-like behavior clients can implement CreateContext,
+ * NotifyTerminating, and Destroy as:
+ *
+ *   void *CreateContext(void *CtxCtx) { return CtxCtx; }
+ *   void NotifyTerminating(void *CtxCtx) { MyOriginalDestroy(CtxCtx); }
+ *   void Destroy(void *Ctx) { }
+ *
+ * This scheme simply reuses the CreateContextCtx pointer as the one-and-only
+ * allocation context.
+ */
+public static native LLVMOrcObjectLayerRef LLVMOrcCreateRTDyldObjectLinkingLayerWithMCJITMemoryManagerLikeCallbacks(
+    LLVMOrcExecutionSessionRef ES, Pointer CreateContextCtx,
+    LLVMMemoryManagerCreateContextCallback CreateContext,
+    LLVMMemoryManagerNotifyTerminatingCallback NotifyTerminating,
+    LLVMMemoryManagerAllocateCodeSectionCallback AllocateCodeSection,
+    LLVMMemoryManagerAllocateDataSectionCallback AllocateDataSection,
+    LLVMMemoryManagerFinalizeMemoryCallback FinalizeMemory,
+    LLVMMemoryManagerDestroyCallback Destroy);
 
 /**
  * Add the given listener to the given RTDyldObjectLinkingLayer.
@@ -11252,46 +11335,6 @@ public static native @Cast("const char*") BytePointer LLVMOrcLLJITGetDataLayoutS
 // #endif /* LLVM_C_LLJIT_H */
 
 
-// Parsed from <llvm-c/Transforms/AggressiveInstCombine.h>
-
-/*===-- AggressiveInstCombine.h ---------------------------------*- C++ -*-===*\
-|*                                                                            *|
-|* Part of the LLVM Project, under the Apache License v2.0 with LLVM          *|
-|* Exceptions.                                                                *|
-|* See https://llvm.org/LICENSE.txt for license information.                  *|
-|* SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception                    *|
-|*                                                                            *|
-|*===----------------------------------------------------------------------===*|
-|*                                                                            *|
-|* This header declares the C interface to libLLVMAggressiveInstCombine.a,    *|
-|* which combines instructions to form fewer, simple IR instructions.         *|
-|*                                                                            *|
-\*===----------------------------------------------------------------------===*/
-
-// #ifndef LLVM_C_TRANSFORMS_AGGRESSIVEINSTCOMBINE_H
-// #define LLVM_C_TRANSFORMS_AGGRESSIVEINSTCOMBINE_H
-
-// #include "llvm-c/ExternC.h"
-// #include "llvm-c/Types.h"
-
-/**
- * \defgroup LLVMCTransformsAggressiveInstCombine Aggressive Instruction Combining transformations
- * \ingroup LLVMCTransforms
- *
- * \{
- */
-
-/** See llvm::createAggressiveInstCombinerPass function. */
-public static native void LLVMAddAggressiveInstCombinerPass(LLVMPassManagerRef PM);
-
-/**
- * \}
- */
-
-// #endif
-
-
-
 // Parsed from <llvm-c/Transforms/InstCombine.h>
 
 /*===-- Scalar.h - Scalar Transformation Library C Interface ----*- C++ -*-===*\
@@ -11387,9 +11430,6 @@ public static native void LLVMAddGlobalDCEPass(LLVMPassManagerRef PM);
 
 /** See llvm::createGlobalOptimizerPass function. */
 public static native void LLVMAddGlobalOptimizerPass(LLVMPassManagerRef PM);
-
-/** See llvm::createPruneEHPass function. */
-public static native void LLVMAddPruneEHPass(LLVMPassManagerRef PM);
 
 /** See llvm::createIPSCCPPass function. */
 public static native void LLVMAddIPSCCPPass(LLVMPassManagerRef PM);
