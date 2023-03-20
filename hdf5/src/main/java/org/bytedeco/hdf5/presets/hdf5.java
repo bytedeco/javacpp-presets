@@ -51,7 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5FaccProp.h", "H5FcreatProp.h", "H5AtomType.h", "H5PredType.h", "H5EnumType.h", "H5IntType.h", "H5FloatType.h", "H5StrType.h", "H5CompType.h",
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
             link = {"hdf5@.310", "hdf5_cpp@.310", "hdf5_hl@.310", "hdf5_hl_cpp@.310"}, resource = {"include", "lib"}),
-    @Platform(value = "windows", link = {"zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp"}) })
+    @Platform(value = "windows", link = {"zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp", "szip_static"}) })
 public class hdf5 implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "hdf5"); }
 
