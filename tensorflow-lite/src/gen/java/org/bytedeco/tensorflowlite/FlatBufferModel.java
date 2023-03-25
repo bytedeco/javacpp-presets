@@ -36,7 +36,8 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  OpResolver must be defined to provide your kernel implementations to the
  *  interpreter. This is environment specific and may consist of just the
  *  builtin ops, or some custom operators you defined to extend tflite. */
-@Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+
+@Namespace("tflite::impl") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class FlatBufferModel extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -183,6 +184,11 @@ public class FlatBufferModel extends Pointer {
   // Return model metadata as a mapping of name & buffer strings.
   // See Metadata table in TFLite schema.
   public native @ByVal StringStringMap ReadAllMetadata();
+
+  // Return model metadata as a mapping of name & buffer strings.
+  // See Metadata table in TFLite schema.
+  public static native @ByVal StringStringMap ReadAllMetadata(
+        @Cast("const tflite::Model*") Pointer model);
 
   /** Returns true if the model identifier is correct (otherwise false and
    *  reports an error). */

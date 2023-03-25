@@ -40,6 +40,10 @@ public class GraphInfo extends Pointer {
   // be between 0 and num_execution_nodes().
   public native @Const @ByRef TfLiteNode node(@Cast("size_t") long index);
 
+  // Returns a node registration given its index which is expected to be between
+  // 0 and num_nodes().
+  public native @Const @ByRef TfLiteRegistration registration(@Cast("size_t") long index);
+
   // Returns an implementation-specific node index which may be different from
   // execution-plan index.
   // Expected to be between 0 and num_total_nodes().

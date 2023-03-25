@@ -9,11 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// #ifndef DOXYGEN_SKIP
-@Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class InterpreterTest extends Pointer {
+// Telemetry information for GPU delegate.
+@Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+public class TfLiteTelemetryGpuDelegateSettings extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public InterpreterTest() { super((Pointer)null); }
+    public TfLiteTelemetryGpuDelegateSettings() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InterpreterTest(Pointer p) { super(p); }
+    public TfLiteTelemetryGpuDelegateSettings(Pointer p) { super(p); }
 }

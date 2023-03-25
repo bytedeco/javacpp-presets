@@ -84,8 +84,6 @@ public class ffi extends org.bytedeco.libffi.presets.ffi {
 
 /** enum ffi_abi */
 ;
-public static native @MemberGetter int FFI_DEFAULT_ABI();
-
 // #endif
 // #endif
 

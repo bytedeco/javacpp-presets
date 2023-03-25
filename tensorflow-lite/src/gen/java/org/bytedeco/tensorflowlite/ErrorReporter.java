@@ -28,10 +28,23 @@ public class ErrorReporter extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ErrorReporter(Pointer p) { super(p); }
 
+  /** Converts {@code args} to character equivalents according to {@code format} string,
+   *  constructs the error string and report it.
+   *  Returns number of characters written or zero on success, and negative
+   *  number on error. */
   public native int Report(@Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer args);
   public native int Report(String format, @ByVal @Cast("va_list*") Pointer args);
+
+  /** Converts arguments to character equivalents according to {@code format} string,
+   *  constructs the error string and report it.
+   *  Returns number of characters written or zero on success, and negative
+   *  number on error. */
   public native int Report(@Cast("const char*") BytePointer format);
   public native int Report(String format);
+
+  /** Equivalent to {@code Report} above. The additional {@code void*} parameter is unused.
+   *  This method is for compatibility with macros that takes {@code TfLiteContext},
+   *  like TF_LITE_ENSURE and related macros. */
   public native int ReportError(Pointer arg0, @Cast("const char*") BytePointer format);
   public native int ReportError(Pointer arg0, String format);
 }
