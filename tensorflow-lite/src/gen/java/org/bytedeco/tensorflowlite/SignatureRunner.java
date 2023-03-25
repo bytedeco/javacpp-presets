@@ -139,4 +139,12 @@ public class SignatureRunner extends Pointer {
   /** Invokes the signature runner (run the graph identified by the given
    *  signature in dependency order). */
   public native @Cast("TfLiteStatus") int Invoke();
+
+  /** Attempts to cancel in flight invocation if any.
+   *  This will not affect calls to {@code Invoke} that happend after this.
+   *  Non blocking and thread safe.
+   *  Returns kTfLiteError if cancellation is not enabled, otherwise returns
+   *  kTfLiteOk.
+   *  WARNING: This is an experimental API and subject to change. */
+  public native @Cast("TfLiteStatus") int Cancel();
 }

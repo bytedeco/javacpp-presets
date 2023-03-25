@@ -10,10 +10,14 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 // #endif  // __cplusplus
 
-// --------------------------------------------------------------------------
-// Opaque types used by the C API.
+// This header should be valid in both C (e.g. C99) and C++,
+// so 'void' in parameters is not redundant.
+// NOLINTBEGIN(modernize-redundant-void-arg)
 
-// TfLiteModel wraps a loaded TensorFlow Lite model.
+// --------------------------------------------------------------------------
+// Opaque types used by the C API.  (See also c_api_types.h.)
+
+/** TfLiteModel wraps a loaded TensorFlow Lite model. */
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteModel extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

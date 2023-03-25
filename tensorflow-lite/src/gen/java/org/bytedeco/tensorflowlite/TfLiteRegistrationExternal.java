@@ -9,9 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// TfLiteRegistrationExternal is an external version of TfLiteRegistration to
-// use custom op registration API.
-// WARNING: This is an experimental type and subject to change.
+/** TfLiteRegistrationExternal is an external version of TfLiteRegistration to
+ *  use custom op registration API.
+ *  \warning This is an experimental type and subject to change. */
+
+///
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteRegistrationExternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

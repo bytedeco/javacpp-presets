@@ -9,11 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// Sets the preparation callback for the registration.
-//
-// The callback is called when the inputs of operator have been resized.
-// Please refer `prepare` of `TfLiteRegistration` for the detail.
-// WARNING: This is an experimental API and subject to change.
+/** Sets the preparation callback for the registration.
+ * 
+ *  The callback is called when the inputs of operator have been resized.
+ *  Please refer {@code prepare} of {@code TfLiteRegistration} for the detail.
+ *  \warning This is an experimental API and subject to change. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Prepare_TfLiteOpaqueContext_TfLiteOpaqueNode extends FunctionPointer {
     static { Loader.load(); }

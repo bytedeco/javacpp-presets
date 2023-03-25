@@ -9,11 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// #ifndef DOXYGEN_SKIP
-@Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class InterpreterTest extends Pointer {
+// TfLite model information and settings of the interpreter.
+// Note: This struct does not comply with ABI stability.
+@Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+public class TfLiteTelemetryInterpreterSettings extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public InterpreterTest() { super((Pointer)null); }
+    public TfLiteTelemetryInterpreterSettings() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InterpreterTest(Pointer p) { super(p); }
+    public TfLiteTelemetryInterpreterSettings(Pointer p) { super(p); }
 }

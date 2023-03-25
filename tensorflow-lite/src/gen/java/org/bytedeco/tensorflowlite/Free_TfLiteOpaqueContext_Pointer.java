@@ -9,13 +9,13 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// Sets the deallocation callback for the registration.
-//
-// This callback is called to deallocate the data returned by the init callback.
-// The value passed in the `data` parameter is the value that was returned by
-// the `init` callback.
-// Please refer `free` of `TfLiteRegistration` for the detail.
-// WARNING: This is an experimental API and subject to change.
+/** Sets the deallocation callback for the registration.
+ * 
+ *  This callback is called to deallocate the data returned by the init
+ *  callback. The value passed in the {@code data} parameter is the value that was
+ *  returned by the {@code init} callback.
+ *  Please refer {@code free} of {@code TfLiteRegistration} for the detail.
+ *  \warning This is an experimental API and subject to change. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Free_TfLiteOpaqueContext_Pointer extends FunctionPointer {
     static { Loader.load(); }

@@ -9,12 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// Sets a custom error reporter for interpreter execution.
-//
-// * `reporter` takes the provided `user_data` object, as well as a C-style
-//   format string and arg list (see also vprintf).
-// * `user_data` is optional. If non-null, it is owned by the client and must
-//   remain valid for the duration of the interpreter lifetime.
+/** Same as {@code TfLiteModelCreate} with customizble error reporter.
+ *  * {@code reporter} takes the provided {@code user_data} object, as well as a C-style
+ *    format string and arg list (see also vprintf).
+ *  * {@code user_data} is optional. If non-null, it is owned by the client and must
+ *    remain valid for the duration of the interpreter lifetime. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Reporter_Pointer_BytePointer_Pointer extends FunctionPointer {
     static { Loader.load(); }

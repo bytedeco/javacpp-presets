@@ -9,11 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// Sets the invocation callback for the registration.
-//
-// The callback is called when the operator is executed.
-// Please refer `invoke` of `TfLiteRegistration` for the detail.
-// WARNING: This is an experimental API and subject to change.
+/** Sets the invocation callback for the registration.
+ * 
+ *  The callback is called when the operator is executed.
+ *  Please refer {@code invoke} of {@code TfLiteRegistration} for the detail.
+ *  \warning This is an experimental API and subject to change. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Invoke_TfLiteOpaqueContext_TfLiteOpaqueNode extends FunctionPointer {
     static { Loader.load(); }

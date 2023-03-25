@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
+// #ifndef DOXYGEN_SKIP
 @Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class SingleOpModel extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

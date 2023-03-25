@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
   // namespace delegates
+// #endif  // DOXYGEN_SKIP
 
 @Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Subgraph extends Pointer {
@@ -15,7 +16,8 @@ public class Subgraph extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Subgraph(Pointer p) { super(p); }
 
-
+// #ifndef DOXYGEN_SKIP
+// #endif  // DOXYGEN_SKIP
   public Subgraph(ErrorReporter error_reporter,
              @Cast("TfLiteExternalContext**") PointerPointer external_contexts,
              SubgraphVector subgraphs,
@@ -555,6 +557,12 @@ public class Subgraph extends Pointer {
   @MemberGetter public static native int kInvalidSubgraphIndex();
   public static final int kInvalidSubgraphIndex = kInvalidSubgraphIndex();
   public native int GetSubgraphIndex();
+
+  // Returns true if this subgraph is the primary subgraph.
+  // Returns false otherwise, including the cases when GetSubgraphIndex()
+  // returns kInvalidSubgraphIndex.
+  // WARNING: This is an experimental API and subject to change.
+  public native @Cast("bool") boolean IsPrimarySubgraph();
 
   // True if all tensors in the graph has static size after calling
   // `AllocateTensors` function.
