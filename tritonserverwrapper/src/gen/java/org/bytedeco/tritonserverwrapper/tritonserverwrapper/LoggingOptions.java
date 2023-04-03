@@ -48,6 +48,8 @@ public class LoggingOptions extends Pointer {
         @Cast("const triton::developer_tools::server::LoggingOptions::VerboseLevel") int verbose, @Cast("const bool") boolean info, @Cast("const bool") boolean warn,
         @Cast("const bool") boolean error, @Cast("const triton::developer_tools::server::LoggingOptions::LogFormat") int format, @StdString String log_file);
 
+  public native void SetVerboseLevel(int verbose_level);
+
   // Verbose logging level. Default is OFF.
   public native @Cast("triton::developer_tools::server::LoggingOptions::VerboseLevel") int verbose_(); public native LoggingOptions verbose_(int setter);
   // Enable or disable info logging level. Default is true.

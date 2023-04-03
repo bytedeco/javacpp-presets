@@ -98,6 +98,8 @@ public class ServerOptions extends Pointer {
         @StdVector ModelLoadGPULimit model_load_gpu_limit,
         @StdVector HostPolicy host_policy, @SharedPtr Trace trace);
 
+  public native void SetLoggingOptions(@Const @ByRef LoggingOptions logging);
+
   // Paths to model repository directory. Note that if a model is not unique
   // across all model repositories at any time, the model will not be available.
   // See here for more information:

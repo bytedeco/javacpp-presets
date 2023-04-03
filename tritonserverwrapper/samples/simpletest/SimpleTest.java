@@ -1,0 +1,140 @@
+// Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  * Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//  * Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//  * Neither the name of NVIDIA CORPORATION nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
+import com.google.gson.*;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.tritonserverwrapper.tritonserverwrapper.*;
+import static org.bytedeco.tritonserverwrapper.global.tritonserverwrapper.*;
+
+public class SimpleTest {
+    // Helper functions
+    static void FAIL(String MSG) {
+        System.err.println("Failure: " + MSG);
+        System.exit(1);
+    }
+
+    static void Usage(String msg)
+    {
+      if (msg != null) {
+        System.err.println(msg);
+      }
+
+      System.err.println("Usage: java " + SimpleTest.class.getSimpleName() +" [options]");
+      System.err.println("\t-v Enable verbose logging");
+      System.err.println("\t-r [model repository absolute path]");
+      System.exit(1);
+    }
+    
+    // static void
+    // GenerateInputData(
+    //     StringVector input0_data, StringVector input1_data)
+    // {
+    //   input0_data = new StringVector(16);
+    //   input1_data = new StringVector(16);
+    //   for (int i = 0; i < 16; ++i) {
+    //     String input = "" + i;
+    //     input0_data.put(i, input);
+    //     input1_data.put(i, input);
+    //   }
+    // }
+
+    static void
+    CompareResult(
+        String output0_name, String output1_name,
+        IntPointer input0, IntPointer input1, IntPointer output0,
+        IntPointer output1)
+    {
+      for (int i = 0; i < 16; ++i) {
+        System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
+                         + output0.get(i));
+        System.out.println(input0.get(i) + " - " + input1.get(i) + " = "
+                         + output1.get(i));
+
+        if ((input0.get(i) + input1.get(i)) != output0.get(i)) {
+          FAIL("incorrect sum in " + output0_name);
+        }
+        if ((input0.get(i) - input1.get(i)) != output1.get(i)) {
+          FAIL("incorrect difference in " + output1_name);
+        }
+      }
+    }
+
+    static int RunInference(int verbose_level, String model_repository_path, String model_name) {
+        StringVector model_repository_paths = new StringVector(model_repository_path);
+        ServerOptions options = new ServerOptions(model_repository_paths);
+        LoggingOptions logging_options = options.logging_();
+        logging_options.SetVerboseLevel(verbose_level);
+        options.SetLoggingOptions(logging_options);
+
+        // GenericTritonServer server = new GenericTritonServer(options);
+        // StringSet loaded_models = server.LoadedModels();
+        // GenericInferRequest request = new GenericInferRequest();
+        // InferOptions infer_options = new InferOptions(model_name);
+        // request.Create(infer_options);
+
+
+        return 0;
+    }
+
+    public static void
+    main(String[] args) throws Exception {
+      String model_repository_path = "./models";
+      int verbose_level = 0;
+
+      // Parse commandline...
+      for (int i = 0; i < args.length; i++) {
+      switch (args[i]) {
+          case "-r":
+          model_repository_path = args[++i];
+          break;
+          case "-v":
+          verbose_level = 1;
+          break;
+          case "-?":
+          Usage(null);
+          break;
+        }
+      }
+    
+      // We use a simple model that takes 2 input tensors of 16 strings
+      // each and returns 2 output tensors of 16 strings each. The input
+      // strings must represent integers. One output tensor is the
+      // element-wise sum of the inputs and one output is the element-wise
+      // difference.
+      String model_name = "add_sub_str";
+      if (model_repository_path == null) {
+        Usage("-r must be used to specify model repository path");
+      }
+
+      RunInference(verbose_level, model_repository_path, model_name);
+
+      System.exit(0);
+    }
+
+}
