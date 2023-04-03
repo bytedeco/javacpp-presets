@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2022 Samuel Audet
+ * Copyright (C) 2016-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     @Override public void map(InfoMap infoMap) {
         infoMap.put(new Info("lapack.h", "lapacke.h").linePatterns(".*LAPACK_GLOBAL.*").skip())
                .put(new Info("OPENBLAS_PTHREAD_CREATE_FUNC", "OPENBLAS_BUNDERSCORE", "OPENBLAS_FUNDERSCORE", "DOUBLE_DEFINED", "xdouble",
-                             "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "lapack_int", "lapack_logical").cppTypes().annotations())
+                             "FLOATRET", "OPENBLAS_CONST", "CBLAS_INDEX", "LAPACK_IFMT", "lapack_int", "lapack_logical").cppTypes().annotations())
                .put(new Info("OPENBLAS_QUAD_PRECISION", "defined OPENBLAS_EXPRECISION", "OPENBLAS_USE64BITINT",
                              "defined(LAPACK_COMPLEX_STRUCTURE)", "defined(LAPACK_COMPLEX_C99)", "OPENBLAS_OS_LINUX").define(false).translate(true))
                .put(new Info("((defined(__STDC_IEC_559_COMPLEX__) || __STDC_VERSION__ >= 199901L ||"
@@ -145,6 +145,8 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "clacrm", "dlacrm", "slacrm", "zlacrm", "clarcm", "dlarcm", "slarcm", "zlarcm", "classq", "dlassq", "slassq", "zlassq",
             "cgesvdq", "dgesvdq", "sgesvdq", "zgesvdq", "lapack_make_complex_double", "lapack_make_complex_float",
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
+            "clangb", "dlangb", "slangb", "zlangb", "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
+            "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
             // deprecated
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",

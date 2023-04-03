@@ -1,0 +1,40 @@
+diff -ruN OpenBLAS-0.3.23/c_check OpenBLAS-0.3.23-cross/c_check
+--- OpenBLAS-0.3.23/c_check	2023-04-02 05:18:01.000000000 +0900
++++ OpenBLAS-0.3.23-cross/c_check	2023-04-04 07:39:37.464879643 +0900
+@@ -31,8 +31,8 @@
+ 
+ cross_suffix=""
+ 
+-if [ "`dirname \"$compiler_name\"`" != '.' ]; then
+-    cross_suffix="$cross_suffix`dirname \"$compiler_name\"`/"
++if [ "`dirname $compiler_name`" != '.' ]; then
++    cross_suffix="$cross_suffix`dirname $compiler_name`/"
+ fi
+ 
+ bn=`basename $compiler_name`
+diff -ruN OpenBLAS-0.3.23/Makefile.prebuild OpenBLAS-0.3.23-cross/Makefile.prebuild
+--- OpenBLAS-0.3.23/Makefile.prebuild	2023-04-02 05:18:01.000000000 +0900
++++ OpenBLAS-0.3.23-cross/Makefile.prebuild	2023-04-04 07:40:51.535000918 +0900
+@@ -60,9 +60,9 @@
+ 	./getarch_2nd  1 >> $(TARGET_CONF)
+ 
+ $(TARGET_CONF): c_check$(SCRIPTSUFFIX) f_check$(SCRIPTSUFFIX) getarch
+-	./c_check$(SCRIPTSUFFIX) $(TARGET_MAKE) $(TARGET_CONF) "$(CC)" $(TARGET_FLAGS) $(CFLAGS)
++	./c_check$(SCRIPTSUFFIX) $(TARGET_MAKE) $(TARGET_CONF) $(CC) $(TARGET_FLAGS) $(CFLAGS)
+ ifneq ($(ONLY_CBLAS), 1)
+-	./f_check$(SCRIPTSUFFIX) $(TARGET_MAKE) $(TARGET_CONF) "$(FC)" $(TARGET_FLAGS)
++	./f_check$(SCRIPTSUFFIX) $(TARGET_MAKE) $(TARGET_CONF) $(FC) $(TARGET_FLAGS)
+ else
+ #When we only build CBLAS, we set NOFORTRAN=2
+ 	echo "NOFORTRAN=2" >> $(TARGET_MAKE)
+@@ -77,8 +77,8 @@
+ 
+ 
+ getarch : getarch.c cpuid.S dummy $(CPUIDEMU)
+-	avx512=$$(./c_check$(SCRIPTSUFFIX) - - "$(CC)" $(TARGET_FLAGS) $(CFLAGS) | grep NO_AVX512); \
+-	rv64gv=$$(./c_check$(SCRIPTSUFFIX) - - "$(CC)" $(TARGET_FLAGS) $(CFLAGS) | grep NO_RV64GV); \
++	avx512=$$(./c_check$(SCRIPTSUFFIX) - - $(CC) $(TARGET_FLAGS) $(CFLAGS) | grep NO_AVX512); \
++	rv64gv=$$(./c_check$(SCRIPTSUFFIX) - - $(CC) $(TARGET_FLAGS) $(CFLAGS) | grep NO_RV64GV); \
+ 	$(HOSTCC) $(HOST_CFLAGS) $(EXFLAGS) $${avx512:+-D$${avx512}} $${rv64gv:+-D$${rv64gv}} -o $(@F) getarch.c cpuid.S $(CPUIDEMU)
+ 
+ getarch_2nd : getarch_2nd.c $(TARGET_CONF) dummy
