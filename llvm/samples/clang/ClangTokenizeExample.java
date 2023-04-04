@@ -56,7 +56,7 @@ public class ClangTokenizeExample {
 		// dispose all allocated data
 		clang.clang_disposeTranslationUnit(translationUnit);
 		clang.clang_disposeIndex(index);
-		// re-set the pointer we've incremented previosly (see `show_all_tokens()`)
+		// re-set the pointer we've incremented previously (see `show_all_tokens()`)
 		tokens.position(0L);
 		clang.clang_disposeTokens(translationUnit, tokens, numTokens[0]);
 	}
