@@ -92,7 +92,7 @@ public class SimpleTest {
         logging_options.SetVerboseLevel(verbose_level);
         options.SetLoggingOptions(logging_options);
 
-        // GenericTritonServer server = new GenericTritonServer(options);
+        GenericTritonServer server = GenericTritonServer.Create(options);
         // StringSet loaded_models = server.LoadedModels();
         // GenericInferRequest request = new GenericInferRequest();
         // InferOptions infer_options = new InferOptions(model_name);
