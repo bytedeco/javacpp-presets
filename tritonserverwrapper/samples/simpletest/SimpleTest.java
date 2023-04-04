@@ -93,10 +93,12 @@ public class SimpleTest {
         options.SetLoggingOptions(logging_options);
 
         GenericTritonServer server = GenericTritonServer.Create(options);
-        // StringSet loaded_models = server.LoadedModels();
-        // GenericInferRequest request = new GenericInferRequest();
-        // InferOptions infer_options = new InferOptions(model_name);
-        // request.Create(infer_options);
+        StringSet loaded_models = server.LoadedModels();
+        System.out.println("Loaded_models count : " + loaded_models.size());
+
+        model_name = "simple";
+        InferOptions infer_options = new InferOptions(model_name);
+        GenericInferRequest request = GenericInferRequest.Create(infer_options);
 
 
         return 0;
