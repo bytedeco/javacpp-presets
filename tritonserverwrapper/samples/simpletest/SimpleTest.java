@@ -92,8 +92,8 @@ public class SimpleTest {
       input0_data[0] = new IntPointer(16);
       input1_data[0] = new IntPointer(16);
       for (int i = 0; i < 16; ++i) {
-        input0_data[0].put(i, 1 + i);
-        input1_data[0].put(i, 2);
+        input0_data[0].put(i, 2);
+        input1_data[0].put(i, 1 * i);
       }
     }
 
@@ -124,8 +124,8 @@ public class SimpleTest {
 	shape0.put(1, 16);
 	shape1.put(0, 1);
 	shape1.put(1, 16);
-	Tensor tensor0 = new Tensor(input0_data, 4, 8, shape0, 0, 0);
-	Tensor tensor1 = new Tensor(input1_data, 4, 8, shape1, 0, 0);
+	Tensor tensor0 = new Tensor(input0_data, 4 * 16, 8, shape0, 0, 1);
+	Tensor tensor1 = new Tensor(input1_data, 4 * 16, 8, shape1, 0, 1);
 	request.AddInput("INPUT0", tensor0);
 	request.AddInput("INPUT1", tensor1);
 	GenericInferResult result = server.Infer(request);
@@ -133,14 +133,16 @@ public class SimpleTest {
         Tensor output = result.Output("OUTPUT0");
 	BytePointer buffer = output.buffer_();
 
+	System.out.println("buffer to string : " + buffer.toString());
+
 	System.out.println("output val at index 0 : " + buffer.getInt(0));
-	System.out.println("output val at index 1 : " + buffer.getInt(1));
-	System.out.println("output val at index 2 : " + buffer.getInt(2));
-	System.out.println("output val at index 3 : " + buffer.getInt(3));
-	System.out.println("output val at index 4 : " + buffer.getInt(4));
-	System.out.println("output val at index 5 : " + buffer.getInt(5));
-	System.out.println("output val at index 6 : " + buffer.getInt(6));
-	System.out.println("output val at index 7 : " + buffer.getInt(7));
+	System.out.println("output val at index 1 : " + buffer.getInt(1 * 4));
+	System.out.println("output val at index 2 : " + buffer.getInt(2 * 4));
+	System.out.println("output val at index 3 : " + buffer.getInt(3 * 4));
+	System.out.println("output val at index 4 : " + buffer.getInt(4 * 4));
+	System.out.println("output val at index 5 : " + buffer.getInt(5 * 4));
+	System.out.println("output val at index 6 : " + buffer.getInt(6 * 4));
+	System.out.println("output val at index 7 : " + buffer.getInt(7 * 4));
         return 0;
     }
 
