@@ -102,7 +102,7 @@ sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
-sedinplace 's/-gencode=arch=compute_52,code=sm_52/-arch=sm_35/g' cmake/CMakeLists.txt
+sedinplace 's/-gencode=arch=compute_52,code=sm_52/-arch=sm_50/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 
 # provide a default constructor to Ort::Value to make it more usable with std::vector

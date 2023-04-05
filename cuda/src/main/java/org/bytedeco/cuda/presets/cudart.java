@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2022 Samuel Audet
+ * Copyright (C) 2015-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,15 +41,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "<cuda_fp16.hpp>",
                          "<cuda_bf16.h>", "<cuda_bf16.hpp>", "<library_types.h>", "<cudaGL.h>", "<cuda_gl_interop.h>"},
               compiler = "cpp11", exclude = "<crt/host_defines.h>",
-              includepath = {"/usr/local/cuda-11.8/include/", "/usr/local/cuda/include/", "/usr/include/"},
-              link = {"cudart@.11.0", "cuda@.1#"}, linkpath = {"/usr/local/cuda-11.8/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-11.8/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-11.8/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-11.8/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64",     preload = "cudart64_110",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/") },
+              includepath = {"/usr/local/cuda-12.0/include/", "/usr/local/cuda/include/", "/usr/include/"},
+              link = {"cudart@.12", "cuda@.1#"}, linkpath = {"/usr/local/cuda-12.0/lib/", "/usr/local/cuda/lib/", "/usr/lib/"}),
+    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"}, linkpath = {"/usr/local/cuda-12.0/lib64/", "/usr/local/cuda/lib64/", "/usr/lib64/"}),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-12.0/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-12.0/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64",     preload = "cudart64_12",
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -62,13 +62,14 @@ public class cudart implements InfoMapper {
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__", "__CUDA_HOSTDEVICE_FP16_DECL__",
                              "__CUDA_HOSTDEVICE_BF16_DECL__", "CUSPARSE_DEPRECATED_HINT").cppTypes().annotations().cppText(""))
 
-               .put(new Info("cuda_runtime_api.h").linePatterns("#define cudaSignalExternalSemaphoresAsync.*", "#define cudaWaitExternalSemaphoresAsync.*").skip())
-               .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuGraphInstantiate.*").skip())
+               .put(new Info("cuda_runtime_api.h").linePatterns("#define cudaSignalExternalSemaphoresAsync.*", "#define cudaGetDeviceProperties.*").skip())
+               .put(new Info("cuda.h").linePatterns("#define cuDeviceTotalMem.*", "#define cuStreamGetCaptureInfo_v2.*").skip())
                .put(new Info("cudaGL.h").linePatterns("#define cuGLCtxCreate.*", "#define cuGLGetDevices.*").skip())
 
                .put(new Info("__CUDA_DEPRECATED").cppText("#define __CUDA_DEPRECATED deprecated").cppTypes())
                .put(new Info("CUDNN_DEPRECATED").cppText("#define CUDNN_DEPRECATED deprecated").cppTypes())
                .put(new Info("CUSPARSE_DEPRECATED").cppText("#define CUSPARSE_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CUSPARSE_DEPRECATED_ENUM").cppText("#define CUSPARSE_DEPRECATED_ENUM deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("cudaStreamAttrID", "cudaKernelNodeAttrID").cppTypes().pointerTypes("cudaLaunchAttributeID"))
@@ -81,8 +82,11 @@ public class cudart implements InfoMapper {
                .put(new Info("cudaKernelNodeAttributeClusterSchedulingPolicyPreference").cppTypes().pointerTypes("cudaLaunchAttributeClusterSchedulingPolicyPreference"))
 
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
-               .put(new Info("defined(CUDA_FORCE_API_VERSION)", "defined(__CUDACC__)",
+               .put(new Info("defined(__CUDACC__)", "defined(CUDA_FORCE_API_VERSION)",
+                             "defined(__CUDACC__) || defined(_NVHPC_CUDA)",
                              "defined(__CUDACC__) && (__CUDA_ARCH__ >= 800 || !defined(__CUDA_ARCH__))",
+                             "defined(__CUDACC__) && (!defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 800) || defined(_NVHPC_CUDA))",
+                             "(defined(__CUDACC__) && (!defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 800))) || defined(_NVHPC_CUDA)",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 3020",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4000",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4010",
@@ -112,6 +116,8 @@ public class cudart implements InfoMapper {
                .put(new Info("CUcontext").valueTypes("CUctx_st").pointerTypes("@ByPtrPtr CUctx_st"))
                .put(new Info("CUmodule").valueTypes("CUmod_st").pointerTypes("@ByPtrPtr CUmod_st"))
                .put(new Info("CUfunction").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
+               .put(new Info("CUlibrary").valueTypes("CUlib_st").pointerTypes("@ByPtrPtr CUlib_st"))
+               .put(new Info("CUkernel").valueTypes("CUkern_st").pointerTypes("@ByPtrPtr CUkern_st"))
                .put(new Info("CUarray").valueTypes("CUarray_st").pointerTypes("@ByPtrPtr CUarray_st"))
                .put(new Info("CUmipmappedArray").valueTypes("CUmipmappedArray_st").pointerTypes("@ByPtrPtr CUmipmappedArray_st"))
                .put(new Info("CUtexref").valueTypes("CUtexref_st").pointerTypes("@ByPtrPtr CUtexref_st"))
