@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2020 Samuel Audet
+ * Copyright (C) 2015-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@.11"),
-    @Platform(value = "windows-x86_64", preload = "nppicc64_11")},
+    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@.12"),
+    @Platform(value = "windows-x86_64", preload = "nppicc64_12")},
         target = "org.bytedeco.cuda.nppicc", global = "org.bytedeco.cuda.global.nppicc")
 @NoException
 public class nppicc implements InfoMapper {

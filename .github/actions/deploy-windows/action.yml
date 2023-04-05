@@ -91,25 +91,25 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.6.0/local_installers/11.8/cudnn-windows-x86_64-8.6.0.163_cuda11-archive.zip
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda_12.0.0_527.41_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.7.0/local_installers/11.8/cudnn-windows-x86_64-8.7.0.84_cuda11-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
-          cuda_11.8.0_522.06_windows.exe -s
-          unzip cudnn-windows-x86_64-8.6.0.163_cuda11-archive.zip
+          cuda_12.0.0_527.41_windows.exe -s
+          unzip cudnn-windows-x86_64-8.7.0.84_cuda11-archive.zip
           unzip zlib123dllx64.zip
-          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin"
-          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"
-          move cudnn-windows-x86_64-8.6.0.163_cuda11-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\lib\x64"
-          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin"
+          move cudnn-windows-x86_64-8.7.0.84_cuda11-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\bin"
+          move cudnn-windows-x86_64-8.7.0.84_cuda11-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\include"
+          move cudnn-windows-x86_64-8.7.0.84_cuda11-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\lib\x64"
+          move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\bin"
 
           rem echo Applying hotfix to Visual Studio 2019 for CUDA
           rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath
           rem bash -c "find 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/' -name cmath -exec cp -v cmath {} \;"
-          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cublasXt.h'"
-          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
-          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
-          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/include/cub/cub.cuh'"
+          bash -c "sed -i 's/cublas_v2.h/cublas_api.h/g' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cublasXt.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cusolverDn.h' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cusolverSp.h'"
+          bash -c "sed -i '/block_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cub/cub.cuh'"
+          bash -c "sed -i '/device_segmented_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cub/cub.cuh'"
+          bash -c "sed -i '/warp_merge_sort.cuh/d' 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.0/include/cub/cub.cuh'"
         )
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
@@ -206,10 +206,10 @@ runs:
           C:/msys64/usr/bin/bazel.exe version
         )
         if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8"
-          set "CUDA_PATH_V11_8=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8"
-          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\libnvvp;%PATH%"
-          echo CUDA Version 11.8.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v11.8\version.txt"
+          set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0"
+          set "CUDA_PATH_V12_0=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0"
+          set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\libnvvp;%PATH%"
+          echo CUDA Version 12.0.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\version.txt"
         )
         set "CCACHE_DIR=%USERPROFILE%\ccache"
         set "PATH=C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"

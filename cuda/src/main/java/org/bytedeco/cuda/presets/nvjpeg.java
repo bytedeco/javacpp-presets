@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Park JeongHwan
+ * Copyright (C) 2022-2023 Park JeongHwan, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Park JeongHwan
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvjpeg.h>", link = "nvjpeg@.11"),
-    @Platform(value = "windows-x86_64", preload = "nvjpeg64_11")},
+    @Platform(include = "<nvjpeg.h>", link = "nvjpeg@.12"),
+    @Platform(value = "windows-x86_64", preload = "nvjpeg64_12")},
         target = "org.bytedeco.cuda.nvjpeg", global = "org.bytedeco.cuda.global.nvjpeg")
 @NoException
 public class nvjpeg implements InfoMapper {
