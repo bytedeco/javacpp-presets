@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Park JeongHwan
+ * Copyright (C) 2021-2023 Park JeongHwan, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -96,8 +96,7 @@ public class nvencodeapi implements InfoMapper {
                .put(new Info("NvEncInitializeEncoder").skip())
                .put(new Info("NvEncGetEncodeProfileGUIDs").skip())
                .put(new Info("NvEncGetEncodePresetConfigEx").skip())
-
-               .put(new Info("NV_ENC_H264_SEI_PAYLOAD").cppText(""))
+               .put(new Info("NV_ENC_H264_SEI_PAYLOAD", "NV_ENC_AV1_OBU_PAYLOAD").cppText("").pointerTypes("NV_ENC_SEI_PAYLOAD"))
                .put(new Info("nvEncodeAPI.h").linePatterns(
                        " \\* \\\\union _NV_ENC_PIC_PARAMS_H264_EXT", " \\* H264 extension  picture parameters",
                        "#define NV_ENC_PARAMS_RC_VBR_MINQP.*", "#define NV_ENC_PARAMS_RC_CBR2.*",

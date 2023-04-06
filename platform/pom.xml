@@ -276,7 +276,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>nvcodec-platform</artifactId>
-      <version>11.1.5-${project.version}</version>
+      <version>12.0.16-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -306,12 +306,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorrt-platform</artifactId>
-      <version>8.4-${project.version}</version>
+      <version>8.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver-platform</artifactId>
-      <version>2.26-${project.version}</version>
+      <version>2.32-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

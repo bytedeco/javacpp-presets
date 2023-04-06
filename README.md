@@ -218,14 +218,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 12.0.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.7.x  https://developer.nvidia.com/cudnn
    * NCCL 2.16.x  https://developer.nvidia.com/nccl
- * NVIDIA Video Codec SDK 11.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * NVIDIA Video Codec SDK 12.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
  * PyTorch 1.13.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.12.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.24.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * Triton Inference Server 2.32.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.19.x  https://github.com/luxonis/depthai-core
  * ONNX 1.12.x  https://github.com/onnx/onnx

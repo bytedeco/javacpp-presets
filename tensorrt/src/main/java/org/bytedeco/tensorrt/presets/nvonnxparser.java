@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2022 Samuel Audet
+ * Copyright (C) 2019-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,6 +48,8 @@ public class nvonnxparser implements InfoMapper {
                .put(new Info("nvonnxparser::IPluginFactory").pointerTypes("OnnxPluginFactory"))
                .put(new Info("nvonnxparser::IPluginFactoryExt").pointerTypes("OnnxPluginFactoryExt"))
                .put(new Info("nvonnxparser::ErrorCode").valueTypes("org.bytedeco.tensorrt.global.nvonnxparser.ErrorCode").enumerate())
-               .put(new Info("nvonnxparser::EnumMax<nvonnxparser::ErrorCode>", "nvonnxparser::EnumMax<ErrorCode>").javaNames("ErrorCodeEnumMax"));
+               .put(new Info("nvonnxparser::EnumMax<nvonnxparser::ErrorCode>", "nvonnxparser::EnumMax<ErrorCode>").javaNames("ErrorCodeEnumMax"))
+               .put(new Info("nvonnxparser::IParser::getUsedVCPluginLibraries").javaText(
+                       "public native @Cast(\"const char**\") @NoException(true) PointerPointer getUsedVCPluginLibraries(@Cast(\"int64_t*\") @ByRef long[] nbPluginLibs);"));
     }
 }
