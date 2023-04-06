@@ -114,16 +114,16 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown.cli https://drive.google.com/uc?id=1dh3P5JLUUe9EXE0GSJj6VDWYlr7W89dO
-          unzip Video_Codec_SDK_11.1.5.zip
-          move Video_Codec_SDK_11.1.5 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown.cli https://drive.google.com/uc?id=1ner_cjzhKhdlrP2VzHGZvyEnW3UQ4uOy
+          unzip Video_Codec_SDK_12.0.16.zip
+          move Video_Codec_SDK_12.0.16 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=1mOqxIW-mzGNnnIiZx2DEPLdvFgmM2vT7
-          unzip TensorRT-8.4.3.1.Windows10.x86_64.cuda-11.6.cudnn8.4.zip
-          move TensorRT-8.4.3.1 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1MTNEhrOC2rTT1itn_Z-SUK_Ck_XRxLbR
+          unzip TensorRT-8.6.0.12.Windows10.x86_64.cuda-12.0.zip
+          move TensorRT-8.6.0.12 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
