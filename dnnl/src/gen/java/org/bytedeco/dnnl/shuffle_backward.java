@@ -29,28 +29,6 @@ public class shuffle_backward extends primitive {
         return new shuffle_backward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for a shuffle primitive backward propagation
-     *  primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-    
-        
-        ///
-        public native @ByRef dnnl_shuffle_desc_t data(); public native desc data(dnnl_shuffle_desc_t setter);
-
-        /** Constructs a descriptor for a shuffle backward propagation
-         *  primitive.
-         * 
-         *  @param diff_data_desc Diff source and diff destination memory
-         *      descriptor.
-         *  @param axis The axis along which the data is shuffled.
-         *  @param group_size Shuffle group size. */
-        public desc(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size) { super((Pointer)null); allocate(diff_data_desc, axis, group_size); }
-        private native void allocate(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size);
-    }
-
     /** Primitive descriptor for a shuffle backward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -72,33 +50,40 @@ public class shuffle_backward extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a shuffle backward
-         *  propagation primitive.
+        /** Constructs a primitive descriptor for a shuffle backward propagation
+         *  primitive.
          * 
-         *  @param adesc Descriptor for a shuffle backward propagation
-         *      primitive.
          *  @param aengine Engine to use.
-         *  @param attr Primitive attributes to use.
-         *  @param hint_fwd_pd Primitive descriptor for a shuffle
-         *      forward propagation primitive. It is used as a hint for
-         *      deciding which memory format to use.
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param axis The axis along which the data is shuffled.
+         *  @param group_size Shuffle group size.
+         *  @param hint_fwd_pd Primitive descriptor for a shuffle forward
+         *      propagation primitive. It is used as a hint for deciding which
+         *      memory format to use.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, int axis, int group_size,
                         @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, attr, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, diff_src_desc, diff_dst_desc, axis, group_size, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, int axis, int group_size,
                         @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, int axis, int group_size,
+                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, diff_src_desc, diff_dst_desc, axis, group_size, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, int axis, int group_size,
                         @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a shuffle backward
@@ -111,10 +96,19 @@ public class shuffle_backward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::diff_src_desc()const */
-        public native @ByVal memory.desc diff_src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
-        public native @ByVal memory.desc diff_dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_dst_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_axis()const */
+        public native int get_axis();
+
+        /** \copydoc dnnl::primitive_desc_base::get_group_size()const */
+        public native @Cast("dnnl::memory::dim") long get_group_size();
     }
 
     /** Default constructor. Produces an empty object. */

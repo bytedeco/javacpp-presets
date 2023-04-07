@@ -13,7 +13,10 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \addtogroup dnnl_api_utils Utilities
+/** \addtogroup dnnl_api_common Common API
+ *  \{
+ <p>
+ *  \addtogroup dnnl_api_utils Utilities
  *  Utility types and definitions.
  *  \{
  <p>
@@ -53,6 +56,4 @@ public class error extends Pointer {
      *  @param message The error message. */
     public static native void wrap_c_api(@Cast("dnnl_status_t") int status, @Cast("const char*") BytePointer message);
     public static native void wrap_c_api(@Cast("dnnl_status_t") int status, String message);
-
-    public native @StdString BytePointer toStdString();
 }

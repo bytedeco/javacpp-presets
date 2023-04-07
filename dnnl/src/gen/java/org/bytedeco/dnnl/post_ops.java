@@ -74,45 +74,6 @@ public class post_ops extends dnnl_post_ops_handle {
     public native primitive.kind kind(int index);
 
     /** Appends an accumulation (sum) post-op. Prior to accumulating the
-     *  result, the previous value would be multiplied by a scaling factor
-     *  \p scale.
-     * 
-     *  The kind of this post-op is #dnnl::primitive::kind::sum.
-     * 
-     *  This feature may improve performance for cases like residual learning
-     *  blocks, where the result of convolution is accumulated to the
-     *  previously computed activations. The parameter \p scale may be used
-     *  for the integer-based computations when the result and previous
-     *  activations have different logical scaling factors.
-     * 
-     *  In the simplest case when the accumulation is the only post-op,
-     *  the computations will be {@code dst[:] := scale * dst[:] + op(...)}
-     *  instead of {@code dst[:] := op(...)}.
-     * 
-     *  If \p data_type is specified, the original dst tensor will be
-     *  reinterpreted as a tensor with the provided data type. Because it is a
-     *  reinterpretation, data_type and dst data type should have the same size.
-     *  As a result, computations will be {@code dst[:] <- scale *
-     *  as_data_type(dst[:]) + op(...)} instead of {@code dst[:] <- op(...)}.
-     * 
-     *  \note
-     *      This post-op executes in-place and does not change the
-     *      destination layout.
-     * 
-     *  @param scale Scaling factor.
-     *  @param data_type Data type. */
-    
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    public native void append_sum(float scale/*=1.f*/,
-                memory.data_type data_type/*=dnnl::memory::data_type::undef*/);
-    public native void append_sum();
-
-    /** Appends an accumulation (sum) post-op. Prior to accumulating the
      *  result, the previous value will be will be reduced by zero point
      *  \p zero_point and multiplied by a scaling factor \p scale.
      * 
@@ -143,9 +104,9 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param data_type Data type. */
     
     ///
-    public native void append_sum(float scale, int zero_point,
+    public native void append_sum(float scale/*=1.f*/, int zero_point/*=0*/,
                 memory.data_type data_type/*=dnnl::memory::data_type::undef*/);
-    public native void append_sum(float scale, int zero_point);
+    public native void append_sum();
 
     /** Returns the parameters of an accumulation (sum) post-op.
      * 
@@ -193,25 +154,21 @@ public class post_ops extends dnnl_post_ops_handle {
      *  The kind of this post-op is #dnnl::primitive::kind::eltwise.
      * 
      *  In the simplest case when the elementwise is the only post-op, the
-     *  computations would be {@code dst[:] := scale * eltwise_op (op(...))} instead
+     *  computations would be {@code dst[:] := eltwise_op (op(...))} instead
      *  of {@code dst[:] <- op(...)}, where eltwise_op is configured with the given
      *  parameters.
      * 
-     *  @param scale Scaling factor.
      *  @param aalgorithm Elementwise algorithm.
      *  @param alpha Alpha parameter for the elementwise algorithm.
      *  @param beta Beta parameter for the elementwise algorithm. */
     
     ///
-    public native void append_eltwise(
-                float scale, algorithm aalgorithm, float alpha, float beta);
-    public native void append_eltwise(
-                float scale, @Cast("dnnl::algorithm") int aalgorithm, float alpha, float beta);
+    public native void append_eltwise(algorithm aalgorithm, float alpha, float beta);
+    public native void append_eltwise(@Cast("dnnl::algorithm") int aalgorithm, float alpha, float beta);
 
     /** Returns parameters of an elementwise post-op.
      * 
      *  @param index Index of the post-op.
-     *  @param scale Output scaling factor.
      *  @param aalgorithm Output elementwise algorithm kind.
      *  @param alpha Output alpha parameter for the elementwise algorithm.
      *  @param beta Output beta parameter for the elementwise algorithm. */
@@ -222,12 +179,12 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     ///
-    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm,
-                @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
-    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm,
-                @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
-    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm,
-                @ByRef float[] alpha, @ByRef float[] beta);
+    public native void get_params_eltwise(
+                int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
+    public native void get_params_eltwise(
+                int index, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm, @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
+    public native void get_params_eltwise(
+                int index, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm, @ByRef float[] alpha, @ByRef float[] beta);
 
     /** Appends a depthwise post-op convolution.
      * 
@@ -250,32 +207,13 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param dst_data_type Output data type of depthwise post-op
      *  @param kernel_size Size of kernel of depthwise post-op
      *  @param stride_size Size of stride of depthwise post-op
-     *  @param padding_l_size Size of left and top paddings of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors. */
+     *  @param padding_l_size Size of left and top paddings of depthwise post-op */
     
     ///
     public native void append_dw(memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
-                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
-                @StdVector FloatPointer scales);
-    public native void append_dw(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
-                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
-                @StdVector FloatBuffer scales);
-    public native void append_dw(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @Cast("dnnl::memory::dim") long kernel_size, @Cast("dnnl::memory::dim") long stride_size,
-                @Cast("dnnl::memory::dim") long padding_l_size, int mask,
-                @StdVector float[] scales);
+                @Cast("dnnl::memory::dim") long padding_l_size);
 
     /** Returns the parameters of an depthwise post-op.
      * 
@@ -285,18 +223,8 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param dst_data_type Output data type of depthwise post-op
      *  @param kernel_size Size of kernel of depthwise post-op
      *  @param stride_size Size of stride of depthwise post-op
-     *  @param padding_l_size Size of left and top paddings of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors. */
+     *  @param padding_l_size Size of left and top paddings of depthwise post-op */
     
-    ///
-    ///
     ///
     ///
     ///
@@ -305,166 +233,15 @@ public class post_ops extends dnnl_post_ops_handle {
     public native void get_params_dw(int index, memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @Cast("dnnl::memory::dim*") @ByRef LongPointer kernel_size, @Cast("dnnl::memory::dim*") @ByRef LongPointer stride_size,
-                @Cast("dnnl::memory::dim*") @ByRef LongPointer padding_l_size, @ByRef IntPointer mask,
-                @StdVector FloatPointer scales);
+                @Cast("dnnl::memory::dim*") @ByRef LongPointer padding_l_size);
     public native void get_params_dw(int index, memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @Cast("dnnl::memory::dim*") @ByRef LongBuffer kernel_size, @Cast("dnnl::memory::dim*") @ByRef LongBuffer stride_size,
-                @Cast("dnnl::memory::dim*") @ByRef LongBuffer padding_l_size, @ByRef IntBuffer mask,
-                @StdVector FloatBuffer scales);
+                @Cast("dnnl::memory::dim*") @ByRef LongBuffer padding_l_size);
     public native void get_params_dw(int index, memory.data_type weights_data_type,
                 memory.data_type bias_data_type, memory.data_type dst_data_type,
                 @Cast("dnnl::memory::dim*") @ByRef long[] kernel_size, @Cast("dnnl::memory::dim*") @ByRef long[] stride_size,
-                @Cast("dnnl::memory::dim*") @ByRef long[] padding_l_size, @ByRef int[] mask,
-                @StdVector float[] scales);
-
-    /** Appends a depthwise post-op convolution with stride 1.
-     * 
-     *  This post-op can only be fused with a 2D 1x1 convolution (convolution
-     *  with weights spatial dimension equal to 1 i.e., kh=kw=1).
-     * 
-     *  The kind of this post-op is #dnnl_convolution.
-     * 
-     *  The number of outputs for primitive remain same as before. The output
-     *  size remain same as the original primitive due to stride=1.
-     * 
-     *  The Post-op can be defined as:
-     * 
-     *       dst[:] <- scales * (conv_dw(conv_1x1))
-     * 
-     *  See \ref dev_guide_attributes_post_ops_depthwise and
-     *  \ref dev_guide_attributes_post_ops_depthwise_fusion for more info.
-     * 
-     *  @param weights_data_type Weights data type of depthwise post-op
-     *  @param bias_data_type Bias data type of depthwise post-op
-     *  @param dst_data_type Output data type of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors. */
-    
-    ///
-    public native void append_dw_k3s1p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector FloatPointer scales);
-    public native void append_dw_k3s1p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector FloatBuffer scales);
-    public native void append_dw_k3s1p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector float[] scales);
-
-    /** Returns the parameters of an depthwise post-op with stride 1.
-     * 
-     *  @param index Index of the elementwise post-op.
-     *  @param weights_data_type Weights data type of depthwise post-op
-     *  @param bias_data_type Bias data type of depthwise post-op
-     *  @param dst_data_type Output data type of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors. */
-    
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    public native void get_params_dw_k3s1p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef IntPointer mask, @StdVector FloatPointer scales);
-    public native void get_params_dw_k3s1p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef IntBuffer mask, @StdVector FloatBuffer scales);
-    public native void get_params_dw_k3s1p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef int[] mask, @StdVector float[] scales);
-
-    /** Appends a depthwise post-op convolution with stride 2.
-     * 
-     *  This post-op can only be fused with a 2D 1x1 convolution (convolution
-     *  with weights spatial dimension equal to 1 i.e., kh=kw=1).
-     * 
-     *  The kind of this post-op is #dnnl_convolution.
-     * 
-     *  The number of outputs for primitive remain same as before. The output
-     *  spatial size can be derived as below:
-     * 
-     *  output_height = ceil(output_height_1x1_convolution, stride)
-     *  output_width = ceil(output_width_1x1_convolution, stride)
-     * 
-     *  The Post-op can be defined as:
-     * 
-     *       dst[:] <- scales * (conv_dw(conv_1x1))
-     * 
-     *  See \ref dev_guide_attributes_post_ops_depthwise and
-     *  \ref dev_guide_attributes_post_ops_depthwise_fusion for more info.
-     * 
-     *  @param weights_data_type Weights data type of depthwise post-op
-     *  @param bias_data_type Bias data type of depthwise post-op
-     *  @param dst_data_type Output data type of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors.
-     *  @return #dnnl_success on success and a status describing the error
-     *      otherwise */
-    
-    ///
-    public native void append_dw_k3s2p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector FloatPointer scales);
-    public native void append_dw_k3s2p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector FloatBuffer scales);
-    public native void append_dw_k3s2p1(memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                int mask, @StdVector float[] scales);
-
-    /** Returns the parameters of an depthwise post-op with stride 2.
-     * 
-     *  @param index Index of the elementwise post-op.
-     *  @param weights_data_type Weights data type of depthwise post-op
-     *  @param bias_data_type Bias data type of depthwise post-op
-     *  @param dst_data_type Output data type of depthwise post-op
-     *  @param mask Output scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the
-     *      \p scales array. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The mask
-     *      value of 0 implies a common scaling factor for the whole output
-     *      tensor.
-     *  @param scales Output pointer to a constant array of float scaling
-     *      factors. */
-    
-    ///
-    ///
-    ///
-    ///
-    ///
-    public native void get_params_dw_k3s2p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef IntPointer mask, @StdVector FloatPointer scales);
-    public native void get_params_dw_k3s2p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef IntBuffer mask, @StdVector FloatBuffer scales);
-    public native void get_params_dw_k3s2p1(int index, memory.data_type weights_data_type,
-                memory.data_type bias_data_type, memory.data_type dst_data_type,
-                @ByRef int[] mask, @StdVector float[] scales);
+                @Cast("dnnl::memory::dim*") @ByRef long[] padding_l_size);
 
     /** Appends a binary post-op.
      * 
@@ -482,8 +259,8 @@ public class post_ops extends dnnl_post_ops_handle {
      *  @param src1_desc Memory descriptor of a second operand. */
     
     ///
-    public native void append_binary(algorithm aalgorithm, @Const @ByRef memory.desc src1_desc);
-    public native void append_binary(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src1_desc);
+    public native void append_binary(algorithm aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src1_desc);
+    public native void append_binary(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src1_desc);
 
     /** Returns the parameters of a binary post-op.
      * 
@@ -505,11 +282,11 @@ public class post_ops extends dnnl_post_ops_handle {
     ///
     ///
     public native void get_params_binary(
-                int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef memory.desc src1_desc);
+                int index, @ByRef @Cast("dnnl::algorithm*") IntPointer aalgorithm, @ByRef org.bytedeco.dnnl.memory.desc src1_desc);
     public native void get_params_binary(
-                int index, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm, @ByRef memory.desc src1_desc);
+                int index, @ByRef @Cast("dnnl::algorithm*") IntBuffer aalgorithm, @ByRef org.bytedeco.dnnl.memory.desc src1_desc);
     public native void get_params_binary(
-                int index, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm, @ByRef memory.desc src1_desc);
+                int index, @ByRef @Cast("dnnl::algorithm*") int[] aalgorithm, @ByRef org.bytedeco.dnnl.memory.desc src1_desc);
 
     /** Appends a prelu forward post-op.
      * 
