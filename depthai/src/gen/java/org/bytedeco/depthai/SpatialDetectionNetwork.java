@@ -95,4 +95,11 @@ public class SpatialDetectionNetwork extends SpatialDetectionNetworkPropertiesNo
      */
     public native void setSpatialCalculationAlgorithm(SpatialLocationCalculatorAlgorithm calculationAlgorithm);
     public native void setSpatialCalculationAlgorithm(@Cast("dai::SpatialLocationCalculatorAlgorithm") int calculationAlgorithm);
+
+    /**
+     * Specifies spatial location calculator step size for depth calculation.
+     * Step size 1 means that every pixel is taken into calculation, size 2 means every second etc.
+     * @param stepSize Step size.
+     */
+    public native void setSpatialCalculationStepSize(int stepSize);
 }

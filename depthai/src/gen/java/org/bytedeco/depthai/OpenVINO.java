@@ -38,7 +38,7 @@ public class OpenVINO extends Pointer {
 
     /** OpenVINO Version supported version information */
     /** enum dai::OpenVINO::Version */
-    public static final int VERSION_2020_3 = 0, VERSION_2020_4 = 1, VERSION_2021_1 = 2, VERSION_2021_2 = 3, VERSION_2021_3 = 4, VERSION_2021_4 = 5, VERSION_2022_1 = 6;
+    public static final int VERSION_2020_3 = 0, VERSION_2020_4 = 1, VERSION_2021_1 = 2, VERSION_2021_2 = 3, VERSION_2021_3 = 4, VERSION_2021_4 = 5, VERSION_2022_1 = 6, VERSION_UNIVERSAL = 7;
 
     /** OpenVINO Blob */
     @NoOffset public static class Blob extends Pointer {
@@ -118,6 +118,14 @@ public class OpenVINO extends Pointer {
      * @return Latest potentially supported version
      */
     public static native @Cast("dai::OpenVINO::Version") int getBlobLatestSupportedVersion(@Cast("std::uint32_t") int majorVersion, @Cast("std::uint32_t") int minorVersion);
+
+    /**
+     * Returns OpenVINO version of a given blob minor/major revision.
+     * @param majorVersion Major version from OpenVINO blob
+     * @param minorVersion Minor version from OpenVINO blob
+     * @return Latest potentially supported version
+     */
+    public static native @Cast("dai::OpenVINO::Version") int getBlobVersion(@Cast("std::uint32_t") int majorVersion, @Cast("std::uint32_t") int minorVersion);
 
     /**
      * Checks whether two blob versions are compatible

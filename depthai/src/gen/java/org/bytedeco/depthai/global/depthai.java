@@ -22,6 +22,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../BoolOptional.java
 
 
+// Targeting ../FloatOptional.java
+
+
 // Targeting ../IntOptional.java
 
 
@@ -29,6 +32,15 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 
 // Targeting ../StringOptional.java
+
+
+// Targeting ../BoardConfigIMUOptional.java
+
+
+// Targeting ../CameraSensorTypeOptional.java
+
+
+// Targeting ../CameraImageOrientationOptional.java
 
 
 // Targeting ../EepromDataOptional.java
@@ -73,6 +85,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 // Targeting ../NodeVector.java
 
 
+// Targeting ../BoolFloatTuple.java
+
+
 // Targeting ../StringIntIntTuple.java
 
 
@@ -95,6 +110,9 @@ public class depthai extends org.bytedeco.depthai.presets.depthai {
 
 
 // Targeting ../CameraBoardSocketCameraInfoMap.java
+
+
+// Targeting ../CameraBoardSocketBoardConfigCameraMap.java
 
 
 // Targeting ../NodeIdConnectionSetMap.java
@@ -207,11 +225,30 @@ public static final int
 
 /** enum XLinkDeviceState_t */
 public static final int
+    /**
+     * Used only for searching devices. It means that the device state is not important.
+     */
     X_LINK_ANY_STATE = 0,
+    /**
+     * The device is booted (firmware is loaded) and the pipeline is running.
+     */
     X_LINK_BOOTED = 1,
+    /**
+     * Device isn't booted, e.g. for USB devices with no bootloader flashed. In such case it's waiting for the USB boot.
+     */
     X_LINK_UNBOOTED = 2,
+    /**
+     * The device is in bootloader and waiting for a connection. After the connection the state will change to BOOTED.
+     */
     X_LINK_BOOTLOADER = 3,
-    X_LINK_FLASH_BOOTED = 4;
+    /**
+     * The device has booted the flashed firmware/pipeline (e.g. in case of OAK POE devices in standalone mode).
+     */
+    X_LINK_FLASH_BOOTED = 4,
+    /**
+     * The device has booted the flashed firmware/pipeline (e.g. in case of OAK POE devices in standalone mode).
+     */
+    X_LINK_BOOTED_NON_EXCLUSIVE = X_LINK_FLASH_BOOTED;
 
 /** enum XLinkPCIEBootloader */
 public static final int
@@ -543,7 +580,7 @@ public static final int
 // #include <nlohmann/json.hpp>
 
 /** Camera sensor type */
-@Namespace("dai") public enum CameraSensorType { COLOR(0), MONO(1), TOF(2), THERMAL(3);
+@Namespace("dai") public enum CameraSensorType { AUTO(-1), COLOR(0), MONO(1), TOF(2), THERMAL(3);
 
     public final int value;
     private CameraSensorType(int v) { this.value = v; }
@@ -563,6 +600,10 @@ public static final int
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
 // #include "depthai-shared/common/CameraSensorType.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
+// Targeting ../CameraSensorConfig.java
+
+
+
 // Targeting ../CameraFeatures.java
 
 
@@ -709,6 +750,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
   // namespace dai
 
+
 // Parsed from depthai-shared/common/RotatedRect.hpp
 
 // #pragma once
@@ -773,6 +815,92 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // Targeting ../CameraInfo.java
 
 
+
+  // namespace dai
+
+// Parsed from depthai-shared/common/Colormap.hpp
+
+// #pragma once
+
+// #include <nlohmann/json.hpp>
+
+/** Camera sensor type */
+@Namespace("dai") public enum Colormap {
+    NONE(0),
+    TURBO(1),
+    JET(2),
+    STEREO_TURBO(3),
+    STEREO_JET(4);
+    // AUTUMN,
+    // BONE,
+    // JET,
+    // WINTER,
+    // RAINBOW,
+    // OCEAN,
+    // SUMMER,
+    // SPRING,
+    // COOL,
+    // HSV,
+    // PINK,
+    // HOT,
+    // PARULA,
+    // MAGMA,
+    // INFERNO,
+    // PLASMA,
+    // VIRIDIS,
+    // CIVIDIS,
+    // TWILIGHT,
+    // TWILIGHT_SHIFTED,
+    // DEEPGREEN
+
+    public final int value;
+    private Colormap(int v) { this.value = v; }
+    private Colormap(Colormap e) { this.value = e.value; }
+    public Colormap intern() { for (Colormap e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/common/FrameEvent.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+@Namespace("dai") public enum FrameEvent { NONE(0), READOUT_START(1), READOUT_END(2);
+
+    public final int value;
+    private FrameEvent(int v) { this.value = v; }
+    private FrameEvent(FrameEvent e) { this.value = e.value; }
+    public FrameEvent intern() { for (FrameEvent e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/common/ProcessorType.hpp
+
+// #pragma once
+
+// #include <cstdint>
+
+/**
+ * On which processor the node will be placed
+ *
+ * Enum specifying processor
+ */
+@Namespace("dai") public enum ProcessorType { LEON_CSS(0), LEON_MSS(1);
+
+    public final int value;
+    private ProcessorType(int v) { this.value = v; }
+    private ProcessorType(ProcessorType e) { this.value = e.value; }
+    public ProcessorType intern() { for (ProcessorType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
   // namespace dai
 
@@ -1052,6 +1180,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 // #include <unordered_map>
 
+// #include "depthai-shared/common/FrameEvent.hpp"
 // #include "depthai-shared/common/Timestamp.hpp"
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 // #include "depthai-shared/utility/Serialization.hpp"
@@ -1093,6 +1222,7 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include "depthai-shared/datatype/RawBuffer.hpp"
 
 // shared
+// #include "depthai-shared/common/Colormap.hpp"
 // #include "depthai-shared/common/Point2f.hpp"
 // #include "depthai-shared/common/RotatedRect.hpp"
 // #include "depthai-shared/common/Size2f.hpp"
@@ -1156,7 +1286,12 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 
 
 
-@Namespace("dai") public enum SpatialLocationCalculatorAlgorithm { AVERAGE(0), MIN(1), MAX(2);
+/**
+ * SpatialLocationCalculatorAlgorithm configuration modes
+ *
+ * Contains calculation method used to obtain spatial locations.
+ */
+@Namespace("dai") public enum SpatialLocationCalculatorAlgorithm { AVERAGE(0), MEAN(AVERAGE.value), MIN(AVERAGE.value + 1), MAX(AVERAGE.value + 2), MODE(AVERAGE.value + 3), MEDIAN(AVERAGE.value + 4);
 
     public final int value;
     private SpatialLocationCalculatorAlgorithm(int v) { this.value = v; }
@@ -1278,6 +1413,9 @@ public enum DetectionNetworkType { YOLO(0), MOBILENET(1);
 // #include <unordered_map>
 
 // project
+// #include "depthai-shared/common/CameraBoardSocket.hpp"
+// #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/common/CameraSensorType.hpp"
 // #include "depthai-shared/common/UsbSpeed.hpp"
 // #include "depthai-shared/common/optional.hpp"
 // #include "depthai-shared/log/LogLevel.hpp"
@@ -1293,6 +1431,29 @@ public static final int BOARD_CONFIG_MAGIC2 = BOARD_CONFIG_MAGIC2();
 
 
 
+
+
+
+
+
+
+
+  // namespace dai
+
+
+// Parsed from depthai-shared/device/CrashDump.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+// #include <unordered_map>
+
+// project
+// #include "depthai-shared/common/ProcessorType.hpp"
+// #include "depthai-shared/common/optional.hpp"
+// #include "depthai-shared/utility/Serialization.hpp"
+// Targeting ../CrashDump.java
 
 
 
@@ -1639,8 +1800,11 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 // #pragma once
 
+// #include <vector>
+
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/common/FrameEvent.hpp"
 // #include "depthai-shared/datatype/RawCameraControl.hpp"
 // #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../ColorCameraProperties.java
@@ -1672,8 +1836,11 @@ public static final int XLINK_MESSAGE_METADATA_MAX_SIZE = XLINK_MESSAGE_METADATA
 
 // #pragma once
 
+// #include <vector>
+
 // #include "depthai-shared/common/CameraBoardSocket.hpp"
 // #include "depthai-shared/common/CameraImageOrientation.hpp"
+// #include "depthai-shared/common/FrameEvent.hpp"
 // #include "depthai-shared/datatype/RawCameraControl.hpp"
 // #include "depthai-shared/properties/Properties.hpp"
 // Targeting ../MonoCameraProperties.java
@@ -2088,6 +2255,43 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, CameraBoardSocket socket);
 
 
+// Parsed from depthai/common/CameraExposureOffset.hpp
+
+// #pragma once
+
+// std
+// #include <cstdint>
+
+/**
+ * Describe possible exposure offsets
+ */
+@Namespace("dai") public enum CameraExposureOffset { START(0), MIDDLE(1), END(2);
+
+    public final int value;
+    private CameraExposureOffset(int v) { this.value = v; }
+    private CameraExposureOffset(CameraExposureOffset e) { this.value = e.value; }
+    public CameraExposureOffset intern() { for (CameraExposureOffset e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+  // namespace dai
+
+
+// Parsed from depthai/common/CameraFeatures.hpp
+
+// #pragma once
+
+// #include <ostream>
+// #include <vector>
+
+// #include "depthai-shared/common/CameraFeatures.hpp"
+// #include "depthai/common/CameraBoardSocket.hpp"
+// #include "depthai/common/CameraImageOrientation.hpp"
+// #include "depthai/common/CameraSensorType.hpp"
+
+// Global namespace
+public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef CameraFeatures camera);
+
 // Parsed from depthai/pipeline/datatype/ADatatype.hpp
 
 // #pragma once
@@ -2211,6 +2415,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 // project
 // #include "depthai/build/config.hpp"
+// #include "depthai/common/CameraExposureOffset.hpp"
 // #include "depthai/pipeline/datatype/Buffer.hpp"
 
 // shared
@@ -2991,6 +3196,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include <list>
 // #include <memory>
 // #include <mutex>
+// #include <stdexcept>
 // #include <string>
 // #include <thread>
 // #include <tuple>
@@ -3185,6 +3391,7 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 
 // project
 // #include "depthai/common/CameraBoardSocket.hpp"
+// #include "depthai/common/CameraFeatures.hpp"
 // #include "depthai/common/UsbSpeed.hpp"
 // #include "depthai/device/CalibrationHandler.hpp"
 // #include "depthai/device/Version.hpp"
@@ -3194,11 +3401,12 @@ public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer 
 // #include "depthai/xlink/XLinkStream.hpp"
 
 // shared
-// #include "depthai-shared/common/CameraFeatures.hpp"
 // #include "depthai-shared/common/ChipTemperature.hpp"
 // #include "depthai-shared/common/CpuUsage.hpp"
 // #include "depthai-shared/common/MemoryInfo.hpp"
+// #include "depthai-shared/datatype/RawIMUData.hpp"
 // #include "depthai-shared/device/BoardConfig.hpp"
+// #include "depthai-shared/device/CrashDump.hpp"
 // #include "depthai-shared/log/LogLevel.hpp"
 // #include "depthai-shared/log/LogMessage.hpp"
 

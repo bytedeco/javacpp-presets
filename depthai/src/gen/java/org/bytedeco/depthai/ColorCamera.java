@@ -117,6 +117,20 @@ public class ColorCamera extends ColorCameraPropertiesNode {
      */
     public native CameraBoardSocket getBoardSocket();
 
+    /**
+     * Specify which camera to use by name
+     * @param name Name of the camera to use
+     */
+    public native void setCamera(@StdString BytePointer name);
+    public native void setCamera(@StdString ByteBuffer name);
+    public native void setCamera(@StdString String name);
+
+    /**
+     * Retrieves which camera to use by name
+     * @return Name of the camera to use
+     */
+    public native @StdString BytePointer getCamera();
+
     /** Set which color camera to use */
     public native @Deprecated void setCamId(@Cast("int64_t") long id);
 
@@ -217,6 +231,24 @@ public class ColorCamera extends ColorCameraPropertiesNode {
      * @param fps Rate in frames per second
      */
     public native void setFps(float fps);
+
+    /**
+     * Isp 3A rate (auto focus, auto exposure, auto white balance, camera controls etc.).
+     * Default (0) matches the camera FPS, meaning that 3A is running on each frame.
+     * Reducing the rate of 3A reduces the CPU usage on CSS, but also increases the convergence rate of 3A.
+     * Note that camera controls will be processed at this rate. E.g. if camera is running at 30 fps, and camera control is sent at every frame,
+     * but 3A fps is set to 15, the camera control messages will be processed at 15 fps rate, which will lead to queueing.
+     <p>
+     */
+    public native void setIsp3aFps(int isp3aFps);
+
+    // Set events on which frames will be received
+    public native void setFrameEventFilter(@StdVector @Cast("dai::FrameEvent*") IntPointer events);
+    public native void setFrameEventFilter(@StdVector @Cast("dai::FrameEvent*") IntBuffer events);
+    public native void setFrameEventFilter(@StdVector @Cast("dai::FrameEvent*") int[] events);
+
+    // Get events on which frames will be received
+    public native @StdVector @Cast("dai::FrameEvent*") IntPointer getFrameEventFilter();
 
     /**
      * Get rate at which camera should produce frames

@@ -85,7 +85,7 @@ public class Warp extends WarpPropertiesNode {
 
     /**
      * Specify which hardware warp engines to use
-     * @param ids Maximum frame size in bytes
+     * @param ids Which warp engines to use (0, 1, 2)
      */
     public native void setHwIds(@ByVal IntVector ids);
     /** Retrieve which hardware warp engines to use */

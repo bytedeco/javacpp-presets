@@ -174,6 +174,19 @@ public class ImageManipConfig extends Buffer {
     public native @ByRef ImageManipConfig setFrameType(@Cast("dai::RawImgFrame::Type") int name);
 
     /**
+     * Specify gray to color conversion map
+     * @param colormap map from Colormap enum or Colormap::NONE to disable
+     */
+    public native @ByRef ImageManipConfig setColormap(Colormap colormap, int min, int max);
+    public native @ByRef ImageManipConfig setColormap(@Cast("dai::Colormap") int colormap, int min, int max);
+    public native @ByRef ImageManipConfig setColormap(Colormap colormap, float maxf);
+    public native @ByRef ImageManipConfig setColormap(@Cast("dai::Colormap") int colormap, float maxf);
+    public native @ByRef ImageManipConfig setColormap(Colormap colormap, int max/*=255*/);
+    public native @ByRef ImageManipConfig setColormap(Colormap colormap);
+    public native @ByRef ImageManipConfig setColormap(@Cast("dai::Colormap") int colormap, int max/*=255*/);
+    public native @ByRef ImageManipConfig setColormap(@Cast("dai::Colormap") int colormap);
+
+    /**
      * Specify horizontal flip
      * @param flip True to enable flip, false otherwise
      */
@@ -252,4 +265,9 @@ public class ImageManipConfig extends Buffer {
      * @return True if resize thumbnail mode is set, false otherwise
      */
     public native @Cast("bool") boolean isResizeThumbnail();
+
+    /**
+     * @return specified colormap
+     */
+    public native Colormap getColormap();
 }

@@ -43,14 +43,12 @@ public class Rect extends Pointer {
     private native void allocate();
     public Rect(float x, float y, float width, float height) { super((Pointer)null); allocate(x, y, width, height); }
     private native void allocate(float x, float y, float width, float height);
-
     public Rect(@Const @ByRef Rect r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Rect r);
     public Rect(@Const @ByRef Point2f org, @Const @ByRef Size2f sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point2f org, @Const @ByRef Size2f sz);
     public Rect(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2);
-
     public native @ByRef @Name("operator =") Rect put(@Const @ByRef Rect r);
 
     /**
@@ -90,18 +88,19 @@ public class Rect extends Pointer {
 
     /**
      * Denormalize rectangle.
-     * @param width Destination frame width.
-     * @param height Destination frame height.
+     * @param destWidth Destination frame width.
+     * @param destHeight Destination frame height.
      */
-    public native @ByVal Rect denormalize(int width, int height);
+    public native @ByVal Rect denormalize(int destWidth, int destHeight);
 
     /**
      * Normalize rectangle.
-     * @param width Source frame width.
-     * @param height Source frame height.
+     * @param srcWidth Source frame width.
+     * @param srcHeight Source frame height.
      */
-    public native @ByVal Rect normalize(int width, int height);
+    public native @ByVal Rect normalize(int srcWidth, int srcHeight);
 
+    // order of declaration must be x, y, width, height for constructor initializer lists
     public native float x(); public native Rect x(float setter);       // x coordinate of the top-left corner
     public native float y(); public native Rect y(float setter);       // y coordinate of the top-left corner
     public native float width(); public native Rect width(float setter);   // width of the rectangle
