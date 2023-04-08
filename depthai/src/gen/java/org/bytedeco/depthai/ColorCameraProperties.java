@@ -89,7 +89,9 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
         /** 5312 × 6000 */
         THE_5312X6000(9),
         /** 8000 × 6000 */
-        THE_48_MP(10);
+        THE_48_MP(10),
+        /** 1440 × 1080 */
+        THE_1440X1080(11);
 
         public final int value;
         private SensorResolution(int v) { this.value = v; }
@@ -119,6 +121,11 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
      * Which socket will color camera use
      */
     public native CameraBoardSocket boardSocket(); public native ColorCameraProperties boardSocket(CameraBoardSocket setter);
+
+    /**
+     * Which camera name will color camera use
+     */
+    public native @StdString BytePointer cameraName(); public native ColorCameraProperties cameraName(BytePointer setter);
 
     /**
      * Camera sensor image orientation / pixel readout
@@ -177,6 +184,16 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
     public native float fps(); public native ColorCameraProperties fps(float setter);
 
     /**
+     * Isp 3A rate (auto focus, auto exposure, auto white balance, camera controls etc.).
+     * Default (0) matches the camera FPS, meaning that 3A is running on each frame.
+     * Reducing the rate of 3A reduces the CPU usage on CSS, but also increases the convergence rate of 3A.
+     * Note that camera controls will be processed at this rate. E.g. if camera is running at 30 fps, and camera control is sent at every frame,
+     * but 3A fps is set to 15, the camera control messages will be processed at 15 fps rate, which will lead to queueing.
+     <p>
+     */
+    public native int isp3aFps(); public native ColorCameraProperties isp3aFps(int setter);
+
+    /**
      * Initial sensor crop, -1 signifies center crop
      */
     public native float sensorCropX(); public native ColorCameraProperties sensorCropX(float setter);
@@ -200,4 +217,9 @@ public class ColorCameraProperties extends ColorCameraPropertiesSerializable {
     public native int numFramesPoolVideo(); public native ColorCameraProperties numFramesPoolVideo(int setter);
     public native int numFramesPoolPreview(); public native ColorCameraProperties numFramesPoolPreview(int setter);
     public native int numFramesPoolStill(); public native ColorCameraProperties numFramesPoolStill(int setter);
+
+    /**
+     * List of events to receive, the rest will be ignored
+     */
+    public native @StdVector @Cast("dai::FrameEvent*") IntPointer eventFilter(); public native ColorCameraProperties eventFilter(IntPointer setter);
 }

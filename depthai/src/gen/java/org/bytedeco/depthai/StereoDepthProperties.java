@@ -145,6 +145,7 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
      * 0 means that it will reuse the shave assigned for main stereo algorithm.
      * For optimal performance it's recommended to allocate more than 0,
      * so post processing will run in parallel with main stereo algorithm.
+     * Minimum 1, maximum 10.
      */
     public native @Cast("std::int32_t") int numPostProcessingShaves(); public native StereoDepthProperties numPostProcessingShaves(int setter);
 
@@ -154,11 +155,12 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
      * 0 means that it will reuse the memory slices assigned for main stereo algorithm.
      * For optimal performance it's recommended to allocate more than 0,
      * so post processing will run in parallel with main stereo algorithm.
+     * Minimum 1, maximum 6.
      */
     public native @Cast("std::int32_t") int numPostProcessingMemorySlices(); public native StereoDepthProperties numPostProcessingMemorySlices(int setter);
 
     /**
-     * Whether to use focal length from calibration intrinsics or calculate based on calibration FOV.
+     * Whether to use horizontal focal length from calibration intrinsics (fx) or calculate based on calibration FOV.
      * Default value is true.
      * If set to false it's calculated from FOV and image resolution: focalLength = calib.width / (2.f * tan(calib.fov / 2 / 180.f * pi));
      */
@@ -175,4 +177,48 @@ public class StereoDepthProperties extends StereoDepthPropertiesSerializable {
      * used from calibration data.
      */
     public native @ByRef BoolOptional useHomographyRectification(); public native StereoDepthProperties useHomographyRectification(BoolOptional setter);
+
+    /**
+     * Override baseline from calibration.
+     * Used only in disparity to depth conversion.
+     * Units are centimeters.
+     */
+    public native @ByRef FloatOptional baseline(); public native StereoDepthProperties baseline(FloatOptional setter);
+
+    /**
+     * Override focal length from calibration.
+     * Used only in disparity to depth conversion.
+     * Units are pixels.
+     */
+    public native @ByRef FloatOptional focalLength(); public native StereoDepthProperties focalLength(FloatOptional setter);
+
+    /**
+     * Use baseline information for disparity to depth conversion from specs (design data) or from calibration.
+     * Suitable for debugging.
+     * Default: true
+     */
+    public native @Cast("bool") boolean disparityToDepthUseSpecTranslation(); public native StereoDepthProperties disparityToDepthUseSpecTranslation(boolean setter);
+
+    /**
+     * Obtain rectification matrices using spec translation (design data) or from calibration in calculations.
+     * Suitable for debugging.
+     * Default: false
+     */
+    public native @Cast("bool") boolean rectificationUseSpecTranslation(); public native StereoDepthProperties rectificationUseSpecTranslation(boolean setter);
+
+    /**
+     * Use baseline information for depth alignment from specs (design data) or from calibration.
+     * Suitable for debugging.
+     * Default: true
+     */
+    public native @Cast("bool") boolean depthAlignmentUseSpecTranslation(); public native StereoDepthProperties depthAlignmentUseSpecTranslation(boolean setter);
+
+    /**
+     * Free scaling parameter between 0 (when all the pixels in the undistorted image are valid)
+     * and 1 (when all the source image pixels are retained in the undistorted image).
+     * On some high distortion lenses, and/or due to rectification (image rotated) invalid areas may appear even with alpha=0,
+     * in these cases alpha < 0.0 helps removing invalid areas.
+     * See getOptimalNewCameraMatrix from opencv for more details.
+     */
+    public native @ByRef FloatOptional alphaScaling(); public native StereoDepthProperties alphaScaling(FloatOptional setter);
 }

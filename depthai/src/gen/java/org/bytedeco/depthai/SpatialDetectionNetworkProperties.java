@@ -41,4 +41,5 @@ public class SpatialDetectionNetworkProperties extends SpatialDetectionNetworkPr
     public native float detectedBBScaleFactor(); public native SpatialDetectionNetworkProperties detectedBBScaleFactor(float setter);
     public native @ByRef SpatialLocationCalculatorConfigThresholds depthThresholds(); public native SpatialDetectionNetworkProperties depthThresholds(SpatialLocationCalculatorConfigThresholds setter);
     public native SpatialLocationCalculatorAlgorithm calculationAlgorithm(); public native SpatialDetectionNetworkProperties calculationAlgorithm(SpatialLocationCalculatorAlgorithm setter);
+    public native @Cast("std::int32_t") int stepSize(); public native SpatialDetectionNetworkProperties stepSize(int setter);
 }

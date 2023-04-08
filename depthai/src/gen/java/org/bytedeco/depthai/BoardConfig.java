@@ -35,7 +35,7 @@ public class BoardConfig extends Pointer {
         return new BoardConfig((Pointer)this).offsetAddress(i);
     }
 
-    // USB related config
+    /** USB related config */
     public static class USB extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
@@ -95,11 +95,11 @@ public class BoardConfig extends Pointer {
      *  For example: "net.inet.tcp.delayed_ack=0" (this one is also set by default) */
     public native @ByRef StringVector sysctl(); public native BoardConfig sysctl(StringVector setter);
 
-    // Watchdog config
+    /** Watchdog config */
     public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogTimeoutMs(); public native BoardConfig watchdogTimeoutMs(IntOptional setter);
     public native @ByRef @Cast("tl::optional<uint32_t>*") IntOptional watchdogInitialDelayMs(); public native BoardConfig watchdogInitialDelayMs(IntOptional setter);
 
-    // GPIO config
+    /** GPIO config */
     @NoOffset public static class GPIO extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -210,27 +210,92 @@ public class BoardConfig extends Pointer {
     /** UART instance map */
     public native @ByRef ByteUARTMap uart(); public native BoardConfig uart(ByteUARTMap setter);
 
-    // PCIe config
+    /** PCIe config */
     public native @ByRef BoolOptional pcieInternalClock(); public native BoardConfig pcieInternalClock(BoolOptional setter);
 
-    // USB3 phy config
+    /** USB3 phy config */
     public native @ByRef BoolOptional usb3PhyInternalClock(); public native BoardConfig usb3PhyInternalClock(BoolOptional setter);
 
-    // MIPI 4Lane RGB config
+    /** MIPI 4Lane RGB config */
     public native @ByRef BoolOptional mipi4LaneRgb(); public native BoardConfig mipi4LaneRgb(BoolOptional setter);
 
-    // eMMC config
+    /** eMMC config */
     public native @ByRef BoolOptional emmc(); public native BoardConfig emmc(BoolOptional setter);
 
-    // log path
+    /** log path */
     public native @ByRef StringOptional logPath(); public native BoardConfig logPath(StringOptional setter);
 
-    // Max log size
+    /** Max log size */
     public native @ByRef SizeTOptional logSizeMax(); public native BoardConfig logSizeMax(SizeTOptional setter);
 
-    // log verbosity
+    /** log verbosity */
     public native @ByRef LogLevelOptional logVerbosity(); public native BoardConfig logVerbosity(LogLevelOptional setter);
 
-    // log device prints
+    /** log device prints */
     public native @ByRef BoolOptional logDevicePrints(); public native BoardConfig logDevicePrints(BoolOptional setter);
+
+    public native @Cast("bool") boolean nonExclusiveMode(); public native BoardConfig nonExclusiveMode(boolean setter);
+
+    // TODO(themarpe) - add later when applicable
+    // // Socket description
+    // struct Socket {
+    //     int i2cBus;
+    //     int mipiStart, mipiEnd;  // inclusive
+    //     int gpioPwr, gpioRst;
+    //     float voltageCore, voltageAnalog, voltageInterface;
+    //     // TODO(themarpe) - tbd if better placed here
+    //     // tl::optional<CameraBoardSocket> syncTo;
+    // };
+    // std::unordered_map<CameraBoardSocket, Socket> socket;
+
+    /** Camera description */
+    public static class Camera extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public Camera() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Camera(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Camera(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public Camera position(long position) {
+            return (Camera)super.position(position);
+        }
+        @Override public Camera getPointer(long i) {
+            return new Camera((Pointer)this).offsetAddress(i);
+        }
+    
+        public native @StdString BytePointer name(); public native Camera name(BytePointer setter);
+        // TODO(themarpe) - add later when applicable
+        // std::vector<std::string> sensorName;
+        public native @ByRef CameraSensorTypeOptional sensorType(); public native Camera sensorType(CameraSensorTypeOptional setter);
+        // std::vector<vector> vcm;
+        // tl::optional<CameraBoardSocket> syncTo;
+        public native @ByRef CameraImageOrientationOptional orientation(); public native Camera orientation(CameraImageOrientationOptional setter);
+    }
+    public native @ByRef CameraBoardSocketBoardConfigCameraMap camera(); public native BoardConfig camera(CameraBoardSocketBoardConfigCameraMap setter);
+
+    @NoOffset public static class IMU extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public IMU(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public IMU(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public IMU position(long position) {
+            return (IMU)super.position(position);
+        }
+        @Override public IMU getPointer(long i) {
+            return new IMU((Pointer)this).offsetAddress(i);
+        }
+    
+        public IMU() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        public native byte bus(); public native IMU bus(byte setter);
+        public native byte interrupt(); public native IMU interrupt(byte setter);
+        public native byte wake(); public native IMU wake(byte setter);
+        public native byte csGpio(); public native IMU csGpio(byte setter);
+    }
+    public native @ByRef BoardConfigIMUOptional imu(); public native BoardConfig imu(BoardConfigIMUOptional setter);
 }

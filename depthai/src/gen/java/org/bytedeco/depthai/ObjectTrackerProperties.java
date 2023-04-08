@@ -63,4 +63,8 @@ public class ObjectTrackerProperties extends ObjectTrackerPropertiesSerializable
      * New ID assignment policy.
      */
     public native TrackerIdAssignmentPolicy trackerIdAssignmentPolicy(); public native ObjectTrackerProperties trackerIdAssignmentPolicy(TrackerIdAssignmentPolicy setter);
+    /**
+     * Whether tracker should take into consideration class label for tracking.
+     */
+    public native @Cast("bool") boolean trackingPerClass(); public native ObjectTrackerProperties trackingPerClass(boolean setter);
 }

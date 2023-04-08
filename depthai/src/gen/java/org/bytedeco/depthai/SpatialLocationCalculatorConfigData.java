@@ -36,6 +36,9 @@ public class SpatialLocationCalculatorConfigData extends Pointer {
         return new SpatialLocationCalculatorConfigData((Pointer)this).offsetAddress(i);
     }
 
+    @MemberGetter public static native @Cast("const std::int32_t") int AUTO();
+    public static final int AUTO = AUTO();
+
     /**
      * Region of interest for spatial location calculation.
      */
@@ -46,10 +49,18 @@ public class SpatialLocationCalculatorConfigData extends Pointer {
     public native @ByRef SpatialLocationCalculatorConfigThresholds depthThresholds(); public native SpatialLocationCalculatorConfigData depthThresholds(SpatialLocationCalculatorConfigThresholds setter);
     /**
      * Calculation method used to obtain spatial locations
-     * Average - the average of ROI is used for calculation.
+     * Average/mean: the average of ROI is used for calculation.
      * Min: the minimum value inside ROI is used for calculation.
      * Max: the maximum value inside ROI is used for calculation.
-     * Default: average.
+     * Mode: the most frequent value inside ROI is used for calculation.
+     * Median: the median value inside ROI is used for calculation.
+     * Default: median.
      */
     public native SpatialLocationCalculatorAlgorithm calculationAlgorithm(); public native SpatialLocationCalculatorConfigData calculationAlgorithm(SpatialLocationCalculatorAlgorithm setter);
+    /**
+     * Step size for calculation.
+     * Step size 1 means that every pixel is taken into calculation, size 2 means every second etc.
+     * Default value AUTO: for AVERAGE, MIN, MAX step size is 1; for MODE/MEDIAN it's 2.
+     */
+    public native @Cast("std::int32_t") int stepSize(); public native SpatialLocationCalculatorConfigData stepSize(int setter);
 }

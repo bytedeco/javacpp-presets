@@ -41,6 +41,12 @@ public class SpatialLocationCalculatorConfigThresholds extends Pointer {
         return new SpatialLocationCalculatorConfigThresholds((Pointer)this).offsetAddress(i);
     }
 
+    /**
+     * Values less or equal than this threshold are not taken into calculation.
+     */
     public native @Cast("uint32_t") int lowerThreshold(); public native SpatialLocationCalculatorConfigThresholds lowerThreshold(int setter);
+    /**
+     * Values greater or equal than this threshold are not taken into calculation.
+     */
     public native @Cast("uint32_t") int upperThreshold(); public native SpatialLocationCalculatorConfigThresholds upperThreshold(int setter);
 }

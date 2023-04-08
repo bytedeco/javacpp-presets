@@ -68,4 +68,12 @@ public class CameraFeatures extends Pointer {
      *  Whether an autofocus VCM IC was detected
      */
     public native @Cast("bool") boolean hasAutofocus(); public native CameraFeatures hasAutofocus(boolean setter);
+    /**
+     * Camera name or alias
+     */
+    public native @StdString BytePointer name(); public native CameraFeatures name(BytePointer setter);
+    /**
+     * Available sensor configs
+     */
+    public native @StdVector CameraSensorConfig configs(); public native CameraFeatures configs(CameraSensorConfig setter);
 }

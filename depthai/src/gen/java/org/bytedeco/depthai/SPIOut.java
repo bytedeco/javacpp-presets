@@ -53,5 +53,5 @@ public class SPIOut extends SPIOutPropertiesNode {
      * Specifies SPI Bus number to use
      * @param id SPI Bus id
      */
-    public native void setBusId(int id);
+    public native void setBusId(int busId);
 }

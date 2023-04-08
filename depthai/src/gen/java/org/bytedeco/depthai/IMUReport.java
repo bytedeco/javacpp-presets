@@ -50,7 +50,7 @@ public class IMUReport extends Pointer {
     /**
      * The sequence number increments once for each report sent.  Gaps
      * in the sequence numbers indicate missing or dropped reports.
-     * Max value 255 after which resets to 0.
+     * Max value 2^32 after which resets to 0.
      */
     public native int sequence(); public native IMUReport sequence(int setter);
 
@@ -73,4 +73,9 @@ public class IMUReport extends Pointer {
      * not synchronized to host time. Used mostly for debugging
      */
     public native @ByVal @Cast("std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>*") Pointer getTimestampDevice();
+
+    /**
+     * Retrieves IMU report sequence number
+     */
+    public native int getSequenceNum();
 }

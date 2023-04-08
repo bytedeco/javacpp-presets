@@ -47,19 +47,32 @@ public class SpatialLocations extends Pointer {
      */
     public native @ByRef SpatialLocationCalculatorConfigData config(); public native SpatialLocations config(SpatialLocationCalculatorConfigData setter);
     /**
-     *  Average of depth values inside the ROI between the specified thresholds in config
+     *  Average of depth values inside the ROI between the specified thresholds in config.
+     *  Calculated only if calculation method is set to AVERAGE or MIN oR MAX.
      */
     public native float depthAverage(); public native SpatialLocations depthAverage(float setter);
     /**
-     *  Minimum of depth values inside the ROI between the specified thresholds in config
+     *  Most frequent of depth values inside the ROI between the specified thresholds in config.
+     * Calculated only if calculation method is set to MODE.
+     */
+    public native float depthMode(); public native SpatialLocations depthMode(float setter);
+    /**
+     *  Median of depth values inside the ROI between the specified thresholds in config.
+     * Calculated only if calculation method is set to MEDIAN.
+     */
+    public native float depthMedian(); public native SpatialLocations depthMedian(float setter);
+    /**
+     *  Minimum of depth values inside the ROI between the specified thresholds in config.
+     * Calculated only if calculation method is set to AVERAGE or MIN oR MAX.
      */
     public native @Cast("std::uint16_t") short depthMin(); public native SpatialLocations depthMin(short setter);
     /**
-     *  Maximum of depth values inside the ROI between the specified thresholds in config
+     *  Maximum of depth values inside the ROI between the specified thresholds in config.
+     * Calculated only if calculation method is set to AVERAGE or MIN oR MAX.
      */
     public native @Cast("std::uint16_t") short depthMax(); public native SpatialLocations depthMax(short setter);
     /**
-     *  Number of depth values used to calculate depthAverage based on config
+     *  Number of depth values used in calculations.
      */
     public native @Cast("std::uint32_t") int depthAveragePixelCount(); public native SpatialLocations depthAveragePixelCount(int setter);
     /**

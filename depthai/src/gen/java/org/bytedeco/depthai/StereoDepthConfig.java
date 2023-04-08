@@ -137,6 +137,13 @@ public class StereoDepthConfig extends Buffer {
     public native @ByRef StereoDepthConfig setDisparityShift(int disparityShift);
 
     /**
+     * Invalidate X amount of pixels at the edge of disparity frame.
+     * For right and center alignment X pixels will be invalidated from the right edge,
+     * for left alignment from the left edge.
+     */
+    public native @ByRef StereoDepthConfig setNumInvalidateEdgePixels(int numInvalidateEdgePixels);
+
+    /**
      * Get depth unit of depth map.
      */
     public native RawStereoDepthConfig.AlgorithmControl.DepthUnit getDepthUnit();

@@ -43,6 +43,10 @@ public class DataOutputQueue extends Pointer {
 
     /**
      * Check whether queue is closed
+     *
+     * \warning This function is thread-unsafe and may return outdated incorrect values. It is
+     * only meant for use in simple single-threaded code. Well written code should handle
+     * exceptions when calling any DepthAI apis to handle hardware events and multithreaded use.
      */
     public native @Cast("bool") boolean isClosed();
 

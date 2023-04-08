@@ -310,6 +310,25 @@ public class DeviceBootloader extends Pointer {
     private native void allocate(@Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToBootloader);
 
     /**
+     * Connects to device with specified name/device id
+     *
+     * @param nameOrDeviceId Creates DeviceInfo with nameOrDeviceId to connect to
+     * @param allowFlashingBootloader Set to true to allow flashing the devices bootloader. Defaults to false
+     */
+    public DeviceBootloader(@StdString BytePointer nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(nameOrDeviceId, allowFlashingBootloader); }
+    private native void allocate(@StdString BytePointer nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
+    public DeviceBootloader(@StdString BytePointer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString BytePointer nameOrDeviceId);
+    public DeviceBootloader(@StdString ByteBuffer nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(nameOrDeviceId, allowFlashingBootloader); }
+    private native void allocate(@StdString ByteBuffer nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
+    public DeviceBootloader(@StdString ByteBuffer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString ByteBuffer nameOrDeviceId);
+    public DeviceBootloader(@StdString String nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/) { super((Pointer)null); allocate(nameOrDeviceId, allowFlashingBootloader); }
+    private native void allocate(@StdString String nameOrDeviceId, @Cast("bool") boolean allowFlashingBootloader/*=false*/);
+    public DeviceBootloader(@StdString String nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString String nameOrDeviceId);
+
+    /**
      * \brief Destroy the Device Bootloader object
      *
      */
@@ -412,7 +431,7 @@ public class DeviceBootloader extends Pointer {
 
     /**
      * Clears flashed application on the device, by removing SBR boot structure
-     * Doesnt remove fast boot header capability to still boot the application
+     * Doesn't remove fast boot header capability to still boot the application
      */
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashClear(Memory memory/*=dai::DeviceBootloader::Memory::AUTO*/);
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer flashClear();
@@ -534,7 +553,7 @@ public class DeviceBootloader extends Pointer {
      * @param memory Memory to read
      * @param offset Offset at which to read the specified bytes
      * @param size Number of bytes to read
-     * @param data Data to read to. Must be atleast 'size' number of bytes big
+     * @param data Data to read to. Must be at least 'size' number of bytes big
      * @param progressCallback Callback that sends back a value between 0..1 which signifies current reading progress
      */
     public native @ByVal @Cast("std::tuple<bool,std::string>*") Pointer readCustom(
@@ -686,6 +705,10 @@ public class DeviceBootloader extends Pointer {
 
     /**
      * Is the device already closed (or disconnected)
+     *
+     * \warning This function is thread-unsafe and may return outdated incorrect values. It is
+     * only meant for use in simple single-threaded code. Well written code should handle
+     * exceptions when calling any DepthAI apis to handle hardware events and multithreaded use.
      */
     public native @Cast("bool") boolean isClosed();
 }

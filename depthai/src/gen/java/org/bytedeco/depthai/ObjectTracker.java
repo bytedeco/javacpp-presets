@@ -82,7 +82,7 @@ public class ObjectTracker extends ObjectTrackerPropertiesNode {
 
     /**
      * Specify maximum number of object to track.
-     * @param maxObjectsToTrack Maximum number of object to track. Maximum 60.
+     * @param maxObjectsToTrack Maximum number of object to track. Maximum 60 in case of SHORT_TERM_KCF, otherwise 1000.
      */
     public native void setMaxObjectsToTrack(@Cast("std::int32_t") int maxObjectsToTrack);
 
@@ -107,4 +107,9 @@ public class ObjectTracker extends ObjectTrackerPropertiesNode {
      */
     public native void setTrackerIdAssignmentPolicy(TrackerIdAssignmentPolicy type);
     public native void setTrackerIdAssignmentPolicy(@Cast("dai::TrackerIdAssignmentPolicy") int type);
+
+    /**
+     * Whether tracker should take into consideration class label for tracking.
+     */
+    public native void setTrackingPerClass(@Cast("bool") boolean trackingPerClass);
 }

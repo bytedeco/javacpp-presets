@@ -68,6 +68,7 @@ public class DeviceBase extends Pointer {
     
         public native @Cast("dai::OpenVINO::Version") int version(); public native Config version(int setter);
         public native @ByRef BoardConfig board(); public native Config board(BoardConfig setter);
+        public native @Cast("bool") boolean nonExclusiveMode(); public native Config nonExclusiveMode(boolean setter);
     }
 
     // static API
@@ -139,7 +140,7 @@ public class DeviceBase extends Pointer {
      * @param version Version of OpenVINO which firmware will support
      * @return Firmware binary
      */
-    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode, @Cast("dai::OpenVINO::Version") int version/*=dai::OpenVINO::DEFAULT_VERSION*/);
+    public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode, @Cast("dai::OpenVINO::Version") int version/*=dai::OpenVINO::VERSION_UNIVERSAL*/);
     public static native @Cast("std::uint8_t*") @StdVector BytePointer getEmbeddedDeviceBinary(@Cast("bool") boolean usb2Mode);
 
     /**
@@ -217,7 +218,7 @@ public class DeviceBase extends Pointer {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
      */
     public DeviceBase() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -305,7 +306,7 @@ public class DeviceBase extends Pointer {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
      *
      * @param devInfo DeviceInfo which specifies which device to connect to
      */
@@ -314,7 +315,7 @@ public class DeviceBase extends Pointer {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
      *
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param maxUsbSpeed Maximum allowed USB speed
@@ -323,6 +324,39 @@ public class DeviceBase extends Pointer {
     private native void allocate(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
     public DeviceBase(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
     private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+
+    /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
+     *
+     * @param nameOrDeviceId Creates DeviceInfo with nameOrDeviceId to connect to
+     */
+    public DeviceBase(@StdString BytePointer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString BytePointer nameOrDeviceId);
+    public DeviceBase(@StdString ByteBuffer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString ByteBuffer nameOrDeviceId);
+    public DeviceBase(@StdString String nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+    private native void allocate(@StdString String nameOrDeviceId);
+
+    /**
+     * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
+     *
+     * @param nameOrDeviceId Creates DeviceInfo with nameOrDeviceId to connect to
+     * @param maxUsbSpeed Maximum allowed USB speed
+     */
+    public DeviceBase(@StdString BytePointer nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString BytePointer nameOrDeviceId, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@StdString ByteBuffer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString ByteBuffer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+    public DeviceBase(@StdString String nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString String nameOrDeviceId, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@StdString BytePointer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString BytePointer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+    public DeviceBase(@StdString ByteBuffer nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString ByteBuffer nameOrDeviceId, UsbSpeed maxUsbSpeed);
+    public DeviceBase(@StdString String nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+    private native void allocate(@StdString String nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
 
     /**
      * Device destructor
@@ -459,6 +493,16 @@ public class DeviceBase extends Pointer {
     public native @StdVector StringIntIntTuple getIrDrivers();
 
     /**
+     * Retrieves crash dump for debugging.
+     */
+    public native @ByVal CrashDump getCrashDump();
+
+    /**
+     * Retrieves whether the is crash dump stored on device or not.
+     */
+    public native @Cast("bool") boolean hasCrashDump();
+
+    /**
      * Add a callback for device logging. The callback will be called from a separate thread with the LogMessage being passed.
      *
      * @param callback Callback to call whenever a log message arrives
@@ -509,6 +553,48 @@ public class DeviceBase extends Pointer {
      * @return Map/dictionary with camera sensor names, indexed by socket
      */
     public native @ByVal CameraBoardSocketStringMap getCameraSensorNames();
+
+    /**
+     * Get connected IMU type
+     *
+     * @return IMU type
+     */
+    public native @StdString BytePointer getConnectedIMU();
+
+    /**
+     * Get connected IMU firmware version
+     *
+     * @return IMU firmware version
+     */
+    public native @ByVal Version getIMUFirmwareVersion();
+
+    /**
+     * Get embedded IMU firmware version to which IMU can be upgraded
+     *
+     * @return Get embedded IMU firmware version to which IMU can be upgraded.
+     */
+    public native @ByVal Version getEmbeddedIMUFirmwareVersion();
+
+    /**
+     * Starts IMU firmware update asynchronously only if IMU node is not running.
+     * If current firmware version is the same as embedded firmware version then it's no-op. Can be overridden by forceUpdate parameter.
+     * State of firmware update can be monitored using getIMUFirmwareUpdateStatus API.
+     *
+     * @param forceUpdate Force firmware update or not. Will perform FW update regardless of current version and embedded firmware version.
+     *
+     * @return Returns whether firmware update can be started. Returns false if IMU node is started.
+     */
+    public native @Cast("bool") boolean startIMUFirmwareUpdate(@Cast("bool") boolean forceUpdate/*=false*/);
+    public native @Cast("bool") boolean startIMUFirmwareUpdate();
+
+    /**
+     * Get IMU firmware update status
+     *
+     * @return Whether IMU firmware update is done and last firmware update progress as percentage.
+     * return value true and 100 means that the update was successful
+     * return value true and other than 100 means that the update failed
+     */
+    public native @ByVal BoolFloatTuple getIMUFirmwareUpdateStatus();
 
     /**
      * Retrieves current DDR memory information from device
@@ -659,7 +745,7 @@ public class DeviceBase extends Pointer {
     /**
      * Fetches the raw EEPROM data from User area
      *
-     * @throws std::runtime_exception if any error occured
+     * @throws std::runtime_exception if any error occurred
      * @return Binary dump of User area EEPROM data
      */
     public native @Cast("std::uint8_t*") @StdVector BytePointer readCalibrationRaw();
@@ -667,7 +753,7 @@ public class DeviceBase extends Pointer {
     /**
      * Fetches the raw EEPROM data from Factory area
      *
-     * @throws std::runtime_exception if any error occured
+     * @throws std::runtime_exception if any error occurred
      * @return Binary dump of Factory area EEPROM data
      */
     public native @Cast("std::uint8_t*") @StdVector BytePointer readFactoryCalibrationRaw();
@@ -706,6 +792,10 @@ public class DeviceBase extends Pointer {
 
     /**
      * Is the device already closed (or disconnected)
+     *
+     * \warning This function is thread-unsafe and may return outdated incorrect values. It is
+     * only meant for use in simple single-threaded code. Well written code should handle
+     * exceptions when calling any DepthAI apis to handle hardware events and multithreaded use.
      */
     public native @Cast("bool") boolean isClosed();
 

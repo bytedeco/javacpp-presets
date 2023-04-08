@@ -158,6 +158,9 @@ public class RawImageManipConfig extends RawBuffer {
         public native RawImgFrame.Type type(); public native FormatConfig type(RawImgFrame.Type setter);
         public native @Cast("bool") boolean flipHorizontal(); public native FormatConfig flipHorizontal(boolean setter);
         public native @Cast("bool") boolean flipVertical(); public native FormatConfig flipVertical(boolean setter);
+        public native Colormap colormap(); public native FormatConfig colormap(Colormap setter);
+        public native int colormapMin(); public native FormatConfig colormapMin(int setter);
+        public native int colormapMax(); public native FormatConfig colormapMax(int setter);
     }
 
     public native @ByRef CropConfig cropConfig(); public native RawImageManipConfig cropConfig(CropConfig setter);

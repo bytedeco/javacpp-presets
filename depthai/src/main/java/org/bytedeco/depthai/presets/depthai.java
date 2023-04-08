@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Samuel Audet
+ * Copyright (C) 2021-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -73,6 +73,9 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/common/Extrinsics.hpp",
                 "depthai-shared/common/CameraModel.hpp",
                 "depthai-shared/common/CameraInfo.hpp",
+                "depthai-shared/common/Colormap.hpp",
+                "depthai-shared/common/FrameEvent.hpp",
+                "depthai-shared/common/ProcessorType.hpp",
                 "depthai-shared/common/StereoRectification.hpp",
                 "depthai-shared/common/EepromData.hpp",
                 "depthai-shared/common/TensorInfo.hpp",
@@ -96,6 +99,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/datatype/RawSystemInformation.hpp",
                 "depthai-shared/datatype/RawTracklets.hpp",
                 "depthai-shared/device/BoardConfig.hpp",
+                "depthai-shared/device/CrashDump.hpp",
                 "depthai-shared/log/LogLevel.hpp",
                 "depthai-shared/log/LogMessage.hpp",
                 "depthai-shared/xlink/XLinkConstants.hpp",
@@ -128,6 +132,8 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/openvino/OpenVINO.hpp",
                 "depthai/common/UsbSpeed.hpp",
                 "depthai/common/CameraBoardSocket.hpp",
+                "depthai/common/CameraExposureOffset.hpp",
+                "depthai/common/CameraFeatures.hpp",
                 "depthai/pipeline/datatype/ADatatype.hpp",
                 "depthai/pipeline/datatype/AprilTagConfig.hpp",
                 "depthai/pipeline/datatype/AprilTags.hpp",
@@ -214,6 +220,8 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::BoardConfig::USB").pointerTypes("BoardConfig.USB"))
                .put(new Info("dai::BoardConfig::GPIO").pointerTypes("BoardConfig.GPIO"))
                .put(new Info("dai::BoardConfig::UART").pointerTypes("BoardConfig.UART"))
+               .put(new Info("dai::BoardConfig::IMU").pointerTypes("BoardConfig.IMU"))
+               .put(new Info("dai::BoardConfig::Camera").pointerTypes("BoardConfig.Camera"))
                .put(new Info("dai::DeviceBase::Config", "dai::Device::Config").pointerTypes("DeviceBase.Config"))
                .put(new Info("auto", "std::initializer_list", "std::weak_ptr", "dai::XLinkStream(dai::XLinkStream)",
                              "dai::RawStereoDepthConfig::CostAggregation::defaultHorizontalPenaltyCosts",
@@ -244,6 +252,7 @@ public class depthai implements InfoMapper {
                .put(new Info("std::unordered_set<dai::Node::Connection>").pointerTypes("ConnectionSet").define())
                .put(new Info("std::unordered_map<dai::CameraBoardSocket,std::string>").pointerTypes("CameraBoardSocketStringMap").define())
                .put(new Info("std::unordered_map<dai::CameraBoardSocket,dai::CameraInfo>").pointerTypes("CameraBoardSocketCameraInfoMap").define())
+               .put(new Info("std::unordered_map<dai::CameraBoardSocket,dai::BoardConfig::Camera>").pointerTypes("CameraBoardSocketBoardConfigCameraMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::unordered_set<dai::Node::Connection> >").pointerTypes("NodeIdConnectionSetMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())
                .put(new Info("std::unordered_map<int64_t,dai::NodeObjInfo>").pointerTypes("LongNodeObjInfoMap").define())
@@ -261,13 +270,18 @@ public class depthai implements InfoMapper {
                                    "std::unordered_map<std::string,dai::Node::Output>").pointerTypes("StringNodeOutputMap").define())
                .put(new Info("std::map<std::string,std::vector<int> >").pointerTypes("StringIntVectorMap").define())
                .put(new Info("tl::optional<bool>").pointerTypes("BoolOptional").define())
+               .put(new Info("tl::optional<float>").pointerTypes("FloatOptional").define())
                .put(new Info("tl::optional<int>", "tl::optional<uint32_t>", "tl::optional<std::int32_t>",
                              "tl::optional<std::uint32_t>", "tl::optional<dai::OpenVINO::Version>").cast().pointerTypes("IntOptional").define())
                .put(new Info("tl::optional<size_t>").pointerTypes("SizeTOptional").define())
                .put(new Info("tl::optional<std::string>").pointerTypes("StringOptional").define())
+               .put(new Info("tl::optional<dai::BoardConfig::IMU>").pointerTypes("BoardConfigIMUOptional").define())
+               .put(new Info("tl::optional<dai::CameraSensorType>").pointerTypes("CameraSensorTypeOptional").define())
+               .put(new Info("tl::optional<dai::CameraImageOrientation>").pointerTypes("CameraImageOrientationOptional").define())
                .put(new Info("tl::optional<dai::EepromData>").pointerTypes("EepromDataOptional").define())
                .put(new Info("tl::optional<dai::LogLevel>", "tl::optional<LogLevel>").pointerTypes("LogLevelOptional").define())
                .put(new Info("tl::optional<dai::Version>", "tl::optional<Version>").pointerTypes("VersionOptional").define())
+               .put(new Info("std::tuple<bool,float>").pointerTypes("BoolFloatTuple").define())
                .put(new Info("std::tuple<std::string,int,int>").pointerTypes("StringIntIntTuple").define())
                .put(new Info("std::tuple<std::string,std::string>").pointerTypes("StringStringTuple").define())
                .put(new Info("std::tuple<std::vector<std::vector<float> >,int,int>").pointerTypes("FloatVectorVectorIntIntTuple").define())

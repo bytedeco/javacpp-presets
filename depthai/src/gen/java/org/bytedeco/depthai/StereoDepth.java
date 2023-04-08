@@ -367,4 +367,46 @@ public class StereoDepth extends StereoDepthPropertiesNode {
      * Equivalent to useHomographyRectification(!enableDistortionCorrection)
      */
     public native void enableDistortionCorrection(@Cast("bool") boolean enableDistortionCorrection);
+
+    /**
+     * Override baseline from calibration.
+     * Used only in disparity to depth conversion.
+     * Units are centimeters.
+     */
+    public native void setBaseline(float baseline);
+
+    /**
+     * Override focal length from calibration.
+     * Used only in disparity to depth conversion.
+     * Units are pixels.
+     */
+    public native void setFocalLength(float focalLength);
+
+    /**
+     * Use baseline information for disparity to depth conversion from specs (design data) or from calibration.
+     * Default: true
+     */
+    public native void setDisparityToDepthUseSpecTranslation(@Cast("bool") boolean specTranslation);
+
+    /**
+     * Obtain rectification matrices using spec translation (design data) or from calibration in calculations.
+     * Should be used only for debugging.
+     * Default: false
+     */
+    public native void setRectificationUseSpecTranslation(@Cast("bool") boolean specTranslation);
+
+    /**
+     * Use baseline information for depth alignment from specs (design data) or from calibration.
+     * Default: true
+     */
+    public native void setDepthAlignmentUseSpecTranslation(@Cast("bool") boolean specTranslation);
+
+    /**
+     * Free scaling parameter between 0 (when all the pixels in the undistorted image are valid)
+     * and 1 (when all the source image pixels are retained in the undistorted image).
+     * On some high distortion lenses, and/or due to rectification (image rotated) invalid areas may appear even with alpha=0,
+     * in these cases alpha < 0.0 helps removing invalid areas.
+     * See getOptimalNewCameraMatrix from opencv for more details.
+     */
+    public native void setAlphaScaling(float alpha);
 }
