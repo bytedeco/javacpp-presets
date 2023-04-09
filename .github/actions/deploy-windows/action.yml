@@ -128,10 +128,10 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18899/w_onemkl_p_2022.2.0.9563_offline.exe
-          curl -LO https://registrationcenter-download.intel.com/akdlm/irc_nas/18851/w_BaseKit_32bit_p_2022.3.0.9568_offline.exe
-          w_onemkl_p_2022.2.0.9563_offline.exe -s -a -s --eula accept
-          w_BaseKit_32bit_p_2022.3.0.9568_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e0195cbc-2c9b-4489-9542-c1447e70df30/w_onemkl_p_2023.1.0.46356_offline.exe
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c961e083-5685-4f0b-ada5-c6cf16f561dd/w_BaseKit_32bit_p_2023.1.0.46402_offline.exe
+          w_onemkl_p_2023.1.0.46356_offline.exe -s -a -s --eula accept
+          w_BaseKit_32bit_p_2023.1.0.46402_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
