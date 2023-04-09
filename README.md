@@ -195,7 +195,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.14.x  https://www.hdfgroup.org/downloads/
  * Hyperscan 5.4.x  https://github.com/intel/hyperscan
  * LZ4 1.9.x  https://github.com/lz4/lz4
- * MKL 2022.x  https://software.intel.com/mkl
+ * MKL 2023.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 2.7.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.23  http://www.openblas.net/
