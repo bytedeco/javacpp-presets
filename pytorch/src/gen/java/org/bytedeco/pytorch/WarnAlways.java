@@ -18,7 +18,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // A RAII guard that sets warn_always (not thread-local) on
 // construction, and sets it back to the original value upon destruction.
-@Namespace("c10::Warning") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10::WarningUtils") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class WarnAlways extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

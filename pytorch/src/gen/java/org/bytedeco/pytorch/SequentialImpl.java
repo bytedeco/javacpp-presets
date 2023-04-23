@@ -84,7 +84,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *    must accept a single argument. If your modules need to take multiple
  *    arguments, you should define them to take and return tuples.
  *  \endrst */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SequentialImpl extends SequentialImplCloneable {
     static { Loader.load(); }

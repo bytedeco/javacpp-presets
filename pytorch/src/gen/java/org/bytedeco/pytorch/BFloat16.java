@@ -45,6 +45,9 @@ public class BFloat16 extends Pointer {
   private native void allocate(float value);
   public native @Name("operator float") float asFloat();
 
-// #if defined(CUDA_VERSION) && CUDA_VERSION >= 11000
+// #if defined(__CUDACC__) && !defined(USE_ROCM)
+// #endif
+
+// #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
 // #endif
 }

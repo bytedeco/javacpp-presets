@@ -29,17 +29,16 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AdaptiveAvgPool1d model(AdaptiveAvgPool1dOptions(5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveAvgPool1dImpl extends AdaptiveAvgPool1dImplBase {
     static { Loader.load(); }
 
   
     public AdaptiveAvgPool1dImpl(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-    private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
+    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
     public AdaptiveAvgPool1dImpl(
           @Const @ByRef AdaptiveAvgPool1dOptions options_) { super((Pointer)null); allocate(options_); }
-    private native void allocate(
+    @NoDeallocator private native void allocate(
           @Const @ByRef AdaptiveAvgPool1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveAvgPool1dImpl(Pointer p) { super(p); }

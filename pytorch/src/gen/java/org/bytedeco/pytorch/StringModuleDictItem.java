@@ -28,13 +28,6 @@ public class StringModuleDictItem extends Pointer {
   public StringModuleDictItem(@StdString String key, @ByVal Module value) { super((Pointer)null); allocate(key, value); }
   private native void allocate(@StdString String key, @ByVal Module value);
 
-// #if defined(__CUDACC__) && (__CUDACC_VER_MAJOR__ < 11) && defined(_MSC_VER)
-  /** Related issue: https://github.com/pytorch/pytorch/issues/55266
-   *  Needs to define this function for CUDA < 11.0 on Windows,
-   *  although it usually won't be used actually. */
-  public native @ByRef @Name("operator =") StringModuleDictItem put(@Const @ByRef StringModuleDictItem other);
-// #endif
-
   /** Returns a reference to the value. */
   public native @ByRef @Name("operator *") Module multiply();
 

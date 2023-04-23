@@ -32,7 +32,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  CrossEntropyLoss
  *  model(CrossEntropyLossOptions().ignore_index(-100).reduction(torch::kMean));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
     static { Loader.load(); }
@@ -48,8 +47,8 @@ public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
         return new CrossEntropyLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public CrossEntropyLossImpl(@Const @ByRef(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_);
+  public CrossEntropyLossImpl(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_);
   public CrossEntropyLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

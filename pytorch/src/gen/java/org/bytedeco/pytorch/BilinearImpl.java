@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Bilinear model(BilinearOptions(3, 2, 4).bias(false));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class BilinearImpl extends BilinearImplCloneable {
     static { Loader.load(); }

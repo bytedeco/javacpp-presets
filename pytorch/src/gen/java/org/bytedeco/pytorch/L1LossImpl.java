@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  L1Loss model(L1LossOptions(torch::kNone));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class L1LossImpl extends L1LossImplCloneable {
     static { Loader.load(); }
@@ -46,8 +45,8 @@ public class L1LossImpl extends L1LossImplCloneable {
         return new L1LossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public L1LossImpl(@Const @ByRef(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_);
+  public L1LossImpl(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_);
   public L1LossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

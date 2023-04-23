@@ -342,7 +342,7 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public native void zero_grad(@Cast("bool") boolean set_to_none/*=false*/);
+  public native void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
   public native void zero_grad();
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.

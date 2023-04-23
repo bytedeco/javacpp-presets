@@ -126,7 +126,7 @@ private native void allocate();
   /** \}
    *  \name Expensive Operations
    *  \{ */
-  public native @StdVector SymInt vec();
+  public native @ByVal SymIntVector vec();
 
   /** \} */
 }

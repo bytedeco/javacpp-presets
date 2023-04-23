@@ -45,5 +45,4 @@ public class Sequential extends SequentialImplModuleHolder {
   /** Constructs the {@code Sequential} from a braced-init-list of named {@code AnyModule}s.
    *  It enables the following use case:
    *  {@code Sequential sequential({{"m1", M(1)}, {"m2", M(2)}})} */
-  // NOLINTNEXTLINE(performance-move-const-arg)
 }

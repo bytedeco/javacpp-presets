@@ -84,7 +84,7 @@ public class NestedTensorImpl extends TensorImpl {
   public native @Const @ByRef Tensor get_nested_size_tensor();
   // TODO: don't expose private implementation details like this
   public native @Const @ByRef Tensor get_nested_stride_tensor();
-  public native @Cast("const std::vector<int64_t>*") @ByRef LongVector get_offsets();
+  public native @Cast("const std::vector<int64_t>*") @ByRef LongVector get_storage_offsets();
   // Returns nullopt if the ith dimension is irregular. The ith dimension
   // of a NestedTensor is regular if the unbound tensors match in
   // size at the (i-1)th dimension.
@@ -100,6 +100,15 @@ public class NestedTensorImpl extends TensorImpl {
    * @return A newly constructed view tensor
    */
   public native @ByVal Tensor get_buffer();
+  /**
+   * If possible use get_buffer() instead. This function returns the storage
+   * as a tensor directly, which is not safe to use in general. If using this
+   * function, The caller must ensure to account for nested_sizes,
+   * nested_strides and storage_offsets.
+   *
+   * @return A newly constructed view tensor
+   */
+  public native @ByVal Tensor get_unsafe_storage_as_tensor();
 
   public native @Cast("int64_t") long get_buffer_size();
 }

@@ -26,10 +26,10 @@ public class AdaptiveAvgPool1dImplBase extends AdaptiveAvgPool1dImplCloneable {
     public AdaptiveAvgPool1dImplBase(Pointer p) { super(p); }
 
   public AdaptiveAvgPool1dImplBase(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
+  @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
   public AdaptiveAvgPool1dImplBase(
         @Const @ByRef AdaptiveAvgPool1dOptions options_) { super((Pointer)null); allocate(options_); }
-  private native void allocate(
+  @NoDeallocator private native void allocate(
         @Const @ByRef AdaptiveAvgPool1dOptions options_);
 
   public native void reset();

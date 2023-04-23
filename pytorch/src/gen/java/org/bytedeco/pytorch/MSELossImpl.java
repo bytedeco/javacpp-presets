@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MSELoss model(MSELossOptions(torch::kNone));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MSELossImpl extends MSELossImplCloneable {
     static { Loader.load(); }
@@ -46,8 +45,8 @@ public class MSELossImpl extends MSELossImplCloneable {
         return new MSELossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public MSELossImpl(@Const @ByRef(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_);
+  public MSELossImpl(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_);
   public MSELossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

@@ -25,7 +25,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  CrossMapLRN2d model(CrossMapLRN2dOptions(3).alpha(1e-5).beta(0.1).k(10));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CrossMapLRN2dImpl extends CrossMapLRN2dImplCloneable {
     static { Loader.load(); }

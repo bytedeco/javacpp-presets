@@ -91,10 +91,16 @@ runs:
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, etc
+          curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda_12.0.0_527.41_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.7.0/local_installers/11.8/cudnn-windows-x86_64-8.7.0.84_cuda11-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
+          cuda_11.8.0_522.06_windows.exe -s
+          bash -c "rm -Rf 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8'"
+          bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt' 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old'"
           cuda_12.0.0_527.41_windows.exe -s
+          bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old' 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
+          bash -c "ls 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
           unzip cudnn-windows-x86_64-8.7.0.84_cuda11-archive.zip
           unzip zlib123dllx64.zip
           move cudnn-windows-x86_64-8.7.0.84_cuda11-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.0\bin"

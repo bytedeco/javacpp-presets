@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Threshold model(ThresholdOptions(42.42, 24.24).inplace(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ThresholdImpl extends ThresholdImplCloneable {
     static { Loader.load(); }

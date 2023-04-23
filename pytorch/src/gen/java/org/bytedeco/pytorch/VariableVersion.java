@@ -124,6 +124,8 @@ public class VariableVersion extends Pointer {
   //      - e.g. inference_tensor.add_(normal_tensor)
   public native void bump();
 
+  public native void set_version(@Cast("int64_t") long i);
+
   // Inference tensor doesn't have version counter so it shouldn't be
   // accessed.
   public native @Cast("uint32_t") int current_version();

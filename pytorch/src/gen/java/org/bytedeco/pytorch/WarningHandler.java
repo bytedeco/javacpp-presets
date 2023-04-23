@@ -35,12 +35,5 @@ public class WarningHandler extends Pointer {
     }
 
   /** The default warning handler. Prints the message to stderr. */
-  public native void process(
-        @Const @ByRef SourceLocation source_location,
-        @StdString BytePointer msg,
-        @Cast("const bool") boolean verbatim);
-  public native void process(
-        @Const @ByRef SourceLocation source_location,
-        @StdString String msg,
-        @Cast("const bool") boolean verbatim);
+  public native void process(@Const @ByRef Warning warning);
 }

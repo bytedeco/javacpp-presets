@@ -31,9 +31,6 @@ public class WithNestedTracingFrame extends Pointer {
         return new WithNestedTracingFrame((Pointer)this).offsetAddress(i);
     }
 
-  // NOLINTNEXTLINE(modernize-use-equals-default)
   public WithNestedTracingFrame() { super((Pointer)null); allocate(); }
   private native void allocate();
-
-  // NOLINTNEXTLINE(modernize-use-equals-default)
 }

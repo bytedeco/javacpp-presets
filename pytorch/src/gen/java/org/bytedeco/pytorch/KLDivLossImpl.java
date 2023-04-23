@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  KLDivLoss model(KLDivLossOptions().reduction(torch::kNone));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class KLDivLossImpl extends KLDivLossImplCloneable {
     static { Loader.load(); }
@@ -46,8 +45,8 @@ public class KLDivLossImpl extends KLDivLossImplCloneable {
         return new KLDivLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public KLDivLossImpl(@Const @ByRef(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_);
+  public KLDivLossImpl(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_);
   public KLDivLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

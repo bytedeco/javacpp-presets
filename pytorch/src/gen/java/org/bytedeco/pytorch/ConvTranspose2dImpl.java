@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  ConvTranspose2d model(ConvTranspose2dOptions(3, 2,
  *  3).stride(1).bias(false));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ConvTranspose2dImpl extends ConvTranspose2dImplBase {
     static { Loader.load(); }

@@ -34,7 +34,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  CosineEmbeddingLoss model(CosineEmbeddingLossOptions().margin(0.5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
     static { Loader.load(); }
@@ -50,10 +49,8 @@ public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
         return new CosineEmbeddingLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public CosineEmbeddingLossImpl(
-        @Const @ByRef(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(
-        @Const @ByRef(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_);
+  public CosineEmbeddingLossImpl(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_);
   public CosineEmbeddingLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

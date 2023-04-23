@@ -45,6 +45,11 @@ public class Value extends Pointer {
   public native JitNode node();
   public native @Cast("size_t") long offset();
   public native void setOffset(@Cast("size_t") long offset);
+
+  /**
+   * \warning NEVER pass raw pointer of smart pointer managed Graph to Python.
+   * Check #87343 for details.
+   */
   public native Graph owningGraph();
   // TODO: make this more const correct
   public native @StdVector Use uses();

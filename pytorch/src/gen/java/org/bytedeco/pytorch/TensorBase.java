@@ -139,8 +139,8 @@ private native void allocate(); }
   public native @StdString String toString();
 
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes();
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_sizes();
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_strides();
+  public native @ByVal SymIntRef sym_sizes();
+  public native @ByVal SymIntRef sym_strides();
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();
   // See impl::get_opt_names in ATen/NamedTensor.h for docs.
   public native @ByVal DimnameListOptional opt_names();

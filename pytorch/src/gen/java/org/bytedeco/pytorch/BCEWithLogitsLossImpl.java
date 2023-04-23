@@ -34,7 +34,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  BCEWithLogitsLoss
  *  model(BCEWithLogitsLossOptions().reduction(torch::kNone).weight(weight));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
     static { Loader.load(); }
@@ -50,8 +49,8 @@ public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
         return new BCEWithLogitsLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public BCEWithLogitsLossImpl(@Const @ByRef(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_);
+  public BCEWithLogitsLossImpl(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_);
   public BCEWithLogitsLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

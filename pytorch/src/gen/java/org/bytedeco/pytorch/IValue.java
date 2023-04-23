@@ -192,6 +192,8 @@ public class IValue extends Pointer {
   // Future
   public native @Cast("bool") boolean isFuture();
   
+  public native @Cast("bool") boolean isAwait();
+  
 
   // RRef
   public native @Cast("bool") boolean isRRef();
@@ -210,6 +212,7 @@ public class IValue extends Pointer {
 
   public native @Cast("bool") boolean isSymInt();
 
+  
   public native @ByVal SymInt toSymInt();
 
   public IValue(@ByVal SymFloat i) { super((Pointer)null); allocate(i); }
@@ -217,6 +220,7 @@ public class IValue extends Pointer {
 
   public native @Cast("bool") boolean isSymFloat();
 
+  
   public native @ByVal SymFloat toSymFloat();
 
   // allow you to pass literals (3, 4) without ambiguity
@@ -343,9 +347,9 @@ public class IValue extends Pointer {
   public native @Cast("bool") boolean isDevice();
   public native @ByVal Device toDevice();
 
-  //Stream
-  public IValue(@ByVal Stream stream) { super((Pointer)null); allocate(stream); }
-  private native void allocate(@ByVal Stream stream);
+  // Stream
+  public IValue(@ByVal Stream s) { super((Pointer)null); allocate(s); }
+  private native void allocate(@ByVal Stream s);
   
   public native @ByVal Stream toStream();
   public native @Cast("bool") boolean isStream();

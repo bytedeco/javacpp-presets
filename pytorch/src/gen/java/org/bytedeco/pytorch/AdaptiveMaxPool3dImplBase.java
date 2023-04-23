@@ -22,10 +22,10 @@ public class AdaptiveMaxPool3dImplBase extends AdaptiveMaxPool3dImplCloneable {
     public AdaptiveMaxPool3dImplBase(Pointer p) { super(p); }
 
   public AdaptiveMaxPool3dImplBase(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
+  @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
   public AdaptiveMaxPool3dImplBase(
         @Const @ByRef AdaptiveMaxPool3dOptions options_) { super((Pointer)null); allocate(options_); }
-  private native void allocate(
+  @NoDeallocator private native void allocate(
         @Const @ByRef AdaptiveMaxPool3dOptions options_);
 
   public native void reset();

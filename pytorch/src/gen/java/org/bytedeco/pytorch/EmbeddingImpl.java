@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  Embedding model(EmbeddingOptions(10,
  *  2).padding_idx(3).max_norm(2).norm_type(2.5).scale_grad_by_freq(true).sparse(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class EmbeddingImpl extends EmbeddingImplCloneable {
     static { Loader.load(); }
@@ -40,8 +39,8 @@ public class EmbeddingImpl extends EmbeddingImplCloneable {
 
   public EmbeddingImpl(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim) { super((Pointer)null); allocate(num_embeddings, embedding_dim); }
   @NoDeallocator private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
-  public EmbeddingImpl(@Const @ByRef EmbeddingOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef EmbeddingOptions options_);
+  public EmbeddingImpl(@ByVal EmbeddingOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal EmbeddingOptions options_);
 
   public native void reset();
 

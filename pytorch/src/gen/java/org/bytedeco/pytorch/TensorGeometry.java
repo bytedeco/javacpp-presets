@@ -34,8 +34,8 @@ public class TensorGeometry extends Pointer {
   public TensorGeometry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public TensorGeometry(@ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sizes) { super((Pointer)null); allocate(sizes); }
-  private native void allocate(@ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sizes);
+  public TensorGeometry(@ByVal SymIntRef sizes) { super((Pointer)null); allocate(sizes); }
+  private native void allocate(@ByVal SymIntRef sizes);
 
   public TensorGeometry(@Const @ByRef TensorBase t) { super((Pointer)null); allocate(t); }
   private native void allocate(@Const @ByRef TensorBase t);
@@ -53,9 +53,9 @@ public class TensorGeometry extends Pointer {
   public native @Cast("int64_t") long numel();
 
   public native @ByVal SymInt sym_size(@Cast("int64_t") long dim);
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_sizes();
+  public native @ByVal SymIntRef sym_sizes();
   public native @ByVal SymInt sym_stride(@Cast("int64_t") long dim);
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_strides();
+  public native @ByVal SymIntRef sym_strides();
   public native @ByVal SymInt sym_storage_offset();
   public native @ByVal SymInt sym_numel();
 

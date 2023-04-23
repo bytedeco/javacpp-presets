@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AvgPool1d model(AvgPool1dOptions(3).stride(2));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AvgPool1dImpl extends AvgPool1dImplBase {
     static { Loader.load(); }

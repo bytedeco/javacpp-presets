@@ -33,6 +33,10 @@ public class Block extends Pointer {
   public native @ByVal graph_node_list nodes();
   public native JitNode return_node();
   public native JitNode param_node();
+  /**
+   * \warning NEVER pass raw pointer of smart pointer managed Graph to Python.
+   * Check #87343 for details.
+   */
   public native Graph owningGraph();
   public native JitNode owningNode();
 

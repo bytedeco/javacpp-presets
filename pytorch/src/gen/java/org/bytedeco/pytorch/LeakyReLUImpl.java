@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  LeakyReLU model(LeakyReLUOptions().negative_slope(0.42).inplace(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LeakyReLUImpl extends LeakyReLUImplCloneable {
     static { Loader.load(); }

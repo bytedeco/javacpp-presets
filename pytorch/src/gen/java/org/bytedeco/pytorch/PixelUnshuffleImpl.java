@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  PixelUnshuffle model(PixelUnshuffleOptions(5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class PixelUnshuffleImpl extends PixelUnshuffleImplCloneable {
     static { Loader.load(); }

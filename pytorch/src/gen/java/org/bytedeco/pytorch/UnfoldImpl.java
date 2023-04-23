@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Unfold model(UnfoldOptions({2, 4}).dilation(2).padding({2, 1}).stride(2));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class UnfoldImpl extends UnfoldImplCloneable {
     static { Loader.load(); }

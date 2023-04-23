@@ -33,7 +33,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  MarginRankingLoss
  *  model(MarginRankingLossOptions().margin(0.5).reduction(torch::kSum));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MarginRankingLossImpl extends MarginRankingLossImplCloneable {
     static { Loader.load(); }
@@ -49,8 +48,8 @@ public class MarginRankingLossImpl extends MarginRankingLossImplCloneable {
         return new MarginRankingLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public MarginRankingLossImpl(@Const @ByRef(nullValue = "torch::nn::MarginRankingLossOptions{}") MarginRankingLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::MarginRankingLossOptions{}") MarginRankingLossOptions options_);
+  public MarginRankingLossImpl(@ByVal(nullValue = "torch::nn::MarginRankingLossOptions{}") MarginRankingLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::MarginRankingLossOptions{}") MarginRankingLossOptions options_);
   public MarginRankingLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

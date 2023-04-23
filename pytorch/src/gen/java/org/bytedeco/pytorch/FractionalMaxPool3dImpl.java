@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  FractionalMaxPool3d model(FractionalMaxPool3dOptions(5).output_size(1));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class FractionalMaxPool3dImpl extends FractionalMaxPool3dImplCloneable {
     static { Loader.load(); }
@@ -39,8 +38,8 @@ public class FractionalMaxPool3dImpl extends FractionalMaxPool3dImplCloneable {
 
   public FractionalMaxPool3dImpl(@ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
   @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size);
-  public FractionalMaxPool3dImpl(@Const @ByRef FractionalMaxPool3dOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef FractionalMaxPool3dOptions options_);
+  public FractionalMaxPool3dImpl(@ByVal FractionalMaxPool3dOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal FractionalMaxPool3dOptions options_);
 
   public native void reset();
 

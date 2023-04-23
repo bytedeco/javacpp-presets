@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  GRU model(GRUOptions(2,
  *  4).num_layers(3).batch_first(false).bidirectional(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GRUImpl extends GRUImplBase {
     static { Loader.load(); }

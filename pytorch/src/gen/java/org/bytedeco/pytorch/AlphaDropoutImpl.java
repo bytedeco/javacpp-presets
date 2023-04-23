@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AlphaDropout model(AlphaDropoutOptions(0.2).inplace(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AlphaDropoutImpl extends AlphaDropoutImplBase {
     static { Loader.load(); }

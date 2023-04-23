@@ -127,9 +127,18 @@ public class Stream extends Pointer {
   //
   // The particular way we pack streams into a uint64_t is considered an
   // implementation detail and should not be relied upon.
-  public native @Cast("uint64_t") @NoException(true) long pack();
+  public native @Cast("uint64_t") @NoException(true) long hash();
 
-  public static native @ByVal Stream unpack(@Cast("uint64_t") long bits);
+  public native @ByVal StreamData3 pack3();
+
+  public static native @ByVal Stream unpack3(
+        @Cast("c10::StreamId") long stream_id,
+        @Cast("c10::DeviceIndex") byte device_index,
+        DeviceType device_type);
+  public static native @ByVal Stream unpack3(
+        @Cast("c10::StreamId") long stream_id,
+        @Cast("c10::DeviceIndex") byte device_index,
+        @Cast("c10::DeviceType") byte device_type);
 
   // I decided NOT to provide setters on this class, because really,
   // why would you change the device of a stream?  Just construct

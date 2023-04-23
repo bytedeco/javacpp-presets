@@ -50,11 +50,10 @@ public class Context extends Pointer {
   public static native long versionCuDNN();
   public static native @Cast("bool") boolean hasCuSOLVER();
   public static native @Cast("bool") boolean hasHIP();
+  public static native @Cast("bool") boolean hasMPS();
   public static native @Cast("bool") boolean hasIPU();
   public static native @Cast("bool") boolean hasXLA();
   public static native @Cast("bool") boolean hasLazy();
-  public static native @Cast("bool") boolean hasMPS();
-
   public static native @Cast("bool") boolean hasORT();
   // defined in header so that getNonVariableType has ability to inline
   // call_once check. getNonVariableType is called fairly frequently
@@ -81,8 +80,9 @@ public class Context extends Pointer {
 
   // Note [Disabling Fused SDP Kernels]
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // Flash SDP kernels are enabled by default. However, they can be disabled
-  // by setting at::globalContext().setUserEnabledFlashSDP(false) flag.
+  // Flash and Memory Efficient SDP kernels are enabled by default.
+  // However, they can be disabled by setting
+  // at::globalContext().setUserEnabledFlashSDP(false) flag.
   // This is useful for debugging purposes. For example, if you want to
   // compare the performance of the flash SDP kernels with the unfused
   // kernel, you can disable the flash SDP kernels. By disabling
@@ -91,6 +91,9 @@ public class Context extends Pointer {
   // at::globalContext().setUserEnabledMathSDP(false) flag.
   public native void setSDPUseFlash(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledFlashSDP();
+
+  public native void setSDPUseMemEfficient(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean userEnabledMemEfficientSDP();
 
   public native void setSDPUseMath(@Cast("bool") boolean arg0);
   public native @Cast("bool") boolean userEnabledMathSDP();
@@ -191,10 +194,14 @@ public class Context extends Pointer {
   public native void setFloat32MatmulPrecision(@Cast("at::Float32MatmulPrecision") int p);
   public native @Cast("bool") boolean allowFP16ReductionCuBLAS();
   public native void setAllowFP16ReductionCuBLAS(@Cast("bool") boolean arg0);
+  public native @Cast("bool") boolean allowBF16ReductionCuBLAS();
+  public native void setAllowBF16ReductionCuBLAS(@Cast("bool") boolean arg0);
   public native @ByVal QEngine qEngine();
   public native void setQEngine(@ByVal QEngine e);
   public static native @Const @ByRef QEngineVector supportedQEngines();
   public static native @Cast("bool") boolean isXNNPACKAvailable();
+  public native void setCheckSparseTensorInvariants(@Cast("bool") boolean e);
+  public native @Cast("bool") boolean checkSparseTensorInvariants();
   // This method is used to release the original weight after pre-packing.
   // It should be called once before loading/running the model.
   // NB: By default it is set to true for mobile builds.

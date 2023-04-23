@@ -32,7 +32,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  SoftMarginLoss model(SoftMarginLossOptions(torch::kNone));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
     static { Loader.load(); }
@@ -48,8 +47,8 @@ public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
         return new SoftMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public SoftMarginLossImpl(@Const @ByRef(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
+  public SoftMarginLossImpl(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
   public SoftMarginLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

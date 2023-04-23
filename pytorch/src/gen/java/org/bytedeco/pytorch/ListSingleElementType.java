@@ -15,9 +15,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-
-// common base for all types that have a single sub element
-// e.g. Future[T], Optional[T], List[T]
 @Name("c10::SingleElementType<c10::TypeKind::ListType,c10::ListType>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ListSingleElementType extends SharedType {
     static { Loader.load(); }

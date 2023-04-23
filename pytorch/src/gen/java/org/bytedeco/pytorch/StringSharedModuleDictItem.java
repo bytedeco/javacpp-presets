@@ -28,13 +28,6 @@ public class StringSharedModuleDictItem extends Pointer {
   public StringSharedModuleDictItem(@StdString String key, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module value) { super((Pointer)null); allocate(key, value); }
   private native void allocate(@StdString String key, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module value);
 
-// #if defined(__CUDACC__) && (__CUDACC_VER_MAJOR__ < 11) && defined(_MSC_VER)
-  /** Related issue: https://github.com/pytorch/pytorch/issues/55266
-   *  Needs to define this function for CUDA < 11.0 on Windows,
-   *  although it usually won't be used actually. */
-  public native @ByRef @Name("operator =") StringSharedModuleDictItem put(@Const @ByRef StringSharedModuleDictItem other);
-// #endif
-
   /** Returns a reference to the value. */
   public native @SharedPtr @ByRef @Name("operator *") Module multiply();
 

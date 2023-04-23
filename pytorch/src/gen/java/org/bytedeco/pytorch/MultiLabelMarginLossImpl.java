@@ -33,7 +33,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MultiLabelMarginLoss model(MultiLabelMarginLossOptions(torch::kNone));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MultiLabelMarginLossImpl extends MultiLabelMarginLossImplCloneable {
     static { Loader.load(); }
@@ -49,10 +48,8 @@ public class MultiLabelMarginLossImpl extends MultiLabelMarginLossImplCloneable 
         return new MultiLabelMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public MultiLabelMarginLossImpl(
-        @Const @ByRef(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(
-        @Const @ByRef(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_);
+  public MultiLabelMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_);
   public MultiLabelMarginLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

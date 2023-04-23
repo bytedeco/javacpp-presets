@@ -248,4 +248,12 @@ public class JitModule extends JitObject {
   public native void set_delete_memory(@Cast("char*") @SharedPtr BytePointer delete_mem);
   public native void set_delete_memory(@Cast("char*") @SharedPtr ByteBuffer delete_mem);
   public native void set_delete_memory(@Cast("char*") @SharedPtr byte[] delete_mem);
+
+  // A set of functions to maintain input shapes through torch.jit.save and
+  // torch.jit.load. It only works on tensors and lists/dicts of tensors
+  // because tracing is only supported by these types.
+  public native void store_traced_inputs(@StdString BytePointer func_name, @ByVal IValueVector inputs);
+  public native void store_traced_inputs(@StdString String func_name, @ByVal IValueVector inputs);
+
+  public native @ByVal StringGenericListDict retrieve_traced_inputs();
 }

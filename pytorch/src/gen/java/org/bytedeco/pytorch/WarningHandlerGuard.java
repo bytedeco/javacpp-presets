@@ -16,7 +16,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Namespace("c10::Warning") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("c10::WarningUtils") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class WarningHandlerGuard extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

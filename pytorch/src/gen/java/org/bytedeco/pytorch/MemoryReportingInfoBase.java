@@ -36,14 +36,14 @@ public class MemoryReportingInfoBase extends DebugInfoBase {
   public native void reportMemoryUsage(
         Pointer ptr,
         @Cast("int64_t") long alloc_size,
-        @Cast("int64_t") long total_allocated,
-        @Cast("int64_t") long total_reserved,
+        @Cast("size_t") long total_allocated,
+        @Cast("size_t") long total_reserved,
         @ByVal Device device);
 
   public native void reportOutOfMemory(
         @Cast("int64_t") long alloc_size,
-        @Cast("int64_t") long total_allocated,
-        @Cast("int64_t") long total_reserved,
+        @Cast("size_t") long total_allocated,
+        @Cast("size_t") long total_reserved,
         @ByVal Device device);
 
   public native @Cast("bool") boolean memoryProfilingEnabled();

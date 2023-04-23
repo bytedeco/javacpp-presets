@@ -32,16 +32,10 @@ public class LBFGS extends Optimizer {
         @ByVal OptimizerParamGroupVector param_groups) { super((Pointer)null); allocate(param_groups); }
   private native void allocate(
         @ByVal OptimizerParamGroupVector param_groups);
-  public LBFGS(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
-        @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults) { super((Pointer)null); allocate(params, defaults); }
-  private native void allocate(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
-        @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults);
-  public LBFGS(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
-  private native void allocate(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params);
+  public LBFGS(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults) { super((Pointer)null); allocate(params, defaults); }
+  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::LBFGSOptions{}") LBFGSOptions defaults);
+  public LBFGS(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
+  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params);
 
   public native @ByVal Tensor step(@ByVal LossClosure closure);
   public native void save(@ByRef OutputArchive archive);

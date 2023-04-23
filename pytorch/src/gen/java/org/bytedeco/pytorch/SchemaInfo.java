@@ -28,8 +28,8 @@ public class SchemaInfo extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SchemaInfo(Pointer p) { super(p); }
 
-  public SchemaInfo(@Const @ByRef FunctionSchema schema) { super((Pointer)null); allocate(schema); }
-  private native void allocate(@Const @ByRef FunctionSchema schema);
+  public SchemaInfo(@ByVal FunctionSchema schema) { super((Pointer)null); allocate(schema); }
+  private native void allocate(@ByVal FunctionSchema schema);
   public SchemaInfo(@Cast("const char*") BytePointer signature) { super((Pointer)null); allocate(signature); }
   private native void allocate(@Cast("const char*") BytePointer signature);
   public SchemaInfo(String signature) { super((Pointer)null); allocate(signature); }

@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  CTCLoss
  *  model(CTCLossOptions().blank(42).zero_infinity(false).reduction(torch::kSum));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class CTCLossImpl extends CTCLossImplCloneable {
     static { Loader.load(); }
@@ -46,8 +45,8 @@ public class CTCLossImpl extends CTCLossImplCloneable {
         return new CTCLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public CTCLossImpl(@Const @ByRef(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_);
+  public CTCLossImpl(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_);
   public CTCLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

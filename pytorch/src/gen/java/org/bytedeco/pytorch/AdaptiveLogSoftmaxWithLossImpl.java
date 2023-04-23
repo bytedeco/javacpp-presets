@@ -34,7 +34,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  AdaptiveLogSoftmaxWithLoss model(AdaptiveLogSoftmaxWithLossOptions(8, 10,
  *  {4, 8}).div_value(2.).head_bias(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossImplCloneable {
     static { Loader.load(); }

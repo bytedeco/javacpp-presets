@@ -38,7 +38,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  TripletMarginWithDistanceLoss
  *  model(TripletMarginWithDistanceLossOptions().margin(3).swap(false));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TripletMarginWithDistanceLossImpl extends TripletMarginWithDistanceLossImplCloneable {
     static { Loader.load(); }

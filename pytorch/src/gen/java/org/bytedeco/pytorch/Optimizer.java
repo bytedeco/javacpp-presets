@@ -27,7 +27,6 @@ public class Optimizer extends Pointer {
   
 
   /** Constructs the {@code Optimizer} from a vector of parameters. */
-  // NOLINTNEXTLINE(performance-move-const-arg)
 
   /** Adds the given param_group to the optimizer's param_group list. */
   public native void add_param_group(@Const @ByRef OptimizerParamGroup param_group);
@@ -39,6 +38,7 @@ public class Optimizer extends Pointer {
   public native void add_parameters(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector parameters);
 
   /** Zeros out the gradients of all parameters. */
+  public native void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
   public native void zero_grad();
 
   /** Provides a const reference to the parameters in the first param_group this
