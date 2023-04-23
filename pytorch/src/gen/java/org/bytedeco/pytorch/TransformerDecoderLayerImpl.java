@@ -37,7 +37,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  TransformerDecoderLayer model(TransformerDecoderLayerOptions(512,
  *  8).dropout(0.2));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerDecoderLayerImpl extends TransformerDecoderLayerImplCloneable {
     static { Loader.load(); }
@@ -46,10 +45,8 @@ public class TransformerDecoderLayerImpl extends TransformerDecoderLayerImplClon
 
   public TransformerDecoderLayerImpl(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead) { super((Pointer)null); allocate(d_model, nhead); }
   @NoDeallocator private native void allocate(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead);
-  public TransformerDecoderLayerImpl(
-        @Const @ByRef TransformerDecoderLayerOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(
-        @Const @ByRef TransformerDecoderLayerOptions options_);
+  public TransformerDecoderLayerImpl(@ByVal TransformerDecoderLayerOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal TransformerDecoderLayerOptions options_);
 
   public native void reset();
 

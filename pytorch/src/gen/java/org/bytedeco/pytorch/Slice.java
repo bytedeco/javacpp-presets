@@ -31,21 +31,20 @@ public class Slice extends Pointer {
         return new Slice((Pointer)this).offsetAddress(i);
     }
 
-  // This mirrors `__PySlice_Unpack` in torch/csrc/utils/python_compat.h
   public Slice(
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start_index,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional stop_index,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index) { super((Pointer)null); allocate(start_index, stop_index, step_index); }
   private native void allocate(
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional start_index,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional stop_index,
-        @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional step_index);
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional start_index,
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional stop_index,
+        @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional step_index);
   public Slice() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native @Cast("int64_t") long start();
+  public native @ByVal SymInt start();
 
-  public native @Cast("int64_t") long stop();
+  public native @ByVal SymInt stop();
 
-  public native @Cast("int64_t") long step();
+  public native @ByVal SymInt step();
 }

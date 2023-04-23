@@ -73,11 +73,11 @@ public class Scalar extends Pointer {
 //     } else if (Tag::HAS_i == tag) {
 //       return checked_convert<type, int64_t>(v.i, #type);
 //     } else if (Tag::HAS_si == tag) {
-// 
+//       TORCH_CHECK(false, "tried to get " #name " out of SymInt")
 //     } else if (Tag::HAS_sd == tag) {
-// 
+//       TORCH_CHECK(false, "tried to get " #name " out of SymFloat")
 //     }
-// 
+//     TORCH_CHECK(false)
 //   }
 
   // TODO: Support ComplexHalf accessor
@@ -119,7 +119,7 @@ public class Scalar extends Pointer {
 
   public native @Cast("bool") boolean isSymbolic();
 
-  public native @ByRef @Name("operator =") Scalar put(@ByRef(true) Scalar other);
+  public native @ByRef @Name("operator =") @NoException(true) Scalar put(@ByRef(true) Scalar other);
 
   public native @ByVal @Name("operator -") Scalar subtract();
   public native @ByVal Scalar conj();

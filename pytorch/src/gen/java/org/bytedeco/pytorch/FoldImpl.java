@@ -28,7 +28,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  Fold model(FoldOptions({8, 8}, {3, 3}).dilation(2).padding({2,
  *  1}).stride(2));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class FoldImpl extends FoldImplCloneable {
     static { Loader.load(); }

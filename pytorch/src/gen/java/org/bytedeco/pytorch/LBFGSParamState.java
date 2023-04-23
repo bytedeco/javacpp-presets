@@ -16,7 +16,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 @Namespace("torch::optim") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LBFGSParamState extends OptimizerCloneableLBFGSParamState {
     static { Loader.load(); }

@@ -52,6 +52,10 @@ public class JitNode extends Pointer {
   public native JitNode setSourceRange(@ByVal SourceRange r);
   public native @ByVal SourceRange sourceRange();
 
+  /**
+   * \warning NEVER pass raw pointer of smart pointer managed Graph to Python.
+   * Check #87343 for details.
+   */
   public native Graph owningGraph();
   public native Block owningBlock();
   public native @ByVal @Cast("torch::jit::ScopePtr*") Pointer scope();

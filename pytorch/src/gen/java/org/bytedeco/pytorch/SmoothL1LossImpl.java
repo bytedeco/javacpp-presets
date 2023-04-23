@@ -33,7 +33,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  SmoothL1Loss model(SmoothL1LossOptions().reduction(torch::kNone).beta(0.5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
     static { Loader.load(); }
@@ -49,8 +48,8 @@ public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
         return new SmoothL1LossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public SmoothL1LossImpl(@Const @ByRef(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options_);
+  public SmoothL1LossImpl(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options) { super((Pointer)null); allocate(options); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options);
   public SmoothL1LossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

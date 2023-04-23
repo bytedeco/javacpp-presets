@@ -30,6 +30,7 @@ public class OperatorHandle extends Pointer {
   public OperatorHandle(@ByRef(true) OperatorHandle arg0) { super((Pointer)null); allocate(arg0); }
   @NoException(true) private native void allocate(@ByRef(true) OperatorHandle arg0);
   public native @ByRef @Name("operator =") @NoException(true) OperatorHandle put(@ByRef(true) OperatorHandle arg0);
+  // NOLINTNEXTLINE(performance-trivially-destructible)
 
   public native @Const @ByRef OperatorName operator_name();
 
@@ -64,4 +65,8 @@ public class OperatorHandle extends Pointer {
   public native void callBoxedForDispatchKey(@Cast("c10::DispatchKey") short dk, @Cast("c10::Stack*") @ByRef IValueVector stack);
 
   public native void redispatchBoxed(@ByVal DispatchKeySet ks, @Cast("c10::Stack*") IValueVector stack);
+
+  
+
+  
 }

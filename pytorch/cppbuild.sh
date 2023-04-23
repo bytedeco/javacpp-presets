@@ -13,14 +13,16 @@ export CUDA_HOME="/usr/local/cuda"
 export CUDNN_HOME="/usr/local/cuda"
 export MAX_JOBS=$MAKEJ
 export USE_CUDA=0
+export USE_CUDNN=0
 export USE_NUMPY=0
 export USE_OPENMP=1
 export USE_SYSTEM_NCCL=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA=1
+    export USE_CUDNN=1
     export USE_FAST_NVCC=0
     export CUDA_SEPARABLE_COMPILATION=OFF
-    export TORCH_CUDA_ARCH_LIST="3.5+PTX"
+    export TORCH_CUDA_ARCH_LIST="5.0+PTX"
 fi
 
 export PYTHON_BIN_PATH=$(which python3)
@@ -28,7 +30,7 @@ if [[ $PLATFORM == windows* ]]; then
     export PYTHON_BIN_PATH=$(which python.exe)
 fi
 
-PYTORCH_VERSION=1.13.1
+PYTORCH_VERSION=2.0.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"

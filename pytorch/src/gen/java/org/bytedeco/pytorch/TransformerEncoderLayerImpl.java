@@ -32,7 +32,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  TransformerEncoderLayer encoderLayer(TransformerEncoderLayerOptions(512,
  *  8).dropout(0.1));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerEncoderLayerImpl extends TransformerEncoderLayerImplCloneable {
     static { Loader.load(); }
@@ -41,10 +40,8 @@ public class TransformerEncoderLayerImpl extends TransformerEncoderLayerImplClon
 
   public TransformerEncoderLayerImpl(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead) { super((Pointer)null); allocate(d_model, nhead); }
   @NoDeallocator private native void allocate(@Cast("int64_t") long d_model, @Cast("int64_t") long nhead);
-  public TransformerEncoderLayerImpl(
-        @Const @ByRef TransformerEncoderLayerOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(
-        @Const @ByRef TransformerEncoderLayerOptions options_);
+  public TransformerEncoderLayerImpl(@ByVal TransformerEncoderLayerOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal TransformerEncoderLayerOptions options_);
 
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor src,

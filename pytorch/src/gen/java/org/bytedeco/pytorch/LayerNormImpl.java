@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  LayerNorm model(LayerNormOptions({2,
  *  2}).elementwise_affine(false).eps(2e-5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LayerNormImpl extends LayerNormImplCloneable {
     static { Loader.load(); }
@@ -40,8 +39,8 @@ public class LayerNormImpl extends LayerNormImplCloneable {
 
   public LayerNormImpl(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape) { super((Pointer)null); allocate(normalized_shape); }
   @NoDeallocator private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape);
-  public LayerNormImpl(@Const @ByRef LayerNormOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef LayerNormOptions options_);
+  public LayerNormImpl(@ByVal LayerNormOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal LayerNormOptions options_);
 
   public native void reset();
 

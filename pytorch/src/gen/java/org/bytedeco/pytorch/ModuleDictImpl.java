@@ -72,7 +72,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  iteration over submodules, positional access, adding new modules from a
  *  vector of key-module pairs or an {@code OrderedDict} or another {@code ModuleDict} after
  *  construction via {@code update}. */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ModuleDictImpl extends ModuleDictImplCloneable {
     static { Loader.load(); }
