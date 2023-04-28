@@ -22,8 +22,9 @@ import static org.bytedeco.cuda.global.nvml.*;
  */
 /***************************************************************************************************/
 
-/* Handle to an allocated GPM sample allocated with nvmlGpmSampleAlloc()
-   Free this with nvmlGpmSampleFree() */
+/**
+ * Handle to an allocated GPM sample allocated with nvmlGpmSampleAlloc(). Free this with nvmlGpmSampleFree().
+ */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGpmSample_st extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

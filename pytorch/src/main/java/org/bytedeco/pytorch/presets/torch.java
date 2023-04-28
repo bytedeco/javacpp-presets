@@ -1772,15 +1772,15 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.11.8"},
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
             preloadpath = {
-                "/usr/local/cuda-11.8/lib64/",
-                "/usr/local/cuda-11.8/extras/CUPTI/lib64/",
+                "/usr/local/cuda-12.1/lib64/",
+                "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             },
             extension = "-gpu"
@@ -1813,20 +1813,22 @@ public class torch implements LoadEnabled, InfoMapper {
                 lib += lib.startsWith("cudnn") ? "@.8"
                      : lib.equals("nccl") ? "@.2"
                      : lib.equals("myelin") ? "@.1"
-                     : lib.equals("nvinfer") ? "@.7"
-                     : lib.equals("cufft") || lib.equals("curand") ? "@.10"
-                     : lib.equals("cudart") ? "@.11.0"
-                     : lib.equals("nvrtc") ? "@.11.2"
-                     : "@.11";
+                     : lib.equals("nvinfer") ? "@.8"
+                     : lib.equals("cufft") ? "@.11"
+                     : lib.equals("curand") ? "@.10"
+                     : lib.equals("cudart") ? "@.12"
+                     : lib.equals("nvrtc") ? "@.12"
+                     : "@.12";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
                      : lib.equals("nccl") ? "64_2"
                      : lib.equals("myelin") ? "64_1"
-                     : lib.equals("nvinfer") ? "64_7"
-                     : lib.equals("cufft") || lib.equals("curand") ? "64_10"
-                     : lib.equals("cudart") ? "64_110"
-                     : lib.equals("nvrtc") ? "64_112_0"
-                     : "64_11";
+                     : lib.equals("nvinfer") ? "64_8"
+                     : lib.equals("cufft") ? "64_11"
+                     : lib.equals("curand") ? "64_10"
+                     : lib.equals("cudart") ? "64_12"
+                     : lib.equals("nvrtc") ? "64_120_0"
+                     : "64_12";
             } else {
                 continue; // no CUDA
             }

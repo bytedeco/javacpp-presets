@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class cublas implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUBLASAPI", "CUBLASWINAPI").cppTypes().annotations().cppText(""))
+               .put(new Info("cublasLtDisableCpuInstructionsSetMask").skip())
                .put(new Info("cublasHandle_t").valueTypes("cublasContext").pointerTypes("@ByPtrPtr cublasContext"))
                .put(new Info("cublasStatus").cppTypes())
                .put(new Info("cublasLtHandle_t").valueTypes("cublasLtContext").pointerTypes("@ByPtrPtr cublasLtContext"))

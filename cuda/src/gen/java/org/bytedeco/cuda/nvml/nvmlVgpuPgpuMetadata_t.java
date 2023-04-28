@@ -41,7 +41,7 @@ public class nvmlVgpuPgpuMetadata_t extends Pointer {
     /** Host driver version */
     public native @Cast("char") byte hostDriverVersion(int i); public native nvmlVgpuPgpuMetadata_t hostDriverVersion(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer hostDriverVersion();
-    /** Pgpu virtualizaion capabilities bitfileld */
+    /** Pgpu virtualization capabilities bitfield */
     public native @Cast("unsigned int") int pgpuVirtualizationCaps(); public native nvmlVgpuPgpuMetadata_t pgpuVirtualizationCaps(int setter);
     /** Reserved for internal use */
     public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuPgpuMetadata_t reserved(int i, int setter);

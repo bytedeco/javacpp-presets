@@ -236,6 +236,8 @@ public class cudaDeviceProp extends Pointer {
     public native int clusterLaunch(); public native cudaDeviceProp clusterLaunch(int setter);
     /** Indicates device supports unified pointers */
     public native int unifiedFunctionPointers(); public native cudaDeviceProp unifiedFunctionPointers(int setter);
+    public native int reserved2(int i); public native cudaDeviceProp reserved2(int i, int setter);
+    @MemberGetter public native IntPointer reserved2();
     /** Reserved for future use */
     public native int reserved(int i); public native cudaDeviceProp reserved(int i, int setter);
     @MemberGetter public native IntPointer reserved();

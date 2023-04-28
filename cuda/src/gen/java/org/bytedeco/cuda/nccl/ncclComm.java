@@ -12,8 +12,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 
 import static org.bytedeco.cuda.global.nccl.*;
 
-// #endif
-
 /* Opaque handle to communicator */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nccl.class)
 public class ncclComm extends Pointer {

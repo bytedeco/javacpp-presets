@@ -102,9 +102,9 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #endif /* __cplusplus */
 
 public static final int CUBLAS_VER_MAJOR = 12;
-public static final int CUBLAS_VER_MINOR = 0;
-public static final int CUBLAS_VER_PATCH = 1;
-public static final int CUBLAS_VER_BUILD = 189;
+public static final int CUBLAS_VER_MINOR = 1;
+public static final int CUBLAS_VER_PATCH = 3;
+public static final int CUBLAS_VER_BUILD = 1;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 10000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -12209,6 +12209,18 @@ public static native @Cast("cublasStatus_t") int cublasLtGetProperty(@Cast("libr
 
 public static native @Cast("cublasStatus_t") int cublasLtHeuristicsCacheGetCapacity(@Cast("size_t*") SizeTPointer _capacity);
 public static native @Cast("cublasStatus_t") int cublasLtHeuristicsCacheSetCapacity(@Cast("size_t") long _capacity);
+
+/** Restricts usage of CPU instructions (ISA) specified by the flags in the mask.
+ *
+ * Flags can be combined with bitwise OR(|) operator. Supported flags:
+ * - 0x1 -- x86-64 AVX512 ISA
+ *
+ * Default mask: 0 (any applicable ISA is allowed).
+ *
+ * The function returns the previous value of the mask.
+ * The function takes precedence over the environment variable CUBLASLT_DISABLE_CPU_INSTRUCTIONS_MASK.
+ */
+
 // Targeting ../cublas/cublasLtMatrixLayoutOpaque_t.java
 
 
@@ -12277,7 +12289,9 @@ public static final int
   CUBLASLT_MATMUL_TILE_192x128 = 31,
   CUBLASLT_MATMUL_TILE_128x192 = 32,
   CUBLASLT_MATMUL_TILE_128x96 = 33,
-  CUBLASLT_MATMUL_TILE_END = 34;
+  CUBLASLT_MATMUL_TILE_32x256 = 34,
+  CUBLASLT_MATMUL_TILE_256x32 = 35,
+  CUBLASLT_MATMUL_TILE_END = 36;
 
 /** Size and number of stages in which elements are read into shared memory
  *

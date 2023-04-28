@@ -2,8 +2,6 @@
 
 package org.bytedeco.cuda.global;
 
-import org.bytedeco.cuda.nppig.*;
-
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -19,7 +17,7 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
 
 // Parsed from <nppi_geometry_transforms.h>
 
- /* Copyright 2009-2021 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
+ /* Copyright 2009-2022 NVIDIA CORPORATION & AFFILIATES.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -103,9 +101,9 @@ public class nppig extends org.bytedeco.cuda.presets.nppig {
  *
  * The typical processing proceedes as follows:
  * -# Transform the rectangular source ROI (given in source image coordinates)
- *		into the destination image space. This yields a quadrilateral.
+ *      into the destination image space. This yields a quadrilateral.
  * -# Write only pixels in the intersection of the transformed source ROI and
- *		the destination ROI.
+ *      the destination ROI.
  *
  * \subsection geometric_transforms_interpolation Pixel Interpolation
  *
@@ -1768,13 +1766,85 @@ public static native @Cast("NppStatus") int nppiResize_32f_P4R(@Cast("const Npp3
                          @Cast("Npp32f**") @ByPtrPtr FloatBuffer pDst, int nDstStep, @ByVal NppiSize oDstSize, @ByVal NppiRect oDstRectROI, int eInterpolation);
 public static native @Cast("NppStatus") int nppiResize_32f_P4R(@Cast("const Npp32f**") @ByPtrPtr float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiRect oSrcRectROI, 
                          @Cast("Npp32f**") @ByPtrPtr float[] pDst, int nDstStep, @ByVal NppiSize oDstSize, @ByVal NppiRect oDstRectROI, int eInterpolation);
-// Targeting ../nppig/NppiResizeBatchCXR.java
 
+/** \} */
 
-// Targeting ../nppig/NppiResizeBatchROI_Advanced.java
+/** \} image_resize */
 
- 
- 
+/** \defgroup image_resize_batch ResizeBatch
+ *
+ * ResizeBatch functions use scale factor automatically determined by the width and height ratios for each pair of input / output images in provided batches.
+ *
+ * In this function as in nppiResize the resize scale factor is automatically determined by the width and height ratios of oSrcRectROI and oDstRectROI.  If either of those 
+ * parameters intersect their respective image sizes then pixels outside the image size width and height will not be processed.
+ * Details of the resize operation are described above in the Resize section. ResizeBatch generally takes the same parameter list as 
+ * Resize except that there is a list of N instances of those parameters (N > 1) and that list is passed in device memory. A convenient
+ * data structure is provided that allows for easy initialization of the parameter lists.  The only restriction on these functions is
+ * that there is one single source ROI rectangle and one single destination ROI rectangle which are applied respectively to each image 
+ * in the batch.  The primary purpose of this function is to provide improved performance for batches of smaller images as long as GPU 
+ * resources are available.  Therefore it is recommended that the function not be used for very large images as there may not be resources 
+ * available for processing several large images simultaneously.  
+ * A single set of oSrcRectROI and oDstRectROI values are applied to each source image and destination image in the batch in the nppiResizeBatch 
+ * version of the function while per image specific oSrcRectROI and oDstRectROI values can be used in the nppiResizeBatch_Advanced version of the function.
+ * Source and destination image sizes may vary but oSmallestSrcSize and oSmallestDstSize must be set to the smallest
+ * source and destination image sizes in the batch. The parameters in the NppiResizeBatchCXR structure represent the corresponding
+ * per-image nppiResize parameters for each image in the nppiResizeBatch functions and the NppiImageDescriptor and NppiResizeBatchROI_Advanced structures represent 
+ * the corresponding per-image nppiResize parameters for the nppiResizeBatch_Advanced functions.  The NppiResizeBatchCXR or 
+ * NppiImageDescriptor and NppiResizeBatchROI_Advanced arrays must be in device memory.
+ *
+ * ResizeBatch supports the following interpolation modes:
+ *
+ * <pre>{@code
+ *   NPPI_INTER_NN
+ *   NPPI_INTER_LINEAR
+ *   NPPI_INTER_CUBIC
+ *   NPPI_INTER_SUPER
+ * }</pre>
+ *
+ * Below is the diagram of batch resize functions for variable ROIs. Figure shows the flexibility that the API can handle.
+ * The ROIs for source and destination images can be any rectangular width and height that reflects the needed resize factors, inside or beyond the image boundary.
+ *
+ * \image html resize.png
+ *
+ * \section resize_error_codes Error Codes
+ * The resize primitives return the following error codes:
+ *
+ *         - ::NPP_RESIZE_NO_OPERATION_ERROR if either destination ROI width or
+ *           height is less than 1 pixel.
+ *         - ::NPP_INTERPOLATION_ERROR if eInterpolation has an illegal value.
+ *         - ::NPP_SIZE_ERROR if source size width or height is less than 2 pixels.
+ *
+ * <h3><a name="CommonResizeBatchParameters">Common parameters for nppiResizeBatch functions include:</a></h3>
+ *
+ * @param oSmallestSrcSize Size in pixels of the entire smallest source image width and height, may be from different images.
+ * @param oSrcRectROI Region of interest in the source images (may overlap source image size width and height).
+ * @param oSmallestDstSize Size in pixels of the entire smallest destination image width and height, may be from different images.
+ * @param oDstRectROI Region of interest in the destination images (may overlap destination image size width and height).
+ * @param eInterpolation The type of eInterpolation to perform resampling. Currently limited to NPPI_INTER_NN, NPPI_INTER_LINEAR, NPPI_INTER_CUBIC, or NPPI_INTER_SUPER. 
+ * @param pBatchList Device memory pointer to nBatchSize list of NppiResizeBatchCXR structures.
+ * @param pBatchSrc Device pointer to NppiImageDescriptor list of source image descriptors. User needs to intialize this structure and copy it to device.
+ * @param pBatchDst Device pointer to NppiImageDescriptor list of destination image descriptors. User needs to intialize this structure and copy it to device. 
+ * @param pBatchROI Device pointer to NppiResizeBatchROI_Advanced list of per-image variable ROIs. User needs to initialize this structure and copy it to device. 
+ * @param nBatchSize Number of NppiResizeBatchCXR structures in this call (must be > 1).
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes, \ref resize_error_codes
+ *
+ * <h3><a name="CommonResizeBatchAdvancedParameters">Common parameters for nppiResizeBatchAdvanced functions include:</a></h3>
+ *
+ * @param nMaxWidth The maximum width of all destination ROIs
+ * @param nMaxHeight The maximum height of all destination ROIs
+ * @param pBatchSrc Device pointer to NppiImageDescriptor list of source image descriptors. User needs to intialize this structure and copy it to device.
+ * @param pBatchDst Device pointer to NppiImageDescriptor list of destination image descriptors. User needs to intialize this structure and copy it to device. 
+ * @param pBatchROI Device pointer to NppiResizeBatchROI_Advanced list of per-image variable ROIs. User needs to initialize this structure and copy it to device. 
+ * @param nBatchSize Number of images in a batch.
+ * @param eInterpolation The type of eInterpolation to perform resampling.
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes, \ref resize_error_codes
+ *
+ * \{
+ *
+ */
+
 /**
  * 1 channel 8-bit image resize batch.
  *
@@ -3908,9 +3978,32 @@ public static native @Cast("NppStatus") int nppiMirror_32f_AC4IR_Ctx(@Cast("Npp3
 public static native @Cast("NppStatus") int nppiMirror_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oROI, @Cast("NppiAxis") int flip);
 public static native @Cast("NppStatus") int nppiMirror_32f_AC4IR(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oROI, @Cast("NppiAxis") int flip);
 public static native @Cast("NppStatus") int nppiMirror_32f_AC4IR(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oROI, @Cast("NppiAxis") int flip);
-// Targeting ../nppig/NppiMirrorBatchCXR.java
 
+/** \} image_mirror */
 
+/** \defgroup mirror_batch MirrorBatch
+ *  Mirrors batches of images horizontally, vertically or diagonally.
+ *
+ * MirrorBatch generally takes the same parameter list as Mirror except that there is a list of N instances of those parameters (N > 1) 
+ * and that list is passed in device memory.  A convenient data structure is provided that allows for easy initialization of the 
+ * parameter lists.  The only restriction on these functions is that there is one single ROI and a single mirror flag which are
+ * applied respectively to each image in the batch.  The primary purpose of this function is to
+ * provide improved performance for batches of smaller images as long as GPU resources are available.  Therefore it is recommended
+ * that the function not be used for very large images as there may not be resources available for processing several large images
+ * simultaneously.  
+ *
+ * <h3><a name="CommonMirrorBatchParameters">Common parameters for nppiMirrorBatch non-inplace and inplace functions include:</a></h3>
+ *
+ * @param oSizeROI \ref roi_specification.
+ * @param flip Specifies the axis about which the images are to be mirrored.
+ * @param pBatchList Device memory pointer to nBatchSize list of NppiMirrorBatchCXR structures.
+ * @param nBatchSize Number of NppiMirrorBatchCXR structures in this call (must be > 1).
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes, \ref mirror_error_codes
+ *
+ * \{
+ *
+ */
 
 /**
  * 1 channel 32-bit float image mirror batch.
@@ -5088,9 +5181,60 @@ public static native @Cast("NppStatus") int nppiWarpAffine_64f_P4R(@Cast("const 
 public static native @Cast("NppStatus") int nppiWarpAffine_64f_P4R(@Cast("const Npp64f**") @ByPtrPtr double[] aSrc, @ByVal NppiSize oSrcSize, int nSrcStep, @ByVal NppiRect oSrcROI,
                              @Cast("Npp64f**") @ByPtrPtr double[] aDst, int nDstStep, @ByVal NppiRect oDstROI, 
                        @Cast("const double(* /*[2]*/ )[3]") double[] aCoeffs, int eInterpolation);
-// Targeting ../nppig/NppiWarpAffineBatchCXR.java
 
 
+/** \} affine_transform */
+
+/** \defgroup affine_transform_batch Affine Transform Batch
+ *
+ * Details of the warp affine operation are described above in the WarpAffine section. WarpAffineBatch generally takes the same parameter list as 
+ * WarpAffine except that there is a list of N instances of those parameters (N > 1) and that list is passed in device memory. A convenient
+ * data structure is provided that allows for easy initialization of the parameter lists.  The aTransformedCoeffs array is for internal use only
+ * and should not be directly initialized by the application.  The only restriction on these functions is
+ * that there is one single source ROI rectangle and one single destination ROI rectangle which are applied respectively to each image 
+ * in the batch.  The primary purpose of this function is to provide improved performance for batches of smaller images as long as GPU 
+ * resources are available.  Therefore it is recommended that the function not be used for very large images as there may not be resources 
+ * available for processing several large images simultaneously.  
+ * A single set of oSrcRectROI and oDstRectROI values are applied to each source image and destination image in the batch.
+ * Source and destination image sizes may vary but oSmallestSrcSize must be set to the smallest
+ * source and image size in the batch. The parameters in the NppiWarpAffineBatchCXR structure represent the corresponding
+ * per-image nppiWarpAffine parameters for each image in the batch.  The NppiWarpAffineBatchCXR array must be in device memory.
+ * The nppiWarpAffineBatchInit function MUST be called AFTER the application has initialized the array of NppiWarpAffineBatchCXR structures
+ * and BEFORE calling any of the nppiWarpAffineBatch functions to so that the aTransformedCoeffs array can be internally pre-initialized
+ * for each image in the batch. The batch size passed to nppiWarpAffineBatchInit must match the batch size passed to the corresponding
+ * warp affine batch function.
+ *
+ *
+ * WarpAffineBatch supports the following interpolation modes:
+ *
+ * <pre>{@code
+ *   NPPI_INTER_NN
+ *   NPPI_INTER_LINEAR
+ *   NPPI_INTER_CUBIC
+ * }</pre>
+ *
+ * \section Error Codes
+ * The warp affine primitives return the following error codes:
+ *
+ *         - ::NPP_RECTANGLE_ERROR if either destination ROI width or
+ *           height is less than 1 pixel.
+ *         - ::NPP_INTERPOLATION_ERROR if eInterpolation has an illegal value.
+ *         - ::NPP_SIZE_ERROR if source size width or height is less than 2 pixels.
+ *
+ * <h3><a name="CommonWarpAffineBatchParameters">Common parameters for nppiWarpAffineBatch functions include:</a></h3>
+ *
+ * @param oSmallestSrcSize Size in pixels of the entire smallest source image width and height, may be from different images.
+ * @param oSrcRectROI Region of interest in the source images.
+ * @param oDstRectROI Region of interest in the destination images.
+ * @param eInterpolation The type of eInterpolation to perform resampling. Currently limited to NPPI_INTER_NN, NPPI_INTER_LINEAR, or NPPI_INTER_CUBIC. 
+ * @param pBatchList Device memory pointer to nBatchSize list of NppiWarpAffineBatchCXR structures.
+ * @param nBatchSize Number of NppiWarpAffineBatchCXR structures in this call (must be > 1).
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ *
+ * \{
+ *
+ */
 
 
 /**
@@ -7585,9 +7729,59 @@ public static native @Cast("NppStatus") int nppiWarpPerspective_32f_P4R(@Cast("c
 public static native @Cast("NppStatus") int nppiWarpPerspective_32f_P4R(@Cast("const Npp32f**") @ByPtrPtr float[] pSrc, @ByVal NppiSize oSrcSize, int nSrcStep, @ByVal NppiRect oSrcROI, 
                                   @Cast("Npp32f**") @ByPtrPtr float[] pDst, int nDstStep, @ByVal NppiRect oDstROI, 
                             @Cast("const double(* /*[3]*/ )[3]") double[] aCoeffs, int eInterpolation);
-// Targeting ../nppig/NppiWarpPerspectiveBatchCXR.java
 
+/** \} perspective_transform */
 
+/** \defgroup perspective_transform_batch Perspective Transform Batch
+ *
+ * Details of the warp perspective operation are described above in the WarpPerspective section. WarpPerspectiveBatch generally takes the same parameter list as 
+ * WarpPerspective except that there is a list of N instances of those parameters (N > 1) and that list is passed in device memory. A convenient
+ * data structure is provided that allows for easy initialization of the parameter lists.  The aTransformedCoeffs array is for internal use only
+ * and should not be directly initialized by the application.  The only restriction on these functions is
+ * that there is one single source ROI rectangle and one single destination ROI rectangle which are applied respectively to each image 
+ * in the batch.  The primary purpose of this function is to provide improved performance for batches of smaller images as long as GPU 
+ * resources are available.  Therefore it is recommended that the function not be used for very large images as there may not be resources 
+ * available for processing several large images simultaneously.  
+ * A single set of oSrcRectROI and oDstRectROI values are applied to each source image and destination image in the batch.
+ * Source and destination image sizes may vary but oSmallestSrcSize must be set to the smallest
+ * source and image size in the batch. The parameters in the NppiWarpPerspectiveBatchCXR structure represent the corresponding
+ * per-image nppiWarpPerspective parameters for each image in the batch.  The NppiWarpPerspectiveBatchCXR array must be in device memory.
+ * The nppiWarpPerspectiveBatchInit function MUST be called AFTER the application has initialized the array of NppiWarpPerspectiveBatchCXR structures
+ * and BEFORE calling any of the nppiWarpPerspectiveBatch functions to so that the aTransformedCoeffs array can be internally pre-initialized
+ * for each image in the batch. The batch size passed to nppiWarpPerspectiveBatchInit must match the batch size passed to the corresponding
+ * warp perspective batch function.
+ *
+ *
+ * WarpPerspectiveBatch supports the following interpolation modes:
+ *
+ * <pre>{@code
+ *   NPPI_INTER_NN
+ *   NPPI_INTER_LINEAR
+ *   NPPI_INTER_CUBIC
+ * }</pre>
+ *
+ * \section Error Codes
+ * The warp perspective primitives return the following error codes:
+ *
+ *         - ::NPP_RECTANGLE_ERROR if either destination ROI width or
+ *           height is less than 1 pixel.
+ *         - ::NPP_INTERPOLATION_ERROR if eInterpolation has an illegal value.
+ *         - ::NPP_SIZE_ERROR if source size width or height is less than 2 pixels.
+ *
+ * <h3><a name="CommonWarpPerspectiveBatchParameters">Common parameters for nppiWarpPerspectiveBatch functions include:</a></h3>
+ *
+ * @param oSmallestSrcSize Size in pixels of the entire smallest source image width and height, may be from different images.
+ * @param oSrcRectROI Region of interest in the source images.
+ * @param oDstRectROI Region of interest in the destination images.
+ * @param eInterpolation The type of eInterpolation to perform resampling. Currently limited to NPPI_INTER_NN, NPPI_INTER_LINEAR, or NPPI_INTER_CUBIC. 
+ * @param pBatchList Device memory pointer to nBatchSize list of NppiWarpPerspectiveBatchCXR structures.
+ * @param nBatchSize Number of NppiWarpPerspectiveBatchCXR structures in this call (must be > 1).
+ * @param nppStreamCtx \ref application_managed_stream_context. 
+ * @return \ref image_data_error_codes, \ref roi_error_codes
+ *
+ * \{
+ *
+ */
 
 
 /**

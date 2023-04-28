@@ -33,17 +33,21 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 16;
-public static final int NCCL_PATCH = 2;
+public static final int NCCL_MINOR = 17;
+public static final int NCCL_PATCH = 1;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 21602;
+public static final int NCCL_VERSION_CODE = 21701;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
+// #endif
+
+// #include <limits.h>
 // Targeting ../nccl/ncclComm.java
 
 
+// #define NCCL_COMM_NULL NULL
 
 public static final int NCCL_UNIQUE_ID_BYTES = 128;
 // Targeting ../nccl/ncclUniqueId.java
@@ -61,6 +65,9 @@ public static final int ncclSuccess                 = 0,
                ncclRemoteError             = 6,
                ncclInProgress              = 7,
                ncclNumResults              = 8;
+
+// #define NCCL_CONFIG_UNDEF_INT INT_MIN
+// #define NCCL_CONFIG_UNDEF_PTR NULL
 // Targeting ../nccl/ncclConfig_t.java
 
 
@@ -71,7 +78,11 @@ public static final int ncclSuccess                 = 0,
 //   sizeof(ncclConfig_t), /* size */
 //   0xcafebeef,           /* magic */
 //   NCCL_VERSION(NCCL_MAJOR, NCCL_MINOR, NCCL_PATCH), /* version */
-//   1                     /* blocking */
+//   NCCL_CONFIG_UNDEF_INT,                    /* blocking */
+//   NCCL_CONFIG_UNDEF_INT,                    /* cgaClusterSize */
+//   NCCL_CONFIG_UNDEF_INT,                    /* minCTAs */
+//   NCCL_CONFIG_UNDEF_INT,                    /* maxCTAs */
+//   NCCL_CONFIG_UNDEF_PTR                     /* netName */
 // }
 
 /* Return the NCCL_VERSION_CODE of the NCCL library in the supplied integer.

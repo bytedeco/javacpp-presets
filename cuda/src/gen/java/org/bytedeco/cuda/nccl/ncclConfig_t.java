@@ -39,4 +39,8 @@ public class ncclConfig_t extends Pointer {
   public native @Cast("unsigned int") int version(); public native ncclConfig_t version(int setter);
   /* attributes that users are able to customize. */
   public native int blocking(); public native ncclConfig_t blocking(int setter);
+  public native int cgaClusterSize(); public native ncclConfig_t cgaClusterSize(int setter);
+  public native int minCTAs(); public native ncclConfig_t minCTAs(int setter);
+  public native int maxCTAs(); public native ncclConfig_t maxCTAs(int setter);
+  public native @Cast("const char*") BytePointer netName(); public native ncclConfig_t netName(BytePointer setter);
 }

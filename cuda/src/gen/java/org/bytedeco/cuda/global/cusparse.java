@@ -18,7 +18,7 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 // Parsed from <cusparse.h>
 
 /*
- * Copyright 1993-2022 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2023 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -83,9 +83,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 12;
-public static final int CUSPARSE_VER_MINOR = 0;
+public static final int CUSPARSE_VER_MINOR = 1;
 public static final int CUSPARSE_VER_PATCH = 0;
-public static final int CUSPARSE_VER_BUILD = 76;
+public static final int CUSPARSE_VER_BUILD = 106;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);
@@ -357,10 +357,6 @@ public static native @Cast("cusparseStatus_t") int cusparseDestroyCsru2csrInfo(c
 public static native @Cast("cusparseStatus_t") int cusparseCreateColorInfo(@ByPtrPtr cusparseColorInfo info);
 
 public static native @Cast("cusparseStatus_t") int cusparseDestroyColorInfo(cusparseColorInfo info);
-
-
-
-
 
 public static native @Cast("cusparseStatus_t") int cusparseCreatePruneInfo(@ByPtrPtr pruneInfo info);
 
@@ -9870,13 +9866,17 @@ public static native @Cast("cusparseStatus_t") int cusparseCsr2cscEx2_bufferSize
 /** enum cusparseFormat_t */
 public static final int
     /** Compressed Sparse Row (CSR) */
-    CUSPARSE_FORMAT_CSR         = 1,
+    CUSPARSE_FORMAT_CSR            = 1,
     /** Compressed Sparse Column (CSC) */
-    CUSPARSE_FORMAT_CSC         = 2,
+    CUSPARSE_FORMAT_CSC            = 2,
     /** Coordinate (COO) - Structure of Arrays */
-    CUSPARSE_FORMAT_COO         = 3,
+    CUSPARSE_FORMAT_COO            = 3,
     /** Blocked ELL */
-    CUSPARSE_FORMAT_BLOCKED_ELL = 5;
+    CUSPARSE_FORMAT_BLOCKED_ELL    = 5,
+    /** Blocked Compressed Sparse Row (BSR) */
+    CUSPARSE_FORMAT_BSR            = 6,
+    /** Sliced ELL */
+    CUSPARSE_FORMAT_SLICED_ELLPACK = 7;
 
 /** enum cusparseOrder_t */
 public static final int
@@ -10054,6 +10054,12 @@ public static native @Cast("cusparseStatus_t") int cusparseCsrSetStridedBatch(@C
                            int batchCount,
                            @Cast("int64_t") long offsetsBatchStride,
                            @Cast("int64_t") long columnsValuesBatchStride);
+
+public static native @Cast("cusparseStatus_t") int cusparseBsrSetStridedBatch(@Cast("cusparseSpMatDescr_t") cusparseSpMatDescr spMatDescr,
+                           int batchCount,
+                           @Cast("int64_t") long offsetsBatchStride,
+                           @Cast("int64_t") long columnsValuesBatchStride,
+                           @Cast("int64_t") long ValuesBatchStride);
 
 /** enum cusparseSpMatAttribute_t */
 public static final int
@@ -10259,6 +10265,39 @@ public static native @Cast("cusparseStatus_t") int cusparseCscSetPointers(@Cast(
                        Pointer cscValues);
 
 //------------------------------------------------------------------------------
+// ### BSR ###
+
+public static native @Cast("cusparseStatus_t") int cusparseCreateBsr(@Cast("cusparseSpMatDescr_t*") @ByPtrPtr cusparseSpMatDescr spMatDescr,
+                  @Cast("int64_t") long brows,
+                  @Cast("int64_t") long bcols,
+                  @Cast("int64_t") long bnnz,
+                  @Cast("int64_t") long rowBlockDim,
+                  @Cast("int64_t") long colBlockDim,
+                  Pointer bsrRowOffsets,
+                  Pointer bsrColInd,
+                  Pointer bsrValues,
+                  @Cast("cusparseIndexType_t") int bsrRowOffsetsType,
+                  @Cast("cusparseIndexType_t") int bsrColIndType,
+                  @Cast("cusparseIndexBase_t") int idxBase,
+                  @Cast("cudaDataType") int valueType,
+                  @Cast("cusparseOrder_t") int order);
+
+public static native @Cast("cusparseStatus_t") int cusparseCreateConstBsr(@Cast("cusparseConstSpMatDescr_t*") @ByPtrPtr cusparseSpMatDescr spMatDescr,
+                       @Cast("int64_t") long brows,
+                       @Cast("int64_t") long bcols,
+                       @Cast("int64_t") long bnnz,
+                       @Cast("int64_t") long rowBlockDim,
+                       @Cast("int64_t") long colBlockDim,
+                       @Const Pointer bsrRowOffsets,
+                       @Const Pointer bsrColInd,
+                       @Const Pointer bsrValues,
+                       @Cast("cusparseIndexType_t") int bsrRowOffsetsType,
+                       @Cast("cusparseIndexType_t") int bsrColIndType,
+                       @Cast("cusparseIndexBase_t") int idxBase,
+                       @Cast("cudaDataType") int valueType,
+                       @Cast("cusparseOrder_t") int order);
+
+//------------------------------------------------------------------------------
 // ### COO ###
 
 
@@ -10389,6 +10428,37 @@ public static native @Cast("cusparseStatus_t") int cusparseConstBlockedEllGet(@C
                            @Cast("cusparseIndexType_t*") int[] ellIdxType,
                            @Cast("cusparseIndexBase_t*") int[] idxBase,
                            @Cast("cudaDataType*") int[] valueType);
+
+//------------------------------------------------------------------------------
+// ### Sliced ELLPACK ###
+
+public static native @Cast("cusparseStatus_t") int cusparseCreateSlicedEll(@Cast("cusparseSpMatDescr_t*") @ByPtrPtr cusparseSpMatDescr spMatDescr,
+                        @Cast("int64_t") long rows,
+                        @Cast("int64_t") long cols,
+                        @Cast("int64_t") long nnz,
+                        @Cast("int64_t") long sellValuesSize,
+                        @Cast("int64_t") long sliceSize,
+	                Pointer sellSliceOffsets,
+                        Pointer sellColInd,
+                        Pointer sellValues,
+			@Cast("cusparseIndexType_t") int sellSliceOffsetsType,
+                        @Cast("cusparseIndexType_t") int sellColIndType,
+                        @Cast("cusparseIndexBase_t") int idxBase,
+                        @Cast("cudaDataType") int valueType);
+
+public static native @Cast("cusparseStatus_t") int cusparseCreateConstSlicedEll(@Cast("cusparseConstSpMatDescr_t*") @ByPtrPtr cusparseSpMatDescr spMatDescr,
+                             @Cast("int64_t") long rows,
+                             @Cast("int64_t") long cols,
+                             @Cast("int64_t") long nnz,
+                             @Cast("int64_t") long sellValuesSize,
+                             @Cast("int64_t") long sliceSize,
+                             @Const Pointer sellSliceOffsets,
+                             @Const Pointer sellColInd,
+                             @Const Pointer sellValues,
+                             @Cast("cusparseIndexType_t") int sellSliceOffsetsType,
+                             @Cast("cusparseIndexType_t") int sellColIndType,
+                             @Cast("cusparseIndexBase_t") int idxBase,
+                             @Cast("cudaDataType") int valueType);
 
 // #############################################################################
 // # DENSE MATRIX DESCRIPTOR
@@ -10534,7 +10604,8 @@ public static final int
     CUSPARSE_SPMV_CSR_ALG1    = 2,
     CUSPARSE_SPMV_CSR_ALG2    = 3,
     CUSPARSE_SPMV_COO_ALG1    = 1,
-    CUSPARSE_SPMV_COO_ALG2    = 4;
+    CUSPARSE_SPMV_COO_ALG2    = 4,
+    CUSPARSE_SPMV_SELL_ALG1   = 5;
 
 
 
@@ -10547,6 +10618,11 @@ public static final int
 /** enum cusparseSpSVAlg_t */
 public static final int
     CUSPARSE_SPSV_ALG_DEFAULT = 0;
+
+/** enum cusparseSpSVUpdate_t */
+public static final int
+    CUSPARSE_SPSV_UPDATE_GENERAL  = 0,
+    CUSPARSE_SPSV_UPDATE_DIAGONAL = 1;
 // Targeting ../cusparse/cusparseSpSVDescr.java
 
 
@@ -10586,6 +10662,13 @@ public static native @Cast("cusparseStatus_t") int cusparseSpSV_solve(cusparseCo
                    @Cast("cudaDataType") int computeType,
                    @Cast("cusparseSpSVAlg_t") int alg,
                    cusparseSpSVDescr spsvDescr);
+
+public static native @Cast("cusparseStatus_t") int cusparseSpSV_updateMatrix(cusparseContext handle,
+				          cusparseSpSVDescr spsvDescr,
+                          Pointer newValues,
+                          @Cast("cusparseSpSVUpdate_t") int updatePart);
+
+
 
 // #############################################################################
 // # SPARSE TRIANGULAR MATRIX SOLVE
