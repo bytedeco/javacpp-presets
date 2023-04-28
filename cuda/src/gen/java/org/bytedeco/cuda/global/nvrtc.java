@@ -20,7 +20,7 @@ public class nvrtc extends org.bytedeco.cuda.presets.nvrtc {
 //
 // NVIDIA_COPYRIGHT_BEGIN
 //
-// Copyright (c) 2014-2022, NVIDIA CORPORATION.  All rights reserved.
+// Copyright (c) 2014-2023, NVIDIA CORPORATION.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
 // and proprietary rights in and to this software, related documentation
@@ -69,7 +69,8 @@ public static final int
   NVRTC_ERROR_NO_NAME_EXPRESSIONS_AFTER_COMPILATION = 8,
   NVRTC_ERROR_NO_LOWERED_NAMES_BEFORE_COMPILATION = 9,
   NVRTC_ERROR_NAME_EXPRESSION_NOT_VALID = 10,
-  NVRTC_ERROR_INTERNAL_ERROR = 11;
+  NVRTC_ERROR_INTERNAL_ERROR = 11,
+  NVRTC_ERROR_TIME_FILE_WRITE_FAILED = 12;
 
 
 /**
@@ -259,6 +260,7 @@ public static native @Cast("nvrtcResult") int nvrtcDestroyProgram(@Cast("_nvrtcP
  *   - \link #nvrtcResult NVRTC_ERROR_INVALID_OPTION \endlink
  *   - \link #nvrtcResult NVRTC_ERROR_COMPILATION \endlink
  *   - \link #nvrtcResult NVRTC_ERROR_BUILTIN_OPERATION_FAILURE \endlink
+ *   - \link #nvrtcResult NVRTC_ERROR_TIME_FILE_WRITE_FAILED \endlink
  *
  * It supports compile options listed in \ref options.
  */
@@ -606,6 +608,7 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *         - \c compute_87
  *         - \c compute_89
  *         - \c compute_90
+ *         - \c compute_90a
  *         - \c sm_50
  *         - \c sm_52
  *         - \c sm_53
@@ -619,6 +622,7 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *         - \c sm_87
  *         - \c sm_89
  *         - \c sm_90
+ *         - \c sm_90a
  *       - Default: \c compute_52
  *   - Separate compilation / whole-program compilation
  *     - \c --device-c (\c -dc)\n
@@ -731,14 +735,15 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *     - \c --std={c++03|c++11|c++14|c++17|c++20}
  *       (\c -std={c++11|c++14|c++17|c++20})\n
  *       Set language dialect to C++03, C++11, C++14, C++17 or C++20
+ *       - Default: \c c++17
  *     - \c --builtin-move-forward={true|false} (\c -builtin-move-forward)\n
  *       Provide builtin definitions of \c std::move and \c std::forward,
- *       when C++11 language dialect is selected.
+ *       when C++11 or later language dialect is selected.
  *       - Default: \c true
  *     - \c --builtin-initializer-list={true|false}
  *       (\c -builtin-initializer-list)\n
  *       Provide builtin definitions of \c std::initializer_list class and
- *       member functions when C++11 language dialect is selected.
+ *       member functions when C++11 or later language dialect is selected.
  *       - Default: \c true
  *   - Misc.
  *     - \c --disable-warnings (\c -w)\n
@@ -770,6 +775,16 @@ public static native @Cast("nvrtcResult") int nvrtcGetLoweredName(_nvrtcProgram 
  *       Suppress specified diagnostic message number(s). Message numbers can be separated by comma.
  *     - \c --diag-warn=<error-number>,... (\c -diag-warn)\n
  *       Emit warning for specified diagnostic message number(s). Message numbers can be separated by comma.
+ *     - \c --brief-diagnostics={true|false}  (\c -brief-diag)\n
+ *       This option disables or enables showing source line and column info 
+ *       in a diagnostic.
+ *       The --brief-diagnostics=true will not show the source line and column info.
+ *       - Default: \c false
+ *     - \c --time=<file-name> (\c -time)\n
+ *        Generate a comma separated value table with the time taken by each compilation
+ *        phase, and append it at the end of the file given as the option argument.
+ *       If the file does not exist, the column headings are generated in the first row
+ *       of the table. If the file name is '-', the timing data is written to the compilation log.
  *
  */
 

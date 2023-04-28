@@ -15,7 +15,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 /**
  * GPU instance profile information (v2).
- * 
+ *
  * Version 2 adds the \ref nvmlGpuInstanceProfileInfo_v2_t.version field
  * to the start of the structure, and the \ref nvmlGpuInstanceProfileInfo_v2_t.name
  * field to the end. This structure is not backwards-compatible with

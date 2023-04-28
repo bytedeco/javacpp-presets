@@ -86,9 +86,9 @@ public static final int NVJPEG_MAX_COMPONENT = 4;
 
 // nvjpeg version information
 public static final int NVJPEG_VER_MAJOR = 12;
-public static final int NVJPEG_VER_MINOR = 0;
+public static final int NVJPEG_VER_MINOR = 2;
 public static final int NVJPEG_VER_PATCH = 0;
-public static final int NVJPEG_VER_BUILD = 28;
+public static final int NVJPEG_VER_BUILD = 2;
 
 /* nvJPEG status enums, returned by nvJPEG API */
 /** enum nvjpegStatus_t */
@@ -153,8 +153,10 @@ public static final int
     NVJPEG_OUTPUT_RGBI        = 5, 
     // convert to interleaved BGR and write to 1-st channel of nvjpegImage_t
     NVJPEG_OUTPUT_BGRI        = 6,
+    // 16 bit unsigned output in interleaved format
+    NVJPEG_OUTPUT_UNCHANGEDI_U16 = 7,
     // maximum allowed value
-    NVJPEG_OUTPUT_FORMAT_MAX  = 6;
+    NVJPEG_OUTPUT_FORMAT_MAX  = 7;
 
 // Parameter of this type specifies what type of input user provides for encoding
 /** enum nvjpegInputFormat_t */
@@ -179,7 +181,8 @@ public static final int
     NVJPEG_BACKEND_GPU_HYBRID = 2,
     NVJPEG_BACKEND_HARDWARE = 3,
     NVJPEG_BACKEND_GPU_HYBRID_DEVICE = 4,
-    NVJPEG_BACKEND_HARDWARE_DEVICE = 5;
+    NVJPEG_BACKEND_HARDWARE_DEVICE = 5,
+    NVJPEG_BACKEND_LOSSLESS_JPEG = 6;
 
 // Currently parseable JPEG encodings (SOF markers)
 /** enum nvjpegJpegEncoding_t */
@@ -188,7 +191,8 @@ public static final int
 
     NVJPEG_ENCODING_BASELINE_DCT                            = 0xc0,
     NVJPEG_ENCODING_EXTENDED_SEQUENTIAL_DCT_HUFFMAN         = 0xc1,
-    NVJPEG_ENCODING_PROGRESSIVE_DCT_HUFFMAN                 = 0xc2;
+    NVJPEG_ENCODING_PROGRESSIVE_DCT_HUFFMAN                 = 0xc2,
+    NVJPEG_ENCODING_LOSSLESS_HUFFMAN                        = 0xc3;
 
 /** enum nvjpegScaleFactor_t */
 public static final int
@@ -203,6 +207,7 @@ public static final int NVJPEG_FLAGS_ENABLE_MEMORY_POOLS =   1<<1;
 public static final int NVJPEG_FLAGS_BITSTREAM_STRICT =  1<<2;
 public static final int NVJPEG_FLAGS_REDUCED_MEMORY_DECODE =  1<<3;
 public static final int NVJPEG_FLAGS_REDUCED_MEMORY_DECODE_ZERO_COPY =  1<<4;
+public static final int NVJPEG_FLAGS_UPSAMPLING_WITH_INTERPOLATION = 1<<5;
 // Targeting ../nvjpeg/nvjpegImage_t.java
 
 
@@ -781,6 +786,16 @@ public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetExifOrientat
 public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetExifOrientation(
     nvjpegJpegStream jpeg_stream,
     @Cast("nvjpegExifOrientation_t*") int[] orientation_flag);
+
+public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetSamplePrecision(
+    nvjpegJpegStream jpeg_stream,
+    @Cast("unsigned int*") IntPointer precision);
+public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetSamplePrecision(
+    nvjpegJpegStream jpeg_stream,
+    @Cast("unsigned int*") IntBuffer precision);
+public static native @Cast("nvjpegStatus_t") int nvjpegJpegStreamGetSamplePrecision(
+    nvjpegJpegStream jpeg_stream,
+    @Cast("unsigned int*") int[] precision);
 
 // if encoded is 1 color component then it assumes 4:0:0 (NVJPEG_CSS_GRAY, grayscale)
 // if encoded is 3 color components it tries to assign one of the known subsamplings

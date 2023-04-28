@@ -97,9 +97,9 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                          "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cufft") ? "@.10" : lib.equals("cudart") ? "@.11.0" : "@.11";
+                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cufft") ? "@.11" : lib.equals("cudart") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cufft") ? "64_10" : lib.equals("cudart") ? "64_110" : "64_11";
+                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cufft") ? "64_11" : lib.equals("cudart") ? "64_12" : "64_12";
             } else {
                 continue; // no CUDA
             }

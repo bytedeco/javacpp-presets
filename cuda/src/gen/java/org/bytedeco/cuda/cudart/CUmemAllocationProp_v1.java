@@ -40,9 +40,9 @@ public class CUmemAllocationProp_v1 extends Pointer {
     public native @ByRef @Cast("CUmemLocation*") CUmemLocation_v1 location(); public native CUmemAllocationProp_v1 location(CUmemLocation_v1 setter);
     /**
      * Windows-specific POBJECT_ATTRIBUTES required when
-     * ::CU_MEM_HANDLE_TYPE_WIN32 is specified.  This object atributes structure
+     * ::CU_MEM_HANDLE_TYPE_WIN32 is specified.  This object attributes structure
      * includes security attributes that define
-     * the scope of which exported allocations may be tranferred to other
+     * the scope of which exported allocations may be transferred to other
      * processes.  In all other cases, this field is required to be zero.
      */
     public native Pointer win32HandleMetaData(); public native CUmemAllocationProp_v1 win32HandleMetaData(Pointer setter);

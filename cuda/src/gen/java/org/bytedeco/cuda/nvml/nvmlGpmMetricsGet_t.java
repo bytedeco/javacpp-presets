@@ -13,6 +13,9 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
+/**
+ * GPM buffer information.
+ */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGpmMetricsGet_t extends Pointer {
     static { Loader.load(); }
@@ -31,11 +34,15 @@ public class nvmlGpmMetricsGet_t extends Pointer {
         return new nvmlGpmMetricsGet_t((Pointer)this).offsetAddress(i);
     }
 
-    public native @Cast("unsigned int") int version(); public native nvmlGpmMetricsGet_t version(int setter);       /* IN: Set to NVML_GPM_METRICS_GET_VERSION */
-    public native @Cast("unsigned int") int numMetrics(); public native nvmlGpmMetricsGet_t numMetrics(int setter);    /* IN: How many metrics to retrieve in metrics[] */
-    public native nvmlGpmSample_st sample1(); public native nvmlGpmMetricsGet_t sample1(nvmlGpmSample_st setter);       /* IN: Sample buffer */
-    public native nvmlGpmSample_st sample2(); public native nvmlGpmMetricsGet_t sample2(nvmlGpmSample_st setter);       /* IN: Sample buffer */
+    /** IN: Set to NVML_GPM_METRICS_GET_VERSION */
+    public native @Cast("unsigned int") int version(); public native nvmlGpmMetricsGet_t version(int setter);
+    /** IN: How many metrics to retrieve in metrics[] */
+    public native @Cast("unsigned int") int numMetrics(); public native nvmlGpmMetricsGet_t numMetrics(int setter);
+    /** IN: Sample buffer */
+    public native nvmlGpmSample_st sample1(); public native nvmlGpmMetricsGet_t sample1(nvmlGpmSample_st setter);
+    /** IN: Sample buffer */
+    public native nvmlGpmSample_st sample2(); public native nvmlGpmMetricsGet_t sample2(nvmlGpmSample_st setter);
+    /** IN/OUT: Array of metrics. Set metricId on call. See nvmlReturn and value on return */
     public native @ByRef nvmlGpmMetric_t metrics(int i); public native nvmlGpmMetricsGet_t metrics(int i, nvmlGpmMetric_t setter);
-    @MemberGetter public native nvmlGpmMetric_t metrics(); /* IN/OUT: Array of metrics. Set metricId on call.
-                                                       see nvmlReturn and value on return */
+    @MemberGetter public native nvmlGpmMetric_t metrics();
 }

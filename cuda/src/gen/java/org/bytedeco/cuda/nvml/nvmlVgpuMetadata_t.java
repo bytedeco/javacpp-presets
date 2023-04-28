@@ -49,7 +49,7 @@ public class nvmlVgpuMetadata_t extends Pointer {
     /** Reserved for internal use */
     public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuMetadata_t reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
-    /** vGPU virtualizaion capabilities bitfileld */
+    /** vGPU virtualization capabilities bitfield */
     public native @Cast("unsigned int") int vgpuVirtualizationCaps(); public native nvmlVgpuMetadata_t vgpuVirtualizationCaps(int setter);
     /** vGPU version of guest driver */
     public native @Cast("unsigned int") int guestVgpuVersion(); public native nvmlVgpuMetadata_t guestVgpuVersion(int setter);

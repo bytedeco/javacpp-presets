@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Samuel Audet
+ * Copyright (C) 2018-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nccl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("defined(__CUDA_BF16_TYPES_EXIST__)").define(true))
-               .put(new Info("NCCL_CONFIG_INITIALIZER").annotations().cppTypes())
+               .put(new Info("NCCL_COMM_NULL", "NCCL_CONFIG_UNDEF_INT", "NCCL_CONFIG_UNDEF_PTR", "NCCL_CONFIG_INITIALIZER").annotations().cppTypes())
                .put(new Info("ncclComm_t").valueTypes("ncclComm").pointerTypes("@ByPtrPtr ncclComm", "@Cast(\"ncclComm**\") PointerPointer"));
     }
 }

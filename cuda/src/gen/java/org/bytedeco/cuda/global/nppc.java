@@ -74,9 +74,9 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
  */
 
 public static final int NPP_VER_MAJOR = 12;
-public static final int NPP_VER_MINOR = 0;
+public static final int NPP_VER_MINOR = 1;
 public static final int NPP_VER_PATCH = 0;
-public static final int NPP_VER_BUILD = 30;
+public static final int NPP_VER_BUILD = 40;
 
 public static final int NPP_VERSION = (NPP_VER_MAJOR * 1000 +     
                      NPP_VER_MINOR *  100 +     
@@ -733,6 +733,24 @@ public static final int
     NPP_WATERSHED_SEGMENT_BOUNDARIES_CONTRAST = 3,
     NPP_WATERSHED_SEGMENT_BOUNDARIES_ONLY = 4;
 // Targeting ../nppc/NppStreamContext.java
+
+
+// Targeting ../nppc/NppiResizeBatchCXR.java
+
+
+// Targeting ../nppc/NppiResizeBatchROI_Advanced.java
+
+
+// Targeting ../nppc/NppiMirrorBatchCXR.java
+
+
+// Targeting ../nppc/NppiWarpAffineBatchCXR.java
+
+
+// Targeting ../nppc/NppiWarpPerspectiveBatchCXR.java
+
+
+
 
 
 

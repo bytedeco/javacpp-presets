@@ -13,6 +13,7 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvjpeg.*;
 
 
+
 // Output descriptor.
 // Data that is written to planes depends on output format
 @Properties(inherit = org.bytedeco.cuda.presets.nvjpeg.class)

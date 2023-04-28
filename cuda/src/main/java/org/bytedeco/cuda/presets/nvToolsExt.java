@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 Samuel Audet
+ * Copyright (C) 2021-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,13 +34,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(value = {"linux-x86_64", "linux-arm64", "linux-ppc64le"},
-              include = {"<nvToolsExt.h>", "<nvToolsExtCuda.h>", "<nvToolsExtCudaRt.h>"/*, "<nvToolsExtOpenCL.h>"*/},
-              link = "nvToolsExt@.1")},
-//    @Platform(value = "windows-x86_64", link = "nvToolsExt64_1",
-//              includepath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/include/",
-//              linkpath    = "C:/Program Files/NVIDIA Corporation/NvToolsExt/lib/x64/",
-//              preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/")},
+    @Platform(include = {"<nvToolsExt.h>", "<nvToolsExtCuda.h>", "<nvToolsExtCudaRt.h>"/*, "<nvToolsExtOpenCL.h>"*/},
+              link = "nvToolsExt@.1"),
+    @Platform(value = "windows-x86_64", link = "nvToolsExt64_1",
+              includepath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/include/",
+              linkpath    = "C:/Program Files/NVIDIA Corporation/NvToolsExt/lib/x64/",
+              preloadpath = "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/")},
         target = "org.bytedeco.cuda.nvToolsExt", global = "org.bytedeco.cuda.global.nvToolsExt")
 @NoException
 public class nvToolsExt implements InfoMapper {

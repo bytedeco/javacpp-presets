@@ -15,7 +15,7 @@ import static org.bytedeco.cuda.global.nvml.*;
 
 /**
  * Memory allocation information for a device (v2).
- * 
+ *
  * Version 2 adds versioning for the struct and the amount of system-reserved memory as an output.
  * \note The \ref nvmlMemory_v2_t.used amount also includes the \ref nvmlMemory_v2_t.reserved amount.
  */
