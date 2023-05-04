@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/bgsegm.hpp>",
-            link = "opencv_bgsegm@.406"
+            link = "opencv_bgsegm@.407"
         ),
         @Platform(value = "ios", preload = "libopencv_bgsegm"),
-        @Platform(value = "windows", link = "opencv_bgsegm460")
+        @Platform(value = "windows", link = "opencv_bgsegm470")
     },
     target = "org.bytedeco.opencv.opencv_bgsegm",
     global = "org.bytedeco.opencv.global.opencv_bgsegm"

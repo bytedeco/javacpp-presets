@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-iconv --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
-ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp"
+DISABLE="--disable-iconv --disable-opencl --disable-vulkan --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-xlib"
+ENABLE="--enable-shared --enable-version3 --enable-runtime-cpudetect --enable-zlib --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-openssl --enable-libopenh264 --enable-libvpx --enable-libfreetype --enable-libopus --enable-libxml2 --enable-libsrt --enable-libwebp --enable-libaom --enable-libsvtav1"
 
 if [[ "$EXTENSION" == *gpl ]]; then
     # Enable GPLv3 modules
@@ -22,6 +22,8 @@ fi
 LIBXML_CONFIG="--enable-static --disable-shared --without-iconv --without-python --without-lzma --with-pic"
 SRT_CONFIG="-DENABLE_APPS:BOOL=OFF -DENABLE_ENCRYPTION:BOOL=ON -DENABLE_SHARED:BOOL=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
 WEBP_CONFIG="-DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_WEBP_JS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib"
+LIBAOM_CONFIG="-DENABLE_TESTS:BOOL=OFF -DENABLE_TESTDATA:BOOL=OFF -DENABLE_TOOLS:BOOL=OFF -DENABLE_EXAMPLES:BOOL=OFF -DENABLE_DOCS:BOOL=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
+LIBSVTAV1_CONFIG="-DBUILD_APPS:BOOL=OFF -DBUILD_TESTING:BOOL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
 
 NASM_VERSION=2.14
 ZLIB=zlib-1.2.13
@@ -30,19 +32,21 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.0.5
-OPENH264_VERSION=2.3.0
+OPENSSL=openssl-3.0.8
+OPENH264_VERSION=2.3.1
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.12.0
-ALSA_VERSION=1.2.7.2
-FREETYPE_VERSION=2.12.1
+VPX_VERSION=1.13.0
+ALSA_VERSION=1.2.8
+FREETYPE_VERSION=2.13.0
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=11.1.5.1
+NVCODEC_VERSION=11.1.5.2
 XML2=libxml2-2.9.12
-LIBSRT_VERSION=1.5.0
-WEBP_VERSION=1.2.4
-FFMPEG_VERSION=5.1.2
+LIBSRT_VERSION=1.5.1
+WEBP_VERSION=1.3.0
+AOMAV1_VERSION=3.6.0
+SVTAV1_VERSION=1.4.1
+FFMPEG_VERSION=6.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -62,6 +66,8 @@ download http://xmlsoft.org/sources/$XML2.tar.gz $XML2.tar.gz
 download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar.gz srt-$LIBSRT_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
+download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
+download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v1.4.1/SVT-AV1-v$SVTAV1_VERSION.tar.gz svt-av1-$SVTAV1_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -86,6 +92,8 @@ tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
+tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
+tar --totals -xzf ../svt-av1-$SVTAV1_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -105,10 +113,13 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
+patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1.patch
+patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1-2059.diff
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
+sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 
 case $PLATFORM in
     android-arm)
@@ -236,9 +247,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG -DCONFIG_RUNTIME_CPU_DETECT:BOOL=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -367,9 +392,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG -DCONFIG_RUNTIME_CPU_DETECT:BOOL=OFF ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -495,9 +534,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -622,9 +675,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_NATIVE_API_LEVEL=24 -DCMAKE_C_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_CXX_FLAGS="-I$INSTALL_PATH/include/" -DCMAKE_EXE_LINKER_FLAGS="-L$INSTALL_PATH/lib/" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1 $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz -latomic" --disable-symver || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -748,8 +815,22 @@ EOF
         fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32 -fPIC" CXX="g++ -m32 -fPIC" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32 -fPIC" CXX="g++ -m32 -fPIC" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m32 -D__ILP32__" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -873,8 +954,23 @@ EOF
         fi
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        pwd
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm $LIBS" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1048,15 +1144,39 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabih -DAOM_TARGET_CPU=generic $LIBAOM_CONFIG ..
+        else
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        fi
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        if [ $CROSSCOMPILE -eq 1 ]
+        then
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabih $LIBSVTAV1_CONFIG ..
+        else
+          $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        fi
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         if [ $CROSSCOMPILE -eq 1 ]
         then
           if [[ ! -d $USERLAND_PATH ]]; then
             USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
           fi
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" || cat ffbuild/config.log
         else
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvchiq_arm -lvcsm -lvcos -lpthread -ldl -lz -lm" || cat ffbuild/config.log
         fi
         make -j $MAKEJ
         make install
@@ -1181,11 +1301,25 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ ! -d $USERLAND_PATH ]]; then
           USERLAND_PATH="$(which aarch64-linux-gnu-gcc | grep -o '.*/tools/')../userland"
         fi
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2/ -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-omx `#--enable-mmal` --enable-omx-rpi --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="$CFLAGS -I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1 -fno-aggressive-loop-optimizations" --extra-ldflags="-Wl,-z,relro -L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvchiq_arm `#-lvcsm` -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1370,12 +1504,34 @@ EOF
         make install 
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        else
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64 -fPIC" -DCMAKE_C_FLAGS="-m64 -fPIC" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu $LIBAOM_CONFIG ..
+        fi
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        else
+          CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64 -fPIC" -DCMAKE_C_FLAGS="-m64 -fPIC" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu $LIBSVTAV1_CONFIG ..
+        fi
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
         else
           echo "configure ffmpeg cross compile"
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec || cat ffbuild/config.log
         fi
         make -j $MAKEJ
         make install
@@ -1487,9 +1643,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic --host=aarch64-apple-darwin
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER="clang" -DCMAKE_CXX_COMPILER="clang++" $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
-        LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --disable-libxcb --cc="clang -arch arm64" --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=darwin
+        LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --disable-libxcb --cc="clang -arch arm64" --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=darwin || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1597,9 +1767,23 @@ EOF
         ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --with-brotli=no --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-macosx.patch
-        LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --disable-libxcb --extra-cflags="-I../include/ -I../include/libxml2" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm"
+        LDEXEFLAGS='-Wl,-rpath,@loader_path/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-indev=avfoundation --disable-libxcb --extra-cflags="-I../include/ -I../include/libxml2 -I../include/mfx -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1715,8 +1899,22 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m32" CXX="g++ -m32" CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;
@@ -1832,8 +2030,22 @@ EOF
         make install
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
+        cd ../libaom-$AOMAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBAOM_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
+        cd ../SVT-AV1-v$SVTAV1_VERSION
+        mkdir -p build_release
+        cd build_release
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH $LIBSVTAV1_CONFIG ..
+        make -j $MAKEJ
+        make install
+        cd ..
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-DLIBXML_STATIC -I../include/ -I../include/libxml2 -I../include/mfx/ -I../include/svt-av1" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic -lole32 -luuid" || cat ffbuild/config.log
         make -j $MAKEJ
         make install
         ;;

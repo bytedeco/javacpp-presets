@@ -56,16 +56,24 @@ public class AutogradMeta extends AutogradMetaInterface {
   // must be protected by mutex_
   public native @SharedPtr ForwardGrad fw_grad_(); public native AutogradMeta fw_grad_(ForwardGrad setter);
 
-  public native @ByRef FunctionPreVector hooks_(); public native AutogradMeta hooks_(FunctionPreVector setter);
-  public native @Cast("torch::autograd::hooks_list*") @StdVector @SharedPtr PointerPointer cpp_hooks_list_(); public native AutogradMeta cpp_hooks_list_(PointerPointer setter);
+  // The hooks_ field is actually reused by both python and cpp logic
+  // For both cases, we have a data structure, cpp_hooks_list_ (cpp)
+  // or dict (python) which is the canonical copy.
+  // Then, for both cases, we always register a single hook to
+  // hooks_ which wraps all the hooks in the list/dict.
+  // And, again in both cases, if the grad_fn exists on that tensor
+  // we will additionally register a single hook to the grad_fn.
+  //
+  // Note that the cpp and python use cases aren't actually aware of
+  // each other, so using both is not defined behavior.
+  
+  
 
   // Only meaningful on leaf variables (must be false otherwise)
   public native @Cast("bool") boolean requires_grad_(); public native AutogradMeta requires_grad_(boolean setter);
 
-  // Only meaningful on non-leaf variables (must be -1 otherwise)
-  // The value of retains_grad_ indicates the index of it in cpp_hooks_list_
-  // A value of -1 indicates that the tensor does not retain grad
-  public native @Cast("int64_t") long retains_grad_(); public native AutogradMeta retains_grad_(long setter);
+  // Only meaningful on non-leaf variables (must be false otherwise)
+  public native @Cast("bool") boolean retains_grad_(); public native AutogradMeta retains_grad_(boolean setter);
 
   public native @Cast("bool") boolean is_view_(); public native AutogradMeta is_view_(boolean setter);
 
@@ -101,7 +109,6 @@ public class AutogradMeta extends AutogradMetaInterface {
         @Cast("uint64_t") long level,
         @Cast("bool") boolean is_inplace_op);
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public AutogradMeta(
         TensorImpl self_impl/*=nullptr*/,
         @Cast("bool") boolean requires_grad/*=false*/,

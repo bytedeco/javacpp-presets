@@ -69,6 +69,24 @@ public class Device extends DeviceBase {
         private native void allocate(@Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
         public Device(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(devInfo, maxUsbSpeed); }
         private native void allocate(@Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+        public Device(@StdString BytePointer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+        private native void allocate(@StdString BytePointer nameOrDeviceId);
+        public Device(@StdString ByteBuffer nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+        private native void allocate(@StdString ByteBuffer nameOrDeviceId);
+        public Device(@StdString String nameOrDeviceId) { super((Pointer)null); allocate(nameOrDeviceId); }
+        private native void allocate(@StdString String nameOrDeviceId);
+        public Device(@StdString BytePointer nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString BytePointer nameOrDeviceId, UsbSpeed maxUsbSpeed);
+        public Device(@StdString ByteBuffer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString ByteBuffer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+        public Device(@StdString String nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString String nameOrDeviceId, UsbSpeed maxUsbSpeed);
+        public Device(@StdString BytePointer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString BytePointer nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+        public Device(@StdString ByteBuffer nameOrDeviceId, UsbSpeed maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString ByteBuffer nameOrDeviceId, UsbSpeed maxUsbSpeed);
+        public Device(@StdString String nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(nameOrDeviceId, maxUsbSpeed); }
+        private native void allocate(@StdString String nameOrDeviceId, @Cast("dai::UsbSpeed") int maxUsbSpeed);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Device(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -134,7 +152,7 @@ public class Device extends DeviceBase {
 
     /**
      * Connects to any available device with a DEFAULT_SEARCH_TIME timeout.
-     * Uses OpenVINO version OpenVINO::DEFAULT_VERSION
+     * Uses OpenVINO version OpenVINO::VERSION_UNIVERSAL
      */
 
     /**

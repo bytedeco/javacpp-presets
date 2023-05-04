@@ -24,6 +24,7 @@ public class GenericDictIterator extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GenericDictIterator(Pointer p) { super(p); }
 
+   // C++17 friendly std::iterator implementation
   public native @ByRef @Name("operator =") GenericDictIterator put(@Const @ByRef GenericDictIterator rhs);
 
   public native @ByRef @Name("operator ++") GenericDictIterator increment();

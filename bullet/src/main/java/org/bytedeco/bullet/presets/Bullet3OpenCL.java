@@ -85,7 +85,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "Bullet3OpenCL/RigidBody/b3Solver.h",
 
             },
-            link = "Bullet3OpenCL_clew@.3.24"
+            link = "Bullet3OpenCL_clew@.3.25"
         )
     },
     target = "org.bytedeco.bullet.Bullet3OpenCL",

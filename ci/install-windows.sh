@@ -80,27 +80,27 @@ fi
 if [[ "$PROJ" =~ spinnaker ]]; then
        echo Spinnaker install
        if [ "$OS" == "windows-x86_64" ]; then
-           if [[ $(find /c/Downloads/Spinnaker_2.4.0.143_*_v140_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/Spinnaker_3.0.0.118_*_v140_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
            else
              echo "Downloading spinnaker to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1NiMxxDflip1F5rJuf73xhfoI9vWUeUkQ /c/Downloads/Spinnaker_2.4.0.143_Binaries_v140_x64.msi
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1FKatuVsLIQLbDb9R9W2ax_tav8_7--HI /c/Downloads/Spinnaker_2.4.0.143_SourceCode_v140_x64.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 12AkFMckbDqxFudYGWwaSLT7omOTtuRJt /c/Downloads/Spinnaker_3.0.0.118_Binaries_v140_x64.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1_SUnBQnv4czISJWVFnbxxWRZM6d2yzZK /c/Downloads/Spinnaker_3.0.0.118_SourceCode_v140_x64.msi
            fi
            # we can get these msi files by starting the installation from the exe file
-           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_2.4.0.143_Binaries_v140_x64.msi ADDLOCAL=ALL'
-           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_2.4.0.143_SourceCode_v140_x64.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_3.0.0.118_Binaries_v140_x64.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_3.0.0.118_SourceCode_v140_x64.msi ADDLOCAL=ALL'
        elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/Spinnaker_2.4.0.143_*_v140_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/Spinnaker_3.0.0.118_*_v140_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker32 in cache and size seems ok"
            else
              echo "Downloading spinnaker32 to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 15i6tV-vahgm_uNWT96c_KX7tFdZxmev- /c/Downloads/Spinnaker_2.4.0.143_Binaries_v140_x86.msi
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1ikOyG-gVettvjoJGQWkHxOcBWuTrGyfz /c/Downloads/Spinnaker_2.4.0.143_SourceCode_v140_x86.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 17GagcVjj2Gv6WswJR86_DKw9jLEfHHdo /c/Downloads/Spinnaker_3.0.0.118_Binaries_v140_x86.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1i93o2rFPtRKrCGBH2bUL5FQZchrDzrDe /c/Downloads/Spinnaker_3.0.0.118_SourceCode_v140_x86.msi
            fi
            # we can get these msi files by starting the installation from the exe file
-           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_2.4.0.143_Binaries_v140_x86.msi ADDLOCAL=ALL'
-           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_2.4.0.143_SourceCode_v140_x86.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_3.0.0.118_Binaries_v140_x86.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_3.0.0.118_SourceCode_v140_x86.msi ADDLOCAL=ALL'
        fi
        echo "Finished spinnaker install"
 fi

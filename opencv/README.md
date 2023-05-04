@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 4.6.0  http://opencv.org/
+ * OpenCV 4.7.0  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -49,35 +49,35 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.6.0-1.5.9-SNAPSHOT</version>
+            <version>4.7.0-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform-gpu</artifactId>
-            <version>4.6.0-1.5.9-SNAPSHOT</version>
+            <version>4.7.0-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>11.8-8.6-1.5.9-SNAPSHOT</version>
+            <version>12.1-8.9-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2022.2-1.5.9-SNAPSHOT</version>
+            <version>2023.1-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Optional dependencies to load the Python module -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.23.5-1.5.9-SNAPSHOT</version>
+            <version>1.24.2-1.5.9-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

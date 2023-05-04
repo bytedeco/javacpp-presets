@@ -23,24 +23,37 @@ public class SymFloat extends Pointer {
 
   /*implicit*/ public SymFloat(double d) { super((Pointer)null); allocate(d); }
 private native void allocate(double d);
-  public SymFloat(@ByVal @Cast("c10::SymFloatNode*") Pointer ptr) { super((Pointer)null); allocate(ptr); }
-  private native void allocate(@ByVal @Cast("c10::SymFloatNode*") Pointer ptr);
+  public SymFloat(@ByVal @Cast("c10::SymNode*") Pointer ptr) { super((Pointer)null); allocate(ptr); }
+  private native void allocate(@ByVal @Cast("c10::SymNode*") Pointer ptr);
   public SymFloat() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native SymFloatNodeImpl toSymFloatNodeImplUnowned();
+  public native SymNodeImpl toSymNodeImplUnowned();
 
   
 
-  public native @ByVal @Cast("c10::SymFloatNode*") Pointer toSymFloatNodeImpl();
-  public static native @ByVal SymFloat toSymFloat(@ByVal @Cast("c10::SymFloatNode*") Pointer sin);
+  public native @ByVal @Cast("c10::SymNode*") Pointer toSymNodeImpl();
 
   public native double expect_float();
 
-  public native @ByVal @Name("operator +") SymFloat add(@ByVal SymFloat arg0);
-  public native @ByVal @Name("operator -") SymFloat subtract(@ByVal SymFloat arg0);
-  public native @ByVal @Name("operator *") SymFloat multiply(@ByVal SymFloat arg0);
-  public native @ByVal @Name("operator /") SymFloat divide(@ByVal SymFloat arg0);
+  public native @ByVal @Name("operator +") SymFloat add(@Const @ByRef SymFloat arg0);
+  public native @ByVal @Name("operator -") SymFloat subtract(@Const @ByRef SymFloat arg0);
+  public native @ByVal @Name("operator *") SymFloat multiply(@Const @ByRef SymFloat arg0);
+  public native @ByVal @Name("operator /") SymFloat divide(@Const @ByRef SymFloat arg0);
+
+  // Need guidance on where to put this code
+  public native @ByVal SymFloat sqrt();
+
+  // Insert a guard for the float to be its concrete value, and then return
+  // that value.  This operation always works, even if the float is symbolic,
+  // so long as we know what the underlying value is. Don't blindly put this
+  // everywhere; you can cause overspecialization of PyTorch programs with
+  // this method.
+  //
+  // It should be called as guard_float(__FILE__, __LINE__).  The file and line
+  // number can be used to diagnose overspecialization.
+  public native double guard_float(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
+  public native double guard_float(String file, @Cast("int64_t") long line);
 
   // N.B. It's important to keep this definition in the header
   // as we expect if checks to be folded for mobile builds

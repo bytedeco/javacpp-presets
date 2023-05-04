@@ -123,9 +123,9 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                          "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.11.0" : lib.equals("nvrtc") ? "@.11.2" : "@.11";
+                lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
             } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_110" : lib.equals("nvrtc") ? "64_112_0" : "64_11";
+                lib += lib.startsWith("cudnn") ? "64_8" : lib.equals("cudart") ? "64_12" : lib.equals("nvrtc") ? "64_120_0" : "64_12";
             } else {
                 continue; // no CUDA
             }
@@ -146,7 +146,7 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                              "TVM_ATTRIBUTE_UNUSED", "TVM_OBJECT_REG_VAR_DEF", "TVM_ADD_FILELINE", "TVM_ALWAYS_INLINE",
                              "TVM_FUNC_REG_VAR_DEF").cppTypes().annotations())
                .put(new Info("__APPLE__", "_MSC_VER", "defined(_MSC_VER)", "defined(_MSC_VER) && _MSC_VER < 1900").define(false))
-               .put(new Info("defined DMLC_USE_LOGGING_LIBRARY", "DMLC_LOG_STACK_TRACE", "DMLC_CMAKE_LITTLE_ENDIAN").define(true))
+               .put(new Info("__cplusplus", "defined DMLC_USE_LOGGING_LIBRARY", "DMLC_LOG_STACK_TRACE", "DMLC_CMAKE_LITTLE_ENDIAN").define(true))
                .put(new Info("DMLC_LITTLE_ENDIAN", "DMLC_IO_NO_ENDIAN_SWAP").translate(false))
                .put(new Info("auto", "std::equal_to", "std::initializer_list", "std::hash", "std::nullptr_t", "dmlc::Demangle",
                              "dmlc::DummyOStream", "dmlc::InputSplit::Create", "dmlc::SeekStream::CreateForRead", "dmlc::Stream::Create",

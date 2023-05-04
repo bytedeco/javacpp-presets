@@ -213,11 +213,20 @@ public class TensorImpl extends Pointer {
    */
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes();
 
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_sizes();
+  public native @ByVal SymIntRef sym_sizes();
 
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes_default();
 
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_sizes_default();
+  public native @ByVal SymIntRef sym_sizes_default();
+
+  // From https://stackoverflow.com/a/3057522/23845
+  // TODO: does C++14 have a stdlib template for this?
+
+  public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef _generic_sizes(@ByVal @Cast("c10::TensorImpl::identity<int64_t>*") Pointer arg0);
+
+  public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef _generic_strides(@ByVal @Cast("c10::TensorImpl::identity<int64_t>*") Pointer arg0);
+
+  public native @Cast("int64_t") long _generic_storage_offset(@ByVal @Cast("c10::TensorImpl::identity<int64_t>*") Pointer arg0);
 
   /**
    * The number of elements in a tensor.
@@ -264,11 +273,11 @@ public class TensorImpl extends Pointer {
    */
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides();
 
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_strides();
+  public native @ByVal SymIntRef sym_strides();
 
   public native @ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef strides_default();
 
-  public native @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sym_strides_default();
+  public native @ByVal SymIntRef sym_strides_default();
 
   /**
    * Whether or not a tensor is laid out in contiguous memory.
@@ -624,12 +633,16 @@ public class TensorImpl extends Pointer {
   // if we are going to use sym sizes, we should be setting sym strides at the
   // same time, otherwise it's very easy to misuse this API
   public native void set_sizes_and_strides(
-        @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sizes,
-        @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef strides,
+        @ByVal SymIntRef sizes,
+        @ByVal SymIntRef strides,
         @ByVal(nullValue = "c10::optional<c10::SymInt>(c10::nullopt)") SymIntOptional storage_offset);
   public native void set_sizes_and_strides(
-        @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef sizes,
-        @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef strides);
+        @ByVal SymIntRef sizes,
+        @ByVal SymIntRef strides);
+  // This is renamed to avoid breaking overload BC
+  public native void generic_set_sizes_contiguous(@ByVal SymIntRef sizes);
+  public native void generic_set_sizes_contiguous(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes);
+  public native void generic_set_sizes_contiguous(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
 
   /**
    * Change the size at some dimension.  This DOES NOT update strides;
@@ -807,40 +820,7 @@ public class TensorImpl extends Pointer {
 
   public native void bump_version();
 
-  // Associate the TensorImpl with the specified PyObject, and, if necessary,
-  // also tag the interpreter.
-  //
-  // NB: This lives in a header so that we can inline away the switch on status
-  //
-  // NB: THIS FUNCTION CAN RAISE AN EXCEPTION.  Make sure to clean up after
-  // PyObject if necessary!
-  public native void init_pyobj(
-        @Cast("c10::impl::PyInterpreter*") Pointer self_interpreter,
-        @Cast("PyObject*") Pointer pyobj,
-        PyInterpreterStatus status);
-  public native void init_pyobj(
-        @Cast("c10::impl::PyInterpreter*") Pointer self_interpreter,
-        @Cast("PyObject*") Pointer pyobj,
-        @Cast("c10::impl::PyInterpreterStatus") int status);
-
-  // Query the PyObject interpreter.  This may return null if there is no
-  // interpreter.  This is racy!
-  public native @Cast("c10::impl::PyInterpreter*") Pointer pyobj_interpreter();
-
-  public native @Cast("PyObject*") Pointer _unchecked_untagged_pyobj();
-
-  // Test the interpreter tag.  If tagged for the current interpreter, return
-  // a non-nullopt (but possibly null) PyObject.  If (possibly) untagged,
-  // returns a nullopt.  If it is definitely invalid, raises an error.
-  //
-  // NB: this lives in header so that we can avoid actually creating the
-  // c10::optional
-  public native @ByVal @Cast("c10::optional<PyObject*>*") Pointer check_pyobj(
-        @Cast("c10::impl::PyInterpreter*") Pointer self_interpreter);
-
-  // Clear the PyObject field for an interpreter, in situations where we
-  // statically know the tensor is tagged with our interpreter.
-  public native void unchecked_clear_pyobj(@Cast("c10::impl::PyInterpreter*") Pointer interpreter);
+  public native @Cast("c10::impl::PyObjectSlot*") Pointer pyobj_slot();
   /**
    * The device type of a Tensor, e.g., DeviceType::CPU or DeviceType::CUDA.
    */
@@ -956,6 +936,9 @@ public class TensorImpl extends Pointer {
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @Const @ByVal TypeMeta data_type);
 
+  public native void empty_tensor_restride_symint(MemoryFormat memory_format);
+  public native void empty_tensor_restride_symint(@Cast("c10::MemoryFormat") byte memory_format);
+
   /**
    * Set the strides of the tensor to match memory_format
    *
@@ -975,10 +958,6 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean has_symbolic_sizes_strides();
   public native void set_storage_access_should_throw();
-
-  public native @Cast("bool") boolean owns_pyobj();
-
-  public native void set_owns_pyobj(@Cast("bool") boolean b);
   public native void set_custom_sizes_strides(SizesStridesPolicy policy);
   public native void set_custom_sizes_strides(@Cast("c10::TensorImpl::SizesStridesPolicy") byte policy);
 

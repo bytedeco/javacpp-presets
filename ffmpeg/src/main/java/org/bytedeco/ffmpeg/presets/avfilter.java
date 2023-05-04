@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.ffmpeg.avfilter",
     global = "org.bytedeco.ffmpeg.global.avfilter",
     value = {
-        @Platform(cinclude = {"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>", "<libavfilter/version_major.h>", "<libavfilter/version.h>"}, link = "avfilter@.8"),
-        @Platform(value = "windows", preload = "avfilter-8")
+        @Platform(cinclude = {"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>", "<libavfilter/version_major.h>", "<libavfilter/version.h>"}, link = "avfilter@.9"),
+        @Platform(value = "windows", preload = "avfilter-9")
     }
 )
 public class avfilter implements InfoMapper {

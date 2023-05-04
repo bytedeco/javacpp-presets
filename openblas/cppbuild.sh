@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.21
+OPENBLAS_VERSION=0.3.23
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -22,6 +22,10 @@ tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C O
 
 cd OpenBLAS-$OPENBLAS_VERSION
 cp lapack-netlib/LAPACKE/include/*.h ../include
+
+# https://github.com/xianyi/OpenBLAS/issues/3989
+patch -Np1 < ../../../OpenBLAS-cross.patch
+patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-cross.patch
 
 # remove broken cross-compiler workaround on Mac
 sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check

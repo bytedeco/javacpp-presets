@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// TfLiteInterpreter provides inference from a provided model.
+/** TfLiteInterpreter provides inference from a provided model. */
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteInterpreter extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

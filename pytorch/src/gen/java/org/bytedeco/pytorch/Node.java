@@ -73,9 +73,6 @@ public class Node extends Pointer {
     public Node(Pointer p) { super(p); }
 
   /** Construct a new {@code Node} with the given {@code next_edges} */
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 
   /** Nodes are neither copyable nor moveable. */
   
@@ -83,6 +80,7 @@ public class Node extends Pointer {
   
   
 
+  public native @SharedPtr Node getptr();
   /** Evaluates the function on the given inputs and returns the result of the
    *  function call. */
   public native @Name("operator ()") @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector apply(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector inputs);
@@ -105,7 +103,7 @@ public class Node extends Pointer {
    *  of the new input. */
   public native @Cast("uint32_t") @NoException(true) int add_input_metadata(
         @Const @ByRef TensorOptions options,
-        @ByVal @Cast("c10::SymIntArrayRef*") SymIntRef shape,
+        @ByVal SymIntRef shape,
         @Cast("bool") boolean is_tensor_subclass);
 
   public native @Cast("uint32_t") @NoException(true) int add_input_metadata(@Const @ByRef Tensor t);
@@ -267,7 +265,19 @@ public class Node extends Pointer {
 
   public native void add_pre_hook(@UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPreHook>&&"}) FunctionPreHook pre_hook);
 
+  public native void add_tensor_pre_hook(@UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPreHook>&&"}) FunctionPreHook pre_hook);
+
+  public native void add_retains_grad_hook(
+        @UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPreHook>&&"}) FunctionPreHook pre_hook,
+        int output_idx);
+
+  public native @UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPreHook>&&"}) FunctionPreHook pop_retains_grad_hook(int output_idx);
+
   public native @ByRef @NoException(true) FunctionPreHookVector pre_hooks();
+
+  public native @ByRef @NoException(true) FunctionPreHookVector tensor_pre_hooks();
+
+  public native @ByRef @NoException(true) IntFunctionPreHookMap retains_grad_hooks();
 
   // Customization Points for Subclasses
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

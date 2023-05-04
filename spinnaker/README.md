@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Spinnaker 2.4.0.143  https://www.flir.com/products/spinnaker-sdk
+ * Spinnaker 3.0.0.118  https://www.flir.com/products/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -22,7 +22,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/spinnaker/apidocs/
 
- 
+
 Sample Usage
 ------------
 Here is a simple example of Spinnaker C API code ported to Java from the `Acquisition_C.cpp` example distributed with Spinnaker SDK.
@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.spinnaker</groupId>
     <artifactId>acquisition_c</artifactId>
-    <version>1.5.8</version>
+    <version>1.5.9-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Acquisition_C</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>2.4.0.143-1.5.8</version>
+            <version>3.0.0.118-1.5.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -473,7 +473,14 @@ public class Acquisition_C {
             if (printOnError(err, "Unable to create image. Non-fatal error.")) {
                 hasFailed = true;
             }
-            err = spinImageConvert(hResultImage, spinPixelFormatEnums.PixelFormat_Mono8, hConvertedImage);
+
+            spinImageProcessor hImageProcessor = new spinImageProcessor(); // NULL;
+            err = spinImageProcessorCreate(hImageProcessor);
+            if (printOnError(err, "Unable to create image processor. Non-fatal error.")) {
+                hasFailed = true;
+            }
+
+            err = spinImageProcessorConvert(hImageProcessor, hResultImage, hConvertedImage, spinPixelFormatEnums.PixelFormat_Mono8);
             if (printOnError(err, "\"Unable to convert image. Non-fatal error.")) {
                 hasFailed = true;
             }
@@ -492,7 +499,7 @@ public class Acquisition_C {
                 // numbers to keep images of one device from overwriting those of
                 // another.
                 //
-                err = spinImageSave(hConvertedImage, new BytePointer(filename), spinImageFileFormat.JPEG);
+                err = spinImageSave(hConvertedImage, new BytePointer(filename), spinImageFileFormat.SPINNAKER_IMAGE_FILE_FORMAT_JPEG);
                 if (!printOnError(err, "Unable to save image. Non-fatal error.")) {
                     System.out.println("Image saved at " + filename + "\n");
                 }

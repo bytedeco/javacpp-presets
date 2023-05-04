@@ -1,9 +1,25 @@
 
+ * Build HDF5 with support for SZIP enabled ([pull #1334](https://github.com/bytedeco/javacpp-presets/pull/1334))
+ * Map missing functions from `mkl_trans.h` in presets for MKL ([issue #1331](https://github.com/bytedeco/javacpp-presets/issues/1331))
+ * Bundle the official Java API of HDF5 via the `hdf5_java` library ([pull #1327](https://github.com/bytedeco/javacpp-presets/pull/1327))
+ * Map missing `cblas_?axpby()` functions in presets for MKL ([issue #1326](https://github.com/bytedeco/javacpp-presets/issues/1326))
+ * Prefix with "fisheye" all functions from the `cv::fisheye::` namespace to avoid collisions ([pull #1324](https://github.com/bytedeco/javacpp-presets/pull/1324))
+ * Remove mapping for platform-dependent `enum` values in presets for libffi ([pull #1318](https://github.com/bytedeco/javacpp-presets/pull/1318))
+ * Fix mapping of `cv::fisheye::calibrate()` function from `opencv_calib3d` ([issue #1185](https://github.com/bytedeco/javacpp-presets/issues/1185))
+ * Add an RPATH to the `tesseract` program to avoid loading issues ([issue #1314](https://github.com/bytedeco/javacpp-presets/issues/1314))
+ * Bundle the CUPTI module of CUDA in the presets for PyTorch ([pull #1307](https://github.com/bytedeco/javacpp-presets/pull/1307))
+ * Build FFmpeg with AOMedia AV1 and SVT-AV1 codecs ([pull #1303](https://github.com/bytedeco/javacpp-presets/pull/1303))
+ * Map `c10::OptionalArrayRef<int64_t>` from PyTorch to `long...` as well for convenience ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
+ * Remove mapping for `c10::OptionalArrayRef` to simplify calls in presets for PyTorch ([issue #1300](https://github.com/bytedeco/javacpp-presets/issues/1300))
+ * Virtualize `btMotionState` and `btDefaultMotionState` from Bullet Physics SDK to allow callbacks ([pull #1297](https://github.com/bytedeco/javacpp-presets/pull/1297))
+ * Define `STRING_BYTES_CHARSET` to "UTF-8" for FFmpeg since it appears to assume that ([issue bytedeco/javacv#1945](https://github.com/bytedeco/javacv/issues/1945))
+ * Map `at::ITensorListRef` as used by `at::cat()` in presets for PyTorch ([issue #1293](https://github.com/bytedeco/javacpp-presets/issues/1293))
+ * Map `torch::data::datasets::ChunkDataReader` and related data loading classes from PyTorch ([issue #1215](https://github.com/bytedeco/javacpp-presets/issues/1215))
  * Add missing predefined `AVChannelLayout` in presets for FFmpeg ([issue #1286](https://github.com/bytedeco/javacpp-presets/issues/1286))
  * Map `c10::impl::GenericDict` as returned by `c10::IValue::toGenericDict()` in presets for PyTorch
  * Introduce `linux-armhf` and `linux-x86` builds to presets for TensorFlow Lite ([pull #1268](https://github.com/bytedeco/javacpp-presets/pull/1268))
  * Add presets for LibRaw 0.20.2 ([pull #1211](https://github.com/bytedeco/javacpp-presets/pull/1211))
- * Upgrade presets for DNNL 2.7.2, CPython 3.11.0, NumPy 1.23.5, LLVM 15.0.6, PyTorch 1.13.0, TensorFlow Lite 2.11.0, DepthAI 2.19.1, and their dependencies
+ * Upgrade presets for OpenCV 4.7.0, FFmpeg 6.0 ([issue bytedeco/javacv#1693](https://github.com/bytedeco/javacv/issues/1693)), HDF5 1.14.0, Hyperscan 5.4.1 ([issue #1308](https://github.com/bytedeco/javacpp-presets/issues/1308)), Spinnaker 3.0.0.118 ([pull #1313](https://github.com/bytedeco/javacpp-presets/pull/1313)), librealsense2 2.53.1 ([pull #1305](https://github.com/bytedeco/javacpp-presets/pull/1305)), MKL 2023.1, DNNL 2.7.3, OpenBLAS 0.3.23, ARPACK-NG 3.9.0, CPython 3.11.3, NumPy 1.24.2, SciPy 1.10.1, LLVM 16.0.1, Leptonica 1.83.0, Tesseract 5.3.1, CUDA 12.1.1, cuDNN 8.9.0, NCCL 2.17.1, OpenCL 3.0.13, NVIDIA Video Codec SDK 12.0.16, PyTorch 2.0.0, TensorFlow Lite 2.12.0, TensorRT 8.6.0.12, Triton Inference Server 2.32.0, DepthAI 2.21.2, ONNX Runtime 1.14.1, TVM 0.11.1, Bullet Physics SDK 3.25, and their dependencies
 
 ### November 2, 2022 version 1.5.8
  * Fix mapping of `torch::ExpandingArrayWithOptionalElem` in presets for PyTorch ([issue #1250](https://github.com/bytedeco/javacpp-presets/issues/1250))

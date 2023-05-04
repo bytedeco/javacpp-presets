@@ -42,8 +42,10 @@ public class AVStream extends Pointer {
         return new AVStream((Pointer)this).offsetAddress(i);
     }
 
-// #if FF_API_AVSTREAM_CLASS
-// #endif
+    /**
+     * A class for \ref avoptions. Set on stream creation.
+     */
+    public native @Const AVClass av_class(); public native AVStream av_class(AVClass setter);
 
     /** stream index in AVFormatContext */
     public native int index(); public native AVStream index(int setter);
@@ -53,6 +55,17 @@ public class AVStream extends Pointer {
      * encoding: set by the user, replaced by libavformat if left unset
      */
     public native int id(); public native AVStream id(int setter);
+
+    /**
+     * Codec parameters associated with this stream. Allocated and freed by
+     * libavformat in avformat_new_stream() and avformat_free_context()
+     * respectively.
+     *
+     * - demuxing: filled by libavformat on stream creation or in
+     *             avformat_find_stream_info()
+     * - muxing: filled by the caller before avformat_write_header()
+     */
+    public native AVCodecParameters codecpar(); public native AVStream codecpar(AVCodecParameters setter);
 
     public native Pointer priv_data(); public native AVStream priv_data(Pointer setter);
 
@@ -190,17 +203,6 @@ public static final int AVSTREAM_EVENT_FLAG_NEW_PACKETS = (1 << 1);
      * approximately 3600 or 1800 timer ticks, then r_frame_rate will be 50/1.
      */
     public native @ByRef AVRational r_frame_rate(); public native AVStream r_frame_rate(AVRational setter);
-
-    /**
-     * Codec parameters associated with this stream. Allocated and freed by
-     * libavformat in avformat_new_stream() and avformat_free_context()
-     * respectively.
-     *
-     * - demuxing: filled by libavformat on stream creation or in
-     *             avformat_find_stream_info()
-     * - muxing: filled by the caller before avformat_write_header()
-     */
-    public native AVCodecParameters codecpar(); public native AVStream codecpar(AVCodecParameters setter);
 
     /**
      * Number of bits in timestamps. Used for wrapping control.

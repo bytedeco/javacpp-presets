@@ -137,6 +137,7 @@ public class RawImgFrame extends RawBuffer {
     public native @Cast("int64_t") long sequenceNum(); public native RawImgFrame sequenceNum(long setter);   // increments for each frame
     public native @ByRef Timestamp ts(); public native RawImgFrame ts(Timestamp setter);         // generation timestamp, synced to host time
     public native @ByRef Timestamp tsDevice(); public native RawImgFrame tsDevice(Timestamp setter);   // generation timestamp, direct device monotonic clock
+    public native FrameEvent event(); public native RawImgFrame event(FrameEvent setter);
 
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);

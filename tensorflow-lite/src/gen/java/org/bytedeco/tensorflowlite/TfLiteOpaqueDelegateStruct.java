@@ -9,11 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// TfLiteOpaqueDelegateStruct: opaque version of TfLiteDelegate; allows
-// delegation of nodes to alternative backends.
+// TfLiteOpaqueDelegateStruct: unconditionally opaque version of
+// TfLiteDelegate; allows delegation of nodes to alternative backends.
 //
 // This is an abstract type that is intended to have the same
-// role as TfLiteDelegate from common.h, but without exposing the implementation
+// role as TfLiteDelegate, but without exposing the implementation
 // details of how delegates are implemented.
 // WARNING: This is an experimental type and subject to change.
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

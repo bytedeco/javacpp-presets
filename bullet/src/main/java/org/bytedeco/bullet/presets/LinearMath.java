@@ -68,7 +68,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "LinearMath/btTransformUtil.h",
                 "LinearMath/btMatrixX.h",
             },
-            link = "LinearMath@.3.24",
+            link = "LinearMath@.3.25",
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}
         )
     },
@@ -148,7 +148,7 @@ public class LinearMath implements InfoMapper {
 
             .put(new Info("btAlignedObjectArray.h").linePatterns("\tclass less", "\t};").skip())
 
-            .put(new Info("btIDebugDraw").virtualize())
+            .put(new Info("btIDebugDraw", "btMotionState", "btDefaultMotionState").virtualize())
 
             .put(new Info(
                     "BT_DECLARE_ALIGNED_ALLOCATOR",

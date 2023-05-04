@@ -24,7 +24,6 @@ import static org.bytedeco.ffmpeg.global.avfilter.*;
 
 import static org.bytedeco.ffmpeg.global.avdevice.*;
 
-// #endif
 
 /**
  * Structure describes basic parameters of the device.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_features2d.class,
     value = {
-        @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.406"),
+        @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.407"),
         @Platform(value = "ios", preload = "libopencv_calib3d"),
-        @Platform(value = "windows", link = "opencv_calib3d460")
+        @Platform(value = "windows", link = "opencv_calib3d470")
     },
     target = "org.bytedeco.opencv.opencv_calib3d",
     global = "org.bytedeco.opencv.global.opencv_calib3d"
@@ -151,6 +151,37 @@ public class opencv_calib3d implements InfoMapper {
                .put(new Info("cv::fisheye::CALIB_FIX_PRINCIPAL_POINT").javaNames("FISHEYE_CALIB_FIX_PRINCIPAL_POINT").translate())
                .put(new Info("cv::fisheye::CALIB_ZERO_DISPARITY").javaNames("FISHEYE_CALIB_ZERO_DISPARITY").translate())
                .put(new Info("cv::fisheye::CALIB_FIX_FOCAL_LENGTH").javaNames("FISHEYE_CALIB_FIX_FOCAL_LENGTH").translate())
+               .put(new Info("cv::fisheye::calibrate").javaText(
+                        "@Namespace(\"cv::fisheye\") public static native @Name(\"calibrate\") double fisheyeCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,\n"
+                      + "        @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,\n"
+                      + "            @ByVal(nullValue = \"cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)\") TermCriteria criteria);\n"
+                      + "@Namespace(\"cv::fisheye\") public static native @Name(\"calibrate\") double fisheyeCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,\n"
+                      + "        @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);\n"
+                      + "@Namespace(\"cv::fisheye\") public static native @Name(\"calibrate\") double fisheyeCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,\n"
+                      + "        @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,\n"
+                      + "            @ByVal(nullValue = \"cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)\") TermCriteria criteria);\n"
+                      + "@Namespace(\"cv::fisheye\") public static native @Name(\"calibrate\") double fisheyeCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point2fVectorVector imagePoints, @Const @ByRef Size image_size,\n"
+                      + "        @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);\n"))
+               .put(new Info("cv::fisheye::distortPoints").javaNames("fisheyeDistortPoints"))
+               .put(new Info("cv::fisheye::estimateNewCameraMatrixForUndistortRectify").javaNames("fisheyeEstimateNewCameraMatrixForUndistortRectify"))
+               .put(new Info("cv::fisheye::initUndistortRectifyMap").javaNames("fisheyeInitUndistortRectifyMap"))
+               .put(new Info("cv::fisheye::projectPoints").javaNames("fisheyeProjectPoints"))
+               .put(new Info("cv::fisheye::stereoCalibrate").javaText(
+                       "@Namespace(\"cv::fisheye\") public static native @Name(\"stereoCalibrate\") double fisheyeStereoCalibrate(@ByVal Point3fVectorVector objectPoints,\n"
+                     + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                     + "                                     @ByVal Mat K1, @ByVal Mat D1,\n"
+                     + "                                     @ByVal Mat K2, @ByVal Mat D2,\n"
+                     + "                                     @ByVal Size imageSize, @ByVal Mat R, @ByVal Mat T,\n"
+                     + "                                     int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,\n"
+                     + "                                     @ByVal(nullValue = \"cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)\") TermCriteria criteria);\n"
+                     + "@Namespace(\"cv::fisheye\") public static native @Name(\"stereoCalibrate\") double fisheyeStereoCalibrate(@ByVal Point3fVectorVector objectPoints,\n"
+                     + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                     + "                                     @ByVal Mat K1, @ByVal Mat D1,\n"
+                     + "                                     @ByVal Mat K2, @ByVal Mat D2,\n"
+                     + "                                     @ByVal Size imageSize, @ByVal Mat R, @ByVal Mat T);\n"))
+               .put(new Info("cv::fisheye::stereoRectify").javaNames("fisheyeStereoRectify"))
+               .put(new Info("cv::fisheye::undistortImage").javaNames("fisheyeUndistortImage"))
+               .put(new Info("cv::fisheye::undistortPoints").javaNames("fisheyeUndistortPoints"))
                .put(new Info("Affine3d").pointerTypes("Mat"));
     }
 }

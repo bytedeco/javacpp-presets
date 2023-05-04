@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  ReflectionPad3d model(ReflectionPad3dOptions(1));
  *  ReflectionPad3d model(ReflectionPad3dOptions({1, 1, 2, 0, 1, 2}));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ReflectionPad3dImpl extends ReflectionPad3dImplBase {
     static { Loader.load(); }

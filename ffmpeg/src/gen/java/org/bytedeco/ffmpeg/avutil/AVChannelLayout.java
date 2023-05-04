@@ -17,8 +17,11 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * A channel layout here is defined as a set of channels ordered in a specific
  * way (unless the channel order is AV_CHANNEL_ORDER_UNSPEC, in which case an
  * AVChannelLayout carries only the channel count).
+ * All orders may be treated as if they were AV_CHANNEL_ORDER_UNSPEC by
+ * ignoring everything but the channel count, as long as av_channel_layout_check()
+ * considers they are valid.
  *
- * Unlike most structures in Libav, sizeof(AVChannelLayout) is a part of the
+ * Unlike most structures in FFmpeg, sizeof(AVChannelLayout) is a part of the
  * public ABI and may be used by the caller. E.g. it may be allocated on stack
  * or embedded in caller-defined structs.
  *

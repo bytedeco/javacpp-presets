@@ -18,7 +18,6 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 /** A snapshot of a variable at a certain version. A {@code SavedVariable} stores
  *  enough information to reconstruct a variable from a certain point in time. */
-// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 @Namespace("torch::autograd") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SavedVariable extends Pointer {
     static { Loader.load(); }

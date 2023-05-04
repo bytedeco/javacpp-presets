@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Flatten model(FlattenOptions().start_dim(2).end_dim(4));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class FlattenImpl extends FlattenImplCloneable {
     static { Loader.load(); }

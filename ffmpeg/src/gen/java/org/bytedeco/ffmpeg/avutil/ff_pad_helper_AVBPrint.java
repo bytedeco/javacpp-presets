@@ -21,14 +21,14 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * Small buffers are kept in the structure itself, and thus require no
  * memory allocation at all (unless the contents of the buffer is needed
  * after the structure goes out of scope). This is almost as lightweight as
- * declaring a local "char buf[512]".
+ * declaring a local {@code char buf[512]}.
  *
  * The length of the string can go beyond the allocated size: the buffer is
  * then truncated, but the functions still keep account of the actual total
  * length.
  *
- * In other words, buf->len can be greater than buf->size and records the
- * total length of what would have been to the buffer if there had been
+ * In other words, AVBPrint.len can be greater than AVBPrint.size and records
+ * the total length of what would have been to the buffer if there had been
  * enough memory.
  *
  * Append operations do not need to be tested for failure: if a memory
@@ -36,20 +36,17 @@ import static org.bytedeco.ffmpeg.global.avutil.*;
  * is still updated. This situation can be tested with
  * av_bprint_is_complete().
  *
- * The size_max field determines several possible behaviours:
- *
- * size_max = -1 (= UINT_MAX) or any large value will let the buffer be
- * reallocated as necessary, with an amortized linear cost.
- *
- * size_max = 0 prevents writing anything to the buffer: only the total
- * length is computed. The write operations can then possibly be repeated in
- * a buffer with exactly the necessary size
- * (using size_init = size_max = len + 1).
- *
- * size_max = 1 is automatically replaced by the exact size available in the
- * structure itself, thus ensuring no dynamic memory allocation. The
- * internal buffer is large enough to hold a reasonable paragraph of text,
- * such as the current paragraph.
+ * The AVBPrint.size_max field determines several possible behaviours:
+ * - {@code size_max = -1} (= {@code UINT_MAX}) or any large value will let the buffer be
+ *   reallocated as necessary, with an amortized linear cost.
+ * - {@code size_max = 0} prevents writing anything to the buffer: only the total
+ *   length is computed. The write operations can then possibly be repeated in
+ *   a buffer with exactly the necessary size
+ *   (using {@code size_init = size_max = len + 1}).
+ * - {@code size_max = 1} is automatically replaced by the exact size available in the
+ *   structure itself, thus ensuring no dynamic memory allocation. The
+ *   internal buffer is large enough to hold a reasonable paragraph of text,
+ *   such as the current paragraph.
  */
 
 @Properties(inherit = org.bytedeco.ffmpeg.presets.avutil.class)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2022 Samuel Audet
+ * Copyright (C) 2021-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             value = {"android", "linux", "macosx", "windows"},
-            compiler = "cpp14",
+            compiler = "cpp17",
             define = "UNIQUE_PTR_NAMESPACE std",
             include = {
 //                "flatbuffers/base.h",
@@ -49,10 +49,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "tensorflow/lite/schema/schema_generated.h",
                 "tensorflow/lite/builtin_ops.h",
                 "tensorflow/lite/c/c_api_types.h",
+                "tensorflow/lite/core/c/c_api_types.h",
                 "tensorflow/lite/c/c_api.h",
                 "tensorflow/lite/core/c/c_api.h",
                 "tensorflow/lite/c/c_api_experimental.h",
+                "tensorflow/lite/core/c/c_api_experimental.h",
                 "tensorflow/lite/c/common.h",
+                "tensorflow/lite/core/c/common.h",
                 "tensorflow/lite/core/api/error_reporter.h",
                 "tensorflow/lite/core/api/op_resolver.h",
                 "tensorflow/lite/core/api/profiler.h",
@@ -77,10 +80,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/interpreter.h",
                 "tensorflow/lite/core/interpreter.h",
                 "tensorflow/lite/model_builder.h",
+                "tensorflow/lite/core/model_builder.h",
                 "tensorflow/lite/interpreter_builder.h",
+                "tensorflow/lite/core/interpreter_builder.h",
                 "tensorflow/lite/model.h",
                 "tensorflow/lite/kernels/register.h",
+                "tensorflow/lite/core/kernels/register.h",
                 "tensorflow/lite/optional_debug_tools.h",
+                "tensorflow/lite/profiling/telemetry/c/profiler.h",
+                "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
+                "tensorflow/lite/profiling/telemetry/telemetry_status.h",
+                "tensorflow/lite/profiling/telemetry/profiler.h",
             }
 //            link = "tensorflowlite_c"
         ),
@@ -91,8 +101,10 @@ public class tensorflowlite implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorflow-lite"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK").cppTypes().annotations())
+        infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT").cppTypes().annotations())
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
+               .put(new Info("tflite::ops::builtin::BuiltinOpResolver").pointerTypes("BuiltinOpResolver"))
+               .put(new Info("tflite::ops::builtin::BuiltinOpResolverWithoutDefaultDelegates").pointerTypes("BuiltinOpResolverWithoutDefaultDelegates"))
                .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
                              "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators",
                              "tflite::InterpreterBuilder::PreserveAllTensorsExperimental").skip())
@@ -119,32 +131,32 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("const std::vector<std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)> >", "tflite::OpResolver::TfLiteDelegatePtrVector").pointerTypes("TfLiteDelegatePtrVector").define())
                .put(new Info("std::unordered_map<std::int32_t,std::unique_ptr<tflite::resource::ResourceBase> >").valueTypes("@StdMove IntResourceBaseMap").pointerTypes("IntResourceBaseMap").define())
 
-               .put(new Info("tflite::Interpreter::typed_tensor<int8_t>").javaNames("typed_tensor_byte"))
-               .put(new Info("tflite::Interpreter::typed_tensor<int16_t>").javaNames("typed_tensor_short"))
-               .put(new Info("tflite::Interpreter::typed_tensor<int32_t>").javaNames("typed_tensor_int"))
-               .put(new Info("tflite::Interpreter::typed_tensor<int64_t>").javaNames("typed_tensor_long"))
-               .put(new Info("tflite::Interpreter::typed_tensor<float>").javaNames("typed_tensor_float"))
-               .put(new Info("tflite::Interpreter::typed_tensor<double>").javaNames("typed_tensor_double"))
-               .put(new Info("tflite::Interpreter::typed_tensor<bool>").javaNames("typed_tensor_bool"))
-               .put(new Info("tflite::Interpreter::typed_tensor<TfLiteFloat16>").javaNames("typed_tensor_float16"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<int8_t>").javaNames("typed_tensor_byte"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<int16_t>").javaNames("typed_tensor_short"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<int32_t>").javaNames("typed_tensor_int"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<int64_t>").javaNames("typed_tensor_long"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<float>").javaNames("typed_tensor_float"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<double>").javaNames("typed_tensor_double"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<bool>").javaNames("typed_tensor_bool"))
+               .put(new Info("tflite::impl::Interpreter::typed_tensor<TfLiteFloat16>").javaNames("typed_tensor_float16"))
 
-               .put(new Info("tflite::Interpreter::typed_input_tensor<int8_t>").javaNames("typed_input_tensor_byte"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<int16_t>").javaNames("typed_input_tensor_short"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<int32_t>").javaNames("typed_input_tensor_int"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<int64_t>").javaNames("typed_input_tensor_long"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<float>").javaNames("typed_input_tensor_float"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<double>").javaNames("typed_input_tensor_double"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<bool>").javaNames("typed_input_tensor_bool"))
-               .put(new Info("tflite::Interpreter::typed_input_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<int8_t>").javaNames("typed_input_tensor_byte"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<int16_t>").javaNames("typed_input_tensor_short"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<int32_t>").javaNames("typed_input_tensor_int"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<int64_t>").javaNames("typed_input_tensor_long"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<float>").javaNames("typed_input_tensor_float"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<double>").javaNames("typed_input_tensor_double"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<bool>").javaNames("typed_input_tensor_bool"))
+               .put(new Info("tflite::impl::Interpreter::typed_input_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
 
-               .put(new Info("tflite::Interpreter::typed_output_tensor<int8_t>").javaNames("typed_output_tensor_byte"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<int16_t>").javaNames("typed_output_tensor_short"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<int32_t>").javaNames("typed_output_tensor_int"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<int64_t>").javaNames("typed_output_tensor_long"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<float>").javaNames("typed_output_tensor_float"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<double>").javaNames("typed_output_tensor_double"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<bool>").javaNames("typed_output_tensor_bool"))
-               .put(new Info("tflite::Interpreter::typed_output_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<int8_t>").javaNames("typed_output_tensor_byte"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<int16_t>").javaNames("typed_output_tensor_short"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<int32_t>").javaNames("typed_output_tensor_int"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<int64_t>").javaNames("typed_output_tensor_long"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<float>").javaNames("typed_output_tensor_float"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<double>").javaNames("typed_output_tensor_double"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<bool>").javaNames("typed_output_tensor_bool"))
+               .put(new Info("tflite::impl::Interpreter::typed_output_tensor<TfLiteFloat16>").javaNames("typed_input_tensor_float16"))
         ;
     }
 }

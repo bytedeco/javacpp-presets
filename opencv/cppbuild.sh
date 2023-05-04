@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.6.0
+OPENCV_VERSION=4.7.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -120,7 +120,7 @@ sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
 BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_objc=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DOPENCV_SKIP_PYTHON_LOADER=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_sfm=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
-WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=OFF -DWITH_EIGEN=OFF -DENABLE_CXX11=ON"
+WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENJPEG=OFF -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON -DWITH_VA=OFF -DWITH_INF_ENGINE=OFF -DWITH_EIGEN=OFF -DENABLE_CXX11=ON -DENABLE_LIBJPEG_TURBO_SIMD=OFF"
 
 # support headless
 if [[ "${HEADLESS:-no}" == "yes" ]]; then
@@ -131,7 +131,7 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
-    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=11.0 -DCUDNN_VERSION=8.0 -DCUDA_ARCH_BIN='3.5' -DCUDA_ARCH_PTX='3.5' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
+    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=12.1 -DCUDNN_VERSION=8.9 -DCUDA_ARCH_BIN='5.0' -DCUDA_ARCH_PTX='5.0' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
 fi
 
 # exclude openblas dependencies
@@ -285,7 +285,7 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.a ../lib
         ;;
     linux-x86)
-        CC="gcc -m32" CXX="g++ -std=c++11 -m32 -I/usr/lib/glib-2.0/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        PKG_CONFIG_PATH=/usr/lib/pkgconfig/ CC="gcc -m32" CXX="g++ -std=c++11 -m32 -I/usr/lib/glib-2.0/include/" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -297,7 +297,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-x86_64)
-        CC="gcc -m64" CXX="g++ -std=c++11 -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
+        PKG_CONFIG_PATH=/usr/lib64/pkgconfig/ CC="gcc -m64" CXX="g++ -std=c++11 -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh

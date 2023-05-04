@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2022 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,12 +35,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_imgcodecs.class,
     value = {
-        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.406"),
+        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.407"),
         @Platform(value = "android", preload = {
             "native_camera_r2.2.0", "native_camera_r2.3.4", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
             "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
         @Platform(value = "ios", preload = "libopencv_videoio"),
-        @Platform(value = "windows", link = "opencv_videoio460", preload = {"opencv_ffmpeg460", "opencv_ffmpeg460_64"})},
+        @Platform(value = "windows", link = "opencv_videoio470", preload = {"opencv_ffmpeg470", "opencv_ffmpeg470_64"})},
     target = "org.bytedeco.opencv.opencv_videoio",
     global = "org.bytedeco.opencv.global.opencv_videoio"
 )

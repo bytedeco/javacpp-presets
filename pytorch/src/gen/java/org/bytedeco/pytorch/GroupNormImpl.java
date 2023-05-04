@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  GroupNorm model(GroupNormOptions(2, 2).eps(2e-5).affine(false));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GroupNormImpl extends GroupNormImplCloneable {
     static { Loader.load(); }
