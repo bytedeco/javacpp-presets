@@ -196,7 +196,7 @@ runs:
         echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
         git init
         git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
-        git checkout $GITHUB_SHA
+        git reset --hard $GITHUB_SHA
         git submodule update --init --recursive
         git submodule foreach --recursive 'git reset --hard'
 

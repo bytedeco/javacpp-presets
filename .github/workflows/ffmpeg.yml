@@ -25,7 +25,8 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   android-arm64:
     runs-on: ubuntu-20.04
     container: centos:7
@@ -33,7 +34,8 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   android-x86:
     runs-on: ubuntu-20.04
     container: centos:7
@@ -41,7 +43,8 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   android-x86_64:
     runs-on: ubuntu-20.04
     container: centos:7
@@ -49,7 +52,8 @@ jobs:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   linux-armhf:
     runs-on: ubuntu-20.04
     container: ubuntu:bionic
@@ -76,20 +80,26 @@ jobs:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86:
     runs-on: ubuntu-20.04
-    container: centos:7
+    container:
+      image: centos:7
+      options: --privileged
     strategy:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   linux-x86_64:
     runs-on: ubuntu-20.04
-    container: centos:7
+    container:
+      image: centos:7
+      options: --privileged
     strategy:
       matrix:
         ext: ["", -gpl]
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deploy-centos
   macosx-arm64:
     runs-on: macos-11
     strategy:
