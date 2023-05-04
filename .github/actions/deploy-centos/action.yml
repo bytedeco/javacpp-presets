@@ -1,4 +1,5 @@
 name: Deploy on CentOS
+description: Deploy on CentOS
 runs:
   using: composite
   steps:
@@ -24,7 +25,94 @@ runs:
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
         fi
-        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        yum -y install $SCL_ENABLE deltarpm rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        
+        if [[ $CI_DEPLOY_PLATFORM == "linux-x86" ]]; then
+          tee /etc/mock/centos-7-i386.cfg << EOF
+          config_opts['root'] = 'centos-7-i386'
+          config_opts['target_arch'] = 'i686'
+          config_opts['legal_host_arches'] = ('i386', 'i486', 'i586', 'i686', 'x86_64',)
+          config_opts['chroot_setup_cmd'] = 'install bash bzip2 coreutils cpio diffutils system-release findutils gawk gcc gcc-c++ grep gzip info make patch redhat-rpm-config rpm-build sed shadow-utils tar unzip util-linux which xz'
+          config_opts['dist'] = 'el7'  # only useful for --resultdir variable subst
+          config_opts['macros']['%dist'] = ".el7"
+          config_opts['%centos_ver'] = "7"
+          config_opts['macros']['%centos_ver'] = "7"
+          config_opts['macros']['%rhel'] = "7"
+          config_opts['macros']['%el7'] = "1"
+          config_opts['macros']['%redhat'] = "7"
+          config_opts['macros']['%_vendor'] = "redhat"
+          config_opts['macros']['%_vendor_host'] = "redhat"
+          config_opts['macros']['%_host'] = "i386-redhat-linux-gnu"
+          config_opts['macros']['%vendor'] = "CentOS"
+          config_opts['macros']['%packager'] = "CentOS BuildSystem <http://bugs.centos.org>"
+          
+          # no ccache in base repo
+          config_opts['plugin_conf']['ccache_enable'] = False
+          config_opts['plugin_conf']['yum_cache_enable'] = False
+          
+          config_opts['use_bootstrap'] = False
+          config_opts['dnf_warning'] = False
+          config_opts['yum.conf'] = """
+          [main]
+          cachedir=/var/cache/yum
+          keepcache=1
+          debuglevel=2
+          reposdir=/dev/null
+          logfile=/var/log/yum.log
+          retries=20
+          obsoletes=1
+          gpgcheck=0
+          assumeyes=1
+          syslog_ident=mock
+          syslog_device=
+          
+          exclude=*.x86_64
+          
+          # repos
+          
+          [base]
+          name=centos 7 i386 - base
+          baseurl=http://mirror.centos.org/altarch/7/os/i386/
+          enabled=1
+          gpgcheck=0
+          cost=2000
+          
+          [updates]
+          name=centos 7 i386 - updates
+          baseurl=http://mirror.centos.org/altarch/7/updates/i386/
+          enabled=1
+          gpgcheck=0
+          cost=2000
+          
+          [extras]
+          name=centos 7 i386 - extras
+          baseurl=http://mirror.centos.org/altarch/7/extras/i386/
+          enabled=0
+          gpgcheck=0
+          cost=2500
+          """
+          EOF
+        fi
+        
+        if [[ $CI_DEPLOY_PLATFORM == "linux-x86" || $CI_DEPLOY_PLATFORM == "linux-x86_64" ]]; then
+          pushd ~
+        
+          curl "https://vault.centos.org/7.9.2009/os/Source/SPackages/libva-1.8.3-1.el7.src.rpm" -L -o libva-1.8.3-1.el7.src.rpm
+          rpm -ivh libva-1.8.3-1.el7.src.rpm
+          # Replace 1.8.3 with 2.18.0
+          sed -i 's/1.8.3/2.18.0/g' rpmbuild/SPECS/libva.spec
+          curl "https://github.com/intel/libva/archive/refs/tags/2.18.0.tar.gz" -L -o rpmbuild/SOURCES/libva-2.18.0.tar.gz
+          rpmbuild -bs rpmbuild/SPECS/libva.spec
+          if [[ $CI_DEPLOY_PLATFORM == "linux-x86" ]]; then
+            mock -r centos-7-i386 --rebuild rpmbuild/SRPMS/libva-2.18.0-1.el7.src.rpm
+            yum -y install /var/lib/mock/centos-7-i386/result/libva-devel-2.18.0-1.el7.i686.rpm
+          else
+            mock -r centos-7-x86_64 --rebuild rpmbuild/SRPMS/libva-2.18.0-1.el7.src.rpm
+            yum -y install /var/lib/mock/centos-7-x86_64/result/libva-devel-2.18.0-1.el7.x86_64.rpm
+          fi
+        
+          popd
+        fi
         # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
         sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9/include/avx512fintrin.h
         source scl_source enable $SCL_ENABLE || true
