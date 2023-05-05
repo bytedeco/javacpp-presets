@@ -1,4 +1,5 @@
 
+ * Link FFmpeg with latest version of VA-API libraries ([pull #1296](https://github.com/bytedeco/javacpp-presets/pull/1296))
  * Build HDF5 with support for SZIP enabled ([pull #1334](https://github.com/bytedeco/javacpp-presets/pull/1334))
  * Map missing functions from `mkl_trans.h` in presets for MKL ([issue #1331](https://github.com/bytedeco/javacpp-presets/issues/1331))
  * Bundle the official Java API of HDF5 via the `hdf5_java` library ([pull #1327](https://github.com/bytedeco/javacpp-presets/pull/1327))

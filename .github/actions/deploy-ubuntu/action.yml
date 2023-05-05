@@ -1,5 +1,4 @@
 name: Deploy on Ubuntu
-description: Deploy on Ubuntu
 runs:
   using: composite
   steps:
