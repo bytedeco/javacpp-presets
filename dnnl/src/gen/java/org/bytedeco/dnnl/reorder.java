@@ -83,25 +83,26 @@ public class reorder extends primitive {
          *  @param dst_engine Engine on which the destination memory object
          *      will be located.
          *  @param dst_md Destination memory descriptor.
-         *  @param attr Primitive attributes to use (optional).
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is allowed
          *      to fail without throwing an exception. In this case an empty
          *      object will be produced. This flag is optional and defaults to
          *      false. */
         
         ///
-        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
-                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
+        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_md,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md, attr, allow_empty); }
-        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
-                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
+        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_md,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
-                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md); }
-        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
-                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md);
+        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_md) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md); }
+        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_md);
 
         /** Constructs a primitive descriptor for reorder primitive.
          * 
@@ -109,7 +110,8 @@ public class reorder extends primitive {
          *      memory descriptor and engine.
          *  @param dst Destination memory object. It is used to obtain the
          *      destination memory descriptor and engine.
-         *  @param attr Primitive attributes to use (optional).
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is allowed
          *      to fail without throwing an exception. In this case an empty
          *      object will be produced. This flag is optional and defaults to
@@ -140,10 +142,10 @@ public class reorder extends primitive {
         public native @ByVal engine get_dst_engine();
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
     }
 
     /** Default constructor. Produces an empty object. */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Samuel Audet, Alexander Merritt
+ * Copyright (C) 2018-2023 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -43,9 +43,11 @@ import org.bytedeco.opencl.presets.*;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
-            include = {"oneapi/dnnl/dnnl_types.h", "oneapi/dnnl/dnnl_config.h", /*"oneapi/dnnl/dnnl_debug.h",*/ "oneapi/dnnl/dnnl_version.h", "oneapi/dnnl/dnnl.h", "oneapi/dnnl/dnnl.hpp"},
-            link = "dnnl@.2", preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}, resource = {"include", "lib"}
+//            define = {"GENERIC_EXCEPTION_CLASS dnnl::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
+            include = {"oneapi/dnnl/dnnl_common_types.h", "oneapi/dnnl/dnnl_types.h", "oneapi/dnnl/dnnl_common.h",
+                       "oneapi/dnnl/dnnl_config.h", /*"oneapi/dnnl/dnnl_debug.h",*/ "oneapi/dnnl/dnnl_version.h",
+                       "oneapi/dnnl/dnnl.h", "oneapi/dnnl/dnnl_common.hpp", "oneapi/dnnl/dnnl.hpp"},
+            link = "dnnl@.3", preload = {"gomp@.1", "iomp5", "omp", "tbb@.2"}, resource = {"include", "lib"}
         ),
     },
     target = "org.bytedeco.dnnl",
@@ -60,17 +62,21 @@ public class dnnl implements InfoMapper {
                              "DNNL_MEMORY_NONE", "DNNL_MEMORY_ALLOCATE").cppTypes().annotations())
                .put(new Info("DNNL_VERSION_HASH", "DNNL_RUNTIME_F32_VAL").translate(false))
                .put(new Info("DNNL_RUNTIME_DIM_VAL").cppTypes("long long").translate(false))
+               .put(new Info("DNNL_DEFINE_BITMASK_OPS").cppText("#define DNNL_DEFINE_BITMASK_OPS(enum_name)"))
                .put(new Info("DNNL_DEPRECATED").cppText("#define DNNL_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
                .put(new Info("DNNL_CPU_RUNTIME == DNNL_RUNTIME_THREADPOOL",
                              "DNNL_CPU_THREADING_RUNTIME == DNNL_RUNTIME_THREADPOOL",
-                             "DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL").define(false))
+                             "DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL",
+                             "DNNL_EXPERIMENTAL_SPARSE").define(false))
                .put(new Info("DNNL_RUNTIME_F32_VAL_REP").skip())
 
                .put(new Info("dnnl_dims_t").cppTypes("int64_t* const"))
                .put(new Info("dnnl_memory_t").valueTypes("dnnl_memory").pointerTypes("@ByPtrPtr dnnl_memory", "@Cast(\"dnnl_memory_t*\") PointerPointer"))
                .put(new Info("const_dnnl_memory_t").valueTypes("@Const dnnl_memory").pointerTypes("@Const @ByPtrPtr dnnl_memory", "@Cast(\"const_dnnl_memory_t*\") PointerPointer"))
+               .put(new Info("dnnl_memory_desc_t").valueTypes("dnnl_memory_desc").pointerTypes("@ByPtrPtr dnnl_memory_desc", "@Cast(\"dnnl_memory_desc_t*\") PointerPointer"))
+               .put(new Info("const_dnnl_memory_desc_t").valueTypes("@Const dnnl_memory_desc").pointerTypes("@Cast(\"const_dnnl_memory_desc_t*\") @ByPtrPtr dnnl_memory_desc", "@Cast(\"const_dnnl_memory_desc_t*\") PointerPointer"))
                .put(new Info("dnnl_engine_t").valueTypes("dnnl_engine").pointerTypes("@ByPtrPtr dnnl_engine", "@Cast(\"dnnl_engine_t*\") PointerPointer"))
                .put(new Info("const_dnnl_engine_t").valueTypes("@Const dnnl_engine").pointerTypes("@Const @ByPtrPtr dnnl_engine", "@Cast(\"const_dnnl_engine_t*\") PointerPointer"))
                .put(new Info("dnnl_primitive_desc_iterator_t").valueTypes("dnnl_primitive_desc_iterator").pointerTypes("@ByPtrPtr dnnl_primitive_desc_iterator", "@Cast(\"dnnl_primitive_desc_iterator_t*\") PointerPointer"))
@@ -89,11 +95,16 @@ public class dnnl implements InfoMapper {
 //               .put(new Info("const_dnnl_stream_attr_t").valueTypes("@Const dnnl_stream_attr").pointerTypes("@Const @ByPtrPtr dnnl_stream_attr", "@Cast(\"const_dnnl_stream_attr_t*\") PointerPointer"))
 
                .put(new Info("dnnl::primitive_desc").pointerTypes("org.bytedeco.dnnl.primitive_desc"))
+               .put(new Info("dnnl::memory::desc").pointerTypes("org.bytedeco.dnnl.memory.desc"))
                .put(new Info("dnnl::memory::dims").annotations("@Cast({\"dnnl_dim_t*\", \"std::vector<dnnl_dim_t>&\"}) @StdVector(\"dnnl_dim_t\")").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 //               .put(new Info("std::vector<const_dnnl_primitive_desc_t>").annotations("@StdVector @Cast(\"const_dnnl_primitive_desc_t*\")").pointerTypes("PointerPointer"))
 //               .put(new Info("dnnl::primitive::at").pointerTypes("primitive.at").define())
 //               .put(new Info("dnnl::memory::primitive_desc").pointerTypes("memory.primitive_desc").define())
 //               .put(new Info("std::vector<int64_t>", "std::vector<dnnl_dim_t>", "dnnl::memory::dims").pointerTypes("memory_dims").define())
+               .put(new Info("std::vector<dnnl_memory_desc_t>",
+                             "std::vector<const_dnnl_memory_desc_t>").cast().pointerTypes("dnnl_memory_desc_vector").define())
+               .put(new Info("std::vector<dnnl::memory::desc>", "std::vector<memory::desc>",
+                             "std::vector<const dnnl::memory::desc>", "std::vector<const memory::desc>").cast().pointerTypes("memory_desc_vector").define())
                .put(new Info("std::vector<dnnl_primitive_desc_t>",
                              "std::vector<const_dnnl_primitive_desc_t>").cast().pointerTypes("dnnl_primitive_desc_vector").define())
                .put(new Info("std::vector<dnnl::primitive>").pointerTypes("primitive_vector").define())
@@ -106,12 +117,16 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::primitive::kind").valueTypes("primitive.kind").enumerate())
 
                .put(new Info("dnnl::handle_traits", "dnnl::primitive_attr(dnnl_primitive_attr_t)",
+                             "dnnl::memory::desc(dnnl_memory_desc_t)",
+                             "dnnl::resampling_backward::primitive_desc::primitive_desc",
+                             "dnnl::resampling_forward::primitive_desc::primitive_desc",
                              "dnnl::reorder::primitive_desc(dnnl_primitive_desc_t)",
                              "dnnl::concat::primitive_desc(dnnl_primitive_desc_t)",
                              "dnnl::sum::primitive_desc(dnnl_primitive_desc_t)",
                              "dnnl::post_ops(dnnl_post_ops_t)").skip())
                .put(new Info("dnnl::handle<dnnl_engine_t>", "dnnl::handle<dnnl_engine_t,traits>").pointerTypes("dnnl_engine_handle"))
                .put(new Info("dnnl::handle<dnnl_memory_t>", "dnnl::handle<dnnl_memory_t,traits>").pointerTypes("dnnl_memory_handle"))
+               .put(new Info("dnnl::handle<dnnl_memory_desc_t>", "dnnl::handle<dnnl_memory_desc_t,traits>").pointerTypes("dnnl_memory_desc_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_desc_t>", "dnnl::handle<dnnl_primitive_desc_t,traits>").pointerTypes("dnnl_primitive_desc_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_attr_t>", "dnnl::handle<dnnl_primitive_attr_t,traits>").pointerTypes("dnnl_primitive_attr_handle"))
                .put(new Info("dnnl::handle<dnnl_post_ops_t>", "dnnl::handle<dnnl_post_ops_t,traits>").pointerTypes("dnnl_post_ops_handle"))

@@ -23,15 +23,22 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 public class Status extends BaseStatus {
     static { Loader.load(); }
 
-  /** Takes ownership of OrtStatus instance returned from the C API. Must be non-null */
+  /** Takes ownership of OrtStatus instance returned from the C API. */
   public Status(OrtStatus status) { super((Pointer)null); allocate(status); }
-  private native void allocate(OrtStatus status);
+  @NoException(true) private native void allocate(OrtStatus status);
   /** Creates status instance out of exception */
   public Status(@Const @ByRef OrtException arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@Const @ByRef OrtException arg0);
+  @NoException(true) private native void allocate(@Const @ByRef OrtException arg0);
   /** Creates status instance out of exception */
   public Status(@Cast("const std::exception*") @ByRef Pointer arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@Cast("const std::exception*") @ByRef Pointer arg0);
+  @NoException(true) private native void allocate(@Cast("const std::exception*") @ByRef Pointer arg0);
+  /** Creates status instance out of null-terminated string message. */
+  public Status(@Cast("const char*") BytePointer message, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(message, code); }
+  @NoException(true) private native void allocate(@Cast("const char*") BytePointer message, @Cast("OrtErrorCode") int code);
+  public Status(String message, @Cast("OrtErrorCode") int code) { super((Pointer)null); allocate(message, code); }
+  @NoException(true) private native void allocate(String message, @Cast("OrtErrorCode") int code);
   public native @StdString BytePointer GetErrorMessage();
   public native @Cast("OrtErrorCode") int GetErrorCode();
+  /** Returns true if instance represents an OK (non-error) status. */
+  public native @Cast("bool") @NoException(true) boolean IsOK();
 }

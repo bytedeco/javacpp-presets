@@ -67,10 +67,14 @@ public class stream extends dnnl_stream_handle {
      * 
      *  @param aengine Engine to create the stream on.
      *  @param aflags Flags controlling stream behavior. */
-    public stream(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
-    private native void allocate(@Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/);
-    public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
-    private native void allocate(@Const @ByRef engine aengine);
+    public stream(
+                @Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
+    private native void allocate(
+                @Const @ByRef engine aengine, flags aflags/*=dnnl::stream::flags::default_flags*/);
+    public stream(
+                @Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
+    private native void allocate(
+                @Const @ByRef engine aengine);
 
     /** Returns the associated engine. */
     public native @ByVal engine get_engine();

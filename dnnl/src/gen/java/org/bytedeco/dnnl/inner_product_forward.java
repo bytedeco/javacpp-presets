@@ -13,7 +13,7 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_layer_normalization_v2
+/** \} dnnl_api_layer_normalization
  <p>
  *  \addtogroup dnnl_api_inner_product Inner Product
  * 
@@ -39,74 +39,6 @@ public class inner_product_forward extends primitive {
         return new inner_product_forward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for an inner product forward propagation primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-    
-        
-        ///
-        ///
-        public native @ByRef dnnl_inner_product_desc_t data(); public native desc data(dnnl_inner_product_desc_t setter);
-
-        /** Constructs a descriptor for an inner product forward propagation
-         *  primitive with bias.
-         * 
-         *  \note
-         *      All the memory descriptors may be initialized with the
-         *      #dnnl::memory::format_tag::any value of \p format_tag.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::forward_training, and
-         *      #dnnl::prop_kind::forward_inference.
-         *  @param src_desc Memory descriptor for src.
-         *  @param weights_desc Memory descriptor for weights.
-         *  @param bias_desc Memory descriptor for bias.
-         *  @param dst_desc Memory descriptor for dst. */
-        
-        ///
-        ///
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc, @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_desc);
-
-        /** Constructs a descriptor for an inner product forward propagation
-         *  primitive without bias.
-         * 
-         *  \note
-         *      All the memory descriptors may be initialized with the
-         *      #dnnl::memory::format_tag::any value of \p format_tag.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::forward_training, and
-         *      #dnnl::prop_kind::forward_inference.
-         *  @param src_desc Memory descriptor for src.
-         *  @param weights_desc Memory descriptor for weights.
-         *  @param dst_desc Memory descriptor for dst. */
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc);
-    }
-
     /** Primitive descriptor for an inner product forward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -125,49 +57,121 @@ public class inner_product_forward extends primitive {
         /** Default constructor. Produces an empty object. */
         
         ///
+        ///
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /** Constructs a primitive descriptor for an inner product forward
-         *  propagation primitive.
+         *  propagation primitive with bias.
          * 
-         *  @param adesc Descriptor for an inner product forward propagation
-         *      primitive.
+         *  \note
+         *      All the memory descriptors may be initialized with the
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
          *  @param aengine Engine to use.
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
+         *  @param src_desc Memory descriptor for src.
+         *  @param weights_desc Memory descriptor for weights.
+         *  @param bias_desc Memory descriptor for bias.
+         *  @param dst_desc Memory descriptor for dst.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        ///
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, bias_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, bias_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
 
         /** Constructs a primitive descriptor for an inner product forward
          *  propagation primitive.
          * 
-         *  @param adesc Descriptor for an inner product forward propagation
-         *      primitive.
-         *  @param attr Primitive attributes to use.
+         *  \note
+         *      All the memory descriptors may be initialized with the
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
          *  @param aengine Engine to use.
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
+         *  @param src_desc Memory descriptor for src.
+         *  @param weights_desc Memory descriptor for weights.
+         *  @param dst_desc Memory descriptor for dst.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, aprop_kind, src_desc, weights_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
 
         /** Constructs a primitive descriptor for an inner product forward
          *  propagation primitive from a C API primitive descriptor that must
@@ -179,16 +183,19 @@ public class inner_product_forward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::weights_desc()const */
-        public native @ByVal memory.desc weights_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
 
         /** \copydoc dnnl::convolution_forward::primitive_desc::bias_desc()const */
-        public native @ByVal memory.desc bias_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc bias_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
     }
 
     /** Default constructor. Produces an empty object. */

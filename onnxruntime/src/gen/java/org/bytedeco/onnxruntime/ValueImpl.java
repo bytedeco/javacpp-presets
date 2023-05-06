@@ -80,8 +80,24 @@ public class ValueImpl extends ConstValueImpl {
    *  </summary>
    *  <param name="s">[in] A null terminated UTF-8 encoded string</param>
    *  <param name="index">[in] Index of the string in the tensor to set</param> */
+  
+  ///
   public native void FillStringTensorElement(@Cast("const char*") BytePointer s, @Cast("size_t") long index);
   public native void FillStringTensorElement(String s, @Cast("size_t") long index);
+
+  /** <summary>
+   *  Allocate if necessary and obtain a pointer to a UTF-8
+   *  encoded string element buffer indexed by the flat element index,
+   *  of the specified length.
+   * 
+   *  This API is for advanced usage. It avoids a need to construct
+   *  an auxiliary array of string pointers, and allows to write data directly
+   *  (do not zero terminate).
+   *  </summary>
+   *  <param name="index"></param>
+   *  <param name="buffer_length"></param>
+   *  <returns>a pointer to a writable buffer</returns> */
+  public native @Cast("char*") BytePointer GetResizedStringTensorElementBuffer(@Cast("size_t") long index, @Cast("size_t") long buffer_length);
 
 // #if !defined(DISABLE_SPARSE_TENSORS)
   /** <summary>

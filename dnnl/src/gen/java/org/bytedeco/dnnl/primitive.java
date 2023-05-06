@@ -69,38 +69,30 @@ public class primitive extends dnnl_primitive_handle {
         deconvolution(dnnl_deconvolution),
         /** An element-wise primitive. */
         eltwise(dnnl_eltwise),
-        /** A softmax primitive. */
-        softmax(dnnl_softmax),
-        /** A pooling primitive. */
-        pooling(dnnl_pooling),
         /** An LRN primitive. */
         lrn(dnnl_lrn),
         /** A batch normalization primitive. */
         batch_normalization(dnnl_batch_normalization),
-        /** A layer normalization primitive. */
-        layer_normalization(dnnl_layer_normalization),
         /** An inner product primitive. */
         inner_product(dnnl_inner_product),
         /** An RNN primitive. */
         rnn(dnnl_rnn),
         /** A binary primitive. */
         binary(dnnl_binary),
-        /** A logsoftmax primitive. */
-        logsoftmax(dnnl_logsoftmax),
         /** A matmul (matrix multiplication) primitive. */
         matmul(dnnl_matmul),
         /** A resampling primitive. */
         resampling(dnnl_resampling),
-        /** A pooling version 2 primitive. */
-        pooling_v2(dnnl_pooling_v2),
+        /** A pooling primitive. */
+        pooling(dnnl_pooling),
         /** A reduction primitive. */
         reduction(dnnl_reduction),
         /** A PReLU primitive. */
         prelu(dnnl_prelu),
-        /** A softmax version 2 primitive. */
-        softmax_v2(dnnl_softmax_v2),
-        /** A layer normalization version 2 primitive. */
-        layer_normalization_v2(dnnl_layer_normalization_v2);
+        /** A softmax primitive. */
+        softmax(dnnl_softmax),
+        /** A layer normalization primitive. */
+        layer_normalization(dnnl_layer_normalization);
 
         public final int value;
         private kind(int v) { this.value = v; }

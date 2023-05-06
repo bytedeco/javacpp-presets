@@ -355,7 +355,7 @@ public class OrtApi extends Pointer {
 
   /** \brief Set the optimization level to apply when loading a graph
    *
-   * Please see https://www.onnxruntime.ai/docs/resources/graph-optimizations.html for an in-depth explanation
+   * Please see https://onnxruntime.ai/docs/performance/graph-optimizations.html for an in-depth explanation
    * @param options [in,out] The session options object
    * @param graph_optimization_level [in] The optimization level
    *
@@ -813,6 +813,7 @@ public class OrtApi extends Pointer {
    *
    * @param type_info [in]
    * @param out [out] Do not free this value, it will be valid until type_info is freed.
+   *             If type_info does not represent tensor, this value will be set to nullptr.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -1424,7 +1425,8 @@ public class OrtApi extends Pointer {
    * This is used by WinML to support model reflection APIs.
    *
    * @param type_info [out]
-   * @param out [out] A pointer to the ::OrtMapTypeInfo. Do not free this value
+   * @param out [out] A pointer to the ::OrtMapTypeInfo. Do not free this value. If type_info
+   *             does not contain a map, this value will be set to nullptr.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -1441,7 +1443,8 @@ public class OrtApi extends Pointer {
    * This is used by WinML to support model reflection APIs.
    *
    * @param type_info [in]
-   * @param out [out] A pointer to the OrtSequenceTypeInfo. Do not free this value
+   * @param out [out] A pointer to the OrtSequenceTypeInfo. Do not free this value. If type_info
+   *             doesn not contain a sequence, this value will be set to nullptr.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
    */
@@ -1757,7 +1760,8 @@ public class OrtApi extends Pointer {
   public native OrtStatus GetAvailableProviders( @Cast("char***") @ByPtrPtr PointerPointer out_ptr, IntBuffer provider_length);
   public native OrtStatus GetAvailableProviders( @Cast("char***") @ByPtrPtr PointerPointer out_ptr, int[] provider_length);
 
-  /** \brief Release data from OrtApi::GetAvailableProviders
+  /** \brief Release data from OrtApi::GetAvailableProviders. This API will never fail
+   * so you can rely on it in a noexcept code.
    *
    * @param ptr [in] The {@code out_ptr} result from OrtApi::GetAvailableProviders.
    * @param providers_length [in] The {@code provider_length} result from OrtApi::GetAvailableProviders
@@ -2036,7 +2040,7 @@ public class OrtApi extends Pointer {
    * Lifetime of the created allocator will be valid for the duration of the environment.
    * Returns an error if an allocator with the same ::OrtMemoryInfo is already registered.
    *
-   * See https://onnxruntime.ai/docs/reference/api/c-api.html for details.
+   * See https://onnxruntime.ai/docs/get-started/with-c.html for details.
    *
    * @param env [in] ::OrtEnv instance
    * @param mem_info [in]
@@ -2402,7 +2406,7 @@ public class OrtApi extends Pointer {
    *
    * Create the configuration of an arena that can eventually be used to define an arena based allocator's behavior.
    *
-   * Supported keys are (See https://onnxruntime.ai/docs/reference/api/c-api.html for details on what the
+   * Supported keys are (See https://onnxruntime.ai/docs/get-started/with-c.html for details on what the
    * following parameters mean and how to choose these values.):
    * "max_mem": Maximum memory that can be allocated by the arena based allocator.
    *  Use 0 for ORT to pick the best value. Default is 0.
@@ -2578,7 +2582,7 @@ public class OrtApi extends Pointer {
 
   /** \brief Set options in a TensorRT Execution Provider.
    *
-   * Please refer to https://www.onnxruntime.ai/docs/reference/execution-providers/TensorRT-ExecutionProvider.html#c-api-example
+   * Please refer to https://onnxruntime.ai/docs/execution-providers/TensorRT-ExecutionProvider.html#cc
    * to know the available keys and values. Key should be in null terminated string format of the member of ::OrtTensorRTProviderOptionsV2
    * and value should be its related range.
    *
@@ -2612,7 +2616,7 @@ public class OrtApi extends Pointer {
    *
    * For example, "trt_max_workspace_size=2147483648;trt_max_partition_iterations=10;trt_int8_enable=1;......"
    *
-   * @param tensorrt_options - OrTensorRTProviderOptionsV2 instance
+   * @param tensorrt_options - OrtTensorRTProviderOptionsV2 instance
    * @param allocator - a ptr to an instance of OrtAllocator obtained with OrtApi::CreateAllocator or OrtApi::GetAllocatorWithDefaultOptions
    *                      the specified allocator will be used to allocate continuous buffers for output strings and lengths.
    * @param ptr - is a UTF-8 null terminated string allocated using 'allocator'. The caller is responsible for using the same allocator to free it.
@@ -2662,7 +2666,7 @@ public class OrtApi extends Pointer {
    * The behavior of this is exactly the same as OrtApi::CreateAndRegisterAllocator except
    * instead of ORT creating an allocator based on provided info, in this case
    * ORT uses the user-provided custom allocator.
-   * See https://onnxruntime.ai/docs/reference/api/c-api.html for details.
+   * See https://onnxruntime.ai/docs/get-started/with-c.html for details.
    *
    * @param env [in]
    * @param allocator [in] User provided allocator
@@ -3468,11 +3472,17 @@ public class OrtApi extends Pointer {
    * @param num_keys [in] - number of keys passed in
    *
    * Currently supported providers:
+   *   QNN
    *   SNPE
    *   XNNPACK
    *
    * Note: If an execution provider has a dedicated SessionOptionsAppendExecutionProvider_<provider name> function
    *       that should be used to add it.
+   *
+   * QNN supported keys:
+   *   "backend_path": file path to QNN backend library.
+   *   "profiling_level": QNN profiling level, options: "basic", "detailed".
+   *   "rpc_control_latency": QNN RPC control latency.
    *
    * SNPE supported keys:
    *   "runtime": SNPE runtime engine, options: "CPU", "CPU_FLOAT32", "GPU", "GPU_FLOAT32_16_HYBRID", "GPU_FLOAT16",
@@ -3552,9 +3562,21 @@ public class OrtApi extends Pointer {
    */
   public native void ReleaseKernelInfo(OrtKernelInfo input);
 
-  /* \brief: Get the training C Api
+  /** \name Ort Training
+   *  \{
+  /** \brief Gets the Training C Api struct
    *
-   * \since Version 1.13
+   * Call this function to access the ::OrtTrainingApi structure that holds pointers to functions that enable
+   * training with onnxruntime.
+   * \note A NULL pointer will be returned and no error message will be printed if the training api
+   * is not supported with this build. A NULL pointer will be returned and an error message will be
+   * printed if the provided version is unsupported, for example when using a runtime older than the
+   * version created with this header file.
+   *
+   * @param version [in] Must be ::ORT_API_VERSION
+   * @return The ::OrtTrainingApi struct for the version requested.
+   *
+   * @since Version 1.13
    */
   public static class GetTrainingApi_int extends FunctionPointer {
       static { Loader.load(); }
@@ -3566,6 +3588,8 @@ public class OrtApi extends Pointer {
   }
   public native GetTrainingApi_int GetTrainingApi(); public native OrtApi GetTrainingApi(GetTrainingApi_int setter);
 
+  /** \}
+  <p>
   /** \brief Append CANN provider to session options
    *
    * If CANN is not available (due to a non CANN enabled build, or if CANN is not installed on the system), this function will return failure.
@@ -3751,8 +3775,7 @@ public class OrtApi extends Pointer {
   public native OrtStatus RegisterCustomOpsUsingFunction( OrtSessionOptions options,
                     String registration_func_name);
 
-  /** \}
-   *  \name OrtKernelInfo
+  /** \name OrtKernelInfo
    *  Custom operator APIs.
    *  \{
   <p>
@@ -3851,6 +3874,7 @@ public class OrtApi extends Pointer {
    * of an input during kernel/session creation.
    *
    * @param info [in] An instance of ::OrtKernelInfo.
+   * @param index [in] Which input to get the type information for
    * @param type_info [out] Pointer set to the resulting ::OrtTypeInfo. Must be freed with OrtApi::ReleaseTypeInfo.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
@@ -3867,6 +3891,7 @@ public class OrtApi extends Pointer {
    * of an output during kernel/session creation.
    *
    * @param info [in] An instance of ::OrtKernelInfo.
+   * @param index [in] Which input to get the type information for
    * @param type_info [out] Pointer set to the resulting ::OrtTypeInfo. Must be freed with OrtApi::ReleaseTypeInfo.
    *
    * \snippet{doc} snippets.dox OrtStatus Return Value
@@ -3970,9 +3995,298 @@ public class OrtApi extends Pointer {
   public native OrtStatus GetSessionConfigEntry( @Const OrtSessionOptions options,
                     String config_key, @Cast("char*") byte[] config_value, @Cast("size_t*") SizeTPointer size);
 
-  /** \} */
+  /** \}
+  <p>
+  /** \brief Append dnnl provider to session options
+   *
+   * If oneDNN is not available, this function will return failure.
+   *
+   * @param options [in]
+   * @param dnnl_options [in]
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus SessionOptionsAppendExecutionProvider_Dnnl(
+                    OrtSessionOptions options, @Const OrtDnnlProviderOptions dnnl_options);
 
-// #ifdef __cplusplus
-    // Prevent users from accidentally copying the API structure, it should always be passed as a pointer
-// #endif
+  /** \brief Create an OrtDnnlProviderOptions
+   *
+   * @param out [out] Newly created ::OrtDnnlProviderOptions. Must be released with OrtApi::ReleaseDnnlProviderOptions
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus CreateDnnlProviderOptions( @Cast("OrtDnnlProviderOptions**") PointerPointer out);
+  public native OrtStatus CreateDnnlProviderOptions( @ByPtrPtr OrtDnnlProviderOptions out);
+
+  /** \brief Set options in a oneDNN Execution Provider.
+   *
+   * Key should be in null terminated string format of the member of ::OrtDnnlProviderOptions
+   * and value should be its related range.
+   *
+   * For example, key="use_arena" and value="1"
+   *
+   * @param dnnl_options [in]
+   * @param provider_options_keys [in] Array of UTF-8 null-terminated string for provider options keys
+   * @param provider_options_values [in] Array of UTF-8 null-terminated string for provider options values
+   * @param num_keys [in] Number of elements in the {@code provider_option_keys} and {@code provider_options_values} arrays
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus UpdateDnnlProviderOptions( OrtDnnlProviderOptions dnnl_options,
+                    @Cast("const char*const*") PointerPointer provider_options_keys,
+                    @Cast("const char*const*") PointerPointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus UpdateDnnlProviderOptions( OrtDnnlProviderOptions dnnl_options,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr BytePointer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus UpdateDnnlProviderOptions( OrtDnnlProviderOptions dnnl_options,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr ByteBuffer provider_options_values,
+                    @Cast("size_t") long num_keys);
+  public native OrtStatus UpdateDnnlProviderOptions( OrtDnnlProviderOptions dnnl_options,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_keys,
+                    @Cast("const char*const*") @ByPtrPtr byte[] provider_options_values,
+                    @Cast("size_t") long num_keys);
+
+  /**
+   * Get serialized oneDNN provider options string.
+   *
+   * For example, "use_arena=1;......"
+   *
+   * @param dnnl_options - OrtDnnlProviderOptions instance
+   * @param allocator - a ptr to an instance of OrtAllocator obtained with CreateAllocator() or GetAllocatorWithDefaultOptions()
+   *                      the specified allocator will be used to allocate continuous buffers for output strings and lengths.
+   * @param ptr - is a UTF-8 null terminated string allocated using 'allocator'. The caller is responsible for using the same allocator to free it.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus GetDnnlProviderOptionsAsString( @Const OrtDnnlProviderOptions dnnl_options, OrtAllocator allocator, @Cast("char**") PointerPointer ptr);
+  public native OrtStatus GetDnnlProviderOptionsAsString( @Const OrtDnnlProviderOptions dnnl_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr BytePointer ptr);
+  public native OrtStatus GetDnnlProviderOptionsAsString( @Const OrtDnnlProviderOptions dnnl_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
+  public native OrtStatus GetDnnlProviderOptionsAsString( @Const OrtDnnlProviderOptions dnnl_options, OrtAllocator allocator, @Cast("char**") @ByPtrPtr byte[] ptr);
+
+  /** \brief Release an ::OrtDnnlProviderOptions
+   *
+   * @since Version 1.15.
+   */
+  public static class ReleaseDnnlProviderOptions_OrtDnnlProviderOptions extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseDnnlProviderOptions_OrtDnnlProviderOptions(Pointer p) { super(p); }
+      protected ReleaseDnnlProviderOptions_OrtDnnlProviderOptions() { allocate(); }
+      private native void allocate();
+      public native void call(OrtDnnlProviderOptions input);
+  }
+  public native ReleaseDnnlProviderOptions_OrtDnnlProviderOptions ReleaseDnnlProviderOptions(); public native OrtApi ReleaseDnnlProviderOptions(ReleaseDnnlProviderOptions_OrtDnnlProviderOptions setter);
+
+  /** \name OrtKernelInfo
+   *  Custom operator APIs.
+   *  \{
+  <p>
+  /** \brief Get the graph node name from ::OrtKernelInfo.
+   *
+   * If {@code out} is nullptr, the value of {@code size} is set to the size of the name
+   * string (including null-terminator), and a success status is returned.
+   *
+   * If the {@code size} parameter is greater than or equal to the name string's size,
+   * the value of {@code size} is set to the true size of the string (including null-terminator),
+   * the provided memory is filled with the string's contents, and a success status is returned.
+   *
+   * If the {@code size} parameter is less than the actual string's size and {@code out}
+   * is not nullptr, the value of {@code size} is set to the true size of the string
+   * and a failure status is returned.
+   *
+   * Can be used in a custom operator's CreateKernel callback to get the name of the operator's node name in the graph.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param out [out] Memory location into which to write the UTF-8 null-terminated string representing the name.
+   * @param size [in,out] Pointer to the size of the {@code out} buffer. See above comments for details.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.15
+   */
+  public native OrtStatus KernelInfo_GetNodeName( @Const OrtKernelInfo info, @Cast("char*") BytePointer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetNodeName( @Const OrtKernelInfo info, @Cast("char*") ByteBuffer out, @Cast("size_t*") SizeTPointer size);
+  public native OrtStatus KernelInfo_GetNodeName( @Const OrtKernelInfo info, @Cast("char*") byte[] out, @Cast("size_t*") SizeTPointer size);
+
+  /** \brief Get the session logger from ::OrtKernelInfo.
+   *
+   * Used in the CreateKernel callback of an OrtCustomOp to get a logger that can be used to log
+   * messages.
+   *
+   * @param info [in] An instance of ::OrtKernelInfo.
+   * @param logger [out] Pointer set to the session's ::OrtLogger. Owned by ONNX Runtime, so do not free.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.15
+   */
+  public native OrtStatus KernelInfo_GetLogger( @Const OrtKernelInfo info, @Cast("const OrtLogger**") PointerPointer logger);
+  public native OrtStatus KernelInfo_GetLogger( @Const OrtKernelInfo info, @Const @ByPtrPtr OrtLogger logger);
+
+  /** \}
+   *  \name OrtKernelContext
+   *  Custom operator APIs.
+   *  \{
+  <p>
+  /** \brief Get the runtime logger from ::OrtKernelContext.
+   *
+   * Used in the KernelCompute callback of an OrtCustomOp to get a logger that can be used to log
+   * messages during inference.
+   *
+   * @param context [in] An instance of ::OrtKernelContext.
+   * @param logger [out] Pointer set to the kernel context's ::OrtLogger. Owned by ONNX Runtime, so do not free.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.15
+   */
+  public native OrtStatus KernelContext_GetLogger( @Const OrtKernelContext context, @Cast("const OrtLogger**") PointerPointer logger);
+  public native OrtStatus KernelContext_GetLogger( @Const OrtKernelContext context, @Const @ByPtrPtr OrtLogger logger);
+
+  /** \}
+   *  \name OrtLogger
+   *  Custom operator APIs.
+   *  \{
+  <p>
+  /** \brief Logs a message at the given severity level using the provided ::OrtLogger.
+   *
+   * Only messages with a severity level equal or greater than the ::OrtLogger's logging severity level
+   * are logged. Use OrtApi::Logger_GetLoggingSeverityLevel to get the ::OrtLogger's logging severity
+   * level.
+   *
+   * Can be used in custom operators to log messages with the logger retrieved via OrtApi::KernelInfo_GetLogger.
+   *
+   * @param logger [in] The ::OrtLogger instance.
+   * @param log_severity_level [in] The message's severity level.
+   * @param message [in] The message to log.
+   * @param file_path [in] The filepath of the file in which the message is logged. Usually the value of ORT_FILE.
+   * @param line_number [in] The file line number in which the message is logged. Usually the value of __LINE__.
+   * @param func_name [in] The name of the function in which the message is logged. Usually the value of __FUNCTION__.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.15
+   */
+  public native OrtStatus Logger_LogMessage( @Const OrtLogger logger, @Cast("OrtLoggingLevel") int log_severity_level,
+                    @Cast("const char*") BytePointer message, @Cast("const ORTCHAR_T*") Pointer file_path, int line_number,
+                    @Cast("const char*") BytePointer func_name);
+  public native OrtStatus Logger_LogMessage( @Const OrtLogger logger, @Cast("OrtLoggingLevel") int log_severity_level,
+                    String message, @Cast("const ORTCHAR_T*") Pointer file_path, int line_number,
+                    String func_name);
+
+  /** \brief Get the logging severity level of the ::OrtLogger.
+   *
+   * Can be used in a custom operator to get the logging serverity level of the ::OrtLogger associated with
+   * the ::OrtKernelInfo.
+   *
+   * @param logger [in] The ::OrtLogger instance.
+   * @param out [out] Pointer to variable assigned with the logging severity level on success.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   * @since Version 1.15
+   */
+  public native OrtStatus Logger_GetLoggingSeverityLevel( @Const OrtLogger logger, @Cast("OrtLoggingLevel*") IntPointer out);
+  public native OrtStatus Logger_GetLoggingSeverityLevel( @Const OrtLogger logger, @Cast("OrtLoggingLevel*") IntBuffer out);
+  public native OrtStatus Logger_GetLoggingSeverityLevel( @Const OrtLogger logger, @Cast("OrtLoggingLevel*") int[] out);
+
+  /** \}
+  <p>
+  /** \brief Get a ::OrtValue tensor stored as a constant initializer in the graph node.
+   *
+   * Used in the CreateKernel callback of an OrtCustomOp to get a tensor value.
+   *
+   * @param info [in] ::OrtKernelInfo instance.
+   * @param index [in] The node index.
+   * @param is_constant [out] Is it a constant node input or not.
+   * @param out [out] The OrtValue tensor value.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus KernelInfoGetConstantInput_tensor( @Const OrtKernelInfo info, @Cast("size_t") long index, IntPointer is_constant, @Cast("const OrtValue**") PointerPointer out);
+  public native OrtStatus KernelInfoGetConstantInput_tensor( @Const OrtKernelInfo info, @Cast("size_t") long index, IntPointer is_constant, @Const @ByPtrPtr OrtValue out);
+  public native OrtStatus KernelInfoGetConstantInput_tensor( @Const OrtKernelInfo info, @Cast("size_t") long index, IntBuffer is_constant, @Const @ByPtrPtr OrtValue out);
+  public native OrtStatus KernelInfoGetConstantInput_tensor( @Const OrtKernelInfo info, @Cast("size_t") long index, int[] is_constant, @Const @ByPtrPtr OrtValue out);
+
+  /** \brief Get Optional Type information from an ::OrtTypeInfo
+   *
+   * This augments ::OrtTypeInfo to return an ::OrtOptionalTypeInfo when the type is optional.
+   * The OrtOptionalTypeInfo also has a nested ::OrtTypeInfo that describes the type of the optional value.
+   * ::OrtOptionalTypeInfo type can only appear within model metadata to describe inputs/outputs.
+   * The actual OrtValues that are supplied in place of optional type inputs should contain
+   * specific type that is described by ::OrtOptionalTypeInfo.
+   *
+   * So the picture: ::OrtTypeInfo -> ::OrtOptionalTypeInfo -> ::OrtTypeInfo (describes the type that can be supplied
+   * in place of the optional type when creating the actual ::OrtValue).
+   *
+   * @param type_info [in]
+   * @param out [out] A pointer to the ::OrtOptionalTypeInfo. Do not free this value,
+   *                 it is owned by OrtTypeInfo instance. When the type_info does not represent
+   *                 optional type, nullptr is returned in out.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus CastTypeInfoToOptionalTypeInfo( @Const OrtTypeInfo type_info,
+                    @Cast("const OrtOptionalTypeInfo**") PointerPointer out);
+  public native OrtStatus CastTypeInfoToOptionalTypeInfo( @Const OrtTypeInfo type_info,
+                    @Const @ByPtrPtr OrtOptionalTypeInfo out);
+
+  /** \brief Get OrtTypeInfo for the allowed contained type from an ::OrtOptionalTypeInfo.
+   *
+   * This augments ::OrtOptionalTypeInfo to return an ::OrtTypeInfo for the contained type.
+   * The OrtOptionalTypeInfo has a nested ::OrtTypeInfo that describes the type of the optional value.
+   * ::OrtOptionalTypeInfo type can only appear within model metadata to describe inputs/outputs.
+   * The actual OrtValues that are supplied in place of optional type inputs should contain
+   * specific type that is described by the returned ::OrtTypeInfo.
+   *
+   * @param optional_type_info [in]
+   * @param out [out] A pointer to the ::OrtTypeInfo for what the optional value could be.
+   * it is owned by OrtOptionalTypeInfo instance.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus GetOptionalContainedTypeInfo( @Const OrtOptionalTypeInfo optional_type_info,
+                    @Cast("OrtTypeInfo**") PointerPointer out);
+  public native OrtStatus GetOptionalContainedTypeInfo( @Const OrtOptionalTypeInfo optional_type_info,
+                    @ByPtrPtr OrtTypeInfo out);
+
+  /** \brief Set a single string in a string tensor
+   *  Do not zero terminate the string data.
+   *
+   * @param value [in] A string tensor
+   * @param index [in] - flat index of the element
+   * @param length_in_bytes [in] length of the buffer in utf-8 bytes (without the null terminator)
+   * @param buffer [inout] - address of return value
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   */
+  public native OrtStatus GetResizedStringTensorElementBuffer( OrtValue value, @Cast("size_t") long index, @Cast("size_t") long length_in_bytes, @Cast("char**") PointerPointer buffer);
+  public native OrtStatus GetResizedStringTensorElementBuffer( OrtValue value, @Cast("size_t") long index, @Cast("size_t") long length_in_bytes, @Cast("char**") @ByPtrPtr BytePointer buffer);
+  public native OrtStatus GetResizedStringTensorElementBuffer( OrtValue value, @Cast("size_t") long index, @Cast("size_t") long length_in_bytes, @Cast("char**") @ByPtrPtr ByteBuffer buffer);
+  public native OrtStatus GetResizedStringTensorElementBuffer( OrtValue value, @Cast("size_t") long index, @Cast("size_t") long length_in_bytes, @Cast("char**") @ByPtrPtr byte[] buffer);
+
+  /** \brief Get Allocator from KernelContext for a specific memoryInfo.
+   *
+   * @param context [in] OrtKernelContext instance
+   * @param mem_info [in] OrtMemoryInfo instance
+   * @param out [out] A pointer to OrtAllocator.
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * @since Version 1.15.
+   */
+  public native OrtStatus KernelContext_GetAllocator( @Const OrtKernelContext context, @Const OrtMemoryInfo mem_info, @Cast("OrtAllocator**") PointerPointer out);
+  public native OrtStatus KernelContext_GetAllocator( @Const OrtKernelContext context, @Const OrtMemoryInfo mem_info, @ByPtrPtr OrtAllocator out);
 }

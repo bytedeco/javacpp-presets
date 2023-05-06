@@ -13,7 +13,9 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \} dnnl_api_stream
+/** \} dnnl_api_primitives_common
+ <p>
+ *  \} dnnl_api_primitives
  <p>
  *  \addtogroup dnnl_api_memory Memory
  * 
@@ -163,17 +165,16 @@ public class memory extends dnnl_memory_handle {
     public enum format_kind {
         /** Undefined memory format kind, used for empty memory descriptors. */
         undef(dnnl_format_kind_undef),
-        /** Unspecified format kind.
-         *  The primitive selects a format automatically. */
+        /** A special format kind that indicates that the actual format will be
+         *  selected by a primitive automatically. */
         any(dnnl_format_kind_any),
         /** A tensor in a generic format described by the stride and blocking
-         *  values in each dimension. See \ref dnnl_blocking_desc_t for more
-         *  information. */
+         *  values in each dimension. */
         blocked(dnnl_blocked),
-        /** Weights format used in 8-bit Winograd convolution. */
-        wino(dnnl_format_kind_wino),
-        /** Packed weights format used in RNN. */
-        packed(dnnl_format_kind_rnn_packed);
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #endif
+        /** A special format kind that indicates that tensor format is opaque. */
+        opaque(dnnl_format_kind_opaque);
 
         public final int value;
         private format_kind(int v) { this.value = v; }
@@ -181,6 +182,9 @@ public class memory extends dnnl_memory_handle {
         public format_kind intern() { for (format_kind e : values()) if (e.value == value) return e; return this; }
         @Override public String toString() { return intern().name(); }
     }
+
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #endif
 
     /** Memory format tag specification.
      * 
@@ -626,17 +630,21 @@ public class memory extends dnnl_memory_handle {
         aBdc16b(dnnl_aBdc16b),
         aBdc4b(dnnl_aBdc4b),
         aBdc8b(dnnl_aBdc8b),
+        aBdC8b2c(dnnl_aBdC8b2c),
         aBdec16b(dnnl_aBdec16b),
         aBdec4b(dnnl_aBdec4b),
         aBdec8b(dnnl_aBdec8b),
+        aBdeC8b2c(dnnl_aBdeC8b2c),
         aBdefc16b(dnnl_aBdefc16b),
         aCBdef16c16b(dnnl_aCBdef16c16b),
         aCBdef16b16c(dnnl_aCBdef16b16c),
         aBdefc4b(dnnl_aBdefc4b),
         aBdefc8b(dnnl_aBdefc8b),
+        aBdefC8b2c(dnnl_aBdefC8b2c),
         Acb16a(dnnl_Acb16a),
         Acb4a(dnnl_Acb4a),
         Acb8a(dnnl_Acb8a),
+        AcB8a2b(dnnl_AcB8a2b),
         aCBd16b16c(dnnl_aCBd16b16c),
         aCBd16c16b(dnnl_aCBd16c16b),
         aCBde16b16c(dnnl_aCBde16b16c),
@@ -644,9 +652,11 @@ public class memory extends dnnl_memory_handle {
         Acdb16a(dnnl_Acdb16a),
         Acdb4a(dnnl_Acdb4a),
         Acdb8a(dnnl_Acdb8a),
+        AcdB8a2b(dnnl_AcdB8a2b),
         Acdeb16a(dnnl_Acdeb16a),
         Acdeb4a(dnnl_Acdeb4a),
         Acdeb8a(dnnl_Acdeb8a),
+        AcdeB8a2b(dnnl_AcdeB8a2b),
         BAc16a16b(dnnl_BAc16a16b),
         BAc16b16a(dnnl_BAc16b16a),
         BAcd16a16b(dnnl_BAcd16a16b),
@@ -674,12 +684,15 @@ public class memory extends dnnl_memory_handle {
         AB32a32b8a2b(dnnl_AB32a32b8a2b),
         AB8a4b(dnnl_AB8a4b),
         AB8a2b(dnnl_AB8a2b),
+        abDc16d(dnnl_abDc16d),
         abDc32d(dnnl_abDc32d),
         abDC32d4c(dnnl_abDC32d4c),
         abCd32c(dnnl_abCd32c),
+        abdEc16e(dnnl_abdEc16e),
         abdEc32e(dnnl_abdEc32e),
         abdEC32e2c(dnnl_abdEC32e2c),
         abdEC32e4c(dnnl_abdEC32e4c),
+        abdCe16c(dnnl_abdCe16c),
         abdCe32c(dnnl_abdCe32c),
         abdCE32c2e(dnnl_abdCE32c2e),
         aBCdef16c16b4c(dnnl_aBCdef16c16b4c),
@@ -786,6 +799,7 @@ public class memory extends dnnl_memory_handle {
         aCBde4c8b8c4b(dnnl_aCBde4c8b8c4b),
         aCBdef4c8b8c4b(dnnl_aCBdef4c8b8c4b),
         ABc32a16b(dnnl_ABc32a16b),
+        ABcd16a32b(dnnl_ABcd16a32b),
         ABcd32a16b(dnnl_ABcd32a16b),
         ABcde32a16b(dnnl_ABcde32a16b),
         AB48a16b(dnnl_AB48a16b),
@@ -809,6 +823,44 @@ public class memory extends dnnl_memory_handle {
         BA16a48b4a(dnnl_BA16a48b4a),
         BA16a64b4a(dnnl_BA16a64b4a),
         decbA16a(dnnl_decbA16a),
+        decbA8a(dnnl_decbA8a),
+        aCB16b16c(dnnl_aCB16b16c),
+        aCB16b32c(dnnl_aCB16b32c),
+        aCB16b48c(dnnl_aCB16b48c),
+        aCB16b64c(dnnl_aCB16b64c),
+        aCB16b16c2b(dnnl_aCB16b16c2b),
+        aCB16b32c2b(dnnl_aCB16b32c2b),
+        aCB16b48c2b(dnnl_aCB16b48c2b),
+        aCB16b64c2b(dnnl_aCB16b64c2b),
+        aCB16b16c4b(dnnl_aCB16b16c4b),
+        aCB16b32c4b(dnnl_aCB16b32c4b),
+        aCB16b48c4b(dnnl_aCB16b48c4b),
+        aCB16b64c4b(dnnl_aCB16b64c4b),
+        Acb24a(dnnl_Acb24a),
+        Acdb24a(dnnl_Acdb24a),
+        Acdeb24a(dnnl_Acdeb24a),
+        aBdc24b(dnnl_aBdc24b),
+        aBdec24b(dnnl_aBdec24b),
+        aBdefc24b(dnnl_aBdefc24b),
+        AcB24a2b(dnnl_AcB24a2b),
+        AcdB24a2b(dnnl_AcdB24a2b),
+        AcdeB24a2b(dnnl_AcdeB24a2b),
+        aBdC24b2c(dnnl_aBdC24b2c),
+        aBdeC24b2c(dnnl_aBdeC24b2c),
+        aBdefC24b2c(dnnl_aBdefC24b2c),
+        AB8b32a(dnnl_AB8b32a),
+        ABc8b32a(dnnl_ABc8b32a),
+        ABcd8b32a(dnnl_ABcd8b32a),
+        ABcde8b32a(dnnl_ABcde8b32a),
+        AB8b24a(dnnl_AB8b24a),
+        ABc8b24a(dnnl_ABc8b24a),
+        ABcd8b24a(dnnl_ABcd8b24a),
+        ABcde8b24a(dnnl_ABcde8b24a),
+        AB8b16a(dnnl_AB8b16a),
+        ABc8b16a(dnnl_ABc8b16a),
+        ABcd8b16a(dnnl_ABcd8b16a),
+        ABcde8b16a(dnnl_ABcde8b16a),
+        AB8b8a(dnnl_AB8b8a),
 
         format_tag_last(dnnl_format_tag_last),
 
@@ -833,7 +885,9 @@ public class memory extends dnnl_memory_handle {
         OI8i16o2i(dnnl_OI8i16o2i),
         OI8i32o2i(dnnl_OI8i32o2i),
         OI8i64o2i(dnnl_OI8i64o2i),
+        OI4i8o4i(dnnl_OI4i8o4i),
         OI4i16o4i(dnnl_OI4i16o4i),
+        OI4i24o4i(dnnl_OI4i24o4i),
         OI4i32o4i(dnnl_OI4i32o4i),
         OI4i64o4i(dnnl_OI4i64o4i),
         Ohwi32o(dnnl_Ohwi32o),
@@ -849,7 +903,9 @@ public class memory extends dnnl_memory_handle {
         gIOw16i16o(dnnl_gIOw16i16o),
         OIw16o16i(dnnl_OIw16o16i),
         Oiw16o(dnnl_Oiw16o),
+        OIw4i8o4i(dnnl_OIw4i8o4i),
         OIw4i16o4i(dnnl_OIw4i16o4i),
+        OIw4i24o4i(dnnl_OIw4i24o4i),
         OIw4i32o4i(dnnl_OIw4i32o4i),
         OIw4i64o4i(dnnl_OIw4i64o4i),
         OIw2i8o4i(dnnl_OIw2i8o4i),
@@ -874,19 +930,29 @@ public class memory extends dnnl_memory_handle {
         OIw16o16i2o(dnnl_OIw16o16i2o),
         Owi16o(dnnl_Owi16o),
         OwI16o2i(dnnl_OwI16o2i),
+        Iwo16i(dnnl_Iwo16i),
+        IwO16i2o(dnnl_IwO16i2o),
+        IwO16i4o(dnnl_IwO16i4o),
         Owi4o(dnnl_Owi4o),
         Owi8o(dnnl_Owi8o),
+        OwI8o2i(dnnl_OwI8o2i),
         IOhw16o16i(dnnl_IOhw16o16i),
         Ohwi16o(dnnl_Ohwi16o),
         OhwI16o2i(dnnl_OhwI16o2i),
+        Ihwo16i(dnnl_Ihwo16i),
+        IhwO16i2o(dnnl_IhwO16i2o),
+        IhwO16i4o(dnnl_IhwO16i4o),
         Ohwi4o(dnnl_Ohwi4o),
         Ohwi8o(dnnl_Ohwi8o),
+        OhwI8o2i(dnnl_OhwI8o2i),
         OIhw16i16o(dnnl_OIhw16i16o),
         OIhw16i32o(dnnl_OIhw16i32o),
         OIhw16i64o(dnnl_OIhw16i64o),
         OIhw16o16i(dnnl_OIhw16o16i),
         Oihw16o(dnnl_Oihw16o),
+        OIhw4i8o4i(dnnl_OIhw4i8o4i),
         OIhw4i16o4i(dnnl_OIhw4i16o4i),
+        OIhw4i24o4i(dnnl_OIhw4i24o4i),
         OIhw4i32o4i(dnnl_OIhw4i32o4i),
         OIhw4i64o4i(dnnl_OIhw4i64o4i),
         OIhw4i4o(dnnl_OIhw4i4o),
@@ -903,8 +969,12 @@ public class memory extends dnnl_memory_handle {
         IOdhw16o16i(dnnl_IOdhw16o16i),
         Odhwi16o(dnnl_Odhwi16o),
         OdhwI16o2i(dnnl_OdhwI16o2i),
+        Idhwo16i(dnnl_Idhwo16i),
+        IdhwO16i2o(dnnl_IdhwO16i2o),
+        IdhwO16i4o(dnnl_IdhwO16i4o),
         Odhwi4o(dnnl_Odhwi4o),
         Odhwi8o(dnnl_Odhwi8o),
+        OdhwI8o2i(dnnl_OdhwI8o2i),
         OIdhw16i16o(dnnl_OIdhw16i16o),
         OIdhw16i32o(dnnl_OIdhw16i32o),
         OIdhw16i64o(dnnl_OIdhw16i64o),
@@ -917,6 +987,7 @@ public class memory extends dnnl_memory_handle {
         OIdhw8i16o2i(dnnl_OIdhw8i16o2i),
         OIdhw8i32o2i(dnnl_OIdhw8i32o2i),
         OIdhw8i64o2i(dnnl_OIdhw8i64o2i),
+        OIdhw4i8o4i(dnnl_OIdhw4i8o4i),
         OIdhw4i16o4i(dnnl_OIdhw4i16o4i),
         OIdhw16i16o4i(dnnl_OIdhw16i16o4i),
         OIdhw16i32o4i(dnnl_OIdhw16i32o4i),
@@ -926,6 +997,7 @@ public class memory extends dnnl_memory_handle {
         OIdhw16i32o2i(dnnl_OIdhw16i32o2i),
         OIdhw16i48o2i(dnnl_OIdhw16i48o2i),
         OIdhw16i64o2i(dnnl_OIdhw16i64o2i),
+        OIdhw4i24o4i(dnnl_OIdhw4i24o4i),
         OIdhw4i32o4i(dnnl_OIdhw4i32o4i),
         OIdhw4i64o4i(dnnl_OIdhw4i64o4i),
         OIdhw2i8o4i(dnnl_OIdhw2i8o4i),
@@ -951,15 +1023,23 @@ public class memory extends dnnl_memory_handle {
         gOIw16o16i2o(dnnl_gOIw16o16i2o),
         gOwi16o(dnnl_gOwi16o),
         gOwI16o2i(dnnl_gOwI16o2i),
+        gIwo16i(dnnl_gIwo16i),
+        gIwO16i2o(dnnl_gIwO16i2o),
+        gIwO16i4o(dnnl_gIwO16i4o),
         gOwi4o(dnnl_gOwi4o),
         gOwi8o(dnnl_gOwi8o),
+        gOwI8o2i(dnnl_gOwI8o2i),
         Goiw8g(dnnl_Goiw8g),
         Goiw16g(dnnl_Goiw16g),
         gIOhw16o16i(dnnl_gIOhw16o16i),
         gOhwi16o(dnnl_gOhwi16o),
         gOhwI16o2i(dnnl_gOhwI16o2i),
+        gIhwo16i(dnnl_gIhwo16i),
+        gIhwO16i2o(dnnl_gIhwO16i2o),
+        gIhwO16i4o(dnnl_gIhwO16i4o),
         gOhwi4o(dnnl_gOhwi4o),
         gOhwi8o(dnnl_gOhwi8o),
+        gOhwI8o2i(dnnl_gOhwI8o2i),
         Goihw16g(dnnl_Goihw16g),
         gOIhw16i16o(dnnl_gOIhw16i16o),
         gOIhw16o16i(dnnl_gOIhw16o16i),
@@ -999,8 +1079,12 @@ public class memory extends dnnl_memory_handle {
         gIOdhw16o16i(dnnl_gIOdhw16o16i),
         gOdhwi16o(dnnl_gOdhwi16o),
         gOdhwI16o2i(dnnl_gOdhwI16o2i),
+        gIdhwo16i(dnnl_gIdhwo16i),
+        gIdhwO16i2o(dnnl_gIdhwO16i2o),
+        gIdhwO16i4o(dnnl_gIdhwO16i4o),
         gOdhwi4o(dnnl_gOdhwi4o),
         gOdhwi8o(dnnl_gOdhwi8o),
+        gOdhwI8o2i(dnnl_gOdhwI8o2i),
         gOIdhw16i16o(dnnl_gOIdhw16i16o),
         gOIdhw16o16i(dnnl_gOIdhw16o16i),
         gOIdhw16o16i2o(dnnl_gOIdhw16o16i2o),
@@ -1028,8 +1112,11 @@ public class memory extends dnnl_memory_handle {
         gOIw4o8i2o(dnnl_gOIw4o8i2o),
         gOIhw4o8i2o(dnnl_gOIhw4o8i2o),
         gOIdhw4o8i2o(dnnl_gOIdhw4o8i2o),
+
+        ldOi16o(abDc16d.value),
         ldOi32o(abDc32d.value),
         ldOI32o4i(abDC32d4c.value),
+        ldgOi16o(abdEc16e.value),
         ldgOi32o(abdEc32e.value),
         ldgOI32o2i(abdEC32e2c.value),
         ldgOI32o4i(abdEC32e4c.value),
@@ -1049,6 +1136,15 @@ public class memory extends dnnl_memory_handle {
         Owi64o(dnnl_Owi64o),
         OwI64o2i(dnnl_OwI64o2i),
         OwI64o4i(dnnl_OwI64o4i),
+        Iwo32i(dnnl_Iwo32i),
+        IwO32i2o(dnnl_IwO32i2o),
+        IwO32i4o(dnnl_IwO32i4o),
+        Iwo48i(dnnl_Iwo48i),
+        IwO48i2o(dnnl_IwO48i2o),
+        IwO48i4o(dnnl_IwO48i4o),
+        Iwo64i(dnnl_Iwo64i),
+        IwO64i2o(dnnl_IwO64i2o),
+        IwO64i4o(dnnl_IwO64i4o),
         wIo2i(dnnl_wIo2i),
         wIo4i(dnnl_wIo4i),
         gOwi32o(dnnl_gOwi32o),
@@ -1060,6 +1156,15 @@ public class memory extends dnnl_memory_handle {
         gOwi64o(dnnl_gOwi64o),
         gOwI64o2i(dnnl_gOwI64o2i),
         gOwI64o4i(dnnl_gOwI64o4i),
+        gIwo32i(dnnl_gIwo32i),
+        gIwO32i2o(dnnl_gIwO32i2o),
+        gIwO32i4o(dnnl_gIwO32i4o),
+        gIwo48i(dnnl_gIwo48i),
+        gIwO48i2o(dnnl_gIwO48i2o),
+        gIwO48i4o(dnnl_gIwO48i4o),
+        gIwo64i(dnnl_gIwo64i),
+        gIwO64i2o(dnnl_gIwO64i2o),
+        gIwO64i4o(dnnl_gIwO64i4o),
         gwio(dnnl_gwio),
         gwIo2i(dnnl_gwIo2i),
         gwIo4i(dnnl_gwIo4i),
@@ -1072,6 +1177,15 @@ public class memory extends dnnl_memory_handle {
         Ohwi64o(dnnl_Ohwi64o),
         OhwI64o2i(dnnl_OhwI64o2i),
         OhwI64o4i(dnnl_OhwI64o4i),
+        Ihwo32i(dnnl_Ihwo32i),
+        IhwO32i2o(dnnl_IhwO32i2o),
+        IhwO32i4o(dnnl_IhwO32i4o),
+        Ihwo48i(dnnl_Ihwo48i),
+        IhwO48i2o(dnnl_IhwO48i2o),
+        IhwO48i4o(dnnl_IhwO48i4o),
+        Ihwo64i(dnnl_Ihwo64i),
+        IhwO64i2o(dnnl_IhwO64i2o),
+        IhwO64i4o(dnnl_IhwO64i4o),
         hwIo2i(dnnl_hwIo2i),
         hwIo4i(dnnl_hwIo4i),
         gOhwI32o(dnnl_gOhwI32o),
@@ -1083,6 +1197,15 @@ public class memory extends dnnl_memory_handle {
         gOhwi64o(dnnl_gOhwi64o),
         gOhwI64o2i(dnnl_gOhwI64o2i),
         gOhwI64o4i(dnnl_gOhwI64o4i),
+        gIhwo32i(dnnl_gIhwo32i),
+        gIhwO32i2o(dnnl_gIhwO32i2o),
+        gIhwO32i4o(dnnl_gIhwO32i4o),
+        gIhwo48i(dnnl_gIhwo48i),
+        gIhwO48i2o(dnnl_gIhwO48i2o),
+        gIhwO48i4o(dnnl_gIhwO48i4o),
+        gIhwo64i(dnnl_gIhwo64i),
+        gIhwO64i2o(dnnl_gIhwO64i2o),
+        gIhwO64i4o(dnnl_gIhwO64i4o),
         ghwio(dnnl_ghwio),
         ghwIo2i(dnnl_ghwIo2i),
         ghwIo4i(dnnl_ghwIo4i),
@@ -1095,6 +1218,15 @@ public class memory extends dnnl_memory_handle {
         Odhwi64o(dnnl_Odhwi64o),
         OdhwI64o2i(dnnl_OdhwI64o2i),
         OdhwI64o4i(dnnl_OdhwI64o4i),
+        Idhwo32i(dnnl_Idhwo32i),
+        IdhwO32i2o(dnnl_IdhwO32i2o),
+        IdhwO32i4o(dnnl_IdhwO32i4o),
+        Idhwo48i(dnnl_Idhwo48i),
+        IdhwO48i2o(dnnl_IdhwO48i2o),
+        IdhwO48i4o(dnnl_IdhwO48i4o),
+        Idhwo64i(dnnl_Idhwo64i),
+        IdhwO64i2o(dnnl_IdhwO64i2o),
+        IdhwO64i4o(dnnl_IdhwO64i4o),
         dhwIo2i(dnnl_dhwIo2i),
         dhwIo4i(dnnl_dhwIo4i),
         gOdhwi32o(dnnl_gOdhwi32o),
@@ -1106,10 +1238,20 @@ public class memory extends dnnl_memory_handle {
         gOdhwi64o(dnnl_gOdhwi64o),
         gOdhwI64o2i(dnnl_gOdhwI64o2i),
         gOdhwI64o4i(dnnl_gOdhwI64o4i),
+        gIdhwo32i(dnnl_gIdhwo32i),
+        gIdhwO32i2o(dnnl_gIdhwO32i2o),
+        gIdhwO32i4o(dnnl_gIdhwO32i4o),
+        gIdhwo48i(dnnl_gIdhwo48i),
+        gIdhwO48i2o(dnnl_gIdhwO48i2o),
+        gIdhwO48i4o(dnnl_gIdhwO48i4o),
+        gIdhwo64i(dnnl_gIdhwo64i),
+        gIdhwO64i2o(dnnl_gIdhwO64i2o),
+        gIdhwO64i4o(dnnl_gIdhwO64i4o),
         gdhwio(dnnl_gdhwio),
         gdhwIo2i(dnnl_gdhwIo2i),
         gdhwIo4i(dnnl_gdhwIo4i),
         ldIo32i(dnnl_ldIo32i),
+        ldgIo16i(dnnl_ldgIo16i),
         ldgIo32i(dnnl_ldgIo32i),
         ldgIO32i2o(dnnl_ldgIO32i2o),
         nCdhw32c(dnnl_nCdhw32c),
@@ -1234,17 +1376,66 @@ public class memory extends dnnl_memory_handle {
         OdhwI16i48o4i(dnnl_OdhwI16i48o4i),
         OdhwI16i64o2i(dnnl_OdhwI16i64o2i),
         OdhwI16i64o4i(dnnl_OdhwI16i64o4i),
+        IdhwO16o32i2o(dnnl_IdhwO16o32i2o),
+        IdhwO16o32i4o(dnnl_IdhwO16o32i4o),
+        IdhwO16o48i2o(dnnl_IdhwO16o48i2o),
+        IdhwO16o48i4o(dnnl_IdhwO16o48i4o),
+        IdhwO16o64i2o(dnnl_IdhwO16o64i2o),
+        IdhwO16o64i4o(dnnl_IdhwO16o64i4o),
         gOdhwI16i32o2i(dnnl_gOdhwI16i32o2i),
         gOdhwI16i32o4i(dnnl_gOdhwI16i32o4i),
         gOdhwI16i48o2i(dnnl_gOdhwI16i48o2i),
         gOdhwI16i48o4i(dnnl_gOdhwI16i48o4i),
         gOdhwI16i64o2i(dnnl_gOdhwI16i64o2i),
         gOdhwI16i64o4i(dnnl_gOdhwI16i64o4i),
+        gIdhwO16o32i2o(dnnl_gIdhwO16o32i2o),
+        gIdhwO16o32i4o(dnnl_gIdhwO16o32i4o),
+        gIdhwO16o48i2o(dnnl_gIdhwO16o48i2o),
+        gIdhwO16o48i4o(dnnl_gIdhwO16o48i4o),
+        gIdhwO16o64i2o(dnnl_gIdhwO16o64i2o),
+        gIdhwO16o64i4o(dnnl_gIdhwO16o64i4o),
+        IwO16o16i2o(dnnl_IwO16o16i2o),
+        IwO16o16i4o(dnnl_IwO16o16i4o),
+        IhwO16o16i2o(dnnl_IhwO16o16i2o),
+        IhwO16o16i4o(dnnl_IhwO16o16i4o),
+        IdhwO16o16i2o(dnnl_IdhwO16o16i2o),
+        IdhwO16o16i4o(dnnl_IdhwO16o16i4o),
+        gIwO16o16i2o(dnnl_gIwO16o16i2o),
+        gIwO16o16i4o(dnnl_gIwO16o16i4o),
+        gIhwO16o16i2o(dnnl_gIhwO16o16i2o),
+        gIhwO16o16i4o(dnnl_gIhwO16o16i4o),
+        gIdhwO16o16i2o(dnnl_gIdhwO16o16i2o),
+        gIdhwO16o16i4o(dnnl_gIdhwO16o16i4o),
+        IwO16o32i2o(dnnl_IwO16o32i2o),
+        IwO16o32i4o(dnnl_IwO16o32i4o),
+        IwO16o48i2o(dnnl_IwO16o48i2o),
+        IwO16o48i4o(dnnl_IwO16o48i4o),
+        IwO16o64i2o(dnnl_IwO16o64i2o),
+        IwO16o64i4o(dnnl_IwO16o64i4o),
+        gIwO16o32i2o(dnnl_gIwO16o32i2o),
+        gIwO16o32i4o(dnnl_gIwO16o32i4o),
+        gIwO16o48i2o(dnnl_gIwO16o48i2o),
+        gIwO16o48i4o(dnnl_gIwO16o48i4o),
+        gIwO16o64i2o(dnnl_gIwO16o64i2o),
+        gIwO16o64i4o(dnnl_gIwO16o64i4o),
+        IhwO16o32i2o(dnnl_IhwO16o32i2o),
+        IhwO16o32i4o(dnnl_IhwO16o32i4o),
+        IhwO16o48i2o(dnnl_IhwO16o48i2o),
+        IhwO16o48i4o(dnnl_IhwO16o48i4o),
+        IhwO16o64i2o(dnnl_IhwO16o64i2o),
+        IhwO16o64i4o(dnnl_IhwO16o64i4o),
+        gIhwO16o32i2o(dnnl_gIhwO16o32i2o),
+        gIhwO16o32i4o(dnnl_gIhwO16o32i4o),
+        gIhwO16o48i2o(dnnl_gIhwO16o48i2o),
+        gIhwO16o48i4o(dnnl_gIhwO16o48i4o),
+        gIhwO16o64i2o(dnnl_gIhwO16o64i2o),
+        gIhwO16o64i4o(dnnl_gIhwO16o64i4o),
         aBdeC16c16b2c(dnnl_aBdeC16c16b2c),
         aBdefC16c16b2c(dnnl_aBdefC16c16b2c),
         AcdB16b16a4b(dnnl_AcdB16b16a4b),
         AcdeB16b16a2b(dnnl_AcdeB16b16a2b),
         hwioG16g(dnnl_hwioG16g),
+        hwioG8g(dnnl_hwioG8g),
         ABc4a2b(dnnl_ABc4a2b),
         ABc8a2b(dnnl_ABc8a2b),
         ABcd4a2b(dnnl_ABcd4a2b),
@@ -1370,7 +1561,180 @@ public class memory extends dnnl_memory_handle {
         abdEC64e2c(dnnl_abdEC64e2c),
         abdEC64e4c(dnnl_abdEC64e4c),
         ldgOI64o2i(abdEC64e2c.value),
-        ldgOI64o4i(abdEC64e4c.value);
+        ldgOI64o4i(abdEC64e4c.value),
+        abCd4c(dnnl_abCd4c),
+        abCde4c(dnnl_abCde4c),
+        abCdef4c(dnnl_abCdef4c),
+        abCde32c(dnnl_abCde32c),
+        abCdef32c(dnnl_abCdef32c),
+        aCdefB16b32c2b(dnnl_aCdefB16b32c2b),
+        aCdefB16b32c4b(dnnl_aCdefB16b32c4b),
+        aCdefB16b48c2b(dnnl_aCdefB16b48c2b),
+        aCdefB16b48c4b(dnnl_aCdefB16b48c4b),
+        aCdefB16b64c2b(dnnl_aCdefB16b64c2b),
+        aCdefB16b64c4b(dnnl_aCdefB16b64c4b),
+        BcdeA16a32b2a(dnnl_BcdeA16a32b2a),
+        BcdeA16a32b4a(dnnl_BcdeA16a32b4a),
+        BcdeA16a48b2a(dnnl_BcdeA16a48b2a),
+        BcdeA16a48b4a(dnnl_BcdeA16a48b4a),
+        BcdeA16a64b2a(dnnl_BcdeA16a64b2a),
+        BcdeA16a64b4a(dnnl_BcdeA16a64b4a),
+        aCdefb32c(dnnl_aCdefb32c),
+        aCdefB32c2b(dnnl_aCdefB32c2b),
+        aCdefB32c4b(dnnl_aCdefB32c4b),
+        aCdefb48c(dnnl_aCdefb48c),
+        aCdefB48c2b(dnnl_aCdefB48c2b),
+        aCdefB48c4b(dnnl_aCdefB48c4b),
+        aCdefb64c(dnnl_aCdefb64c),
+        aCdefB64c2b(dnnl_aCdefB64c2b),
+        aCdefB64c4b(dnnl_aCdefB64c4b),
+        Bcdea32b(dnnl_Bcdea32b),
+        BcdeA32b2a(dnnl_BcdeA32b2a),
+        BcdeA32b4a(dnnl_BcdeA32b4a),
+        Bcdea48b(dnnl_Bcdea48b),
+        BcdeA48b2a(dnnl_BcdeA48b2a),
+        BcdeA48b4a(dnnl_BcdeA48b4a),
+        Bcdea64b(dnnl_Bcdea64b),
+        BcdeA64b2a(dnnl_BcdeA64b2a),
+        BcdeA64b4a(dnnl_BcdeA64b4a),
+        Bca32b(dnnl_Bca32b),
+        BcA32b2a(dnnl_BcA32b2a),
+        BcA32b4a(dnnl_BcA32b4a),
+        Bca48b(dnnl_Bca48b),
+        BcA48b2a(dnnl_BcA48b2a),
+        BcA48b4a(dnnl_BcA48b4a),
+        Bca64b(dnnl_Bca64b),
+        BcA64b2a(dnnl_BcA64b2a),
+        BcA64b4a(dnnl_BcA64b4a),
+        aCdb32c(dnnl_aCdb32c),
+        aCdB32c2b(dnnl_aCdB32c2b),
+        aCdB32c4b(dnnl_aCdB32c4b),
+        aCdb48c(dnnl_aCdb48c),
+        aCdB48c2b(dnnl_aCdB48c2b),
+        aCdB48c4b(dnnl_aCdB48c4b),
+        aCdb64c(dnnl_aCdb64c),
+        aCdB64c2b(dnnl_aCdB64c2b),
+        aCdB64c4b(dnnl_aCdB64c4b),
+        BcA16a16b2a(dnnl_BcA16a16b2a),
+        BcA16a16b4a(dnnl_BcA16a16b4a),
+        BcdA16a16b2a(dnnl_BcdA16a16b2a),
+        BcdA16a16b4a(dnnl_BcdA16a16b4a),
+        BcdeA16a16b2a(dnnl_BcdeA16a16b2a),
+        BcdeA16a16b4a(dnnl_BcdeA16a16b4a),
+        aCdB16b16c2b(dnnl_aCdB16b16c2b),
+        aCdB16b16c4b(dnnl_aCdB16b16c4b),
+        aCdeB16b16c2b(dnnl_aCdeB16b16c2b),
+        aCdeB16b16c4b(dnnl_aCdeB16b16c4b),
+        aCdefB16b16c2b(dnnl_aCdefB16b16c2b),
+        aCdefB16b16c4b(dnnl_aCdefB16b16c4b),
+        BcA16a32b2a(dnnl_BcA16a32b2a),
+        BcA16a32b4a(dnnl_BcA16a32b4a),
+        BcA16a48b2a(dnnl_BcA16a48b2a),
+        BcA16a48b4a(dnnl_BcA16a48b4a),
+        BcA16a64b2a(dnnl_BcA16a64b2a),
+        BcA16a64b4a(dnnl_BcA16a64b4a),
+        aCdB16b32c2b(dnnl_aCdB16b32c2b),
+        aCdB16b32c4b(dnnl_aCdB16b32c4b),
+        aCdB16b48c2b(dnnl_aCdB16b48c2b),
+        aCdB16b48c4b(dnnl_aCdB16b48c4b),
+        aCdB16b64c2b(dnnl_aCdB16b64c2b),
+        aCdB16b64c4b(dnnl_aCdB16b64c4b),
+        BcdA16a32b2a(dnnl_BcdA16a32b2a),
+        BcdA16a32b4a(dnnl_BcdA16a32b4a),
+        BcdA16a48b2a(dnnl_BcdA16a48b2a),
+        BcdA16a48b4a(dnnl_BcdA16a48b4a),
+        BcdA16a64b2a(dnnl_BcdA16a64b2a),
+        BcdA16a64b4a(dnnl_BcdA16a64b4a),
+        aCdeB16b32c2b(dnnl_aCdeB16b32c2b),
+        aCdeB16b32c4b(dnnl_aCdeB16b32c4b),
+        aCdeB16b48c2b(dnnl_aCdeB16b48c2b),
+        aCdeB16b48c4b(dnnl_aCdeB16b48c4b),
+        aCdeB16b64c2b(dnnl_aCdeB16b64c2b),
+        aCdeB16b64c4b(dnnl_aCdeB16b64c4b),
+        Bca16b(dnnl_Bca16b),
+        BcA16b2a(dnnl_BcA16b2a),
+        BcA16b4a(dnnl_BcA16b4a),
+        Bcda16b(dnnl_Bcda16b),
+        BcdA16b2a(dnnl_BcdA16b2a),
+        BcdA16b4a(dnnl_BcdA16b4a),
+        Bcdea16b(dnnl_Bcdea16b),
+        BcdeA16b2a(dnnl_BcdeA16b2a),
+        BcdeA16b4a(dnnl_BcdeA16b4a),
+        aCdb16c(dnnl_aCdb16c),
+        aCdB16c2b(dnnl_aCdB16c2b),
+        aCdB16c4b(dnnl_aCdB16c4b),
+        aCdeb16c(dnnl_aCdeb16c),
+        aCdeB16c2b(dnnl_aCdeB16c2b),
+        aCdeB16c4b(dnnl_aCdeB16c4b),
+        aCdefb16c(dnnl_aCdefb16c),
+        aCdefB16c2b(dnnl_aCdefB16c2b),
+        aCdefB16c4b(dnnl_aCdefB16c4b),
+        Bcda32b(dnnl_Bcda32b),
+        BcdA32b2a(dnnl_BcdA32b2a),
+        BcdA32b4a(dnnl_BcdA32b4a),
+        Bcda48b(dnnl_Bcda48b),
+        BcdA48b2a(dnnl_BcdA48b2a),
+        BcdA48b4a(dnnl_BcdA48b4a),
+        Bcda64b(dnnl_Bcda64b),
+        BcdA64b2a(dnnl_BcdA64b2a),
+        BcdA64b4a(dnnl_BcdA64b4a),
+        aCdeb32c(dnnl_aCdeb32c),
+        aCdeB32c2b(dnnl_aCdeB32c2b),
+        aCdeB32c4b(dnnl_aCdeB32c4b),
+        aCdeb48c(dnnl_aCdeb48c),
+        aCdeB48c2b(dnnl_aCdeB48c2b),
+        aCdeB48c4b(dnnl_aCdeB48c4b),
+        aCdeb64c(dnnl_aCdeb64c),
+        aCdeB64c2b(dnnl_aCdeB64c2b),
+        aCdeB64c4b(dnnl_aCdeB64c4b),
+        NChw16n32c(dnnl_NChw16n32c),
+        goIw4i(dnnl_goIw4i),
+        goIw32i(dnnl_goIw32i),
+        goIhw4i(dnnl_goIhw4i),
+        goIhw32i(dnnl_goIhw32i),
+        goIdhw4i(dnnl_goIdhw4i),
+        goIdhw32i(dnnl_goIdhw32i),
+        cab(dnnl_cab),
+        cdab(dnnl_cdab),
+        cdeab(dnnl_cdeab),
+        woi(dnnl_woi),
+        hwoi(dnnl_hwoi),
+        dhwoi(dnnl_dhwoi),
+        Owi24o(dnnl_Owi24o),
+        Ohwi24o(dnnl_Ohwi24o),
+        Odhwi24o(dnnl_Odhwi24o),
+        gOwi24o(dnnl_gOwi24o),
+        gOhwi24o(dnnl_gOhwi24o),
+        gOdhwi24o(dnnl_gOdhwi24o),
+        OwI24o2i(dnnl_OwI24o2i),
+        OhwI24o2i(dnnl_OhwI24o2i),
+        OdhwI24o2i(dnnl_OdhwI24o2i),
+        gOwI24o2i(dnnl_gOwI24o2i),
+        gOhwI24o2i(dnnl_gOhwI24o2i),
+        gOdhwI24o2i(dnnl_gOdhwI24o2i),
+        OI8i32o(dnnl_OI8i32o),
+        OIw8i32o(dnnl_OIw8i32o),
+        OIhw8i32o(dnnl_OIhw8i32o),
+        OIdhw8i32o(dnnl_OIdhw8i32o),
+        OI8i24o(dnnl_OI8i24o),
+        OIw8i24o(dnnl_OIw8i24o),
+        OIhw8i24o(dnnl_OIhw8i24o),
+        OIdhw8i24o(dnnl_OIdhw8i24o),
+        OI8i16o(dnnl_OI8i16o),
+        OIw8i16o(dnnl_OIw8i16o),
+        OIhw8i16o(dnnl_OIhw8i16o),
+        OIdhw8i16o(dnnl_OIdhw8i16o),
+        OI8i8o(dnnl_OI8i8o),
+        AB4b8a4b(dnnl_AB4b8a4b),
+        AB4b24a4b(dnnl_AB4b24a4b),
+        ABc4b8a4b(dnnl_ABc4b8a4b),
+        ABc4b24a4b(dnnl_ABc4b24a4b),
+        ABcd4b8a4b(dnnl_ABcd4b8a4b),
+        ABcd4b24a4b(dnnl_ABcd4b24a4b),
+        ABcde4b8a4b(dnnl_ABcde4b8a4b),
+        ABcde4b24a4b(dnnl_ABcde4b24a4b),
+        OhwI24o(dnnl_OhwI24o),
+        gOhwI24o(dnnl_gOhwI24o);
 
         public final int value;
         private format_tag(int v) { this.value = v; }
@@ -1380,8 +1744,20 @@ public class memory extends dnnl_memory_handle {
     }
 
     /** A memory descriptor. */
-    @NoOffset public static class desc extends Pointer {
+    @Name("desc") public static class desc extends dnnl_memory_desc_handle {
         static { Loader.load(); }
+    
+            
+                public desc() { super((Pointer)null); allocate(); }
+                private native void allocate();
+                public desc(@Const @ByRef desc arg0) { super((Pointer)null); allocate(arg0); }
+                private native void allocate(@Const @ByRef desc arg0);
+                
+                ///
+                public desc(dnnl_memory_desc t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+                private native void allocate(dnnl_memory_desc t, @Cast("bool") boolean weak/*=false*/);
+                public desc(dnnl_memory_desc t) { super((Pointer)null); allocate(t); }
+                private native void allocate(dnnl_memory_desc t);
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -1394,16 +1770,9 @@ public class memory extends dnnl_memory_handle {
             return new desc((Pointer)this).offsetAddress(i);
         }
     
-        /** The underlying C API data structure. */
-        public native @ByRef dnnl_memory_desc_t data(); public native desc data(dnnl_memory_desc_t setter);
 
         /** Constructs a zero (empty) memory descriptor. Such a memory
          *  descriptor can be used to indicate absence of an argument. */
-        
-        ///
-        ///
-        public desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
 
         /** Constructs a memory descriptor.
          * 
@@ -1423,24 +1792,24 @@ public class memory extends dnnl_memory_handle {
         
         ///
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, aformat_tag, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, memory.format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, memory.format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, aformat_tag, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, format_tag aformat_tag);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, memory.format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, memory.format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, aformat_tag, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, memory.format_tag aformat_tag,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, format_tag aformat_tag);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, memory.format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, memory.format_tag aformat_tag);
 
         /** Constructs a memory descriptor by strides.
          * 
@@ -1459,30 +1828,32 @@ public class memory extends dnnl_memory_handle {
          *      optional and defaults to false. */
         
         ///
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, strides, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongPointer strides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, strides, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef LongBuffer strides);
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adims, adata_type, strides, allow_empty); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
-        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides);
-
-        /** Constructs a memory descriptor from a C API data structure.
+        public desc(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides) { super((Pointer)null); allocate(adims, adata_type, strides); }
+        private native void allocate(@Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] adims, memory.data_type adata_type, @Const @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByRef long[] strides);
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #endif
+        /** Construct a memory descriptor from a C API ::dnnl_memory_desc_t
+         *  handle. The resulting handle is not weak and the C handle will be
+         *  destroyed during the destruction of the C++ object.
          * 
-         *  @param data A C API ::dnnl_memory_desc_t structure. */
-        public desc(@Const @ByRef dnnl_memory_desc_t data) { super((Pointer)null); allocate(data); }
-        private native void allocate(@Const @ByRef dnnl_memory_desc_t data);
+         *  @param md The C API memory descriptor. */
+        
 
         /** Constructs a memory descriptor for a region inside an area
          *  described by this memory descriptor. */
@@ -1583,7 +1954,7 @@ public class memory extends dnnl_memory_handle {
          * 
          *  The logical axes will be permuted in the following manner:
          *  <pre>{@code
-         *  for (i = 0; i < ndims(); i++)
+         *  for (i = 0; i < get_ndims(); i++)
          *      new_desc.dims()[permutation[i]] = dims()[i];
          *  }</pre>
          * 
@@ -1605,6 +1976,8 @@ public class memory extends dnnl_memory_handle {
          *      zero memory descriptor will be returned. This flag is optional
          *      and defaults to false.
          *  @return A new memory descriptor with new dimensions. */
+        
+        ///
         public native @ByVal desc permute_axes(@StdVector IntPointer permutation,
                         @Cast("bool") boolean allow_empty/*=false*/);
         public native @ByVal desc permute_axes(@StdVector IntPointer permutation);
@@ -1615,23 +1988,119 @@ public class memory extends dnnl_memory_handle {
                         @Cast("bool") boolean allow_empty/*=false*/);
         public native @ByVal desc permute_axes(@StdVector int[] permutation);
 
+        /** Returns a number of dimensions of the memory descriptor.
+         * 
+         *  @return A number of dimensions. */
+        
+        ///
+        public native int get_ndims();
+
+        /** Returns padded dimensions of the memory descriptor.
+         * 
+         *  @return A copy of the padded dimensions vector. */
+        
+        ///
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_padded_dims();
+
+        /** Returns padded offsets of the memory descriptor.
+         * 
+         *  @return A copy of the padded offsets vector. */
+        
+        ///
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_padded_offsets();
+
+        /** Returns a submemory offset of the memory descriptor.
+         * 
+         *  @return A submemory offset. */
+        
+        ///
+        ///
+        public native @Cast("dnnl::memory::dim") long get_submemory_offset();
+
+        /** Returns strides of the memory descriptor.
+         * 
+         *  \note
+         *      This API is only applicable to memory descriptors with format
+         *      kind #dnnl_blocked.
+         * 
+         *  @return A copy of the strides vector.
+         *  @return An empty #dnnl::memory::dims if the memory descriptor
+         *      does not have strides. */
+        
+        ///
+        ///
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_strides();
+
+        /** Returns a number of inner blocks of the memory descriptor.
+         * 
+         *  \note
+         *      This API is only applicable to memory descriptors with format
+         *      kind #dnnl_blocked.
+         * 
+         *  @return A number of inner blocks. */
+        
+        ///
+        ///
+        public native int get_inner_nblks();
+
+        /** Returns inner blocks of the memory descriptor.
+         * 
+         *  \note
+         *      This API is only applicable to memory descriptors with format
+         *      kind #dnnl_blocked.
+         * 
+         *  @return A copy of the inner blocks vector.
+         *  @return An empty #dnnl::memory::dims if the memory descriptor
+         *      does not have inner blocks. */
+        
+        ///
+        ///
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_inner_blks();
+
+        /** Returns inner indices of the memory descriptor.
+         * 
+         *  \note
+         *      This API is only applicable to memory descriptors with format
+         *      kind #dnnl_blocked.
+         * 
+         *  @return A copy of the inner indices vector.
+         *  @return An empty #dnnl::memory::dims if the memory descriptor
+         *      does not have inner indices. */
+        
+        ///
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_inner_idxs();
+
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #else
         /** Returns the data type of the memory descriptor.
+         * 
          *  @return The data type. */
         
         ///
-        public native data_type data_type();
+        public native memory.data_type get_data_type();
+// #endif
+
+        /** Returns the format kind of the memory descriptor.
+         * 
+         *  @return the format kind. */
+        
+        ///
+        public native memory.format_kind get_format_kind();
 
         /** Returns dimensions of the memory descriptor.
          * 
          *  Potentially expensive due to the data copy involved.
          *  @return A copy of the dimensions vector. */
-        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer dims();
+        public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_dims();
 
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #else
         /** Returns size of the memory descriptor in bytes.
          *  @return The number of bytes required to allocate a memory buffer
          *      for the memory object described by this memory descriptor
          *      including the padding area. */
         public native @Cast("size_t") long get_size();
+// #endif
 
         /** Checks whether the memory descriptor is zero (empty).
          *  @return \c true if the memory descriptor describes an empty
@@ -1648,14 +2117,7 @@ public class memory extends dnnl_memory_handle {
          *  @param other Another memory descriptor.
          *  @return Whether this and the other memory descriptors describe
          *      different memory. */
-        
-        ///
         public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef desc other);
-
-        /** Checks whether the object is not empty.
-         * 
-         *  @return Whether the object is not empty. */
-        public native @Cast("bool") @Name("operator bool") boolean asBoolean();
     }
 
     /** Default constructor.
@@ -1663,6 +2125,8 @@ public class memory extends dnnl_memory_handle {
      *  Constructs an empty memory object, which can be used to indicate
      *  absence of a parameter. */
 
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #else
     /** Constructs a memory object.
      * 
      *  Unless \p handle is equal to #DNNL_MEMORY_NONE, the constructed memory
@@ -1685,8 +2149,8 @@ public class memory extends dnnl_memory_handle {
     
     ///
     ///
-    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer handle) { super((Pointer)null); allocate(md, aengine, handle); }
-    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer handle);
+    public memory(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine, Pointer handle) { super((Pointer)null); allocate(md, aengine, handle); }
+    private native void allocate(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine, Pointer handle);
 
     /** Constructs a memory object.
      * 
@@ -1694,71 +2158,34 @@ public class memory extends dnnl_memory_handle {
      * 
      *  @param md Memory descriptor.
      *  @param aengine Engine to store the data on. */
-    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine) { super((Pointer)null); allocate(md, aengine); }
-    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine);
+    public memory(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine) { super((Pointer)null); allocate(md, aengine); }
+    private native void allocate(@Const @ByRef org.bytedeco.dnnl.memory.desc md, @Const @ByRef engine aengine);
+// #endif
 
     /** Returns the associated memory descriptor. */
-    public native @ByVal desc get_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc get_desc();
 
     /** Returns the associated engine. */
     
     ///
     public native @ByVal engine get_engine();
 
+// #ifdef DNNL_EXPERIMENTAL_SPARSE
+// #else
     /** Returns the underlying memory buffer.
      * 
      *  On the CPU engine, or when using USM, this is a pointer to the
      *  allocated memory. */
     
     ///
-    ///
-    ///
-    ///
     public native Pointer get_data_handle();
 
     /** Sets the underlying memory buffer.
      * 
-     *  This function may write zero values to the memory specified by the \p
-     *  handle if the memory object has a zero padding area. This may be time
-     *  consuming and happens each time this function is called. The
-     *  operation is always blocking and the stream parameter is a hint.
-     * 
-     *  \note
-     *      The zero padding is required by memory objects created with
-     *      blocked memory format tags like #dnnl_aBcd8b when any of the
-     *      dimensions is not a multiple of the corresponding block size. For
-     *      "plain" formats like #dnnl::memory::format_tag::nchw or
-     *      #dnnl::memory::format_tag::nhwc zero padding area needs to be set
-     *      up explicitly when creating the corresponding memory descriptors.
-     *      See \ref dev_guide_understanding_memory_formats for more details.
-     * 
-     *  \note
-     *      Even when the memory object is used to hold values that stay
-     *      constant during the execution of the program (pre-packed weights
-     *      during inference, for example), the function will still write
-     *      zeroes to the padding area if it exists. Hence, the \p handle
-     *      parameter cannot and does not have a const qualifier.
-     * 
      *  @param handle Memory buffer to use. On the CPU engine or when USM is
      *      used, the memory buffer is a pointer to the actual data. For OpenCL
      *      it is a cl_mem. It must have at least
-     *      #dnnl::memory::desc::get_size() bytes allocated.
-     *  @param astream Stream to use to execute padding in. */
-    
-    ///
-    ///
-    public native void set_data_handle(Pointer handle, @Const @ByRef stream astream);
-
-    /** Sets the underlying memory buffer.
-     * 
-     *  See documentation for
-     *  #dnnl::memory::set_data_handle(void *, const stream &) const
-     *  for more information.
-     * 
-     *  @param handle Memory buffer to use. For the CPU engine, the memory
-     *      buffer is a pointer to the actual data. For OpenCL it is a cl_mem.
-     *      It must have at least #dnnl::memory::desc::get_size() bytes
-     *      allocated. */
+     *      #dnnl::memory::desc::get_size() bytes allocated. */
     
     ///
     ///
@@ -1800,6 +2227,7 @@ public class memory extends dnnl_memory_handle {
      *  @param mapped_ptr A pointer previously returned by
      *      #dnnl::memory::map_data(). */
     public native void unmap_data(Pointer mapped_ptr);
+// #endif
 
     public static native @Cast("dnnl_data_type_t") int convert_to_c(data_type adata_type);
     public static native @Cast("dnnl_format_tag_t") int convert_to_c(format_tag format);

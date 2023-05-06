@@ -60,11 +60,125 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
     /** Returns a memory::dim value (same as int64_t).
      *  @param what The value to query.
      *  @return The result of the query. */
+    public native @Cast("dnnl::memory::dim") long query_s64(query what);
+    public native @Cast("dnnl::memory::dim") long query_s64(@Cast("dnnl::query") int what);
+
+    /** Returns strides.
+     *  @return Strides.
+     *  @return An empty #dnnl::memory::dims if the primitive does not have
+     *      a strides parameter. */
+    public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_strides();
+
+    /** Returns dilations.
+     *  @return Dilations.
+     *  @return An empty #dnnl::memory::dims if the primitive does not have
+     *      a dilations parameter. */
+    public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_dilations();
+
+    /** Returns a left padding.
+     *  @return A left padding.
+     *  @return An empty #dnnl::memory::dims if the primitive does not have
+     *      a left padding parameter. */
+    public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_padding_l();
+
+    /** Returns a right padding.
+     *  @return A right padding.
+     *  @return An empty #dnnl::memory::dims if the primitive does not have
+     *      a right padding parameter. */
+    public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_padding_r();
+
+    /** Returns an epsilon.
+     *  @return An epsilon.
+     *  @return Zero if the primitive does not have an epsilon parameter. */
+    public native float get_epsilon();
+
+    /** Returns flags.
+     *  \tparam T Flags enumeration type.
+     *  @return Flags.
+     *  @return Zero if the primitive does not have a flags parameter. */
+
+    /** Returns an algorithm kind.
+     *  @return An algorithm kind.
+     *  @return #dnnl::algorithm::undef if the primitive does not have an
+     *      algorithm parameter. */
+    public native algorithm get_algorithm();
+
+    /** Returns an alpha.
+     *  @return An alpha.
+     *  @return Zero if the primitive does not have an alpha parameter. */
+    public native float get_alpha();
+
+    /** Returns a beta.
+     *  @return A beta.
+     *  @return Zero if the primitive does not have a beta parameter. */
+    public native float get_beta();
+
+    /** Returns an axis.
+     *  @return An axis.
+     *  @return A negative number if the primitive does not have an axis
+     *      parameter. */
+    public native int get_axis();
+
+    /** Returns an LRN local size parameter.
+     *  @return An LRN local size parameter.
+     *  @return Zero if the primitive does not have an LRN local size
+     *      parameter. */
+    public native @Cast("dnnl::memory::dim") long get_local_size();
+
+    /** Returns an LRN K parameter.
+     *  @return An LRN K parameter.
+     *  @return Zero if the primitive does not have an LRN K parameter. */
+    public native float get_k();
+
+    /** Returns a reduction P parameter.
+     *  @return A reduction P parameter.
+     *  @return Zero if the primitive does not have a reduction P parameter. */
+    public native float get_p();
+
+    /** Returns a resampling factors parameters.
+     *  @return A vector of factors.
+     *  @return An empty vector if the primitive does not have a resampling
+     *      factors parameter. */
+    public native @StdVector FloatPointer get_factors();
+
+    /** Returns an RNN cell kind parameter.
+     *  @return An RNN cell kind parameter.
+     *  @return #dnnl::algorithm::undef if the primitive does not have an
+     *      RNN cell kind parameter. */
+    public native algorithm get_cell_kind();
+
+    /** Returns an RNN direction parameter.
+     *  @return An RNN direction parameter.
+     *  @return #dnnl::rnn_direction::undef if the primitive does not have
+     *      an RNN direction parameter. */
+    public native rnn_direction get_direction();
+
+    /** Returns an RNN activation kind parameter.
+     *  @return An RNN activation kind parameter.
+     *  @return #dnnl::algorithm::undef if the primitive does not have an
+     *      RNN activation kind parameter. */
+    public native algorithm get_activation_kind();
+
+    /** Returns a pooling kernel parameter.
+     *  @return A pooling kernel parameter.
+     *  @return An empty #dnnl::memory::dims if the primitive does not have
+     *      a pooling kernel parameter. */
+    public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_kernel();
+
+    /** Returns a shuffle group size parameter.
+     *  @return A shuffle group size parameter.
+     *  @return Zero if the primitive does not have a shuffle group size
+     *      parameter. */
+    public native @Cast("dnnl::memory::dim") long get_group_size();
+
+    /** Returns a propagation kind.
+     *  @return A propagation kind.
+     *  @return #dnnl::prop_kind::undef if the primitive does not have
+     *      a propagation parameter. */
     
     ///
     ///
-    public native @Cast("dnnl::memory::dim") long query_s64(query what);
-    public native @Cast("dnnl::memory::dim") long query_s64(@Cast("dnnl::query") int what);
+    public native prop_kind get_prop_kind();
 
     /** Returns a memory descriptor.
      * 
@@ -80,52 +194,52 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
      *  @return The requested memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      parameter of the specified kind or index. */
-    public native @ByVal memory.desc query_md(query what, int idx/*=0*/);
-    public native @ByVal memory.desc query_md(query what);
-    public native @ByVal memory.desc query_md(@Cast("dnnl::query") int what, int idx/*=0*/);
-    public native @ByVal memory.desc query_md(@Cast("dnnl::query") int what);
+    public native @ByVal org.bytedeco.dnnl.memory.desc query_md(query what, int idx/*=0*/);
+    public native @ByVal org.bytedeco.dnnl.memory.desc query_md(query what);
+    public native @ByVal org.bytedeco.dnnl.memory.desc query_md(@Cast("dnnl::query") int what, int idx/*=0*/);
+    public native @ByVal org.bytedeco.dnnl.memory.desc query_md(@Cast("dnnl::query") int what);
 
     /** Returns a source memory descriptor.
      *  @param idx Source index.
      *  @return Source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      source parameter with index \p idx. */
-    public native @ByVal memory.desc src_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc src_desc(int idx);
 
     /** Returns a destination memory descriptor.
      *  @param idx Destination index.
      *  @return Destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      destination parameter with index \p idx. */
-    public native @ByVal memory.desc dst_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc(int idx);
 
     /** Returns a weights memory descriptor.
      *  @param idx Weights index.
      *  @return Weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      weights parameter with index \p idx. */
-    public native @ByVal memory.desc weights_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc weights_desc(int idx);
 
     /** Returns a diff source memory descriptor.
      *  @param idx Diff source index.
      *  @return Diff source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff source parameter with index \p idx. */
-    public native @ByVal memory.desc diff_src_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_src_desc(int idx);
 
     /** Returns a diff destination memory descriptor.
      *  @param idx Diff destination index.
      *  @return Diff destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff destination parameter with index \p idx. */
-    public native @ByVal memory.desc diff_dst_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_dst_desc(int idx);
 
     /** Returns a diff weights memory descriptor.
      *  @param idx Diff weights index.
      *  @return Diff weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff weights parameter with index \p idx. */
-    public native @ByVal memory.desc diff_weights_desc(int idx);
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_weights_desc(int idx);
 
     // Separate versions without the index argument for documentation
     // purposes.
@@ -134,50 +248,50 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
      *  @return Source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      source parameter. */
-    public native @ByVal memory.desc src_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
     /** Returns a destination memory descriptor.
      *  @return Destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      destination parameter. */
-    public native @ByVal memory.desc dst_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
 
     /** Returns a weights memory descriptor.
      *  @return Weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      weights parameter. */
-    public native @ByVal memory.desc weights_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc weights_desc();
 
     /** Returns a diff source memory descriptor.
      *  @return Diff source memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff source memory with. */
-    public native @ByVal memory.desc diff_src_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_src_desc();
 
     /** Returns a diff destination memory descriptor.
      *  @return Diff destination memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff destination parameter. */
-    public native @ByVal memory.desc diff_dst_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_dst_desc();
 
     /** Returns a diff weights memory descriptor.
      *  @return Diff weights memory descriptor.
      *  @return A zero memory descriptor if the primitive does not have a
      *      diff weights parameter. */
-    public native @ByVal memory.desc diff_weights_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc diff_weights_desc();
 
     /** Returns the workspace memory descriptor.
      *  @return Workspace memory descriptor.
      *  @return A zero memory descriptor if the primitive does not require
      *      workspace parameter. */
-    public native @ByVal memory.desc workspace_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc workspace_desc();
 
     /** Returns the scratchpad memory descriptor.
      *  @return scratchpad memory descriptor.
      *  @return A zero memory descriptor if the primitive does not require
      *      scratchpad parameter.
      *  @see \ref dev_guide_attributes_scratchpad */
-    public native @ByVal memory.desc scratchpad_desc();
+    public native @ByVal org.bytedeco.dnnl.memory.desc scratchpad_desc();
 
     /** Returns the engine on which the scratchpad memory is located.
      *  @return The engine on which the scratchpad memory is located. */

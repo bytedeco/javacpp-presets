@@ -13,7 +13,16 @@ import static org.bytedeco.opencl.global.OpenCL.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 
 
-/** \struct dnnl_primitive_desc
+/** \} dnnl_api_rnn
+ <p>
+ *  \} dnnl_api_primitives
+ <p>
+ *  \addtogroup dnnl_api_primitives
+ *  \{
+ *  \addtogroup dnnl_api_primitives_common
+ *  \{
+ <p>
+ *  \struct dnnl_primitive_desc
  *  \brief An opaque structure to describe a primitive descriptor. */
 @Opaque @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class dnnl_primitive_desc extends Pointer {

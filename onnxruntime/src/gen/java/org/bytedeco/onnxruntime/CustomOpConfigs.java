@@ -63,6 +63,6 @@ public class CustomOpConfigs extends Pointer {
    * {"my_op.key", "value"}.
    *
    * @return An unordered map of flattened configurations.
-  */
+   */
   public native @Const @ByRef StringStringMap GetFlattenedConfigs();
 }

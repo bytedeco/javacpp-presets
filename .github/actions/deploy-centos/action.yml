@@ -13,7 +13,7 @@ runs:
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
         echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
-        SCL_ENABLE="devtoolset-9"
+        SCL_ENABLE="devtoolset-9 rh-python38"
         CENTOS_VERSION=$(rpm --eval '%{centos_ver}')
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           find /etc/yum.repos.d/ -name *.repo | xargs -i sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/$releasever/6.10/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' {}

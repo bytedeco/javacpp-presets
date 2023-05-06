@@ -117,6 +117,14 @@ public class ConstValue extends BaseConstValue {
   public native void GetStringTensorElement(@Cast("size_t") long buffer_length, @Cast("size_t") long element_index, Pointer buffer);
 
   /** <summary>
+   *  Returns string tensor UTF-8 encoded string element.
+   *  Use of this API is recommended over GetStringTensorElement() that takes void* buffer pointer.
+   *  </summary>
+   *  <param name="element_index"></param>
+   *  <returns>std::string</returns> */
+  public native @StdString BytePointer GetStringTensorElement(@Cast("size_t") long element_index);
+
+  /** <summary>
    *  The API returns a byte length of UTF-8 encoded string element
    *  contained in either a tensor or a spare tensor values.
    *  </summary>

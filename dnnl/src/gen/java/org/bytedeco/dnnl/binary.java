@@ -39,47 +39,6 @@ public class binary extends primitive {
         return new binary((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for an elementwise binary operator primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public desc(long size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(long size);
-        @Override public desc position(long position) {
-            return (desc)super.position(position);
-        }
-        @Override public desc getPointer(long i) {
-            return new desc((Pointer)this).offsetAddress(i);
-        }
-    
-        /** Underlying C operation descriptor. */
-        public native @ByRef dnnl_binary_desc_t data(); public native desc data(dnnl_binary_desc_t setter);
-
-        /** Default constructor. Produces an empty object. */
-        
-        ///
-        public desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
-
-        /** Constructs a descriptor for an elementwise binary operator
-         *  primitive.
-         * 
-         *  @param aalgorithm Elementwise binary algorithm.
-         *  @param src0 Memory descriptor for source tensor #0.
-         *  @param src1 Memory descriptor for source tensor #1.
-         *  @param dst Memory descriptor for destination tensor. */
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst) { super((Pointer)null); allocate(aalgorithm, src0, src1, dst); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst) { super((Pointer)null); allocate(aalgorithm, src0, src1, dst); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src0,
-                        @Const @ByRef memory.desc src1, @Const @ByRef memory.desc dst);
-    }
-
     /** Primitive descriptor for an elementwise binary operator primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -104,41 +63,51 @@ public class binary extends primitive {
         /** Constructs a primitive descriptor for an elementwise binary operator
          *  primitive.
          * 
-         *  @param adesc Descriptor for an elementwise binary operator primitive.
          *  @param aengine Engine to use.
+         *  @param aalgorithm Elementwise binary algorithm.
+         *  @param src0 Memory descriptor for source tensor #0.
+         *  @param src1 Memory descriptor for source tensor #1.
+         *  @param dst Memory descriptor for destination tensor.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, src0, src1, dst, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
-
-        /** Constructs a primitive descriptor for an elementwise binary operator
-         *  primitive.
-         * 
-         *  @param adesc Descriptor for an elementwise binary operator primitive.
-         *  @param aengine Engine to use.
-         *  @param attr Primitive attributes to use.
-         *  @param allow_empty A flag signifying whether construction is
-         *      allowed to fail without throwing an exception. In this case an
-         *      empty object will be produced. This flag is optional and
-         *      defaults to false. */
-        
-        ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst) { super((Pointer)null); allocate(aengine, aalgorithm, src0, src1, dst); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, src0, src1, dst, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst) { super((Pointer)null); allocate(aengine, aalgorithm, src0, src1, dst); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src0, @Const @ByRef org.bytedeco.dnnl.memory.desc src1,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst);
 
         /** Constructs a primitive descriptor for a binary primitive from a C
          *  API primitive descriptor that must have a matching kind.
@@ -148,17 +117,20 @@ public class binary extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc(int)const */
-        public native @ByVal memory.desc src_desc(int idx/*=0*/);
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc(int idx/*=0*/);
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** Returns the memory descriptor for source #0. */
-        public native @ByVal memory.desc src0_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src0_desc();
 
         /** Returns the memory descriptor for source #1. */
-        public native @ByVal memory.desc src1_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src1_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_algorithm()const */
+        public native algorithm get_algorithm();
     }
 
     /** Default constructor. Produces an empty object. */
