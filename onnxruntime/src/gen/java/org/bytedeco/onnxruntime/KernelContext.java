@@ -39,4 +39,6 @@ public class KernelContext extends Pointer {
   public native @ByVal @Cast("Ort::UnownedValue*") ValueImpl GetOutput(@Cast("size_t") long index, @Cast("int64_t*") @StdVector LongBuffer dims);
   public native @ByVal @Cast("Ort::UnownedValue*") ValueImpl GetOutput(@Cast("size_t") long index, @Cast("int64_t*") @StdVector long[] dims);
   public native Pointer GetGPUComputeStream();
+  public native @ByVal Logger GetLogger();
+  public native OrtAllocator GetAllocator(@Const @ByRef OrtMemoryInfo memory_info);
 }

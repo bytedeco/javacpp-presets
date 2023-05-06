@@ -87,10 +87,16 @@ public class OrtCUDAProviderOptions extends Pointer {
    */
   public native OrtArenaCfg default_memory_arena_cfg(); public native OrtCUDAProviderOptions default_memory_arena_cfg(OrtArenaCfg setter);
 
-  /** \brief Enable TunableOp.
-   *   Set it to 1 to enable TunableOp. Otherwise, it is disabled by default.
-   *   This option can be superseded by environment variable ORT_CUDA_TUNABLE_OP_ENABLED.
+  /** \brief Enable TunableOp for using.
+   *   Set it to 1/0 to enable/disable TunableOp. Otherwise, it is disabled by default.
+   *   This option can be overriden by environment variable ORT_CUDA_TUNABLE_OP_ENABLE.
    */
-  public native int tunable_op_enabled(); public native OrtCUDAProviderOptions tunable_op_enabled(int setter);
+  public native int tunable_op_enable(); public native OrtCUDAProviderOptions tunable_op_enable(int setter);
+
+  /** \brief Enable TunableOp for tuning.
+   *   Set it to 1/0 to enable/disable TunableOp tuning. Otherwise, it is disabled by default.
+   *   This option can be overriden by environment variable ORT_CUDA_TUNABLE_OP_TUNING_ENABLE.
+   */
+  public native int tunable_op_tuning_enable(); public native OrtCUDAProviderOptions tunable_op_tuning_enable(int setter);
 
 }

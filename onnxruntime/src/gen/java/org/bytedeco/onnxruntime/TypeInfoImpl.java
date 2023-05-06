@@ -39,6 +39,8 @@ public class TypeInfoImpl extends BaseTypeInfo {
   public native @ByVal @Cast("Ort::ConstSequenceTypeInfo*") BaseSequenceTypeInfoImpl GetSequenceTypeInfo();
   /** Wraps OrtApi::CastTypeInfoToMapTypeInfo */
   public native @ByVal ConstMapTypeInfo GetMapTypeInfo();
+  /** wraps OrtApi::CastTypeInfoToOptionalTypeInfo */
+  public native @ByVal @Cast("Ort::ConstOptionalTypeInfo*") OptionalTypeInfoImpl GetOptionalTypeInfo();
 
   public native @Cast("ONNXType") int GetONNXType();
 }

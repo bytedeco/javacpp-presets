@@ -18,9 +18,9 @@ import static org.bytedeco.dnnl.global.dnnl.*;
  *  \addtogroup dnnl_api_primitives_common
  *  \{
  <p>
- *  A base class for descriptors of all primitives that have an operation
- *  descriptor and that support iteration over multiple implementations. */
-@Name("dnnl::primitive_desc") @NoOffset @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
+ *  A base class for descriptors of all primitives that support iteration
+ *      over multiple implementations. */
+@Name("dnnl::primitive_desc") @Properties(inherit = org.bytedeco.dnnl.presets.dnnl.class)
 public class primitive_desc extends primitive_desc_base {
     static { Loader.load(); }
 
@@ -49,44 +49,11 @@ public class primitive_desc extends primitive_desc_base {
     }
 
 
-    /** Constructs a primitive descriptor.
+    /** Changes the primitive descriptor to point to the next available
+     *  implementation.
      * 
-     *  \note
-     *      If \p allow_empty is true, the constructor does not throw if a
-     *      primitive descriptor cannot be created. But calling next_impl() in
-     *      this case will throw.
-     * 
-     *  \note
-     *      This is a low-level implementation detail that is typically not
-     *      needed in application code.
-     * 
-     *  @param desc Constant C API operation descriptor.
-     *  @param attr Pointer to primitive attributes. It is safe to pass
-     *      nullptr to indicate absence of attributes.
-     *  @param aengine Engine to use.
-     *  @param hint_fwd_pd C API primitive descriptor for a forward
-     *      propagation primitive. It is used as a hint for deciding which
-     *      memory format to use for backward propagation or weights gradient.
-     *  @param allow_empty A flag signifying whether construction is allowed
-     *      to fail without throwing an exception. In this case an empty
-     *      object will be produced. This flag is optional and defaults to
-     *      false. */
-    
-    ///
-    public primitive_desc(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
-                @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd, allow_empty); }
-    private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd,
-                @Cast("bool") boolean allow_empty/*=false*/);
-    public primitive_desc(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, aengine, hint_fwd_pd); }
-    private native void allocate(const_dnnl_op_desc_t desc, @Const primitive_attr attr,
-                @Const @ByRef engine aengine, @Const dnnl_primitive_desc hint_fwd_pd);
-
-    /** Advances the primitive iterator to the next implementation.
-     * 
-     *  @return \c true on success, and \c false if the last implementation
-     *      reached, and the primitive descriptor itself is kept unchanged */
+     *  @return \c true on success and \c false if the last available
+     *  implementation has already been reached. In the latter case, the
+     *  primitive descriptor itself is kept unchanged. */
     public native @Cast("bool") boolean next_impl();
 }

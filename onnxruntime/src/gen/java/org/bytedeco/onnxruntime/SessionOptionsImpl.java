@@ -102,8 +102,11 @@ public class SessionOptionsImpl extends ConstSessionOptionsImpl {
   /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_MIGraphX
    *  Wraps OrtApi::SessionOptionsAppendExecutionProvider_CANN */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_MIGraphX(@Const @ByRef OrtMIGraphXProviderOptions provider_options);
+  
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider_Dnnl */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider_CANN(@Const @ByRef OrtCANNProviderOptions provider_options);
-  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider. Currently supports SNPE and XNNPACK. */
+  public native @ByRef SessionOptionsImpl AppendExecutionProvider_Dnnl(@Const @ByRef OrtDnnlProviderOptions provider_options);
+  /** Wraps OrtApi::SessionOptionsAppendExecutionProvider. Currently supports QNN, SNPE and XNNPACK. */
   public native @ByRef SessionOptionsImpl AppendExecutionProvider(@StdString BytePointer provider_name,
                                                 @Const @ByRef(nullValue = "std::unordered_map<std::string,std::string>{}") StringStringMap provider_options);
   public native @ByRef SessionOptionsImpl AppendExecutionProvider(@StdString BytePointer provider_name);

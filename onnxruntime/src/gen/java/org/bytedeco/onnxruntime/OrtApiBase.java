@@ -52,14 +52,24 @@ public class OrtApiBase extends Pointer {
       public native @Const OrtApi call(@Cast("uint32_t") int version);
   }
   public native GetApi_int GetApi(); public native OrtApiBase GetApi(GetApi_int setter);
-  public static class BytePointer_GetVersionString extends FunctionPointer {
+  public static class Pointer_GetVersionString extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    BytePointer_GetVersionString(Pointer p) { super(p); }
-      protected BytePointer_GetVersionString() { allocate(); }
+      public    Pointer_GetVersionString(Pointer p) { super(p); }
+      protected Pointer_GetVersionString() { allocate(); }
       private native void allocate();
-      public native @Cast("const char*") BytePointer call();
+      public native @Cast("const ORTCHAR_T*") Pointer call();
   }
   /** Returns a null terminated string of the version of the Onnxruntime library (eg: "1.8.1") */
-  public native BytePointer_GetVersionString GetVersionString(); public native OrtApiBase GetVersionString(BytePointer_GetVersionString setter);
+  public native Pointer_GetVersionString GetVersionString(); public native OrtApiBase GetVersionString(Pointer_GetVersionString setter);
+  public static class Pointer_GetBuildInfoString extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Pointer_GetBuildInfoString(Pointer p) { super(p); }
+      protected Pointer_GetBuildInfoString() { allocate(); }
+      private native void allocate();
+      public native @Cast("const ORTCHAR_T*") Pointer call();
+  }
+  /** Returns a null terminated string of the build info including git info and cxx flags */
+  public native Pointer_GetBuildInfoString GetBuildInfoString(); public native OrtApiBase GetBuildInfoString(Pointer_GetBuildInfoString setter);
 }

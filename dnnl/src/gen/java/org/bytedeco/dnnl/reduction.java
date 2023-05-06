@@ -40,57 +40,6 @@ public class reduction extends primitive {
         return new reduction((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for reduction. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public desc(long size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(long size);
-        @Override public desc position(long position) {
-            return (desc)super.position(position);
-        }
-        @Override public desc getPointer(long i) {
-            return new desc((Pointer)this).offsetAddress(i);
-        }
-    
-        public native @ByRef dnnl_reduction_desc_t data(); public native desc data(dnnl_reduction_desc_t setter);
-
-        /** Default constructor. Produces an empty object. */
-        
-        ///
-        ///
-        public desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
-
-        /** Constructs a descriptor for a reduction primitive using algorithm
-         *  specific parameters, source and destination memory descriptors.
-         * 
-         *  \note
-         *      Destination memory descriptor may be initialized with
-         *      #dnnl::memory::format_tag::any value of \p format_tag.
-         * 
-         *  @param aalgorithm reduction algorithm kind. Possible values:
-         *      #dnnl_reduction_max, #dnnl_reduction_min, #dnnl_reduction_sum,
-         *      #dnnl_reduction_mul, #dnnl_reduction_mean,
-         *      #dnnl_reduction_norm_lp_max, #dnnl_reduction_norm_lp_sum,
-         *      #dnnl_reduction_norm_lp_power_p_max,
-         *      #dnnl_reduction_norm_lp_power_p_sum.
-         *  @param p algorithm specific parameter.
-         *  @param eps algorithm specific parameter.
-         *  @param src_desc Source memory descriptor.
-         *  @param dst_desc Destination memory descriptor. */
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc dst_desc, float p, float eps) { super((Pointer)null); allocate(aalgorithm, src_desc, dst_desc, p, eps); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc dst_desc, float p, float eps);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc dst_desc, float p, float eps) { super((Pointer)null); allocate(aalgorithm, src_desc, dst_desc, p, eps); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc dst_desc, float p, float eps);
-    }
-
     /** Primitive descriptor for a reduction primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -109,45 +58,65 @@ public class reduction extends primitive {
         /** Default constructor. Produces an empty object. */
         
         ///
+        ///
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a reduction primitive.
+        /** Constructs a primitive descriptor for a reduction primitive using
+         *      algorithm specific parameters, source and destination memory
+         *      descriptors.
          * 
-         *  @param adesc Descriptor for a reduction primitive.
+         *  \note
+         *      Destination memory descriptor may be initialized with
+         *      #dnnl::memory::format_tag::any value of \p format_tag.
+         * 
          *  @param aengine Engine to use.
+         *  @param aalgorithm reduction algorithm kind. Possible values:
+         *      #dnnl_reduction_max, #dnnl_reduction_min, #dnnl_reduction_sum,
+         *      #dnnl_reduction_mul, #dnnl_reduction_mean,
+         *      #dnnl_reduction_norm_lp_max, #dnnl_reduction_norm_lp_sum,
+         *      #dnnl_reduction_norm_lp_power_p_max,
+         *      #dnnl_reduction_norm_lp_power_p_sum.
+         *  @param p algorithm specific parameter.
+         *  @param eps algorithm specific parameter.
+         *  @param src_desc Source memory descriptor.
+         *  @param dst_desc Destination memory descriptor.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps, @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, src_desc, dst_desc, p, eps, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps, @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
-
-        /** Constructs a primitive descriptor for a reduction primitive.
-         * 
-         *  @param adesc Descriptor for a reduction primitive.
-         *  @param aengine Engine to use.
-         *  @param attr Primitive attributes to use.
-         *  @param allow_empty A flag signifying whether construction is
-         *      allowed to fail without throwing an exception. In this case an
-         *      empty object will be produced. This flag is optional and
-         *      defaults to false. */
-        
-        ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps) { super((Pointer)null); allocate(aengine, aalgorithm, src_desc, dst_desc, p, eps); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps, @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, src_desc, dst_desc, p, eps, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps, @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps) { super((Pointer)null); allocate(aengine, aalgorithm, src_desc, dst_desc, p, eps); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        float p, float eps);
 
         /** Constructs a primitive descriptor for a reduction primitive from a C
          *  API primitive descriptor that must have a matching kind.
@@ -157,10 +126,19 @@ public class reduction extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_p()const */
+        public native float get_p();
+
+        /** \copydoc dnnl::primitive_desc_base::get_epsilon()const */
+        public native float get_epsilon();
+
+        /** \copydoc dnnl::primitive_desc_base::get_algorithm()const */
+        public native algorithm get_algorithm();
     }
 
     /** Default constructor. Produces an empty object. */

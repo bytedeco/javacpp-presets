@@ -41,40 +41,6 @@ public class matmul extends primitive {
         return new matmul((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for a matmul primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-    
-        
-        ///
-        public native @ByRef dnnl_matmul_desc_t data(); public native desc data(dnnl_matmul_desc_t setter);
-
-        /** Constructs a descriptor for a matmul primitive.
-         * 
-         *  @param src_desc Memory descriptor for source (matrix A).
-         *  @param weights_desc Memory descriptor for weights (matrix B).
-         *  @param dst_desc Memory descriptor for destination (matrix C). */
-        
-        ///
-        public desc(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(src_desc, weights_desc, dst_desc); }
-        private native void allocate(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc dst_desc);
-
-        /** Constructs a descriptor for a matmul primitive.
-         * 
-         *  @param src_desc Memory descriptor for source (matrix A).
-         *  @param weights_desc Memory descriptor for weights (matrix B).
-         *  @param dst_desc Memory descriptor for destination (matrix C).
-         *  @param bias_desc Memory descriptor for bias. */
-        public desc(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc bias_desc, @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(src_desc, weights_desc, bias_desc, dst_desc); }
-        private native void allocate(@Const @ByRef memory.desc src_desc, @Const @ByRef memory.desc weights_desc,
-                        @Const @ByRef memory.desc bias_desc, @Const @ByRef memory.desc dst_desc);
-    }
-
     /** Primitive descriptor for a matmul primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -96,42 +62,65 @@ public class matmul extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a matmul primitive.
+        /** Constructs a primitive descriptor for a matmul primitive
+         *      without bias.
          * 
-         *  @param adesc Descriptor for a matmul primitive.
          *  @param aengine Engine to use.
+         *  @param src_desc Memory descriptor for source (matrix A).
+         *  @param weights_desc Memory descriptor for weights (matrix B).
+         *  @param dst_desc Memory descriptor for destination (matrix C).
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, src_desc, weights_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, src_desc, weights_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
 
-        /** Constructs a primitive descriptor for a matmul primitive.
+        /** Constructs a primitive descriptor for a matmul primitive with bias.
          * 
-         *  @param adesc Descriptor for a matmul primitive.
-         *  @param attr Primitive attributes to use.
          *  @param aengine Engine to use.
+         *  @param src_desc Memory descriptor for source (matrix A).
+         *  @param weights_desc Memory descriptor for weights (matrix B).
+         *  @param dst_desc Memory descriptor for destination (matrix C).
+         *  @param bias_desc Memory descriptor for bias.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, src_desc, weights_desc, bias_desc, dst_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc) { super((Pointer)null); allocate(aengine, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc);
 
         /** Constructs a primitive descriptor for a matmul primitive from a C
          *  API primitive descriptor that must have a matching kind.
@@ -141,16 +130,16 @@ public class matmul extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::weights_desc()const */
-        public native @ByVal memory.desc weights_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_desc();
 
         /** \copydoc dnnl::convolution_forward::primitive_desc::bias_desc()const */
-        public native @ByVal memory.desc bias_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc bias_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
     }
 
     /** Default constructor. Produces an empty object. */

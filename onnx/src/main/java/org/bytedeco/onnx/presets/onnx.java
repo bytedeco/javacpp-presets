@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Alexander Merritt, Samuel Audet
+ * Copyright (C) 2018-2023 Alexander Merritt, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.Pointer;
 @Platform(
     value = {"linux", "macosx", "windows"},
     define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "NO_WINDOWS_H"},
-    compiler = "cpp11",
+    compiler = "cpp17",
     exclude = "google/protobuf/port_def.inc",
     include = {
         "onnx/defs/schema.h",
@@ -51,11 +51,13 @@ import org.bytedeco.javacpp.Pointer;
         "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
         "onnx/proto_utils.h",
+//        "onnx/onnx_pb.h",
+//        "onnx/common/assertions.h,
 //        "onnx/string_utils.h",
         "onnx/defs/function.h",
         "onnx/checker.h",
         "onnx/shape_inference/implementation.h",
-        "onnx/onnxifi.h",
+//        "onnx/onnxifi.h",
         "onnx/common/tensor.h",
         "onnx/common/array_ref.h",
         "onnx/common/status.h",
@@ -71,10 +73,8 @@ import org.bytedeco.javacpp.Pointer;
 //        "onnx/optimizer/pass.h",
 //        "onnx/optimizer/optimize.h",
     },
-    link = {"onnx_proto", "onnx", "onnxifi"}),
-// "onnxifi" not available on Mac
-@Platform(value = "macosx", link = {"onnx_proto", "onnx"}),
-@Platform(value = "windows", link = {"libprotobuf#", "onnx_proto", "onnx", "onnxifi"})
+    link = {"protobuf#", "onnx_proto", "onnx"}),
+@Platform(value = "windows", link = {"libprotobuf#", "onnx_proto", "onnx"})
 })
 public class onnx implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "onnx"); }
@@ -82,7 +82,9 @@ public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
                .put(new Info("alignas", "PROTOC_EXPORT", "LIBPROTOBUF_EXPORT", "PROTOBUF_EXPORT", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
-                             "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_ALWAYS_INLINE", "PROTOBUF_NOINLINE", "PROTOBUF_RETURNS_NONNULL",
+                             "PROTOBUF_MUSTTAIL", "PROTOBUF_TAILCALL", "PROTOBUF_NO_THREAD_SAFETY_ANALYSIS", "PROTOBUF_COLD", "PROTOBUF_THREAD_LOCAL", "PROTOBUF_CONSTINIT",
+                             "PROTOBUF_ATTRIBUTE_NO_DESTROY", "PROTOBUF_ATTRIBUTE_INIT_PRIORITY", "PROTOBUF_PRAGMA_INIT_SEG", "PROTOBUF_ATTRIBUTE_WEAK",
+                             "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_ALWAYS_INLINE", "PROTOBUF_NOINLINE", "PROTOBUF_NDEBUG_INLINE", "PROTOBUF_RETURNS_NONNULL",
                              "PROTOBUF_NAMESPACE_ID", "PROTOBUF_NAMESPACE_OPEN", "PROTOBUF_NAMESPACE_CLOSE", "PROTOBUF_FALLTHROUGH_INTENDED", "PROTOBUF_UNUSED",
                              "PROTOBUF_EXPORT_TEMPLATE_DEFINE", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_FUNC_ALIGN", "GOOGLE_ATTRIBUTE_NOINLINE",
                              "GOOGLE_PREDICT_TRUE", "GOOGLE_PREDICT_FALSE", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_ATTRIBUTE_RETURNS_NONNULL",
@@ -98,17 +100,19 @@ public class onnx implements InfoMapper {
                              "onnx::SequenceProto::DataType", "onnx::OptionalProto::DataType", "onnx::TypeProto::ValueCase",
                              "onnx::OpSchema::UseType", "onnx::OperatorStatus").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
-               .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("string", "std::string", "ConstStringParam", "google::protobuf::ConstStringParam", "StringPiece", "google::protobuf::StringPiece")
+                       .annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::TensorShapeProto_Dimension", "onnx::TensorShapeProto::Dimension", "TensorShapeProto_Dimension").pointerTypes("Dimension"))
                .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
                .put(new Info("std::vector<int64_t>").pointerTypes("LongVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("onnx::Dimension").pointerTypes("DimensionIR").define())
                .put(new Info("std::initializer_list", "std::function<void(OpSchema&&)>", "NodeKind", "graph_node_list",
-                             "graph_node_list_iterator", "std::vector<onnx::Tensor>::const_iterator",
+                             "graph_node_list_iterator", "onnx::DiscardUnknownFields", "std::vector<onnx::Tensor>::const_iterator",
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer",
                              "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass", "onnx::optimization::ImmutablePass",
+                             "TableStruct_onnx_2fonnx_2ddata_2eproto", "TableStruct_onnx_2fonnx_2dml_2eproto", "TableStruct_onnx_2fonnx_2doperators_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2doperators_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto", "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2dml_2eproto",
                              "PROTOBUF_INTERNAL_EXPORT_onnx_2fonnx_2ddata_2eproto").skip())
@@ -141,6 +145,7 @@ public class onnx implements InfoMapper {
                              "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "google::protobuf::UnknownField::LengthDelimited",
                              "google::protobuf::internal::empty_string_once_init_", "google::protobuf::SourceLocation::leading_detached_comments", "onnx::_TypeProto_default_instance_",
+                             "google::protobuf::internal::MergeFromImpl", "google::protobuf::internal::AuxiliaryParseTableField", "google::protobuf::internal::ConstantInitialized",
                              "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_", "onnx::_SparseTensorProto_default_instance_",
                              "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_", "onnx::_TrainingInfoProto_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",

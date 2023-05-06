@@ -40,7 +40,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
 // #endif
   /** \brief Device type string
    *
-   * Valid settings are one of: "CPU_FP32", "CPU_FP16", "GPU_FP32", "GPU_FP16", "MYRIAD_FP16", "VAD-M_FP16" or "VAD-F_FP32"
+   * Valid settings are one of: "CPU_FP32", "CPU_FP16", "GPU_FP32", "GPU_FP16"
    */
   public native @Cast("const char*") BytePointer device_type(); public native OrtOpenVINOProviderOptions device_type(BytePointer setter);
   /** 0 = disabled, nonzero = enabled */
@@ -48,7 +48,7 @@ public class OrtOpenVINOProviderOptions extends Pointer {
   public native @Cast("const char*") BytePointer device_id(); public native OrtOpenVINOProviderOptions device_id(BytePointer setter);
   /** 0 = Use default number of threads */
   public native @Cast("size_t") long num_of_threads(); public native OrtOpenVINOProviderOptions num_of_threads(long setter);
-  public native @Cast("const char*") BytePointer cache_dir(); public native OrtOpenVINOProviderOptions cache_dir(BytePointer setter);          // path is set to empty by default
+  public native @Cast("const char*") BytePointer cache_dir(); public native OrtOpenVINOProviderOptions cache_dir(BytePointer setter);  // path is set to empty by default
   public native Pointer context(); public native OrtOpenVINOProviderOptions context(Pointer setter);
   /** 0 = disabled, nonzero = enabled */
   public native @Cast("unsigned char") byte enable_opencl_throttling(); public native OrtOpenVINOProviderOptions enable_opencl_throttling(byte setter);

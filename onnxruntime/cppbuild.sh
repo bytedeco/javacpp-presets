@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export ARCH_FLAGS=
+export ARCH_FLAGS="--allow_running_as_root"
 export DNNL_FLAGS="--use_dnnl"
 export OPENMP_FLAGS= # "--use_openmp"
 export CUDACXX="/usr/local/cuda/bin/nvcc"
@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.14.1
+ONNXRUNTIME=rel-1.15.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -33,7 +33,7 @@ if [[ ! -d onnxruntime ]]; then
 fi
 cd onnxruntime
 git reset --hard
-git checkout v$ONNXRUNTIME
+git checkout $ONNXRUNTIME
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 
@@ -41,7 +41,7 @@ case $PLATFORM in
     linux-arm64)
         export CC="aarch64-linux-gnu-gcc"
         export CXX="aarch64-linux-gnu-g++"
-        export ARCH_FLAGS="--arm64 --path_to_protoc_exe $INSTALL_PATH/build/protoc"
+        export ARCH_FLAGS="$ARCH_FLAGS --arm64"
         export DNNL_FLAGS=
         ;;
     windows-*)
@@ -52,17 +52,19 @@ case $PLATFORM in
         fi
         export CC="cl.exe"
         export CXX="cl.exe"
+        export ARCH_FLAGS=
         export PYTHON_BIN_PATH=$(which python.exe)
         ;;
 esac
 
-if [[ -n "$ARCH_FLAGS" ]]; then
-    # build host version of protoc
-    cd ../build
-    CC= CXX= "$CMAKE" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../onnxruntime/cmake/external/protobuf/cmake
-    CC= CXX= "$CMAKE" --build . --parallel $MAKEJ
-    cd ../onnxruntime
-fi
+#if [[ -n "$ARCH_FLAGS" ]]; then
+#    # build host version of protoc
+#    cd ../build
+#    CC= CXX= "$CMAKE" -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../onnxruntime/cmake/external/protobuf/cmake
+#    CC= CXX= "$CMAKE" --build . --parallel $MAKEJ
+#    cd ../onnxruntime
+#    export ARCH_FLAGS="$ARCH_FLAGS --path_to_protoc_exe $INSTALL_PATH/build/protoc"
+#fi
 
 sedinplace 's/cmake_minimum_required(VERSION 3...)/cmake_minimum_required(VERSION 3.16)/g' cmake/CMakeLists.txt
 sedinplace '/COMPILE_WARNING_AS_ERROR/d' cmake/CMakeLists.txt
@@ -84,7 +86,7 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v2.7.3)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.1)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -100,6 +102,8 @@ sedinplace 's/round(/roundf(/g' onnxruntime/core/providers/cuda/tensor/resize_im
 sedinplace 's/, dims_span);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_reduce.cc
 sedinplace 's/, data_dims);/);/g' onnxruntime/core/providers/dnnl/subgraph/dnnl_squeeze.cc
 sedinplace 's/, dims);/);/g' onnxruntime/contrib_ops/cuda/quantization/qordered_ops/qordered_qdq.cc
+sedinplace '/omp_get_max_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
+sedinplace '/omp_set_num_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
 sedinplace 's/-gencode=arch=compute_52,code=sm_52/-arch=sm_50/g' cmake/CMakeLists.txt
@@ -129,6 +133,8 @@ sedinplace 's/copy = malloc/copy = (char*)malloc/g' java/src/main/native/OrtJniU
 sedinplace 's/floatArr = malloc/floatArr = (float*)malloc/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace 's/offsets = malloc/offsets = (size_t*)malloc/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace 's/tempBuffer = malloc/tempBuffer = (char*)malloc/g' java/src/main/native/OrtJniUtil.cpp
+sedinplace 's/offsets = allocarray/offsets = (size_t*)allocarray/g' java/src/main/native/OrtJniUtil.cpp
+sedinplace 's/tempBuffer = realloc/tempBuffer = (char*)realloc/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace 's/Throw(javaException)/Throw((jthrowable)javaException)/g' java/src/main/native/OrtJniUtil.cpp
 sedinplace '/jint JNI_OnLoad/,/}/d' java/src/main/native/OrtJniUtil.cpp
 sedinplace '/static synchronized void init() throws IOException {/a\
@@ -139,6 +145,10 @@ sedinplace 's/Names = malloc/Names = (const char**)malloc/g' java/src/main/nativ
 sedinplace 's/Strings = malloc/Strings = (jobject*)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/inputValuePtrs = malloc/inputValuePtrs = (const OrtValue**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/outputValues = malloc/outputValues = (OrtValue**)malloc/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
+sedinplace 's/Names = allocarray/Names = (const char**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
+sedinplace 's/Strings = allocarray/Strings = (jobject*)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
+sedinplace 's/inputValuePtrs = allocarray/inputValuePtrs = (const OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
+sedinplace 's/outputValues = allocarray/outputValues = (OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/(\*jniEnv)->GetMethodID(/jniEnv->GetMethodID(/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/jniEnv, metadataClazz/metadataClazz/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
