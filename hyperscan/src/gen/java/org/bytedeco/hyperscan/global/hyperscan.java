@@ -2382,7 +2382,7 @@ public static final long HS_OFFSET_PAST_HORIZON =    (~0L);
 
 public static final int HS_MAJOR =      5;
 public static final int HS_MINOR =      4;
-public static final int HS_PATCH =      1;
+public static final int HS_PATCH =      2;
 
 // #include "hs_compile.h"
 // #include "hs_runtime.h"

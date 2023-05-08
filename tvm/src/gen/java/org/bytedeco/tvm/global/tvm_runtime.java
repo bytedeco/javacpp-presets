@@ -887,6 +887,13 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #define TVM_DLL EMSCRIPTEN_KEEPALIVE
 // #endif
 
+// helper macro to suppress unused warning
+// #if defined(__GNUC__)
+// #define TVM_ATTRIBUTE_UNUSED __attribute__((unused))
+// #else
+// #define TVM_ATTRIBUTE_UNUSED
+// #endif
+
 // #ifndef TVM_DLL
 // #ifdef _WIN32
 // #ifdef TVM_EXPORTS
@@ -900,7 +907,7 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.11.1";
+public static final String TVM_VERSION = "0.12.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
@@ -2479,6 +2486,7 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #ifndef TVM_RUNTIME_CONTAINER_STRING_H_
 // #define TVM_RUNTIME_CONTAINER_STRING_H_
 
+// #include <dmlc/endian.h>
 // #include <dmlc/logging.h>
 // #include <tvm/runtime/container/base.h>
 // #include <tvm/runtime/logging.h>
@@ -2633,14 +2641,6 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #include <vector>
 
 // alias DLDevice
-
-// A 'null' device type, does not correspond to any DLDeviceType enum.
-// TODO(mbs): This is to help us as we transition away from representing the 'homogenous' case
-// as a singleton target map indexed by the invalid DLDeviceType '0'.
-@Namespace("tvm") @MemberGetter public static native @Cast("const DLDeviceType") int kNullDeviceType();
-
-// An 'invalid' device type, does not correspond to any DLDeviceType enum.
-@Namespace("tvm") @MemberGetter public static native @Cast("const DLDeviceType") int kInvalidDeviceType();
 // Targeting ../NDArray.java
 
 
@@ -2797,6 +2797,35 @@ public static final int USE_FALLBACK_STL_MAP = 0;
 // #include <string>
 // #include <unordered_map>
 // #include <vector>
+
+/**
+ * \brief Property of runtime module
+ * We classify the property of runtime module into the following categories.
+ */
+/** enum tvm::runtime::ModulePropertyMask */
+public static final int
+  /** \brief kBinarySerializable
+   *  we can serialize the module to the stream of bytes. CUDA/OpenCL/JSON
+   * runtime are representative examples. A binary exportable module can be integrated into final
+   * runtime artifact by being serialized as data into the artifact, then deserialized at runtime.
+   * This class of modules must implement SaveToBinary, and have a matching deserializer registered
+   * as 'runtime.module.loadbinary_<type_key>'.
+   */
+  kBinarySerializable = 0b001,
+  /** \brief kRunnable
+   * we can run the module directly. LLVM/CUDA/JSON runtime, executors (e.g,
+   * virtual machine) runtimes are runnable. Non-runnable modules, such as CSourceModule, requires a
+   * few extra steps (e.g,. compilation, link) to make it runnable.
+   */
+  kRunnable = 0b010,
+  /** \brief kDSOExportable
+   * we can export the module as DSO. A DSO exportable module (e.g., a
+   * CSourceModuleNode of type_key 'c') can be incorporated into the final runtime artifact (ie
+   * shared library) by compilation and/or linking using the external compiler (llvm, nvcc, etc).
+   * DSO exportable modules must implement SaveToFile. In general, DSO exportable modules are not
+   * runnable unless there is a special support like JIT for {@code LLVMModule}.
+   */
+  kDSOExportable = 0b100;
 // Targeting ../Module.java
 
 
