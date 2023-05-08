@@ -1541,6 +1541,13 @@ public static final int CL_VERSION_PATCH_MASK = ((1 << CL_VERSION_PATCH_BITS) - 
 
 /********************************************************************************************************/
 
+/* CL_NO_PROTOTYPES implies CL_NO_CORE_PROTOTYPES: */
+// #if defined(CL_NO_PROTOTYPES) && !defined(CL_NO_CORE_PROTOTYPES)
+// #define CL_NO_CORE_PROTOTYPES
+// #endif
+
+// #if !defined(CL_NO_CORE_PROTOTYPES)
+
 /* Platform API */
 public static native @Cast("cl_int") int clGetPlatformIDs(@Cast("cl_uint") int num_entries,
                  @Cast("cl_platform_id*") PointerPointer platforms,
@@ -3270,6 +3277,8 @@ public static native @Cast("cl_int") @Deprecated int clEnqueueTask(_cl_command_q
               @Cast("cl_uint") int num_events_in_wait_list,
               @Cast("const cl_event*") @ByPtrPtr _cl_event event_wait_list,
               @ByPtrPtr _cl_event event);
+
+// #endif /* !defined(CL_NO_CORE_PROTOTYPES) */
 
 // #ifdef __cplusplus
 // #endif

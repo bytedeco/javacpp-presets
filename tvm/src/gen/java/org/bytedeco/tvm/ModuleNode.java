@@ -136,19 +136,13 @@ public class ModuleNode extends TVMObject {
   public native @StdVector Module imports();
 
   /**
-   * \brief Returns true if this module is 'DSO exportable'.
-   *
-   * A DSO exportable module (eg a CSourceModuleNode of type_key 'c') can be incorporated into the
-   * final runtime artifact (ie shared library) by compilation and/or linking using the external
-   * compiler (llvm, nvcc, etc). DSO exportable modules must implement SaveToFile.
-   *
-   * By contrast, non-DSO exportable modules (eg CUDAModuleNode of type_key 'cuda') typically must
-   * be incorporated into the final runtime artifact by being serialized as data into the
-   * artifact, then deserialized at runtime. Non-DSO exportable modules must implement SaveToBinary,
-   * and have a matching deserializer registered as 'runtime.module.loadbinary_<type_key>'.
-   *
-   * The default implementation returns false.
+   * \brief Returns bitmap of property.
+   * By default, none of the property is set. Derived class can override this function and set its
+   * own property.
    */
+  public native int GetPropertyMask();
+
+  /** \brief Returns true if this module is 'DSO exportable'. */
   public native @Cast("bool") boolean IsDSOExportable();
 
   /**

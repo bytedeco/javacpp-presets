@@ -231,7 +231,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.14.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.15.x  https://github.com/microsoft/onnxruntime
- * TVM 0.11.x  https://github.com/apache/tvm
+ * TVM 0.12.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>hyperscan-platform</artifactId>
-            <version>5.4.1-1.5.9-SNAPSHOT</version>
+            <version>5.4.2-1.5.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

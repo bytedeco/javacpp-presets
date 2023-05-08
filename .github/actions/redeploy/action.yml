@@ -82,7 +82,7 @@ runs:
         done
 
         for LINE in $(sort -u dependencies.txt); do
-            if [[ $LINE =~ $GROUP:([^:]*):jar:([^:]*):compile ]]; then
+            if [[ $LINE =~ $GROUP:([^:]*):jar:([^:]*-SNAPSHOT):compile ]]; then
                 ARTIFACT=${BASH_REMATCH[1]}
                 VERSION=${BASH_REMATCH[2]}
                 FILES=
