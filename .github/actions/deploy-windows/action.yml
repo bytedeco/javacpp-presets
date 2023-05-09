@@ -27,8 +27,8 @@ runs:
         rm "C:/msys64/mingw32/bin/clang-cl.exe" "C:/msys64/mingw64/bin/clang-cl.exe" "C:/msys64/mingw32/bin/cmake.exe" "C:/msys64/mingw64/bin/cmake.exe"
         rm "C:/Strawberry/c/lib/libz.a" "C:/Strawberry/c/lib/libzlib.a" "C:/Strawberry/c/lib/libzdll.a"
 
-        choco uninstall maven
-        choco install maven --version 3.6.3 --force
+        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        bash -c "tar -xzf apache-maven-3.6.3-bin.tar.gz -C 'C:/Program Files/'"
 
         python -m pip install gdown || python -m pip install gdown
 
@@ -127,9 +127,9 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=1MTNEhrOC2rTT1itn_Z-SUK_Ck_XRxLbR
-          unzip TensorRT-8.6.0.12.Windows10.x86_64.cuda-12.0.zip
-          move TensorRT-8.6.0.12 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
+          python -m gdown.cli https://drive.google.com/uc?id=1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
+          unzip TensorRT-8.6.1.6.Windows10.x86_64.cuda-12.0.zip
+          move TensorRT-8.6.1.6 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
@@ -218,7 +218,7 @@ runs:
           echo CUDA Version 12.1.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\version.txt"
         )
         set "CCACHE_DIR=%USERPROFILE%\ccache"
-        set "PATH=C:\hostedtoolcache\windows\Python\3.8.10\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.6.3\bin;%PATH%"
+        set "PATH=C:\hostedtoolcache\windows\Python\3.8.10\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"
 
         where bash
         where curl

@@ -78,21 +78,27 @@ public static final int NV_ONNX_PARSER_MINOR = 1;
 public static final int NV_ONNX_PARSER_PATCH = 0;
 
 
+
+//!
 //!
 //!
 @MemberGetter public static native int NV_ONNX_PARSER_VERSION();
 public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 
-/** \typedef SubGraph_t
+/**
+ *  \typedef SubGraph_t
  * 
  *  \brief The data structure containing the parsing capability of
  *  a set of nodes in an ONNX graph.
  *  */
 
+
+//!
 //!
 //!
 
-/** \typedef SubGraphCollection_t
+/**
+ *  \typedef SubGraphCollection_t
  * 
  *  \brief The data structure containing all SubGraph_t partitioned
  *  out of an ONNX graph.
@@ -109,12 +115,13 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
  *  \brief The TensorRT ONNX parser API namespace
  *  */
 
-@Namespace("nvonnxparser") public static native @Name("EnumMax<nvonnxparser::ErrorCode>") int ErrorCodeEnumMax();
 
-/** \enum ErrorCode
- *
- * \brief the type of parser error
- */
+
+/**
+ *  \enum ErrorCode
+ * 
+ *  \brief The type of error that the parser may return
+ *  */
 @Namespace("nvonnxparser") public enum ErrorCode {
     kSUCCESS(0),
     kINTERNAL_ERROR(1),
@@ -132,6 +139,41 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
     public ErrorCode intern() { for (ErrorCode e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
+
+/**
+ *  Maximum number of flags in the ErrorCode enum.
+ * 
+ *  @see ErrorCode
+ *  */
+
+
+/**
+ *  \brief Represents one or more OnnxParserFlag values using binary OR
+ *  operations, e.g., 1U << OnnxParserFlag::kNATIVE_INSTANCENORM
+ * 
+ *  @see IParser::setFlags() and IParser::getFlags()
+ *  */
+
+@Namespace("nvonnxparser") public enum OnnxParserFlag {
+    /** Parse the ONNX model into the INetworkDefinition with the intention of using TensorRT's native layer
+     *  implementation over the plugin implementation for InstanceNormalization nodes. This flag is planned to be
+     *  deprecated in TensorRT 8.7 and removed in TensorRT 9.0. This flag is required when building version-compatible
+     *  or hardware-compatible engines. There may be performance degradations when this flag is enabled. */
+    kNATIVE_INSTANCENORM(0);
+
+    public final int value;
+    private OnnxParserFlag(int v) { this.value = v; }
+    private OnnxParserFlag(OnnxParserFlag e) { this.value = e.value; }
+    public OnnxParserFlag intern() { for (OnnxParserFlag e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+/**
+ *  Maximum number of flags in the OnnxParserFlag enum.
+ * 
+ *  @see OnnxParserFlag
+ *  */
+
 // Targeting ../nvonnxparser/IParserError.java
 
 
@@ -144,20 +186,21 @@ public static final int NV_ONNX_PARSER_VERSION = NV_ONNX_PARSER_VERSION();
 public static native Pointer createNvOnnxParser_INTERNAL(Pointer network, Pointer logger, int version);
 public static native int getNvOnnxParserVersion();
 
-/** \brief Create a new parser object
- *
- * @param network The network definition that the parser will write to
- * @param logger The logger to use
- * @return a new parser object or NULL if an error occurred
- *
- * Any input dimensions that are constant should not be changed after parsing,
- * because correctness of the translation may rely on those constants.
- * Changing a dynamic input dimension, i.e. one that translates to -1 in
- * TensorRT, to a constant is okay if the constant is consistent with the model.
- * Each instance of the parser is designed to only parse one ONNX model once.
- *
- * @see IParser
- */
+/**
+ *  \brief Create a new parser object
+ * 
+ *  @param network The network definition that the parser will write to
+ *  @param logger The logger to use
+ *  @return a new parser object or NULL if an error occurred
+ * 
+ *  Any input dimensions that are constant should not be changed after parsing,
+ *  because correctness of the translation may rely on those constants.
+ *  Changing a dynamic input dimension, i.e. one that translates to -1 in
+ *  TensorRT, to a constant is okay if the constant is consistent with the model.
+ *  Each instance of the parser is designed to only parse one ONNX model once.
+ * 
+ *  @see IParser
+ *  */
 @Namespace("nvonnxparser") public static native IParser createParser(@ByRef INetworkDefinition network, @ByRef ILogger logger);
 
  // namespace

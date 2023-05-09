@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 8.6.0.12  https://developer.nvidia.com/tensorrt
+ * TensorRT 8.6.1.6  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

@@ -27,31 +27,31 @@ public class LibRaw extends Pointer {
   public LibRaw() { super((Pointer)null); allocate(); }
   private native void allocate();
   public native libraw_output_params_t output_params_ptr();
-  public native int open_file(@Cast("const char*") BytePointer fname,
-                  @Cast("INT64") long max_buffered_sz/*=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE*/);
+// #ifndef LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #else
   public native int open_file(@Cast("const char*") BytePointer fname);
-  public native int open_file(String fname,
-                  @Cast("INT64") long max_buffered_sz/*=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE*/);
   public native int open_file(String fname);
 // #if defined(_WIN32) || defined(WIN32)
 // #endif
-  public native int open_buffer(Pointer buffer, @Cast("size_t") long size);
+
+// #endif
+  public native int open_buffer(@Const Pointer buffer, @Cast("size_t") long size);
   public native int open_datastream(LibRaw_abstract_datastream arg0);
-  public native int open_bayer(@Cast("unsigned char*") BytePointer data, @Cast("unsigned") int datalen,
+  public native int open_bayer(@Cast("const unsigned char*") BytePointer data, @Cast("unsigned") int datalen,
                            @Cast("ushort") short _raw_width, @Cast("ushort") short _raw_height,
                            @Cast("ushort") short _left_margin, @Cast("ushort") short _top_margin,
                            @Cast("ushort") short _right_margin, @Cast("ushort") short _bottom_margin,
                            @Cast("unsigned char") byte procflags, @Cast("unsigned char") byte bayer_pattern,
                            @Cast("unsigned") int unused_bits, @Cast("unsigned") int otherflags,
                            @Cast("unsigned") int black_level);
-  public native int open_bayer(@Cast("unsigned char*") ByteBuffer data, @Cast("unsigned") int datalen,
+  public native int open_bayer(@Cast("const unsigned char*") ByteBuffer data, @Cast("unsigned") int datalen,
                            @Cast("ushort") short _raw_width, @Cast("ushort") short _raw_height,
                            @Cast("ushort") short _left_margin, @Cast("ushort") short _top_margin,
                            @Cast("ushort") short _right_margin, @Cast("ushort") short _bottom_margin,
                            @Cast("unsigned char") byte procflags, @Cast("unsigned char") byte bayer_pattern,
                            @Cast("unsigned") int unused_bits, @Cast("unsigned") int otherflags,
                            @Cast("unsigned") int black_level);
-  public native int open_bayer(@Cast("unsigned char*") byte[] data, @Cast("unsigned") int datalen,
+  public native int open_bayer(@Cast("const unsigned char*") byte[] data, @Cast("unsigned") int datalen,
                            @Cast("ushort") short _raw_width, @Cast("ushort") short _raw_height,
                            @Cast("ushort") short _left_margin, @Cast("ushort") short _top_margin,
                            @Cast("ushort") short _right_margin, @Cast("ushort") short _bottom_margin,
@@ -62,6 +62,7 @@ public class LibRaw extends Pointer {
   public native void recycle_datastream();
   public native int unpack();
   public native int unpack_thumb();
+  public native int unpack_thumb_ex(int arg0);
   public native int thumbOK(@Cast("INT64") long maxsz/*=-1*/);
   public native int thumbOK();
   public native int adjust_sizes_info_only();
@@ -72,8 +73,9 @@ public class LibRaw extends Pointer {
   public native void raw2image_start();
   public native void free_image();
   public native int adjust_maximum();
+  public native int adjust_to_raw_inset_crop(@Cast("unsigned") int mask, float maxcrop/*=0.55f*/);
+  public native int adjust_to_raw_inset_crop(@Cast("unsigned") int mask); 
   public native void set_exifparser_handler(exif_parser_callback cb, Pointer data);
-  public native void set_memerror_handler(memory_callback cb, Pointer data);
   public native void set_dataerror_handler(data_callback func, Pointer data);
   public native void set_progress_handler(progress_callback pcb, Pointer data);
 

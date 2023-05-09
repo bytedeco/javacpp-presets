@@ -39,7 +39,6 @@ public class libraw_output_params_t extends Pointer {
     @MemberGetter public native DoublePointer gamm();        /* -g */
     public native float user_mul(int i); public native libraw_output_params_t user_mul(int i, float setter);
     @MemberGetter public native FloatPointer user_mul();     /* -r mul0 mul1 mul2 mul3 */
-    public native @Cast("unsigned") int shot_select(); public native libraw_output_params_t shot_select(int setter);  /* -s */
     public native float bright(); public native libraw_output_params_t bright(float setter);          /* -b */
     public native float threshold(); public native libraw_output_params_t threshold(float setter);       /* -n */
     public native int half_size(); public native libraw_output_params_t half_size(int setter);         /* -h */
@@ -55,6 +54,7 @@ public class libraw_output_params_t extends Pointer {
     public native @Cast("char*") BytePointer dark_frame(); public native libraw_output_params_t dark_frame(BytePointer setter);      /* -K */
     public native int output_bps(); public native libraw_output_params_t output_bps(int setter);        /* -4 */
     public native int output_tiff(); public native libraw_output_params_t output_tiff(int setter);       /* -T */
+    public native int output_flags(); public native libraw_output_params_t output_flags(int setter);
     public native int user_flip(); public native libraw_output_params_t user_flip(int setter);         /* -t */
     public native int user_qual(); public native libraw_output_params_t user_qual(int setter);         /* -q */
     public native int user_black(); public native libraw_output_params_t user_black(int setter);        /* -k */
@@ -74,25 +74,8 @@ public class libraw_output_params_t extends Pointer {
     public native int exp_correc(); public native libraw_output_params_t exp_correc(int setter);
     public native float exp_shift(); public native libraw_output_params_t exp_shift(float setter);
     public native float exp_preser(); public native libraw_output_params_t exp_preser(float setter);
-    /* Raw speed */
-    public native int use_rawspeed(); public native libraw_output_params_t use_rawspeed(int setter);
-    /* DNG SDK */
-    public native int use_dngsdk(); public native libraw_output_params_t use_dngsdk(int setter);
     /* Disable Auto-scale */
     public native int no_auto_scale(); public native libraw_output_params_t no_auto_scale(int setter);
     /* Disable intepolation */
     public native int no_interpolation(); public native libraw_output_params_t no_interpolation(int setter);
-    /*  int x3f_flags; */
-    /* Sony ARW2 digging mode */
-    /* int sony_arw2_options; */
-    public native @Cast("unsigned") int raw_processing_options(); public native libraw_output_params_t raw_processing_options(int setter);
-    public native @Cast("unsigned") int max_raw_memory_mb(); public native libraw_output_params_t max_raw_memory_mb(int setter);
-    public native int sony_arw2_posterization_thr(); public native libraw_output_params_t sony_arw2_posterization_thr(int setter);
-    /* Nikon Coolscan */
-    public native float coolscan_nef_gamma(); public native libraw_output_params_t coolscan_nef_gamma(float setter);
-    public native @Cast("char") byte p4shot_order(int i); public native libraw_output_params_t p4shot_order(int i, byte setter);
-    @MemberGetter public native @Cast("char*") BytePointer p4shot_order();
-    /* Custom camera list */
-    public native @Cast("char*") BytePointer custom_camera_strings(int i); public native libraw_output_params_t custom_camera_strings(int i, BytePointer setter);
-    public native @Cast("char**") PointerPointer custom_camera_strings(); public native libraw_output_params_t custom_camera_strings(PointerPointer setter);
   }

@@ -39,6 +39,7 @@ public class libraw_makernotes_t extends Pointer {
     public native @ByRef libraw_panasonic_makernotes_t panasonic(); public native libraw_makernotes_t panasonic(libraw_panasonic_makernotes_t setter);
     public native @ByRef libraw_pentax_makernotes_t pentax(); public native libraw_makernotes_t pentax(libraw_pentax_makernotes_t setter);
     public native @ByRef libraw_p1_makernotes_t phaseone(); public native libraw_makernotes_t phaseone(libraw_p1_makernotes_t setter);
+    public native @ByRef libraw_ricoh_makernotes_t ricoh(); public native libraw_makernotes_t ricoh(libraw_ricoh_makernotes_t setter);
     public native @ByRef libraw_samsung_makernotes_t samsung(); public native libraw_makernotes_t samsung(libraw_samsung_makernotes_t setter);
     public native @ByRef libraw_metadata_common_t common(); public native libraw_makernotes_t common(libraw_metadata_common_t setter);
   }

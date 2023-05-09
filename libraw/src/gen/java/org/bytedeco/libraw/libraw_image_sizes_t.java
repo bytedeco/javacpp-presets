@@ -42,5 +42,7 @@ public class libraw_image_sizes_t extends Pointer {
     public native int flip(); public native libraw_image_sizes_t flip(int setter);
     public native int mask(int i, int j); public native libraw_image_sizes_t mask(int i, int j, int setter);
     @MemberGetter public native @Cast("int(* /*[8]*/ )[4]") IntPointer mask();
-    public native @ByRef libraw_raw_inset_crop_t raw_inset_crop(); public native libraw_image_sizes_t raw_inset_crop(libraw_raw_inset_crop_t setter);
+    public native @Cast("ushort") short raw_aspect(); public native libraw_image_sizes_t raw_aspect(short setter);
+    public native @ByRef libraw_raw_inset_crop_t raw_inset_crops(int i); public native libraw_image_sizes_t raw_inset_crops(int i, libraw_raw_inset_crop_t setter);
+    @MemberGetter public native libraw_raw_inset_crop_t raw_inset_crops();
   }

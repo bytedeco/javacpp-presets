@@ -14,12 +14,15 @@ runs:
         echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
         SCL_ENABLE="devtoolset-9 rh-python38"
+        SCL_INSTALL="rh-python38-python-urllib3"
         CENTOS_VERSION=$(rpm --eval '%{centos_ver}')
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           find /etc/yum.repos.d/ -name *.repo | xargs -i sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/$releasever/6.10/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' {}
           SCL_ENABLE="devtoolset-9 rh-python36 python27"
+          SCL_INSTALL=""
         fi
         echo "SCL_ENABLE=$SCL_ENABLE" >> $GITHUB_ENV
+        echo "SCL_INSTALL=$SCL_INSTALL" >> $GITHUB_ENV
 
         yum -y update
         yum -y install centos-release-scl-rh epel-release
@@ -27,7 +30,7 @@ runs:
           sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
         fi
         curl -L "https://negativo17.org/repos/epel-multimedia.repo" | sed -e '/^\[[a-z\-]*\]/a priority=99' > /etc/yum.repos.d/epel-multimedia.repo
-        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        yum -y install $SCL_ENABLE $SCL_INSTALL rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
         # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
         sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9/include/avx512fintrin.h
         source scl_source enable $SCL_ENABLE || true
@@ -70,10 +73,10 @@ runs:
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda-repo-rhel7-12-1-local-12.1.1_530.30.02-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.9.0.131-1.cuda12.1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.9.0.131-1.cuda12.1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.17.1-1+cuda12.1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.17.1-1+cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.9.1.23-1.cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.9.1.23-1.cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.18.1-1+cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.18.1-1+cuda12.1.x86_64.rpm
 
           rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-* libcudnn*.rpm libnccl*.rpm
           pushd /var/cuda-repo-rhel7-12-1-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
@@ -121,8 +124,8 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=10H_HJUHy2c6w8AlrFbxvySFaNwhrmmuj
-          tar -hxvf TensorRT-8.6.0.12.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 

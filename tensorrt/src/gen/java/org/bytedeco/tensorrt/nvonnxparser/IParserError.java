@@ -23,32 +23,54 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 import static org.bytedeco.tensorrt.global.nvonnxparser.*;
 
 
-/** \class IParserError
- *
- * \brief an object containing information about an error
- */
+/**
+ *  \class IParserError
+ * 
+ *  \brief an object containing information about an error
+ *  */
 @Namespace("nvonnxparser") @Properties(inherit = org.bytedeco.tensorrt.presets.nvonnxparser.class)
 public class IParserError extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IParserError(Pointer p) { super(p); }
 
-    /** \brief the error code
-     */
+    /**
+     * \brief the error code
+     *  */
+    
+    //!
+    //!
     public native org.bytedeco.tensorrt.global.nvonnxparser.ErrorCode code();
-    /** \brief description of the error
-     */
+    /**
+     * \brief description of the error
+     *  */
+    
+    //!
+    //!
     public native String desc();
-    /** \brief source file in which the error occurred
-     */
+    /**
+     * \brief source file in which the error occurred
+     *  */
+    
+    //!
+    //!
     public native String file();
-    /** \brief source line at which the error occurred
-     */
+    /**
+     * \brief source line at which the error occurred
+     *  */
+    
+    //!
+    //!
     public native int line();
-    /** \brief source function in which the error occurred
-     */
+    /**
+     * \brief source function in which the error occurred
+     *  */
+    
+    //!
+    //!
     public native String func();
-    /** \brief index of the ONNX model node in which the error occurred
-     */
+    /**
+     * \brief index of the ONNX model node in which the error occurred
+     *  */
     public native int node();
 }

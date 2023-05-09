@@ -48,4 +48,8 @@ public class libraw_metadata_common_t extends Pointer {
     public native @Cast("ushort") short ColorSpace(); public native libraw_metadata_common_t ColorSpace(short setter);
     public native @Cast("char") byte firmware(int i); public native libraw_metadata_common_t firmware(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer firmware();
+    public native float ExposureCalibrationShift(); public native libraw_metadata_common_t ExposureCalibrationShift(float setter);
+    public native @ByRef libraw_afinfo_item_t afdata(int i); public native libraw_metadata_common_t afdata(int i, libraw_afinfo_item_t setter);
+    @MemberGetter public native libraw_afinfo_item_t afdata();
+    public native int afcount(); public native libraw_metadata_common_t afcount(int setter);
   }

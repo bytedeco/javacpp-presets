@@ -29,17 +29,19 @@ public class libraw_pentax_makernotes_t extends Pointer {
           return new libraw_pentax_makernotes_t((Pointer)this).offsetAddress(i);
       }
   
-    public native @Cast("ushort") short FocusMode(); public native libraw_pentax_makernotes_t FocusMode(short setter);
-    public native @Cast("ushort") short AFPointSelected(); public native libraw_pentax_makernotes_t AFPointSelected(short setter);
-    public native @Cast("unsigned") int AFPointsInFocus(); public native libraw_pentax_makernotes_t AFPointsInFocus(int setter);
-    public native @Cast("ushort") short FocusPosition(); public native libraw_pentax_makernotes_t FocusPosition(short setter);
     public native @Cast("uchar") byte DriveMode(int i); public native libraw_pentax_makernotes_t DriveMode(int i, byte setter);
     @MemberGetter public native @Cast("uchar*") BytePointer DriveMode();
+    public native @Cast("ushort") short FocusMode(int i); public native libraw_pentax_makernotes_t FocusMode(int i, short setter);
+    @MemberGetter public native @Cast("ushort*") ShortPointer FocusMode();
+    public native @Cast("ushort") short AFPointSelected(int i); public native libraw_pentax_makernotes_t AFPointSelected(int i, short setter);
+    @MemberGetter public native @Cast("ushort*") ShortPointer AFPointSelected();
+    public native @Cast("ushort") short AFPointSelected_Area(); public native libraw_pentax_makernotes_t AFPointSelected_Area(short setter);
+    public native int AFPointsInFocus_version(); public native libraw_pentax_makernotes_t AFPointsInFocus_version(int setter);
+    public native @Cast("unsigned") int AFPointsInFocus(); public native libraw_pentax_makernotes_t AFPointsInFocus(int setter);
+    public native @Cast("ushort") short FocusPosition(); public native libraw_pentax_makernotes_t FocusPosition(short setter);
     public native short AFAdjustment(); public native libraw_pentax_makernotes_t AFAdjustment(short setter);
+    public native @Cast("uchar") byte AFPointMode(); public native libraw_pentax_makernotes_t AFPointMode(byte setter);
     public native @Cast("uchar") byte MultiExposure(); public native libraw_pentax_makernotes_t MultiExposure(byte setter); /* last bit is not "1" if ME is not used */
     public native @Cast("ushort") short Quality(); public native libraw_pentax_makernotes_t Quality(short setter); /* 4 is raw, 7 is raw w/ pixel shift, 8 is raw w/ dynamic
                        pixel shift */
-    /*    uchar AFPointMode;     */
-    /*    uchar SRResult;        */
-    /*    uchar ShakeReduction;  */
   }

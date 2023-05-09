@@ -1771,7 +1771,7 @@ import org.bytedeco.openblas.presets.openblas;
         ),
         @Platform(
             value = {"linux", "macosx", "windows"},
-            link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
+            link = {"c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
             preloadpath = {
                 "/usr/local/cuda-12.1/lib64/",
@@ -1806,7 +1806,7 @@ public class torch implements LoadEnabled, InfoMapper {
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvrtc", "myelin", "nvinfer",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "nvJitLink", "cusparse", "cudnn", "nccl", "nvrtc", "myelin", "nvinfer",
                          "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
@@ -1818,6 +1818,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("curand") ? "@.10"
                      : lib.equals("cudart") ? "@.12"
                      : lib.equals("nvrtc") ? "@.12"
+                     : lib.equals("nvJitLink") ? "@.12"
                      : "@.12";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
@@ -1828,6 +1829,7 @@ public class torch implements LoadEnabled, InfoMapper {
                      : lib.equals("curand") ? "64_10"
                      : lib.equals("cudart") ? "64_12"
                      : lib.equals("nvrtc") ? "64_120_0"
+                     : lib.equals("nvJitLink") ? "64_120_0"
                      : "64_12";
             } else {
                 continue; // no CUDA

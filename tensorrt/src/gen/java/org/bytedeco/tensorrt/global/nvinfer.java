@@ -48,9 +48,9 @@ public static final int NV_TENSORRT_MAJOR = 8;
 /** TensorRT minor version. */
 public static final int NV_TENSORRT_MINOR = 6;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 0;
+public static final int NV_TENSORRT_PATCH = 1;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 12;
+public static final int NV_TENSORRT_BUILD = 6;
 
 /** TensorRT LWS major version. */
 public static final int NV_TENSORRT_LWS_MAJOR = 0;
@@ -59,12 +59,15 @@ public static final int NV_TENSORRT_LWS_MINOR = 0;
 /** TensorRT LWS patch version. */
 public static final int NV_TENSORRT_LWS_PATCH = 0;
 
+// This #define is deprecated in TensorRT 8.6 and will be removed in 10.0. Use NV_TENSORRT_MAJOR.
 /** Shared object library major version number. */
 public static final int NV_TENSORRT_SONAME_MAJOR = 8;
+// This #define is deprecated in TensorRT 8.6 and will be removed in 10.0. Use NV_TENSORRT_MINOR.
 /** Shared object library minor version number. */
 public static final int NV_TENSORRT_SONAME_MINOR = 6;
+// This #define is deprecated in TensorRT 8.6 and will be removed in 10.0. Use NV_TENSORRT_PATCH.
 /** Shared object library patch version number. */
-public static final int NV_TENSORRT_SONAME_PATCH = 0;
+public static final int NV_TENSORRT_SONAME_PATCH = 1;
 
 /** An early access release */
 public static final int NV_TENSORRT_RELEASE_TYPE_EARLY_ACCESS = 0;
@@ -74,7 +77,7 @@ public static final int NV_TENSORRT_RELEASE_TYPE_RELEASE_CANDIDATE = 1;
 public static final int NV_TENSORRT_RELEASE_TYPE_GENERAL_AVAILABILITY = 2;
 
 /** TensorRT release type */
-public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_EARLY_ACCESS;
+public static final int NV_TENSORRT_RELEASE_TYPE = NV_TENSORRT_RELEASE_TYPE_GENERAL_AVAILABILITY;
 
 // #endif // NV_INFER_VERSION_H
 
@@ -3151,8 +3154,8 @@ public static native @NoException(true) ILogger getLogger();
     kDLA_GLOBAL_DRAM(3),
 
     /**
-     *  kTACTIC_DRAM is the host DRAM used by the optimizer to
-     *  run tactics. On embedded devices, where host and device memory are unified, this includes all device
+     *  kTACTIC_DRAM is the device DRAM used by the optimizer to
+     *  run tactics. On embedded devices, where host and device memory are unified, this includes all host
      *  memory required by TensorRT to build the network up to the point of each memory allocation.
      *  This defaults to 75% of totalGlobalMem as reported by cudaGetDeviceProperties when
      *  cudaGetDeviceProperties.embedded is true, and 100% otherwise.

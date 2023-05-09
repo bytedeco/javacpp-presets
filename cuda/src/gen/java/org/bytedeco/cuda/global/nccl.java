@@ -33,11 +33,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 17;
+public static final int NCCL_MINOR = 18;
 public static final int NCCL_PATCH = 1;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 21701;
+public static final int NCCL_VERSION_CODE = 21801;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -68,6 +68,7 @@ public static final int ncclSuccess                 = 0,
 
 // #define NCCL_CONFIG_UNDEF_INT INT_MIN
 // #define NCCL_CONFIG_UNDEF_PTR NULL
+public static final int NCCL_SPLIT_NOCOLOR = -1;
 // Targeting ../nccl/ncclConfig_t.java
 
 
@@ -82,7 +83,8 @@ public static final int ncclSuccess                 = 0,
 //   NCCL_CONFIG_UNDEF_INT,                    /* cgaClusterSize */
 //   NCCL_CONFIG_UNDEF_INT,                    /* minCTAs */
 //   NCCL_CONFIG_UNDEF_INT,                    /* maxCTAs */
-//   NCCL_CONFIG_UNDEF_PTR                     /* netName */
+//   NCCL_CONFIG_UNDEF_PTR,                    /* netName */
+//   NCCL_CONFIG_UNDEF_INT                     /* splitShare */
 // }
 
 /* Return the NCCL_VERSION_CODE of the NCCL library in the supplied integer.
@@ -155,6 +157,18 @@ public static native @Cast("ncclResult_t") int pncclCommDestroy(ncclComm comm);
  * that might still be running on the device. */
 public static native @Cast("ncclResult_t") int ncclCommAbort(ncclComm comm);
 public static native @Cast("ncclResult_t") int pncclCommAbort(ncclComm comm);
+
+/* Creates one or more communicators from an existing one.
+ * Ranks with the same color will end up in the same communicator.
+ * Within the new communicator, key will be used to order ranks.
+ * NCCL_SPLIT_NOCOLOR as color will indicate the rank will not be part of any group
+ * and will therefore return a NULL communicator.
+ * If config is NULL, the new communicator will inherit the original communicator's
+ * configuration*/
+public static native @Cast("ncclResult_t") int ncclCommSplit(ncclComm comm, int color, int key, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int ncclCommSplit(ncclComm comm, int color, int key, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @ByPtrPtr ncclComm newcomm, ncclConfig_t config);
+public static native @Cast("ncclResult_t") int pncclCommSplit(ncclComm comm, int color, int key, @Cast("ncclComm**") PointerPointer newcomm, ncclConfig_t config);
 
 /* Returns a string for each error code. */
 public static native @Cast("const char*") BytePointer ncclGetErrorString(@Cast("ncclResult_t") int result);

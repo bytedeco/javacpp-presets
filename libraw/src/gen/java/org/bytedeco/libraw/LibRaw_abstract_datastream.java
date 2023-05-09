@@ -29,7 +29,8 @@ public class LibRaw_abstract_datastream extends Pointer {
   public native int scanf_one(@Cast("const char*") BytePointer arg0, Pointer arg1);
   public native int scanf_one(String arg0, Pointer arg1);
   public native int eof();
-  public native Pointer make_jas_stream();
+// #ifdef LIBRAW_OLD_VIDEO_SUPPORT
+// #endif
   public native int jpeg_src(Pointer arg0);
   public native void buffering_off();
   /* reimplement in subclass to use parallel access in xtrans_load_raw() if

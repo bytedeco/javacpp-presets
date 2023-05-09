@@ -17,7 +17,7 @@ public class LibRaw extends org.bytedeco.libraw.presets.LibRaw {
 
 /* -*- C++ -*-
  * File: libraw_const.h
- * Copyright 2008-2020 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2021 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  * LibRaw error codes
 LibRaw is free software; you can redistribute it and/or modify
@@ -34,12 +34,24 @@ it under the terms of the one of two licenses as you choose:
 // #ifndef _LIBRAW_ERRORS_H
 // #define _LIBRAW_ERRORS_H
 
-public static final double LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD = 0.75;
-public static final double LIBRAW_DEFAULT_AUTO_BRIGHTNESS_THRESHOLD = 0.01;
+public static final double LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD = 0.75f;
+public static final double LIBRAW_DEFAULT_AUTO_BRIGHTNESS_THRESHOLD = 0.01f;
 /* limit allocation size, default is 2Gb */
 // #ifndef LIBRAW_MAX_ALLOC_MB_DEFAULT
 public static final long LIBRAW_MAX_ALLOC_MB_DEFAULT = 2048L;
 // #endif
+
+// #ifndef LIBRAW_MAX_NONDNG_RAW_FILE_SIZE
+public static final long LIBRAW_MAX_NONDNG_RAW_FILE_SIZE = 2147483647L;
+// #endif
+
+// #ifndef LIBRAW_MAX_DNG_RAW_FILE_SIZE
+// #ifdef USE_DNGSDK
+// #else
+public static final long LIBRAW_MAX_DNG_RAW_FILE_SIZE = 2147483647L;
+// #endif
+// #endif
+
 
 /* limit thumbnail size, default is 512Mb*/
 // #ifndef LIBRAW_MAX_THUMBNAIL_MB
@@ -55,6 +67,7 @@ public static final long LIBRAW_MAX_THUMBNAIL_MB = 512L;
 // #endif
 
 
+
 /* LibRaw uses own memory pool management, with LIBRAW_MSIZE (512)
 entries. It is enough for parsing/decoding non-damaged files, but
 may overflow on specially crafted files (eg. with many string values
@@ -67,20 +80,14 @@ LIBRAW_MEMPOOL_CHECK define will result in error on pool overflow */
 public static final int LIBRAW_MAX_METADATA_BLOCKS = 1024;
 public static final int LIBRAW_CBLACK_SIZE = 4104;
 public static final int LIBRAW_IFD_MAXCOUNT = 10;
+public static final int LIBRAW_THUMBNAIL_MAXCOUNT = 8;
 public static final int LIBRAW_CRXTRACKS_MAXCOUNT = 16;
+public static final int LIBRAW_AFDATA_MAXCOUNT = 4;
 
 public static final int LIBRAW_AHD_TILE = 512;
 
-public enum LibRaw_open_flags {
-	LIBRAW_OPEN_BIGFILE(1),
-	LIBRAW_OPEN_FILE(1<<1);
-
-    public final int value;
-    private LibRaw_open_flags(int v) { this.value = v; }
-    private LibRaw_open_flags(LibRaw_open_flags e) { this.value = e.value; }
-    public LibRaw_open_flags intern() { for (LibRaw_open_flags e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
+// #ifndef LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #endif
 
 public enum LibRaw_openbayer_patterns {
   LIBRAW_OPENBAYER_RGGB(0x94),
@@ -110,7 +117,10 @@ public enum LibRaw_dngfields_marks {
   LIBRAW_DNGFM_PREVIEWCS(1 << 11),
   LIBRAW_DNGFM_ASSHOTNEUTRAL(1 << 12),
   LIBRAW_DNGFM_BASELINEEXPOSURE(1 << 13),
-  LIBRAW_DNGFM_LINEARRESPONSELIMIT(1 << 14);
+  LIBRAW_DNGFM_LINEARRESPONSELIMIT(1 << 14),
+  LIBRAW_DNGFM_USERCROP(1 << 15),
+  LIBRAW_DNGFM_OPCODE1(1 << 16),
+  LIBRAW_DNGFM_OPCODE3(1 << 17);
 
     public final int value;
     private LibRaw_dngfields_marks(int v) { this.value = v; }
@@ -280,13 +290,28 @@ public enum LibRaw_dng_processing {
     @Override public String toString() { return intern().name(); }
 }
 
+public enum LibRaw_output_flags {
+    LIBRAW_OUTPUT_FLAGS_NONE(0),
+    LIBRAW_OUTPUT_FLAGS_PPMMETA(1);
+
+    public final int value;
+    private LibRaw_output_flags(int v) { this.value = v; }
+    private LibRaw_output_flags(LibRaw_output_flags e) { this.value = e.value; }
+    public LibRaw_output_flags intern() { for (LibRaw_output_flags e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
 public enum LibRaw_runtime_capabilities {
   LIBRAW_CAPS_RAWSPEED(1),
-  LIBRAW_CAPS_DNGSDK(2),
-  LIBRAW_CAPS_GPRSDK(4),
-  LIBRAW_CAPS_UNICODEPATHS(8),
-  LIBRAW_CAPS_X3FTOOLS(16),
-  LIBRAW_CAPS_RPI6BY9(32);
+  LIBRAW_CAPS_DNGSDK(1<<1),
+  LIBRAW_CAPS_GPRSDK(1<<2),
+  LIBRAW_CAPS_UNICODEPATHS(1<<3),
+  LIBRAW_CAPS_X3FTOOLS(1<<4),
+  LIBRAW_CAPS_RPI6BY9(1<<5),
+  LIBRAW_CAPS_ZLIB(1<<6),
+  LIBRAW_CAPS_JPEG(1<<7),
+  LIBRAW_CAPS_RAWSPEED3(1<<8),
+  LIBRAW_CAPS_RAWSPEED_BITS(1<<9);
 
     public final int value;
     private LibRaw_runtime_capabilities(int v) { this.value = v; }
@@ -391,8 +416,16 @@ public enum LibRaw_cameramaker_index {
   LIBRAW_CAMERAMAKER_YI(69),
   LIBRAW_CAMERAMAKER_Yuneec(70),
   LIBRAW_CAMERAMAKER_Zeiss(71),
+  LIBRAW_CAMERAMAKER_OnePlus(72),
+  LIBRAW_CAMERAMAKER_ISG(73),
+  LIBRAW_CAMERAMAKER_VIVO(74),
+  LIBRAW_CAMERAMAKER_HMD_Global(75),
+  LIBRAW_CAMERAMAKER_HUAWEI(76),
+  LIBRAW_CAMERAMAKER_RaspberryPi(77),
+  LIBRAW_CAMERAMAKER_OmDigital(78),
+
   // Insert additional indexes here
-  LIBRAW_CAMERAMAKER_TheLastOne(72);
+  LIBRAW_CAMERAMAKER_TheLastOne(79);
 
     public final int value;
     private LibRaw_cameramaker_index(int v) { this.value = v; }
@@ -431,20 +464,23 @@ public enum LibRaw_camera_mounts {
   LIBRAW_MOUNT_Nikon_CX(26),       /* used in 'Nikon 1' series */
   LIBRAW_MOUNT_Nikon_F(27),
   LIBRAW_MOUNT_Nikon_Z(28),
-  LIBRAW_MOUNT_Pentax_645(29),
-  LIBRAW_MOUNT_Pentax_K(30),
-  LIBRAW_MOUNT_Pentax_Q(31),
-  LIBRAW_MOUNT_RicohModule(32),
-  LIBRAW_MOUNT_Rollei_bayonet(33), /* Rollei Hy-6: Leaf AFi, Sinar Hy6- models */
-  LIBRAW_MOUNT_Samsung_NX_M(34),
-  LIBRAW_MOUNT_Samsung_NX(35),
-  LIBRAW_MOUNT_Sigma_X3F(36),
-  LIBRAW_MOUNT_Sony_E(37),
-  LIBRAW_MOUNT_LF(38),
-  LIBRAW_MOUNT_DigitalBack(39),
-  LIBRAW_MOUNT_FixedLens(40),
-  LIBRAW_MOUNT_IL_UM(41),          /* Interchangeable lens, mount unknown */
-  LIBRAW_MOUNT_TheLastOne(42);
+  LIBRAW_MOUNT_PhaseOne_iXM_MV(29),
+  LIBRAW_MOUNT_PhaseOne_iXM_RS(30),
+  LIBRAW_MOUNT_PhaseOne_iXM(31),
+  LIBRAW_MOUNT_Pentax_645(32),
+  LIBRAW_MOUNT_Pentax_K(33),
+  LIBRAW_MOUNT_Pentax_Q(34),
+  LIBRAW_MOUNT_RicohModule(35),
+  LIBRAW_MOUNT_Rollei_bayonet(36), /* Rollei Hy-6: Leaf AFi, Sinar Hy6- models */
+  LIBRAW_MOUNT_Samsung_NX_M(37),
+  LIBRAW_MOUNT_Samsung_NX(38),
+  LIBRAW_MOUNT_Sigma_X3F(39),
+  LIBRAW_MOUNT_Sony_E(40),
+  LIBRAW_MOUNT_LF(41),
+  LIBRAW_MOUNT_DigitalBack(42),
+  LIBRAW_MOUNT_FixedLens(43),
+  LIBRAW_MOUNT_IL_UM(44),          /* Interchangeable lens, mount unknown */
+  LIBRAW_MOUNT_TheLastOne(45);
 
     public final int value;
     private LibRaw_camera_mounts(int v) { this.value = v; }
@@ -487,12 +523,19 @@ public enum LibRaw_camera_formats {
 
 public enum LibRawImageAspects {
   LIBRAW_IMAGE_ASPECT_UNKNOWN(0),
-  LIBRAW_IMAGE_ASPECT_3to2(1),
-  LIBRAW_IMAGE_ASPECT_1to1(2),
-  LIBRAW_IMAGE_ASPECT_4to3(3),
-  LIBRAW_IMAGE_ASPECT_16to9(4),
-  LIBRAW_IMAGE_ASPECT_5to4(5),
-  LIBRAW_IMAGE_ASPECT_OTHER(6);
+  LIBRAW_IMAGE_ASPECT_OTHER(1),
+  LIBRAW_IMAGE_ASPECT_MINIMAL_REAL_ASPECT_VALUE(99), /* 1:10*/
+  LIBRAW_IMAGE_ASPECT_MAXIMAL_REAL_ASPECT_VALUE(10000), /* 10: 1*/
+  // Value:  width / height * 1000
+  LIBRAW_IMAGE_ASPECT_3to2( (1000 * 3)/2),
+  LIBRAW_IMAGE_ASPECT_1to1(1000),
+  LIBRAW_IMAGE_ASPECT_4to3( (1000 * 4)/ 3),
+  LIBRAW_IMAGE_ASPECT_16to9((1000 * 16) / 9),
+  //LIBRAW_IMAGE_ASPECT_6to6, // what is the difference with 1:1 ?
+  LIBRAW_IMAGE_ASPECT_5to4((1000 * 5) / 4),
+  LIBRAW_IMAGE_ASPECT_7to6((1000 * 7) / 6),
+  LIBRAW_IMAGE_ASPECT_6to5((1000 * 6) / 5),
+  LIBRAW_IMAGE_ASPECT_7to5((1000 * 7) / 5);
 
     public final int value;
     private LibRawImageAspects(int v) { this.value = v; }
@@ -541,18 +584,91 @@ public enum LibRaw_Canon_RecordModes {
     @Override public String toString() { return intern().name(); }
 }
 
+public enum LibRaw_minolta_storagemethods {
+  LIBRAW_MINOLTA_UNPACKED(0x52),
+  LIBRAW_MINOLTA_PACKED  (0x59);
+
+    public final int value;
+    private LibRaw_minolta_storagemethods(int v) { this.value = v; }
+    private LibRaw_minolta_storagemethods(LibRaw_minolta_storagemethods e) { this.value = e.value; }
+    public LibRaw_minolta_storagemethods intern() { for (LibRaw_minolta_storagemethods e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+public enum LibRaw_minolta_bayerpatterns {
+  LIBRAW_MINOLTA_RGGB  (0x01),
+  LIBRAW_MINOLTA_G2BRG1(0x04);
+
+    public final int value;
+    private LibRaw_minolta_bayerpatterns(int v) { this.value = v; }
+    private LibRaw_minolta_bayerpatterns(LibRaw_minolta_bayerpatterns e) { this.value = e.value; }
+    public LibRaw_minolta_bayerpatterns intern() { for (LibRaw_minolta_bayerpatterns e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
 public enum LibRaw_sony_cameratypes {
-  LIBRAW_SONY_DSC(1),
+  LIBRAW_SONY_DSC (1),
   LIBRAW_SONY_DSLR(2),
-  LIBRAW_SONY_NEX(3),
-  LIBRAW_SONY_SLT(4),
+  LIBRAW_SONY_NEX (3),
+  LIBRAW_SONY_SLT (4),
   LIBRAW_SONY_ILCE(5),
-  LIBRAW_SONY_ILCA(6);
+  LIBRAW_SONY_ILCA(6),
+  LIBRAW_SONY_CameraType_UNKNOWN(0xffff);
 
     public final int value;
     private LibRaw_sony_cameratypes(int v) { this.value = v; }
     private LibRaw_sony_cameratypes(LibRaw_sony_cameratypes e) { this.value = e.value; }
     public LibRaw_sony_cameratypes intern() { for (LibRaw_sony_cameratypes e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+public enum LibRaw_Sony_0x2010_Type {
+  LIBRAW_SONY_Tag2010None(0),
+  LIBRAW_SONY_Tag2010a(1),
+  LIBRAW_SONY_Tag2010b(2),
+  LIBRAW_SONY_Tag2010c(3),
+  LIBRAW_SONY_Tag2010d(4),
+  LIBRAW_SONY_Tag2010e(5),
+  LIBRAW_SONY_Tag2010f(6),
+  LIBRAW_SONY_Tag2010g(7),
+  LIBRAW_SONY_Tag2010h(8),
+  LIBRAW_SONY_Tag2010i(9);
+
+    public final int value;
+    private LibRaw_Sony_0x2010_Type(int v) { this.value = v; }
+    private LibRaw_Sony_0x2010_Type(LibRaw_Sony_0x2010_Type e) { this.value = e.value; }
+    public LibRaw_Sony_0x2010_Type intern() { for (LibRaw_Sony_0x2010_Type e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+public enum LibRaw_Sony_0x9050_Type {
+  LIBRAW_SONY_Tag9050None(0),
+  LIBRAW_SONY_Tag9050a(1),
+  LIBRAW_SONY_Tag9050b(2),
+  LIBRAW_SONY_Tag9050c(3);
+
+    public final int value;
+    private LibRaw_Sony_0x9050_Type(int v) { this.value = v; }
+    private LibRaw_Sony_0x9050_Type(LibRaw_Sony_0x9050_Type e) { this.value = e.value; }
+    public LibRaw_Sony_0x9050_Type intern() { for (LibRaw_Sony_0x9050_Type e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+public enum LIBRAW_SONY_FOCUSMODEmodes {
+  LIBRAW_SONY_FOCUSMODE_MF    (0),
+  LIBRAW_SONY_FOCUSMODE_AF_S  (2),
+  LIBRAW_SONY_FOCUSMODE_AF_C  (3),
+  LIBRAW_SONY_FOCUSMODE_AF_A  (4),
+  LIBRAW_SONY_FOCUSMODE_DMF   (6),
+  LIBRAW_SONY_FOCUSMODE_AF_D  (7),
+  LIBRAW_SONY_FOCUSMODE_AF          (101),
+  LIBRAW_SONY_FOCUSMODE_PERMANENT_AF(104),
+  LIBRAW_SONY_FOCUSMODE_SEMI_MF     (105),
+  LIBRAW_SONY_FOCUSMODE_UNKNOWN     (-1);
+
+    public final int value;
+    private LIBRAW_SONY_FOCUSMODEmodes(int v) { this.value = v; }
+    private LIBRAW_SONY_FOCUSMODEmodes(LIBRAW_SONY_FOCUSMODEmodes e) { this.value = e.value; }
+    public LIBRAW_SONY_FOCUSMODEmodes intern() { for (LIBRAW_SONY_FOCUSMODEmodes e : values()) if (e.value == value) return e; return this; }
     @Override public String toString() { return intern().name(); }
 }
 
@@ -595,6 +711,45 @@ public enum LibRaw_HasselbladFormatCodes {
     @Override public String toString() { return intern().name(); }
 }
 
+public enum LibRaw_rawspecial_t {
+    LIBRAW_RAWSPECIAL_SONYARW2_NONE(0),
+    LIBRAW_RAWSPECIAL_SONYARW2_BASEONLY(1),
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTAONLY(1 << 1),
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTAZEROBASE(1 << 2),
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTATOVALUE(1 << 3),
+    LIBRAW_RAWSPECIAL_SONYARW2_ALLFLAGS(
+    LIBRAW_RAWSPECIAL_SONYARW2_BASEONLY.value +
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTAONLY.value +
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTAZEROBASE.value +
+    LIBRAW_RAWSPECIAL_SONYARW2_DELTATOVALUE.value),
+    LIBRAW_RAWSPECIAL_NODP2Q_INTERPOLATERG(1<<4),
+    LIBRAW_RAWSPECIAL_NODP2Q_INTERPOLATEAF(1 << 5),
+    LIBRAW_RAWSPECIAL_SRAW_NO_RGB(1 << 6),
+    LIBRAW_RAWSPECIAL_SRAW_NO_INTERPOLATE(1 << 7);
+
+    public final int value;
+    private LibRaw_rawspecial_t(int v) { this.value = v; }
+    private LibRaw_rawspecial_t(LibRaw_rawspecial_t e) { this.value = e.value; }
+    public LibRaw_rawspecial_t intern() { for (LibRaw_rawspecial_t e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+public enum LibRaw_rawspeed_bits_t {
+    LIBRAW_RAWSPEEDV1_USE(1),
+    LIBRAW_RAWSPEEDV1_FAILONUNKNOWN(1 << 1),
+    LIBRAW_RAWSPEEDV1_IGNOREERRORS(1 << 2),
+    /*  bits 3-7 are reserved*/
+    LIBRAW_RAWSPEEDV3_USE(1 << 8),
+    LIBRAW_RAWSPEEDV3_FAILONUNKNOWN(1 << 9),
+    LIBRAW_RAWSPEEDV3_IGNOREERRORS(1 << 10);
+
+    public final int value;
+    private LibRaw_rawspeed_bits_t(int v) { this.value = v; }
+    private LibRaw_rawspeed_bits_t(LibRaw_rawspeed_bits_t e) { this.value = e.value; }
+    public LibRaw_rawspeed_bits_t intern() { for (LibRaw_rawspeed_bits_t e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
 
 
 public enum LibRaw_decoder_flags {
@@ -609,7 +764,9 @@ public enum LibRaw_decoder_flags {
   LIBRAW_DECODER_SINAR4SHOT(1 << 11),
   LIBRAW_DECODER_FLATDATA(1 << 12),
   LIBRAW_DECODER_FLAT_BG2_SWAPPED(1<<13),
-  LIBRAW_DECODER_NOTSET(1 << 15);
+  LIBRAW_DECODER_UNSUPPORTED_FORMAT(1 << 14),
+  LIBRAW_DECODER_NOTSET(1 << 15),
+  LIBRAW_DECODER_TRYRAWSPEED3(1 << 16);
 
     public final int value;
     private LibRaw_decoder_flags(int v) { this.value = v; }
@@ -622,8 +779,9 @@ public static final int LIBRAW_XTRANS = 9;
 
 public enum LibRaw_constructor_flags {
   LIBRAW_OPTIONS_NONE(0),
-  LIBRAW_OPIONS_NO_MEMERR_CALLBACK(1),
-  LIBRAW_OPIONS_NO_DATAERR_CALLBACK(1 << 1);
+  LIBRAW_OPTIONS_NO_DATAERR_CALLBACK(1 << 1),
+  /* Compatibility w/ years old typo */
+  LIBRAW_OPIONS_NO_DATAERR_CALLBACK(LIBRAW_OPTIONS_NO_DATAERR_CALLBACK.value);
 
     public final int value;
     private LibRaw_constructor_flags(int v) { this.value = v; }
@@ -643,7 +801,8 @@ public enum LibRaw_warnings {
   LIBRAW_WARN_NO_BADPIXELMAP(1 << 8),
   LIBRAW_WARN_BAD_DARKFRAME_FILE(1 << 9),
   LIBRAW_WARN_BAD_DARKFRAME_DIM(1 << 10),
-  LIBRAW_WARN_NO_JASPER(1 << 11),
+// #ifdef LIBRAW_OLD_VIDEO_SUPPORT
+// #endif
   LIBRAW_WARN_RAWSPEED_PROBLEM(1 << 12),
   LIBRAW_WARN_RAWSPEED_UNSUPPORTED(1 << 13),
   LIBRAW_WARN_RAWSPEED_PROCESSED(1 << 14),
@@ -652,7 +811,11 @@ public enum LibRaw_warnings {
   LIBRAW_WARN_DNGSDK_PROCESSED(1 << 17),
   LIBRAW_WARN_DNG_IMAGES_REORDERED(1 << 18),
   LIBRAW_WARN_DNG_STAGE2_APPLIED(1 << 19),
-  LIBRAW_WARN_DNG_STAGE3_APPLIED(1 << 20);
+  LIBRAW_WARN_DNG_STAGE3_APPLIED(1 << 20),
+  LIBRAW_WARN_RAWSPEED3_PROBLEM(1 << 21),
+  LIBRAW_WARN_RAWSPEED3_UNSUPPORTED(1 << 22),
+  LIBRAW_WARN_RAWSPEED3_PROCESSED(1 << 23),
+  LIBRAW_WARN_RAWSPEED3_NOTLISTED(1 << 24);
 
     public final int value;
     private LibRaw_warnings(int v) { this.value = v; }
@@ -673,7 +836,8 @@ public enum LibRaw_exceptions {
   LIBRAW_EXCEPTION_IO_BADFILE(8),
   LIBRAW_EXCEPTION_DECODE_JPEG2000(9),
   LIBRAW_EXCEPTION_TOOBIG(10),
-  LIBRAW_EXCEPTION_MEMPOOL(11);
+  LIBRAW_EXCEPTION_MEMPOOL(11),
+  LIBRAW_EXCEPTION_UNSUPPORTED_FORMAT(12);
 
     public final int value;
     private LibRaw_exceptions(int v) { this.value = v; }
@@ -736,6 +900,7 @@ public enum LibRaw_errors {
   LIBRAW_UNSUPPORTED_THUMBNAIL(-6),
   LIBRAW_INPUT_CLOSED(-7),
   LIBRAW_NOT_IMPLEMENTED(-8),
+  LIBRAW_REQUEST_FOR_NONEXISTENT_THUMBNAIL(-9),
   LIBRAW_UNSUFFICIENT_MEMORY(-100007),
   LIBRAW_DATA_ERROR(-100008),
   LIBRAW_IO_ERROR(-100009),
@@ -753,13 +918,34 @@ public enum LibRaw_errors {
 
 // #define LIBRAW_FATAL_ERROR(ec) ((ec) < -100000)
 
+public enum LibRaw_internal_thumbnail_formats {
+    LIBRAW_INTERNAL_THUMBNAIL_UNKNOWN(0),
+    LIBRAW_INTERNAL_THUMBNAIL_KODAK_THUMB(1),
+    LIBRAW_INTERNAL_THUMBNAIL_KODAK_YCBCR(2),
+    LIBRAW_INTERNAL_THUMBNAIL_KODAK_RGB(3),
+    LIBRAW_INTERNAL_THUMBNAIL_JPEG(4),
+    LIBRAW_INTERNAL_THUMBNAIL_LAYER(5),
+    LIBRAW_INTERNAL_THUMBNAIL_ROLLEI(6),
+    LIBRAW_INTERNAL_THUMBNAIL_PPM(7),
+    LIBRAW_INTERNAL_THUMBNAIL_PPM16(8),
+    LIBRAW_INTERNAL_THUMBNAIL_X3F(9);
+
+    public final int value;
+    private LibRaw_internal_thumbnail_formats(int v) { this.value = v; }
+    private LibRaw_internal_thumbnail_formats(LibRaw_internal_thumbnail_formats e) { this.value = e.value; }
+    public LibRaw_internal_thumbnail_formats intern() { for (LibRaw_internal_thumbnail_formats e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
 public enum LibRaw_thumbnail_formats {
   LIBRAW_THUMBNAIL_UNKNOWN(0),
   LIBRAW_THUMBNAIL_JPEG(1),
   LIBRAW_THUMBNAIL_BITMAP(2),
   LIBRAW_THUMBNAIL_BITMAP16(3),
   LIBRAW_THUMBNAIL_LAYER(4),
-  LIBRAW_THUMBNAIL_ROLLEI(5);
+  LIBRAW_THUMBNAIL_ROLLEI(5),
+  LIBRAW_THUMBNAIL_H265(6);
 
     public final int value;
     private LibRaw_thumbnail_formats(int v) { this.value = v; }
@@ -786,7 +972,7 @@ public enum LibRaw_image_formats {
 
 /* -*- C++ -*-
  * File: libraw_version.h
- * Copyright 2008-2020 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2021 LibRaw LLC (info@libraw.org)
  * Created: Mon Sept  8, 2008
  *
  * LibRaw C++ interface
@@ -807,11 +993,11 @@ it under the terms of the one of two licenses as you choose:
 // #define __VERSION_H
 
 public static final int LIBRAW_MAJOR_VERSION = 0;
-public static final int LIBRAW_MINOR_VERSION = 20;
-public static final int LIBRAW_PATCH_VERSION = 2;
+public static final int LIBRAW_MINOR_VERSION = 21;
+public static final int LIBRAW_PATCH_VERSION = 1;
 // #define LIBRAW_VERSION_TAIL Release
 
-public static final int LIBRAW_SHLIB_CURRENT = 20;
+public static final int LIBRAW_SHLIB_CURRENT = 23;
 public static final int LIBRAW_SHLIB_REVISION = 0;
 public static final int LIBRAW_SHLIB_AGE = 0;
 
@@ -853,7 +1039,7 @@ public static final int LIBRAW_SHLIB_AGE = 0;
 
 /* -*- C++ -*-
  * File: libraw_types.h
- * Copyright 2008-2020 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2021 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C data structures
@@ -892,6 +1078,9 @@ it under the terms of the one of two licenses as you choose:
 
 // #if defined(_OPENMP)
 
+// #if defined(LIBRAW_FORCE_OPENMP)
+// #define LIBRAW_USE_OPENMP
+// #else
 // #if defined(_WIN32)
 // #if defined(_MSC_VER) &&
 //     (_MSC_VER >= 1600 || (_MSC_VER == 1500 && _MSC_FULL_VER >= 150030729))
@@ -910,6 +1099,7 @@ it under the terms of the one of two licenses as you choose:
 // #undef LIBRAW_USE_OPENMP
 // #else
 // #define LIBRAW_USE_OPENMP
+// #endif
 // #endif
 // #endif
 
@@ -949,11 +1139,6 @@ it under the terms of the one of two licenses as you choose:
 // Targeting ../exif_parser_callback.java
 
 
-
-  public static native void default_memory_callback(Pointer data, @Cast("const char*") BytePointer file,
-                                        @Cast("const char*") BytePointer where);
-  public static native void default_memory_callback(Pointer data, String file,
-                                        String where);
 // Targeting ../data_callback.java
 
 
@@ -987,6 +1172,9 @@ it under the terms of the one of two licenses as you choose:
 
 
 // Targeting ../libraw_image_sizes_t.java
+
+
+// Targeting ../libraw_area_t.java
 
 
 // Targeting ../ph1_t.java
@@ -1025,6 +1213,9 @@ it under the terms of the one of two licenses as you choose:
 // Targeting ../libraw_pentax_makernotes_t.java
 
 
+// Targeting ../libraw_ricoh_makernotes_t.java
+
+
 // Targeting ../libraw_samsung_makernotes_t.java
 
 
@@ -1043,16 +1234,28 @@ it under the terms of the one of two licenses as you choose:
 // Targeting ../libraw_thumbnail_t.java
 
 
+// Targeting ../libraw_thumbnail_item_t.java
+
+
+// Targeting ../libraw_thumbnail_list_t.java
+
+
 // Targeting ../libraw_gps_info_t.java
 
 
 // Targeting ../libraw_imgother_t.java
 
 
+// Targeting ../libraw_afinfo_item_t.java
+
+
 // Targeting ../libraw_metadata_common_t.java
 
 
 // Targeting ../libraw_output_params_t.java
+
+
+// Targeting ../libraw_raw_unpack_params_t.java
 
 
 // Targeting ../libraw_rawdata_t.java
@@ -1080,6 +1283,9 @@ it under the terms of the one of two licenses as you choose:
 
 
 // Targeting ../libraw_data_t.java
+
+
+// Targeting ../fuji_q_table.java
 
 
 // Targeting ../fuji_compressed_params.java
@@ -1125,7 +1331,7 @@ public static final int LibRawBigEndian = 1;
 
 /* -*- C -*-
  * File: libraw_datastream.h
- * Copyright 2008-2020 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2021 LibRaw LLC (info@libraw.org)
  * Created: Sun Jan 18 13:07:35 2009
  *
  * LibRaw Data stream interface
@@ -1192,9 +1398,6 @@ it under the terms of the one of two licenses as you choose:
 // Targeting ../LibRaw_abstract_datastream.java
 
 
-// Targeting ../LibRaw_file_datastream.java
-
-
 // Targeting ../LibRaw_buffer_datastream.java
 
 
@@ -1219,7 +1422,7 @@ it under the terms of the one of two licenses as you choose:
 
 /* -*- C++ -*-
  * File: libraw.h
- * Copyright 2008-2020 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2021 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008
  *
  * LibRaw C++ interface
@@ -1243,8 +1446,17 @@ it under the terms of the one of two licenses as you choose:
 public static final int _FILE_OFFSET_BITS = 64;
 // #endif
 
-/* maximum file size to use LibRaw_file_datastream (fully buffered) I/O */
-public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 1024L);
+// Enable use old cinema cameras if USE_OLD_VIDEOCAMS defined
+// #ifdef USE_OLD_VIDEOCAMS
+// #define LIBRAW_OLD_VIDEO_SUPPORT
+// #endif
+
+// #ifndef LIBRAW_USE_DEPRECATED_IOSTREAMS_DATASTREAM
+// #define LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #endif
+
+// #ifndef LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #endif
 
 // #include <limits.h>
 // #include <memory.h>
@@ -1279,6 +1491,10 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
 // #  ifndef LIBRAW_WIN32_UNICODEPATHS
 // #    define LIBRAW_WIN32_UNICODEPATHS
 // #  endif
+// # elif defined(_LIBCPP_HAS_OPEN_WITH_WCHAR)
+// #  ifndef LIBRAW_WIN32_UNICODEPATHS
+// #    define LIBRAW_WIN32_UNICODEPATHS
+// #  endif
 // # endif
 
 // #endif
@@ -1298,15 +1514,39 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
   public static native libraw_data_t libraw_init(@Cast("unsigned int") int flags);
   public static native int libraw_open_file(libraw_data_t arg0, @Cast("const char*") BytePointer arg1);
   public static native int libraw_open_file(libraw_data_t arg0, String arg1);
-  public static native int libraw_open_file_ex(libraw_data_t arg0, @Cast("const char*") BytePointer arg1,
-                                   @Cast("INT64") long max_buff_sz);
-  public static native int libraw_open_file_ex(libraw_data_t arg0, String arg1,
-                                   @Cast("INT64") long max_buff_sz);
+// #ifndef LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #endif
 // #if defined(_WIN32) || defined(WIN32)
 // #endif
-  public static native int libraw_open_buffer(libraw_data_t arg0, Pointer buffer, @Cast("size_t") long size);
+
+  public static native int libraw_open_buffer(libraw_data_t arg0, @Const Pointer buffer, @Cast("size_t") long size);
+  public static native int libraw_open_bayer(libraw_data_t lr, @Cast("unsigned char*") BytePointer data,
+                                 @Cast("unsigned") int datalen, @Cast("ushort") short _raw_width,
+                                 @Cast("ushort") short _raw_height, @Cast("ushort") short _left_margin,
+                                 @Cast("ushort") short _top_margin, @Cast("ushort") short _right_margin,
+                                 @Cast("ushort") short _bottom_margin, @Cast("unsigned char") byte procflags,
+                                 @Cast("unsigned char") byte bayer_battern,
+                                 @Cast("unsigned") int unused_bits, @Cast("unsigned") int otherflags,
+                                 @Cast("unsigned") int black_level);
+  public static native int libraw_open_bayer(libraw_data_t lr, @Cast("unsigned char*") ByteBuffer data,
+                                 @Cast("unsigned") int datalen, @Cast("ushort") short _raw_width,
+                                 @Cast("ushort") short _raw_height, @Cast("ushort") short _left_margin,
+                                 @Cast("ushort") short _top_margin, @Cast("ushort") short _right_margin,
+                                 @Cast("ushort") short _bottom_margin, @Cast("unsigned char") byte procflags,
+                                 @Cast("unsigned char") byte bayer_battern,
+                                 @Cast("unsigned") int unused_bits, @Cast("unsigned") int otherflags,
+                                 @Cast("unsigned") int black_level);
+  public static native int libraw_open_bayer(libraw_data_t lr, @Cast("unsigned char*") byte[] data,
+                                 @Cast("unsigned") int datalen, @Cast("ushort") short _raw_width,
+                                 @Cast("ushort") short _raw_height, @Cast("ushort") short _left_margin,
+                                 @Cast("ushort") short _top_margin, @Cast("ushort") short _right_margin,
+                                 @Cast("ushort") short _bottom_margin, @Cast("unsigned char") byte procflags,
+                                 @Cast("unsigned char") byte bayer_battern,
+                                 @Cast("unsigned") int unused_bits, @Cast("unsigned") int otherflags,
+                                 @Cast("unsigned") int black_level);
   public static native int libraw_unpack(libraw_data_t arg0);
   public static native int libraw_unpack_thumb(libraw_data_t arg0);
+  public static native int libraw_unpack_thumb_ex(libraw_data_t arg0,int arg1);
   public static native void libraw_recycle_datastream(libraw_data_t arg0);
   public static native void libraw_recycle(libraw_data_t arg0);
   public static native void libraw_close(libraw_data_t arg0);
@@ -1321,8 +1561,6 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
   public static native int libraw_cameraCount();
 
   /* helpers */
-  public static native void libraw_set_memerror_handler(libraw_data_t arg0, memory_callback cb,
-                                            Pointer datap);
   public static native void libraw_set_exifparser_handler(libraw_data_t arg0,
                                               exif_parser_callback cb,
                                               Pointer datap);
@@ -1355,6 +1593,7 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
   /* getters/setters used by 3DLut Creator */
   public static native void libraw_set_demosaic(libraw_data_t lr, int value);
   public static native void libraw_set_output_color(libraw_data_t lr, int value);
+  public static native void libraw_set_adjust_maximum_thr(libraw_data_t lr, float value);
   public static native void libraw_set_user_mul(libraw_data_t lr, int index, float val);
   public static native void libraw_set_output_bps(libraw_data_t lr, int value);
   public static native void libraw_set_gamma(libraw_data_t lr, int index, float value);
@@ -1381,14 +1620,10 @@ public static final long LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE = (250 * 1024L * 
 
 
 // #ifdef LIBRAW_LIBRARY_BUILD
-// #define RUN_CALLBACK(stage, iter, expect)
-//   if (callbacks.progress_cb)
-//   {
-//     int rr = (*callbacks.progress_cb)(callbacks.progresscb_data, stage, iter,
-//                                       expect);
-//     if (rr != 0)
-//       throw LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK;
-//   }
+// #endif
+
+
+// #ifdef LIBRAW_LIBRARY_BUILD
 // #endif
 
 // #endif /* __cplusplus */

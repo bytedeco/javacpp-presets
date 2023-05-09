@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libraw</artifactId>
-  <version>0.20.2-${project.parent.version}</version>
+  <version>0.21.1-${project.parent.version}</version>
   <name>JavaCPP Presets for LibRaw</name>
 
   <dependencies>
