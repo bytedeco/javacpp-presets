@@ -50,6 +50,10 @@ public class libraw_fuji_info_t extends Pointer {
     public native @Cast("ushort") short AFMode(); public native libraw_fuji_info_t AFMode(short setter);
     public native @Cast("ushort") short FocusPixel(int i); public native libraw_fuji_info_t FocusPixel(int i, short setter);
     @MemberGetter public native @Cast("ushort*") ShortPointer FocusPixel();
+    public native @Cast("ushort") short PrioritySettings(); public native libraw_fuji_info_t PrioritySettings(short setter);
+    public native @Cast("unsigned") int FocusSettings(); public native libraw_fuji_info_t FocusSettings(int setter);
+    public native @Cast("unsigned") int AF_C_Settings(); public native libraw_fuji_info_t AF_C_Settings(int setter);
+    public native @Cast("ushort") short FocusWarning(); public native libraw_fuji_info_t FocusWarning(short setter);
     public native @Cast("ushort") short ImageStabilization(int i); public native libraw_fuji_info_t ImageStabilization(int i, short setter);
     @MemberGetter public native @Cast("ushort*") ShortPointer ImageStabilization();
     public native @Cast("ushort") short FlashMode(); public native libraw_fuji_info_t FlashMode(short setter);
@@ -72,13 +76,13 @@ public class libraw_fuji_info_t extends Pointer {
        4 - 1.25x crop (electronic shutter, continuous high)
     */
     public native @Cast("ushort") short CropMode(); public native libraw_fuji_info_t CropMode(short setter);
-    public native @Cast("ushort") short FrameRate(); public native libraw_fuji_info_t FrameRate(short setter);
-    public native @Cast("ushort") short FrameWidth(); public native libraw_fuji_info_t FrameWidth(short setter);
-    public native @Cast("ushort") short FrameHeight(); public native libraw_fuji_info_t FrameHeight(short setter);
     public native @Cast("char") byte SerialSignature(int i); public native libraw_fuji_info_t SerialSignature(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer SerialSignature();
+    public native @Cast("char") byte SensorID(int i); public native libraw_fuji_info_t SensorID(int i, byte setter);
+    @MemberGetter public native @Cast("char*") BytePointer SensorID();
     public native @Cast("char") byte RAFVersion(int i); public native libraw_fuji_info_t RAFVersion(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer RAFVersion();
+    public native int RAFDataGeneration(); public native libraw_fuji_info_t RAFDataGeneration(int setter); // 0 (none), 1..4, 4096
     public native @Cast("ushort") short RAFDataVersion(); public native libraw_fuji_info_t RAFDataVersion(short setter);
     public native int isTSNERDTS(); public native libraw_fuji_info_t isTSNERDTS(int setter);
 
@@ -88,4 +92,24 @@ public class libraw_fuji_info_t extends Pointer {
        2 - continuous high
     */
     public native short DriveMode(); public native libraw_fuji_info_t DriveMode(short setter);
+
+    /*
+    tag 0x4000 BlackLevel:
+    S9100, S9000, S7000, S6000fd, S5200, S5100, S5000,
+    S5Pro, S3Pro, S2Pro, S20Pro,
+    S200EXR, S100FS,
+    F810, F700,
+    E900, E550,
+    DBP, and aliases for all of the above
+    */
+    public native @Cast("ushort") short BlackLevel(int i); public native libraw_fuji_info_t BlackLevel(int i, short setter);
+    @MemberGetter public native @Cast("ushort*") ShortPointer BlackLevel();
+    public native @Cast("unsigned") int RAFData_ImageSizeTable(int i); public native libraw_fuji_info_t RAFData_ImageSizeTable(int i, int setter);
+    @MemberGetter public native @Cast("unsigned*") IntPointer RAFData_ImageSizeTable();
+    public native int AutoBracketing(); public native libraw_fuji_info_t AutoBracketing(int setter);
+    public native int SequenceNumber(); public native libraw_fuji_info_t SequenceNumber(int setter);
+    public native int SeriesLength(); public native libraw_fuji_info_t SeriesLength(int setter);
+    public native float PixelShiftOffset(int i); public native libraw_fuji_info_t PixelShiftOffset(int i, float setter);
+    @MemberGetter public native FloatPointer PixelShiftOffset();
+    public native int ImageCount(); public native libraw_fuji_info_t ImageCount(int setter);
   }

@@ -38,8 +38,10 @@ public class libraw_dng_levels_t extends Pointer {
     public native float dng_fblack(); public native libraw_dng_levels_t dng_fblack(float setter);
     public native @Cast("unsigned") int dng_whitelevel(int i); public native libraw_dng_levels_t dng_whitelevel(int i, int setter);
     @MemberGetter public native @Cast("unsigned*") IntPointer dng_whitelevel();
-    public native @Cast("unsigned") int default_crop(int i); public native libraw_dng_levels_t default_crop(int i, int setter);
-    @MemberGetter public native @Cast("unsigned*") IntPointer default_crop(); /* Origin and size */
+    public native @Cast("ushort") short default_crop(int i); public native libraw_dng_levels_t default_crop(int i, short setter);
+    @MemberGetter public native @Cast("ushort*") ShortPointer default_crop(); /* Origin and size */
+    public native float user_crop(int i); public native libraw_dng_levels_t user_crop(int i, float setter);
+    @MemberGetter public native FloatPointer user_crop(); // top-left-bottom-right relative to default_crop
     public native @Cast("unsigned") int preview_colorspace(); public native libraw_dng_levels_t preview_colorspace(int setter);
     public native float analogbalance(int i); public native libraw_dng_levels_t analogbalance(int i, float setter);
     @MemberGetter public native FloatPointer analogbalance();

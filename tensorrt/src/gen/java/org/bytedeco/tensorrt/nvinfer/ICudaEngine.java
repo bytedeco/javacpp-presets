@@ -489,8 +489,12 @@ public class ICudaEngine extends INoCopy {
      *  @param tensorName The name of an input or output tensor.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  \warning The function can only return the result of profile 0, and issues a warning message when there are
+     *  multiple profiles in the engine, use getTensorBytesPerComponent with profileIndex when there are multiple
+     *  profiles.
      * 
      *  @see getTensorVectorizedDim()
+     *  @see getTensorBytesPerComponent(tensorName, profileIndex)
      *  */
     
     
@@ -502,6 +506,30 @@ public class ICudaEngine extends INoCopy {
     //!
     public native @NoException(true) int getTensorBytesPerComponent(String tensorName);
     public native @NoException(true) int getTensorBytesPerComponent(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Return the number of bytes per component of an element of given profile, or -1 if the provided name does
+     *  not map to an input or output tensor.
+     * 
+     *  The vector component size is returned if getTensorVectorizedDim(tensorName, profileIndex) != -1.
+     * 
+     *  @param tensorName The name of an input or output tensor.
+     *  @param profileIndex The profile index to query
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @see getTensorVectorizedDim(tensorName, profileIndex)
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) int getTensorBytesPerComponent(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorBytesPerComponent(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
      *  \brief Return the number of components included in one element.
@@ -533,8 +561,12 @@ public class ICudaEngine extends INoCopy {
      *  @param tensorName The name of an input or output tensor.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  \warning The function can only return the result of profile 0, and issues a warning message when there
+     *  are multiple profiles in the engine, use getTensorComponentsPerElement with profileIndex when there are
+     *  multiple profiles.
      * 
      *  @see getTensorVectorizedDim()
+     *  @see getTensorComponentsPerElement(tensorName, profileIndex)
      *  */
     
     
@@ -543,8 +575,32 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
+    //!
     public native @NoException(true) int getTensorComponentsPerElement(String tensorName);
     public native @NoException(true) int getTensorComponentsPerElement(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Return the number of components included in one element of given profile, or -1 if the provided name does
+     *  not map to an input or output tensor.
+     * 
+     *  The number of elements in the vectors is returned if getTensorVectorizedDim(tensorName, profileIndex) != -1.
+     * 
+     *  @param tensorName The name of an input or output tensor.
+     *  @param profileIndex The profile index to query
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     * 
+     *  @see getTensorVectorizedDim(tensorName, profileIndex)
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) int getTensorComponentsPerElement(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorComponentsPerElement(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
      *  \brief Return the binding format.
@@ -564,10 +620,30 @@ public class ICudaEngine extends INoCopy {
     public native @Deprecated @NoException(true) TensorFormat getBindingFormat(int bindingIndex);
 
     /**
-     *  \brief Return the binding format, or TensorFormat::kLINEAR if the provided name does not map to an input or
+     *  \brief Return the tensor format, or TensorFormat::kLINEAR if the provided name does not map to an input or
      *  output tensor.
      * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  \warning This API can only return the tensor format of profile 0, and issues a warning message when there are
+     *  multiple profiles in the engine, use getTensorFormat with profileIndex when there are multiple profiles.
+     * 
+     *  @see getTensorFormat(tensorName, profileIndex)
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) TensorFormat getTensorFormat(String tensorName);
+    public native @NoException(true) @Cast("nvinfer1::TensorFormat") int getTensorFormat(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Return the tensor format of given profile, or TensorFormat::kLINEAR if the provided name does not map to
+     *  an input or output tensor.
+     * 
      *  @param tensorName The name of an input or output tensor.
+     *  @param profileIndex The profile index to query the format for.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
      *  */
@@ -579,8 +655,8 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) TensorFormat getTensorFormat(String tensorName);
-    public native @NoException(true) @Cast("nvinfer1::TensorFormat") int getTensorFormat(@Cast("const char*") BytePointer tensorName);
+    public native @NoException(true) TensorFormat getTensorFormat(String tensorName, int profileIndex);
+    public native @NoException(true) @Cast("nvinfer1::TensorFormat") int getTensorFormat(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
      *  \brief Return the human readable description of the tensor format, or nullptr if the provided name does not
@@ -626,6 +702,36 @@ public class ICudaEngine extends INoCopy {
      *  @param tensorName The name of an input or output tensor.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  \warning The function can only return the result of profile 0, and issues a warning message when there are
+     *  multiple profiles in the engine, use getTensorFormatDesc with profileIndex when there are multiple profiles.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) String getTensorFormatDesc(String tensorName);
+    public native @NoException(true) @Cast("const char*") BytePointer getTensorFormatDesc(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Return the human readable description of the tensor format of given profile, or empty string if the
+     *  provided name does not map to an input or output tensor.
+     * 
+     *  The description includes the order, vectorization, data type, and strides.
+     *  Examples are shown as follows:
+     *    Example 1: kCHW + FP32
+     *      "Row major linear FP32 format"
+     *    Example 2: kCHW2 + FP16
+     *      "Two wide channel vectorized row major FP16 format"
+     *    Example 3: kHWC8 + FP16 + Line Stride = 32
+     *      "Channel major FP16 format where C % 8 == 0 and H Stride % 32 == 0"
+     * 
+     *  @param tensorName The name of an input or output tensor.
+     *  @param profileIndex The profile index to query the format for.
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
      *  */
     
     
@@ -635,8 +741,8 @@ public class ICudaEngine extends INoCopy {
     //!
     //!
     //!
-    public native @NoException(true) String getTensorFormatDesc(String tensorName);
-    public native @NoException(true) @Cast("const char*") BytePointer getTensorFormatDesc(@Cast("const char*") BytePointer tensorName);
+    public native @NoException(true) String getTensorFormatDesc(String tensorName, int profileIndex);
+    public native @NoException(true) @Cast("const char*") BytePointer getTensorFormatDesc(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
      *  \brief Return the dimension index that the buffer is vectorized, or -1 is the name is not found.
@@ -667,6 +773,8 @@ public class ICudaEngine extends INoCopy {
      *  @param tensorName The name of an input or output tensor.
      * 
      *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  \warning The function can only return the result of profile 0, and issues a warning message when there are
+     *   multiple profiles in the engine, use getTensorVectorizedDim with profileIndex when there are multiple profiles.
      *  */
     
     
@@ -677,6 +785,27 @@ public class ICudaEngine extends INoCopy {
     //!
     public native @NoException(true) int getTensorVectorizedDim(String tensorName);
     public native @NoException(true) int getTensorVectorizedDim(@Cast("const char*") BytePointer tensorName);
+
+    /**
+     *  \brief Return the dimension index that the buffer is vectorized of given profile, or -1 if the provided name
+     *  does not map to an input or output tensor.
+     * 
+     *  Specifically -1 is returned if scalars per vector is 1.
+     * 
+     *  @param tensorName The name of an input.
+     *  @param profileIndex The profile index to query the format for.
+     * 
+     *  \warning The string tensorName must be null-terminated, and be at most 4096 bytes including the terminator.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) int getTensorVectorizedDim(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorVectorizedDim(@Cast("const char*") BytePointer tensorName, int profileIndex);
 
     /**
      *  \brief Returns the name of the network associated with the engine.

@@ -100,73 +100,12 @@ public class IPluginRegistry extends Pointer {
      *  - Allowed context for the API call
      *    - Thread-safe: Yes
      *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
     public native @NoException(true) IPluginCreator getPluginCreator(String pluginName, String pluginVersion,
             String pluginNamespace/*=""*/);
     public native @NoException(true) IPluginCreator getPluginCreator(String pluginName, String pluginVersion);
     public native @NoException(true) IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginName, @Cast("const char*") BytePointer pluginVersion,
             @Cast("const char*") BytePointer pluginNamespace/*=""*/);
     public native @NoException(true) IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginName, @Cast("const char*") BytePointer pluginVersion);
-
-    /**
-     *  \brief Return whether the parent registry will be searched if a plugin is not found in this registry
-     *  default: true
-     * 
-     *  @return bool variable indicating whether parent search is enabled.
-     * 
-     *  @see setParentSearchEnabled
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native @Cast("bool") boolean isParentSearchEnabled();
-
-    /**
-     *  \brief Set whether the parent registry will be searched if a plugin is not found in this registry.
-     * 
-     *  @param enabled The bool variable indicating whether parent search is enabled.
-     * 
-     *  @see isParentSearchEnabled
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    //!
-    public native void setParentSearchEnabled(@Cast("const bool") boolean enabled);
-
-    /**
-     *  \brief Load and register a shared library of plugins.
-     * 
-     *  @param pluginPath the plugin library path.
-     * 
-     *  @return The loaded plugin library handle. The call will fail and return
-     *  nullptr if any of the plugins are already registered.
-     *  */
-    
-    
-    //!
-    //!
-    //!
-    public native @NoException(true) PluginLibraryHandle loadLibrary(String pluginPath);
-    public native @NoException(true) PluginLibraryHandle loadLibrary(@Cast("const char*") BytePointer pluginPath);
-
-    /**
-     *  \brief Deregister plugins associated with a library. Any resources acquired when the library
-     *  was loaded will be released.
-     * 
-     *  @param handle the plugin library handle to deregister.
-     *  */
-    public native @NoException(true) void deregisterLibrary(PluginLibraryHandle handle);
 
     // @cond SuppressDoxyWarnings
     
@@ -238,5 +177,66 @@ public class IPluginRegistry extends Pointer {
      *  - Allowed context for the API call
      *    - Thread-safe: Yes
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
     public native @Cast("bool") @NoException(true) boolean deregisterCreator(@Const @ByRef IPluginCreator creator);
+
+    /**
+     *  \brief Return whether the parent registry will be searched if a plugin is not found in this registry
+     *  default: true
+     * 
+     *  @return bool variable indicating whether parent search is enabled.
+     * 
+     *  @see setParentSearchEnabled
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") boolean isParentSearchEnabled();
+
+    /**
+     *  \brief Set whether the parent registry will be searched if a plugin is not found in this registry.
+     * 
+     *  @param enabled The bool variable indicating whether parent search is enabled.
+     * 
+     *  @see isParentSearchEnabled
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native void setParentSearchEnabled(@Cast("const bool") boolean enabled);
+
+    /**
+     *  \brief Load and register a shared library of plugins.
+     * 
+     *  @param pluginPath the plugin library path.
+     * 
+     *  @return The loaded plugin library handle. The call will fail and return
+     *  nullptr if any of the plugins are already registered.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @NoException(true) PluginLibraryHandle loadLibrary(String pluginPath);
+    public native @NoException(true) PluginLibraryHandle loadLibrary(@Cast("const char*") BytePointer pluginPath);
+
+    /**
+     *  \brief Deregister plugins associated with a library. Any resources acquired when the library
+     *  was loaded will be released.
+     * 
+     *  @param handle the plugin library handle to deregister.
+     *  */
+    public native @NoException(true) void deregisterLibrary(PluginLibraryHandle handle);
 }

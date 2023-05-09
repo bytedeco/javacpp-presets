@@ -46,36 +46,8 @@ public class libraw_canon_makernotes_t extends Pointer {
     public native short FlashExposureLock(); public native libraw_canon_makernotes_t FlashExposureLock(short setter);
     public native short ExposureMode(); public native libraw_canon_makernotes_t ExposureMode(short setter);
     public native short AESetting(); public native libraw_canon_makernotes_t AESetting(short setter);
-    public native @Cast("uchar") byte HighlightTonePriority(); public native libraw_canon_makernotes_t HighlightTonePriority(byte setter);
     /* stabilization */
     public native short ImageStabilization(); public native libraw_canon_makernotes_t ImageStabilization(short setter);
-    /* focus */
-    public native short FocusMode(); public native libraw_canon_makernotes_t FocusMode(short setter);
-    public native short AFPoint(); public native libraw_canon_makernotes_t AFPoint(short setter);
-    public native short FocusContinuous(); public native libraw_canon_makernotes_t FocusContinuous(short setter);
-    public native short AFPointsInFocus30D(); public native libraw_canon_makernotes_t AFPointsInFocus30D(short setter);
-    public native @Cast("uchar") byte AFPointsInFocus1D(int i); public native libraw_canon_makernotes_t AFPointsInFocus1D(int i, byte setter);
-    @MemberGetter public native @Cast("uchar*") BytePointer AFPointsInFocus1D();
-    public native @Cast("ushort") short AFPointsInFocus5D(); public native libraw_canon_makernotes_t AFPointsInFocus5D(short setter); /* bytes in reverse*/
-                              /* AFInfo */
-    public native @Cast("ushort") short AFAreaMode(); public native libraw_canon_makernotes_t AFAreaMode(short setter);
-    public native @Cast("ushort") short NumAFPoints(); public native libraw_canon_makernotes_t NumAFPoints(short setter);
-    public native @Cast("ushort") short ValidAFPoints(); public native libraw_canon_makernotes_t ValidAFPoints(short setter);
-    public native @Cast("ushort") short AFImageWidth(); public native libraw_canon_makernotes_t AFImageWidth(short setter);
-    public native @Cast("ushort") short AFImageHeight(); public native libraw_canon_makernotes_t AFImageHeight(short setter);
-    public native short AFAreaWidths(int i); public native libraw_canon_makernotes_t AFAreaWidths(int i, short setter);
-    @MemberGetter public native ShortPointer AFAreaWidths();     /* cycle to NumAFPoints */
-    public native short AFAreaHeights(int i); public native libraw_canon_makernotes_t AFAreaHeights(int i, short setter);
-    @MemberGetter public native ShortPointer AFAreaHeights();    /* --''--               */
-    public native short AFAreaXPositions(int i); public native libraw_canon_makernotes_t AFAreaXPositions(int i, short setter);
-    @MemberGetter public native ShortPointer AFAreaXPositions(); /* --''--               */
-    public native short AFAreaYPositions(int i); public native libraw_canon_makernotes_t AFAreaYPositions(int i, short setter);
-    @MemberGetter public native ShortPointer AFAreaYPositions(); /* --''--               */
-    public native short AFPointsInFocus(int i); public native libraw_canon_makernotes_t AFPointsInFocus(int i, short setter);
-    @MemberGetter public native ShortPointer AFPointsInFocus();   /* cycle to floor((NumAFPoints+15)/16) */
-    public native short AFPointsSelected(int i); public native libraw_canon_makernotes_t AFPointsSelected(int i, short setter);
-    @MemberGetter public native ShortPointer AFPointsSelected();  /* --''--               */
-    public native @Cast("ushort") short PrimaryAFPoint(); public native libraw_canon_makernotes_t PrimaryAFPoint(short setter);
     /* flash */
     public native short FlashMode(); public native libraw_canon_makernotes_t FlashMode(short setter);
     public native short FlashActivity(); public native libraw_canon_makernotes_t FlashActivity(short setter);
@@ -88,20 +60,33 @@ public class libraw_canon_makernotes_t extends Pointer {
     /* sensor */
     public native short SensorWidth(); public native libraw_canon_makernotes_t SensorWidth(short setter);
     public native short SensorHeight(); public native libraw_canon_makernotes_t SensorHeight(short setter);
-    public native short SensorLeftBorder(); public native libraw_canon_makernotes_t SensorLeftBorder(short setter);
-    public native short SensorTopBorder(); public native libraw_canon_makernotes_t SensorTopBorder(short setter);
-    public native short SensorRightBorder(); public native libraw_canon_makernotes_t SensorRightBorder(short setter);
-    public native short SensorBottomBorder(); public native libraw_canon_makernotes_t SensorBottomBorder(short setter);
-    public native short BlackMaskLeftBorder(); public native libraw_canon_makernotes_t BlackMaskLeftBorder(short setter);
-    public native short BlackMaskTopBorder(); public native libraw_canon_makernotes_t BlackMaskTopBorder(short setter);
-    public native short BlackMaskRightBorder(); public native libraw_canon_makernotes_t BlackMaskRightBorder(short setter);
-    public native short BlackMaskBottomBorder(); public native libraw_canon_makernotes_t BlackMaskBottomBorder(short setter);
+
     public native int AFMicroAdjMode(); public native libraw_canon_makernotes_t AFMicroAdjMode(int setter);
     public native float AFMicroAdjValue(); public native libraw_canon_makernotes_t AFMicroAdjValue(float setter);
     public native short MakernotesFlip(); public native libraw_canon_makernotes_t MakernotesFlip(short setter);
     public native short RecordMode(); public native libraw_canon_makernotes_t RecordMode(short setter);
     public native short SRAWQuality(); public native libraw_canon_makernotes_t SRAWQuality(short setter);
     public native @Cast("unsigned") int wbi(); public native libraw_canon_makernotes_t wbi(int setter);
-    public native float firmware(); public native libraw_canon_makernotes_t firmware(float setter);
     public native short RF_lensID(); public native libraw_canon_makernotes_t RF_lensID(short setter);
+    public native int AutoLightingOptimizer(); public native libraw_canon_makernotes_t AutoLightingOptimizer(int setter);
+    public native int HighlightTonePriority(); public native libraw_canon_makernotes_t HighlightTonePriority(int setter);
+
+    /* -1 = n/a            1 = Economy
+        2 = Normal         3 = Fine
+        4 = RAW            5 = Superfine
+        7 = CRAW         130 = Normal Movie, CRM LightRaw
+      131 = CRM  StandardRaw */
+    public native short Quality(); public native libraw_canon_makernotes_t Quality(short setter);
+    /* data compression curve
+        0 = OFF  1 = CLogV1 2 = CLogV2? 3 = CLogV3 */
+    public native int CanonLog(); public native libraw_canon_makernotes_t CanonLog(int setter);
+
+   public native @ByRef libraw_area_t DefaultCropAbsolute(); public native libraw_canon_makernotes_t DefaultCropAbsolute(libraw_area_t setter);
+   public native @ByRef libraw_area_t RecommendedImageArea(); public native libraw_canon_makernotes_t RecommendedImageArea(libraw_area_t setter);   // contains the image in proper aspect ratio?
+   public native @ByRef libraw_area_t LeftOpticalBlack(); public native libraw_canon_makernotes_t LeftOpticalBlack(libraw_area_t setter);       // use this, when present, to estimate black levels?
+   public native @ByRef libraw_area_t UpperOpticalBlack(); public native libraw_canon_makernotes_t UpperOpticalBlack(libraw_area_t setter);
+   public native @ByRef libraw_area_t ActiveArea(); public native libraw_canon_makernotes_t ActiveArea(libraw_area_t setter);
+    
+    public native short ISOgain(int i); public native libraw_canon_makernotes_t ISOgain(int i, short setter);
+    @MemberGetter public native ShortPointer ISOgain(); // AutoISO & BaseISO per ExifTool
   }

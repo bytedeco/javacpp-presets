@@ -50,7 +50,7 @@ import org.bytedeco.cuda.presets.nvrtc;
             include = {"NvInferVersion.h", "NvInferRuntimeBase.h", "NvInferRuntimePlugin.h", "NvInferRuntimeCommon.h",
                        "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
             link = "nvinfer@.8",
-            preload = "nvinfer_builder_resource@.8.6.0"
+            preload = "nvinfer_builder_resource@.8.6.1"
         ),
         @Platform(
             value = "linux-arm64",
@@ -126,7 +126,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("nvinfer1::safe::IPluginRegistry").pointerTypes("SafeIPluginRegistry"))
-               .put(new Info("nvinfer1::EnumMax").skip())
+               .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
                              "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",

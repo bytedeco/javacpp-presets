@@ -93,4 +93,15 @@ public class VCudaEngine extends VRoot {
     public native @NoException(true) HardwareCompatibilityLevel getHardwareCompatibilityLevel();
     public native @NoException(true) ICudaEngine getPImpl();
     public native @NoException(true) int getNbAuxStreams();
+
+    public native @NoException(true) int getTensorBytesPerComponentV2(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorBytesPerComponentV2(@Cast("const char*") BytePointer tensorName, int profileIndex);
+    public native @NoException(true) int getTensorComponentsPerElementV2(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorComponentsPerElementV2(@Cast("const char*") BytePointer tensorName, int profileIndex);
+    public native @NoException(true) TensorFormat getTensorFormatV2(String tensorName, int profileIndex);
+    public native @NoException(true) @Cast("nvinfer1::TensorFormat") int getTensorFormatV2(@Cast("const char*") BytePointer tensorName, int profileIndex);
+    public native @NoException(true) String getTensorFormatDescV2(String tensorName, int profileIndex);
+    public native @NoException(true) @Cast("const char*") BytePointer getTensorFormatDescV2(@Cast("const char*") BytePointer tensorName, int profileIndex);
+    public native @NoException(true) int getTensorVectorizedDimV2(String tensorName, int profileIndex);
+    public native @NoException(true) int getTensorVectorizedDimV2(@Cast("const char*") BytePointer tensorName, int profileIndex);
 }

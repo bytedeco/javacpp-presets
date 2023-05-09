@@ -43,4 +43,5 @@ public class ncclConfig_t extends Pointer {
   public native int minCTAs(); public native ncclConfig_t minCTAs(int setter);
   public native int maxCTAs(); public native ncclConfig_t maxCTAs(int setter);
   public native @Cast("const char*") BytePointer netName(); public native ncclConfig_t netName(BytePointer setter);
+  public native int splitShare(); public native ncclConfig_t splitShare(int setter);
 }

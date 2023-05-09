@@ -23,131 +23,265 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 import static org.bytedeco.tensorrt.global.nvonnxparser.*;
 
 
-/** \class IParser
- *
- * \brief an object for parsing ONNX models into a TensorRT network definition
- */
+/**
+ *  \class IParser
+ * 
+ *  \brief an object for parsing ONNX models into a TensorRT network definition
+ *  */
 @Namespace("nvonnxparser") @Properties(inherit = org.bytedeco.tensorrt.presets.nvonnxparser.class)
 public class IParser extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IParser(Pointer p) { super(p); }
 
-    /** \brief Parse a serialized ONNX model into the TensorRT network.
-     *         This method has very limited diagnostics. If parsing the serialized model
-     *         fails for any reason (e.g. unsupported IR version, unsupported opset, etc.)
-     *         it the user responsibility to intercept and report the error.
-     *         To obtain a better diagnostic, use the parseFromFile method below.
-     *
-     * @param serialized_onnx_model Pointer to the serialized ONNX model
-     * @param serialized_onnx_model_size Size of the serialized ONNX model
-     *        in bytes
-     * @param model_path Absolute path to the model file for loading external weights if required
-     * @return true if the model was parsed successfully
-     * @see getNbErrors() getError()
-     */
-    public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
-                           @Cast("size_t") long serialized_onnx_model_size,
-                           String model_path/*=nullptr*/);
-    public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
-                           @Cast("size_t") long serialized_onnx_model_size);
-    public native @Cast("bool") boolean parse(@Const Pointer serialized_onnx_model,
-                           @Cast("size_t") long serialized_onnx_model_size,
-                           @Cast("const char*") BytePointer model_path/*=nullptr*/);
+    /**
+     *  \brief Parse a serialized ONNX model into the TensorRT network.
+     *          This method has very limited diagnostics. If parsing the serialized model
+     *          fails for any reason (e.g. unsupported IR version, unsupported opset, etc.)
+     *          it the user responsibility to intercept and report the error.
+     *          To obtain a better diagnostic, use the parseFromFile method below.
+     * 
+     *  @param serialized_onnx_model Pointer to the serialized ONNX model
+     *  @param serialized_onnx_model_size Size of the serialized ONNX model
+     *         in bytes
+     *  @param model_path Absolute path to the model file for loading external weights if required
+     *  @return true if the model was parsed successfully
+     *  @see getNbErrors() getError()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") boolean parse(
+            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size, String model_path/*=nullptr*/);
+    public native @Cast("bool") boolean parse(
+            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
+    public native @Cast("bool") boolean parse(
+            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size, @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
-    /** \brief Parse an onnx model file, which can be a binary protobuf or a text onnx model
-     *         calls parse method inside.
-     *
-     * @param onnxModelFile name
-     * @param verbosity Level
-     *
-     * @return true if the model was parsed successfully
-     *
-     */
+    /**
+     *  \brief Parse an onnx model file, which can be a binary protobuf or a text onnx model
+     *          calls parse method inside.
+     * 
+     *  @param onnxModelFile name
+     *  @param verbosity Level
+     * 
+     *  @return true if the model was parsed successfully
+     * 
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean parseFromFile(String onnxModelFile, int verbosity);
     public native @Cast("bool") boolean parseFromFile(@Cast("const char*") BytePointer onnxModelFile, int verbosity);
 
-    /** \brief Check whether TensorRT supports a particular ONNX model.
-     * 	       If the function returns True, one can proceed to engine building
-     * 	       without having to call \p parse or \p parseFromFile.
-     *
-     * @param serialized_onnx_model Pointer to the serialized ONNX model
-     * @param serialized_onnx_model_size Size of the serialized ONNX model
-     *        in bytes
-     * @param sub_graph_collection Container to hold supported subgraphs
-     * @param model_path Absolute path to the model file for loading external weights if required
-     * @return true if the model is supported
-     */
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
-                                   @Cast("size_t") long serialized_onnx_model_size,
-                                   @ByRef SubGraphCollection_t sub_graph_collection,
-                                   String model_path/*=nullptr*/);
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
-                                   @Cast("size_t") long serialized_onnx_model_size,
-                                   @ByRef SubGraphCollection_t sub_graph_collection);
-    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model,
-                                   @Cast("size_t") long serialized_onnx_model_size,
-                                   @ByRef SubGraphCollection_t sub_graph_collection,
-                                   @Cast("const char*") BytePointer model_path/*=nullptr*/);
+    /**
+     * \brief Check whether TensorRT supports a particular ONNX model.
+     *  	       If the function returns True, one can proceed to engine building
+     *  	       without having to call \p parse or \p parseFromFile.
+     * 
+     *  @param serialized_onnx_model Pointer to the serialized ONNX model
+     *  @param serialized_onnx_model_size Size of the serialized ONNX model
+     *         in bytes
+     *  @param sub_graph_collection Container to hold supported subgraphs
+     *  @param model_path Absolute path to the model file for loading external weights if required
+     *  @return true if the model is supported
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+            @ByRef SubGraphCollection_t sub_graph_collection, String model_path/*=nullptr*/);
+    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+            @ByRef SubGraphCollection_t sub_graph_collection);
+    public native @Cast("bool") boolean supportsModel(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size,
+            @ByRef SubGraphCollection_t sub_graph_collection, @Cast("const char*") BytePointer model_path/*=nullptr*/);
 
-    /** \brief Parse a serialized ONNX model into the TensorRT network
-     * with consideration of user provided weights
-     *
-     * @param serialized_onnx_model Pointer to the serialized ONNX model
-     * @param serialized_onnx_model_size Size of the serialized ONNX model
-     *        in bytes
-     * @return true if the model was parsed successfully
-     * @see getNbErrors() getError()
-     */
-    public native @Cast("bool") boolean parseWithWeightDescriptors(
-            @Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
+    /**
+     * \brief Parse a serialized ONNX model into the TensorRT network
+     *  with consideration of user provided weights
+     * 
+     *  @param serialized_onnx_model Pointer to the serialized ONNX model
+     *  @param serialized_onnx_model_size Size of the serialized ONNX model
+     *         in bytes
+     *  @return true if the model was parsed successfully
+     *  @see getNbErrors() getError()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("bool") boolean parseWithWeightDescriptors(@Const Pointer serialized_onnx_model, @Cast("size_t") long serialized_onnx_model_size);
 
-    /** \brief Returns whether the specified operator may be supported by the
-     *         parser.
-     *
-     * Note that a result of true does not guarantee that the operator will be
-     * supported in all cases (i.e., this function may return false-positives).
-     *
-     * @param op_name The name of the ONNX operator to check for support
-     */
+    /**
+     * \brief Returns whether the specified operator may be supported by the
+     *          parser.
+     * 
+     *  Note that a result of true does not guarantee that the operator will be
+     *  supported in all cases (i.e., this function may return false-positives).
+     * 
+     *  @param op_name The name of the ONNX operator to check for support
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("bool") boolean supportsOperator(String op_name);
     public native @Cast("bool") boolean supportsOperator(@Cast("const char*") BytePointer op_name);
-    /** \brief destroy this object
-     *
-     * \warning deprecated and planned on being removed in TensorRT 10.0
-     */
+
+    /**
+     * \brief destroy this object
+     * 
+     *  \warning deprecated and planned on being removed in TensorRT 10.0
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Deprecated void destroy();
-    /** \brief Get the number of errors that occurred during prior calls to
-     *         \p parse
-     *
-     * @see getError() clearErrors() IParserError
-     */
+
+    /**
+     * \brief Get the number of errors that occurred during prior calls to
+     *          \p parse
+     * 
+     *  @see getError() clearErrors() IParserError
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native int getNbErrors();
-    /** \brief Get an error that occurred during prior calls to \p parse
-     *
-     * @see getNbErrors() clearErrors() IParserError
-     */
+
+    /**
+     * \brief Get an error that occurred during prior calls to \p parse
+     * 
+     *  @see getNbErrors() clearErrors() IParserError
+     *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Const IParserError getError(int index);
-    /** \brief Clear errors from prior calls to \p parse
-     *
-     * @see getNbErrors() getError() IParserError
-     */
+
+    /**
+     * \brief Clear errors from prior calls to \p parse
+     * 
+     *  @see getNbErrors() getError() IParserError
+     *  */
     public native void clearErrors();
 
-    /** \brief Query the plugin libraries needed to implement operations used by the parser in a version-compatible
-     * engine.
-     *
-     * This provides a list of plugin libraries on the filesystem needed to implement operations
-     * in the parsed network.  If you are building a version-compatible engine using this network,
-     * provide this list to IBuilderConfig::setPluginsToSerialize to serialize these plugins along
-     * with the version-compatible engine, or, if you want to ship these plugin libraries externally
-     * to the engine, ensure that IPluginRegistry::loadLibrary is used to load these libraries in the
-     * appropriate runtime before deserializing the corresponding engine.
-     *
-     * @param nbPluginLibs [out] Returns the number of plugin libraries in the array, or -1 if there was an error.
-     * @return Array of {@code nbPluginLibs} C-strings describing plugin library paths on the filesystem if nbPluginLibs > 0,
-     * or nullptr otherwise.  This array is owned by the IParser, and the pointers in the array are only valid until the
-     * next call to parse(), supportsModel(), parseFromFile(), or parseWithWeightDescriptors().
-     */
+    /**
+     *  \brief Query the plugin libraries needed to implement operations used by the parser in a version-compatible
+     *  engine.
+     * 
+     *  This provides a list of plugin libraries on the filesystem needed to implement operations
+     *  in the parsed network.  If you are building a version-compatible engine using this network,
+     *  provide this list to IBuilderConfig::setPluginsToSerialize to serialize these plugins along
+     *  with the version-compatible engine, or, if you want to ship these plugin libraries externally
+     *  to the engine, ensure that IPluginRegistry::loadLibrary is used to load these libraries in the
+     *  appropriate runtime before deserializing the corresponding engine.
+     * 
+     *  @param nbPluginLibs [out] Returns the number of plugin libraries in the array, or -1 if there was an error.
+     *  @return Array of {@code nbPluginLibs} C-strings describing plugin library paths on the filesystem if nbPluginLibs > 0,
+     *  or nullptr otherwise.  This array is owned by the IParser, and the pointers in the array are only valid until
+     *  the next call to parse(), supportsModel(), parseFromFile(), or parseWithWeightDescriptors().
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
     public native @Cast("const char**") @NoException(true) PointerPointer getUsedVCPluginLibraries(@Cast("int64_t*") @ByRef long[] nbPluginLibs);
+
+    /**
+     *  \brief Set the parser flags.
+     * 
+     *  The flags are listed in the OnnxParserFlag enum.
+     * 
+     *  @param OnnxParserFlag The flags used when parsing an ONNX model.
+     * 
+     *  \note This function will override the previous set flags, rather than bitwise ORing the new flag.
+     * 
+     *  @see getFlags()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setFlags(@Cast("nvonnxparser::OnnxParserFlags") int onnxParserFlags);
+
+    /**
+     *  \brief Get the parser flags. Defaults to 0.
+     * 
+     *  @return The parser flags as a bitmask.
+     * 
+     *  @see setFlags()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @Cast("nvonnxparser::OnnxParserFlags") @NoException(true) int getFlags();
+
+    /**
+     *  \brief clear a parser flag.
+     * 
+     *  clears the parser flag from the enabled flags.
+     * 
+     *  @see setFlags()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void clearFlag(OnnxParserFlag onnxParserFlag);
+    public native @NoException(true) void clearFlag(@Cast("nvonnxparser::OnnxParserFlag") int onnxParserFlag);
+
+    /**
+     *  \brief Set a single parser flag.
+     * 
+     *  Add the input parser flag to the already enabled flags.
+     * 
+     *  @see setFlags()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native @NoException(true) void setFlag(OnnxParserFlag onnxParserFlag);
+    public native @NoException(true) void setFlag(@Cast("nvonnxparser::OnnxParserFlag") int onnxParserFlag);
+
+    /**
+     *  \brief Returns true if the parser flag is set
+     * 
+     *  @see getFlags()
+     * 
+     *  @return True if flag is set, false if unset.
+     *  */
+    public native @Cast("bool") @NoException(true) boolean getFlag(OnnxParserFlag onnxParserFlag);
+    public native @Cast("bool") @NoException(true) boolean getFlag(@Cast("nvonnxparser::OnnxParserFlag") int onnxParserFlag);
 }

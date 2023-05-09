@@ -44,4 +44,8 @@ public class libraw_panasonic_makernotes_t extends Pointer {
     public native float gamma(); public native libraw_panasonic_makernotes_t gamma(float setter);
     public native int HighISOMultiplier(int i); public native libraw_panasonic_makernotes_t HighISOMultiplier(int i, int setter);
     @MemberGetter public native IntPointer HighISOMultiplier(); /* 0->R, 1->G, 2->B */
+    public native short FocusStepNear(); public native libraw_panasonic_makernotes_t FocusStepNear(short setter);
+    public native short FocusStepCount(); public native libraw_panasonic_makernotes_t FocusStepCount(short setter);
+    public native @Cast("unsigned") int ZoomPosition(); public native libraw_panasonic_makernotes_t ZoomPosition(int setter);
+    public native @Cast("unsigned") int LensManufacturer(); public native libraw_panasonic_makernotes_t LensManufacturer(int setter);
   }

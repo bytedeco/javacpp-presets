@@ -11,16 +11,24 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.libraw.global.LibRaw.*;
 
 
+// #ifndef LIBRAW_NO_IOSTREAMS_DATASTREAM
+// #endif
+
+// #if defined (LIBRAW_NO_IOSTREAMS_DATASTREAM)  && defined (LIBRAW_WIN32_CALLS)
+
+// #endif
+
 @NoOffset @Properties(inherit = org.bytedeco.libraw.presets.LibRaw.class)
 public class LibRaw_buffer_datastream extends LibRaw_abstract_datastream {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LibRaw_buffer_datastream(Pointer p) { super(p); }
 
-  public LibRaw_buffer_datastream(Pointer buffer, @Cast("size_t") long bsize) { super((Pointer)null); allocate(buffer, bsize); }
-  private native void allocate(Pointer buffer, @Cast("size_t") long bsize);
+  public LibRaw_buffer_datastream(@Const Pointer buffer, @Cast("size_t") long bsize) { super((Pointer)null); allocate(buffer, bsize); }
+  private native void allocate(@Const Pointer buffer, @Cast("size_t") long bsize);
   public native int valid();
-  public native Pointer make_jas_stream();
+// #ifdef LIBRAW_OLD_VIDEO_SUPPORT
+// #endif
   public native int jpeg_src(Pointer jpegdata);
   public native int read(Pointer ptr, @Cast("size_t") long sz, @Cast("size_t") long nmemb);
   public native int eof();

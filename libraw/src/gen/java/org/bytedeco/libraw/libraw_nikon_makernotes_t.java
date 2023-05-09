@@ -37,24 +37,6 @@ public class libraw_nikon_makernotes_t extends Pointer {
     @MemberGetter public native @Cast("uchar*") BytePointer ImageStabilization();
     public native @Cast("uchar") byte VibrationReduction(); public native libraw_nikon_makernotes_t VibrationReduction(byte setter);
     public native @Cast("uchar") byte VRMode(); public native libraw_nikon_makernotes_t VRMode(byte setter);
-    /* focus */
-    public native @Cast("char") byte FocusMode(int i); public native libraw_nikon_makernotes_t FocusMode(int i, byte setter);
-    @MemberGetter public native @Cast("char*") BytePointer FocusMode();
-    public native @Cast("uchar") byte AFPoint(); public native libraw_nikon_makernotes_t AFPoint(byte setter);
-    public native @Cast("ushort") short AFPointsInFocus(); public native libraw_nikon_makernotes_t AFPointsInFocus(short setter);
-    public native @Cast("uchar") byte ContrastDetectAF(); public native libraw_nikon_makernotes_t ContrastDetectAF(byte setter);
-    public native @Cast("uchar") byte AFAreaMode(); public native libraw_nikon_makernotes_t AFAreaMode(byte setter);
-    public native @Cast("uchar") byte PhaseDetectAF(); public native libraw_nikon_makernotes_t PhaseDetectAF(byte setter);
-    public native @Cast("uchar") byte PrimaryAFPoint(); public native libraw_nikon_makernotes_t PrimaryAFPoint(byte setter);
-    public native @Cast("uchar") byte AFPointsUsed(int i); public native libraw_nikon_makernotes_t AFPointsUsed(int i, byte setter);
-    @MemberGetter public native @Cast("uchar*") BytePointer AFPointsUsed();
-    public native @Cast("ushort") short AFImageWidth(); public native libraw_nikon_makernotes_t AFImageWidth(short setter);
-    public native @Cast("ushort") short AFImageHeight(); public native libraw_nikon_makernotes_t AFImageHeight(short setter);
-    public native @Cast("ushort") short AFAreaXPposition(); public native libraw_nikon_makernotes_t AFAreaXPposition(short setter);
-    public native @Cast("ushort") short AFAreaYPosition(); public native libraw_nikon_makernotes_t AFAreaYPosition(short setter);
-    public native @Cast("ushort") short AFAreaWidth(); public native libraw_nikon_makernotes_t AFAreaWidth(short setter);
-    public native @Cast("ushort") short AFAreaHeight(); public native libraw_nikon_makernotes_t AFAreaHeight(short setter);
-    public native @Cast("uchar") byte ContrastDetectAFInFocus(); public native libraw_nikon_makernotes_t ContrastDetectAFInFocus(byte setter);
     /* flash */
     public native @Cast("char") byte FlashSetting(int i); public native libraw_nikon_makernotes_t FlashSetting(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer FlashSetting();
@@ -83,7 +65,23 @@ public class libraw_nikon_makernotes_t extends Pointer {
     public native @Cast("uchar") byte FlashGroupOutputAndCompensation(int i); public native libraw_nikon_makernotes_t FlashGroupOutputAndCompensation(int i, byte setter);
     @MemberGetter public native @Cast("uchar*") BytePointer FlashGroupOutputAndCompensation();
     public native @Cast("uchar") byte FlashColorFilter(); public native libraw_nikon_makernotes_t FlashColorFilter(byte setter);
+
+/* NEF compression, comments follow those for ExifTool tag 0x0093:
+	 1: Lossy (type 1)
+	 2: Uncompressed
+	 3: Lossless
+	 4: Lossy (type 2)
+	 5: Striped packed 12-bit
+	 6: Uncompressed (14-bit reduced to 12-bit)
+	 7: Unpacked 12-bit
+	 8: Small raw
+	 9: Packed 12-bit
+	10: Packed 14-bit
+	13: High Efficiency  (HE)
+	14: High Efficiency* (HE*)
+*/
     public native @Cast("ushort") short NEFCompression(); public native libraw_nikon_makernotes_t NEFCompression(short setter);
+
     public native int ExposureMode(); public native libraw_nikon_makernotes_t ExposureMode(int setter);
     public native int ExposureProgram(); public native libraw_nikon_makernotes_t ExposureProgram(int setter);
     public native int nMEshots(); public native libraw_nikon_makernotes_t nMEshots(int setter);
@@ -105,4 +103,10 @@ public class libraw_nikon_makernotes_t extends Pointer {
     public native @ByRef libraw_sensor_highspeed_crop_t SensorHighSpeedCrop(); public native libraw_nikon_makernotes_t SensorHighSpeedCrop(libraw_sensor_highspeed_crop_t setter);
     public native @Cast("ushort") short SensorWidth(); public native libraw_nikon_makernotes_t SensorWidth(short setter);
     public native @Cast("ushort") short SensorHeight(); public native libraw_nikon_makernotes_t SensorHeight(short setter);
+    public native @Cast("ushort") short Active_D_Lighting(); public native libraw_nikon_makernotes_t Active_D_Lighting(short setter);
+    public native @Cast("unsigned") int ShotInfoVersion(); public native libraw_nikon_makernotes_t ShotInfoVersion(int setter);
+    public native short MakernotesFlip(); public native libraw_nikon_makernotes_t MakernotesFlip(short setter);
+    public native double RollAngle(); public native libraw_nikon_makernotes_t RollAngle(double setter);  // positive is clockwise, CW
+    public native double PitchAngle(); public native libraw_nikon_makernotes_t PitchAngle(double setter); // positive is upwords
+    public native double YawAngle(); public native libraw_nikon_makernotes_t YawAngle(double setter);   // positive is to the right
   }

@@ -210,22 +210,22 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 16.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
- * LibRaw 0.20.2  https://www.libraw.org/download
+ * LibRaw 0.21.x  https://www.libraw.org/download
  * Leptonica 1.83.x  http://www.leptonica.org/download.html
  * Tesseract 5.3.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
  * CUDA 12.1.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.9.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.17.x  https://developer.nvidia.com/nccl
+   * NCCL 2.18.x  https://developer.nvidia.com/nccl
  * NVIDIA Video Codec SDK 12.0.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
  * PyTorch 2.0.x  https://github.com/pytorch/pytorch
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.12.x  https://github.com/tensorflow/tensorflow
- * TensorRT 8.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.32.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
+ * Triton Inference Server 2.33.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.21.x  https://github.com/luxonis/depthai-core
  * ONNX 1.14.x  https://github.com/onnx/onnx

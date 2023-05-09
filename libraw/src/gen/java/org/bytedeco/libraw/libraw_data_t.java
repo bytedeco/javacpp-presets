@@ -37,11 +37,13 @@ public class libraw_data_t extends Pointer {
     public native @ByRef libraw_makernotes_t makernotes(); public native libraw_data_t makernotes(libraw_makernotes_t setter);
     public native @ByRef libraw_shootinginfo_t shootinginfo(); public native libraw_data_t shootinginfo(libraw_shootinginfo_t setter);
     public native @ByRef libraw_output_params_t params(); public native libraw_data_t params(libraw_output_params_t setter);
+    public native @ByRef libraw_raw_unpack_params_t rawparams(); public native libraw_data_t rawparams(libraw_raw_unpack_params_t setter);
     public native @Cast("unsigned int") int progress_flags(); public native libraw_data_t progress_flags(int setter);
     public native @Cast("unsigned int") int process_warnings(); public native libraw_data_t process_warnings(int setter);
     public native @ByRef libraw_colordata_t color(); public native libraw_data_t color(libraw_colordata_t setter);
     public native @ByRef libraw_imgother_t other(); public native libraw_data_t other(libraw_imgother_t setter);
     public native @ByRef libraw_thumbnail_t thumbnail(); public native libraw_data_t thumbnail(libraw_thumbnail_t setter);
+	public native @ByRef libraw_thumbnail_list_t thumbs_list(); public native libraw_data_t thumbs_list(libraw_thumbnail_list_t setter);
     public native @ByRef libraw_rawdata_t rawdata(); public native libraw_data_t rawdata(libraw_rawdata_t setter);
     public native Pointer parent_class(); public native libraw_data_t parent_class(Pointer setter);
   }

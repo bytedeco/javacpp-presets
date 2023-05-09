@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LibRaw 0.20.2  https://www.libraw.org/
+ * LibRaw 0.21.1  https://www.libraw.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libraw-platform</artifactId>
-            <version>0.20.2-1.5.9-SNAPSHOT</version>
+            <version>0.21.1-1.5.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

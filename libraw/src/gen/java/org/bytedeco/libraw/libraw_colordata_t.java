@@ -36,8 +36,24 @@ public class libraw_colordata_t extends Pointer {
     public native @Cast("unsigned") int black(); public native libraw_colordata_t black(int setter);
     public native @Cast("unsigned") int data_maximum(); public native libraw_colordata_t data_maximum(int setter);
     public native @Cast("unsigned") int maximum(); public native libraw_colordata_t maximum(int setter);
+
+// Canon (SpecularWhiteLevel)
+// Kodak (14N, 14nx, SLR/c/n, DCS720X, DCS760C, DCS760M, ProBack, ProBack645, P712, P880, P850)
+// Olympus, except:
+//	C5050Z, C5060WZ, C7070WZ, C8080WZ
+//	SP350, SP500UZ, SP510UZ, SP565UZ
+//	E-10, E-20
+//	E-300, E-330, E-400, E-410, E-420, E-450, E-500, E-510, E-520
+//	E-1, E-3
+//	XZ-1
+// Panasonic
+// Pentax
+// Sony
+// and aliases of the above
+// DNG
     public native long linear_max(int i); public native libraw_colordata_t linear_max(int i, long setter);
     @MemberGetter public native CLongPointer linear_max();
+
     public native float fmaximum(); public native libraw_colordata_t fmaximum(float setter);
     public native float fnorm(); public native libraw_colordata_t fnorm(float setter);
     public native @Cast("ushort") short white(int i, int j); public native libraw_colordata_t white(int i, int j, short setter);
@@ -83,17 +99,17 @@ public class libraw_colordata_t extends Pointer {
     public native int as_shot_wb_applied(); public native libraw_colordata_t as_shot_wb_applied(int setter);
     public native @ByRef libraw_P1_color_t P1_color(int i); public native libraw_colordata_t P1_color(int i, libraw_P1_color_t setter);
     @MemberGetter public native libraw_P1_color_t P1_color();
-    public native @Cast("unsigned") int raw_bps(); public native libraw_colordata_t raw_bps(int setter); /* for Phase One, raw format */
+    public native @Cast("unsigned") int raw_bps(); public native libraw_colordata_t raw_bps(int setter); /* for Phase One: raw format; For other cameras: bits per pixel (copy of tiff_bps in most cases) */
                       /* Phase One raw format values, makernotes tag 0x010e:
                       0    Name unknown
                       1    "RAW 1"
                       2    "RAW 2"
-                      3    "IIQ L"
+                      3    "IIQ L" (IIQ L14)
                       4    Never seen
                       5    "IIQ S"
-                      6    "IIQ S v.2"
+                      6    "IIQ Sv2" (S14 / S14+)
                       7    Never seen
-                      8    Name unknown
+                      8    "IIQ L16" (IIQ L16EX / IIQ L16)
                       */
 	public native int ExifColorSpace(); public native libraw_colordata_t ExifColorSpace(int setter);
   }

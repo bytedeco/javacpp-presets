@@ -29,13 +29,11 @@ public class fuji_compressed_params extends Pointer {
           return new fuji_compressed_params((Pointer)this).offsetAddress(i);
       }
   
-     /* quantization table */
-    public native int q_point(int i); public native fuji_compressed_params q_point(int i, int setter);
-    @MemberGetter public native IntPointer q_point();  /* quantization points */
+    public native @ByRef fuji_q_table qt(int i); public native fuji_compressed_params qt(int i, fuji_q_table setter);
+    @MemberGetter public native fuji_q_table qt();
+    public native Pointer buf(); public native fuji_compressed_params buf(Pointer setter);
     public native int max_bits(); public native fuji_compressed_params max_bits(int setter);
     public native int min_value(); public native fuji_compressed_params min_value(int setter);
-    public native int raw_bits(); public native fuji_compressed_params raw_bits(int setter);
-    public native int total_values(); public native fuji_compressed_params total_values(int setter);
-    public native int maxDiff(); public native fuji_compressed_params maxDiff(int setter);
+    public native int max_value(); public native fuji_compressed_params max_value(int setter);   // q_point[4]
     public native @Cast("ushort") short line_width(); public native fuji_compressed_params line_width(short setter);
   }

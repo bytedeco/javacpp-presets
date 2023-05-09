@@ -29,9 +29,6 @@ public class libraw_callbacks_t extends Pointer {
           return new libraw_callbacks_t((Pointer)this).offsetAddress(i);
       }
   
-    public native memory_callback mem_cb(); public native libraw_callbacks_t mem_cb(memory_callback setter);
-    public native Pointer memcb_data(); public native libraw_callbacks_t memcb_data(Pointer setter);
-
     public native data_callback data_cb(); public native libraw_callbacks_t data_cb(data_callback setter);
     public native Pointer datacb_data(); public native libraw_callbacks_t datacb_data(Pointer setter);
 
