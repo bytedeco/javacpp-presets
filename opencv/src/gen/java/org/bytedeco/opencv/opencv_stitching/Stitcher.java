@@ -2,6 +2,7 @@
 
 package org.bytedeco.opencv.opencv_stitching;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -203,18 +204,18 @@ public class Stitcher extends Pointer {
     @return Status code.
      */
     public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal MatVector images,
-                            @StdVector CameraParams cameras,
+                            @Const @ByRef CameraParamsVector cameras,
                             @StdVector IntPointer component);
     public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal UMatVector images,
-                            @StdVector CameraParams cameras,
+                            @Const @ByRef CameraParamsVector cameras,
                             @StdVector IntBuffer component);
     public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal GpuMatVector images,
-                            @StdVector CameraParams cameras,
+                            @Const @ByRef CameraParamsVector cameras,
                             @StdVector int[] component);
     /** \overload */
-    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal MatVector images, @StdVector CameraParams cameras);
-    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal UMatVector images, @StdVector CameraParams cameras);
-    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal GpuMatVector images, @StdVector CameraParams cameras);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal MatVector images, @Const @ByRef CameraParamsVector cameras);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal UMatVector images, @Const @ByRef CameraParamsVector cameras);
+    public native @Cast("cv::Stitcher::Status") int setTransform(@ByVal GpuMatVector images, @Const @ByRef CameraParamsVector cameras);
 
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat pano);
@@ -269,7 +270,7 @@ public class Stitcher extends Pointer {
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMatVector masks, @ByVal GpuMat pano);
 
     public native @StdVector IntPointer component();
-    public native @StdVector CameraParams cameras();
+    public native @ByVal CameraParamsVector cameras();
     public native double workScale();
 
     /** \brief Return the mask of the panorama.

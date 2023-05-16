@@ -2,6 +2,7 @@
 
 package org.bytedeco.opencv.opencv_stitching;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
