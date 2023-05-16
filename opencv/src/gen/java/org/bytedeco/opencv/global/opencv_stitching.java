@@ -4,6 +4,7 @@ package org.bytedeco.opencv.global;
 
 import org.bytedeco.opencv.opencv_stitching.*;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -41,6 +42,15 @@ import static org.bytedeco.opencv.global.opencv_xfeatures2d.*;
 
 public class opencv_stitching extends org.bytedeco.opencv.presets.opencv_stitching {
     static { Loader.load(); }
+
+// Targeting ../opencv_stitching/CameraParamsVector.java
+
+
+// Targeting ../opencv_stitching/ImageFeaturesVector.java
+
+
+// Targeting ../opencv_stitching/MatchesInfoVector.java
+
 
 // Parsed from <opencv2/stitching/detail/warpers.hpp>
 
@@ -270,30 +280,30 @@ public class opencv_stitching extends org.bytedeco.opencv.presets.opencv_stitchi
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal MatVector images,
-    @StdVector ImageFeatures features,
+    @ByRef ImageFeaturesVector features,
     @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks);
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal MatVector images,
-    @StdVector ImageFeatures features);
+    @ByRef ImageFeaturesVector features);
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal UMatVector images,
-    @StdVector ImageFeatures features,
+    @ByRef ImageFeaturesVector features,
     @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks);
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal UMatVector images,
-    @StdVector ImageFeatures features);
+    @ByRef ImageFeaturesVector features);
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMatVector images,
-    @StdVector ImageFeatures features,
+    @ByRef ImageFeaturesVector features,
     @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks);
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMatVector images,
-    @StdVector ImageFeatures features);
+    @ByRef ImageFeaturesVector features);
 
 /** \brief
 <p>
@@ -607,22 +617,22 @@ on whether a panorama spans horizontally or vertically
 // Auxiliary functions
 
 // Returns matches graph representation in DOT language
-@Namespace("cv::detail") public static native @Str BytePointer matchesGraphAsString(@ByRef StringVector pathes, @StdVector MatchesInfo pairwise_matches,
+@Namespace("cv::detail") public static native @Str BytePointer matchesGraphAsString(@ByRef StringVector pathes, @ByRef MatchesInfoVector pairwise_matches,
                                             float conf_threshold);
 
 @Namespace("cv::detail") public static native @StdVector IntPointer leaveBiggestComponent(
-        @StdVector ImageFeatures features,
-        @StdVector MatchesInfo pairwise_matches,
+        @ByRef ImageFeaturesVector features,
+        @ByRef MatchesInfoVector pairwise_matches,
         float conf_threshold);
 
 @Namespace("cv::detail") public static native void findMaxSpanningTree(
-        int num_images, @StdVector MatchesInfo pairwise_matches,
+        int num_images, @Const @ByRef MatchesInfoVector pairwise_matches,
         @ByRef Graph span_tree, @StdVector IntPointer centers);
 @Namespace("cv::detail") public static native void findMaxSpanningTree(
-        int num_images, @StdVector MatchesInfo pairwise_matches,
+        int num_images, @Const @ByRef MatchesInfoVector pairwise_matches,
         @ByRef Graph span_tree, @StdVector IntBuffer centers);
 @Namespace("cv::detail") public static native void findMaxSpanningTree(
-        int num_images, @StdVector MatchesInfo pairwise_matches,
+        int num_images, @Const @ByRef MatchesInfoVector pairwise_matches,
         @ByRef Graph span_tree, @StdVector int[] centers);
 
 /** \} stitching_rotation */
@@ -972,14 +982,14 @@ by Heung-Yeung Shum and Richard Szeliski.
 @param pairwise_matches Matches between all image pairs.
 @param focals Estimated focal lengths for each camera.
  */
-@Namespace("cv::detail") public static native void estimateFocal(@StdVector ImageFeatures features,
-                              @StdVector MatchesInfo pairwise_matches,
+@Namespace("cv::detail") public static native void estimateFocal(@Const @ByRef ImageFeaturesVector features,
+                              @Const @ByRef MatchesInfoVector pairwise_matches,
                               @StdVector DoublePointer focals);
-@Namespace("cv::detail") public static native void estimateFocal(@StdVector ImageFeatures features,
-                              @StdVector MatchesInfo pairwise_matches,
+@Namespace("cv::detail") public static native void estimateFocal(@Const @ByRef ImageFeaturesVector features,
+                              @Const @ByRef MatchesInfoVector pairwise_matches,
                               @StdVector DoubleBuffer focals);
-@Namespace("cv::detail") public static native void estimateFocal(@StdVector ImageFeatures features,
-                              @StdVector MatchesInfo pairwise_matches,
+@Namespace("cv::detail") public static native void estimateFocal(@Const @ByRef ImageFeaturesVector features,
+                              @Const @ByRef MatchesInfoVector pairwise_matches,
                               @StdVector double[] focals);
 
 @Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs,@ByRef Mat K);
