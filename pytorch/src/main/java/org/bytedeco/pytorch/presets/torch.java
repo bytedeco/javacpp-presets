@@ -4814,6 +4814,7 @@ public class torch implements LoadEnabled, InfoMapper {
             //"at::mt19937_data_pod",
             //"at::mt19937_engine",
             "at::tracer::impl::NoTracerDispatchMode",
+            "c10::_CopyBytesFunctionRegisterer",
             "c10::AlignedCharArray<1,Size>::",
             "c10::AlignedCharArray<2,Size>::",
             "c10::AlignedCharArray<4,Size>::",
@@ -4958,6 +4959,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::data::datasets::detail::BatchDataBuffer::UnwrappedBatchData",
             "torch::detail::ClassNotSelected",
             "torch::detail::TorchLibraryInit",
+            "torch::enumtype::_compute_enum_name",
             "torch::jit::CompleteArgumentInfo",
             "torch::jit::CompleteArgumentInfoPOD",
             "torch::jit::CompleteArgumentSpec",
@@ -5003,6 +5005,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
                //// Classes kept but passed as generic pointer
                .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::string_view", "c10::impl::PyObjectSlot",
+                   "_object",
                    "PyObject", "std::function<PyObject*(void*)>", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
                    "std::pair<PyObject*,PyObject*>", "std::stack<std::pair<PyObject*,PyObject*> >", "torch::autograd::utils::DelayWarningHandler",
                    "std::is_same<torch::detail::pack<true>,torch::detail::pack<true> >", "at::cuda::NVRTC", "at::RecordFunctionCallback", "at::StepCallbacks", "THCState", "THHState",
