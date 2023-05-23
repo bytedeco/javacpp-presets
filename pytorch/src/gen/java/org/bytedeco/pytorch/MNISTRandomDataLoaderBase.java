@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -51,5 +53,4 @@ public class MNISTRandomDataLoaderBase extends Pointer {
   public native void join();
 
   /** Returns the options with which the DataLoader was configured. */
-  public native @Const @ByRef @NoException(true) FullDataLoaderOptions options();
 }

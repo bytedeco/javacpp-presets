@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -23,9 +25,9 @@ public class StringModuleDictItem extends Pointer {
     public StringModuleDictItem(Pointer p) { super(p); }
 
   /** Constructs a new item. */
-  public StringModuleDictItem(@StdString BytePointer key, @ByVal Module value) { super((Pointer)null); allocate(key, value); }
+  public StringModuleDictItem(@StdString BytePointer key, @ByVal Module value) { super((Pointer)null); allocate(key, value.asModule()); }
   private native void allocate(@StdString BytePointer key, @ByVal Module value);
-  public StringModuleDictItem(@StdString String key, @ByVal Module value) { super((Pointer)null); allocate(key, value); }
+  public StringModuleDictItem(@StdString String key, @ByVal Module value) { super((Pointer)null); allocate(key, value.asModule()); }
   private native void allocate(@StdString String key, @ByVal Module value);
 
   /** Returns a reference to the value. */

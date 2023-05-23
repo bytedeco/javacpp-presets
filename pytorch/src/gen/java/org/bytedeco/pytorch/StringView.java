@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -40,9 +42,12 @@ public class StringView extends Pointer {
 
   public native @Cast("const char*") BytePointer str();
 
-  
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef StringView dt);
+  public Pointer shiftLeft(Pointer os) { return shiftLeft(os, this); }
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef StringView lhs, @Const @ByRef StringView rhs);
+  public boolean equals(StringView rhs) { return equals(this, rhs); }
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef StringView lhs, @Const @ByRef StringView rhs);
+  public boolean notEquals(StringView rhs) { return notEquals(this, rhs); }
 }

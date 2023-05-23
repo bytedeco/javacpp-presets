@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -29,8 +31,8 @@ public class SGD extends Optimizer {
         @ByVal OptimizerParamGroupVector param_groups,
         @ByVal SGDOptions defaults);
 
-  public SGD(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal SGDOptions defaults) { super((Pointer)null); allocate(params, defaults); }
-  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal SGDOptions defaults);
+  public SGD(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal SGDOptions defaults) { super((Pointer)null); allocate(params, defaults); }
+  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal SGDOptions defaults);
 
   public native @ByVal Tensor step(@ByVal(nullValue = "torch::optim::Optimizer::LossClosure(nullptr)") LossClosure closure);
   public native @ByVal Tensor step();

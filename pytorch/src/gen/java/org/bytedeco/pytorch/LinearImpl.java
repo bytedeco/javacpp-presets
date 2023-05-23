@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,9 +38,9 @@ public class LinearImpl extends LinearImplCloneable {
     public LinearImpl(Pointer p) { super(p); }
 
   public LinearImpl(@Cast("int64_t") long in_features, @Cast("int64_t") long out_features) { super((Pointer)null); allocate(in_features, out_features); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long in_features, @Cast("int64_t") long out_features);
+  @SharedPtr private native void allocate(@Cast("int64_t") long in_features, @Cast("int64_t") long out_features);
   public LinearImpl(@Const @ByRef LinearOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef LinearOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef LinearOptions options_);
 
   public native void reset();
 

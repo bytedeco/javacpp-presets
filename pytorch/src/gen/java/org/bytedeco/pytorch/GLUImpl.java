@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -45,9 +47,9 @@ public class GLUImpl extends GLUImplCloneable {
     }
 
   public GLUImpl(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_);
   public GLUImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

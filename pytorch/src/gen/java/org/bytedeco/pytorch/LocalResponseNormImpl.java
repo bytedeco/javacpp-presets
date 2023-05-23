@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -40,9 +42,9 @@ public class LocalResponseNormImpl extends LocalResponseNormImplCloneable {
     public LocalResponseNormImpl(Pointer p) { super(p); }
 
   public LocalResponseNormImpl(@Cast("int64_t") long size) { super((Pointer)null); allocate(size); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long size);
+  @SharedPtr private native void allocate(@Cast("int64_t") long size);
   public LocalResponseNormImpl(@Const @ByRef LocalResponseNormOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef LocalResponseNormOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef LocalResponseNormOptions options_);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

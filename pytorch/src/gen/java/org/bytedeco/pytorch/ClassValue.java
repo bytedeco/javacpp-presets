@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -24,28 +26,23 @@ public class ClassValue extends SugaredValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ClassValue(Pointer p) { super(p); }
 
-  public ClassValue(@SharedPtr @ByVal ClassType type) { super((Pointer)null); allocate(type); }
-  private native void allocate(@SharedPtr @ByVal ClassType type);
+  public ClassValue(@SharedPtr("c10::ClassType") @ByVal ClassType type) { super((Pointer)null); allocate(type); }
+  private native void allocate(@SharedPtr("c10::ClassType") @ByVal ClassType type);
 
   // Call the type's constructor, as in:
   //    n = Foo(constructor_arg)
-  public native @SharedPtr @ByVal SugaredValue call(
-        @Const @ByRef SourceRange loc,
-        @ByRef GraphFunction m,
-        @ByVal NamedValueArrayRef args,
-        @ByVal NamedValueArrayRef kwargs,
-        @Cast("size_t") long n_binders);
+  
 
-  public native @SharedPtr @ByVal SugaredValue attr(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue attr(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @StdString BytePointer field);
-  public native @SharedPtr @ByVal SugaredValue attr(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue attr(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @StdString String field);
 
   public native @StdString BytePointer kind();
 
-  public native @SharedPtr @ByRef ClassType type_(); public native ClassValue type_(ClassType setter);
+  public native @SharedPtr("c10::ClassType") @ByRef ClassType type_(); public native ClassValue type_(ClassType setter);
 }

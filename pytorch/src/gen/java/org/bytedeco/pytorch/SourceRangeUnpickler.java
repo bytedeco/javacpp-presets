@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -16,12 +18,10 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("torch::jit") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SourceRangeUnpickler extends Pointer {
-    static { Loader.load(); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SourceRangeUnpickler() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SourceRangeUnpickler(Pointer p) { super(p); }
-
-  public native @ByVal SourceRangeOptional findSourceRangeThatGenerated(
-        @Const @ByRef SourceRange range);
 }

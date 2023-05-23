@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,13 +35,13 @@ public class ExecutionPlan extends Pointer {
 
   public ExecutionPlan() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public ExecutionPlan(@SharedPtr @ByVal Graph graph, @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(@SharedPtr @ByVal Graph graph, @StdString BytePointer function_name);
-  public ExecutionPlan(@SharedPtr @ByVal Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(@SharedPtr @ByVal Graph graph, @StdString String function_name);
+  public ExecutionPlan(@SharedPtr("torch::jit::Graph") @ByVal Graph graph, @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@SharedPtr("torch::jit::Graph") @ByVal Graph graph, @StdString BytePointer function_name);
+  public ExecutionPlan(@SharedPtr("torch::jit::Graph") @ByVal Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@SharedPtr("torch::jit::Graph") @ByVal Graph graph, @StdString String function_name);
 
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 
   public native @ByRef Code code(); public native ExecutionPlan code(Code setter);
-  public native @SharedPtr @ByRef Graph graph(); public native ExecutionPlan graph(Graph setter);
+  public native @SharedPtr("torch::jit::Graph") @ByRef Graph graph(); public native ExecutionPlan graph(Graph setter);
 }

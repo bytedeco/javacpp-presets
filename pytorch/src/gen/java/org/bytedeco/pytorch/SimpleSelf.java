@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,8 +24,8 @@ public class SimpleSelf extends Self {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimpleSelf(Pointer p) { super(p); }
 
-  public SimpleSelf(@SharedPtr @ByVal ClassType classType) { super((Pointer)null); allocate(classType); }
-  private native void allocate(@SharedPtr @ByVal ClassType classType);
-  public native @SharedPtr @ByVal SugaredValue makeSugared(Value v);
-  public native @SharedPtr @ByVal ClassType getClassType();
+  public SimpleSelf(@SharedPtr("c10::ClassType") @ByVal ClassType classType) { super((Pointer)null); allocate(classType); }
+  private native void allocate(@SharedPtr("c10::ClassType") @ByVal ClassType classType);
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue makeSugared(Value v);
+  public native @SharedPtr("c10::ClassType") @ByVal ClassType getClassType();
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -70,13 +72,13 @@ private native void allocate();
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast("const c10::ArrayRef<c10::Symbol>::iterator*") Symbol begin();
-  public native @ByVal @Cast("const c10::ArrayRef<c10::Symbol>::iterator*") Symbol end();
+  public native @Const @ByPtr Symbol begin();
+  public native @Const @ByPtr Symbol end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast("const c10::ArrayRef<c10::Symbol>::const_iterator*") Symbol cbegin();
-  public native @ByVal @Cast("const c10::ArrayRef<c10::Symbol>::const_iterator*") Symbol cend();
+  public native @Const @ByPtr Symbol cbegin();
+  public native @Const @ByPtr Symbol cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();

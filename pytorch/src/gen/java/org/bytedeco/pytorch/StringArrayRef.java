@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -20,19 +22,37 @@ public class StringArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringArrayRef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringArrayRef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public StringArrayRef position(long position) {
+        return (StringArrayRef)super.position(position);
+    }
+    @Override public StringArrayRef getPointer(long i) {
+        return new StringArrayRef((Pointer)this).offsetAddress(i);
+    }
 
   /** \name Constructors
    *  \{
    <p>
    *  Construct an empty ArrayRef. */
-  /* implicit */
+  /* implicit */ public StringArrayRef() { super((Pointer)null); allocate(); }
+private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
+  public StringArrayRef(@StdString BytePointer OneElt) { super((Pointer)null); allocate(OneElt); }
+  private native void allocate(@StdString BytePointer OneElt);
+  public StringArrayRef(@StdString String OneElt) { super((Pointer)null); allocate(OneElt); }
+  private native void allocate(@StdString String OneElt);
 
   /** Construct an ArrayRef from a pointer and length. */
+  public StringArrayRef(PointerPointer<BytePointer> data, long length) { super((Pointer)null); allocate(data, length); }
+  private native void allocate(@Cast("const std::string*") PointerPointer<BytePointer> data, @Cast("size_t") long length);
 
   /** Construct an ArrayRef from a range. */
+  public StringArrayRef(PointerPointer<BytePointer> begin, PointerPointer<BytePointer> end) { super((Pointer)null); allocate(begin, end); }
+  private native void allocate(@Cast("const std::string*") PointerPointer<BytePointer> begin, @Cast("const std::string*") PointerPointer<BytePointer> end);
 
   /** Construct an ArrayRef from a SmallVector. This is templated in order to
    *  avoid instantiating SmallVectorTemplateCommon<T> whenever we
@@ -54,18 +74,18 @@ public class StringArrayRef extends Pointer {
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast({"", "std::string*"}) @StdString BytePointer begin();
-  public native @ByVal @Cast({"", "std::string*"}) @StdString BytePointer end();
+  public native @Const PointerPointer<BytePointer> begin();
+  public native @Const PointerPointer<BytePointer> end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast({"", "std::string*"}) @StdString BytePointer cbegin();
-  public native @ByVal @Cast({"", "std::string*"}) @StdString BytePointer cend();
+  public native @Const PointerPointer<BytePointer> cbegin();
+  public native @Const PointerPointer<BytePointer> cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();
 
-  public native @Const @StdString BytePointer data();
+  public native @Const PointerPointer<BytePointer> data();
 
   /** size - Get the array size. */
   public native @Cast("const size_t") long size();

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -39,7 +41,7 @@ public class PixelShuffleImpl extends PixelShuffleImplCloneable {
     public PixelShuffleImpl(Pointer p) { super(p); }
 
   public PixelShuffleImpl(@Const @ByRef PixelShuffleOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef PixelShuffleOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef PixelShuffleOptions options_);
 
   /** Pretty prints the {@code PixelShuffle} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,8 +27,8 @@ public class LongVaryingShape extends Pointer {
   public LongVaryingShape(@Cast("const std::vector<int64_t>*") @ByRef LongVector vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@Cast("const std::vector<int64_t>*") @ByRef LongVector vec);
 
-  public LongVaryingShape(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef vec) { super((Pointer)null); allocate(vec); }
-  private native void allocate(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef vec);
+  public LongVaryingShape(@ByVal LongArrayRef vec) { super((Pointer)null); allocate(vec); }
+  private native void allocate(@ByVal LongArrayRef vec);
   public LongVaryingShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... vec);
 
@@ -41,7 +43,7 @@ public class LongVaryingShape extends Pointer {
   public LongVaryingShape(@Cast("size_t") long size) { super((Pointer)null); allocate(size); }
   private native void allocate(@Cast("size_t") long size);
 
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef LongVaryingShape other);
 
   public native @Const @ByRef @Name("operator []") LongOptional get(@Cast("size_t") long i);
 

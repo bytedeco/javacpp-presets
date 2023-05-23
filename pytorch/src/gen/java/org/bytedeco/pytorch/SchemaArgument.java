@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,5 +35,5 @@ public class SchemaArgument extends Pointer {
   private native void allocate(SchemaArgType tpe, @Cast("size_t") long idx);
   public SchemaArgument(@Cast("c10::SchemaArgType") int tpe, @Cast("size_t") long idx) { super((Pointer)null); allocate(tpe, idx); }
   private native void allocate(@Cast("c10::SchemaArgType") int tpe, @Cast("size_t") long idx);
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SchemaArgument rhs);
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -49,9 +51,9 @@ public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
     }
 
   public MultiMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
+  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
   public MultiMarginLossImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native void reset();
 

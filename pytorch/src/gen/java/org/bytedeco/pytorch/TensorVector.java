@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,7 +17,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<at::Tensor>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::vector<torch::Tensor>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TensorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -26,7 +28,7 @@ public class TensorVector extends Pointer {
     public TensorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator =") @ByRef TensorVector put(@ByRef @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector x);
+    public native @Name("operator =") @ByRef TensorVector put(@ByRef @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();

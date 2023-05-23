@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -49,9 +51,9 @@ public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
     }
 
   public SmoothL1LossImpl(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options) { super((Pointer)null); allocate(options); }
-  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options);
+  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options);
   public SmoothL1LossImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native void reset();
 

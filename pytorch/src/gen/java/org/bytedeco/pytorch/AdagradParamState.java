@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -38,5 +40,8 @@ public class AdagradParamState extends OptimizerCloneableAdagradParamState {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer step();
   
   
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
+        @Const @ByRef AdagradParamState lhs,
+        @Const @ByRef AdagradParamState rhs);
+  public boolean equals(AdagradParamState rhs) { return equals(this, rhs); }
 }

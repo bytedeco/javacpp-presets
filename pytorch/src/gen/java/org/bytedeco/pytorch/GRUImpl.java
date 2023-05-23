@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -37,16 +39,16 @@ public class GRUImpl extends GRUImplBase {
     public GRUImpl(Pointer p) { super(p); }
 
   public GRUImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
+  @SharedPtr private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
   public GRUImpl(@Const @ByRef GRUOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef GRUOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef GRUOptions options_);
 
-  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal TensorTensorTuple forward(@Const @ByRef Tensor input);
-  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(
+  public native @ByVal T_TensorTensor_T forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
+  public native @ByVal T_TensorTensor_T forward(@Const @ByRef Tensor input);
+  public native @ByVal T_PackedSequenceTensor_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input,
-        @ByVal(nullValue = "at::Tensor{}") Tensor hx);
-  public native @ByVal PackedSequenceTensorTuple forward_with_packed_input(
+        @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
+  public native @ByVal T_PackedSequenceTensor_T forward_with_packed_input(
         @Const @ByRef PackedSequence packed_input);
 
   public native @ByRef GRUOptions options(); public native GRUImpl options(GRUOptions setter);

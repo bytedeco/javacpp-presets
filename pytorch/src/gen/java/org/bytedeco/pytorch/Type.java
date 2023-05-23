@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,7 +24,8 @@ public class Type extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Type(Pointer p) { super(p); }
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Type lhs, @Const @ByRef Type rhs);
+  public boolean equals(Type rhs) { return equals(this, rhs); }
   @Name("SingletonOrSharedTypePtr<c10::Type>") public static class TypePtr extends Pointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -41,13 +44,14 @@ public class Type extends Pointer {
     public TypePtr() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /* implicit */ public TypePtr(@SharedPtr @ByVal Type x) { super((Pointer)null); allocate(x); }
-private native void allocate(@SharedPtr @ByVal Type x);
+    /* implicit */ public TypePtr(@SharedPtr Type x) { super((Pointer)null); allocate(x); }
+private native void allocate(@SharedPtr Type x);
 
     /* implicit */ public TypePtr(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0) { super((Pointer)null); allocate(arg0); }
 private native void allocate(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0);
 
-    /* implicit */ 
+    /* implicit */ public TypePtr(@ByVal SingletonTypePtr p) { super((Pointer)null); allocate(p); }
+private native void allocate(@ByVal SingletonTypePtr p);
 
 
     // We need to support construction from T* for pybind. The problem
@@ -71,9 +75,9 @@ private native void allocate(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0
 
     public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 
-    
+    public native @Cast("bool") @Name("operator ==") boolean equals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0);
 
-    
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal @Cast("std::nullptr_t*") PointerPointer arg0);
 
     public native @Name("operator ->") Type access();
   }

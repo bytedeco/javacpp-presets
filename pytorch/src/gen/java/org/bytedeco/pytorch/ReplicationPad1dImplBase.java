@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -26,9 +28,9 @@ public class ReplicationPad1dImplBase extends ReplicationPad1dImplCloneable {
     public ReplicationPad1dImplBase(Pointer p) { super(p); }
 
   public ReplicationPad1dImplBase(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
-  @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding);
+  private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding);
   public ReplicationPad1dImplBase(@Const @ByRef ReplicationPad1dOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef ReplicationPad1dOptions options_);
+  private native void allocate(@Const @ByRef ReplicationPad1dOptions options_);
 
   public native void reset();
 

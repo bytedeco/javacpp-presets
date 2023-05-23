@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -34,6 +36,6 @@ public class StackEntry extends Pointer {
         return new StackEntry((Pointer)this).offsetAddress(i);
     }
 
-  public native @StdString BytePointer filename(); public native StackEntry filename(BytePointer setter);
-  public native @ByRef SourceRange range(); public native StackEntry range(SourceRange setter);
+  public native @StdString @NoOffset BytePointer filename(); public native StackEntry filename(BytePointer setter);
+  public native @ByRef @NoOffset SourceRange range(); public native StackEntry range(SourceRange setter);
 }

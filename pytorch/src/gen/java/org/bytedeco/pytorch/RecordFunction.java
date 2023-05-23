@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -53,13 +55,13 @@ public class RecordFunction extends Pointer {
 
   public native @Cast("int64_t") long seqNr();
 
-  public native @ByVal @Cast("c10::ArrayRef<const at::IValue>*") IValueArrayRef inputs();
+  public native @ByVal IValueArrayRef inputs();
 
   public native @Const @ByRef IValueVector outputs();
 
   public native void setOutputs(@ByRef(true) IValueVector outputs);
 
-  public native void setOutputs(@ByVal @Cast("c10::ArrayRef<c10::IValue>*") IValueArrayRef outputs);
+  public native void setOutputs(@ByVal IValueArrayRef outputs);
 
   public native @Cast("size_t") long num_inputs();
   public native @Cast("size_t") long num_outputs();
@@ -114,14 +116,14 @@ public class RecordFunction extends Pointer {
   public native void _setStaticRuntimeOutVariant();
   public native @Cast("bool") boolean isStaticRuntimeOutVariant();
 
-  public native @Cast("at::RecordFunctionHandle") long handle();
+  public native long handle();
 
   public native @ByVal OperatorNameOptional operator_name();
 
   // This method returns a copy of the FunctionSchema and can be expensive.
   public native @ByVal FunctionSchemaOptional operator_schema();
 
-  public native void setHandle(@Cast("at::RecordFunctionHandle") long handle);
+  public native void setHandle(long handle);
 
   // Whether this RecordFunction runs any callbacks.
   public native @Cast("bool") boolean isActive();

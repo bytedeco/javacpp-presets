@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,19 +24,19 @@ public class SugaredEnumClass extends SugaredValue {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SugaredEnumClass(Pointer p) { super(p); }
 
-  public SugaredEnumClass(@SharedPtr @ByVal EnumType enum_type) { super((Pointer)null); allocate(enum_type); }
-  private native void allocate(@SharedPtr @ByVal EnumType enum_type);
+  public SugaredEnumClass(@SharedPtr EnumType enum_type) { super((Pointer)null); allocate(enum_type); }
+  private native void allocate(@SharedPtr EnumType enum_type);
 
   public native @StdString BytePointer kind();
 
-  public native @SharedPtr @ByVal SugaredValue attr(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue attr(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @StdString BytePointer field);
-  public native @SharedPtr @ByVal SugaredValue attr(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue attr(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         @StdString String field);
 
-  public native @SharedPtr @ByVal SugaredValue iter(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue iter(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
 }

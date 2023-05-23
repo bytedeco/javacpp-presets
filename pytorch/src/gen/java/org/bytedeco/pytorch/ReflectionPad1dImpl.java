@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,9 +38,9 @@ public class ReflectionPad1dImpl extends ReflectionPad1dImplBase {
 
   
     public ReflectionPad1dImpl(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
-    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding);
+    private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding);
     public ReflectionPad1dImpl(@Const @ByRef ReflectionPad1dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(@Const @ByRef ReflectionPad1dOptions options_);
+    private native void allocate(@Const @ByRef ReflectionPad1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReflectionPad1dImpl(Pointer p) { super(p); }
 

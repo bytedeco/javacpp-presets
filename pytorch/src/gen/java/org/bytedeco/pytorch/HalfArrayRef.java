@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -70,13 +72,13 @@ private native void allocate();
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast("const c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)>::iterator*") ShortPointer begin();
-  public native @ByVal @Cast("const c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)>::iterator*") ShortPointer end();
+  public native @Const @ByPtr Half begin();
+  public native @Const @ByPtr Half end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast("const c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)>::const_iterator*") ShortPointer cbegin();
-  public native @ByVal @Cast("const c10::ArrayRef<decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)>::const_iterator*") ShortPointer cend();
+  public native @Const @ByPtr Half cbegin();
+  public native @Const @ByPtr Half cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();

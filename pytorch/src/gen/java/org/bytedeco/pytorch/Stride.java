@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -57,7 +59,7 @@ public class Stride extends Pointer {
         @ByVal BoolOptional contiguous,
         @Const @ByRef SizeTOptional stride);
 
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Stride b);
 
   public native @Cast("bool") boolean isComplete();
 

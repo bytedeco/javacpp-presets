@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -99,8 +101,8 @@ public class Stream extends Pointer {
   public Stream(@Cast("c10::Stream::Default") int arg0, @ByVal Device device) { super((Pointer)null); allocate(arg0, device); }
   private native void allocate(@Cast("c10::Stream::Default") int arg0, @ByVal Device device);
 
-  
-  
+  public native @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByRef Stream other);
+  public native @Cast("bool") @Name("operator !=") @NoException(true) boolean notEquals(@Const @ByRef Stream other);
 
   public native @ByVal @NoException(true) Device device();
   public native @NoException(true) DeviceType device_type();

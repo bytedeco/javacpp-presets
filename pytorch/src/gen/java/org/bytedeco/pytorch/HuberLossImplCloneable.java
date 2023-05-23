@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -20,18 +22,18 @@ public class HuberLossImplCloneable extends Module {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HuberLossImplCloneable(Pointer p) { super(p); }
+    @Override public Module asModule() { return asModule(this); }
+    @Namespace public static native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::Module, torch::nn::Cloneable<torch::nn::HuberLossImpl>>") Module asModule(@SharedPtr HuberLossImplCloneable pointer);
 
 
   /** {@code reset()} must perform initialization of all members with reference
    *  semantics, most importantly parameters, buffers and submodules. */
   public native void reset();
-  @Override public Module asModule() { return asModule(this); }
-  @Namespace public static native @Name("static_cast<torch::nn::Module*>") Module asModule(HuberLossImplCloneable module);
 
   /** Performs a recursive "deep copy" of the {@code Module}, such that all parameters
    *  and submodules in the cloned module are different from those in the
    *  original module. */
-  public native @SharedPtr Module clone(
-        @Const @ByRef(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device);
-  public native @SharedPtr Module clone();
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
+        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 }

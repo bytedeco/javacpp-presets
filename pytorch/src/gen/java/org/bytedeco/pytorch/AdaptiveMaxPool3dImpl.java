@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,10 +37,10 @@ public class AdaptiveMaxPool3dImpl extends AdaptiveMaxPool3dImplBase {
 
   
     public AdaptiveMaxPool3dImpl(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
-    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
+    private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
     public AdaptiveMaxPool3dImpl(
           @Const @ByRef AdaptiveMaxPool3dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(
+    private native void allocate(
           @Const @ByRef AdaptiveMaxPool3dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool3dImpl(Pointer p) { super(p); }
@@ -48,5 +50,5 @@ public class AdaptiveMaxPool3dImpl extends AdaptiveMaxPool3dImplBase {
 
   /** Returns the indices along with the outputs.
    *  Useful to pass to nn.MaxUnpool3d. */
-  public native @ByVal TensorTensorTuple forward_with_indices(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorTensor_T forward_with_indices(@Const @ByRef Tensor input);
 }

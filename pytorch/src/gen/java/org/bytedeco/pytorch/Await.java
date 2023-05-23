@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,10 +17,38 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Namespace("c10::ivalue") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+
+@Name("c10::ivalue::Await") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Await extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public Await() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Await(Pointer p) { super(p); }
+
+  
+  
+  
+  
+
+  public native @ByVal @Name("wait") IValue _wait();
+
+  public native @ByVal IValue value();
+
+  public native void setFn(@ByVal IValueSupplier fn);
+
+  public native @Cast("bool") boolean completed();
+
+  public native void markCompleted(@ByVal IValue value);
+
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+        @Cast("std::ostream*") @ByRef Pointer out,
+        @Const @ByRef Await v);
+  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+
+  public native @ByVal Type.TypePtr elementType();
+
+  public native @ByVal Type.TypePtr type();
+
+  public native void setArgs(@ByVal IValueVector args);
+
+  public native @ByRef IValueVector args();
 }

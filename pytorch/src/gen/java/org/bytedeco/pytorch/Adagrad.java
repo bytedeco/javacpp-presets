@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,10 +35,10 @@ public class Adagrad extends Optimizer {
   private native void allocate(
         @ByVal OptimizerParamGroupVector param_groups);
 
-  public Adagrad(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults) { super((Pointer)null); allocate(params, defaults); }
-  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults);
-  public Adagrad(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
-  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params);
+  public Adagrad(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults) { super((Pointer)null); allocate(params, defaults); }
+  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params, @ByVal(nullValue = "torch::optim::AdagradOptions{}") AdagradOptions defaults);
+  public Adagrad(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
+  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params);
 
   public native @ByVal Tensor step(@ByVal(nullValue = "torch::optim::Optimizer::LossClosure(nullptr)") LossClosure closure);
   public native @ByVal Tensor step();

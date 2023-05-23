@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,17 +17,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-/** ArrayRef - Represent a constant reference to an array (0 or more elements
- *  consecutively in memory), i.e. a start pointer and a length.  It allows
- *  various APIs to take consecutive elements easily and conveniently.
- * 
- *  This class does not own the underlying data, it is expected to be used in
- *  situations where the data resides in some other buffer, whose lifetime
- *  extends past that of the ArrayRef. For this reason, it is not in general
- *  safe to store an ArrayRef.
- * 
- *  This is intended to be trivially copyable, so it should be passed by
- *  value. */
 @Name("c10::ArrayRef<jbyte>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ByteArrayRef extends Pointer {
     static { Loader.load(); }
@@ -89,13 +80,13 @@ private native void allocate();
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>::iterator*") BytePointer begin();
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>::iterator*") BytePointer end();
+  public native @Const BytePointer begin();
+  public native @Const BytePointer end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>::const_iterator*") BytePointer cbegin();
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>::const_iterator*") BytePointer cend();
+  public native @Const BytePointer cbegin();
+  public native @Const BytePointer cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();
@@ -112,13 +103,13 @@ private native void allocate();
   public native byte back();
 
   /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal @Cast("c10::ArrayRef<jbyte>*") ByteArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal ByteArrayRef RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>*") ByteArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
+  public native @Const @ByVal ByteArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
   /** slice(n) - Chop off the first N elements of the array. */
-  public native @ByVal @Cast("const c10::ArrayRef<jbyte>*") ByteArrayRef slice(@Cast("size_t") long N);
+  public native @Const @ByVal ByteArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,100 +27,100 @@ public class FunctionSchema extends Pointer {
   public FunctionSchema(
         @StdString BytePointer name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/) { super((Pointer)null); allocate(name, overload_name, arguments, returns, is_vararg, is_varret); }
   private native void allocate(
         @StdString BytePointer name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/);
   public FunctionSchema(
         @StdString BytePointer name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
+        @StdVector Argument arguments,
+        @StdVector Argument returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
   private native void allocate(
         @StdString BytePointer name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns);
+        @StdVector Argument arguments,
+        @StdVector Argument returns);
   public FunctionSchema(
         @StdString String name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/) { super((Pointer)null); allocate(name, overload_name, arguments, returns, is_vararg, is_varret); }
   private native void allocate(
         @StdString String name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/);
   public FunctionSchema(
         @StdString String name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
+        @StdVector Argument arguments,
+        @StdVector Argument returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
   private native void allocate(
         @StdString String name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns);
+        @StdVector Argument arguments,
+        @StdVector Argument returns);
 
   public FunctionSchema(
         @ByVal Symbol name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/) { super((Pointer)null); allocate(name, overload_name, arguments, returns, is_vararg, is_varret); }
   private native void allocate(
         @ByVal Symbol name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/);
   public FunctionSchema(
         @ByVal Symbol name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
+        @StdVector Argument arguments,
+        @StdVector Argument returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
   private native void allocate(
         @ByVal Symbol name,
         @StdString BytePointer overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns);
+        @StdVector Argument arguments,
+        @StdVector Argument returns);
   public FunctionSchema(
         @ByVal Symbol name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/) { super((Pointer)null); allocate(name, overload_name, arguments, returns, is_vararg, is_varret); }
   private native void allocate(
         @ByVal Symbol name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns,
+        @StdVector Argument arguments,
+        @StdVector Argument returns,
         @Cast("bool") boolean is_vararg/*=false*/,
         @Cast("bool") boolean is_varret/*=false*/);
   public FunctionSchema(
         @ByVal Symbol name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
+        @StdVector Argument arguments,
+        @StdVector Argument returns) { super((Pointer)null); allocate(name, overload_name, arguments, returns); }
   private native void allocate(
         @ByVal Symbol name,
         @StdString String overload_name,
-        @ByVal ArgumentVector arguments,
-        @ByVal ArgumentVector returns);
+        @StdVector Argument arguments,
+        @StdVector Argument returns);
 
   // Checks whether this schema is backward compatible with the old one.
   // The following conditions must be true:
@@ -176,8 +178,8 @@ public class FunctionSchema extends Pointer {
   public native @Const @ByRef OperatorName operator_name();
   public native @StdString BytePointer name();
   public native @StdString BytePointer overload_name();
-  public native @Const @ByRef ArgumentVector arguments();
-  public native @Const @ByRef ArgumentVector returns();
+  public native @StdVector Argument arguments();
+  public native @StdVector Argument returns();
   public native @Cast("bool") boolean is_vararg();
   public native @Cast("bool") boolean is_varret();
   public native @Cast("bool") boolean is_aliasing(@Const @ByRef SchemaArgument argument);
@@ -213,14 +215,14 @@ public class FunctionSchema extends Pointer {
 
   // Returns either arguments() or returns() depending on the SchemaArgType
   // output => returns(), input => arguments()
-  public native @Const @ByRef ArgumentVector getCorrectList(SchemaArgType type);
-  public native @Const @ByRef ArgumentVector getCorrectList(@Cast("c10::SchemaArgType") int type);
+  public native @StdVector Argument getCorrectList(SchemaArgType type);
+  public native @StdVector Argument getCorrectList(@Cast("c10::SchemaArgType") int type);
 
   public native @ByVal IntOptional argumentIndexWithName(@ByVal @Cast("c10::string_view*") Pointer name);
   public native @ByVal FunctionSchema cloneWithName(@StdString BytePointer name, @StdString BytePointer overload_name);
   public native @ByVal FunctionSchema cloneWithName(@StdString String name, @StdString String overload_name);
-  public native @ByVal FunctionSchema cloneWithArguments(@ByVal ArgumentVector new_arguments);
-  public native @ByVal FunctionSchema cloneWithReturns(@ByVal ArgumentVector new_returns);
+  public native @ByVal FunctionSchema cloneWithArguments(@StdVector Argument new_arguments);
+  public native @ByVal FunctionSchema cloneWithReturns(@StdVector Argument new_returns);
 
   public native @StdString BytePointer formatTypeMismatchMsg(
         @Const @ByRef Argument expected,
@@ -255,8 +257,9 @@ public class FunctionSchema extends Pointer {
 
   // TODO remove the mutation here
   public native @Cast("bool") boolean isDefaultAliasAnalysisKind();
-  public native @ByVal AliasAnalysisKind aliasAnalysis();
-  public native void setAliasAnalysis(@ByVal AliasAnalysisKind v);
+  public native AliasAnalysisKind aliasAnalysis();
+  public native void setAliasAnalysis(AliasAnalysisKind v);
+  public native void setAliasAnalysis(@Cast("c10::AliasAnalysisKind") byte v);
 
   public native @ByVal @Cast("c10::optional<c10::string_view>*") Pointer getNamespace();
 

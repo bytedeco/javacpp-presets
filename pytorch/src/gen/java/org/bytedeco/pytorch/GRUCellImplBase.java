@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,7 +24,7 @@ public class GRUCellImplBase extends GRUCellImplCloneable {
     public GRUCellImplBase(Pointer p) { super(p); }
 
   public GRUCellImplBase(@Const @ByRef RNNCellOptionsBase options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef RNNCellOptionsBase options_);
+  private native void allocate(@Const @ByRef RNNCellOptionsBase options_);
 
   /** Initializes the parameters of the RNNCell module. */
   public native void reset();

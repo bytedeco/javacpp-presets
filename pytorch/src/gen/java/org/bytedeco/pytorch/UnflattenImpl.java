@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -38,13 +40,13 @@ public class UnflattenImpl extends UnflattenImplCloneable {
     public UnflattenImpl(Pointer p) { super(p); }
 
   public UnflattenImpl(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes) { super((Pointer)null); allocate(dim, sizes); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
+  @SharedPtr private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
   public UnflattenImpl(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @NoDeallocator private native void allocate(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
+  @SharedPtr private native void allocate(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public UnflattenImpl(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @NoDeallocator private native void allocate(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
+  @SharedPtr private native void allocate(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public UnflattenImpl(@ByVal UnflattenOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal UnflattenOptions options_);
+  @SharedPtr private native void allocate(@ByVal UnflattenOptions options_);
 
   public native void reset();
 

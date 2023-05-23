@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -23,13 +25,15 @@ import static org.bytedeco.pytorch.global.torch.*;
  * dtype of tensors.
  */
 @Namespace("caffe2") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TypeIdentifier extends TypeIdentifierIdWrapper {
+public class TypeIdentifier extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TypeIdentifier(Pointer p) { super(p); }
 
-  
-  
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @ByVal TypeIdentifier typeId);
+  public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }
+  private static native @Namespace @Cast("const bool") @Name("operator <") boolean lessThan(@ByVal TypeIdentifier lhs, @ByVal TypeIdentifier rhs);
+  public boolean lessThan(TypeIdentifier rhs) { return lessThan(this, rhs); }
 
   /**
    * Returns the unique id for the given type T. The id is unique for the type T

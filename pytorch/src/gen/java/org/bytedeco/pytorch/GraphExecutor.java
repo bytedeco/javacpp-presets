@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -32,29 +34,34 @@ public class GraphExecutor extends Pointer {
 
   public GraphExecutor() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public GraphExecutor(@Const @SharedPtr @ByRef Graph graph, @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(@Const @SharedPtr @ByRef Graph graph, @StdString BytePointer function_name);
-  public GraphExecutor(@Const @SharedPtr @ByRef Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
-  private native void allocate(@Const @SharedPtr @ByRef Graph graph, @StdString String function_name);
+  public GraphExecutor(@Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph, @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph, @StdString BytePointer function_name);
+  public GraphExecutor(@Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph, @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
+  private native void allocate(@Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph, @StdString String function_name);
 
   public GraphExecutor(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name,
         ExecutorExecutionMode executor_mode) { super((Pointer)null); allocate(graph, function_name, executor_mode); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name,
         ExecutorExecutionMode executor_mode);
   public GraphExecutor(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name,
         @Cast("torch::jit::ExecutorExecutionMode") int executor_mode) { super((Pointer)null); allocate(graph, function_name, executor_mode); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name,
         @Cast("torch::jit::ExecutorExecutionMode") int executor_mode);
 
   public native void run(@ByRef IValueVector inputs);
+  public native @ByVal FuturePtr runAsync(
+        @ByRef IValueVector stack,
+        @ByVal(nullValue = "torch::jit::TaskLauncher(at::launch)") @Cast("torch::jit::TaskLauncher*") Pointer taskLauncher);
+  public native @ByVal FuturePtr runAsync(
+        @ByRef IValueVector stack);
 
   // `remaining_bailout_depth` stands for the maximum number of profiled and
   // specialized recompilations allowed for the current `GraphExecutor`. if

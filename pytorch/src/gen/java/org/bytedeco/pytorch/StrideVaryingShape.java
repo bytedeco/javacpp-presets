@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -39,7 +41,7 @@ public class StrideVaryingShape extends Pointer {
   public StrideVaryingShape(@Cast("size_t") long size) { super((Pointer)null); allocate(size); }
   private native void allocate(@Cast("size_t") long size);
 
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef StrideVaryingShape other);
 
   public native @Const @ByRef @Name("operator []") StrideOptional get(@Cast("size_t") long i);
 

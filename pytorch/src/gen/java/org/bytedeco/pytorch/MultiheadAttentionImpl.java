@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,19 +38,19 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
     public MultiheadAttentionImpl(Pointer p) { super(p); }
 
   public MultiheadAttentionImpl(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads) { super((Pointer)null); allocate(embed_dim, num_heads); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads);
+  @SharedPtr private native void allocate(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads);
   public MultiheadAttentionImpl(@Const @ByRef MultiheadAttentionOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
 
-  public native @ByVal TensorTensorTuple forward(
+  public native @ByVal T_TensorTensor_T forward(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,
         @Const @ByRef Tensor value,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor key_padding_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor key_padding_mask,
         @Cast("bool") boolean need_weights/*=true*/,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor attn_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor attn_mask,
         @Cast("bool") boolean average_attn_weights/*=true*/);
-  public native @ByVal TensorTensorTuple forward(
+  public native @ByVal T_TensorTensor_T forward(
         @Const @ByRef Tensor query,
         @Const @ByRef Tensor key,
         @Const @ByRef Tensor value);
@@ -64,7 +66,6 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
   public native @ByRef Tensor in_proj_bias(); public native MultiheadAttentionImpl in_proj_bias(Tensor setter);
   public native @ByRef Tensor bias_k(); public native MultiheadAttentionImpl bias_k(Tensor setter);
   public native @ByRef Tensor bias_v(); public native MultiheadAttentionImpl bias_v(Tensor setter);
-  public native @ByRef Linear out_proj(); public native MultiheadAttentionImpl out_proj(Linear setter);
   public native @ByRef Tensor q_proj_weight(); public native MultiheadAttentionImpl q_proj_weight(Tensor setter);
   public native @ByRef Tensor k_proj_weight(); public native MultiheadAttentionImpl k_proj_weight(Tensor setter);
   public native @ByRef Tensor v_proj_weight(); public native MultiheadAttentionImpl v_proj_weight(Tensor setter);

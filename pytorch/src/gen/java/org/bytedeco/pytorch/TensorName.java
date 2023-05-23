@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -50,4 +52,9 @@ public class TensorName extends Pointer {
   public native @Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName unify(@Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName other, @Cast("const char*") BytePointer op_name);
   public native @Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName unify(@Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName other, String op_name);
   public native @ByVal Dimname toDimname();
+
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+        @Cast("std::ostream*") @ByRef Pointer out,
+        @Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName tensorname);
+  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
 }

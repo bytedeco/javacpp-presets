@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -34,6 +36,6 @@ public class NamedJitModule extends Pointer {
         return new NamedJitModule((Pointer)this).offsetAddress(i);
     }
 
-  public native @StdString BytePointer name(); public native NamedJitModule name(BytePointer setter);
-  public native @ByRef JitModule value(); public native NamedJitModule value(JitModule setter);
+  public native @StdString @NoOffset BytePointer name(); public native NamedJitModule name(BytePointer setter);
+  public native @ByRef @NoOffset JitModule value(); public native NamedJitModule value(JitModule setter);
 }

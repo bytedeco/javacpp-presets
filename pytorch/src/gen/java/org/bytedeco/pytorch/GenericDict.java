@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,7 +17,24 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("c10::Dict<c10::IValue,c10::IValue>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+
+/**
+ * An object of this class stores a map from Key to Value.
+ *
+ * This is a pointer type. After a copy, both Dicts
+ * will share the same storage:
+ *
+ * > Dict<int, string> a;
+ * > Dict<int, string> b = a;
+ * > b.insert(3, "three");
+ * > ASSERT("three" == a.at(3));
+ *
+ * We use this class in the PyTorch kernel API because that
+ * allows us to do optimizations and switch out the underlying
+ * map implementation without breaking backwards compatibility
+ * for the kernel API.
+ */
+@Name("c10::Dict<c10::IValue,c10::IValue>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GenericDict extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

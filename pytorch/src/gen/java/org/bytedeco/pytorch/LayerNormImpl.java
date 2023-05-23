@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -38,9 +40,9 @@ public class LayerNormImpl extends LayerNormImplCloneable {
     public LayerNormImpl(Pointer p) { super(p); }
 
   public LayerNormImpl(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape) { super((Pointer)null); allocate(normalized_shape); }
-  @NoDeallocator private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape);
+  @SharedPtr private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector normalized_shape);
   public LayerNormImpl(@ByVal LayerNormOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal LayerNormOptions options_);
+  @SharedPtr private native void allocate(@ByVal LayerNormOptions options_);
 
   public native void reset();
 

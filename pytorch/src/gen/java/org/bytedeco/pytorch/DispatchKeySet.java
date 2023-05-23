@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -238,8 +240,8 @@ public class DispatchKeySet extends Pointer {
 
   // Compute self ^ other
   public native @Const @ByVal @Name("operator ^") DispatchKeySet xor(@ByVal DispatchKeySet other);
-  
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@ByVal DispatchKeySet other);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal DispatchKeySet other);
   // Add a DispatchKey to the DispatchKey set.  Does NOT mutate,
   // returns the extended DispatchKeySet!
   public native @Const @ByVal DispatchKeySet add(DispatchKey t);
@@ -392,8 +394,8 @@ public class DispatchKeySet extends Pointer {
 
     public native @ByVal @Cast("c10::DispatchKeySet::iterator::self_type*") @Name("operator ++") iterator increment(int arg0);
 
-    
-    
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const c10::DispatchKeySet::iterator::self_type*") @ByRef iterator rhs);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const c10::DispatchKeySet::iterator::self_type*") @ByRef iterator rhs);
     public native @Name("operator *") DispatchKey multiply();
   }
   // Returns iterator to the first key in the set. If no keys are in the

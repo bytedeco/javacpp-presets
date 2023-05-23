@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -40,7 +42,7 @@ public class DDPLoggingData extends Pointer {
     }
 
   // logging fields that are string types.
-  public native @ByRef StringStringMap strs_map(); public native DDPLoggingData strs_map(StringStringMap setter);
+  public native @ByRef @NoOffset StringStringMap strs_map(); public native DDPLoggingData strs_map(StringStringMap setter);
   // logging fields that are int64_t types.
-  public native @ByRef StringLongMap ints_map(); public native DDPLoggingData ints_map(StringLongMap setter);
+  public native @ByRef @NoOffset StringLongMap ints_map(); public native DDPLoggingData ints_map(StringLongMap setter);
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -53,4 +55,9 @@ public class module_iterator extends Pointer {
   public native @ByVal @Name("operator ->") JitModule access();
   public native @ByRef @Name("operator ++") module_iterator increment();
   public native @ByVal @Name("operator ++") module_iterator increment(int arg0);
+
+  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(
+        @Const @ByRef module_iterator a,
+        @Const @ByRef module_iterator b);
+  public boolean notEquals(module_iterator b) { return notEquals(this, b); }
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,8 +33,8 @@ public class JitModule extends JitObject {
 
   public JitModule(@ByVal QualifiedName class_name) { super((Pointer)null); allocate(class_name); }
   private native void allocate(@ByVal QualifiedName class_name);
-  public JitModule(@SharedPtr CompilationUnit cu, @Const @SharedPtr @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
-  private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr @ByRef ClassType type);
+  public JitModule(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }
+  private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public JitModule() { super((Pointer)null); allocate(); }
   private native void allocate();
   public JitModule(
@@ -99,7 +101,7 @@ public class JitModule extends JitObject {
   public native void register_module(@StdString BytePointer name, @Const @ByRef JitModule module);
   public native void register_module(@StdString String name, @Const @ByRef JitModule module);
 
-  public native void apply(@Const @ByRef ModuleFunction fn);
+  public native void apply(@Const @ByRef JitModuleApplyFunction fn);
 
   public native @ByVal buffer_list buffers(@Cast("bool") boolean recurse/*=true*/);
   public native @ByVal buffer_list buffers();

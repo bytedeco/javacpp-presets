@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -48,15 +50,15 @@ public class CompilationUnit extends Pointer {
   // constructor that takes a set of functions to compile using the native
   // resolver
   public CompilationUnit(@StdString BytePointer source) { super((Pointer)null); allocate(source); }
-  private native void allocate(@StdString BytePointer source);
+  @SharedPtr private native void allocate(@StdString BytePointer source);
   public CompilationUnit(@StdString String source) { super((Pointer)null); allocate(source); }
-  private native void allocate(@StdString String source);
+  @SharedPtr private native void allocate(@StdString String source);
   public CompilationUnit() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native @ByRef @Name("operator =") CompilationUnit put(@ByRef(true) CompilationUnit arg0);
   public CompilationUnit(@ByRef(true) CompilationUnit arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@ByRef(true) CompilationUnit arg0);
+  @SharedPtr private native void allocate(@ByRef(true) CompilationUnit arg0);
   
   
 
@@ -108,31 +110,31 @@ public class CompilationUnit extends Pointer {
   public native @ByVal FunctionVector define(
         @Const @ByRef QualifiedNameOptional prefix,
         @StdString BytePointer source,
-        @Const @SharedPtr @ByRef Resolver resolver,
+        @Const @SharedPtr("torch::jit::Resolver") @ByRef Resolver resolver,
         @Const Self self);
   public native @ByVal FunctionVector define(
         @Const @ByRef QualifiedNameOptional prefix,
         @StdString String source,
-        @Const @SharedPtr @ByRef Resolver resolver,
+        @Const @SharedPtr("torch::jit::Resolver") @ByRef Resolver resolver,
         @Const Self self);
 
   public native void define_interface(
         @Const @ByRef QualifiedName qualifiedName,
         @Const @ByRef ClassDef classDef,
-        @SharedPtr @ByVal Resolver rcb,
+        @SharedPtr("torch::jit::Resolver") @ByVal Resolver rcb,
         @Cast("bool") boolean is_module/*=false*/);
   public native void define_interface(
         @Const @ByRef QualifiedName qualifiedName,
         @Const @ByRef ClassDef classDef,
-        @SharedPtr @ByVal Resolver rcb);
+        @SharedPtr("torch::jit::Resolver") @ByVal Resolver rcb);
 
   public native Function create_function(
         @ByVal QualifiedName name,
-        @SharedPtr @ByVal Graph graph,
+        @SharedPtr("torch::jit::Graph") @ByVal Graph graph,
         @Cast("bool") boolean shouldMangle/*=false*/);
   public native Function create_function(
         @ByVal QualifiedName name,
-        @SharedPtr @ByVal Graph graph);
+        @SharedPtr("torch::jit::Graph") @ByVal Graph graph);
 
   
   ///
@@ -159,15 +161,15 @@ public class CompilationUnit extends Pointer {
   /**
    * Register a class as being owned by this compilation unit.
    */
-  public native void register_type(@SharedPtr @ByVal NamedType namedType);
+  public native void register_type(@SharedPtr NamedType namedType);
 
-  public native @SharedPtr @ByVal ClassType get_class(@Const @ByRef QualifiedName name);
+  public native @SharedPtr("c10::ClassType") @ByVal ClassType get_class(@Const @ByRef QualifiedName name);
 
   public native @SharedPtr InterfaceType get_interface(@Const @ByRef QualifiedName name);
 
   public native @SharedPtr TupleType get_named_tuple(@Const @ByRef QualifiedName name);
 
-  public native @SharedPtr @ByVal NamedType get_type(@Const @ByRef QualifiedName name);
+  public native @SharedPtr NamedType get_type(@Const @ByRef QualifiedName name);
 
   // For testing: clear all Python-defined classes to ensure that unit tests
   // have isolation.

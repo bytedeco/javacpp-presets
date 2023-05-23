@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -38,9 +40,9 @@ public class EmbeddingImpl extends EmbeddingImplCloneable {
     public EmbeddingImpl(Pointer p) { super(p); }
 
   public EmbeddingImpl(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim) { super((Pointer)null); allocate(num_embeddings, embedding_dim); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
+  @SharedPtr private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
   public EmbeddingImpl(@ByVal EmbeddingOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal EmbeddingOptions options_);
+  @SharedPtr private native void allocate(@ByVal EmbeddingOptions options_);
 
   public native void reset();
 

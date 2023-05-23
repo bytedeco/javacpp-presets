@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,11 +35,11 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
 
 
   public ParameterDictImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public ParameterDictImpl(
         @Const @ByRef StringTensorDict params) { super((Pointer)null); allocate(params); }
-  @NoDeallocator private native void allocate(
+  @SharedPtr private native void allocate(
         @Const @ByRef StringTensorDict params);
 
   /** {@code reset()} is empty for {@code ParameterDict}, since it does not have
@@ -62,7 +64,7 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
   public native @ByVal StringVector keys();
 
   /** Return the Values in the dict */
-  public native @StdVector Tensor values();
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector values();
 
   /** Return an iterator to the start of ParameterDict */
   public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItem begin();

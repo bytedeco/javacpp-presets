@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -48,9 +50,9 @@ public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
     }
 
   public SoftMarginLossImpl(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
+  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
   public SoftMarginLossImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   /** Pretty prints the {@code SoftMarginLoss} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);

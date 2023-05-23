@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -18,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // this wraps map_type::iterator to make sure user code can't rely
 // on it being the type of the underlying map.
-@Name("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GenericDictIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -31,9 +33,11 @@ public class GenericDictIterator extends Pointer {
 
   public native @ByVal @Name("operator ++") GenericDictIterator increment(int arg0);
 
-  public native @Const @ByRef @Name("operator *") GenericDictEntryRef multiply();
-
-  public native @Const @Name("operator ->") GenericDictEntryRef access();
-
   
+
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef GenericDictIterator lhs, @Const @ByRef GenericDictIterator rhs);
+  public boolean equals(GenericDictIterator rhs) { return equals(this, rhs); }
+
+  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef GenericDictIterator lhs, @Const @ByRef GenericDictIterator rhs);
+  public boolean notEquals(GenericDictIterator rhs) { return notEquals(this, rhs); }
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,7 +24,7 @@ public class FunctionPostHook extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionPostHook(Pointer p) { super(p); }
 
-  public native @Name("operator ()") @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector apply(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector outputs,
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector inputs);
+  public native @Name("operator ()") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply(
+        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector outputs,
+        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs);
 }

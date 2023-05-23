@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,10 +17,37 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Namespace("c10::ivalue") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+
+@Name("c10::ivalue::EnumHolder") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class EnumHolder extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public EnumHolder() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EnumHolder(Pointer p) { super(p); }
+
+  public EnumHolder(@SharedPtr EnumType type, @StdString BytePointer name, @ByVal IValue value) { super((Pointer)null); allocate(type, name, value); }
+  private native void allocate(@SharedPtr EnumType type, @StdString BytePointer name, @ByVal IValue value);
+  public EnumHolder(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value) { super((Pointer)null); allocate(type, name, value); }
+  private native void allocate(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value);
+
+  public native @Cast("bool") boolean is(@Const @ByRef EnumHolder rhs);
+
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
+        @Const @ByRef EnumHolder lhs,
+        @Const @ByRef EnumHolder rhs);
+  public boolean equals(EnumHolder rhs) { return equals(this, rhs); }
+
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+        @Cast("std::ostream*") @ByRef Pointer out,
+        @Const @ByRef EnumHolder v);
+  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+
+  public native @StdString BytePointer qualifiedClassName();
+
+  public native @StdString BytePointer unqualifiedClassName();
+
+  public native @StdString BytePointer name();
+
+  public native @Const @ByRef IValue value();
+
+  public native @SharedPtr EnumType type();
 }

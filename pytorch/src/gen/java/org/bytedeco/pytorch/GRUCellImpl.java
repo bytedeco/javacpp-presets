@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -37,11 +39,11 @@ public class GRUCellImpl extends GRUCellImplBase {
     public GRUCellImpl(Pointer p) { super(p); }
 
   public GRUCellImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
+  @SharedPtr private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
   public GRUCellImpl(@Const @ByRef GRUCellOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef GRUCellOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef GRUCellOptions options_);
 
-  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "at::Tensor{}") Tensor hx);
+  public native @ByVal Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
   public native @ByRef GRUCellOptions options(); public native GRUCellImpl options(GRUCellOptions setter);
 }

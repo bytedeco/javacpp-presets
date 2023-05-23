@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,9 +38,9 @@ public class UnfoldImpl extends UnfoldImplCloneable {
     public UnfoldImpl(Pointer p) { super(p); }
 
   public UnfoldImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
-  @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
+  @SharedPtr private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
   public UnfoldImpl(@Const @ByRef UnfoldOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef UnfoldOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef UnfoldOptions options_);
 
   public native void reset();
 

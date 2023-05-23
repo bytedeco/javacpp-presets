@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,11 +37,11 @@ public class NativeResolver extends Resolver {
         return new NativeResolver((Pointer)this).offsetAddress(i);
     }
 
-  public native @SharedPtr @ByVal SugaredValue resolveValue(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue resolveValue(
         @StdString BytePointer name,
         @ByRef GraphFunction m,
         @Const @ByRef SourceRange loc);
-  public native @SharedPtr @ByVal SugaredValue resolveValue(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue resolveValue(
         @StdString String name,
         @ByRef GraphFunction m,
         @Const @ByRef SourceRange loc);

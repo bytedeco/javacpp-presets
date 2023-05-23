@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,9 +38,9 @@ public class ThresholdImpl extends ThresholdImplCloneable {
     public ThresholdImpl(Pointer p) { super(p); }
 
   public ThresholdImpl(double threshold, double value) { super((Pointer)null); allocate(threshold, value); }
-  @NoDeallocator private native void allocate(double threshold, double value);
+  @SharedPtr private native void allocate(double threshold, double value);
   public ThresholdImpl(@Const @ByRef ThresholdOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef ThresholdOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef ThresholdOptions options_);
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

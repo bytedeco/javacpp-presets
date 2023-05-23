@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -27,10 +29,5 @@ public class CastValue extends BuiltinFunction {
 
   public CastValue(@ByVal Type.TypePtr type, @ByVal Symbol method) { super((Pointer)null); allocate(type, method); }
   private native void allocate(@ByVal Type.TypePtr type, @ByVal Symbol method);
-  public native @SharedPtr @ByVal SugaredValue call(
-        @Const @ByRef SourceRange loc,
-        @ByRef GraphFunction m,
-        @ByVal NamedValueArrayRef args,
-        @ByVal NamedValueArrayRef kwargs,
-        @Cast("size_t") long n_binders);
+  
 }

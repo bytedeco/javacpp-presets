@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -28,8 +30,8 @@ public class DimVectorInferExpandGeometryResult extends Pointer {
   public native @ByRef DimVector strides(); public native DimVectorInferExpandGeometryResult strides(DimVector setter);
   public DimVectorInferExpandGeometryResult(@Cast("size_t") long ndim) { super((Pointer)null); allocate(ndim); }
   private native void allocate(@Cast("size_t") long ndim);
-  public DimVectorInferExpandGeometryResult(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
-  private native void allocate(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef sizes_, @Cast("size_t") long ndim);
+  public DimVectorInferExpandGeometryResult(@ByVal LongArrayRef sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
+  private native void allocate(@ByVal LongArrayRef sizes_, @Cast("size_t") long ndim);
   public DimVectorInferExpandGeometryResult(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes_, @Cast("size_t") long ndim);
 }

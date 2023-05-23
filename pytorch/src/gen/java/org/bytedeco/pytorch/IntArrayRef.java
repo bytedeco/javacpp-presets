@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -69,13 +71,13 @@ private native void allocate();
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast("const c10::ArrayRef<jint>::iterator*") IntPointer begin();
-  public native @ByVal @Cast("const c10::ArrayRef<jint>::iterator*") IntPointer end();
+  public native @Const IntPointer begin();
+  public native @Const IntPointer end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast("const c10::ArrayRef<jint>::const_iterator*") IntPointer cbegin();
-  public native @ByVal @Cast("const c10::ArrayRef<jint>::const_iterator*") IntPointer cend();
+  public native @Const IntPointer cbegin();
+  public native @Const IntPointer cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();
@@ -92,13 +94,13 @@ private native void allocate();
   public native int back();
 
   /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal @Cast("c10::ArrayRef<jint>*") IntArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal IntArrayRef RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
-  public native @ByVal @Cast("const c10::ArrayRef<jint>*") IntArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
+  public native @Const @ByVal IntArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
   /** slice(n) - Chop off the first N elements of the array. */
-  public native @ByVal @Cast("const c10::ArrayRef<jint>*") IntArrayRef slice(@Cast("size_t") long N);
+  public native @Const @ByVal IntArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads

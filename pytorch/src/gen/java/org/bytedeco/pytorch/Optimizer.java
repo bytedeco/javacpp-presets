@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,11 +33,11 @@ public class Optimizer extends Pointer {
   /** Adds the given param_group to the optimizer's param_group list. */
   public native void add_param_group(@Const @ByRef OptimizerParamGroup param_group);
   /** A loss function closure, which is expected to return the loss value. */
-  public native @ByVal Tensor step(@ByVal(nullValue = "torch::optim::Optimizer::LossClosure(nullptr)") @Cast("torch::optim::Optimizer::LossClosure*") Pointer closure);
+  public native @ByVal Tensor step(@ByVal(nullValue = "torch::optim::Optimizer::LossClosure(nullptr)") LossClosure closure);
   public native @ByVal Tensor step();
 
   /** Adds the given vector of parameters to the optimizer's parameter list. */
-  public native void add_parameters(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector parameters);
+  public native void add_parameters(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector parameters);
 
   /** Zeros out the gradients of all parameters. */
   public native void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -46,7 +48,7 @@ public class ModulePolicy extends Pointer {
         @ByVal IValue v);
   // is slot i in typ something that this iterator should return, otherwise,
   // we skip it.
-  public static native @Cast("bool") boolean valid(@Const @SharedPtr @ByRef ClassType typ, @Cast("size_t") long i, @Const @ByRef IValue v);
+  public static native @Cast("bool") boolean valid(@Const @SharedPtr("c10::ClassType") @ByRef ClassType typ, @Cast("size_t") long i, @Const @ByRef IValue v);
   // are we going to return everything? If so, we can optimize the calculate
   // of the size of the list.
   @MemberGetter public static native @Cast("const bool") boolean all_slots();

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,7 +37,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 // An Operator is a thin wrapper around either a pure JIT operator (e.g. prim
 // ops) or a c10 operator, allowing some common operations and abstracting away
 // the concrete operator nature.
-@Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Operator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -55,7 +57,7 @@ public class Operator extends Pointer {
 
   public native @Const @ByRef FunctionSchema schema();
 
-  public native @ByVal @Cast("c10::ArrayRef<at::Tag>*") IntArrayRef getTags();
+  public native @ByVal TagArrayRef getTags();
 
   public native @Cast("bool") boolean isC10Op();
 

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -94,7 +96,8 @@ public class TypeMeta extends Pointer {
    */
   public native @ByVal @Cast("c10::string_view*") @NoException(true) Pointer name();
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByVal TypeMeta lhs, @Const @ByVal TypeMeta rhs);
+  public boolean equals(TypeMeta rhs) { return equals(this, rhs); }
 
   // Below are static functions that can be called by passing a specific type.
 

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -89,22 +91,22 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
 
 
   public ModuleDictImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   /** Constructs the {@code ModuleDict} from a list of string-Module pairs. */
   public ModuleDictImpl(
-        @Const @ByRef StringSharedModulePairVector modules) { super((Pointer)null); allocate(modules); }
-  @NoDeallocator private native void allocate(
-        @Const @ByRef StringSharedModulePairVector modules);
+        @Const @ByRef StringSharedModuleVector modules) { super((Pointer)null); allocate(modules); }
+  @SharedPtr private native void allocate(
+        @Const @ByRef StringSharedModuleVector modules);
 
   /** Constructs the {@code ModuleDict} from an {@code OrderedDict}. */
   public ModuleDictImpl(
         @Const @ByRef StringSharedModuleDict modules) { super((Pointer)null); allocate(modules); }
-  @NoDeallocator private native void allocate(
+  @SharedPtr private native void allocate(
         @Const @ByRef StringSharedModuleDict modules);
 
   /** Return the items in the {@code ModuleDict}. */
-  public native @ByVal StringSharedModulePairVector items();
+  public native @ByVal StringSharedModuleVector items();
 
   /** Return the keys in the {@code ModuleDict}. */
   public native @ByVal StringVector keys();
@@ -137,9 +139,9 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
 
   /** Special cloning function for {@code ModuleDict} because it does not use
    *  {@code reset()}. */
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone(
-        @Const @ByRef(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device);
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone();
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
+        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 
   /** {@code reset()} is empty for {@code ModuleDict}, since it does not have parameters of
    *  its own. */
@@ -151,8 +153,8 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   /** Attempts to returns the {@code Module} associated with the given {@code key}. Throws
    *  an exception if no such {@code key} is stored in the {@code ModuleDict}. Check
    *  contains(key) before for a non-throwing way of access. */
-  public native @SharedPtr @Name("operator []") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module get(@StdString BytePointer key);
-  public native @SharedPtr @Name("operator []") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module get(@StdString String key);
+  public native @SharedPtr("torch::nn::Module") @ByVal @Name("operator []") Module get(@StdString BytePointer key);
+  public native @SharedPtr("torch::nn::Module") @ByVal @Name("operator []") Module get(@StdString String key);
 
   /** Attempts to return the module at the given key as the requested type.
    *  Throws an exception if no such {@code key} is stored in the {@code ModuleDict}.
@@ -165,12 +167,12 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
   /** Removes and returns the {@code Module} associated with the given {@code key}.
    *  Throws an exception if no such {@code key} is stored in the {@code ModuleDict}.
    *  Check contains(key) before for a non-throwing way of access. */
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module pop(@StdString BytePointer key);
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module pop(@StdString String key);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module pop(@StdString BytePointer key);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module pop(@StdString String key);
 
   /** Updated the {@code ModuleDict} with a vector of key-module pairs. */
   public native void update(
-        @Const @ByRef StringSharedModulePairVector modules);
+        @Const @ByRef StringSharedModuleVector modules);
 
   /** Updated the {@code ModuleDict} with key-value pairs from {@code OrderedDict} or
    *  {@code ModuleDict}. */

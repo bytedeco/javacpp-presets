@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -58,13 +60,13 @@ public class PackedSequence extends Pointer {
   public PackedSequence(
         @ByVal Tensor data,
         @ByVal Tensor batch_sizes,
-        @ByVal(nullValue = "at::Tensor{}") Tensor sorted_indices,
-        @ByVal(nullValue = "at::Tensor{}") Tensor unsorted_indices) { super((Pointer)null); allocate(data, batch_sizes, sorted_indices, unsorted_indices); }
+        @ByVal(nullValue = "torch::Tensor{}") Tensor sorted_indices,
+        @ByVal(nullValue = "torch::Tensor{}") Tensor unsorted_indices) { super((Pointer)null); allocate(data, batch_sizes, sorted_indices, unsorted_indices); }
   private native void allocate(
         @ByVal Tensor data,
         @ByVal Tensor batch_sizes,
-        @ByVal(nullValue = "at::Tensor{}") Tensor sorted_indices,
-        @ByVal(nullValue = "at::Tensor{}") Tensor unsorted_indices);
+        @ByVal(nullValue = "torch::Tensor{}") Tensor sorted_indices,
+        @ByVal(nullValue = "torch::Tensor{}") Tensor unsorted_indices);
   public PackedSequence(
         @ByVal Tensor data,
         @ByVal Tensor batch_sizes) { super((Pointer)null); allocate(data, batch_sizes); }

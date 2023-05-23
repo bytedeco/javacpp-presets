@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -74,7 +76,7 @@ public class InlinedCallStack extends Pointer {
   public native @StdString BytePointer function_name();
 
   // Return callstack as a vector of [Function, SourceRange] pairs.
-  public native @Cast("torch::jit::InlinedCallStackEntry*") @StdVector LongPointer vec();
+  public native @Cast("torch::jit::InlinedCallStackEntry*") @StdVector LongVector vec();
 
   public native void setCallee(@ByVal @Cast("c10::optional<torch::jit::InlinedCallStackPtr>*") InlinedCallStackOptional arg0);
 

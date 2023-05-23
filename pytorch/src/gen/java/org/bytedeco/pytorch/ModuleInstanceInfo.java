@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -30,7 +32,7 @@ public class ModuleInstanceInfo extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModuleInstanceInfo(Pointer p) { super(p); }
 
-  public native @SharedPtr @ByVal ClassType class_type();
+  public native @SharedPtr("c10::ClassType") @ByVal ClassType class_type();
   public native @StdString BytePointer instance_name();
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ModuleInstanceInfo rhs);

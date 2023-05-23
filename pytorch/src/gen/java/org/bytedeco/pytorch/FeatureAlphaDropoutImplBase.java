@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -23,12 +25,12 @@ public class FeatureAlphaDropoutImplBase extends FeatureAlphaDropoutImplCloneabl
     public FeatureAlphaDropoutImplBase(Pointer p) { super(p); }
 
   public FeatureAlphaDropoutImplBase(double p) { super((Pointer)null); allocate(p); }
-  @NoDeallocator private native void allocate(double p);
+  private native void allocate(double p);
 
   public FeatureAlphaDropoutImplBase(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_);
+  private native void allocate(@Const @ByRef(nullValue = "torch::nn::DropoutOptions{}") DropoutOptions options_);
   public FeatureAlphaDropoutImplBase() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  private native void allocate();
 
   public native void reset();
 

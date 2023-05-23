@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -16,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 /** An ordered dictionary implementation, akin to Python's {@code OrderedDict}. */
-@Name("torch::OrderedDict<std::string,at::Tensor>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::OrderedDict<std::string,torch::Tensor>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class StringTensorDict extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -117,13 +119,13 @@ public class StringTensorDict extends Pointer {
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,at::Tensor>::Iterator*") StringTensorDictItem begin();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItem begin();
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,at::Tensor>::Iterator*") StringTensorDictItem end();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItem end();
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
 
@@ -169,7 +171,7 @@ public class StringTensorDict extends Pointer {
   // Observers
 
   /** Returns the items stored in the {@code OrderedDict}. */
-  public native @StdVector @NoException(true) StringTensorDictItem items();
+  public native @Const @ByRef @NoException(true) StringTensorVector items();
 
   /** Returns a newly allocated vector and copies all keys from this
    *  {@code OrderedDict} into the vector. */
@@ -177,11 +179,11 @@ public class StringTensorDict extends Pointer {
 
   /** Returns a newly allocated vector and copies all values from this
    *  {@code OrderedDict} into the vector. */
-  public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector values();
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector values();
 
   /** Returns a newly allocated vector and copies all keys and values from this
    *  {@code OrderedDict} into a vector of {@code std::pair<Key, Value>}. */
-  public native @ByVal StringTensorPairVector pairs();
+  public native @ByVal StringTensorVector pairs();
 
   /** Returns true if both dicts contain the same keys and values, in the same
    *  order. */

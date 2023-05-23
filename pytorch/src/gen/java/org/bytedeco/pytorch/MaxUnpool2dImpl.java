@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,9 +37,9 @@ public class MaxUnpool2dImpl extends MaxUnpool2dImplBase {
 
   
     public MaxUnpool2dImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
-    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
+    private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
     public MaxUnpool2dImpl(@Const @ByRef MaxUnpool2dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(@Const @ByRef MaxUnpool2dOptions options_);
+    private native void allocate(@Const @ByRef MaxUnpool2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxUnpool2dImpl(Pointer p) { super(p); }
 

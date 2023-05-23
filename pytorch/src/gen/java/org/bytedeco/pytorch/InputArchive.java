@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -126,12 +128,12 @@ public class InputArchive extends Pointer {
 
   // Loads given the specified read and size functions.
   public native void load_from(
-        @Const @ByRef ReadFunction read_func,
-        @Const @ByRef SizeFunction size_func,
+        @Const @ByRef Reader read_func,
+        @Const @ByRef SizeTSupplier size_func,
         @ByVal(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
   public native void load_from(
-        @Const @ByRef ReadFunction read_func,
-        @Const @ByRef SizeFunction size_func);
+        @Const @ByRef Reader read_func,
+        @Const @ByRef SizeTSupplier size_func);
 
   // Returns the vector of keys in the input archive.
   public native @ByVal StringVector keys();

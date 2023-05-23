@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -34,5 +36,6 @@ public class CompileTimeEmptyString extends Pointer {
         return new CompileTimeEmptyString((Pointer)this).offsetAddress(i);
     }
 
-  public native @Const @ByRef @Name("operator const std::string&") @StdString BytePointer asBytePointer();
+  public native @Const @ByRef @Name("operator const std::string&") @StdString @Override String toString();
+  public native @Const @Name("operator const char*") @Cast("const char*") BytePointer asBytePointer();
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,9 +37,9 @@ public class ConstantPad1dImpl extends ConstantPad1dImplBase {
 
   
     public ConstantPad1dImpl(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding, double value) { super((Pointer)null); allocate(padding, value); }
-    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding, double value);
+    private native void allocate(@ByVal @Cast("torch::ExpandingArray<1*2>*") LongPointer padding, double value);
     public ConstantPad1dImpl(@Const @ByRef ConstantPad1dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(@Const @ByRef ConstantPad1dOptions options_);
+    private native void allocate(@Const @ByRef ConstantPad1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConstantPad1dImpl(Pointer p) { super(p); }
 

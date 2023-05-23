@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -18,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ OrderedDict::Item ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-@Name("torch::OrderedDict<std::string,at::Tensor>::Item") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::OrderedDict<std::string,torch::Tensor>::Item") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class StringTensorDictItem extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -49,5 +51,5 @@ public class StringTensorDictItem extends Pointer {
   /** Returns a reference to the value. */
 
   /** Returns a {@code (key, value)} pair. */
-  public native @Cast("const std::pair<std::string,at::Tensor>*") @ByRef @NoException(true) StringTensorPair pair();
+  public native @Cast("const std::pair<std::string,torch::Tensor>*") @ByRef @NoException(true) StringTensorPair pair();
 }

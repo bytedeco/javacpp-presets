@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -106,13 +108,15 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TreeView extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TreeView(Pointer p) { super(p); }
 
-  public TreeView(@ByVal @Cast("torch::jit::TreeRef*") Pointer tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@ByVal @Cast("torch::jit::TreeRef*") Pointer tree);
-  public native @ByVal @Cast("torch::jit::TreeRef*") Pointer tree();
+  public TreeView(@ByVal TreeRef tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@ByVal TreeRef tree);
+  public native @ByVal TreeRef tree();
   public native @Const @ByRef SourceRange range();
-  public native @ByVal @Cast("torch::jit::TreeRef*") @Name("operator torch::jit::TreeRef") Pointer asPointer();
-  public native @Cast("const torch::jit::TreeRef*") @ByRef Pointer get();
+  public native @ByVal @Name("operator torch::jit::TreeRef") TreeRef asTreeRef();
+  
   public native int kind();
   public native void dump();
 }

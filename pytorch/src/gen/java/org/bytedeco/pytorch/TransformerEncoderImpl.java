@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -40,19 +42,13 @@ public class TransformerEncoderImpl extends TransformerEncoderImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerEncoderImpl(Pointer p) { super(p); }
 
-  public TransformerEncoderImpl(
-        @ByVal TransformerEncoderLayer encoder_layer,
-        @Cast("int64_t") long num_layers) { super((Pointer)null); allocate(encoder_layer, num_layers); }
-  @NoDeallocator private native void allocate(
-        @ByVal TransformerEncoderLayer encoder_layer,
-        @Cast("int64_t") long num_layers);
   public TransformerEncoderImpl(@ByVal TransformerEncoderOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal TransformerEncoderOptions options_);
+  @SharedPtr private native void allocate(@ByVal TransformerEncoderOptions options_);
 
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor src,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor src_mask,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor src_key_padding_mask);
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor src_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor src_key_padding_mask);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor src);
 
@@ -63,7 +59,6 @@ public class TransformerEncoderImpl extends TransformerEncoderImplCloneable {
   public native @ByRef TransformerEncoderOptions options(); public native TransformerEncoderImpl options(TransformerEncoderOptions setter);
 
   /** module list that contains all the encoder layers */
-  public native @ByRef ModuleList layers(); public native TransformerEncoderImpl layers(ModuleList setter);
 
   /** optional normalization module */
   public native @ByRef AnyModule norm(); public native TransformerEncoderImpl norm(AnyModule setter);

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -39,36 +41,36 @@ public class SymNodeImpl extends Pointer {
   public native @Cast("bool") boolean is_int();
   public native @Cast("bool") boolean is_bool();
   public native @Cast("bool") boolean is_float();
-  public native @ByVal @Cast("c10::SymNode*") Pointer add(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer sub(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer mul(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer truediv(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer pow(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer floordiv(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer mod(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer eq(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer ne(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer gt(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer lt(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer le(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer ge(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer ceil();
-  public native @ByVal @Cast("c10::SymNode*") Pointer floor();
-  public native @ByVal @Cast("c10::SymNode*") Pointer neg();
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_min(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_max(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_or(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_and(@Cast("const c10::SymNode*") @ByRef Pointer other);
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_not();
+  public native @ByVal SymNode add(@Const @ByRef SymNode other);
+  public native @ByVal SymNode sub(@Const @ByRef SymNode other);
+  public native @ByVal SymNode mul(@Const @ByRef SymNode other);
+  public native @ByVal SymNode truediv(@Const @ByRef SymNode other);
+  public native @ByVal SymNode pow(@Const @ByRef SymNode other);
+  public native @ByVal SymNode floordiv(@Const @ByRef SymNode other);
+  public native @ByVal SymNode mod(@Const @ByRef SymNode other);
+  public native @ByVal SymNode eq(@Const @ByRef SymNode other);
+  public native @ByVal SymNode ne(@Const @ByRef SymNode other);
+  public native @ByVal SymNode gt(@Const @ByRef SymNode other);
+  public native @ByVal SymNode lt(@Const @ByRef SymNode other);
+  public native @ByVal SymNode le(@Const @ByRef SymNode other);
+  public native @ByVal SymNode ge(@Const @ByRef SymNode other);
+  public native @ByVal SymNode ceil();
+  public native @ByVal SymNode floor();
+  public native @ByVal SymNode neg();
+  public native @ByVal SymNode sym_min(@Const @ByRef SymNode other);
+  public native @ByVal SymNode sym_max(@Const @ByRef SymNode other);
+  public native @ByVal SymNode sym_or(@Const @ByRef SymNode other);
+  public native @ByVal SymNode sym_and(@Const @ByRef SymNode other);
+  public native @ByVal SymNode sym_not();
   // NB: self is ignored here, only the arguments are used
-  public native @ByVal @Cast("c10::SymNode*") Pointer is_non_overlapping_and_dense(
-        @ByVal SymNodeRef sizes,
-        @ByVal SymNodeRef strides);
-  public native @ByVal @Cast("c10::SymNode*") Pointer clone();
-  public native @ByVal @Cast("c10::SymNode*") Pointer sym_float();
-  public native @ByVal @Cast("c10::SymNode*") Pointer wrap_int(@Cast("int64_t") long num);
-  public native @ByVal @Cast("c10::SymNode*") Pointer wrap_float(double num);
-  public native @ByVal @Cast("c10::SymNode*") Pointer wrap_bool(@Cast("bool") boolean num);
+  public native @ByVal SymNode is_non_overlapping_and_dense(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
+  public native @ByVal SymNode clone();
+  public native @ByVal SymNode sym_float();
+  public native @ByVal SymNode wrap_int(@Cast("int64_t") long num);
+  public native @ByVal SymNode wrap_float(double num);
+  public native @ByVal SymNode wrap_bool(@Cast("bool") boolean num);
   public native @Cast("int64_t") long guard_int(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("int64_t") long guard_int(String file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean guard_bool(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
@@ -78,5 +80,5 @@ public class SymNodeImpl extends Pointer {
   public native @Cast("int64_t") long int_();
   public native @Cast("bool") boolean bool_();
   public native @StdString BytePointer str();
-  
+  public native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os);
 }

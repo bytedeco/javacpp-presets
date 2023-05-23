@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -18,6 +20,10 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Name("torch::nn::ConvTransposeNdImpl<3,torch::nn::ConvTranspose3dImpl>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ConvTranspose3dImplBase extends ConvTranspose3dImplBaseBase {
     static { Loader.load(); }
+
+  
+    public ConvTranspose3dImplBase(@ByVal DetailConv3dOptions options_) { super((Pointer)null); allocate(options_); }
+    private native void allocate(@ByVal DetailConv3dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvTranspose3dImplBase(Pointer p) { super(p); }
 

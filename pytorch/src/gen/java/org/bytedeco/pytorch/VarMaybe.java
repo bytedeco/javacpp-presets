@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -19,9 +21,11 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Name("torch::jit::Maybe<torch::jit::Var>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class VarMaybe extends TreeView {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VarMaybe(Pointer p) { super(p); }
 
-  public VarMaybe(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree);
+  public VarMaybe(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@Const @ByRef TreeRef tree);
   /* implicit */ public VarMaybe(@Const @ByRef Var tree) { super((Pointer)null); allocate(tree); }
 private native void allocate(@Const @ByRef Var tree);
   public native @Cast("bool") boolean present();

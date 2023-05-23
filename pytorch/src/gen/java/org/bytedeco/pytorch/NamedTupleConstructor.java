@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -25,12 +27,7 @@ public class NamedTupleConstructor extends SugaredValue {
   public NamedTupleConstructor(@SharedPtr TupleType type) { super((Pointer)null); allocate(type); }
   private native void allocate(@SharedPtr TupleType type);
 
-  public native @SharedPtr @ByVal SugaredValue call(
-        @Const @ByRef SourceRange loc,
-        @ByRef GraphFunction m,
-        @ByVal NamedValueArrayRef args,
-        @ByVal NamedValueArrayRef kwargs,
-        @Cast("size_t") long n_binders);
+  
 
   public native @StdString BytePointer kind();
 

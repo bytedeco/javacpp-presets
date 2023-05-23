@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -44,16 +46,16 @@ public class RangeValue extends SugaredValue {
 
   public native @StdString BytePointer kind();
   public native Value len(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
-  public native @SharedPtr @ByVal SugaredValue getitem(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue getitem(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         Value idx,
         @ByVal(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type_hint);
-  public native @SharedPtr @ByVal SugaredValue getitem(
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue getitem(
         @Const @ByRef SourceRange loc,
         @ByRef GraphFunction m,
         Value idx);
-  public native @SharedPtr @ByVal SugaredValue iter(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
+  public native @SharedPtr("torch::jit::SugaredValue") @ByVal SugaredValue iter(@Const @ByRef SourceRange loc, @ByRef GraphFunction m);
 
   // When Range is instantiated via enumerate(iterable_with_static_len),
   // then it takes the static length of the iterable

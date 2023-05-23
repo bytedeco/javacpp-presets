@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -55,10 +57,10 @@ public class TripletMarginWithDistanceLossImpl extends TripletMarginWithDistance
 
   public TripletMarginWithDistanceLossImpl(
         @ByVal(nullValue = "torch::nn::TripletMarginWithDistanceLossOptions{}") TripletMarginWithDistanceLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(
+  @SharedPtr private native void allocate(
         @ByVal(nullValue = "torch::nn::TripletMarginWithDistanceLossOptions{}") TripletMarginWithDistanceLossOptions options_);
   public TripletMarginWithDistanceLossImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native void reset();
 

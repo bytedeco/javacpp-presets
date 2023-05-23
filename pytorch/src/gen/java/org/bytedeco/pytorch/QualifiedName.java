@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -67,7 +69,7 @@ private native void allocate(@StdString String name);
 
   public native @Const @ByRef StringVector atoms();
 
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef QualifiedName other);
 
-  
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef QualifiedName other);
 }

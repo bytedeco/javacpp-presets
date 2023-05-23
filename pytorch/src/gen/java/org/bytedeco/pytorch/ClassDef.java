@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -19,13 +21,28 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ClassDef extends TreeView {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ClassDef(Pointer p) { super(p); }
 
-  public ClassDef(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree);
+  public ClassDef(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@Const @ByRef TreeRef tree);
   public native @ByVal ClassDef withName(@StdString BytePointer new_name);
   public native @ByVal ClassDef withName(@StdString String new_name);
   public native @ByVal Ident name();
   public native @ByVal ExprMaybe superclass();
-  public native @ByVal @Cast("torch::jit::Maybe<c10::List<torch::jit::Property> >*") Pointer properties();
-  public native @ByVal @Cast("torch::jit::Maybe<c10::List<torch::jit::Assign> >*") Pointer assigns();
+  public native @ByVal StmtList body();
+  public native @ByVal PropertyListMaybe properties();
+  public native @ByVal AssignListMaybe assigns();
+  public static native @ByVal ClassDef create(
+        @Const @ByRef SourceRange range,
+        @Const @ByRef Ident name,
+        @Const @ByRef ExprMaybe superclass,
+        @Const @ByRef StmtList body);
+  public static native @ByVal ClassDef create(
+        @Const @ByRef SourceRange range,
+        @Const @ByRef Ident name,
+        @Const @ByRef ExprMaybe superclass,
+        @Const @ByRef StmtList body,
+        @Const @ByRef PropertyList properties,
+        @Const @ByRef AssignList assigns);
 }

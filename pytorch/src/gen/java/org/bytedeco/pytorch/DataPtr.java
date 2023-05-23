@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -44,8 +46,8 @@ public class DataPtr extends Pointer {
   private native void allocate();
   public DataPtr(Pointer data, @ByVal Device device) { super((Pointer)null); allocate(data, device); }
   private native void allocate(Pointer data, @ByVal Device device);
-  public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Deleter ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
-  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Deleter ctx_deleter, @ByVal Device device);
+  public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") PointerConsumer ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
+  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") PointerConsumer ctx_deleter, @ByVal Device device);
   public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
   private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter, @ByVal Device device);
   public DataPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") long ctx_deleter, @ByVal Device device) { super((Pointer)null); allocate(data, ctx, ctx_deleter, device); }
@@ -57,7 +59,7 @@ public class DataPtr extends Pointer {
   public native Pointer release_context();
   
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
-  public native @Cast("c10::DeleterFnPtr") Deleter get_deleter();
+  public native @Cast("c10::DeleterFnPtr") PointerConsumer get_deleter();
   /**
    * Compare the deleter in a DataPtr to expected_deleter.
    * If it matches, replace the deleter with new_deleter
@@ -96,8 +98,8 @@ public class DataPtr extends Pointer {
    * in question to confirm this.
    */
   public native @Cast("bool") boolean compare_exchange_deleter(
-        @Cast("c10::DeleterFnPtr") Deleter expected_deleter,
-        @Cast("c10::DeleterFnPtr") Deleter new_deleter);
+        @Cast("c10::DeleterFnPtr") PointerConsumer expected_deleter,
+        @Cast("c10::DeleterFnPtr") PointerConsumer new_deleter);
   public native @Cast("bool") boolean compare_exchange_deleter(
         @Cast("c10::DeleterFnPtr") Pointer expected_deleter,
         @Cast("c10::DeleterFnPtr") Pointer new_deleter);

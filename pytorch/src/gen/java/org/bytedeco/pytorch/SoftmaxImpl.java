@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,9 +38,9 @@ public class SoftmaxImpl extends SoftmaxImplCloneable {
     public SoftmaxImpl(Pointer p) { super(p); }
 
   public SoftmaxImpl(@Cast("int64_t") long dim) { super((Pointer)null); allocate(dim); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long dim);
+  @SharedPtr private native void allocate(@Cast("int64_t") long dim);
   public SoftmaxImpl(@Const @ByRef SoftmaxOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef SoftmaxOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef SoftmaxOptions options_);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

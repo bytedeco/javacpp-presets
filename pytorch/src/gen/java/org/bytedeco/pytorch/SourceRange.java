@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -73,7 +75,7 @@ public class SourceRange extends Pointer {
   public native @Cast("size_t") long end();
   public native @StdString BytePointer str();
 
-  public native @ByVal StringSizeTSizeTTupleOptional file_line_col();
+  public native @ByVal T_StringSizeTSizeT_TOptional file_line_col();
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SourceRange rhs);
 

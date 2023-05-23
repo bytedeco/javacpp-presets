@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -36,7 +38,7 @@ public class ShapeSymbol extends Pointer {
   private native void allocate();
   // is this symbol a fixed/static dimension
   public native @Cast("bool") boolean is_static();
-  
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ShapeSymbol b);
   public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef ShapeSymbol b);
 
   public static native @ByVal ShapeSymbol fromStaticSize(@Cast("int64_t") long val);
@@ -45,5 +47,8 @@ public class ShapeSymbol extends Pointer {
   public native @Cast("int64_t") long value();
 
   public static native @ByVal ShapeSymbol newSymbol();
-  
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+        @Cast("std::ostream*") @ByRef Pointer os,
+        @Const @ByRef ShapeSymbol s);
+  public Pointer shiftLeft(Pointer os) { return shiftLeft(os, this); }
 }

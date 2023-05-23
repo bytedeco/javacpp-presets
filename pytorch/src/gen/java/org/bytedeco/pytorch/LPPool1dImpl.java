@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,9 +37,9 @@ public class LPPool1dImpl extends LPPool1dImplBase {
 
   
     public LPPool1dImpl(double norm_type, @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size) { super((Pointer)null); allocate(norm_type, kernel_size); }
-    @NoDeallocator private native void allocate(double norm_type, @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);
+    private native void allocate(double norm_type, @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);
     public LPPool1dImpl(@Const @ByRef LPPool1dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(@Const @ByRef LPPool1dOptions options_);
+    private native void allocate(@Const @ByRef LPPool1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LPPool1dImpl(Pointer p) { super(p); }
 

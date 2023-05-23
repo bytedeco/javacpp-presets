@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -40,5 +42,8 @@ public class AdamWParamState extends OptimizerCloneableAdamWParamState {
   public native @ByRef @NoException(true) Tensor max_exp_avg_sq();
   
   
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
+        @Const @ByRef AdamWParamState lhs,
+        @Const @ByRef AdamWParamState rhs);
+  public boolean equals(AdamWParamState rhs) { return equals(this, rhs); }
 }

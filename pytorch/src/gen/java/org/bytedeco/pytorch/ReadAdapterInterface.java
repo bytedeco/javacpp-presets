@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -15,10 +17,18 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Namespace("caffe2::serialize") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+
+// this is the interface for the (file/stream/memory) reader in
+// PyTorchStreamReader. with this interface, we can extend the support
+// besides standard istream
+@Namespace("caffe2::serialize") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ReadAdapterInterface extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ReadAdapterInterface() { super((Pointer)null); }
+    static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReadAdapterInterface(Pointer p) { super(p); }
+
+  public native @Cast("size_t") long size();
+  public native @Cast("size_t") long read(@Cast("uint64_t") long pos, Pointer buf, @Cast("size_t") long n, @Cast("const char*") BytePointer what/*=""*/);
+  public native @Cast("size_t") long read(@Cast("uint64_t") long pos, Pointer buf, @Cast("size_t") long n);
+  public native @Cast("size_t") long read(@Cast("uint64_t") long pos, Pointer buf, @Cast("size_t") long n, String what/*=""*/);
 }

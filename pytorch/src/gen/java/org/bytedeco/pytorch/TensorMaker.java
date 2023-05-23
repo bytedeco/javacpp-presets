@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -39,11 +41,11 @@ public class TensorMaker extends Pointer {
 
   public native @ByRef @NoException(true) TensorMaker storage_offset(@ByVal LongOptional value);
 
-  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal Deleter value);
+  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal PointerConsumer value);
   public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") Pointer value);
   public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") long value);
 
-  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") Deleter deleter/*=nullptr*/);
+  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") PointerConsumer deleter/*=nullptr*/);
   public native @ByRef @NoException(true) TensorMaker context(Pointer value);
   public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") Pointer deleter/*=nullptr*/);
   public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") long deleter/*=nullptr*/);

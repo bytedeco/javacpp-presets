@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -20,11 +22,13 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SymFloat extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SymFloat(Pointer p) { super(p); }
 
   /*implicit*/ public SymFloat(double d) { super((Pointer)null); allocate(d); }
 private native void allocate(double d);
-  public SymFloat(@ByVal @Cast("c10::SymNode*") Pointer ptr) { super((Pointer)null); allocate(ptr); }
-  private native void allocate(@ByVal @Cast("c10::SymNode*") Pointer ptr);
+  public SymFloat(@ByVal SymNode ptr) { super((Pointer)null); allocate(ptr); }
+  private native void allocate(@ByVal SymNode ptr);
   public SymFloat() { super((Pointer)null); allocate(); }
   private native void allocate();
 
@@ -32,7 +36,7 @@ private native void allocate(double d);
 
   
 
-  public native @ByVal @Cast("c10::SymNode*") Pointer toSymNodeImpl();
+  public native @ByVal SymNode toSymNodeImpl();
 
   public native double expect_float();
 

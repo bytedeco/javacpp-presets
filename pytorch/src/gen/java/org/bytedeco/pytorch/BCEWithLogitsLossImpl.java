@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -50,9 +52,9 @@ public class BCEWithLogitsLossImpl extends BCEWithLogitsLossImplCloneable {
     }
 
   public BCEWithLogitsLossImpl(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_);
+  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::BCEWithLogitsLossOptions{}") BCEWithLogitsLossOptions options_);
   public BCEWithLogitsLossImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native void reset();
 

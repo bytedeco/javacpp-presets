@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -28,13 +30,13 @@ public class OptimizerParamGroup extends Pointer {
   // be copy-constructible.
   public OptimizerParamGroup(@Const @ByRef OptimizerParamGroup param_group) { super((Pointer)null); allocate(param_group); }
   private native void allocate(@Const @ByRef OptimizerParamGroup param_group);
-  public OptimizerParamGroup(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
-  private native void allocate(@Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params);
+  public OptimizerParamGroup(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params) { super((Pointer)null); allocate(params); }
+  private native void allocate(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params);
   public OptimizerParamGroup(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
+        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params,
         @UniquePtr OptimizerOptions options) { super((Pointer)null); allocate(params, options); }
   private native void allocate(
-        @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector params,
+        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector params,
         @UniquePtr OptimizerOptions options);
 
   public native @Cast("bool") boolean has_options();

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -20,15 +22,15 @@ public class StringSharedModulePair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringSharedModulePair(Pointer p) { super(p); }
-    public StringSharedModulePair(BytePointer firstValue, @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module secondValue) { this(); put(firstValue, secondValue); }
-    public StringSharedModulePair(String firstValue, @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module secondValue) { this(); put(firstValue, secondValue); }
+    public StringSharedModulePair(BytePointer firstValue, Module secondValue) { this(); put(firstValue, secondValue); }
+    public StringSharedModulePair(String firstValue, Module secondValue) { this(); put(firstValue, secondValue); }
     public StringSharedModulePair()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef StringSharedModulePair put(@ByRef StringSharedModulePair x);
 
 
     @MemberGetter public native @StdString BytePointer first(); public native StringSharedModulePair first(BytePointer first);
-    @MemberGetter public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module second();  public native StringSharedModulePair second(Module second);
+    @MemberGetter public native @SharedPtr("torch::nn::Module") Module second();  public native StringSharedModulePair second(Module second);
     @MemberSetter @Index public native StringSharedModulePair first(@StdString String first);
 
     public StringSharedModulePair put(BytePointer firstValue, Module secondValue) {

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -32,9 +34,9 @@ public class Graph extends Pointer {
   
   
   public Graph(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root) { super((Pointer)null); allocate(scope_root); }
-  private native void allocate(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root);
+  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root);
   public Graph() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @SharedPtr private native void allocate();
 
   public native @ByVal ValueArrayRef inputs();
   public native @ByVal ValueArrayRef outputs();
@@ -107,7 +109,7 @@ public class Graph extends Pointer {
         @ByVal ValueArrayRef keys,
         @ByVal ValueArrayRef values);
   public native JitNode createNumToTensor(Value value);
-  public native JitNode createObject(@Const @SharedPtr @ByRef ClassType type);
+  public native JitNode createObject(@Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public native JitNode createSetAttr(
         Value obj,
         @StdString BytePointer field,
@@ -212,9 +214,10 @@ public class Graph extends Pointer {
   public native @Cast("std::ostream*") @ByRef Pointer print(
         @Cast("std::ostream*") @ByRef Pointer out);
 
-  
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Graph g);
+  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
 
-  public native @SharedPtr @ByVal Graph copy();
+  public native @SharedPtr("torch::jit::Graph") @ByVal Graph copy();
   public native @UniquePtr Graph copyUnique();
   public native void remapTypes(@Const @ByRef TypeMapper type_map);
 }

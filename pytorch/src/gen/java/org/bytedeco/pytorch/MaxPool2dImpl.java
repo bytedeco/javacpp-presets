@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,9 +37,9 @@ public class MaxPool2dImpl extends MaxPool2dImplBase {
 
   
     public MaxPool2dImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
-    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
+    private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
     public MaxPool2dImpl(@Const @ByRef MaxPool2dOptions options_) { super((Pointer)null); allocate(options_); }
-    @NoDeallocator private native void allocate(@Const @ByRef MaxPool2dOptions options_);
+    private native void allocate(@Const @ByRef MaxPool2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxPool2dImpl(Pointer p) { super(p); }
 
@@ -45,5 +47,5 @@ public class MaxPool2dImpl extends MaxPool2dImplBase {
 
   /** Returns the outputs and the indices of the max values.
    *  Useful for {@code torch::nn::MaxUnpool2d} later. */
-  public native @ByVal TensorTensorTuple forward_with_indices(@Const @ByRef Tensor input);
+  public native @ByVal T_TensorTensor_T forward_with_indices(@Const @ByRef Tensor input);
 }

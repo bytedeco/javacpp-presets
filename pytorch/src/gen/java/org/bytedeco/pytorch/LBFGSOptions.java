@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -35,7 +37,10 @@ public class LBFGSOptions extends OptimizerCloneableLBFGSOptions {
   public native @ByRef @NoException(true) StringOptional line_search_fn();
   
   
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
+        @Const @ByRef LBFGSOptions lhs,
+        @Const @ByRef LBFGSOptions rhs);
+  public boolean equals(LBFGSOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
 }

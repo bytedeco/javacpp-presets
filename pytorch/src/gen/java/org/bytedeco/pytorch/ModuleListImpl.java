@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -77,15 +79,15 @@ public class ModuleListImpl extends ModuleListImplCloneable {
 
 
   public ModuleListImpl() { super((Pointer)null); allocate(); }
-  @NoDeallocator private native void allocate();
+  @SharedPtr private native void allocate();
 
   /** Constructs the {@code ModuleList} from a variadic list of modules. */
 
   /** Special cloning function for {@code ModuleList} because it does not use
    *  {@code reset()}. */
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone(
-        @Const @ByRef(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device);
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone();
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone(
+        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module clone();
 
   /** {@code reset()} is empty for {@code ModuleList}, since it does not have parameters of
    *  its own. */
@@ -94,7 +96,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** Pretty prints the {@code ModuleList} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
-  public native void push_back(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public void push_back(Module module) { _push_back(module.asModule()); }
+  private native @Name("push_back") void _push_back(@SharedPtr("torch::nn::Module") @ByVal Module module);
 
   /** Adds a new {@code Module} to the {@code ModuleList} container, moving or copying
    *  it into a {@code shared_ptr} internally. This method allows passing value types,
@@ -126,14 +129,14 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** Attempts to return a {@code std::shared_ptr} whose dynamic type is that of the
    *  underlying module at the given index. Throws an exception if the index is
    *  out of bounds. */
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module ptr(@Cast("size_t") long index);
+  public native @SharedPtr("torch::nn::Module") @ByVal Module ptr(@Cast("size_t") long index);
 
   /** Attempts to return a {@code std::shared_ptr} whose type is the one provided.
    *  Throws an exception if the index is out of bounds or the types do not
    *  match. */
 
   /** Like {@code ptr(index)}. */
-  public native @SharedPtr @Name("operator []") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module get(@Cast("size_t") long index);
+  public native @SharedPtr("torch::nn::Module") @ByVal @Name("operator []") Module get(@Cast("size_t") long index);
 
   /** The current size of the {@code ModuleList} container. */
   public native @Cast("size_t") @NoException(true) long size();
@@ -141,7 +144,8 @@ public class ModuleListImpl extends ModuleListImplCloneable {
   /** True if there are no modules in the {@code ModuleList}. */
   public native @Cast("bool") @NoException(true) boolean is_empty();
 
-  public native void insert(@Cast("size_t") long index, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
+  public void insert(long index, Module module) { _insert(index, module.asModule()); }
+  private native @Name("insert") void _insert(@Cast("size_t") long index, @SharedPtr("torch::nn::Module") @ByVal Module module);
 
   /** Unwraps the contained module of a {@code ModuleHolder} and inserts it in the
    *  {@code ModuleList}. */

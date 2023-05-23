@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -33,10 +35,10 @@ public class GraphVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr Graph get(@Cast("size_t") long i);
+    @Index(function = "at") public native @SharedPtr("torch::jit::Graph") Graph get(@Cast("size_t") long i);
     public native GraphVector put(@Cast("size_t") long i, Graph value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Graph value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr("torch::jit::Graph") Graph value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -46,7 +48,7 @@ public class GraphVector extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *") @SharedPtr @Const Graph get();
+        public native @Name("operator *") @SharedPtr("torch::jit::Graph") @Const Graph get();
     }
 
     public Graph[] get() {

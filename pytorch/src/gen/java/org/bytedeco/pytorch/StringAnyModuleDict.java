@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -180,7 +182,7 @@ public class StringAnyModuleDict extends Pointer {
 
   /** Returns a newly allocated vector and copies all keys and values from this
    *  {@code OrderedDict} into a vector of {@code std::pair<Key, Value>}. */
-  public native @ByVal StringAnyModulePairVector pairs();
+  public native @ByVal StringAnyModuleVector pairs();
 
   /** Returns true if both dicts contain the same keys and values, in the same
    *  order. */

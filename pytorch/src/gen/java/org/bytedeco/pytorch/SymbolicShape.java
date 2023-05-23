@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -50,8 +52,8 @@ public class SymbolicShape extends Pointer {
   public SymbolicShape(@ByVal ShapeSymbolVector dims) { super((Pointer)null); allocate(dims); }
   private native void allocate(@ByVal ShapeSymbolVector dims);
 
-  public SymbolicShape(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims) { super((Pointer)null); allocate(dims); }
-  private native void allocate(@ByVal @Cast("c10::ArrayRef<int64_t>*") LongArrayRef dims);
+  public SymbolicShape(@ByVal LongArrayRef dims) { super((Pointer)null); allocate(dims); }
+  private native void allocate(@ByVal LongArrayRef dims);
   public SymbolicShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims) { super((Pointer)null); allocate(dims); }
   private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
 
@@ -77,7 +79,9 @@ public class SymbolicShape extends Pointer {
   // result will be unranked.
   public native @ByVal SymbolicShape merge(@Const @ByRef SymbolicShape other);
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SymbolicShape lhs, @Const @ByRef SymbolicShape rhs);
+  public boolean equals(SymbolicShape rhs) { return equals(this, rhs); }
 
-  
+  private static native @Namespace @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef SymbolicShape lhs, @Const @ByRef SymbolicShape rhs);
+  public boolean notEquals(SymbolicShape rhs) { return notEquals(this, rhs); }
 }

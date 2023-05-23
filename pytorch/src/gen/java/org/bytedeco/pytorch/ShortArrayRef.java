@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -78,13 +80,13 @@ private native void allocate();
    *  \name Simple Operations
    *  \{ */
 
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>::iterator*") ShortPointer begin();
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>::iterator*") ShortPointer end();
+  public native @Const ShortPointer begin();
+  public native @Const ShortPointer end();
 
   // These are actually the same as iterator, since ArrayRef only
   // gives you const iterators.
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>::const_iterator*") ShortPointer cbegin();
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>::const_iterator*") ShortPointer cend();
+  public native @Const ShortPointer cbegin();
+  public native @Const ShortPointer cend();
 
   /** empty - Check if the array is empty. */
   public native @Cast("const bool") boolean empty();
@@ -101,13 +103,13 @@ private native void allocate();
   public native short back();
 
   /** equals - Check for element-wise equality. */
-  public native @Cast("const bool") boolean equals(@ByVal @Cast("c10::ArrayRef<jshort>*") ShortArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal ShortArrayRef RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>*") ShortArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
+  public native @Const @ByVal ShortArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
   /** slice(n) - Chop off the first N elements of the array. */
-  public native @ByVal @Cast("const c10::ArrayRef<jshort>*") ShortArrayRef slice(@Cast("size_t") long N);
+  public native @Const @ByVal ShortArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads

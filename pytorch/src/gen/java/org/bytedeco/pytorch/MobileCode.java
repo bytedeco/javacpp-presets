@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -23,43 +25,43 @@ public class MobileCode extends Code {
     public MobileCode(Pointer p) { super(p); }
 
   public MobileCode(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
         @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, emit_promoted_ops, remaining_bailout_depth); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
         @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/);
   public MobileCode(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name) { super((Pointer)null); allocate(graph, function_name); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString BytePointer function_name);
   public MobileCode(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
         @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/) { super((Pointer)null); allocate(graph, function_name, emit_default_input_instructions, support_default_args_before_out, emit_promoted_ops, remaining_bailout_depth); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name,
         @Cast("bool") boolean emit_default_input_instructions/*=true*/,
         @Cast("bool") boolean support_default_args_before_out/*=true*/,
         @Cast("bool") boolean emit_promoted_ops/*=true*/,
         @Cast("size_t") long remaining_bailout_depth/*=0*/);
   public MobileCode(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name) { super((Pointer)null); allocate(graph, function_name); }
   private native void allocate(
-        @Const @SharedPtr @ByRef Graph graph,
+        @Const @SharedPtr("torch::jit::Graph") @ByRef Graph graph,
         @StdString String function_name);
 }

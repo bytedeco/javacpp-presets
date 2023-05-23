@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -19,12 +21,20 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::jit") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Def extends TreeView {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Def(Pointer p) { super(p); }
 
-  public Def(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree) { super((Pointer)null); allocate(tree); }
-  private native void allocate(@Cast("const torch::jit::TreeRef*") @ByRef Pointer tree);
+  public Def(@Const @ByRef TreeRef tree) { super((Pointer)null); allocate(tree); }
+  private native void allocate(@Const @ByRef TreeRef tree);
   public native @ByVal Def withName(@StdString BytePointer new_name);
   public native @ByVal Def withName(@StdString String new_name);
   public native @ByVal Def withDecl(@Const @ByRef Decl decl);
   public native @ByVal Ident name();
   public native @ByVal Decl decl();
+  public native @ByVal StmtList statements();
+  public static native @ByVal Def create(
+        @Const @ByRef SourceRange range,
+        @Const @ByRef Ident name,
+        @Const @ByRef Decl decl,
+        @Const @ByRef StmtList stmts);
 }

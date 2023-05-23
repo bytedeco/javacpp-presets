@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -42,14 +44,8 @@ public class TransformerDecoderImpl extends TransformerDecoderImplCloneable {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerDecoderImpl(Pointer p) { super(p); }
 
-  public TransformerDecoderImpl(
-        @ByVal TransformerDecoderLayer decoder_layer,
-        @Cast("int64_t") long num_layers) { super((Pointer)null); allocate(decoder_layer, num_layers); }
-  @NoDeallocator private native void allocate(
-        @ByVal TransformerDecoderLayer decoder_layer,
-        @Cast("int64_t") long num_layers);
   public TransformerDecoderImpl(@ByVal TransformerDecoderOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@ByVal TransformerDecoderOptions options_);
+  @SharedPtr private native void allocate(@ByVal TransformerDecoderOptions options_);
 
   public native void reset();
 
@@ -67,10 +63,10 @@ public class TransformerDecoderImpl extends TransformerDecoderImplCloneable {
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor tgt,
         @Const @ByRef Tensor memory,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor tgt_mask,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor memory_mask,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor tgt_key_padding_mask,
-        @Const @ByRef(nullValue = "at::Tensor{}") Tensor memory_key_padding_mask);
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor tgt_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor memory_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor tgt_key_padding_mask,
+        @Const @ByRef(nullValue = "torch::Tensor{}") Tensor memory_key_padding_mask);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor tgt,
         @Const @ByRef Tensor memory);
@@ -79,7 +75,6 @@ public class TransformerDecoderImpl extends TransformerDecoderImplCloneable {
   public native @ByRef TransformerDecoderOptions options(); public native TransformerDecoderImpl options(TransformerDecoderOptions setter);
 
   /** Cloned layers of decoder layers */
-  public native @ByRef ModuleList layers(); public native TransformerDecoderImpl layers(ModuleList setter);
 
   /** optional layer normalization module */
   public native @ByRef AnyModule norm(); public native TransformerDecoderImpl norm(AnyModule setter);

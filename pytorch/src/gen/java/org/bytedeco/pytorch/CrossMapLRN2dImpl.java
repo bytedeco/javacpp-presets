@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -32,9 +34,9 @@ public class CrossMapLRN2dImpl extends CrossMapLRN2dImplCloneable {
     public CrossMapLRN2dImpl(Pointer p) { super(p); }
 
   public CrossMapLRN2dImpl(@Cast("int64_t") long size) { super((Pointer)null); allocate(size); }
-  @NoDeallocator private native void allocate(@Cast("int64_t") long size);
+  @SharedPtr private native void allocate(@Cast("int64_t") long size);
   public CrossMapLRN2dImpl(@Const @ByRef CrossMapLRN2dOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef CrossMapLRN2dOptions options_);
+  @SharedPtr private native void allocate(@Const @ByRef CrossMapLRN2dOptions options_);
 
   public native void reset();
 

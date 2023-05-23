@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -28,8 +30,8 @@ public class Tree extends Pointer {
   public native @Cast("bool") boolean isAtom();
   public native @Const @ByRef SourceRange range();
   public native @StdString BytePointer stringValue();
-  public native @Cast("const torch::jit::TreeList*") @ByRef Pointer trees();
-  public native @Cast("const torch::jit::TreeRef*") @ByRef Pointer tree(@Cast("size_t") long i);
+  public native @Cast("const torch::jit::TreeList*") @ByRef SymDimVector trees();
+  public native @Const @ByRef TreeRef tree(@Cast("size_t") long i);
   
   public native void matchNumSubtrees(int k, @Cast("size_t") long expected_subtrees);
   public native void matchNumSubtreesD(

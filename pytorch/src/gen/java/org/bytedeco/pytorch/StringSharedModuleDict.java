@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -91,8 +93,8 @@ public class StringSharedModuleDict extends Pointer {
   /** Returns the value associated with the given {@code key}. Throws an exception if
    *  no such key is stored in the {@code OrderedDict}. Use {@code find()} for a
    *  non-throwing way of accessing a value if it is present. */
-  public native @SharedPtr @ByRef @Name("operator []") Module get(@StdString BytePointer key);
-  public native @SharedPtr @ByRef @Name("operator []") Module get(@StdString String key);
+  public native @SharedPtr("torch::nn::Module") @ByRef @Name("operator []") Module get(@StdString BytePointer key);
+  public native @SharedPtr("torch::nn::Module") @ByRef @Name("operator []") Module get(@StdString String key);
 
   /** Returns the value associated with the given {@code key}. Throws an exception if
    *  no such key is stored in the {@code OrderedDict}. Use {@code find()} for a
@@ -102,8 +104,8 @@ public class StringSharedModuleDict extends Pointer {
 
   /** Returns a pointer to the value associated with the given key, or a
    *  {@code nullptr} if no such key is stored in the {@code OrderedDict}. */
-  public native @SharedPtr @NoException(true) Module find(@StdString BytePointer key);
-  public native @SharedPtr @NoException(true) Module find(@StdString String key);
+  public native @SharedPtr("torch::nn::Module") @NoException(true) Module find(@StdString BytePointer key);
+  public native @SharedPtr("torch::nn::Module") @NoException(true) Module find(@StdString String key);
 
   /** Returns a pointer to the value associated with the given key, or a
    *  {@code nullptr} if no such key is stored in the {@code OrderedDict}. */
@@ -147,8 +149,10 @@ public class StringSharedModuleDict extends Pointer {
   /** Inserts a new {@code (key, value)} pair into the {@code OrderedDict}. Throws an
    *  exception if the key is already present. If insertion is successful,
    *  immediately returns a reference to the inserted value. */
-  public native @SharedPtr @ByRef Module insert(@StdString BytePointer key, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module value);
-  public native @SharedPtr @ByRef Module insert(@StdString String key, @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module value);
+  public Module insert(BytePointer key, Module value) { return _insert(key, value.asModule()); }
+  private native @SharedPtr("torch::nn::Module") @ByRef @Name("insert") Module _insert(@StdString BytePointer key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
+  public Module insert(String key, Module value) { return _insert(key, value.asModule()); }
+  private native @SharedPtr("torch::nn::Module") @ByRef @Name("insert") Module _insert(@StdString String key, @SharedPtr("torch::nn::Module") @ByRef(true) Module value);
 
   /** Inserts all items from {@code other} into this {@code OrderedDict}. If any key from
    *  {@code other} is already present in this {@code OrderedDict}, an exception is thrown. */
@@ -180,7 +184,7 @@ public class StringSharedModuleDict extends Pointer {
 
   /** Returns a newly allocated vector and copies all keys and values from this
    *  {@code OrderedDict} into a vector of {@code std::pair<Key, Value>}. */
-  public native @ByVal StringSharedModulePairVector pairs();
+  public native @ByVal StringSharedModuleVector pairs();
 
   /** Returns true if both dicts contain the same keys and values, in the same
    *  order. */

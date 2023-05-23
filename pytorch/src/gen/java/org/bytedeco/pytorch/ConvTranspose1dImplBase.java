@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -22,6 +24,10 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Name("torch::nn::ConvTransposeNdImpl<1,torch::nn::ConvTranspose1dImpl>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ConvTranspose1dImplBase extends ConvTranspose1dImplBaseBase {
     static { Loader.load(); }
+
+  
+    public ConvTranspose1dImplBase(@ByVal DetailConv1dOptions options_) { super((Pointer)null); allocate(options_); }
+    private native void allocate(@ByVal DetailConv1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvTranspose1dImplBase(Pointer p) { super(p); }
 

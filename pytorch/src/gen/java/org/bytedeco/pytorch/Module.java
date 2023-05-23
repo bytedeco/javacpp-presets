@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -72,19 +74,20 @@ public class Module extends Pointer {
     @Override public Module getPointer(long i) {
         return new Module((Pointer)this).offsetAddress(i);
     }
+    public Module asModule() { return this; }
 
 
   /** Tells the base {@code Module} about the name of the submodule. */
   public Module(@StdString BytePointer name) { super((Pointer)null); allocate(name); }
-  private native void allocate(@StdString BytePointer name);
+  @SharedPtr private native void allocate(@StdString BytePointer name);
   public Module(@StdString String name) { super((Pointer)null); allocate(name); }
-  private native void allocate(@StdString String name);
+  @SharedPtr private native void allocate(@StdString String name);
 
   /** Constructs the module without immediate knowledge of the submodule's name.
    *  The name of the submodule is inferred via RTTI (if possible) the first
    *  time {@code .name()} is invoked. */
   public Module() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @SharedPtr private native void allocate();
 
   /** Returns the name of the {@code Module}.
    * 
@@ -98,7 +101,8 @@ public class Module extends Pointer {
   
   ///
   ///
-  public native @StdString @NoException(true) BytePointer name();
+  public BytePointer name() { return asModule()._name(); }
+  private native @StdString @NoException(true) @Name("name") BytePointer _name();
 
   /** Performs a recursive deep copy of the module and all its registered
    *  parameters, buffers and submodules.
@@ -118,9 +122,9 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone(
-        @Const @ByRef(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device);
-  public native @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module clone();
+  public Module clone(DeviceOptional device) { return asModule()._clone(device); }
+  private native @SharedPtr("torch::nn::Module") @ByVal @Virtual(subclasses=false, method="clone") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) @Const({false, false, true}) @Name("clone") Module _clone(
+        @Const @ByRef(nullValue = "c10::optional<torch::Device>(c10::nullopt)") DeviceOptional device);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code Module&}.
@@ -134,7 +138,8 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public native void apply(@Cast("const torch::nn::Module::ModuleApplyFunction*") @ByRef ModuleFunction function);
+  public void apply(JitModuleApplyFunction function) { asModule()._apply(function); }
+  private native @Name("apply") void _apply(@Cast("const torch::nn::Module::ModuleApplyFunction*") @ByRef JitModuleApplyFunction function);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code const Module&}.
@@ -162,12 +167,15 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public native void apply(
+  public void apply(Pointer function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
+  private native @Name("apply") void _apply(
         @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function,
         @StdString BytePointer name_prefix/*=std::string()*/);
-  public native void apply(
+  public void apply(Pointer function) { asModule()._apply(function); }
+  private native @Name("apply") void _apply(
         @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function);
-  public native void apply(
+  public void apply(Pointer function, String name_prefix) { asModule()._apply(function, name_prefix); }
+  private native @Name("apply") void _apply(
         @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function,
         @StdString String name_prefix/*=std::string()*/);
 
@@ -214,25 +222,33 @@ public class Module extends Pointer {
 
   /** Returns the parameters of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector parameters(@Cast("bool") boolean recurse/*=true*/);
-  public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector parameters();
+  public TensorVector parameters(boolean recurse) { return asModule()._parameters(recurse); }
+  private native @Name("parameters") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _parameters(@Cast("bool") boolean recurse/*=true*/);
+  public TensorVector parameters() { return asModule()._parameters(); }
+  private native @Name("parameters") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _parameters();
 
   /** Returns an {@code OrderedDict} with the parameters of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */
-  public native @ByVal StringTensorDict named_parameters(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal StringTensorDict named_parameters();
+  public StringTensorDict named_parameters(boolean recurse) { return asModule()._named_parameters(recurse); }
+  private native @ByVal @Name("named_parameters") StringTensorDict _named_parameters(@Cast("bool") boolean recurse/*=true*/);
+  public StringTensorDict named_parameters() { return asModule()._named_parameters(); }
+  private native @ByVal @Name("named_parameters") StringTensorDict _named_parameters();
 
   /** Returns the buffers of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */
-  public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector buffers(@Cast("bool") boolean recurse/*=true*/);
-  public native @Cast({"", "std::vector<at::Tensor>"}) @StdMove TensorVector buffers();
+  public TensorVector buffers(boolean recurse) { return asModule()._buffers(recurse); }
+  private native @Name("buffers") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _buffers(@Cast("bool") boolean recurse/*=true*/);
+  public TensorVector buffers() { return asModule()._buffers(); }
+  private native @Name("buffers") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector _buffers();
 
   /** Returns an {@code OrderedDict} with the buffers of this {@code Module} along with
    *  their keys, and if {@code recurse} is true also recursively of every submodule. */
   
   ///
-  public native @ByVal StringTensorDict named_buffers(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal StringTensorDict named_buffers();
+  public StringTensorDict named_buffers(boolean recurse) { return asModule()._named_buffers(recurse); }
+  private native @ByVal @Name("named_buffers") StringTensorDict _named_buffers(@Cast("bool") boolean recurse/*=true*/);
+  public StringTensorDict named_buffers() { return asModule()._named_buffers(); }
+  private native @ByVal @Name("named_buffers") StringTensorDict _named_buffers();
 
   /** Returns the submodules of this {@code Module} (the entire submodule hierarchy)
    *  and if {@code include_self} is true, also inserts a {@code shared_ptr} to this module
@@ -247,8 +263,10 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public native @ByVal SharedModuleVector modules(@Cast("bool") boolean include_self/*=true*/);
-  public native @ByVal SharedModuleVector modules();
+  public SharedModuleVector modules(boolean include_self) { return asModule()._modules(include_self); }
+  private native @ByVal @Name("modules") SharedModuleVector _modules(@Cast("bool") boolean include_self/*=true*/);
+  public SharedModuleVector modules() { return asModule()._modules(); }
+  private native @ByVal @Name("modules") SharedModuleVector _modules();
 
   /** Returns an {@code OrderedDict} of the submodules of this {@code Module} (the entire
    *  submodule hierarchy) and their keys, and if {@code include_self} is true, also
@@ -263,30 +281,36 @@ public class Module extends Pointer {
    *    this method with {@code include_self} set to false if your {@code Module} is not
    *    stored in a {@code shared_ptr}.
    *  \endrst */
-  public native @ByVal StringSharedModuleDict named_modules(
+  public StringSharedModuleDict named_modules(BytePointer name_prefix, boolean include_self) { return asModule()._named_modules(name_prefix, include_self); }
+  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules(
         @StdString BytePointer name_prefix/*=std::string()*/,
         @Cast("bool") boolean include_self/*=true*/);
-  public native @ByVal StringSharedModuleDict named_modules();
-  public native @ByVal StringSharedModuleDict named_modules(
+  public StringSharedModuleDict named_modules() { return asModule()._named_modules(); }
+  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules();
+  public StringSharedModuleDict named_modules(String name_prefix, boolean include_self) { return asModule()._named_modules(name_prefix, include_self); }
+  private native @ByVal @Name("named_modules") StringSharedModuleDict _named_modules(
         @StdString String name_prefix/*=std::string()*/,
         @Cast("bool") boolean include_self/*=true*/);
 
   /** Returns the direct submodules of this {@code Module}. */
-  public native @ByVal SharedModuleVector children();
+  public SharedModuleVector children() { return asModule()._children(); }
+  private native @ByVal @Name("children") SharedModuleVector _children();
 
   /** Returns an {@code OrderedDict} of the direct submodules of this {@code Module} and
    *  their keys. */
-  public native @ByVal StringSharedModuleDict named_children();
+  public StringSharedModuleDict named_children() { return asModule()._named_children(); }
+  private native @ByVal @Name("named_children") StringSharedModuleDict _named_children();
 
   /** Enables "training" mode. */
-  public native void train(@Cast("bool") boolean on/*=true*/);
-  public native void train();
+  public void train(boolean on) { asModule()._train(on); }
+  private native @Virtual(subclasses=false, method="train") @Name("train") void _train(@Cast("bool") boolean on/*=true*/);
 
   /** Calls train(false) to enable "eval" mode.
    *  Do not override this method, override {@code train()} instead. */
   
   ///
-  public native void eval();
+  public void eval() { asModule()._eval(); }
+  private native @Name("eval") void _eval();
 
   /** True if the module is in training mode.
    * 
@@ -299,7 +323,8 @@ public class Module extends Pointer {
    *  depending on this property. */
   
   ///
-  public native @Cast("bool") @NoException(true) boolean is_training();
+  public boolean is_training() { return asModule()._is_training(); }
+  private native @Cast("bool") @Virtual(subclasses=false, method="is_training") @NoException(true) @Const({false, false, true}) @Name("is_training") boolean _is_training();
 
   /** Recursively casts all parameters to the given {@code dtype} and {@code device}.
    * 
@@ -309,13 +334,11 @@ public class Module extends Pointer {
    *  effect. */
   
   ///
-  public native void to(
+  public void to(Device device, ScalarType dtype, boolean non_blocking) { asModule()._to(device, dtype, non_blocking); }
+  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(
         @ByVal Device device,
         ScalarType dtype,
         @Cast("bool") boolean non_blocking/*=false*/);
-  public native void to(
-        @ByVal Device device,
-        ScalarType dtype);
 
   /** Recursively casts all parameters to the given dtype.
    * 
@@ -325,8 +348,8 @@ public class Module extends Pointer {
    *  effect. */
   
   ///
-  public native void to(ScalarType dtype, @Cast("bool") boolean non_blocking/*=false*/);
-  public native void to(ScalarType dtype);
+  public void to(ScalarType dtype, boolean non_blocking) { asModule()._to(dtype, non_blocking); }
+  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(ScalarType dtype, @Cast("bool") boolean non_blocking/*=false*/);
 
   /** Recursively moves all parameters to the given device.
    * 
@@ -334,16 +357,16 @@ public class Module extends Pointer {
    *  destination is on the GPU or vice versa, the copy is performed
    *  asynchronously with respect to the host. Otherwise, the argument has no
    *  effect. */
-  public native void to(@ByVal Device device, @Cast("bool") boolean non_blocking/*=false*/);
-  public native void to(@ByVal Device device);
+  public void to(Device device, boolean non_blocking) { asModule()._to(device, non_blocking); }
+  private native @Virtual(subclasses=false, method="to") @Name("to") void _to(@ByVal Device device, @Cast("bool") boolean non_blocking/*=false*/);
 
   /** Recursively zeros out the {@code grad} value of each registered parameter. */
   
   ///
   ///
   ///
-  public native void zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
-  public native void zero_grad();
+  public void zero_grad(boolean set_to_none) { asModule()._zero_grad(set_to_none); }
+  private native @Virtual(subclasses=false, method="zero_grad") @Name("zero_grad") void _zero_grad(@Cast("bool") boolean set_to_none/*=true*/);
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
@@ -361,10 +384,6 @@ public class Module extends Pointer {
    *    MyModule module;
    *    module->apply(initialize_weights);
    *  \endrst */
-  
-  ///
-  ///
-  public Module asModule() { return this; }
 
   /** Attempts to cast this {@code Module} to the given {@code ModuleType}.
    * 
@@ -422,7 +441,8 @@ public class Module extends Pointer {
    *  {@code nn::Functional}), those submodules are skipped when serializing. */
   
   ///
-  public native void save(@ByRef OutputArchive archive);
+  public void save(OutputArchive archive) { asModule()._save(archive); }
+  private native @Virtual(subclasses=false, method="save") @Const({false, false, true}) @Name("save") void _save(@ByRef OutputArchive archive);
 
   /** Deserializes the {@code Module} from the given {@code InputArchive}.
    * 
@@ -431,7 +451,8 @@ public class Module extends Pointer {
    *  {@code InputArchive} when deserializing. */
   
   ///
-  public native void load(@ByRef InputArchive archive);
+  public void load(InputArchive archive) { asModule()._load(archive); }
+  private native @Virtual(subclasses=false, method="load") @Name("load") void _load(@ByRef InputArchive archive);
 
   /** Streams a pretty representation of the {@code Module} into the given {@code stream}.
    *  By default, this representation will be the name of the module (taken from
@@ -440,7 +461,8 @@ public class Module extends Pointer {
    * 
    *  Override this method to change the pretty print. The input
    *  {@code stream} should be returned from the method, to allow easy chaining. */
-  public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
+  public void pretty_print(Pointer stream) { asModule()._pretty_print(stream); }
+  private native @Virtual(subclasses=false, method="pretty_print") @Const({false, false, true}) @Name("pretty_print") void _pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);
 
   /** Returns whether the {@code Module} is serializable. */
   
@@ -448,7 +470,8 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public native @Cast("bool") boolean is_serializable();
+  public boolean is_serializable() { return asModule()._is_serializable(); }
+  private native @Cast("bool") @Virtual(subclasses=false, method="is_serializable") @Const({false, false, true}) @Name("is_serializable") boolean _is_serializable();
 
   /** Registers a parameter with this {@code Module}.
    * 
@@ -471,18 +494,22 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public native @ByRef Tensor register_parameter(
+  public Tensor register_parameter(BytePointer name, Tensor tensor, boolean requires_grad) { return asModule()._register_parameter(name, tensor, requires_grad); }
+  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
         @StdString BytePointer name,
         @ByVal Tensor tensor,
         @Cast("bool") boolean requires_grad/*=true*/);
-  public native @ByRef Tensor register_parameter(
+  public Tensor register_parameter(BytePointer name, Tensor tensor) { return asModule()._register_parameter(name, tensor); }
+  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
         @StdString BytePointer name,
         @ByVal Tensor tensor);
-  public native @ByRef Tensor register_parameter(
+  public Tensor register_parameter(String name, Tensor tensor, boolean requires_grad) { return asModule()._register_parameter(name, tensor, requires_grad); }
+  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
         @StdString String name,
         @ByVal Tensor tensor,
         @Cast("bool") boolean requires_grad/*=true*/);
-  public native @ByRef Tensor register_parameter(
+  public Tensor register_parameter(String name, Tensor tensor) { return asModule()._register_parameter(name, tensor); }
+  private native @ByRef @Name("register_parameter") Tensor _register_parameter(
         @StdString String name,
         @ByVal Tensor tensor);
 
@@ -503,8 +530,10 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public native @ByRef Tensor register_buffer(@StdString BytePointer name, @ByVal Tensor tensor);
-  public native @ByRef Tensor register_buffer(@StdString String name, @ByVal Tensor tensor);
+  public Tensor register_buffer(BytePointer name, Tensor tensor) { return asModule()._register_buffer(name, tensor); }
+  private native @ByRef @Name("register_buffer") Tensor _register_buffer(@StdString BytePointer name, @ByVal Tensor tensor);
+  public Tensor register_buffer(String name, Tensor tensor) { return asModule()._register_buffer(name, tensor); }
+  private native @ByRef @Name("register_buffer") Tensor _register_buffer(@StdString String name, @ByVal Tensor tensor);
 
   /** Registers a submodule with this {@code Module}.
    * 
@@ -523,1420 +552,14 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public native @SharedPtr @Name("register_module<torch::nn::Module>") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+  public Module register_module(BytePointer name, Module module) { return asModule()._register_module(name, module.asModule()); }
+  private native @SharedPtr("torch::nn::Module") @ByVal @Name("register_module<torch::nn::Module>") Module _register_module(
         @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
-  public native @SharedPtr @Name("register_module<torch::nn::Module>") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
+        @SharedPtr("torch::nn::Module") @ByVal Module module);
+  public Module register_module(String name, Module module) { return asModule()._register_module(name, module.asModule()); }
+  private native @SharedPtr("torch::nn::Module") @ByVal @Name("register_module<torch::nn::Module>") Module _register_module(
         @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SequentialImpl>") @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SequentialImpl>") @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::DropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::DropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FeatureAlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::FeatureAlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CosineSimilarityImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CosineSimilarityImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PairwiseDistanceImpl>") @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::PairwiseDistanceImpl>") @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingBagImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingBagImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::FoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UnfoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::UnfoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::IdentityImpl>") @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::IdentityImpl>") @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BilinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BilinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FlattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::FlattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UnflattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::UnflattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::L1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::L1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::KLDivLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::KLDivLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MSELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MSELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BCELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BCELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HingeEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::HingeEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CosineEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CosineEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SmoothL1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SmoothL1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HuberLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::HuberLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelSoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelSoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginWithDistanceLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginWithDistanceLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CTCLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CTCLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PoissonNLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::PoissonNLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MarginRankingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MarginRankingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::NLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::NLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CrossEntropyLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CrossEntropyLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BCEWithLogitsLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::BCEWithLogitsLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ZeroPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ZeroPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RNNImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::RNNImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GRUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::GRUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RNNCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::RNNCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GRUCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::GRUCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PixelShuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::PixelShuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PixelUnshuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::PixelUnshuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UpsampleImpl>") @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::UpsampleImpl>") @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HardshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::HardshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HardtanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::HardtanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LeakyReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LeakyReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LogSigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LogSigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftminImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftminImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LogSoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LogSoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Softmax2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::Softmax2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::PReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReLU6Impl>") @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ReLU6Impl>") @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::RReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::GLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::GELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SiLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SiLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MishImpl>") @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MishImpl>") @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftplusImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftplusImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftsignImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftsignImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TanhshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TanhshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ThresholdImpl>") @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::ThresholdImpl>") @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiheadAttentionImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiheadAttentionImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LayerNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LayerNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LocalResponseNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::LocalResponseNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CrossMapLRN2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::CrossMapLRN2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GroupNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::GroupNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl module);
-  
-  ///
-  ///
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl register_module(
-        @StdString BytePointer name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl module);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl register_module(
-        @StdString String name,
-        @SharedPtr @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl module);
+        @SharedPtr("torch::nn::Module") @ByVal Module module);
 
   /** Registers a submodule with this {@code Module}.
    * 
@@ -1952,1167 +575,6 @@ public class Module extends Pointer {
    *      submodule_ = register_module("linear", torch::nn::Linear(3, 4));
    *    }
    *  \endrst */
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Module>") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
-        @StdString BytePointer name,
-        @ByVal ModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Module>") @Cast({"", "std::shared_ptr<torch::nn::Module>"}) Module register_module(
-        @StdString String name,
-        @ByVal ModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ModuleDictImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleDictImpl>"}) ModuleDictImpl register_module(
-        @StdString String name,
-        @ByVal ModuleDictImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ModuleListImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ModuleListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ModuleListImpl>"}) ModuleListImpl register_module(
-        @StdString String name,
-        @ByVal ModuleListImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SequentialImpl>") @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SequentialImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SequentialImpl>") @Cast({"", "std::shared_ptr<torch::nn::SequentialImpl>"}) SequentialImpl register_module(
-        @StdString String name,
-        @ByVal SequentialImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ParameterDictImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterDictImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterDictImpl>"}) ParameterDictImpl register_module(
-        @StdString String name,
-        @ByVal ParameterDictImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ParameterListImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ParameterListImpl>") @Cast({"", "std::shared_ptr<torch::nn::ParameterListImpl>"}) ParameterListImpl register_module(
-        @StdString String name,
-        @ByVal ParameterListImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveLogSoftmaxWithLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveLogSoftmaxWithLossImpl>"}) AdaptiveLogSoftmaxWithLossImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveLogSoftmaxWithLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BatchNorm1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm1dImpl>"}) BatchNorm1dImpl register_module(
-        @StdString String name,
-        @ByVal BatchNorm1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal InstanceNorm1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm1dImpl>"}) InstanceNorm1dImpl register_module(
-        @StdString String name,
-        @ByVal InstanceNorm1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Conv1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv1dImpl>"}) Conv1dImpl register_module(
-        @StdString String name,
-        @ByVal Conv1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConvTranspose1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose1dImpl>"}) ConvTranspose1dImpl register_module(
-        @StdString String name,
-        @ByVal ConvTranspose1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::DropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl register_module(
-        @StdString BytePointer name,
-        @ByVal DropoutImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::DropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::DropoutImpl>"}) DropoutImpl register_module(
-        @StdString String name,
-        @ByVal DropoutImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BatchNorm2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm2dImpl>"}) BatchNorm2dImpl register_module(
-        @StdString String name,
-        @ByVal BatchNorm2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal InstanceNorm2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm2dImpl>"}) InstanceNorm2dImpl register_module(
-        @StdString String name,
-        @ByVal InstanceNorm2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Conv2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv2dImpl>"}) Conv2dImpl register_module(
-        @StdString String name,
-        @ByVal Conv2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConvTranspose2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose2dImpl>"}) ConvTranspose2dImpl register_module(
-        @StdString String name,
-        @ByVal ConvTranspose2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Dropout2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout2dImpl>"}) Dropout2dImpl register_module(
-        @StdString String name,
-        @ByVal Dropout2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BatchNorm3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BatchNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::BatchNorm3dImpl>"}) BatchNorm3dImpl register_module(
-        @StdString String name,
-        @ByVal BatchNorm3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal InstanceNorm3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::InstanceNorm3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::InstanceNorm3dImpl>"}) InstanceNorm3dImpl register_module(
-        @StdString String name,
-        @ByVal InstanceNorm3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Conv3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Conv3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Conv3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Conv3dImpl>"}) Conv3dImpl register_module(
-        @StdString String name,
-        @ByVal Conv3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConvTranspose3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConvTranspose3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConvTranspose3dImpl>"}) ConvTranspose3dImpl register_module(
-        @StdString String name,
-        @ByVal ConvTranspose3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Dropout3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Dropout3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Dropout3dImpl>"}) Dropout3dImpl register_module(
-        @StdString String name,
-        @ByVal Dropout3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AlphaDropoutImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::AlphaDropoutImpl>"}) AlphaDropoutImpl register_module(
-        @StdString String name,
-        @ByVal AlphaDropoutImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FeatureAlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl register_module(
-        @StdString BytePointer name,
-        @ByVal FeatureAlphaDropoutImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::FeatureAlphaDropoutImpl>") @Cast({"", "std::shared_ptr<torch::nn::FeatureAlphaDropoutImpl>"}) FeatureAlphaDropoutImpl register_module(
-        @StdString String name,
-        @ByVal FeatureAlphaDropoutImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CosineSimilarityImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CosineSimilarityImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CosineSimilarityImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineSimilarityImpl>"}) CosineSimilarityImpl register_module(
-        @StdString String name,
-        @ByVal CosineSimilarityImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PairwiseDistanceImpl>") @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl register_module(
-        @StdString BytePointer name,
-        @ByVal PairwiseDistanceImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::PairwiseDistanceImpl>") @Cast({"", "std::shared_ptr<torch::nn::PairwiseDistanceImpl>"}) PairwiseDistanceImpl register_module(
-        @StdString String name,
-        @ByVal PairwiseDistanceImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl register_module(
-        @StdString BytePointer name,
-        @ByVal EmbeddingImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingImpl>"}) EmbeddingImpl register_module(
-        @StdString String name,
-        @ByVal EmbeddingImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingBagImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl register_module(
-        @StdString BytePointer name,
-        @ByVal EmbeddingBagImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::EmbeddingBagImpl>") @Cast({"", "std::shared_ptr<torch::nn::EmbeddingBagImpl>"}) EmbeddingBagImpl register_module(
-        @StdString String name,
-        @ByVal EmbeddingBagImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl register_module(
-        @StdString BytePointer name,
-        @ByVal FoldImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::FoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::FoldImpl>"}) FoldImpl register_module(
-        @StdString String name,
-        @ByVal FoldImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UnfoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl register_module(
-        @StdString BytePointer name,
-        @ByVal UnfoldImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::UnfoldImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnfoldImpl>"}) UnfoldImpl register_module(
-        @StdString String name,
-        @ByVal UnfoldImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::IdentityImpl>") @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl register_module(
-        @StdString BytePointer name,
-        @ByVal IdentityImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::IdentityImpl>") @Cast({"", "std::shared_ptr<torch::nn::IdentityImpl>"}) IdentityImpl register_module(
-        @StdString String name,
-        @ByVal IdentityImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LinearImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::LinearImpl>"}) LinearImpl register_module(
-        @StdString String name,
-        @ByVal LinearImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BilinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BilinearImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BilinearImpl>") @Cast({"", "std::shared_ptr<torch::nn::BilinearImpl>"}) BilinearImpl register_module(
-        @StdString String name,
-        @ByVal BilinearImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FlattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl register_module(
-        @StdString BytePointer name,
-        @ByVal FlattenImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::FlattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::FlattenImpl>"}) FlattenImpl register_module(
-        @StdString String name,
-        @ByVal FlattenImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UnflattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl register_module(
-        @StdString BytePointer name,
-        @ByVal UnflattenImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::UnflattenImpl>") @Cast({"", "std::shared_ptr<torch::nn::UnflattenImpl>"}) UnflattenImpl register_module(
-        @StdString String name,
-        @ByVal UnflattenImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::L1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal L1LossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::L1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::L1LossImpl>"}) L1LossImpl register_module(
-        @StdString String name,
-        @ByVal L1LossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::KLDivLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal KLDivLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::KLDivLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::KLDivLossImpl>"}) KLDivLossImpl register_module(
-        @StdString String name,
-        @ByVal KLDivLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MSELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MSELossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MSELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MSELossImpl>"}) MSELossImpl register_module(
-        @StdString String name,
-        @ByVal MSELossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BCELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BCELossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BCELossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCELossImpl>"}) BCELossImpl register_module(
-        @StdString String name,
-        @ByVal BCELossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HingeEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal HingeEmbeddingLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::HingeEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HingeEmbeddingLossImpl>"}) HingeEmbeddingLossImpl register_module(
-        @StdString String name,
-        @ByVal HingeEmbeddingLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MultiMarginLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiMarginLossImpl>"}) MultiMarginLossImpl register_module(
-        @StdString String name,
-        @ByVal MultiMarginLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CosineEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CosineEmbeddingLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CosineEmbeddingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CosineEmbeddingLossImpl>"}) CosineEmbeddingLossImpl register_module(
-        @StdString String name,
-        @ByVal CosineEmbeddingLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SmoothL1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SmoothL1LossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SmoothL1LossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SmoothL1LossImpl>"}) SmoothL1LossImpl register_module(
-        @StdString String name,
-        @ByVal SmoothL1LossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HuberLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal HuberLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::HuberLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::HuberLossImpl>"}) HuberLossImpl register_module(
-        @StdString String name,
-        @ByVal HuberLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MultiLabelMarginLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelMarginLossImpl>"}) MultiLabelMarginLossImpl register_module(
-        @StdString String name,
-        @ByVal MultiLabelMarginLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftMarginLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftMarginLossImpl>"}) SoftMarginLossImpl register_module(
-        @StdString String name,
-        @ByVal SoftMarginLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelSoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MultiLabelSoftMarginLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiLabelSoftMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiLabelSoftMarginLossImpl>"}) MultiLabelSoftMarginLossImpl register_module(
-        @StdString String name,
-        @ByVal MultiLabelSoftMarginLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TripletMarginLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginLossImpl>"}) TripletMarginLossImpl register_module(
-        @StdString String name,
-        @ByVal TripletMarginLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginWithDistanceLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TripletMarginWithDistanceLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TripletMarginWithDistanceLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::TripletMarginWithDistanceLossImpl>"}) TripletMarginWithDistanceLossImpl register_module(
-        @StdString String name,
-        @ByVal TripletMarginWithDistanceLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CTCLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CTCLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CTCLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CTCLossImpl>"}) CTCLossImpl register_module(
-        @StdString String name,
-        @ByVal CTCLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PoissonNLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal PoissonNLLLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::PoissonNLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::PoissonNLLLossImpl>"}) PoissonNLLLossImpl register_module(
-        @StdString String name,
-        @ByVal PoissonNLLLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MarginRankingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MarginRankingLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MarginRankingLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::MarginRankingLossImpl>"}) MarginRankingLossImpl register_module(
-        @StdString String name,
-        @ByVal MarginRankingLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::NLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal NLLLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::NLLLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::NLLLossImpl>"}) NLLLossImpl register_module(
-        @StdString String name,
-        @ByVal NLLLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CrossEntropyLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CrossEntropyLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CrossEntropyLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossEntropyLossImpl>"}) CrossEntropyLossImpl register_module(
-        @StdString String name,
-        @ByVal CrossEntropyLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::BCEWithLogitsLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl register_module(
-        @StdString BytePointer name,
-        @ByVal BCEWithLogitsLossImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::BCEWithLogitsLossImpl>") @Cast({"", "std::shared_ptr<torch::nn::BCEWithLogitsLossImpl>"}) BCEWithLogitsLossImpl register_module(
-        @StdString String name,
-        @ByVal BCEWithLogitsLossImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReflectionPad1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad1dImpl>"}) ReflectionPad1dImpl register_module(
-        @StdString String name,
-        @ByVal ReflectionPad1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReplicationPad1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl register_module(
-        @StdString String name,
-        @ByVal ReplicationPad1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConstantPad1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl register_module(
-        @StdString String name,
-        @ByVal ConstantPad1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AvgPool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl register_module(
-        @StdString String name,
-        @ByVal AvgPool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxPool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool1dImpl>"}) MaxPool1dImpl register_module(
-        @StdString String name,
-        @ByVal MaxPool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveAvgPool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool1dImpl>"}) AdaptiveAvgPool1dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveAvgPool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveMaxPool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool1dImpl>"}) AdaptiveMaxPool1dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveMaxPool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxUnpool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool1dImpl>"}) MaxUnpool1dImpl register_module(
-        @StdString String name,
-        @ByVal MaxUnpool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LPPool1dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool1dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool1dImpl>"}) LPPool1dImpl register_module(
-        @StdString String name,
-        @ByVal LPPool1dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReflectionPad2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad2dImpl>"}) ReflectionPad2dImpl register_module(
-        @StdString String name,
-        @ByVal ReflectionPad2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReplicationPad2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad2dImpl>"}) ReplicationPad2dImpl register_module(
-        @StdString String name,
-        @ByVal ReplicationPad2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConstantPad2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad2dImpl>"}) ConstantPad2dImpl register_module(
-        @StdString String name,
-        @ByVal ConstantPad2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ZeroPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ZeroPad2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ZeroPad2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ZeroPad2dImpl>"}) ZeroPad2dImpl register_module(
-        @StdString String name,
-        @ByVal ZeroPad2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AvgPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool2dImpl>"}) AvgPool2dImpl register_module(
-        @StdString String name,
-        @ByVal AvgPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool2dImpl>"}) MaxPool2dImpl register_module(
-        @StdString String name,
-        @ByVal MaxPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveAvgPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool2dImpl>"}) AdaptiveAvgPool2dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveAvgPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveMaxPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool2dImpl>"}) AdaptiveMaxPool2dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveMaxPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxUnpool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool2dImpl>"}) MaxUnpool2dImpl register_module(
-        @StdString String name,
-        @ByVal MaxUnpool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal FractionalMaxPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool2dImpl>"}) FractionalMaxPool2dImpl register_module(
-        @StdString String name,
-        @ByVal FractionalMaxPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LPPool2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LPPool2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::LPPool2dImpl>"}) LPPool2dImpl register_module(
-        @StdString String name,
-        @ByVal LPPool2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReflectionPad3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReflectionPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReflectionPad3dImpl>"}) ReflectionPad3dImpl register_module(
-        @StdString String name,
-        @ByVal ReflectionPad3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReplicationPad3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReplicationPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl register_module(
-        @StdString String name,
-        @ByVal ReplicationPad3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ConstantPad3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ConstantPad3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl register_module(
-        @StdString String name,
-        @ByVal ConstantPad3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AvgPool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl register_module(
-        @StdString String name,
-        @ByVal AvgPool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxPool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxPool3dImpl>"}) MaxPool3dImpl register_module(
-        @StdString String name,
-        @ByVal MaxPool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveAvgPool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveAvgPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveAvgPool3dImpl>"}) AdaptiveAvgPool3dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveAvgPool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal AdaptiveMaxPool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::AdaptiveMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::AdaptiveMaxPool3dImpl>"}) AdaptiveMaxPool3dImpl register_module(
-        @StdString String name,
-        @ByVal AdaptiveMaxPool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MaxUnpool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MaxUnpool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::MaxUnpool3dImpl>"}) MaxUnpool3dImpl register_module(
-        @StdString String name,
-        @ByVal MaxUnpool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal FractionalMaxPool3dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::FractionalMaxPool3dImpl>") @Cast({"", "std::shared_ptr<torch::nn::FractionalMaxPool3dImpl>"}) FractionalMaxPool3dImpl register_module(
-        @StdString String name,
-        @ByVal FractionalMaxPool3dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RNNImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl register_module(
-        @StdString BytePointer name,
-        @ByVal RNNImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::RNNImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNImpl>"}) RNNImpl register_module(
-        @StdString String name,
-        @ByVal RNNImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LSTMImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMImpl>"}) LSTMImpl register_module(
-        @StdString String name,
-        @ByVal LSTMImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GRUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal GRUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::GRUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUImpl>"}) GRUImpl register_module(
-        @StdString String name,
-        @ByVal GRUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RNNCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl register_module(
-        @StdString BytePointer name,
-        @ByVal RNNCellImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::RNNCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::RNNCellImpl>"}) RNNCellImpl register_module(
-        @StdString String name,
-        @ByVal RNNCellImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LSTMCellImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LSTMCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::LSTMCellImpl>"}) LSTMCellImpl register_module(
-        @StdString String name,
-        @ByVal LSTMCellImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GRUCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl register_module(
-        @StdString BytePointer name,
-        @ByVal GRUCellImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::GRUCellImpl>") @Cast({"", "std::shared_ptr<torch::nn::GRUCellImpl>"}) GRUCellImpl register_module(
-        @StdString String name,
-        @ByVal GRUCellImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PixelShuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl register_module(
-        @StdString BytePointer name,
-        @ByVal PixelShuffleImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::PixelShuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelShuffleImpl>"}) PixelShuffleImpl register_module(
-        @StdString String name,
-        @ByVal PixelShuffleImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PixelUnshuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl register_module(
-        @StdString BytePointer name,
-        @ByVal PixelUnshuffleImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::PixelUnshuffleImpl>") @Cast({"", "std::shared_ptr<torch::nn::PixelUnshuffleImpl>"}) PixelUnshuffleImpl register_module(
-        @StdString String name,
-        @ByVal PixelUnshuffleImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::UpsampleImpl>") @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl register_module(
-        @StdString BytePointer name,
-        @ByVal UpsampleImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::UpsampleImpl>") @Cast({"", "std::shared_ptr<torch::nn::UpsampleImpl>"}) UpsampleImpl register_module(
-        @StdString String name,
-        @ByVal UpsampleImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ELUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ELUImpl>"}) ELUImpl register_module(
-        @StdString String name,
-        @ByVal ELUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SELUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SELUImpl>"}) SELUImpl register_module(
-        @StdString String name,
-        @ByVal SELUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HardshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl register_module(
-        @StdString BytePointer name,
-        @ByVal HardshrinkImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::HardshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardshrinkImpl>"}) HardshrinkImpl register_module(
-        @StdString String name,
-        @ByVal HardshrinkImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::HardtanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl register_module(
-        @StdString BytePointer name,
-        @ByVal HardtanhImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::HardtanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::HardtanhImpl>"}) HardtanhImpl register_module(
-        @StdString String name,
-        @ByVal HardtanhImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LeakyReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LeakyReLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LeakyReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::LeakyReLUImpl>"}) LeakyReLUImpl register_module(
-        @StdString String name,
-        @ByVal LeakyReLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LogSigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LogSigmoidImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LogSigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSigmoidImpl>"}) LogSigmoidImpl register_module(
-        @StdString String name,
-        @ByVal LogSigmoidImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftmaxImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftmaxImpl>"}) SoftmaxImpl register_module(
-        @StdString String name,
-        @ByVal SoftmaxImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftminImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftminImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftminImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftminImpl>"}) SoftminImpl register_module(
-        @StdString String name,
-        @ByVal SoftminImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LogSoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LogSoftmaxImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LogSoftmaxImpl>") @Cast({"", "std::shared_ptr<torch::nn::LogSoftmaxImpl>"}) LogSoftmaxImpl register_module(
-        @StdString String name,
-        @ByVal LogSoftmaxImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::Softmax2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal Softmax2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::Softmax2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::Softmax2dImpl>"}) Softmax2dImpl register_module(
-        @StdString String name,
-        @ByVal Softmax2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::PReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal PReLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::PReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::PReLUImpl>"}) PReLUImpl register_module(
-        @StdString String name,
-        @ByVal PReLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ReLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::ReLUImpl>"}) ReLUImpl register_module(
-        @StdString String name,
-        @ByVal ReLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ReLU6Impl>") @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl register_module(
-        @StdString BytePointer name,
-        @ByVal ReLU6ImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ReLU6Impl>") @Cast({"", "std::shared_ptr<torch::nn::ReLU6Impl>"}) ReLU6Impl register_module(
-        @StdString String name,
-        @ByVal ReLU6ImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::RReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal RReLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::RReLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::RReLUImpl>"}) RReLUImpl register_module(
-        @StdString String name,
-        @ByVal RReLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CELUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::CELUImpl>"}) CELUImpl register_module(
-        @StdString String name,
-        @ByVal CELUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal GLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::GLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GLUImpl>"}) GLUImpl register_module(
-        @StdString String name,
-        @ByVal GLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal GELUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::GELUImpl>") @Cast({"", "std::shared_ptr<torch::nn::GELUImpl>"}) GELUImpl register_module(
-        @StdString String name,
-        @ByVal GELUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SiLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SiLUImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SiLUImpl>") @Cast({"", "std::shared_ptr<torch::nn::SiLUImpl>"}) SiLUImpl register_module(
-        @StdString String name,
-        @ByVal SiLUImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MishImpl>") @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MishImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MishImpl>") @Cast({"", "std::shared_ptr<torch::nn::MishImpl>"}) MishImpl register_module(
-        @StdString String name,
-        @ByVal MishImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SigmoidImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SigmoidImpl>") @Cast({"", "std::shared_ptr<torch::nn::SigmoidImpl>"}) SigmoidImpl register_module(
-        @StdString String name,
-        @ByVal SigmoidImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftplusImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftplusImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftplusImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftplusImpl>"}) SoftplusImpl register_module(
-        @StdString String name,
-        @ByVal SoftplusImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftshrinkImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftshrinkImpl>"}) SoftshrinkImpl register_module(
-        @StdString String name,
-        @ByVal SoftshrinkImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::SoftsignImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl register_module(
-        @StdString BytePointer name,
-        @ByVal SoftsignImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::SoftsignImpl>") @Cast({"", "std::shared_ptr<torch::nn::SoftsignImpl>"}) SoftsignImpl register_module(
-        @StdString String name,
-        @ByVal SoftsignImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TanhImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TanhImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhImpl>"}) TanhImpl register_module(
-        @StdString String name,
-        @ByVal TanhImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TanhshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TanhshrinkImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TanhshrinkImpl>") @Cast({"", "std::shared_ptr<torch::nn::TanhshrinkImpl>"}) TanhshrinkImpl register_module(
-        @StdString String name,
-        @ByVal TanhshrinkImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::ThresholdImpl>") @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl register_module(
-        @StdString BytePointer name,
-        @ByVal ThresholdImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::ThresholdImpl>") @Cast({"", "std::shared_ptr<torch::nn::ThresholdImpl>"}) ThresholdImpl register_module(
-        @StdString String name,
-        @ByVal ThresholdImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::MultiheadAttentionImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl register_module(
-        @StdString BytePointer name,
-        @ByVal MultiheadAttentionImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::MultiheadAttentionImpl>") @Cast({"", "std::shared_ptr<torch::nn::MultiheadAttentionImpl>"}) MultiheadAttentionImpl register_module(
-        @StdString String name,
-        @ByVal MultiheadAttentionImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LayerNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LayerNormImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LayerNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LayerNormImpl>"}) LayerNormImpl register_module(
-        @StdString String name,
-        @ByVal LayerNormImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::LocalResponseNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl register_module(
-        @StdString BytePointer name,
-        @ByVal LocalResponseNormImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::LocalResponseNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::LocalResponseNormImpl>"}) LocalResponseNormImpl register_module(
-        @StdString String name,
-        @ByVal LocalResponseNormImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::CrossMapLRN2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl register_module(
-        @StdString BytePointer name,
-        @ByVal CrossMapLRN2dImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::CrossMapLRN2dImpl>") @Cast({"", "std::shared_ptr<torch::nn::CrossMapLRN2dImpl>"}) CrossMapLRN2dImpl register_module(
-        @StdString String name,
-        @ByVal CrossMapLRN2dImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::GroupNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl register_module(
-        @StdString BytePointer name,
-        @ByVal GroupNormImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::GroupNormImpl>") @Cast({"", "std::shared_ptr<torch::nn::GroupNormImpl>"}) GroupNormImpl register_module(
-        @StdString String name,
-        @ByVal GroupNormImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TransformerEncoderLayerImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderLayerImpl>"}) TransformerEncoderLayerImpl register_module(
-        @StdString String name,
-        @ByVal TransformerEncoderLayerImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TransformerDecoderLayerImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderLayerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderLayerImpl>"}) TransformerDecoderLayerImpl register_module(
-        @StdString String name,
-        @ByVal TransformerDecoderLayerImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TransformerEncoderImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerEncoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerEncoderImpl>"}) TransformerEncoderImpl register_module(
-        @StdString String name,
-        @ByVal TransformerEncoderImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TransformerDecoderImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerDecoderImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerDecoderImpl>"}) TransformerDecoderImpl register_module(
-        @StdString String name,
-        @ByVal TransformerDecoderImplModuleHolder module_holder);
-  
-  ///
-  ///
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl register_module(
-        @StdString BytePointer name,
-        @ByVal TransformerImplModuleHolder module_holder);
-  public native @SharedPtr @Name("register_module<torch::nn::TransformerImpl>") @Cast({"", "std::shared_ptr<torch::nn::TransformerImpl>"}) TransformerImpl register_module(
-        @StdString String name,
-        @ByVal TransformerImplModuleHolder module_holder);
 
   /** Replaces a registered submodule with this {@code Module}.
    * 
@@ -3140,6 +602,13 @@ public class Module extends Pointer {
 
   /** Unregisters a submodule from this {@code Module}. If there is no such module
    *  with {@code name} an exception is thrown. */
-  public native void unregister_module(@StdString BytePointer name);
-  public native void unregister_module(@StdString String name);
+  public void unregister_module(BytePointer name) { asModule()._unregister_module(name); }
+  private native @Name("unregister_module") void _unregister_module(@StdString BytePointer name);
+  public void unregister_module(String name) { asModule()._unregister_module(name); }
+  private native @Name("unregister_module") void _unregister_module(@StdString String name);
+  private static Pointer shiftLeft(Pointer stream, Module module) { return _shiftLeft(stream, module.asModule()); }
+  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer _shiftLeft(
+        @Cast("std::ostream*") @ByRef Pointer stream,
+        @Const @ByRef Module module);
+  public Pointer shiftLeft(Pointer stream) { return shiftLeft(stream, this); }
 }

@@ -4,7 +4,9 @@ package org.bytedeco.pytorch;
 
 import org.bytedeco.pytorch.Allocator;
 import org.bytedeco.pytorch.Function;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Module;
+import org.bytedeco.javacpp.annotation.Cast;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -31,7 +33,10 @@ public class SGDOptions extends OptimizerCloneableSGDOptions {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer nesterov();
   
   
-  
+  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
+        @Const @ByRef SGDOptions lhs,
+        @Const @ByRef SGDOptions rhs);
+  public boolean equals(SGDOptions rhs) { return equals(this, rhs); }
   public native double get_lr();
   public native void set_lr(double lr);
 }
