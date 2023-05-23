@@ -1436,17 +1436,55 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/version.h",
                 "torch/csrc/api/include/torch/all.h",
 
+                // Included by
+                // ATen/cudnn/Descriptors.h
+                // ATen/cudnn/Types.h
+                // ATen/native/TensorShape.h
+                // c10/cuda/CUDAGuard.h
+                // torch/csrc/jit/runtime/custom_operator.h
+                // torch/csrc/jit/serialization/storage_context.h
+                // torch/csrc/jit/serialization/import.h
+                "c10/cuda/CUDAStream.h",
+                "ATen/cuda/CUDAContext.h",
+                // "c10/cuda/CUDAFunctions.h", // Parsing error
+                // "c10/cuda/CUDAException.h", // Parsing error
+                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
+                "c10/core/impl/GPUTrace.h",
+                "c10/cuda/CUDADeviceAssertionHost.h",
+                "c10/cuda/CUDAMacros.h",
+                "c10/cuda/impl/cuda_cmake_macros.h",
+                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
+                "c10/cuda/CUDAGraphsC10Utils.h",
+                "ATen/cuda/Exceptions.h",
+                "ATen/cudnn/cudnn-wrapper.h",
+                "ATen/cudnn/Utils.h",
+                "ATen/cudnn/Handle.h",
+                "ATen/cuda/ATenCUDAGeneral.h",
+                "caffe2/serialize/inline_container.h",
+                "caffe2/serialize/istream_adapter.h",
+                "caffe2/serialize/read_adapter_interface.h",
+                "caffe2/serialize/versions.h",
+                "torch/csrc/jit/serialization/unpickler.h",
+                "torch/csrc/jit/frontend/script_type_parser.h",
+                "torch/csrc/jit/frontend/resolver.h",
+                "torch/csrc/jit/frontend/sugared_value.h",
+                "torch/csrc/jit/frontend/error_report.h",
+                "torch/csrc/jit/frontend/tree.h",
+                "torch/csrc/jit/frontend/lexer.h",
+                "torch/csrc/jit/frontend/parser_constants.h",
+                "torch/csrc/jit/frontend/strtod.h",
+                "torch/csrc/jit/frontend/schema_matching.h",
+                "torch/csrc/jit/frontend/versioned_symbols.h",
+                "torch/csrc/jit/frontend/tree_views.h",
+                "torch/csrc/jit/serialization/pickler.h",
+
                 // Parsed and for inclusion in JNI
                 // See also https://github.com/pytorch/pytorch/blob/main/docs/cpp/source/Doxyfile
                 // for an approximation of what should be in API in addition to torch.h
                 "torch/torch.h",
-                "ATen/cuda/CUDAContext.h",
                 "ATen/cudnn/Descriptors.h",
-                "ATen/cudnn/Handle.h",
                 "ATen/cudnn/Types.h",
-                "ATen/cudnn/Utils.h",
                 "ATen/native/TensorShape.h",
-                "c10/cuda/CUDAStream.h",
                 "c10/cuda/CUDAGuard.h",
                 "torch/csrc/jit/runtime/custom_operator.h",
                 "torch/csrc/jit/serialization/storage_context.h",
@@ -2840,6 +2878,48 @@ import org.bytedeco.openblas.presets.openblas;
                 "torch/special.h",
                 "torch/version.h",
                 "torch/csrc/api/include/torch/all.h",
+
+                // Included by
+                // ATen/cudnn/Descriptors.h
+                // ATen/cudnn/Types.h
+                // ATen/native/TensorShape.h
+                // c10/cuda/CUDAGuard.h
+                // torch/csrc/jit/runtime/custom_operator.h
+                // torch/csrc/jit/serialization/storage_context.h
+                // torch/csrc/jit/serialization/import.h
+                "c10/cuda/CUDAStream.h",
+                "ATen/cuda/CUDAContext.h",
+                // "c10/cuda/CUDAFunctions.h", // Parsing error
+                // "c10/cuda/CUDAException.h", // Parsing error
+                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
+                "c10/core/impl/GPUTrace.h",
+                "c10/cuda/CUDADeviceAssertionHost.h",
+                "c10/cuda/CUDAMacros.h",
+                "c10/cuda/impl/cuda_cmake_macros.h",
+                //"c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
+                "c10/cuda/CUDAGraphsC10Utils.h",
+                "ATen/cuda/Exceptions.h",
+                "ATen/cudnn/cudnn-wrapper.h",
+                "ATen/cudnn/Utils.h",
+                "ATen/cudnn/Handle.h",
+                "ATen/cuda/ATenCUDAGeneral.h",
+                "caffe2/serialize/inline_container.h",
+                "caffe2/serialize/istream_adapter.h",
+                "caffe2/serialize/read_adapter_interface.h",
+                "caffe2/serialize/versions.h",
+                "torch/csrc/jit/serialization/unpickler.h",
+                "torch/csrc/jit/frontend/script_type_parser.h",
+                "torch/csrc/jit/frontend/resolver.h",
+                "torch/csrc/jit/frontend/sugared_value.h",
+                "torch/csrc/jit/frontend/error_report.h",
+                "torch/csrc/jit/frontend/tree.h",
+                "torch/csrc/jit/frontend/lexer.h",
+                "torch/csrc/jit/frontend/parser_constants.h",
+                "torch/csrc/jit/frontend/strtod.h",
+                "torch/csrc/jit/frontend/schema_matching.h",
+                "torch/csrc/jit/frontend/versioned_symbols.h",
+                "torch/csrc/jit/frontend/tree_views.h",
+                "torch/csrc/jit/serialization/pickler.h",
             },
             link = {"c10", "torch_cpu", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm"}
@@ -3143,6 +3223,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 "c10::optional<torch::nn::FractionalMaxPoolOptions<3>::ExpandingArrayDouble>").cast().pointerTypes("DoubleExpandingArrayOptional").define())
             .put(new Info("c10::optional<std::tuple<std::string,size_t,size_t> >").pointerTypes("T_StringSizeTSizeT_TOptional").define())
             .put(new Info("torch::optional<std::tuple<torch::Tensor,torch::Tensor> >").pointerTypes("T_TensorTensor_TOptional").define())
+            .put(new Info("c10::optional<std::tuple<c10::TypePtr,int32_t> >", "c10::optional<std::pair<c10::TypePtr,int32_t> >").pointerTypes("T_TypePtrLong_TOptional").cast().define())
         ;
 
 
@@ -3307,7 +3388,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<c10::Symbol>").pointerTypes("SymbolVector").define())
             .put(new Info("std::vector<c10::optional<int64_t> >").pointerTypes("LongOptionalVector").define())
             .put(new Info("std::vector<c10::optional<at::IValue> >").pointerTypes("IValueOptionalVector").define())
-            .put(new Info("std::vector<std::shared_ptr<c10::ClassType> >", "std::vector<c10::ClassTypePtr>").pointerTypes("ClassTypeVector").define())
+            .put(new Info("std::vector<std::shared_ptr<c10::ClassType> >", "std::vector<c10::ClassTypePtr>").pointerTypes("SharedClassTypeVector").define())
             .put(new Info("std::vector<c10::Type::SingletonOrSharedTypePtr<c10::Type> >", "std::vector<c10::TypePtr>",
                 "std::vector<c10::Type::TypePtr>", "c10::AliasTypeSet").pointerTypes("TypeVector").define())
             .put(new Info("const std::vector<at::Dimname>", "std::vector<at::Dimname>").valueTypes("@StdMove DimnameVector").pointerTypes("DimnameVector").define())
@@ -3321,7 +3402,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
             .put(new Info("std::vector<c10::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
             .put(new Info("std::vector<c10::optional<torch::jit::Operator> >").pointerTypes("OperatorOptionalVector").define())
-            .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreVector").define())
+            .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("SharedFunctionPreVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >",
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreHookVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPostHook> >",
@@ -3353,10 +3434,14 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<std::pair<std::string,std::shared_ptr<torch::nn::Module> > >").pointerTypes("StringSharedModuleVector").define())
             .put(new Info("std::vector<std::pair<torch::jit::FusionBehavior,size_t> >", "torch::jit::FusionStrategy").pointerTypes("FusionStrategy").define())
             .put(new Info("std::vector<c10::SymInt>").pointerTypes("SymIntVector").define())
+            .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define())
+            .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
+            .put(new Info("std::vector<std::shared_ptr<torch::jit::SugaredValue> >").pointerTypes("SharedSugaredValueVector").define())
+            .put(new Info("const std::vector<const c10::FunctionSchema*>").pointerTypes("FunctionSchemaVector").define())
         ;
 
 
-        //// ArrayRef
+        //// c10::ArrayRef
         for (ArrayInfo t : new ArrayInfo[]{
             new ArrayInfo("Argument").elementTypes("c10::Argument"),
             new ArrayInfo("ArgumentDef").elementTypes("c10::detail::infer_schema::ArgumentDef"),
@@ -3554,8 +3639,8 @@ public class torch implements LoadEnabled, InfoMapper {
         for (String[] t : new String[][]{
             {"SymInt", "SymInt", "@ByVal SymInt", "c10::SymInt", "at::kDimVectorStaticSize", "at::SymDimVector", "SymDimVector"},
             {"Long", "LongPointer", "long", "int64_t", "at::kDimVectorStaticSize", "at::DimVector", "DimVector"},
-            {"Node", "@ByPtr Node", "@ByPtr Node", "torch::autograd::Node*", "4", null, "SmallNodeVector"},
-            //{"TreeRef", "TreeRef", "@ByVal TreeRef", "c10::intrusive_ptr<torch::jit::Tree>", "4", null, "TreeList"}
+            {"Node", "Node", "@ByPtr Node", "torch::autograd::Node*", "4", null, "SmallNodeVector"},
+            {"TreeRef", "TreeRef", "@ByVal TreeRef", "c10::intrusive_ptr<torch::jit::Tree>", "4", null, "TreeList"}
 
         }) {
             // Assume all have SmallVectorSizeType == uint32_t
@@ -3633,7 +3718,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::unordered_map<std::string,std::unordered_map<int64_t,std::string> >").pointerTypes("StringLongStringMapMap").define())
             .put(new Info("std::unordered_map<torch::jit::Value*,torch::jit::Value*>").pointerTypes("ValueValueMap").define())
             .put(new Info("std::unordered_map<torch::jit::ArgumentSpec,torch::jit::ExecutionPlan>").pointerTypes("ArgumentSpecExecutionPlanMap").define())
-        //.put(new Info("std::unordered_map<c10::intrusive_ptr<torch::jit::Tree>,std::string>", "std::unordered_map<torch::jit::TreeRef,std::string>").pointerTypes("TreeRefStringMap").define())
+            .put(new Info("std::unordered_map<torch::jit::TreeRef,std::string>").pointerTypes("TreeRefStringMap").define())
         ;
 
 
@@ -3685,6 +3770,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::tuple<torch::Tensor,std::vector<torch::Tensor>,std::vector<torch::Tensor> >", "std::tuple<at::Tensor,std::vector<at::Tensor>,std::vector<at::Tensor> >").pointerTypes("T_TensorTensorVectorTensorVector_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,int64_t,int64_t,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,int64_t,int64_t,at::Tensor>").pointerTypes("T_TensorTensorLongLongTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,int64_t,int64_t,int64_t,int64_t,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,int64_t,int64_t,int64_t,int64_t,at::Tensor>").pointerTypes("T_TensorTensorTensorTensorsLongLongLongLongTensor_T").define())
+            .put(new Info("const std::tuple<at::DataPtr,size_t>", "std::tuple<at::DataPtr,size_t>").pointerTypes("T_DataPtrSizeT_T").define())
+            .put(new Info("std::tuple<c10::TypePtr,int32_t>", "std::pair<c10::TypePtr,int32_t>").pointerTypes("T_TypePtrLong_T").define()) // Parse this pair as tuple because Parser doesn't generate valid code for optional<pair>
         ;
 
 
@@ -3695,6 +3782,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
                 "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))
             .put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"))
+            .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
+            .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
 
@@ -3710,9 +3799,12 @@ public class torch implements LoadEnabled, InfoMapper {
             {"AttributeList", "torch::jit::Attribute", "Attribute"},
         }) {
             infoMap.put(new Info(template("torch::jit::List", t[1])).pointerTypes(t[0]))
-                   .put(new Info(template("torch::jit::ListIterator", t[1])).pointerTypes(t[0] + "ListIterator"))
+                   .put(new Info(template("torch::jit::ListIterator", t[1])).pointerTypes(t[0] + "Iterator"))
+                   .put(new Info(template("torch::jit::List", t[1]) + "::map").skip()); // Could map if needed
             ;
         }
+        infoMap.put(new Info("torch::jit::TreeList::const_iterator").cast().pointerTypes("TreeRef"));
+
 
 /* Not parsed anymore
         List<String> binaryOps = Arrays.asList("Add", "Sub", "Div", "Max", "Min", "Mul", "Mod", "Xor", "And", "Or", "Rshift", "Lshift");
@@ -3796,7 +3888,7 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("c10::ivalue::EnumHolder"),
             new PointerInfo("c10::TensorImpl"),
             new PointerInfo("c10::TensorImpl,c10::UndefinedTensorImpl").javaBaseName("TensorImpl"),
-            //new PointerInfo("torch::jit::Tree").javaName("TreeRef"),
+            new PointerInfo("torch::jit::Tree").javaName("TreeRef"),
             new PointerInfo("c10::StorageImpl", "c10::StorageImpl,NullType"),
             new PointerInfo("c10::SymNodeImpl").javaName("SymNode")
         }) {
@@ -3832,7 +3924,9 @@ public class torch implements LoadEnabled, InfoMapper {
                 "C10_HOST_CONSTEXPR", "CONSTEXPR_EXCEPT_WIN_CUDA", "C10_HOST_CONSTEXPR_EXCEPT_WIN_CUDA", "C10_ALWAYS_INLINE_UNLESS_MOBILE",
                 "alignas", "COMPLEX_INTEGER_OP_TEMPLATE_CONDITION", "C10_DEVICE_HOST_FUNCTION", "FORCE_INLINE_APPLE",
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
-                "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__").cppTypes().annotations())
+                "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__",
+                "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
+                "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT").cppTypes().annotations())
 
             .put(new Info("defined(__CUDACC__) || defined(__HIPCC__)",
                 "defined(__CUDACC__) && !defined(USE_ROCM)",
@@ -3866,7 +3960,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::WeakTypePtr", "torch::autograd::CppFunctionPreHook", "torch::autograd::DifferentiableViewMeta",
             "torch::autograd::TraceableFunction", "torch::jit::Instruction", "torch::jit::Method", "torch::jit::ModuleInstanceInfo",
             "torch::jit::Object::Property", "torch::jit::OperatorSet", "torch::jit::SourceRangePickler", "torch::jit::Unpickler",
-            "torch::jit::Operator").purify());
+            "torch::jit::Operator", "c10::CuDNNError").purify());
 
 
         /// Classes skipped for various non-investigated reasons
@@ -3999,8 +4093,14 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("torch::jit::Maybe<torch::jit::Var>").pointerTypes("VarMaybe"))
             .put(new Info("torch::jit::Maybe<torch::jit::List<torch::jit::Property> >").pointerTypes("PropertyListMaybe"))
             .put(new Info("torch::jit::Maybe<torch::jit::List<torch::jit::Assign> >").pointerTypes("AssignListMaybe"))
-            .put(new Info("torch::jit::Compound::map", "torch::jit::Tree::map", "torch::jit::Maybe<torch::jit::Def>::map",
-                "torch::jit::Maybe<torch::jit::Expr>::map", "torch::jit::Maybe<torch::jit::Var>::map").skip())
+            .put(new Info(
+                "torch::jit::Compound::map",
+                "torch::jit::Tree::map",
+                "torch::jit::Maybe<torch::jit::Def>::map",
+                "torch::jit::Maybe<torch::jit::Expr>::map",
+                "torch::jit::Maybe<torch::jit::Var>::map",
+                "torch::jit::Maybe<torch::jit::List<torch::jit::Assign> >::map",
+                "torch::jit::Maybe<torch::jit::List<torch::jit::Property> >::map").skip())
             .put(new Info("torch::jit::Wrap<torch::jit::Block>").pointerTypes("BlockWrap"))
             .put(new Info("torch::jit::Wrap<torch::jit::Node>").pointerTypes("JitNodeWrap"))
             .put(new Info("torch::jit::Wrap<torch::jit::Value>").pointerTypes("ValueWrap"));
@@ -4436,7 +4536,8 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("torch::nn::AnyModule"),
             new PointerInfo("torch::nn::Module"),
             new PointerInfo("const at::functorch::FuncTorchTLSBase"),
-            new PointerInfo("const torch::jit::CompilationUnit")
+            new PointerInfo("const torch::jit::CompilationUnit"),
+            new PointerInfo("torch::jit::SugaredValue")
         }) {
             // See issue #670
             String[] cppNames = new String[pi.argumentNames.length + pi.otherCppNames.length];
@@ -4478,6 +4579,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::detail::infer_schema::make_function_schema(std::string&&, std::string&&, c10::ArrayRef<c10::detail::infer_schema::ArgumentDef>, c10::ArrayRef<c10::detail::infer_schema::ArgumentDef>)",
             "torch::autograd::_wrap_outputs",
             "torch::autograd::Node::retains_grad_hooks", // IntFunctionPreHookMap cannot be instantiated because static_assert errors due to unique_ptr copying
+            "c10::impl::GPUTrace", "torch::jit::IterableTree",
+            "c10::cuda::CaptureStatus",
 
             // Ignore for now, takes a callback.
             "c10::IValue::repr", "c10::IValue::visit",
@@ -4868,6 +4971,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::RecursiveMethodCallError",
             "torch::jit::StrongFunctionPtr",
             "torch::jit::Suspend",
+            "torch::jit::TokenTrie",
             "torch::jit::TaggedRange",
             "torch::jit::WithCurrentScope",
             "torch::jit::WithInsertPoint",
@@ -4945,7 +5049,8 @@ public class torch implements LoadEnabled, InfoMapper {
                    // classes of external API for which we have no definition
                    "cudaDeviceProp", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnDataType_t",
                    "cudnnHandle_t", "cudnnRNNInputMode_t", "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudnnRNNAlgo_t",
-                   "cudnnLossNormalizationMode_t", "cudnnNanPropagation_t", "cudnnActivationMode_t"
+                   "cudnnLossNormalizationMode_t", "cudnnNanPropagation_t", "cudnnActivationMode_t", "cusparseStatus_t",
+                   "cudaStreamCaptureMode", "cublasStatus_t", "cusolverStatus_t"
                ).cast().pointerTypes("Pointer"));
 
 
@@ -5005,7 +5110,10 @@ public class torch implements LoadEnabled, InfoMapper {
                 "std::function<void(std::vector<IValue>&)>").pointerTypes("IValueVectorConsumer"))
             .put(new Info("std::function<c10::IValue()>").pointerTypes("IValueSupplier"))
             .put(new Info("std::function<size_t(uint64_tpos,void*buf,size_tnbytes)>").pointerTypes("Reader"))
-            .put(new Info("std::function<size_t(const void*,size_t)>").pointerTypes("Writer"))
+            .put(new Info("std::function<size_t(const void*,size_t)>").pointerTypes("ArchiveWriter"))
+            .put(new Info("std::function<void(const char*,size_t)>").pointerTypes("PickleWriter"))
+            .put(new Info("std::function<c10::QualifiedName(const c10::ClassTypePtr&)>").pointerTypes("TypeRenamer"))
+            .put(new Info("std::function<std::string(const at::Tensor&)>").pointerTypes("TensorIdGetter"))
             .put(new Info("std::function<size_t(void)>").pointerTypes("SizeTSupplier"))
             .put(new Info("std::function<torch::Tensor()>").pointerTypes("LossClosure"))
             .put(new Info("std::function<Tensor(const Tensor&,const Tensor&)>",

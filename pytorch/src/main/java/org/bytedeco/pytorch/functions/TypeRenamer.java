@@ -3,12 +3,12 @@ package org.bytedeco.pytorch.functions;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
-import org.bytedeco.javacpp.annotation.Const;
-import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.annotation.*;
+import org.bytedeco.pytorch.ClassType;
+import org.bytedeco.pytorch.QualifiedName;
 
 @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class Writer extends FunctionPointer {
+public class TypeRenamer extends FunctionPointer {
     static {
         Loader.load();
     }
@@ -16,15 +16,16 @@ public class Writer extends FunctionPointer {
     /**
      * Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}.
      */
-    public Writer(Pointer p) {
+    public TypeRenamer(Pointer p) {
         super(p);
     }
 
-    protected Writer() {
+    protected TypeRenamer() {
         allocate();
     }
 
     private native void allocate();
 
-    public native @Cast("size_t") long call(@Const Pointer buf, @Cast("size_t") long nbytes);
+    // std::function<c10::QualifiedName(const c10::ClassTypePtr&)>
+    public native @ByVal QualifiedName call(@SharedPtr @Cast({"", "std::shared_ptr<c10::ClassType>"}) ClassType classType);
 }
