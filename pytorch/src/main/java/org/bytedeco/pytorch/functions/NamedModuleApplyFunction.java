@@ -25,5 +25,5 @@ public class NamedModuleApplyFunction extends FunctionPointer {
 
     private native void allocate();
 
-    public native void call(@Const @StdString @ByRef String name, @ByPtr Module m);
+    public native void call(@Const @StdString @ByRef String name, @ByRef Module m);
 }

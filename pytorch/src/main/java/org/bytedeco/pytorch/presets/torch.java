@@ -5102,13 +5102,17 @@ public class torch implements LoadEnabled, InfoMapper {
                 "std::function<torch::jit::Value*(Value*)>").pointerTypes("ValueMapper"))
             .put(new Info("std::function<void(torch::jit::GraphFunction&)>",
                 "std::function<void(GraphFunction&)>").pointerTypes("GraphFunctionCreator"))
-            // Parser doesn't seem to qualify type of arguments in function pointer
-            // Lucky us, torch::nn::Module uses aliases for the module apply functions that allows us to distinguish them from Jit module apply
-            .put(new Info("torch::nn::ModuleApplyFunction", "torch::nn::ConstModuleApplyFunction", "std::function<void(const torch::nn::Module&)>", "std::function<void(torch::nn::Module&)>").pointerTypes("ModuleApplyFunction"))
-            .put(new Info("std::function<void(Module&)>", "std::function<void(const torch::jit::Module&)>", "std::function<void(torch::jit::Module&)>").pointerTypes("JitModuleApplyFunction"))
+            // Parser doesn't qualify type of arguments in function pointer and we cannot distinguish
+            // std::function<void(torch::jit::Module&)> from std::function<void(torch::nn::Module&)>
+            // when used as std::function<void(Module&)>. So we rely on javaText for the jit version.
+            .put(new Info("torch::nn::Module::ModuleApplyFunction", "torch::nn::Module::ConstModuleApplyFunction", "std::function<void(const torch::nn::Module&)>", "std::function<void(torch::nn::Module&)>").pointerTypes("ModuleApplyFunction"))
+            .put(new Info("std::function<void(const torch::jit::Module&)>", "std::function<void(torch::jit::Module&)>").pointerTypes("JitModuleApplyFunction"))
+            .put(new Info("torch::jit::Module::apply").javaText(
+                "public native void apply(@Const @ByRef JitModuleApplyFunction fn);"
+            ))
             .put(new Info("torch::nn::NamedModuleApplyFunction", "torch::nn::ConstNamedModuleApplyFunction", "std::function<void(const std::string&,const torch::nn::Module&)>", "std::function<void(const std::string&,torch::nn::Module&)>").pointerTypes("NamedModuleApplyFunction"))
             .put(new Info("torch::nn::ModulePointerApplyFunction", "std::function<void(const std::shared_ptr<torch::nn::Module>&)>").pointerTypes("SharedModuleApplyFunction"))
-            .put(new Info("torch::nn::NamedModulePointerApplyFunction", "std::function<void(const std::string&,const std::shared_ptr<torch::nn::Module>&)>").pointerTypes("NamedSharedModuleApplyFunction"))
+            .put(new Info("torch::nn::Module::NamedModulePointerApplyFunction", "std::function<void(const std::string&,const std::shared_ptr<torch::nn::Module>&)>").pointerTypes("NamedSharedModuleApplyFunction"))
             .put(new Info("std::function<void(std::vector<c10::IValue>&)>",
                 "std::function<void(std::vector<IValue>&)>").pointerTypes("IValueVectorConsumer"))
             .put(new Info("std::function<c10::IValue()>").pointerTypes("IValueSupplier"))

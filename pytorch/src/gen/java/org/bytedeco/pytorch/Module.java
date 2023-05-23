@@ -138,8 +138,8 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public void apply(JitModuleApplyFunction function) { asModule()._apply(function); }
-  private native @Name("apply") void _apply(@Cast("const torch::nn::Module::ModuleApplyFunction*") @ByRef JitModuleApplyFunction function);
+  public void apply(ModuleApplyFunction function) { asModule()._apply(function); }
+  private native @Name("apply") void _apply(@Const @ByRef ModuleApplyFunction function);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code const Module&}.
@@ -219,6 +219,17 @@ public class Module extends Pointer {
    *      std::cout << key << ": " << module->name() << std::endl;
    *    });
    *  \endrst */
+  public void apply(NamedSharedModuleApplyFunction function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
+  private native @Name("apply") void _apply(
+        @Const @ByRef NamedSharedModuleApplyFunction function,
+        @StdString BytePointer name_prefix/*=std::string()*/);
+  public void apply(NamedSharedModuleApplyFunction function) { asModule()._apply(function); }
+  private native @Name("apply") void _apply(
+        @Const @ByRef NamedSharedModuleApplyFunction function);
+  public void apply(NamedSharedModuleApplyFunction function, String name_prefix) { asModule()._apply(function, name_prefix); }
+  private native @Name("apply") void _apply(
+        @Const @ByRef NamedSharedModuleApplyFunction function,
+        @StdString String name_prefix/*=std::string()*/);
 
   /** Returns the parameters of this {@code Module} and if {@code recurse} is true, also
    *  recursively of every submodule. */

@@ -3,7 +3,7 @@ package org.bytedeco.pytorch.functions;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.ByPtr;
+import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.pytorch.Module;
 
@@ -26,5 +26,5 @@ public class ModuleApplyFunction extends FunctionPointer {
 
     private native void allocate();
 
-    public native void call(@ByPtr Module m);
+    public native void call(@ByRef Module m);
 }
