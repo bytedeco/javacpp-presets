@@ -51,19 +51,6 @@ public class SimpleTest {
       System.exit(1);
     }
     
-    // static void
-    // GenerateInputData(
-    //     StringVector input0_data, StringVector input1_data)
-    // {
-    //   input0_data = new StringVector(16);
-    //   input1_data = new StringVector(16);
-    //   for (int i = 0; i < 16; ++i) {
-    //     String input = "" + i;
-    //     input0_data.put(i, input);
-    //     input1_data.put(i, input);
-    //   }
-    // }
-
     static void
     CompareResult(
         String output0_name, String output1_name,
@@ -85,6 +72,18 @@ public class SimpleTest {
       }
     }
 
+    static void
+    GenerateInputData(
+        IntPointer[] input0_data, IntPointer[] input1_data)
+    {
+      input0_data[0] = new IntPointer(16);
+      input1_data[0] = new IntPointer(16);
+      for (int i = 0; i < 16; ++i) {
+        input0_data[0].put(i, 2);
+        input1_data[0].put(i, 1 * i);
+      }
+    }
+
     static int RunInference(int verbose_level, String model_repository_path, String model_name) {
         StringVector model_repository_paths = new StringVector(model_repository_path);
         ServerOptions options = new ServerOptions(model_repository_paths);
@@ -92,13 +91,45 @@ public class SimpleTest {
         logging_options.SetVerboseLevel(verbose_level);
         options.SetLoggingOptions(logging_options);
 
-        // GenericTritonServer server = new GenericTritonServer(options);
-        // StringSet loaded_models = server.LoadedModels();
-        // GenericInferRequest request = new GenericInferRequest();
-        // InferOptions infer_options = new InferOptions(model_name);
-        // request.Create(infer_options);
+        GenericTritonServer server = GenericTritonServer.Create(options);
+        StringSet loaded_models = server.LoadedModels();
+	System.out.println("Loaded_models count : " + loaded_models.size());
+        
+        InferOptions infer_options = new InferOptions(model_name);
+        GenericInferRequest request = GenericInferRequest.Create(infer_options);
 
+        BytePointer input0_data;
+        BytePointer input1_data; 
+        IntPointer[] p0 = {null}, p1 = {null};
+        GenerateInputData(p0, p1);
+        input0_data = p0[0].getPointer(BytePointer.class);
+        input1_data = p1[0].getPointer(BytePointer.class);
 
+	LongPointer shape0 = new LongPointer(2);
+	LongPointer shape1 = new LongPointer(2);
+	shape0.put(0, 1);
+	shape0.put(1, 16);
+	shape1.put(0, 1);
+	shape1.put(1, 16);
+	Tensor tensor0 = new Tensor(input0_data, 4 * 16, 8, shape0, 0, 1);
+	Tensor tensor1 = new Tensor(input1_data, 4 * 16, 8, shape1, 0, 1);
+	request.AddInput("INPUT0", tensor0);
+	request.AddInput("INPUT1", tensor1);
+	GenericInferResult result = server.Infer(request);
+
+        Tensor output = result.Output("OUTPUT0");
+	BytePointer buffer = output.buffer_();
+
+	System.out.println("buffer to string : " + buffer.toString());
+
+	System.out.println("output val at index 0 : " + buffer.getInt(0));
+	System.out.println("output val at index 1 : " + buffer.getInt(1 * 4));
+	System.out.println("output val at index 2 : " + buffer.getInt(2 * 4));
+	System.out.println("output val at index 3 : " + buffer.getInt(3 * 4));
+	System.out.println("output val at index 4 : " + buffer.getInt(4 * 4));
+	System.out.println("output val at index 5 : " + buffer.getInt(5 * 4));
+	System.out.println("output val at index 6 : " + buffer.getInt(6 * 4));
+	System.out.println("output val at index 7 : " + buffer.getInt(7 * 4));
         return 0;
     }
 
@@ -127,7 +158,7 @@ public class SimpleTest {
       // strings must represent integers. One output tensor is the
       // element-wise sum of the inputs and one output is the element-wise
       // difference.
-      String model_name = "add_sub_str";
+      String model_name = "simple";
       if (model_repository_path == null) {
         Usage("-r must be used to specify model repository path");
       }
