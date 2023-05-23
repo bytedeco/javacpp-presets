@@ -1439,27 +1439,32 @@ import org.bytedeco.openblas.presets.openblas;
                 // Included by
                 // ATen/cudnn/Descriptors.h
                 // ATen/cudnn/Types.h
-                // ATen/native/TensorShape.h
                 // c10/cuda/CUDAGuard.h
-                // torch/csrc/jit/runtime/custom_operator.h
-                // torch/csrc/jit/serialization/storage_context.h
-                // torch/csrc/jit/serialization/import.h
+                // Uncomment if we build with CUDA installed
+                /*
                 "c10/cuda/CUDAStream.h",
                 "ATen/cuda/CUDAContext.h",
-                // "c10/cuda/CUDAFunctions.h", // Parsing error
-                // "c10/cuda/CUDAException.h", // Parsing error
-                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
                 "c10/core/impl/GPUTrace.h",
                 "c10/cuda/CUDADeviceAssertionHost.h",
                 "c10/cuda/CUDAMacros.h",
                 "c10/cuda/impl/cuda_cmake_macros.h",
-                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
                 "c10/cuda/CUDAGraphsC10Utils.h",
                 "ATen/cuda/Exceptions.h",
                 "ATen/cudnn/cudnn-wrapper.h",
                 "ATen/cudnn/Utils.h",
                 "ATen/cudnn/Handle.h",
                 "ATen/cuda/ATenCUDAGeneral.h",
+                // "c10/cuda/CUDAFunctions.h", // Parsing error
+                // "c10/cuda/CUDAException.h", // Parsing error
+                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
+                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
+                 */
+
+                // Included by
+                // ATen/native/TensorShape.h
+                // torch/csrc/jit/runtime/custom_operator.h
+                // torch/csrc/jit/serialization/storage_context.h
+                // torch/csrc/jit/serialization/import.h
                 "caffe2/serialize/inline_container.h",
                 "caffe2/serialize/istream_adapter.h",
                 "caffe2/serialize/read_adapter_interface.h",
@@ -1482,10 +1487,13 @@ import org.bytedeco.openblas.presets.openblas;
                 // See also https://github.com/pytorch/pytorch/blob/main/docs/cpp/source/Doxyfile
                 // for an approximation of what should be in API in addition to torch.h
                 "torch/torch.h",
+                // Uncomment if we build with CUDA installed
+                /*
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
-                "ATen/native/TensorShape.h",
                 "c10/cuda/CUDAGuard.h",
+                 */
+                "ATen/native/TensorShape.h",
                 "torch/csrc/jit/runtime/custom_operator.h",
                 "torch/csrc/jit/serialization/storage_context.h",
                 "torch/csrc/jit/serialization/import.h",
@@ -2882,27 +2890,32 @@ import org.bytedeco.openblas.presets.openblas;
                 // Included by
                 // ATen/cudnn/Descriptors.h
                 // ATen/cudnn/Types.h
-                // ATen/native/TensorShape.h
                 // c10/cuda/CUDAGuard.h
-                // torch/csrc/jit/runtime/custom_operator.h
-                // torch/csrc/jit/serialization/storage_context.h
-                // torch/csrc/jit/serialization/import.h
+                // Uncomment if we build with CUDA installed
+                /*
                 "c10/cuda/CUDAStream.h",
                 "ATen/cuda/CUDAContext.h",
-                // "c10/cuda/CUDAFunctions.h", // Parsing error
-                // "c10/cuda/CUDAException.h", // Parsing error
-                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
                 "c10/core/impl/GPUTrace.h",
                 "c10/cuda/CUDADeviceAssertionHost.h",
                 "c10/cuda/CUDAMacros.h",
                 "c10/cuda/impl/cuda_cmake_macros.h",
-                //"c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
                 "c10/cuda/CUDAGraphsC10Utils.h",
                 "ATen/cuda/Exceptions.h",
                 "ATen/cudnn/cudnn-wrapper.h",
                 "ATen/cudnn/Utils.h",
                 "ATen/cudnn/Handle.h",
                 "ATen/cuda/ATenCUDAGeneral.h",
+                // "c10/cuda/CUDAFunctions.h", // Parsing error
+                // "c10/cuda/CUDAException.h", // Parsing error
+                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
+                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
+                 */
+
+                // Included by
+                // ATen/native/TensorShape.h
+                // torch/csrc/jit/runtime/custom_operator.h
+                // torch/csrc/jit/serialization/storage_context.h
+                // torch/csrc/jit/serialization/import.h
                 "caffe2/serialize/inline_container.h",
                 "caffe2/serialize/istream_adapter.h",
                 "caffe2/serialize/read_adapter_interface.h",
@@ -3183,7 +3196,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<c10::OperatorName>").pointerTypes("OperatorNameOptional").define())
             .put(new Info("c10::optional<c10::QualifiedName>").pointerTypes("QualifiedNameOptional").define())
             .put(new Info("c10::optional<c10::Stream>").pointerTypes("StreamOptional").define())
-            .put(new Info("c10::optional<c10::cuda::CUDAStream>").pointerTypes("CUDAStreamOptional").define())
+            // .put(new Info("c10::optional<c10::cuda::CUDAStream>").pointerTypes("CUDAStreamOptional").define()) // CUDA needed
             .put(new Info("c10::optional<c10::Stride>").pointerTypes("StrideOptional").define())
             .put(new Info("c10::optional<c10::TypePtr>").pointerTypes("TypePtrOptional").define())
             .put(new Info("c10::optional<c10::ClassType::Property>").pointerTypes("ClassTypePropertyOptional").define())
@@ -3434,8 +3447,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<std::pair<std::string,std::shared_ptr<torch::nn::Module> > >").pointerTypes("StringSharedModuleVector").define())
             .put(new Info("std::vector<std::pair<torch::jit::FusionBehavior,size_t> >", "torch::jit::FusionStrategy").pointerTypes("FusionStrategy").define())
             .put(new Info("std::vector<c10::SymInt>").pointerTypes("SymIntVector").define())
-            .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define())
-            .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
+            // .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define()) // CUDA needed
+            // .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define()) // CUDA needed
             .put(new Info("std::vector<std::shared_ptr<torch::jit::SugaredValue> >").pointerTypes("SharedSugaredValueVector").define())
             .put(new Info("const std::vector<const c10::FunctionSchema*>").pointerTypes("FunctionSchemaVector").define())
         ;
@@ -3449,7 +3462,7 @@ public class torch implements LoadEnabled, InfoMapper {
             new ArrayInfo("Block").elementTypes("torch::jit::Block*").itPointerType("PointerPointer<Block>"),
             new ArrayInfo("Bool").itPointerType("BoolPointer").elementTypes("bool", "decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)"),
             new ArrayInfo("Byte").itPointerType("BytePointer").elementTypes("jbyte", "int8_t", "uint8_t"),
-            new ArrayInfo("CUDAStream").elementTypes("c10::cuda::CUDAStream"),
+            // new ArrayInfo("CUDAStream").elementTypes("c10::cuda::CUDAStream"), // CUDA needed
             new ArrayInfo("Dimname").otherCppNames("at::DimnameList").elementTypes("at::Dimname"),
             new ArrayInfo("Double").itPointerType("DoublePointer").elementTypes("double"),
             new ArrayInfo("DoubleComplex") /*.itPointertype("DoublePointer") */.elementTypes("c10::complex<double>"),
@@ -3782,7 +3795,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
                 "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))
             .put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"))
-            .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
+            // .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define()) // CUDA needed
             .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
