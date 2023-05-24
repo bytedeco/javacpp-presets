@@ -4753,9 +4753,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("at::Tensor::item<double>").javaNames("item_double"))
                .put(new Info("at::make_generator").javaText(
                    "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CUDAGeneratorImpl>\") Generator make_generator_cuda();\n" +
-                   "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CUDAGeneratorImpl,int8_t>\") Generator make_generator_cuda(@Const byte device_index);\n" +
+                   "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CUDAGeneratorImpl,int8_t>\") Generator make_generator_cuda(@Cast(\"int8_t&&\") byte device_index);\n" +
                    "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CPUGeneratorImpl>\") Generator make_generator_cpu();\n" +
-                   "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CPUGeneratorImpl,uint64_t>\") Generator make_generator_cpu(long seed_in);"))
+                   "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CPUGeneratorImpl,uint64_t>\") Generator make_generator_cpu(@Cast(\"uint64_t&&\") long seed_in);"))
         ;
 
         for (String[] t : new String[][]{

@@ -7691,9 +7691,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl>") Generator make_generator_cuda();
-@Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Const byte device_index);
+@Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Cast("int8_t&&") byte device_index);
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CPUGeneratorImpl>") Generator make_generator_cpu();
-@Namespace("at") public static native @ByVal @Name("make_generator<at::CPUGeneratorImpl,uint64_t>") Generator make_generator_cpu(long seed_in);
+@Namespace("at") public static native @ByVal @Name("make_generator<at::CPUGeneratorImpl,uint64_t>") Generator make_generator_cpu(@Cast("uint64_t&&") long seed_in);
 
 /**
  * Utility function to static cast input Generator* to
