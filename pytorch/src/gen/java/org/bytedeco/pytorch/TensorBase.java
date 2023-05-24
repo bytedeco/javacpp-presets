@@ -421,15 +421,13 @@ public class TensorBase extends AbstractTensor {
   // users who should use the API provided in torch/csrc/autograd.h
 
   /** This function returns the forward gradient for this Tensor at the given level. */
-  public native @Const @ByRef Tensor _fw_grad(@Cast("uint64_t") long level);
+  
 
   /** This function can be used to set the value of the forward grad.
    *  Note that the given new_grad might not be used directly if it has different
    *  metadata (size/stride/storage offset) compared to this Tensor. In that case,
    *  new_grad content will be copied into a new Tensor */
   
-  ///
-  public native void _set_fw_grad(@Const @ByRef TensorBase new_grad, @Cast("uint64_t") long level, @Cast("bool") boolean is_inplace_op);
 
   /** NOTE: This is similar to the legacy {@code .data()} function on {@code Variable}, and is intended
    *  to be used from functions that need to access the {@code Variable}'s equivalent {@code Tensor}

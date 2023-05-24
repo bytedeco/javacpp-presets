@@ -173,7 +173,7 @@ public class CompilationUnit extends Pointer {
 
   // For testing: clear all Python-defined classes to ensure that unit tests
   // have isolation.
-  public native void _clear_python_cu();
+  
 
   // [Internal Only] Remove method.
   // Note Used for freezing.

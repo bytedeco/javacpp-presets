@@ -6588,11 +6588,11 @@ public static final byte min_lookups = min_lookups();
 // #if defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
 @Namespace("c10::impl") public static native @ByVal LocalDispatchKeySet tls_local_dispatch_key_set();
 // #else // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
-@Namespace("c10::impl") public static native @ByRef PODLocalDispatchKeySet raw_local_dispatch_key_set(); public static native void raw_local_dispatch_key_set(PODLocalDispatchKeySet setter);
+
 // #endif // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
 
 // Internal, use ThreadLocalStateGuard
-@Namespace("c10::impl") public static native void _force_tls_local_dispatch_key_set(@ByVal LocalDispatchKeySet key_set);
+
 // Targeting ../IncludeDispatchKeyGuard.java
 
 

@@ -65,12 +65,11 @@ public class GraphFunction extends Function {
   // private/unstable api. sets the initial execution mode
   // will not affect executor if there is an existing executor
   // created for this function
-  public native void _set_initial_executor_execution_mode(ExecutorExecutionMode mode);
-  public native void _set_initial_executor_execution_mode(@Cast("torch::jit::ExecutorExecutionMode") int mode);
+  
   // private/unstable api. sets flag of whether or not to ignore amp.
   // will not affect executor if there is an existing executor
   // created for this function
-  public native void _set_ignore_amp(@Cast("bool") boolean ignore_amp);
+  
 
   // if this isn't yet defined, run its method_creator function
   public native void ensure_defined();

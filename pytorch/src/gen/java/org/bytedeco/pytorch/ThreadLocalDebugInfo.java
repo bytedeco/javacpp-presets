@@ -49,8 +49,7 @@ public class ThreadLocalDebugInfo extends Pointer {
   public static native @SharedPtr ThreadLocalDebugInfo current();
 
   // Internal, use DebugInfoGuard/ThreadLocalStateGuard
-  public static native void _forceCurrentDebugInfo(
-        @SharedPtr ThreadLocalDebugInfo info);
+  
 
   // Push debug info struct of a given kind
   public static native void _push(DebugInfoKind kind, @SharedPtr DebugInfoBase info);

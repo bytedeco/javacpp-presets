@@ -172,5 +172,5 @@ public class KernelFunction extends Pointer {
 
   public native @StdString BytePointer dumpState();
   // For testing internal invariants only
-  public native @Cast("bool") boolean _equalsBoxedAndUnboxed(@Const @ByRef KernelFunction arg0);
+  
 }

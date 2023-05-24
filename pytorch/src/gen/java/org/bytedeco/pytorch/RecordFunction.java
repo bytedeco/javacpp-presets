@@ -107,13 +107,13 @@ public class RecordFunction extends Pointer {
 
   // Internal-only, used only force async event for distributed events
   // profiling.
-  public native void _setAsync();
+  
 
   // Returns whether this RecordFunction corresponds to an async event orn ot.
   public native @Cast("bool") boolean isAsync();
 
   // Internal-only, used to denote out variant used for Static Runtime execution
-  public native void _setStaticRuntimeOutVariant();
+  
   public native @Cast("bool") boolean isStaticRuntimeOutVariant();
 
   public native long handle();
