@@ -4685,7 +4685,8 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info(
             "c10_complex_math::_detail::sqrt",
             "c10_complex_math::_detail::acos",
-            "c10::__ldg"
+            "c10::__ldg",
+            "c10::impl::raw_local_dispatch_key_set" // non-windows, non-android only
         ).skip());
 
 
