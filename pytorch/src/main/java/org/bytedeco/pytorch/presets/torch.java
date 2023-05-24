@@ -4644,12 +4644,21 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// Pytorch "internal only"
         infoMap.put(new Info(
-            "c10::RegisterOperators::Options::kernel(c10::DispatchKey)",
+            "at::RecordFunction::_setAsync", "at::RecordFunction::_setStaticRuntimeOutVariant",
+            "at::Tensor(c10::TensorImpl*)", // Really at::Tensor(c10::intrusive_ptr<at::TensorImpl,c10::UndefinedTensorImpl> but the Parser gets the wrong fullname
+            "at::Tensor::_set_fw_grad", "at::Tensor::_fw_grad",
+            "at::TensorBase(c10::intrusive_ptr<at::TensorImpl,c10::UndefinedTensorImpl>",
+            "at::TensorBase::_set_fw_grad", "at::TensorBase::_fw_grad",
+            "at::TensorImpl::_set_fw_grad", "at::TensorImpl::_fw_grad",
+            "c10::KernelFunction::_equalsBoxedAndUnboxed",
             "c10::RegisterOperators::Options::catchAllKernel()",
+            "c10::RegisterOperators::Options::kernel(c10::DispatchKey)",
             "c10::RegisterOperators::Options::schema(c10::FunctionSchema&&)",
             "c10::RegisterOperators::op(c10::FunctionSchema,c10::Options&&)",
-            "at::TensorBase(c10::intrusive_ptr<at::TensorImpl,c10::UndefinedTensorImpl>",
-            "at::Tensor(c10::TensorImpl*)" // Really at::Tensor(c10::intrusive_ptr<at::TensorImpl,c10::UndefinedTensorImpl> but the Parser gets the wrong fullname
+            "c10::ThreadLocalDebugInfo::_forceCurrentDebugInfo",
+            "c10::impl::_force_tls_local_dispatch_key_set",
+            "torch::jit::CompilationUnit::_clear_python_cu",
+            "torch::jit::GraphFunction::_set_initial_executor_execution_mode", "torch::jit::GraphFunction::_set_ignore_amp"
         ).skip());
 
 
