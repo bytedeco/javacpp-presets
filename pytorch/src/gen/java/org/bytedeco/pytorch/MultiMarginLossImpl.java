@@ -33,7 +33,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  MultiMarginLoss model(MultiMarginLossOptions().margin(2).weight(weight));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
     static { Loader.load(); }
@@ -49,8 +48,8 @@ public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
         return new MultiMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public MultiMarginLossImpl(@Const @ByRef(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
+  public MultiMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
   public MultiMarginLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

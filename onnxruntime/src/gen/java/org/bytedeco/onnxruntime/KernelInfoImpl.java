@@ -47,4 +47,11 @@ public class KernelInfoImpl extends BaseKernelInfo {
 
   public native @ByVal TypeInfo GetInputTypeInfo(@Cast("size_t") long index);
   public native @ByVal TypeInfo GetOutputTypeInfo(@Cast("size_t") long index);
+
+  public native @ByVal ConstValue GetTensorConstantInput(@Cast("size_t") long index, IntPointer is_constant);
+  public native @ByVal ConstValue GetTensorConstantInput(@Cast("size_t") long index, IntBuffer is_constant);
+  public native @ByVal ConstValue GetTensorConstantInput(@Cast("size_t") long index, int[] is_constant);
+
+  public native @StdString BytePointer GetNodeName();
+  public native @ByVal Logger GetLogger();
 }

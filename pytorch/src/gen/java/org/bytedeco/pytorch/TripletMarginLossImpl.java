@@ -36,7 +36,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  TripletMarginLoss
  *  model(TripletMarginLossOptions().margin(3).p(2).eps(1e-06).swap(false));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TripletMarginLossImpl extends TripletMarginLossImplCloneable {
     static { Loader.load(); }
@@ -52,8 +51,8 @@ public class TripletMarginLossImpl extends TripletMarginLossImplCloneable {
         return new TripletMarginLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public TripletMarginLossImpl(@Const @ByRef(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_);
+  public TripletMarginLossImpl(@ByVal(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::TripletMarginLossOptions{}") TripletMarginLossOptions options_);
   public TripletMarginLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

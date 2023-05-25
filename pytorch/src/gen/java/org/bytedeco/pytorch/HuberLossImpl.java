@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  HuberLoss model(HuberLossOptions().reduction(torch::kNone).delta(0.5));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class HuberLossImpl extends HuberLossImplCloneable {
     static { Loader.load(); }
@@ -47,8 +46,8 @@ public class HuberLossImpl extends HuberLossImplCloneable {
         return new HuberLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public HuberLossImpl(@Const @ByRef(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_);
+  public HuberLossImpl(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_);
   public HuberLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

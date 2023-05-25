@@ -44,6 +44,12 @@ public class ThreadLocalState extends Pointer {
   //  autograd engine.
   public native void set_grad_mode(@Cast("bool") boolean enabled);
 
+  // set_multithreading_enabled - force the value of the multithreadinmaximum
+  // threads TLS in
+  //  the current state object. This is used for example in the
+  //  autograd engine.
+  public native void set_multithreading_enabled(@Cast("bool") boolean enabled);
+
   // Sets thread local variables in the current thread,
   // according to the thread boundary specified
   public static native void setThreadLocalState(@Const @ByRef ThreadLocalState state);

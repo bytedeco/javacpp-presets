@@ -33,7 +33,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  LocalResponseNorm
  *  model(LocalResponseNormOptions(2).alpha(0.0002).beta(0.85).k(2.));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class LocalResponseNormImpl extends LocalResponseNormImplCloneable {
     static { Loader.load(); }

@@ -29,22 +29,34 @@ public class lstm_forward extends primitive {
         return new lstm_forward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for an LSTM forward propagation primitive. */
-    @NoOffset public static class desc extends Pointer {
+    /** Primitive descriptor for an LSTM forward propagation primitive. */
+    public static class primitive_desc extends rnn_primitive_desc_base {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
+        public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
+        @Override public primitive_desc getPointer(long i) {
+            return new primitive_desc((Pointer)this).offsetAddress(i);
+        }
     
+        /** Default constructor. Produces an empty object. */
         
         ///
         ///
         ///
         ///
         ///
-        public native @ByRef dnnl_rnn_desc_t data(); public native desc data(dnnl_rnn_desc_t setter);
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
 
-        /** Constructs a descriptor for an LSTM (with or without peephole and
-         *  with or without projection) forward propagation primitive.
+        /** Constructs a primitive descriptor for an LSTM (with or without
+         *      peephole and with or without projection) forward propagation
+         *      primitive.
          * 
          *  The following arguments may point to a zero memory descriptor:
          *  - \p src_iter_desc together with \p src_iter_c_desc,
@@ -64,6 +76,7 @@ public class lstm_forward extends primitive {
          *      All memory descriptors can be initialized with an
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  @param aengine Engine to use.
          *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
@@ -90,115 +103,124 @@ public class lstm_forward extends primitive {
          *      hidden state vector.
          *  @param dst_iter_c_desc Memory descriptor for the output recurrent
          *      cell state vector.
-         *  @param flags Unused. */
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
         
         ///
         ///
         ///
         ///
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc weights_projection_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, weights_projection_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_projection_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
 
-        /** Constructs a descriptor for an LSTM (with or without peephole)
-         *  forward propagation primitive.
+        /** Constructs a primitive descriptor for an LSTM (with or without
+         *      peephole) forward propagation primitive.
          * 
          *  The following arguments may point to a zero memory descriptor:
          *  - \p src_iter_desc together with \p src_iter_c_desc,
@@ -214,6 +236,7 @@ public class lstm_forward extends primitive {
          *      All memory descriptors can be initialized with an
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  @param aengine Engine to use.
          *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
@@ -237,106 +260,116 @@ public class lstm_forward extends primitive {
          *      hidden state vector.
          *  @param dst_iter_c_desc Memory descriptor for the output recurrent
          *      cell state vector.
-         *  @param flags Unused. */
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
         
         ///
         ///
         ///
         ///
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc weights_peephole_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, weights_peephole_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_peephole_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
 
-        /** Constructs a descriptor for an LSTM forward propagation primitive.
+        /** Constructs a primitive descriptor for an LSTM forward propagation
+         *      primitive.
          * 
          *  The following arguments may point to a zero memory descriptor:
          *  - \p src_iter_desc together with \p src_iter_c_desc,
@@ -351,6 +384,7 @@ public class lstm_forward extends primitive {
          *      All memory descriptors can be initialized with an
          *      #dnnl::memory::format_tag::any value of \p format_tag.
          * 
+         *  @param aengine Engine to use.
          *  @param aprop_kind Propagation kind. Possible values are
          *      #dnnl::prop_kind::forward_training, and
          *      #dnnl::prop_kind::forward_inference.
@@ -371,152 +405,102 @@ public class lstm_forward extends primitive {
          *      hidden state vector.
          *  @param dst_iter_c_desc Memory descriptor for the output recurrent
          *      cell state vector.
-         *  @param flags Unused. */
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        rnn_flags flags/*=dnnl::rnn_flags::undef*/);
-        public desc(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(prop_kind aprop_kind, rnn_direction direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc,
-                        @Cast("dnnl::rnn_flags") int flags/*=dnnl::rnn_flags::undef*/);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Cast("dnnl::rnn_direction") int direction,
-                        @Const @ByRef memory.desc src_layer_desc,
-                        @Const @ByRef memory.desc src_iter_desc,
-                        @Const @ByRef memory.desc src_iter_c_desc,
-                        @Const @ByRef memory.desc weights_layer_desc,
-                        @Const @ByRef memory.desc weights_iter_desc,
-                        @Const @ByRef memory.desc bias_desc,
-                        @Const @ByRef memory.desc dst_layer_desc,
-                        @Const @ByRef memory.desc dst_iter_desc,
-                        @Const @ByRef memory.desc dst_iter_c_desc);
-    }
-
-    /** Primitive descriptor for an LSTM forward propagation primitive. */
-    public static class primitive_desc extends rnn_primitive_desc_base {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public primitive_desc(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(long size);
-        @Override public primitive_desc position(long position) {
-            return (primitive_desc)super.position(position);
-        }
-        @Override public primitive_desc getPointer(long i) {
-            return new primitive_desc((Pointer)this).offsetAddress(i);
-        }
-    
-        /** Default constructor. Produces an empty object. */
-        
-        ///
-        public primitive_desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
-
-        /** Constructs a primitive descriptor for an LSTM forward propagation
-         *  primitive.
-         * 
-         *  @param adesc Descriptor for an LSTM forward propagation primitive.
-         *  @param aengine Engine to use.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
-
-        /** Constructs a primitive descriptor for an LSTM forward propagation
-         *  primitive.
-         * 
-         *  @param adesc Descriptor for an LSTM forward propagation primitive.
-         *  @param attr Primitive attributes to use.
-         *  @param aengine Engine to use.
-         *  @param allow_empty A flag signifying whether construction is
-         *      allowed to fail without throwing an exception. In this case an
-         *      empty object will be produced. This flag is optional and
-         *      defaults to false. */
-        
-        ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        rnn_direction direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc) { super((Pointer)null); allocate(aengine, aprop_kind, direction, src_layer_desc, src_iter_desc, src_iter_c_desc, weights_layer_desc, weights_iter_desc, bias_desc, dst_layer_desc, dst_iter_desc, dst_iter_c_desc); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::rnn_direction") int direction, @Const @ByRef org.bytedeco.dnnl.memory.desc src_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc src_iter_c_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc weights_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc bias_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_layer_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_iter_c_desc);
 
         /** Constructs a primitive descriptor for an LSTM forward propagation
          *  primitive from a C API primitive descriptor that must have a
@@ -528,40 +512,49 @@ public class lstm_forward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::rnn_primitive_desc_base::src_layer_desc()const */
-        public native @ByVal memory.desc src_layer_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_layer_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::src_iter_desc()const */
-        public native @ByVal memory.desc src_iter_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_iter_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::src_iter_desc()const */
-        public native @ByVal memory.desc src_iter_c_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_iter_c_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_layer_desc()const */
-        public native @ByVal memory.desc weights_layer_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_layer_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_iter_desc()const */
-        public native @ByVal memory.desc weights_iter_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_iter_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_peephole_desc()const */
-        public native @ByVal memory.desc weights_peephole_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_peephole_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::weights_projection_desc()const */
-        public native @ByVal memory.desc weights_projection_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_projection_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::bias_desc()const */
-        public native @ByVal memory.desc bias_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc bias_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::dst_layer_desc()const */
-        public native @ByVal memory.desc dst_layer_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_layer_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::dst_iter_desc()const */
-        public native @ByVal memory.desc dst_iter_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_iter_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::src_iter_desc()const */
-        public native @ByVal memory.desc dst_iter_c_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_iter_c_desc();
 
         /** \copydoc dnnl::rnn_primitive_desc_base::workspace_desc()const */
-        public native @ByVal memory.desc workspace_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc workspace_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_cell_kind()const */
+        public native algorithm get_cell_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_direction()const */
+        public native rnn_direction get_direction();
     }
 
     /** Default constructor. Produces an empty object. */

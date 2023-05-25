@@ -21,7 +21,6 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies silu over a given input.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.SiLU to learn
  *  about the exact behavior of this module. */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SiLUImpl extends SiLUImplCloneable {
     static { Loader.load(); }

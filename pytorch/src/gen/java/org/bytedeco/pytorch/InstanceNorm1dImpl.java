@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  InstanceNorm1d
  *  model(InstanceNorm1dOptions(4).eps(0.5).momentum(0.1).affine(false).track_running_stats(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class InstanceNorm1dImpl extends InstanceNorm1dImplBase {
     static { Loader.load(); }

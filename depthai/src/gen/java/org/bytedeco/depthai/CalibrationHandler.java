@@ -18,7 +18,7 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 /**
  * CalibrationHandler is an interface to read/load/write structured calibration and device data.
- * The following fields are protected and aren't allowed to be overriden by default:
+ * The following fields are protected and aren't allowed to be overridden by default:
  *  - boardName
  *  - boardRev
  *  - boardConf
@@ -97,7 +97,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaning part of the
+     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaining part of the
      * other side
      * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *
@@ -133,7 +133,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaning part of the
+     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaining part of the
      * other side
      * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *
@@ -169,7 +169,7 @@ public class CalibrationHandler extends Pointer {
      * respective cropped image
      * @param bottomRightPixelId (x, y) point represents the bottom right corner coordinates of the cropped image which is used to modify the intrinsics for
      * the respective cropped image
-     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaning part of the
+     * @param keepAspectRatio Enabling this will scale on width or height depending on which provides the max resolution and crops the remaining part of the
      * other side
      * @return Represents the 3x3 intrinsics matrix of the respective camera at the requested size and crop dimensions.
      *

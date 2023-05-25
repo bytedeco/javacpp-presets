@@ -21,7 +21,6 @@ import static org.bytedeco.pytorch.global.torch.*;
 /** Applies Tanh over a given input.
  *  See https://pytorch.org/docs/master/nn.html#torch.nn.Tanh to learn
  *  about the exact behavior of this module. */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TanhImpl extends TanhImplCloneable {
     static { Loader.load(); }

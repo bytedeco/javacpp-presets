@@ -13,20 +13,24 @@ runs:
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
         echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
-        SCL_ENABLE="devtoolset-9"
+        SCL_ENABLE="devtoolset-9 rh-python38"
+        SCL_INSTALL="rh-python38-python-urllib3"
         CENTOS_VERSION=$(rpm --eval '%{centos_ver}')
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           find /etc/yum.repos.d/ -name *.repo | xargs -i sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/$releasever/6.10/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' {}
           SCL_ENABLE="devtoolset-9 rh-python36 python27"
+          SCL_INSTALL=""
         fi
         echo "SCL_ENABLE=$SCL_ENABLE" >> $GITHUB_ENV
+        echo "SCL_INSTALL=$SCL_INSTALL" >> $GITHUB_ENV
 
         yum -y update
         yum -y install centos-release-scl-rh epel-release
         if [[ "$CENTOS_VERSION" == "6" ]]; then
           sed -i 's/mirror\.centos\.org\/centos/vault.centos.org/g;s/6\/sclo/6.10\/sclo/g;s/mirrorlist/#mirrorlist/g;s/#baseurl/baseurl/g' /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
         fi
-        yum -y install $SCL_ENABLE rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
+        curl -L "https://negativo17.org/repos/epel-multimedia.repo" | sed -e '/^\[[a-z\-]*\]/a priority=99' > /etc/yum.repos.d/epel-multimedia.repo
+        yum -y install $SCL_ENABLE $SCL_INSTALL rh-java-common-ant boost-devel ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python3-devel python3-pip swig file which wget unzip tar bzip2 gzip xz patch autoconf-archive automake make libtool bison flex perl-core nasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel curl-devel expat-devel gettext-devel openssl-devel bzip2-devel zlib-devel SDL2-devel libva-devel libxkbcommon-devel libxkbcommon-x11-devel xcb-util* fontconfig-devel libffi-devel ragel ocl-icd-devel GeoIP-devel pcre-devel ssdeep-devel yajl-devel
         # https://gcc.gnu.org/legacy-ml/gcc-patches/2018-01/msg01962.html
         sed -i 's/_mm512_abs_pd (__m512 __A)/_mm512_abs_pd (__m512d __A)/g' /opt/rh/devtoolset-9/root/usr/lib/gcc/x86_64-redhat-linux/9/include/avx512fintrin.h
         source scl_source enable $SCL_ENABLE || true
@@ -68,14 +72,14 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.6.0.163-1.cuda11.8.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.6.0.163-1.cuda11.8.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.15.5-1+cuda11.8.x86_64.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.15.5-1+cuda11.8.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda-repo-rhel7-12-1-local-12.1.1_530.30.02-1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-8.9.1.23-1.cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libcudnn8-devel-8.9.1.23-1.cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-2.18.1-1+cuda12.1.x86_64.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.18.1-1+cuda12.1.x86_64.rpm
 
-          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-11-8-local-11.8.0_520.61.05-1.x86_64.rpm libcudnn*.rpm libnccl*.rpm
-          pushd /var/cuda-repo-rhel7-11-8-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
+          rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-* libcudnn*.rpm libnccl*.rpm
+          pushd /var/cuda-repo-rhel7-12-1-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
           mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
@@ -100,7 +104,7 @@ runs:
           cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
           cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
-          sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h
+          sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h /usr/local/cuda/include/cusolverDn.h /usr/local/cuda/include/cusolverSp.h
           sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
           sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
           sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
@@ -113,22 +117,22 @@ runs:
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown.cli https://drive.google.com/uc?id=1dh3P5JLUUe9EXE0GSJj6VDWYlr7W89dO
-          unzip Video_Codec_SDK_11.1.5.zip -d /usr/local
+          python3 -m gdown.cli https://drive.google.com/uc?id=1ner_cjzhKhdlrP2VzHGZvyEnW3UQ4uOy
+          unzip Video_Codec_SDK_12.0.16.zip -d /usr/local
           ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1UZLOE_RylYGMC80LzJ7m7iiKrTzYF_Qy
-          tar -hxvf TensorRT-8.4.3.1.Linux.x86_64-gnu.cuda-11.6.cudnn8.4.tar.gz -C /usr/local/
+          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/18898/l_onemkl_p_2022.2.0.8748_offline.sh
-          bash l_onemkl_p_2022.2.0.8748_offline.sh -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/cd17b7fe-500e-4305-a89b-bd5b42bfd9f8/l_onemkl_p_2023.1.0.46342_offline.sh
+          bash l_onemkl_p_2023.1.0.46342_offline.sh -s -a -s --eula accept
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

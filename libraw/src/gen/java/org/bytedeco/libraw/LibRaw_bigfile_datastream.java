@@ -24,7 +24,8 @@ public class LibRaw_bigfile_datastream extends LibRaw_abstract_datastream {
 // #ifdef LIBRAW_WIN32_UNICODEPATHS
 // #endif
   public native int valid();
-  public native Pointer make_jas_stream();
+// #ifdef LIBRAW_OLD_VIDEO_SUPPORT
+// #endif
 
   public native int read(Pointer ptr, @Cast("size_t") long size, @Cast("size_t") long nmemb);
   public native int eof();

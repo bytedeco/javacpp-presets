@@ -38,6 +38,11 @@ public class GlobalProperties extends GlobalPropertiesSerializable {
         return new GlobalProperties((Pointer)this).offsetAddress(i);
     }
 
+    @MemberGetter public static native @Cast("const uint32_t") int SIPP_BUFFER_DEFAULT_SIZE();
+    public static final int SIPP_BUFFER_DEFAULT_SIZE = SIPP_BUFFER_DEFAULT_SIZE();
+    @MemberGetter public static native @Cast("const uint32_t") int SIPP_DMA_BUFFER_DEFAULT_SIZE();
+    public static final int SIPP_DMA_BUFFER_DEFAULT_SIZE = SIPP_DMA_BUFFER_DEFAULT_SIZE();
+
     /**
      * Set frequency of Leon OS - Increasing can improve performance, at the cost of higher power
      * draw
@@ -71,4 +76,21 @@ public class GlobalProperties extends GlobalPropertiesSerializable {
      * device defaults - configured per protocol, currently 64*1024 for both USB and Ethernet.
      */
     public native int xlinkChunkSize(); public native GlobalProperties xlinkChunkSize(int setter);
+
+    /**
+     * SIPP (Signal Image Processing Pipeline) internal memory pool.
+     * SIPP is a framework used to schedule HW filters, e.g. ISP, Warp, Median filter etc.
+     * Changing the size of this pool is meant for advanced use cases, pushing the limits of the HW.
+     * By default memory is allocated in high speed CMX memory. Setting to 0 will allocate in DDR 256 kilobytes.
+     * Units are bytes.
+     */
+    public native @Cast("uint32_t") int sippBufferSize(); public native GlobalProperties sippBufferSize(int setter);
+    /**
+     * SIPP (Signal Image Processing Pipeline) internal DMA memory pool.
+     * SIPP is a framework used to schedule HW filters, e.g. ISP, Warp, Median filter etc.
+     * Changing the size of this pool is meant for advanced use cases, pushing the limits of the HW.
+     * Memory is allocated in high speed CMX memory
+     * Units are bytes.
+     */
+    public native @Cast("uint32_t") int sippDmaBufferSize(); public native GlobalProperties sippDmaBufferSize(int setter);
 }

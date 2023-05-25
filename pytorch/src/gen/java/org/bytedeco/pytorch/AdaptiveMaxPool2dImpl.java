@@ -29,17 +29,16 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AdaptiveMaxPool2d model(AdaptiveMaxPool2dOptions({3, 2}));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveMaxPool2dImpl extends AdaptiveMaxPool2dImplBase {
     static { Loader.load(); }
 
   
     public AdaptiveMaxPool2dImpl(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
-    private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
+    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);
     public AdaptiveMaxPool2dImpl(
           @Const @ByRef AdaptiveMaxPool2dOptions options_) { super((Pointer)null); allocate(options_); }
-    private native void allocate(
+    @NoDeallocator private native void allocate(
           @Const @ByRef AdaptiveMaxPool2dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool2dImpl(Pointer p) { super(p); }

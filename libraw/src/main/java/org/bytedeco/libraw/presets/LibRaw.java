@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Jarek Sacha, Samuel Audet
+ * Copyright (C) 2022-2023 Jarek Sacha, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                 "libraw/libraw_datastream.h",
                                 "libraw/libraw.h",
                         },
-                        link = "raw_r@.20",
+                        link = "raw_r@.23",
                         preload = "gomp@.1"
                 ),
                 @Platform(value = "windows",
@@ -70,6 +70,7 @@ public class LibRaw implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap
                 .put(new Info().enumerate())
+                .put(new Info("signed __int8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                 //
                 // libraw_const.h
                 //
@@ -109,18 +110,6 @@ public class LibRaw implements InfoMapper {
                 .put(new Info("LIBRAW_VERSION_TAIL").skip())
 
                 //
-                // libraw_types.h
-                //
-                // Realated to incorrect wrapping of `signed __int8`
-                .put(new Info("libraw_sony_info_t::AFMicroAdjValue").skip())
-                .put(new Info("libraw_sony_info_t::AFMicroAdjOn").skip())
-                .put(new Info("fuji_compressed_params::q_table").skip())
-                .put(new Info("libraw_nikon_makernotes_t::q_table").skip())
-                .put(new Info("libraw_nikon_makernotes_t::AFFineTuneAdj").skip())
-
-                .put(new Info("libraw_static_table_t").skip(true))
-
-                //
                 // "libraw_datastream.h"
                 //
                 .put(new Info("LIBRAW_WIN32_DLLDEFS").define(false))
@@ -142,6 +131,12 @@ public class LibRaw implements InfoMapper {
                 // To build on non-Windows
                 //
                 .put(new Info("defined(_WIN32) || defined(WIN32)").define(false))
+
+                .put(new Info("LIBRAW_LIBRARY_BUILD",
+                              "LIBRAW_OLD_VIDEO_SUPPORT",
+                              "defined (LIBRAW_LIBRARY_BUILD) && defined(__cplusplus)",
+                              "defined (LIBRAW_NO_IOSTREAMS_DATASTREAM)  && defined (LIBRAW_WIN32_CALLS)").define(false))
+                .put(new Info("LIBRAW_NO_IOSTREAMS_DATASTREAM").define(true))
         ;
     }
 }

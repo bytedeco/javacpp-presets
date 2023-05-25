@@ -11,19 +11,19 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy</artifactId>
-  <version>1.24.2-${project.parent.version}</version>
+  <version>1.24.3-${project.parent.version}</version>
   <name>JavaCPP Presets for NumPy</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.21-${project.parent.version}</version>
+      <version>0.3.23-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython</artifactId>
-      <version>3.11.2-${project.parent.version}</version>
+      <version>3.11.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -46,23 +46,23 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.21-${project.parent.version}</version>
+            <version>0.3.23-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.11.2-${project.parent.version}</version>
+            <version>3.11.3-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.21-${project.parent.version}</version>
+            <version>0.3.23-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.11.2-${project.parent.version}</version>
+            <version>3.11.3-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -171,7 +171,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>cpython</artifactId>
-                <version>3.11.2-${project.parent.version}</version>
+                <version>3.11.3-${project.parent.version}</version>
                 <classifier>${os.name}-${os.arch}</classifier>
               </dependency>
             </dependencies>

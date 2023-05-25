@@ -1,14 +1,14 @@
-diff -ruN llvm-project-11.0.1.src/clang/lib/Driver/Driver.cpp llvm-project-11.0.1.src-patch/clang/lib/Driver/Driver.cpp
---- llvm-project-11.0.1.src/clang/lib/Driver/Driver.cpp	2020-12-19 04:57:38.000000000 +0900
-+++ llvm-project-11.0.1.src-patch/clang/lib/Driver/Driver.cpp	2021-02-25 14:34:43.211484832 +0900
-@@ -115,6 +115,11 @@
+diff -ruN llvm-project-16.0.0.src/clang/lib/Driver/Driver.cpp llvm-project-16.0.0.src-patch/clang/lib/Driver/Driver.cpp
+--- llvm-project-16.0.0.src/clang/lib/Driver/Driver.cpp	2023-03-17 21:26:07.000000000 +0900
++++ llvm-project-16.0.0.src-patch/clang/lib/Driver/Driver.cpp	2023-03-18 21:21:07.478638487 +0900
+@@ -184,6 +184,11 @@
      P = llvm::sys::path::parent_path(Dir);
-     llvm::sys::path::append(P, Twine("lib") + CLANG_LIBDIR_SUFFIX, "clang",
-                             CLANG_VERSION_STRING);
+     llvm::sys::path::append(P, CLANG_INSTALL_LIBDIR_BASENAME, "clang",
+                             CLANG_VERSION_MAJOR_STRING);
 +    if (!llvm::sys::fs::exists(P)) {
 +        P = Dir;
-+        llvm::sys::path::append(P, Twine("lib") + CLANG_LIBDIR_SUFFIX, "clang",
-+                                CLANG_VERSION_STRING);
++        llvm::sys::path::append(P, CLANG_INSTALL_LIBDIR_BASENAME, "clang",
++                                CLANG_VERSION_MAJOR_STRING);
 +    }
    }
  

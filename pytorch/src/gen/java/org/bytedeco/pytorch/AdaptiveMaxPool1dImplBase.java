@@ -26,10 +26,10 @@ public class AdaptiveMaxPool1dImplBase extends AdaptiveMaxPool1dImplCloneable {
     public AdaptiveMaxPool1dImplBase(Pointer p) { super(p); }
 
   public AdaptiveMaxPool1dImplBase(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size) { super((Pointer)null); allocate(output_size); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
+  @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer output_size);
   public AdaptiveMaxPool1dImplBase(
         @Const @ByRef AdaptiveMaxPool1dOptions options_) { super((Pointer)null); allocate(options_); }
-  private native void allocate(
+  @NoDeallocator private native void allocate(
         @Const @ByRef AdaptiveMaxPool1dOptions options_);
 
   public native void reset();

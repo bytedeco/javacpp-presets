@@ -10,12 +10,11 @@ fi
 # to build with "Traditional ML" support. Untested.
 export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
-export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.12.0
-export PROTO=3.11.3
-export PYBIND=2.6.2
+export ONNX=1.14.0
+export PROTO=3.17.3
+export PYBIND=2.10.1
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
@@ -35,6 +34,44 @@ export PATH="$INSTALL_PATH/bin:$PATH"
 export CFLAGS="-I$INSTALL_PATH/include"
 export CXXFLAGS="-I$INSTALL_PATH/include"
 export PYTHON_BIN_PATH=$(which python3)
+if [[ $PLATFORM == windows* ]]; then
+    export PYTHON_BIN_PATH=$(which python.exe)
+fi
+
+CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ $(find "$P" -name Python.h) ]]; then
+            CPYTHON_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
+CPYTHON_PATH="${CPYTHON_PATH//\\//}"
+
+if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
+    export LD_LIBRARY_PATH="$CPYTHON_PATH/lib/"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
+    chmod +x "$PYTHON_BIN_PATH"
+elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
+    CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+    export PATH="$CPYTHON_PATH:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python.exe"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/pip/_vendor/certifi/cacert.pem"
+fi
+export PYTHONPATH="$PYTHON_INSTALL_PATH"
+mkdir -p "$PYTHON_INSTALL_PATH"
 
 case $PLATFORM in
     linux-*)
@@ -52,9 +89,7 @@ case $PLATFORM in
     windows-*)
         export CC="cl.exe"
         export CXX="cl.exe"
-        export CMAKE_ARGS="-DONNX_USE_PROTOBUF_SHARED_LIBS=OFF -DProtobuf_USE_STATIC_LIBS=ON"
         export CMAKE_GENERATOR="Ninja"
-        export PYTHON_BIN_PATH=$(which python.exe)
         export USE_MSVC_STATIC_RUNTIME=0
         ;;
 esac
@@ -72,6 +107,7 @@ sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 sedinplace 's/if WINDOWS:/if False:/g' setup.py
 sedinplace '/if platform.architecture/{N;N;N;d;}' setup.py
 sedinplace "/setup_requires.append('pytest-runner')/d" setup.py
+export CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF -DProtobuf_USE_STATIC_LIBS=ON -DONNX_USE_LITE_PROTO=ON"
 "$PYTHON_BIN_PATH" setup.py --quiet build
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters ../include/onnx/shape_inference

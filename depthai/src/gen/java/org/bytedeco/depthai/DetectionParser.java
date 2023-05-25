@@ -18,7 +18,8 @@ import static org.bytedeco.depthai.global.depthai.*;
 
 
 /**
- * \brief DetectionParser node. Performs edge detection using 3x3 Sobel filter
+ * \brief DetectionParser node. Parses detection results from different neural networks and is being used internally by MobileNetDetectionNetwork and
+ * YoloDetectionNetwork.
  */
 @Namespace("dai::node") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class DetectionParser extends DetectionParserPropertiesNode {

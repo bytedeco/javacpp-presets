@@ -34,7 +34,6 @@ public class AutogradContext extends Pointer {
         return new AutogradContext((Pointer)this).offsetAddress(i);
     }
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
   public AutogradContext() { super((Pointer)null); allocate(); }
   private native void allocate();
   

@@ -33,8 +33,15 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
 
 // See docs\c_cxx\README.md on generating the Doxygen documentation from this file
 
-/** \mainpage C & C++ APIs
+/** \mainpage ONNX Runtime
  *
+ * ONNX Runtime is a high-performance inference and training graph execution engine for deeplearning models.
+ *
+ * ONNX Runtime's C, C++ APIs offer an easy to use interface to onboard and execute onnx models.
+ * - \subpage c_cpp_api "Core C, C++ APIs"
+ * - \subpage training_c_cpp_api "Training C, C++ APIs for learning on the edge"
+ *
+ * \page c_cpp_api Core C, C++ APIs
  * <h1>C</h1>
  *
  * ::OrtApi - Click here to go to the structure with all C API functions.
@@ -60,7 +67,7 @@ public class onnxruntime extends org.bytedeco.onnxruntime.presets.onnxruntime {
  *
  * This value is used by some API functions to behave as this version of the header expects.
  */
-public static final int ORT_API_VERSION = 14;
+public static final int ORT_API_VERSION = 15;
 
 // #ifdef __cplusplus
 // #endif
@@ -120,9 +127,19 @@ public static final int ORT_API_VERSION = 14;
 // #ifndef ORT_TSTR
 // #ifdef _WIN32
 // #define ORT_TSTR(X) L##X
+// When X is a macro, L##X is not defined. In this case, we need to use ORT_TSTR_ON_MACRO.
+// #define ORT_TSTR_ON_MACRO(X) L"" X
 // #else
 // #define ORT_TSTR(X) X
+// #define ORT_TSTR_ON_MACRO(X) X
 // #endif
+// #endif
+
+// On Windows, ORT_FILE is a wchar_t version of the __FILE__ macro.
+// Otherwise, ORT_FILE is equivalent to __FILE__.
+// #ifndef ORT_FILE
+// #define ORT_FILE_INTERNAL(x) ORT_TSTR(x)
+// #define ORT_FILE ORT_FILE_INTERNAL(__FILE__)
 // #endif
 
 // Any pointer marked with _In_ or _Out_, cannot be NULL.
@@ -308,16 +325,19 @@ public static final int
 // Targeting ../OrtTensorTypeAndShapeInfo.java
 
 
-// Targeting ../OrtSessionOptions.java
-
-
-// Targeting ../OrtCustomOpDomain.java
-
-
 // Targeting ../OrtMapTypeInfo.java
 
 
 // Targeting ../OrtSequenceTypeInfo.java
+
+
+// Targeting ../OrtOptionalTypeInfo.java
+
+
+// Targeting ../OrtSessionOptions.java
+
+
+// Targeting ../OrtCustomOpDomain.java
 
 
 // Targeting ../OrtModelMetadata.java
@@ -350,6 +370,9 @@ public static final int
 // Targeting ../OrtOpAttr.java
 
 
+// Targeting ../OrtLogger.java
+
+
 
 // #ifdef _WIN32
 // #else
@@ -362,8 +385,8 @@ public static final int
 
 /** \brief Graph optimization level
  *
- * Refer to https://www.onnxruntime.ai/docs/resources/graph-optimizations.html
- * for an in-depth understanding of Graph Optimizations
+ * Refer to https://www.onnxruntime.ai/docs/performance/graph-optimizations.html#graph-optimization-levels
+ * for an in-depth understanding of the Graph Optimization Levels.
  */
 /** enum GraphOptimizationLevel */
 public static final int
@@ -519,9 +542,18 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
  */
 
 
+/*
+ * This is the old way to add the oneDNN provider to the session, please use
+ * SessionOptionsAppendExecutionProvider_oneDNN above to access the latest functionality
+ * This function always exists, but will only succeed if Onnxruntime was built with
+ * oneDNN support and the oneDNN provider shared library exists
+ *
+ * \param use_arena zero: false. non-zero: true.
+ */
+public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
+
 // #ifdef __cplusplus
 // #endif
-
 /** \} */
 
 
@@ -554,6 +586,7 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // #pragma once
 // #include "onnxruntime_c_api.h"
 // #include <cstddef>
+// #include <cstdio>
 // #include <array>
 // #include <memory>
 // #include <stdexcept>
@@ -608,7 +641,20 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // #endif
 
 /** This returns a reference to the OrtApi interface in use */
-@Namespace("Ort") public static native @Const @ByRef OrtApi GetApi();
+@Namespace("Ort") public static native @Const @ByRef @NoException(true) OrtApi GetApi();
+
+/** <summary>
+ *  This function returns the onnxruntime version string
+ *  </summary>
+ *  <returns>version string major.minor.rev</returns> */
+@Namespace("Ort") public static native @ByVal @Cast("std::basic_string<ORTCHAR_T>*") Pointer GetVersionString();
+
+/** <summary>
+ *  This function returns the onnxruntime build information: including git branch,
+ *  git commit id, build type(Debug/Release/RelWithDebInfo) and cmake cpp flags.
+ *  </summary>
+ *  <returns>string</returns> */
+@Namespace("Ort") public static native @ByVal @Cast("std::basic_string<ORTCHAR_T>*") Pointer GetBuildInfoString();
 
 /** <summary>
  *  This is a C++ wrapper for OrtApi::GetAvailableProviders() and
@@ -851,6 +897,13 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // Targeting ../SequenceTypeInfo.java
 
 
+// Targeting ../OptionalTypeInfoImpl.java
+
+
+
+  // namespace detail
+
+// This is always owned by the TypeInfo and can only be obtained from it.
 // Targeting ../ConstMapTypeInfo.java
 
 
@@ -935,6 +988,82 @@ public static native @Platform(extension="-gpu") OrtStatus OrtSessionOptionsAppe
 // Targeting ../OpAttr.java
 
 
+
+/**
+ * Macro that logs a message using the provided logger. Throws an exception if OrtApi::Logger_LogMessage fails.
+ * Example: ORT_CXX_LOG(logger, ORT_LOGGING_LEVEL_INFO, "Log a message");
+ *
+ * @param logger The Ort::Logger instance to use. Must be a value or reference.
+ * @param message_severity The logging severity level of the message.
+ * @param message A null-terminated UTF-8 message to log.
+ */
+// #define ORT_CXX_LOG(logger, message_severity, message)
+//   do {
+//     if (message_severity >= logger.GetLoggingSeverityLevel()) {
+//       Ort::ThrowOnError(logger.ogMessage(message_severity, ORT_FILE, __LINE__,
+//                                           static_cast<const char*>(__FUNCTION__), message));
+//     }
+//   } while (false)
+
+/**
+ * Macro that logs a message using the provided logger. Can be used in noexcept code since errors are silently ignored.
+ * Example: ORT_CXX_LOG_NOEXCEPT(logger, ORT_LOGGING_LEVEL_INFO, "Log a message");
+ *
+ * @param logger The Ort::Logger instance to use. Must be a value or reference.
+ * @param message_severity The logging severity level of the message.
+ * @param message A null-terminated UTF-8 message to log.
+ */
+// #define ORT_CXX_LOG_NOEXCEPT(logger, message_severity, message)
+//   do {
+//     if (message_severity >= logger.GetLoggingSeverityLevel()) {
+//       static_cast<void>(logger.ogMessage(message_severity, ORT_FILE, __LINE__,
+//                                           static_cast<const char*>(__FUNCTION__), message));
+//     }
+//   } while (false)
+
+/**
+ * Macro that logs a printf-like formatted message using the provided logger. Throws an exception if
+ * OrtApi::Logger_LogMessage fails or if a formatting error occurs.
+ * Example: ORT_CXX_LOGF(logger, ORT_LOGGING_LEVEL_INFO, "Log an int: %d", 12);
+ *
+ * @param logger The Ort::Logger instance to use. Must be a value or reference.
+ * @param message_severity The logging severity level of the message.
+ * @param format A null-terminated UTF-8 format string forwarded to a printf-like function.
+ *               Refer to https://en.cppreference.com/w/cpp/io/c/fprintf for information on valid formats.
+ * @param ... Zero or more variadic arguments referenced by the format string.
+ */
+// #define ORT_CXX_LOGF(logger, message_severity, /*format,*/...)
+//   do {
+//     if (message_severity >= logger.GetLoggingSeverityLevel()) {
+//       Ort::ThrowOnError(logger.ogFormattedMessage(message_severity, ORT_FILE, __LINE__,
+//                                                    static_cast<const char*>(__FUNCTION__), __VA_ARGS__));
+//     }
+//   } while (false)
+
+/**
+ * Macro that logs a printf-like formatted message using the provided logger. Can be used in noexcept code since errors
+ * are silently ignored.
+ * Example: ORT_CXX_LOGF_NOEXCEPT(logger, ORT_LOGGING_LEVEL_INFO, "Log an int: %d", 12);
+ *
+ * @param logger The Ort::Logger instance to use. Must be a value or reference.
+ * @param message_severity The logging severity level of the message.
+ * @param format A null-terminated UTF-8 format string forwarded to a printf-like function.
+ *               Refer to https://en.cppreference.com/w/cpp/io/c/fprintf for information on valid formats.
+ * @param ... Zero or more variadic arguments referenced by the format string.
+ */
+
+///
+///
+// #define ORT_CXX_LOGF_NOEXCEPT(logger, message_severity, /*format,*/...)
+//   do {
+//     if (message_severity >= logger.GetLoggingSeverityLevel()) {
+//       static_cast<void>(logger.ogFormattedMessage(message_severity, ORT_FILE, __LINE__,
+//                                                    static_cast<const char*>(__FUNCTION__), __VA_ARGS__));
+//     }
+//   } while (false)
+// Targeting ../Logger.java
+
+
 // Targeting ../KernelContext.java
 
 
@@ -1004,23 +1133,13 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_CPU( Ort
 // #endif
 
 
-// Parsed from onnxruntime/core/providers/dnnl/dnnl_provider_factory.h
+// Parsed from onnxruntime/core/providers/dnnl/dnnl_provider_options.h
 
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Copyright(C) 2022 Intel Corporation
+// Licensed under the MIT License
+// #pragma once
+// Targeting ../OrtDnnlProviderOptions.java
 
-// #include "onnxruntime_c_api.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/**
- * @param use_arena zero: false. non-zero: true.
- */
-public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( OrtSessionOptions options, int use_arena);
-
-// #ifdef __cplusplus
-// #endif
 
 
 }

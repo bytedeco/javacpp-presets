@@ -33,5 +33,4 @@ public class libraw_raw_inset_crop_t extends Pointer {
     public native @Cast("ushort") short ctop(); public native libraw_raw_inset_crop_t ctop(short setter);
     public native @Cast("ushort") short cwidth(); public native libraw_raw_inset_crop_t cwidth(short setter);
     public native @Cast("ushort") short cheight(); public native libraw_raw_inset_crop_t cheight(short setter);
-    public native @Cast("ushort") short aspect(); public native libraw_raw_inset_crop_t aspect(short setter);
   }

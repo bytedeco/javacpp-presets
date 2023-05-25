@@ -51,6 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("override").annotations()) // we are not exposing all subclasses, so disable override annotation
+               .put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
                .put(new Info("cv::detail::BlocksCompensator").purify())
                .put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalWarper").pointerTypes("DetailSphericalWarper").base("RotationWarper"))
@@ -67,6 +68,9 @@ public class opencv_stitching implements InfoMapper {
                .put(new Info("cv::detail::SphericalWarperGpu").pointerTypes("DetailSphericalWarperGpu").base("RotationWarper"))
                .put(new Info("cv::detail::CylindricalWarperGpu").pointerTypes("DetailCylindricalWarperGpu").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalPortraitWarper", "cv::detail::CylindricalPortraitWarper", "cv::detail::PlanePortraitWarper").base("RotationWarper"))
+               .put(new Info("std::vector<cv::detail::CameraParams>").pointerTypes("CameraParamsVector").define())
+               .put(new Info("std::vector<cv::detail::ImageFeatures>").pointerTypes("ImageFeaturesVector").define())
+               .put(new Info("std::vector<cv::detail::MatchesInfo>").pointerTypes("MatchesInfoVector").define())
                .put(new Info("cv::PlaneWarperGpu").pointerTypes("PlaneWarperGpu"))
                .put(new Info("cv::CylindricalWarperGpu").pointerTypes("CylindricalWarperGpu"))
                .put(new Info("cv::SphericalWarperGpu").pointerTypes("SphericalWarperGpu"))

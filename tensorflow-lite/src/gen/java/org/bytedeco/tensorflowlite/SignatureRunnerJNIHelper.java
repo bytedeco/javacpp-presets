@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // Class for friend declarations.
+
 @Namespace("tflite") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class SignatureRunnerJNIHelper extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

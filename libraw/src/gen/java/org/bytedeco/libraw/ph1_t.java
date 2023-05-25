@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.libraw.global.LibRaw.*;
-
+ 
 
   @Properties(inherit = org.bytedeco.libraw.presets.LibRaw.class)
 public class ph1_t extends Pointer {

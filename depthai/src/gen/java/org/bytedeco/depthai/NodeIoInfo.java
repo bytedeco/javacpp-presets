@@ -51,4 +51,5 @@ public class NodeIoInfo extends Pointer {
     public native @Cast("bool") boolean blocking(); public native NodeIoInfo blocking(boolean setter);
     public native int queueSize(); public native NodeIoInfo queueSize(int setter);
     public native @Cast("bool") boolean waitForMessage(); public native NodeIoInfo waitForMessage(boolean setter);
+    public native @Cast("uint32_t") int id(); public native NodeIoInfo id(int setter);
 }

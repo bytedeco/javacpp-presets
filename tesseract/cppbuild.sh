@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=5.3.0
+TESSERACT_VERSION=5.3.1
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -21,13 +21,13 @@ cd tesseract-$TESSERACT_VERSION
 mv VERSION VERSION.txt
 sedinplace 's/"VERSION"/"VERSION.txt"/g' CMakeLists.txt
 
-# Disable external dependencies on asciidoc, libarchive and libtiff
-sedinplace '/NdkCompat/d' CMakeLists.txt
-sedinplace '/ndk_compat/d' CMakeLists.txt
+# Disable external dependencies on asciidoc, libarchive, libtiff, etc
 sedinplace '/  FATAL_ERROR/d' CMakeLists.txt
 sedinplace '/find_package(TIFF)/d' CMakeLists.txt
 sedinplace '/pkg_check_modules(TIFF/d' CMakeLists.txt
+sedinplace '/NEON_COMPILE_FLAGS "-mfpu=neon"/d' CMakeLists.txt
 sedinplace 's/if(COMPILER_SUPPORTS_MARCH_NATIVE)/if(FALSE)/g' CMakeLists.txt
+sedinplace '/find_package(CpuFeaturesNdkCompat/,/CpuFeatures::ndk_compat)/d' CMakeLists.txt
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 

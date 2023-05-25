@@ -31,7 +31,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  PoissonNLLLoss
  *  model(PoissonNLLLossOptions().log_input(false).full(true).eps(0.42).reduction(torch::kSum));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class PoissonNLLLossImpl extends PoissonNLLLossImplCloneable {
     static { Loader.load(); }
@@ -47,8 +46,8 @@ public class PoissonNLLLossImpl extends PoissonNLLLossImplCloneable {
         return new PoissonNLLLossImpl((Pointer)this).offsetAddress(i);
     }
 
-  public PoissonNLLLossImpl(@Const @ByRef(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @NoDeallocator private native void allocate(@Const @ByRef(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_);
+  public PoissonNLLLossImpl(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_) { super((Pointer)null); allocate(options_); }
+  @NoDeallocator private native void allocate(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_);
   public PoissonNLLLossImpl() { super((Pointer)null); allocate(); }
   @NoDeallocator private native void allocate();
 

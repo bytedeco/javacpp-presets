@@ -139,6 +139,28 @@ public class RawStereoDepthConfig extends RawBuffer {
          * pointing down at the table surface.
          */
         public native @Cast("std::int32_t") int disparityShift(); public native AlgorithmControl disparityShift(int setter);
+
+        /**
+         * Used only for debug purposes. centerAlignmentShiftFactor is set automatically in firmware,
+         * from camera extrinsics when depth alignment to camera is enabled.
+         * Center alignment is achieved by shifting the obtained disparity map by a scale factor.
+         * It's used to align to a different camera that is on the same horizontal baseline as the two stereo cameras.
+         * E.g. if we have a device with 10 cm stereo baseline, and we have another camera inbetween,
+         * 9cm from the LEFT camera and 1 cm from the RIGHT camera we can align the obtained disparity map using a scale factor of 0.9.
+         * Note that aligning disparity map to a different camera involves 2 steps:
+         * 1. Shifting obtained disparity map.
+         * 2. Warping the image to counter rotate and scaling to match the FOV.
+         * Center alignment factor 1 is equivalent to RECTIFIED_RIGHT
+         * Center alignment factor 0 is equivalent to RECTIFIED_LEFT
+         */
+        public native @ByRef FloatOptional centerAlignmentShiftFactor(); public native AlgorithmControl centerAlignmentShiftFactor(FloatOptional setter);
+
+        /**
+         * Invalidate X amount of pixels at the edge of disparity frame.
+         * For right and center alignment X pixels will be invalidated from the right edge,
+         * for left alignment from the left edge.
+         */
+        public native @Cast("std::int32_t") int numInvalidateEdgePixels(); public native AlgorithmControl numInvalidateEdgePixels(int setter);
     }
 
     /**
@@ -228,7 +250,7 @@ public class RawStereoDepthConfig extends RawBuffer {
             public native @Cast("std::int32_t") int delta(); public native SpatialFilter delta(int setter);
 
             /**
-             * Nubmer of iterations over the image in both horizontal and vertical direction.
+             * Number of iterations over the image in both horizontal and vertical direction.
              */
             public native @Cast("std::int32_t") int numIterations(); public native SpatialFilter numIterations(int setter);
         }
@@ -352,6 +374,49 @@ public class RawStereoDepthConfig extends RawBuffer {
          * Filters out distances outside of a given interval.
          */
         public native @ByRef ThresholdFilter thresholdFilter(); public native PostProcessing thresholdFilter(ThresholdFilter setter);
+
+        /**
+         * Brightness filtering.
+         * If input frame pixel is too dark or too bright, disparity will be invalidated.
+         * The idea is that for too dark/too bright pixels we have low confidence,
+         * since that area was under/over exposed and details were lost.
+         */
+        public static class BrightnessFilter extends Pointer {
+            static { Loader.load(); }
+            /** Default native constructor. */
+            public BrightnessFilter() { super((Pointer)null); allocate(); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public BrightnessFilter(long size) { super((Pointer)null); allocateArray(size); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public BrightnessFilter(Pointer p) { super(p); }
+            private native void allocate();
+            private native void allocateArray(long size);
+            @Override public BrightnessFilter position(long position) {
+                return (BrightnessFilter)super.position(position);
+            }
+            @Override public BrightnessFilter getPointer(long i) {
+                return new BrightnessFilter((Pointer)this).offsetAddress(i);
+            }
+        
+            /**
+             * Minimum pixel brightness.
+             * If input pixel is less or equal than this value the depth value is invalidated.
+             */
+            public native @Cast("std::int32_t") int minBrightness(); public native BrightnessFilter minBrightness(int setter);
+            /**
+             * Maximum range in depth units.
+             * If input pixel is less or equal than this value the depth value is invalidated.
+             */
+            public native @Cast("std::int32_t") int maxBrightness(); public native BrightnessFilter maxBrightness(int setter);
+        }
+
+        /**
+         * Brightness filtering.
+         * If input frame pixel is too dark or too bright, disparity will be invalidated.
+         * The idea is that for too dark/too bright pixels we have low confidence,
+         * since that area was under/over exposed and details were lost.
+         */
+        public native @ByRef BrightnessFilter brightnessFilter(); public native PostProcessing brightnessFilter(BrightnessFilter setter);
 
         /**
          * Speckle filtering.

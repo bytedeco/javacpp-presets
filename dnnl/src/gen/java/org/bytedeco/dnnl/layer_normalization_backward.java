@@ -29,102 +29,6 @@ public class layer_normalization_backward extends primitive {
         return new layer_normalization_backward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for a layer normalization backward propagation primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-    
-        
-        ///
-        public native @ByRef dnnl_layer_normalization_v2_desc_t data(); public native desc data(dnnl_layer_normalization_v2_desc_t setter);
-
-        /** Constructs a descriptor for layer normalization backward
-         *  propagation primitive.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
-         *      (diffs for all parameters are computed in this case).
-         *  @param diff_data_desc Diff source and diff destination memory
-         *      descriptor.
-         *  @param data_desc Source memory descriptor.
-         *  @param stat_desc Statistics memory descriptors.
-         *  @param epsilon Layer normalization epsilon parameter.
-         *  @param flags Layer normalization flags (\ref
-         *      dnnl::normalization_flags). */
-        
-        ///
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, @Const @ByRef memory.desc stat_desc,
-                        float epsilon, normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, stat_desc, epsilon, flags); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, @Const @ByRef memory.desc stat_desc,
-                        float epsilon, normalization_flags flags);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, @Const @ByRef memory.desc stat_desc,
-                        float epsilon, @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, stat_desc, epsilon, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, @Const @ByRef memory.desc stat_desc,
-                        float epsilon, @Cast("dnnl::normalization_flags") int flags);
-
-        /** Constructs a descriptor for layer normalization backward
-         *  propagation primitive.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
-         *      (diffs for all parameters are computed in this case).
-         *  @param diff_data_desc Diff source and diff destination memory
-         *      descriptor.
-         *  @param data_desc Source memory descriptor.
-         *  @param epsilon Layer normalization epsilon parameter.
-         *  @param flags Layer normalization flags (\ref
-         *      dnnl::normalization_flags). */
-        
-        ///
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon,
-                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon,
-                        normalization_flags flags);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags);
-
-        /** Constructs a descriptor for layer normalization backward
-         *  propagation primitive.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
-         *      (diffs for all parameters are computed in this case).
-         *  @param diff_src_desc Diff source memory descriptor.
-         *  @param diff_dst_desc Diff destination memory descriptor.
-         *  @param src_desc Source memory descriptor.
-         *  @param stat_desc Statistics memory descriptors.
-         *  @param epsilon Layer normalization epsilon parameter.
-         *  @param flags Layer normalization flags (\ref
-         *      dnnl::normalization_flags). */
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc stat_desc, float epsilon,
-                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc stat_desc, float epsilon,
-                        normalization_flags flags);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc stat_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_src_desc,
-                        @Const @ByRef memory.desc diff_dst_desc, @Const @ByRef memory.desc src_desc,
-                        @Const @ByRef memory.desc stat_desc, float epsilon,
-                        @Cast("dnnl::normalization_flags") int flags);
-    }
-
     /** Primitive descriptor for a layer normalization backward propagation
      *  primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
@@ -150,9 +54,19 @@ public class layer_normalization_backward extends primitive {
         /** Constructs a primitive descriptor for a layer normalization backward
          *  propagation primitive.
          * 
-         *  @param adesc Descriptor for a layer normalization backward
-         *      propagation primitive.
          *  @param aengine Engine to use.
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
+         *      (diffs for all parameters are computed in this case).
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param src_desc Source memory descriptor.
+         *  @param stat_desc Statistics memory descriptors.
+         *  @param epsilon Layer normalization epsilon parameter.
+         *  @param flags Layer normalization flags (\ref
+         *      dnnl::normalization_flags).
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param hint_fwd_pd Primitive descriptor for a layer normalization
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
@@ -162,24 +76,78 @@ public class layer_normalization_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        normalization_flags flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        normalization_flags flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        normalization_flags flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        normalization_flags flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, stat_desc, epsilon, flags, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc stat_desc, float epsilon,
+                        @Cast("dnnl::normalization_flags") int flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a layer normalization backward
          *  propagation primitive.
          * 
-         *  @param adesc Descriptor for a layer normalization backward
-         *      propagation primitive.
-         *  @param attr Primitive attributes to use.
          *  @param aengine Engine to use.
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::backward_data and #dnnl::prop_kind::backward
+         *      (diffs for all parameters are computed in this case).
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param src_desc Source memory descriptor.
+         *  @param epsilon Layer normalization epsilon parameter.
+         *  @param flags Layer normalization flags (\ref
+         *      dnnl::normalization_flags).
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param hint_fwd_pd Primitive descriptor for a layer normalization
          *      forward propagation primitive. It is used as a hint for
          *      deciding which memory format to use.
@@ -189,19 +157,53 @@ public class layer_normalization_backward extends primitive {
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, normalization_flags flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, epsilon, flags, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, normalization_flags flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
-                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, normalization_flags flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, epsilon, flags, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, normalization_flags flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, epsilon, flags, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, @Cast("dnnl::normalization_flags") int flags,
+                        @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aprop_kind, diff_src_desc, diff_dst_desc, src_desc, epsilon, flags, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        float epsilon, @Cast("dnnl::normalization_flags") int flags,
                         @Const @ByRef layer_normalization_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for a layer normalization
@@ -214,31 +216,41 @@ public class layer_normalization_backward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::weights_desc()const */
-        public native @ByVal memory.desc weights_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc weights_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
 
         /** \copydoc dnnl::primitive_desc_base::diff_src_desc()const */
-        public native @ByVal memory.desc diff_src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
-        public native @ByVal memory.desc diff_dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_dst_desc();
 
         /** \copydoc dnnl::primitive_desc_base::diff_weights_desc()const */
-        public native @ByVal memory.desc diff_weights_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_weights_desc();
 
         /** \copydoc dnnl::batch_normalization_forward::primitive_desc::mean_desc()const */
-        public native @ByVal memory.desc mean_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc mean_desc();
 
         /** \copydoc dnnl::batch_normalization_forward::primitive_desc::variance_desc()const */
-        public native @ByVal memory.desc variance_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc variance_desc();
 
         /** \copydoc dnnl::primitive_desc_base::workspace_desc()const */
-        public native @ByVal memory.desc workspace_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc workspace_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_epsilon()const */
+        public native float get_epsilon();
+
+        /** Returns normalization flags.
+         *  @return Normalization flags. */
+        public native normalization_flags get_flags();
     }
 
     /** Default constructor. Produces an empty object. */

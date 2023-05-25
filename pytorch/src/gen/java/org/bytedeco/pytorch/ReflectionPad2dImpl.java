@@ -30,7 +30,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  ReflectionPad2d model(ReflectionPad2dOptions({1, 1, 2, 0}));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ReflectionPad2dImpl extends ReflectionPad2dImplBase {
     static { Loader.load(); }

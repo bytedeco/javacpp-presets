@@ -15,13 +15,24 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-// #endif
+
+// SymInt represents either a regular int64_t, or a symbolic integer
+// (represented in a type erased way as SymNode).  The intention is for SymInt
+// to represent symbolic sizes that arise when doing shape computation in
+// operator kernels. This allows for tracing through programs without baking in
+// concrete sizes into kernel calls.
+//
+// SymInt has an API equivalent to int64_t.  In particular, it is a value type.
+// Internally, SymInt is represented in a clever packed way, so that it only
+// occupies one word of space; but morally, it is a union between an int64_t
+// and an intrusive pointer to SymNodeImpl.
+//
+// Invariant: the referenced SymNodeImpl is guaranteed to be a SymNode where
+// is_int() returns true
 
 @Namespace("c10") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SymInt extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public SymInt(Pointer p) { super(p); }
 
   public enum Unchecked {
     UNCHECKED(0);
@@ -37,6 +48,8 @@ public class SymInt extends Pointer {
 private native void allocate(@Cast("int64_t") long d);
   public SymInt() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public SymInt(@ByVal @Cast("c10::SymNode*") Pointer n) { super((Pointer)null); allocate(n); }
+  private native void allocate(@ByVal @Cast("c10::SymNode*") Pointer n);
 
   // unchecked c-tor accepting raw `data_`
   // One appropriate use for this is when you are constructing a symint
@@ -56,17 +69,13 @@ private native void allocate(@Cast("int64_t") long d);
 
   public native @ByVal SymInt clone();
 
-// #ifndef C10_MOBILE
-  public native SymIntNodeImpl toSymIntNodeImplUnowned();
+  public native SymNodeImpl toSymNodeImplUnowned();
 
   public native void release_();
 
   
-// #else
-// #endif
 
-  public native @ByVal @Cast("c10::SymIntNode*") Pointer toSymIntNodeImpl();
-  public static native @ByVal SymInt toSymInt(@ByVal @Cast("c10::SymIntNode*") Pointer sin);
+  public native @ByVal @Cast("c10::SymNode*") Pointer toSymNodeImpl();
 
   // Require the int to be non-symbolic, and if it is symbolic raise an
   // error.  This is safe to use for C++ code that doesn't work for symbolic
@@ -88,22 +97,34 @@ private native void allocate(@Cast("int64_t") long d);
 
   // N.B. It's important to keep this definition in the header
   // as we expect if checks to be folded for mobile builds
-  // where `is_symbolic` is always false
+  // where `is_symbolic` is always false and optimize dead code paths
   public native @Cast("bool") boolean is_symbolic();
 
-  public native @ByVal @Name("operator +") SymInt add(@ByVal SymInt sci);
-  public native @ByVal @Name("operator -") SymInt subtract(@ByVal SymInt sci);
-  public native @ByVal @Name("operator *") SymInt multiply(@ByVal SymInt sci);
-  public native @ByVal @Name("operator /") SymInt divide(@ByVal SymInt sci);
-  public native @ByVal @Name("operator %") SymInt mod(@ByVal SymInt sci);
+  public native @ByVal @Name("operator +") SymInt add(@Const @ByRef SymInt sci);
+  public native @ByVal @Name("operator -") SymInt subtract(@Const @ByRef SymInt sci);
+  public native @ByVal @Name("operator *") SymInt multiply(@Const @ByRef SymInt sci);
+  public native @ByVal @Name("operator /") SymInt divide(@Const @ByRef SymInt sci);
+  public native @ByVal @Name("operator %") SymInt mod(@Const @ByRef SymInt sci);
+  public native @Name("operator *=") void multiplyPut(@Const @ByRef SymInt sci);
+  public native @Name("operator +=") void addPut(@Const @ByRef SymInt sci);
+  public native @Name("operator /=") void dividePut(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymBool sym_eq(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_ne(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_lt(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_le(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_gt(@Const @ByRef SymInt arg0);
+  public native @ByVal SymBool sym_ge(@Const @ByRef SymInt arg0);
+
   
   
-  public native @Cast("bool") @Name("operator <") boolean lessThan(@ByVal SymInt sci);
-  public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@ByVal SymInt sci);
-  public native @Cast("bool") @Name("operator >") boolean greaterThan(@ByVal SymInt sci);
-  public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@ByVal SymInt sci);
-  public native @Name("operator *=") void multiplyPut(@ByVal SymInt sci);
-  public native @Name("operator +=") void addPut(@ByVal SymInt sci);
+  public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef SymInt o);
+  public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef SymInt o);
+  public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef SymInt o);
+  public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef SymInt o);
+
+  public native @ByVal SymInt min(@Const @ByRef SymInt sci);
+  public native @ByVal SymInt max(@Const @ByRef SymInt sci);
 
   public native @ByVal @Name("operator *") SymInt multiply(@Cast("int64_t") long sci);
   public native @Cast("bool") @Name("operator <") boolean lessThan(@Cast("int64_t") long sci);
@@ -119,4 +140,7 @@ private native void allocate(@Cast("int64_t") long d);
 
   // Return whether the integer is representable as a SymInt.
   public static native @Cast("bool") boolean check_range(@Cast("int64_t") long i);
+
+  // Return the min represetable integer as a SymInt
+  public static native @Cast("const int64_t") long min_representable_int();
 }

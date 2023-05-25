@@ -7,44 +7,9 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // namespace interpreter_wrapper
+  // Class for friend declarations.
 
-/** An interpreter for a graph of nodes that input and output from tensors.
- *  Each node of the graph processes a set of input tensors and produces a
- *  set of output Tensors. All inputs/output tensors are referenced by index.
- * 
- *  Usage:
- * 
- *  <pre><code>
- *  // Create model from file. Note that the model instance must outlive the
- *  // interpreter instance.
- *  auto model = tflite::FlatBufferModel::BuildFromFile(...);
- *  if (model == nullptr) {
- *    // Return error.
- *  }
- *  // Create an Interpreter with an InterpreterBuilder.
- *  std::unique_ptr<tflite::Interpreter> interpreter;
- *  tflite::ops::builtin::BuiltinOpResolver resolver;
- *  if (InterpreterBuilder(*model, resolver)(&interpreter) != kTfLiteOk) {
- *    // Return failure.
- *  }
- *  if (interpreter->AllocateTensors() != kTfLiteOk) {
- *    // Return failure.
- *  }
- * 
- *  auto input = interpreter->typed_tensor<float>(0);
- *  for (int i = 0; i < input_size; i++) {
- *    input[i] = ...; */
-//  }
-/** interpreter->Invoke();
-/** </code></pre>
-/**
-/** Note: For nearly all practical use cases, one should not directly construct
-/** an Interpreter object, but rather use the InterpreterBuilder.
-/**
-/** WARNING: This class is *not* thread-safe. The client is responsible for
-/** ensuring serialized interaction to avoid data races and undefined behavior. */
-@Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+@Namespace("tflite::impl") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class Interpreter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -494,6 +459,13 @@ public class Interpreter extends Pointer {
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
         int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization);
+
+  /** Enables application to cancel in flight invocation with {@code Cancel}.
+   *  This can be only set when building the interpreter and should not called
+   *  directly.
+   *  NOTE: This function does not affect cancellation triggered by the callback
+   *  passed in {@code SetCancellationFunction}. */
+  public native @Cast("TfLiteStatus") int EnableCancellation();
 // #endif  // DOXYGEN_SKIP
   // Functions to access tensor data
 
@@ -520,7 +492,7 @@ public class Interpreter extends Pointer {
   /** Return the number of ops in the model. */
   public native @Cast("size_t") long nodes_size();
 
-  /** WARNING: Experimental interface, subject to change */
+  /** \warning Experimental interface, subject to change. */
   public native @StdVector IntPointer execution_plan();
 
   /** Get a mutable tensor data structure. */
@@ -554,16 +526,16 @@ public class Interpreter extends Pointer {
   /** Perform a checked cast to the appropriate tensor type (immutable pointer
    *  version). */
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns list of all keys of different method signatures defined in the
-   *  model.
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns list of all keys of different method signatures defined
+   *  in the model.
    *  Note, pointers returned have lifetime same as the Interpreter object. */
   public native @ByVal StringVector signature_keys();
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns a pointer to the SignatureRunner instance to run the part of the
-   *  graph identified by a SignatureDef. The nullptr is returned if the given
-   *  signature key is not valid.
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns a pointer to the SignatureRunner instance to run the part
+   *  of the graph identified by a SignatureDef. The nullptr is returned if the
+   *  given signature key is not valid.
    *  If you need to specify delegates, you have to do that before calling this
    *  function. This function will additionally apply default delegates. Thus,
    *  applying delegates after that might lead to undesirable behaviors.
@@ -572,15 +544,15 @@ public class Interpreter extends Pointer {
   public native SignatureRunner GetSignatureRunner(@Cast("const char*") BytePointer signature_key);
   public native SignatureRunner GetSignatureRunner(String signature_key);
 
-  /** WARNING: Experimental interface, subject to change
-   *  Return the subgraph index that corresponds to a SignatureDef, defined by
-   *  'signature_key'.
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Return the subgraph index that corresponds to a SignatureDef,
+   *  defined by 'signature_key'.
    *  If invalid name passed, -1 will be returned. */
   public native int GetSubgraphIndexFromSignature(@Cast("const char*") BytePointer signature_key);
   public native int GetSubgraphIndexFromSignature(String signature_key);
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns the mapping of inputs to tensor index in the signature
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns the mapping of inputs to tensor index in the signature
    *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_inputs(
@@ -588,8 +560,8 @@ public class Interpreter extends Pointer {
   public native @Const @ByRef StringIntMap signature_inputs(
         String signature_key);
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns the mapping of outputs to tensor index in the signature
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns the mapping of outputs to tensor index in the signature
    *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_outputs(
@@ -597,18 +569,18 @@ public class Interpreter extends Pointer {
   public native @Const @ByRef StringIntMap signature_outputs(
         String signature_key);
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns the input tensor identified by 'signature_input_name' in the
-   *  signature identified by 'signature_key'.
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns the input tensor identified by 'signature_input_name' in
+   *  the signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
   public native TfLiteTensor input_tensor_by_signature(@Cast("const char*") BytePointer signature_input_name,
                                             @Cast("const char*") BytePointer signature_key);
   public native TfLiteTensor input_tensor_by_signature(String signature_input_name,
                                             String signature_key);
 
-  /** WARNING: Experimental interface, subject to change
-   *  Returns the output tensor identified by 'signature_output_name' in the
-   *  signature identified by 'signature_key'.
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Returns the output tensor identified by 'signature_output_name' in
+   *  the signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
   public native @Const TfLiteTensor output_tensor_by_signature(
         @Cast("const char*") BytePointer signature_output_name, @Cast("const char*") BytePointer signature_key);
@@ -682,9 +654,10 @@ public class Interpreter extends Pointer {
   public native @Cast("TfLiteStatus") int ResizeInputTensorStrict(int tensor_index,
                                          @StdVector int[] dims);
 
-  /** This releases memory held by non-persistent tensors. It does NOT
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief This releases memory held by non-persistent tensors. It does NOT
    *  re-perform memory planning. AllocateTensors needs to be called before next
-   *  invocation. WARNING: Experimental interface, subject to change */
+   *  invocation. */
   public native @Cast("TfLiteStatus") int ReleaseNonPersistentMemory();
 
   /** Update allocations for all tensors. This will redim dependent tensors
@@ -743,17 +716,17 @@ public class Interpreter extends Pointer {
    *  This method will be removed in a future release. */
   public native void SetAllowFp16PrecisionForFp32(@Cast("bool") boolean allow);
 
-  /** Get the half precision flag.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Get the half precision flag. */
   public native @Cast("bool") boolean GetAllowFp16PrecisionForFp32();
 
-  /** Sets the cancellation function pointer in order to cancel a request in the
-   *  middle of a call to Invoke(). The interpreter queries this function during
-   *  inference, between op invocations; when it returns true, the interpreter
-   *  will abort execution and return {@code kTfLiteError}. The {@code data} parameter
-   *  contains any data used by the cancellation function, and if non-null,
-   *  remains owned by the caller.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Sets the cancellation function pointer in order to cancel a request
+   *  in the middle of a call to Invoke(). The interpreter queries this function
+   *  during inference, between op invocations; when it returns true, the
+   *  interpreter will abort execution and return {@code kTfLiteError}. The {@code data}
+   *  parameter contains any data used by the cancellation function, and if
+   *  non-null, remains owned by the caller. */
   public static class Check_cancelled_func_Pointer extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -764,8 +737,16 @@ public class Interpreter extends Pointer {
   }
   public native void SetCancellationFunction(Pointer data, Check_cancelled_func_Pointer check_cancelled_func);
 
-  /** Allow a delegate to look at the graph and modify the graph to handle
-   *  parts of the graph themselves. After this is called, the graph may
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief  Attempts to cancel in flight invocation if any.
+   *  This will not affect {@code Invoke}s that happends after the cancellation.
+   *  Non blocking. Thread safe.
+   *  Returns kTfLiteError if cancellation is not enabled, otherwise returns
+   *  kTfLiteOk. */
+  public native @Cast("TfLiteStatus") int Cancel();
+
+  /** \brief Allow a delegate to look at the graph and modify the graph to
+   *  handle parts of the graph themselves. After this is called, the graph may
    *  contain new nodes that replace 1 more nodes.
    *  'delegate' must outlive the interpreter.
    *  Returns one of the following status codes:
@@ -781,42 +762,43 @@ public class Interpreter extends Pointer {
    *  4. kTfLiteUnresolvedOps: Delegation failed because the model has an
    *  operator that cannot be resolved. This can happen when the op is not
    *  registered or built with the TF Lite framework.
-   *  5. kTfLiteError: Unexpected/runtime failure.
-   *  WARNING: This is an experimental API and subject to change. */
+   *  5. kTfLiteError: Unexpected/runtime failure. \n
+   *  \warning This is an experimental API and subject to change. \n */
   public native @Cast("TfLiteStatus") int ModifyGraphWithDelegate(TfLiteDelegate delegate);
 
   // Owning handle to a TfLiteDelegate instance.
 
-  /** Same as ModifyGraphWithDelegate except this interpreter takes
-   *  ownership of the provided delegate.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Same as ModifyGraphWithDelegate except this interpreter takes
+   *  ownership of the provided delegate. */
 
   /** This overload is *never* OK. TfLiteDelegate is a C structure, so it has no
    *  virtual destructor. The default deleter of the unique_ptr does not know
    *  how to delete C++ objects deriving from TfLiteDelegate. */
   
 
-  /** Ensure the data in {@code tensor.data} is readable. In case delegate is used,
-   *  it might require to copy the data from delegate buffer to raw memory.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Ensure the data in {@code tensor.data} is readable. In case delegate is
+   *  used, it might require to copy the data from delegate buffer to raw
+   *  memory. */
   public native @Cast("TfLiteStatus") int EnsureTensorDataIsReadable(int tensor_index);
 
-  /** Set the delegate buffer handle to a tensor. It can be called in the
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Set the delegate buffer handle to a tensor. It can be called in the
    *  following cases:
    *  1. Set the buffer handle to a tensor that's not being written by a
    *     delegate. For example, feeding an OpenGL texture as the input of the
    *     inference graph.
    *  2. Set the buffer handle to a tensor that uses the same delegate.
    *     For example, set an OpenGL texture as the output of inference, while
-   *     the node which produces output is an OpenGL delegate node.
-   *  WARNING: This is an experimental API and subject to change. */
+   *     the node which produces output is an OpenGL delegate node. */
   public native @Cast("TfLiteStatus") int SetBufferHandle(int tensor_index,
                                  @Cast("TfLiteBufferHandle") int buffer_handle,
                                  TfLiteDelegate delegate);
 
-  /** Get the delegate buffer handle, and the delegate which can process the
-   *  buffer handle.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Get the delegate buffer handle, and the delegate which can process
+   *  the buffer handle. */
   public native @Cast("TfLiteStatus") int GetBufferHandle(int tensor_index,
                                  @Cast("TfLiteBufferHandle*") IntPointer buffer_handle,
                                  @Cast("TfLiteDelegate**") PointerPointer delegate);
@@ -830,29 +812,34 @@ public class Interpreter extends Pointer {
                                  @Cast("TfLiteBufferHandle*") int[] buffer_handle,
                                  @ByPtrPtr TfLiteDelegate delegate);
 
-  /** Sets the profiler to tracing execution. The caller retains ownership
-   *  of the profiler and must ensure its validity.
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Sets the profiler to tracing execution. The caller retains
+   *  ownership of the profiler and must ensure its validity.
    *  Previously registered profilers will be unregistered.
    *  If {@code profiler} is nullptr, all previously installed profilers will be
-   *  removed.
-   *  WARNING: This is an experimental API and subject to change. */
+   *  removed. */
   public native void SetProfiler(Profiler profiler);
 
-  /** Same as SetProfiler except this interpreter takes ownership
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Same as SetProfiler except this interpreter takes ownership
    *  of the provided profiler.
    *  Previously registered profilers will be unregistered.
    *  If {@code profiler} is nullptr, all previously installed profilers will be
-   *  removed.
-   *  WARNING: This is an experimental API and subject to change. */
+   *  removed. */
 
-  /** Adds the profiler to tracing execution. The caller retains ownership
-   *  of the profiler and must ensure its validity.
-   *  nullptr {@code profiler} will be ignored.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Adds the profiler to tracing execution. The caller retains
+   *  ownership of the profiler and must ensure its validity.
+   *  nullptr {@code profiler} will be ignored. */
   public native void AddProfiler(Profiler profiler);
 
-  /** Gets the profiler used for op tracing.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Adds the profiler to tracing execution. Transfers
+   *  ownership of the profiler to the interpreter.
+   *  nullptr {@code profiler} will be ignored. */
+
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Gets the profiler used for op tracing. */
   public native Profiler GetProfiler();
 
   // The default capacity of `tensors_` vector.
@@ -867,21 +854,21 @@ public class Interpreter extends Pointer {
   @MemberGetter public static native int kTensorsCapacityHeadroom();
   public static final int kTensorsCapacityHeadroom = kTensorsCapacityHeadroom();
 
-  /** Set if buffer handle output is allowed.
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Set if buffer handle output is allowed.
    * 
    *  When using hardware delegation, Interpreter will make the data of output
    *  tensors available in {@code tensor->data} by default. If the application can
    *  consume the buffer handle directly (e.g. reading output from OpenGL
    *  texture), it can set this flag to false, so Interpreter won't copy the
-   *  data from buffer handle to CPU memory.
-   *  WARNING: This is an experimental API and subject to change. */
+   *  data from buffer handle to CPU memory. */
   public native void SetAllowBufferHandleOutput(@Cast("bool") boolean allow_buffer_handle_output);
 
-  /** Reset all variable tensors to the default value.
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Reset all variable tensors to the default value.
    *  If a variable tensor doesn't have a buffer, reset it to zero.
    *  TODO(b/115961645): Implement - If a variable tensor has a buffer, reset it
-   *  to the value of the buffer.
-   *  WARNING: This is an experimental API and subject to change. */
+   *  to the value of the buffer. */
   public native @Cast("TfLiteStatus") int ResetVariableTensors();
 
   /** Retrieve an operator's description of its work, for profiling purposes. */
@@ -894,12 +881,11 @@ public class Interpreter extends Pointer {
   
   ///
   ///
-  ///
   public native void SetExternalContext(@Cast("TfLiteExternalContextType") int type,
                             TfLiteExternalContext ctx);
 
-  /** Assigns (or reassigns) a custom memory allocation for the given tensor.
-   *  {@code flags} is a bitmask, see TfLiteCustomAllocationFlags.
+  /** \brief Assigns (or reassigns) a custom memory allocation for the given
+   *  tensor. {@code flags} is a bitmask, see TfLiteCustomAllocationFlags.
    *  The runtime does NOT take ownership of the underlying memory.
    * 
    *  NOTE: User needs to call AllocateTensors() after this.
@@ -918,36 +904,35 @@ public class Interpreter extends Pointer {
    *     defined in lite/util.h. (Currently 64 bytes)
    *     This check is skipped if kTfLiteCustomAllocationFlagsSkipAlignCheck is
    *     set through {@code flags}.
-   * 
-   *  WARNING: This is an experimental interface that is subject to change. */
+   *  \warning This is an experimental API and subject to change. \n */
   public native @Cast("TfLiteStatus") int SetCustomAllocationForTensor(
         int tensor_index, @Const @ByRef TfLiteCustomAllocation allocation,
         @Cast("int64_t") long flags/*=kTfLiteCustomAllocationFlagsNone*/);
   public native @Cast("TfLiteStatus") int SetCustomAllocationForTensor(
         int tensor_index, @Const @ByRef TfLiteCustomAllocation allocation);
 
-  /** Apply InterpreterOptions which tunes behavior of the interpreter.
-   *  WARNING: This is an experimental interface that is subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Apply InterpreterOptions which tunes behavior of the interpreter. */
   public native @Cast("TfLiteStatus") int ApplyOptions(InterpreterOptions options);
 
 // #ifndef DOXYGEN_SKIP
-  /** Return the number of subgraphs in the model.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Return the number of subgraphs in the model. */
   public native @Cast("size_t") long subgraphs_size();
 
-  /** Get a pointer to a subgraph if in bounds.
-   *  WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. \n
+   *  \brief Get a pointer to a subgraph if in bounds. */
 
-  /** WARNING: This is an experimental API and subject to change. */
+  /** \warning This is an experimental API and subject to change. */
   public native Subgraph subgraph(int subgraph_index);
 
-  /** WARNING: Experimental interface, subject to change */
+  /** \warning Experimental interface, subject to change. */
   public native @ByRef Subgraph primary_subgraph();
 
-  /** WARNING: Experimental interface, subject to change */
+  /** \warning Experimental interface, subject to change. */
 // #endif  // DOXYGEN_SKIP
 
-  /** WARNING: Experimental interface, subject to change
-   *  Get the error reporter associated with this interpreter. */
+  /** \warning Experimental interface, subject to change. \n
+   *  \brief Get the error reporter associated with this interpreter. */
   public native ErrorReporter error_reporter();
 }

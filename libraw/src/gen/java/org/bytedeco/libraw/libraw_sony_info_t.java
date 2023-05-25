@@ -29,42 +29,54 @@ public class libraw_sony_info_t extends Pointer {
           return new libraw_sony_info_t((Pointer)this).offsetAddress(i);
       }
   
-    public native @Cast("ushort") short CameraType(); public native libraw_sony_info_t CameraType(short setter);
-    public native @Cast("uchar") byte Sony0x9400_version(); public native libraw_sony_info_t Sony0x9400_version(byte setter); /* 0 if not found/deciphered, 0xa, 0xb, 0xc
-                                 following exiftool convention */
+/* afdata:
+  0x0010 CameraInfo
+  0x2020 AFPointsUsed
+  0x2022 FocalPlaneAFPointsUsed
+  0x202a Tag202a
+  0x940e AFInfo
+*/
+    public native @Cast("ushort") short CameraType(); public native libraw_sony_info_t CameraType(short setter);                      // init in 0xffff
+    public native @Cast("uchar") byte Sony0x9400_version(); public native libraw_sony_info_t Sony0x9400_version(byte setter); /* 0 if not found/deciphered,
+                                    0xa, 0xb, 0xc following exiftool convention */
     public native @Cast("uchar") byte Sony0x9400_ReleaseMode2(); public native libraw_sony_info_t Sony0x9400_ReleaseMode2(byte setter);
     public native @Cast("unsigned") int Sony0x9400_SequenceImageNumber(); public native libraw_sony_info_t Sony0x9400_SequenceImageNumber(int setter);
     public native @Cast("uchar") byte Sony0x9400_SequenceLength1(); public native libraw_sony_info_t Sony0x9400_SequenceLength1(byte setter);
     public native @Cast("unsigned") int Sony0x9400_SequenceFileNumber(); public native libraw_sony_info_t Sony0x9400_SequenceFileNumber(int setter);
     public native @Cast("uchar") byte Sony0x9400_SequenceLength2(); public native libraw_sony_info_t Sony0x9400_SequenceLength2(byte setter);
-    public native @Cast("uint8_t") byte AFAreaModeSetting(); public native libraw_sony_info_t AFAreaModeSetting(byte setter);
+    public native @Cast("uint8_t") byte AFAreaModeSetting(); public native libraw_sony_info_t AFAreaModeSetting(byte setter);               // init in 0xff; +
+    public native @Cast("uint16_t") short AFAreaMode(); public native libraw_sony_info_t AFAreaMode(short setter);                      // init in 0xffff; +
     public native @Cast("ushort") short FlexibleSpotPosition(int i); public native libraw_sony_info_t FlexibleSpotPosition(int i, short setter);
-    @MemberGetter public native @Cast("ushort*") ShortPointer FlexibleSpotPosition();
-    public native @Cast("uint8_t") byte AFPointSelected(); public native libraw_sony_info_t AFPointSelected(byte setter);
+    @MemberGetter public native @Cast("ushort*") ShortPointer FlexibleSpotPosition();         // init in (0xffff, 0xffff)
+    public native @Cast("uint8_t") byte AFPointSelected(); public native libraw_sony_info_t AFPointSelected(byte setter);                 // init in 0xff
+    public native @Cast("uint8_t") byte AFPointSelected_0x201e(); public native libraw_sony_info_t AFPointSelected_0x201e(byte setter);          // init in 0xff
+    public native short nAFPointsUsed(); public native libraw_sony_info_t nAFPointsUsed(short setter);
     public native @Cast("uint8_t") byte AFPointsUsed(int i); public native libraw_sony_info_t AFPointsUsed(int i, byte setter);
     @MemberGetter public native @Cast("uint8_t*") BytePointer AFPointsUsed();
-    public native @Cast("uint8_t") byte AFTracking(); public native libraw_sony_info_t AFTracking(byte setter);
+    public native @Cast("uint8_t") byte AFTracking(); public native libraw_sony_info_t AFTracking(byte setter);                      // init in 0xff
     public native @Cast("uint8_t") byte AFType(); public native libraw_sony_info_t AFType(byte setter);
     public native @Cast("ushort") short FocusLocation(int i); public native libraw_sony_info_t FocusLocation(int i, short setter);
     @MemberGetter public native @Cast("ushort*") ShortPointer FocusLocation();
-    
-    
-    public native @Cast("uchar") byte AFMicroAdjRegisteredLenses(); public native libraw_sony_info_t AFMicroAdjRegisteredLenses(byte setter);
+    public native @Cast("ushort") short FocusPosition(); public native libraw_sony_info_t FocusPosition(short setter);                    // init in 0xffff
+    public native @Cast("int8_t") byte AFMicroAdjValue(); public native libraw_sony_info_t AFMicroAdjValue(byte setter);                  // init in 0x7f
+    public native @Cast("int8_t") byte AFMicroAdjOn(); public native libraw_sony_info_t AFMicroAdjOn(byte setter);                     // init in -1
+    public native @Cast("uchar") byte AFMicroAdjRegisteredLenses(); public native libraw_sony_info_t AFMicroAdjRegisteredLenses(byte setter);       // init in 0xff
     public native @Cast("ushort") short VariableLowPassFilter(); public native libraw_sony_info_t VariableLowPassFilter(short setter);
-    public native @Cast("unsigned") int LongExposureNoiseReduction(); public native libraw_sony_info_t LongExposureNoiseReduction(int setter);
-    public native @Cast("ushort") short HighISONoiseReduction(); public native libraw_sony_info_t HighISONoiseReduction(short setter);
+    public native @Cast("unsigned") int LongExposureNoiseReduction(); public native libraw_sony_info_t LongExposureNoiseReduction(int setter);      // init in 0xffffffff
+    public native @Cast("ushort") short HighISONoiseReduction(); public native libraw_sony_info_t HighISONoiseReduction(short setter);           // init in 0xffff
     public native @Cast("ushort") short HDR(int i); public native libraw_sony_info_t HDR(int i, short setter);
     @MemberGetter public native @Cast("ushort*") ShortPointer HDR();
     public native @Cast("ushort") short group2010(); public native libraw_sony_info_t group2010(short setter);
-    public native @Cast("ushort") short real_iso_offset(); public native libraw_sony_info_t real_iso_offset(short setter);
+    public native @Cast("ushort") short group9050(); public native libraw_sony_info_t group9050(short setter);
+    public native @Cast("ushort") short real_iso_offset(); public native libraw_sony_info_t real_iso_offset(short setter);                 // init in 0xffff
     public native @Cast("ushort") short MeteringMode_offset(); public native libraw_sony_info_t MeteringMode_offset(short setter);
     public native @Cast("ushort") short ExposureProgram_offset(); public native libraw_sony_info_t ExposureProgram_offset(short setter);
     public native @Cast("ushort") short ReleaseMode2_offset(); public native libraw_sony_info_t ReleaseMode2_offset(short setter);
-    public native @Cast("unsigned") int MinoltaCamID(); public native libraw_sony_info_t MinoltaCamID(int setter);
+    public native @Cast("unsigned") int MinoltaCamID(); public native libraw_sony_info_t MinoltaCamID(int setter);                    // init in 0xffffffff
     public native float firmware(); public native libraw_sony_info_t firmware(float setter);
-    public native @Cast("ushort") short ImageCount3_offset(); public native libraw_sony_info_t ImageCount3_offset(short setter);
+    public native @Cast("ushort") short ImageCount3_offset(); public native libraw_sony_info_t ImageCount3_offset(short setter);              // init in 0xffff
     public native @Cast("unsigned") int ImageCount3(); public native libraw_sony_info_t ImageCount3(int setter);
-    public native @Cast("unsigned") int ElectronicFrontCurtainShutter(); public native libraw_sony_info_t ElectronicFrontCurtainShutter(int setter);
+    public native @Cast("unsigned") int ElectronicFrontCurtainShutter(); public native libraw_sony_info_t ElectronicFrontCurtainShutter(int setter);   // init in 0xffffffff
     public native @Cast("ushort") short MeteringMode2(); public native libraw_sony_info_t MeteringMode2(short setter);
     public native @Cast("char") byte SonyDateTime(int i); public native libraw_sony_info_t SonyDateTime(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer SonyDateTime();
@@ -76,20 +88,33 @@ public class libraw_sony_info_t extends Pointer {
                                   here */
     public native @Cast("ushort") short prd_ImageHeight(); public native libraw_sony_info_t prd_ImageHeight(short setter);
     public native @Cast("ushort") short prd_ImageWidth(); public native libraw_sony_info_t prd_ImageWidth(short setter);
-    public native @Cast("ushort") short prd_RawBitDepth(); public native libraw_sony_info_t prd_RawBitDepth(short setter);
+    public native @Cast("ushort") short prd_Total_bps(); public native libraw_sony_info_t prd_Total_bps(short setter);
+    public native @Cast("ushort") short prd_Active_bps(); public native libraw_sony_info_t prd_Active_bps(short setter);
     public native @Cast("ushort") short prd_StorageMethod(); public native libraw_sony_info_t prd_StorageMethod(short setter); /* 82 -> Padded; 89 -> Linear */
     public native @Cast("ushort") short prd_BayerPattern(); public native libraw_sony_info_t prd_BayerPattern(short setter);  /* 0 -> not valid; 1 -> RGGB; 4 -> GBRG */
 
-    public native @Cast("ushort") short SonyRawFileType(); public native libraw_sony_info_t SonyRawFileType(short setter); /* takes precedence over RAWFileType and Quality:
+    public native @Cast("ushort") short SonyRawFileType(); public native libraw_sony_info_t SonyRawFileType(short setter); /* init in 0xffff
+                               valid for ARW 2.0 and up (FileFormat >= 3000)
+                               takes precedence over RAWFileType and Quality:
                                0  for uncompressed 14-bit raw
                                1  for uncompressed 12-bit raw
-                               2  for compressed raw
+                               2  for compressed raw (lossy)
                                3  for lossless compressed raw
+                               4  for lossless compressed raw v.2 (ILCE-1)
                             */
-    public native @Cast("ushort") short RAWFileType(); public native libraw_sony_info_t RAWFileType(short setter);     /* takes precedence over Quality
-                               0 for compressed raw, 1 for uncompressed;
+    public native @Cast("ushort") short RAWFileType(); public native libraw_sony_info_t RAWFileType(short setter);     /* init in 0xffff
+                               takes precedence over Quality
+                               0 for compressed raw,
+                               1 for uncompressed;
+                               2 lossless compressed raw v.2
                             */
-    public native @Cast("unsigned") int Quality(); public native libraw_sony_info_t Quality(int setter);       /* 0 or 6 for raw, 7 or 8 for compressed raw */
+    public native @Cast("ushort") short RawSizeType(); public native libraw_sony_info_t RawSizeType(short setter);     /* init in 0xffff
+                               1 - large,
+                               2 - small,
+                               3 - medium
+                            */
+    public native @Cast("unsigned") int Quality(); public native libraw_sony_info_t Quality(int setter);       /* init in 0xffffffff
+                               0 or 6 for raw, 7 or 8 for compressed raw */
     public native @Cast("ushort") short FileFormat(); public native libraw_sony_info_t FileFormat(short setter);      /*  1000 SR2
                                 2000 ARW 1.0
                                 3000 ARW 2.0
@@ -100,5 +125,8 @@ public class libraw_sony_info_t extends Pointer {
                                 3320 ARW 2.3.2
                                 3330 ARW 2.3.3
                                 3350 ARW 2.3.5
+                                4000 ARW 4.0
                              */
+    public native @Cast("char") byte MetaVersion(int i); public native libraw_sony_info_t MetaVersion(int i, byte setter);
+    @MemberGetter public native @Cast("char*") BytePointer MetaVersion();
   }

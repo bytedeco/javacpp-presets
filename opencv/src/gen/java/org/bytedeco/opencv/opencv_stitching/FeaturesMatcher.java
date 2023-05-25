@@ -2,6 +2,7 @@
 
 package org.bytedeco.opencv.opencv_stitching;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -66,9 +67,9 @@ public class FeaturesMatcher extends Pointer {
     <p>
     @see detail::MatchesInfo
     */
-    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
+    public native @Name("operator ()") void apply2(@Const @ByRef ImageFeaturesVector features, @ByRef MatchesInfoVector pairwise_matches,
                                             @Const @ByRef(nullValue = "cv::UMat()") UMat mask);
-    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
+    public native @Name("operator ()") void apply2(@Const @ByRef ImageFeaturesVector features, @ByRef MatchesInfoVector pairwise_matches);
 
     /** @return True, if it's possible to use the same matcher instance in parallel, false otherwise
     */

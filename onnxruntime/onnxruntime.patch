@@ -1,5 +1,5 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index e072363417..e83edb635d 100644
+index d4421a6211..219ac9daba 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
 @@ -11,8 +11,8 @@ endif()
@@ -12,12 +12,12 @@ index e072363417..e83edb635d 100644
 +  string(APPEND CMAKE_C_FLAGS " -Wextra -I/usr/local/include")
  endif()
  
- if (onnxruntime_ENABLE_EAGER_MODE)
+ if (onnxruntime_BUILD_WEBASSEMBLY)
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 307a0f5691..c2e29cbd80 100644
+index 02861458c9..b2a24008a7 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -109,9 +109,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -115,9 +115,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
@@ -30,10 +30,10 @@ index 307a0f5691..c2e29cbd80 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 18079d3ee2..940592e5a6 100644
+index 9a4fe6900c..edd12a248b 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1039,13 +1039,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1070,13 +1070,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -67,7 +67,7 @@ index 18079d3ee2..940592e5a6 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1067,7 +1087,7 @@ struct ProviderSharedLibrary {
+@@ -1095,7 +1115,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -76,7 +76,7 @@ index 18079d3ee2..940592e5a6 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1100,6 +1120,18 @@ struct ProviderLibrary {
+@@ -1128,6 +1148,18 @@ struct ProviderLibrary {
          s_library_shared.Ensure();
  
          auto full_path = Env::Default().GetRuntimePath() + filename_;
@@ -96,10 +96,10 @@ index 18079d3ee2..940592e5a6 100644
  
          Provider* (*PGetProvider)();
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index b772fe95d6..52fa4e4494 100644
+index 2e4d5b6bfa..b12b848e93 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -105,18 +105,21 @@ struct OnUnload {
+@@ -109,18 +109,21 @@ struct OnUnload {
  
  } g_on_unload;
  
@@ -123,7 +123,7 @@ index b772fe95d6..52fa4e4494 100644
    return g_host->AllocatorManager__GetAllocator(this, mem_type, device);
  }
  
-@@ -216,19 +219,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<MLFloat16>() { return Provider_GetH
+@@ -220,19 +223,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<MLFloat16>() { return Provider_GetH
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -147,7 +147,7 @@ index b772fe95d6..52fa4e4494 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -236,16 +242,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -240,16 +246,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -167,7 +167,7 @@ index b772fe95d6..52fa4e4494 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -256,6 +265,7 @@ int64_t TensorShape::Size() const {
+@@ -260,6 +269,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -175,7 +175,7 @@ index b772fe95d6..52fa4e4494 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -265,6 +275,7 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -269,6 +279,7 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -183,7 +183,7 @@ index b772fe95d6..52fa4e4494 100644
    return g_host->TensorShape__ToString(this);
  }
  
-@@ -274,77 +285,94 @@ int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->
+@@ -278,77 +289,94 @@ int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->
  std::ostream& operator<<(std::ostream& out, const TensorShape& shape) { return g_host->operator_left_shift(out, shape); }
  
  AllocatorPtr CreateAllocator(AllocatorCreationInfo info) {
@@ -201,9 +201,9 @@ index b772fe95d6..52fa4e4494 100644
    return g_host->IAllocator__CalcMemSizeForArrayWithAlignment(nmemb, size, alignment, out);
  }
  
- AllocatorPtr IExecutionProvider::GetAllocator(int id, OrtMemType mem_type) const {
+ AllocatorPtr IExecutionProvider::GetAllocator(OrtMemType mem_type) const {
 +  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetAllocator(this, id, mem_type);
+   return g_host->IExecutionProvider__GetAllocator(this, mem_type);
  }
  
  void IExecutionProvider::InsertAllocator(AllocatorPtr allocator) {
@@ -278,7 +278,7 @@ index b772fe95d6..52fa4e4494 100644
    return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes);
  }
  
-@@ -445,10 +473,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -449,10 +477,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -292,10 +292,10 @@ index b772fe95d6..52fa4e4494 100644
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index ed298760f4..18ee84cd75 100644
+index 1065f7397e..9b756c57e9 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -867,6 +867,9 @@ def generate_build_tree(
+@@ -887,6 +887,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -305,9 +305,9 @@ index ed298760f4..18ee84cd75 100644
          # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
          # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
          # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2509,6 +2512,9 @@ def main():
-             # Cross-compiling for Android, iOS, and WebAssembly
-             path_to_protoc_exe = build_protoc_for_host(cmake_path, source_dir, build_dir, args)
+@@ -2440,6 +2443,9 @@ def main():
+             log.info("Activating emsdk...")
+             run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
 +        if is_linux() and args.arm64:
 +            cmake_extra_args = ["-DCMAKE_SYSTEM_NAME=Linux", "-DCMAKE_SYSTEM_PROCESSOR=aarch64"]
@@ -315,16 +315,3 @@ index ed298760f4..18ee84cd75 100644
          if is_ubuntu_1604():
              if args.arm or args.arm64:
                  raise BuildError(
-@@ -2521,11 +2527,7 @@ def main():
-             install_python_deps(args.numpy_version)
- 
-         if args.use_cuda and args.cuda_version is None:
--            if is_windows():
--                # cuda_version is used while generating version_info.py on Windows.
--                raise BuildError("cuda_version must be specified on Windows.")
--            else:
--                args.cuda_version = ""
-+            args.cuda_version = ""
-         if args.use_rocm and args.rocm_version is None:
-             args.rocm_version = ""
- 

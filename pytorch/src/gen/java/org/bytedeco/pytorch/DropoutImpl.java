@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Dropout model(DropoutOptions().p(0.42).inplace(true));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DropoutImpl extends DropoutImplBase {
     static { Loader.load(); }

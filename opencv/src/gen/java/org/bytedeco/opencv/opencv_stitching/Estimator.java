@@ -2,6 +2,7 @@
 
 package org.bytedeco.opencv.opencv_stitching;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -65,7 +66,7 @@ public class Estimator extends Pointer {
     @param cameras Estimated camera parameters
     @return True in case of success, false otherwise
      */
-    public native @Cast("bool") @Name("operator ()") boolean apply(@StdVector ImageFeatures features,
-            @StdVector MatchesInfo pairwise_matches,
-            @StdVector CameraParams cameras);
+    public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef ImageFeaturesVector features,
+            @Const @ByRef MatchesInfoVector pairwise_matches,
+            @ByRef CameraParamsVector cameras);
 }

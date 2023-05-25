@@ -64,26 +64,27 @@ public class concat extends primitive {
         /** Constructs a primitive descriptor for an out-of-place concatenation
          *  primitive.
          * 
+         *  @param aengine Engine to perform the operation on.
          *  @param dst Destination memory descriptor.
          *  @param concat_dimension Source tensors will be concatenated over
          *      dimension with this index. Note that order of dimensions does
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
-         *  @param aengine Engine to perform the operation on.
-         *  @param attr Primitive attributes to use (optional). */
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes. */
         
         ///
         ///
-        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine, attr); }
-        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(aengine, dst, concat_dimension, srcs, attr); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
-        public primitive_desc(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, concat_dimension, srcs, aengine); }
-        private native void allocate(@Const @ByRef memory.desc dst, int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs) { super((Pointer)null); allocate(aengine, dst, concat_dimension, srcs); }
+        private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
+                        int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs);
 
         /** Constructs a primitive descriptor for an out-of-place concatenation
          *  primitive.
@@ -91,24 +92,25 @@ public class concat extends primitive {
          *  This version derives the destination memory descriptor
          *  automatically.
          * 
+         *  @param aengine Engine to perform the operation on.
          *  @param concat_dimension Source tensors will be concatenated over
          *      dimension with this index. Note that order of dimensions does
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
-         *  @param aengine Engine to perform the operation on.
-         *  @param attr Primitive attributes to use (optional). */
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes. */
         
         ///
-        public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(concat_dimension, srcs, aengine, attr); }
-        private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, int concat_dimension,
+                        @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(aengine, concat_dimension, srcs, attr); }
+        private native void allocate(@Const @ByRef engine aengine, int concat_dimension,
+                        @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
                         @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
-        public primitive_desc(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(concat_dimension, srcs, aengine); }
-        private native void allocate(int concat_dimension,
-                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, int concat_dimension,
+                        @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs) { super((Pointer)null); allocate(aengine, concat_dimension, srcs); }
+        private native void allocate(@Const @ByRef engine aengine, int concat_dimension,
+                        @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs);
 
         /** Constructs a primitive descriptor for concat primitive from a C
          *  API primitive descriptor which must have a matching kind.
@@ -117,11 +119,11 @@ public class concat extends primitive {
         
 
         /** \copydoc dnnl::primitive_desc_base::src_desc(int)const */
-        public native @ByVal memory.desc src_desc(int idx/*=0*/);
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc(int idx/*=0*/);
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
     }
 
     /** Default constructor. Produces an empty object. */

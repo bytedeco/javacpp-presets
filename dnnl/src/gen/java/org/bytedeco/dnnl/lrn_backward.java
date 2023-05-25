@@ -29,54 +29,6 @@ public class lrn_backward extends primitive {
         return new lrn_backward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for an LRN backward propagation primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-    
-        
-        ///
-        public native @ByRef dnnl_lrn_desc_t data(); public native desc data(dnnl_lrn_desc_t setter);
-
-        /** Constructs a descriptor for an LRN backward propagation primitive.
-         * 
-         *  @param aalgorithm LRN algorithm kind: either
-         *      #dnnl::algorithm::lrn_across_channels, or
-         *      #dnnl::algorithm::lrn_within_channel.
-         *  @param diff_data_desc Diff source and diff destination memory
-         *      descriptor.
-         *  @param data_desc Source memory descriptor.
-         *  @param local_size Regularization local size.
-         *  @param alpha The alpha regularization parameter.
-         *  @param beta The beta regularization parameter.
-         *  @param k The k regularization parameter. */
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta, k); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta, float k/*=1.f*/);
-        public desc(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta); }
-        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta, k); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta, float k/*=1.f*/);
-        public desc(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta); }
-        private native void allocate(@Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef memory.desc data_desc,
-                        @Const @ByRef memory.desc diff_data_desc, @Cast("dnnl::memory::dim") long local_size,
-                        float alpha, float beta);
-    }
-
     /** Primitive descriptor for an LRN backward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -99,58 +51,77 @@ public class lrn_backward extends primitive {
         private native void allocate();
 
         /** Constructs a primitive descriptor for an LRN backward propagation
-         *  primitive.
+         *      primitive.
          * 
-         *  @param adesc Descriptor for an LRN backward propagation primitive.
          *  @param aengine Engine to use.
+         *  @param aalgorithm LRN algorithm kind: either
+         *      #dnnl::algorithm::lrn_across_channels, or
+         *      #dnnl::algorithm::lrn_within_channel.
+         *  @param diff_src_desc Diff source memory descriptor.
+         *  @param diff_dst_desc Diff destination memory descriptor.
+         *  @param src_desc Source memory descriptor.
+         *  @param local_size Regularization local size.
+         *  @param alpha The alpha regularization parameter.
+         *  @param beta The beta regularization parameter.
+         *  @param k The k regularization parameter.
          *  @param hint_fwd_pd Primitive descriptor for an LRN forward
          *      propagation primitive. It is used as a hint for deciding which
          *      memory format to use.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, diff_src_desc, diff_dst_desc, src_desc, local_size, alpha, beta, k, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aalgorithm, diff_src_desc, diff_dst_desc, src_desc, local_size, alpha, beta, k, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, algorithm aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd);
-
-        /** Constructs a primitive descriptor for an LRN backward propagation
-         *  primitive.
-         * 
-         *  @param adesc Descriptor for an LRN backward propagation primitive.
-         *  @param attr Primitive attributes to use.
-         *  @param aengine Engine to use.
-         *  @param hint_fwd_pd Primitive descriptor for an LRN forward
-         *      propagation primitive. It is used as a hint for deciding which
-         *      memory format to use.
-         *  @param allow_empty A flag signifying whether construction is
-         *      allowed to fail without throwing an exception. In this case an
-         *      empty object will be produced. This flag is optional and
-         *      defaults to false. */
-        
-        ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aalgorithm, diff_src_desc, diff_dst_desc, src_desc, local_size, alpha, beta, k, hint_fwd_pd, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
-                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(adesc, attr, aengine, hint_fwd_pd); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(aengine, aalgorithm, diff_src_desc, diff_dst_desc, src_desc, local_size, alpha, beta, k, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::algorithm") int aalgorithm,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc diff_dst_desc, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Cast("dnnl::memory::dim") long local_size, float alpha, float beta, float k,
                         @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd);
 
         /** Constructs a primitive descriptor for an LRN backward propagation
@@ -163,13 +134,31 @@ public class lrn_backward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc diff_src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::diff_dst_desc()const */
-        public native @ByVal memory.desc diff_dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc diff_dst_desc();
 
         /** \copydoc dnnl::primitive_desc_base::workspace_desc()const */
-        public native @ByVal memory.desc workspace_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc workspace_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_algorithm()const */
+        public native algorithm get_algorithm();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_alpha()const */
+        public native float get_alpha();
+
+        /** \copydoc dnnl::primitive_desc_base::get_beta()const */
+        public native float get_beta();
+
+        /** \copydoc dnnl::primitive_desc_base::get_local_size()const */
+        public native @Cast("dnnl::memory::dim") long get_local_size();
+
+        /** \copydoc dnnl::primitive_desc_base::get_k()const */
+        public native float get_k();
     }
 
     /** Default constructor. Produces an empty object. */

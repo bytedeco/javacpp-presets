@@ -29,7 +29,6 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  Softplus model(SoftplusOptions().beta(0.24).threshold(42.42));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SoftplusImpl extends SoftplusImplCloneable {
     static { Loader.load(); }

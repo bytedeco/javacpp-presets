@@ -39,47 +39,6 @@ public class softmax_forward extends primitive {
         return new softmax_forward((Pointer)this).offsetAddress(i);
     }
 
-    /** Descriptor for a softmax forward propagation primitive. */
-    @NoOffset public static class desc extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public desc(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public desc(long size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(long size);
-        @Override public desc position(long position) {
-            return (desc)super.position(position);
-        }
-        @Override public desc getPointer(long i) {
-            return new desc((Pointer)this).offsetAddress(i);
-        }
-    
-        public native @ByRef dnnl_softmax_desc_t data(); public native desc data(dnnl_softmax_desc_t setter);
-
-        /** Default constructor. Produces an empty object. */
-        
-        ///
-        public desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
-
-        /** Constructs a descriptor for a softmax forward propagation
-         *  primitive.
-         * 
-         *  @param aprop_kind Propagation kind. Possible values are
-         *      #dnnl::prop_kind::forward_training, and
-         *      #dnnl::prop_kind::forward_inference.
-         *  @param data_desc Source and destination memory descriptor.
-         *  @param softmax_axis Axis over which softmax is computed. */
-        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
-        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis);
-        public desc(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
-        private native void allocate(@Cast("dnnl::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
-                        int softmax_axis);
-    }
-
     /** Primitive descriptor for a softmax forward propagation primitive. */
     public static class primitive_desc extends org.bytedeco.dnnl.primitive_desc {
         static { Loader.load(); }
@@ -101,46 +60,59 @@ public class softmax_forward extends primitive {
         public primitive_desc() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        /** Constructs a primitive descriptor for a softmax forward
-         *  propagation primitive.
+        /** Constructs a primitive descriptor for a softmax forward propagation
+         *  primitive.
          * 
-         *  @param adesc descriptor for a softmax forward propagation
-         *      primitive.
          *  @param aengine Engine to use.
+         *  @param aprop_kind Propagation kind. Possible values are
+         *      #dnnl::prop_kind::forward_training, and
+         *      #dnnl::prop_kind::forward_inference.
+         *  @param aalgorithm Softmax algorithm kind: either
+         *      #dnnl::algorithm::softmax_accurate,
+         *      or #dnnl::algorithm::softmax_log.
+         *  @param src_desc Source memory descriptor.
+         *  @param dst_desc Destination memory descriptor.
+         *  @param axis Axis over which softmax is computed.
+         *  @param attr Primitive attributes to use. Attributes are optional
+         *      and default to empty attributes.
          *  @param allow_empty A flag signifying whether construction is
          *      allowed to fail without throwing an exception. In this case an
          *      empty object will be produced. This flag is optional and
          *      defaults to false. */
         
         ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        algorithm aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, aalgorithm, src_desc, dst_desc, axis, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        algorithm aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
                         @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
-
-        /** Constructs a primitive descriptor for a softmax forward
-         *  propagation primitive.
-         * 
-         *  @param adesc Descriptor for a softmax forward propagation
-         *      primitive.
-         *  @param aengine Engine to use.
-         *  @param attr Primitive attributes to use.
-         *  @param allow_empty A flag signifying whether construction is
-         *      allowed to fail without throwing an exception. In this case an
-         *      empty object will be produced. This flag is optional and
-         *      defaults to false. */
-        
-        ///
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(adesc, attr, aengine, allow_empty); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine, @Cast("bool") boolean allow_empty/*=false*/);
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, attr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr attr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        algorithm aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis) { super((Pointer)null); allocate(aengine, aprop_kind, aalgorithm, src_desc, dst_desc, axis); }
+        private native void allocate(@Const @ByRef engine aengine, prop_kind aprop_kind,
+                        algorithm aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, aprop_kind, aalgorithm, src_desc, dst_desc, axis, attr, allow_empty); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis,
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
+        public primitive_desc(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis) { super((Pointer)null); allocate(aengine, aprop_kind, aalgorithm, src_desc, dst_desc, axis); }
+        private native void allocate(@Const @ByRef engine aengine, @Cast("dnnl::prop_kind") int aprop_kind,
+                        @Cast("dnnl::algorithm") int aalgorithm, @Const @ByRef org.bytedeco.dnnl.memory.desc src_desc,
+                        @Const @ByRef org.bytedeco.dnnl.memory.desc dst_desc, int axis);
 
         /** Constructs a primitive descriptor for a softmax forward
          *  propagation primitive from a C API primitive descriptor that must
@@ -152,10 +124,19 @@ public class softmax_forward extends primitive {
         private native void allocate(dnnl_primitive_desc pd);
 
         /** \copydoc dnnl::primitive_desc_base::src_desc()const */
-        public native @ByVal memory.desc src_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc src_desc();
 
         /** \copydoc dnnl::primitive_desc_base::dst_desc()const */
-        public native @ByVal memory.desc dst_desc();
+        public native @ByVal org.bytedeco.dnnl.memory.desc dst_desc();
+
+        /** \copydoc dnnl::primitive_desc_base::get_algorithm()const */
+        public native algorithm get_algorithm();
+
+        /** \copydoc dnnl::primitive_desc_base::get_prop_kind()const */
+        public native prop_kind get_prop_kind();
+
+        /** \copydoc dnnl::primitive_desc_base::get_axis()const */
+        public native int get_axis();
     }
 
     /** Default constructor. Produces an empty object. */

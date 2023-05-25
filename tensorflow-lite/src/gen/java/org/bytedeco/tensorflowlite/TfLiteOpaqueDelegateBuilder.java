@@ -10,7 +10,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
 // `TfLiteOpaqueDelegateBuilder` is used for constructing
-// `TfLiteOpaqueDelegateStruct`, see `TfLiteOpaqueDelegateCreate` below.  Note:
+// `TfLiteOpaqueDelegate`, see `TfLiteOpaqueDelegateCreate` below.  Note:
 // This struct is not ABI stable.
 //
 // For forward source compatibility `TfLiteOpaqueDelegateBuilder` objects should
@@ -53,8 +53,7 @@ public class TfLiteOpaqueDelegateBuilder extends Pointer {
       protected Prepare_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer() { allocate(); }
       private native void allocate();
       public native @Cast("TfLiteStatus") int call(TfLiteOpaqueContext context,
-                            TfLiteOpaqueDelegateStruct delegate,
-                            Pointer data);
+                            @Cast("TfLiteOpaqueDelegate*") TfLiteOpaqueDelegateStruct delegate, Pointer data);
   }
   public native Prepare_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer Prepare(); public native TfLiteOpaqueDelegateBuilder Prepare(Prepare_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer setter);
   // Copies the data from delegate buffer handle into raw memory of the given
@@ -68,8 +67,8 @@ public class TfLiteOpaqueDelegateBuilder extends Pointer {
       protected CopyFromBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor() { allocate(); }
       private native void allocate();
       public native @Cast("TfLiteStatus") int call(
-        TfLiteOpaqueContext context, TfLiteOpaqueDelegateStruct delegate,
-        Pointer data, @Cast("TfLiteBufferHandle") int buffer_handle, TfLiteOpaqueTensor tensor);
+        TfLiteOpaqueContext context, @Cast("TfLiteOpaqueDelegate*") TfLiteOpaqueDelegateStruct delegate, Pointer data,
+        @Cast("TfLiteBufferHandle") int buffer_handle, TfLiteOpaqueTensor tensor);
   }
   public native CopyFromBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor CopyFromBufferHandle(); public native TfLiteOpaqueDelegateBuilder CopyFromBufferHandle(CopyFromBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor setter);
   // Copies the data from raw memory of the given 'tensor' to delegate buffer
@@ -81,8 +80,8 @@ public class TfLiteOpaqueDelegateBuilder extends Pointer {
       protected CopyToBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor() { allocate(); }
       private native void allocate();
       public native @Cast("TfLiteStatus") int call(
-        TfLiteOpaqueContext context, TfLiteOpaqueDelegateStruct delegate,
-        Pointer data, @Cast("TfLiteBufferHandle") int buffer_handle, TfLiteOpaqueTensor tensor);
+        TfLiteOpaqueContext context, @Cast("TfLiteOpaqueDelegate*") TfLiteOpaqueDelegateStruct delegate, Pointer data,
+        @Cast("TfLiteBufferHandle") int buffer_handle, TfLiteOpaqueTensor tensor);
   }
   public native CopyToBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor CopyToBufferHandle(); public native TfLiteOpaqueDelegateBuilder CopyToBufferHandle(CopyToBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_int_TfLiteOpaqueTensor setter);
   // Frees the Delegate Buffer Handle. Note: This only frees the handle, but
@@ -96,8 +95,8 @@ public class TfLiteOpaqueDelegateBuilder extends Pointer {
       protected FreeBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_IntPointer() { allocate(); }
       private native void allocate();
       public native void call(TfLiteOpaqueContext context,
-                             TfLiteOpaqueDelegateStruct delegate,
-                             Pointer data, @Cast("TfLiteBufferHandle*") IntPointer handle);
+                             @Cast("TfLiteOpaqueDelegate*") TfLiteOpaqueDelegateStruct delegate, Pointer data,
+                             @Cast("TfLiteBufferHandle*") IntPointer handle);
   }
   public native FreeBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_IntPointer FreeBufferHandle(); public native TfLiteOpaqueDelegateBuilder FreeBufferHandle(FreeBufferHandle_TfLiteOpaqueContext_TfLiteOpaqueDelegateStruct_Pointer_IntPointer setter);
   // Bitmask flags. See the comments in `TfLiteDelegateFlags`.

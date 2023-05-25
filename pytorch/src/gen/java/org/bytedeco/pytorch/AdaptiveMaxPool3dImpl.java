@@ -29,17 +29,16 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  <pre>{@code
  *  AdaptiveMaxPool3d model(AdaptiveMaxPool3dOptions(3));
  *  }</pre> */
-// NOLINTNEXTLINE(bugprone-exception-escape)
 @Namespace("torch::nn") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class AdaptiveMaxPool3dImpl extends AdaptiveMaxPool3dImplBase {
     static { Loader.load(); }
 
   
     public AdaptiveMaxPool3dImpl(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
-    private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
+    @NoDeallocator private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<3>*") LongOptional output_size);
     public AdaptiveMaxPool3dImpl(
           @Const @ByRef AdaptiveMaxPool3dOptions options_) { super((Pointer)null); allocate(options_); }
-    private native void allocate(
+    @NoDeallocator private native void allocate(
           @Const @ByRef AdaptiveMaxPool3dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool3dImpl(Pointer p) { super(p); }

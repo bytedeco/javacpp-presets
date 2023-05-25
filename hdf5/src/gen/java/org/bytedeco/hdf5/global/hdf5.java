@@ -136,7 +136,7 @@ public static final int H5_HAVE_FEATURES_H = 1;
 public static final int H5_HAVE_FILTER_DEFLATE = 1;
 
 /* Define if support for szip filter is enabled */
-/* #undef H5_HAVE_FILTER_SZIP */
+public static final int H5_HAVE_FILTER_SZIP = 1;
 
 /* Determine if __float128 is available */
 /* #undef H5_HAVE_FLOAT128 */
@@ -207,7 +207,7 @@ public static final int H5_HAVE_LIBM = 1;
 /* #undef H5_HAVE_LIBPTHREAD */
 
 /* Define to 1 if you have the `sz' library (-lsz). */
-/* #undef H5_HAVE_LIBSZ */
+public static final int H5_HAVE_LIBSZ = 1;
 
 /* Define to 1 if you have the `ws2_32' library (-lws2_32). */
 /* #undef H5_HAVE_LIBWS2_32 */
@@ -352,7 +352,7 @@ public static final int H5_HAVE_SYS_TIME_H = 1;
 public static final int H5_HAVE_SYS_TYPES_H = 1;
 
 /* Define to 1 if you have the <szlib.h> header file. */
-/* #undef H5_HAVE_SZLIB_H */
+public static final int H5_HAVE_SZLIB_H = 1;
 
 /* Define if we have thread safe support */
 /* #undef H5_HAVE_THREADSAFE */

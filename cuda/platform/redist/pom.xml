@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda-platform-redist</artifactId>
-  <version>11.8-8.6-${project.parent.version}</version>
+  <version>12.1-8.9-${project.parent.version}</version>
   <name>JavaCPP Presets Platform Redist for CUDA</name>
 
   <properties>

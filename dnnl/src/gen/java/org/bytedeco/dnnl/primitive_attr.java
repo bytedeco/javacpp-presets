@@ -75,100 +75,15 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *  @param mode Specified scratchpad mode. */
     
     ///
+    ///
     public native void set_scratchpad_mode(scratchpad_mode mode);
     public native void set_scratchpad_mode(@Cast("dnnl::scratchpad_mode") int mode);
 
-    /** Returns output scaling factors correspondence mask and values.
-     * 
-     *  @param mask Scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the \p
-     *      scales vector. The set i-th bit indicates that a dedicated output
-     *      scaling factor is used for each index along that dimension. The
-     *      mask value of 0 implies a common output scaling factor for the
-     *      whole output tensor.
-     *  @param scales Vector of output scaling factors. */
-    
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    public native void get_output_scales(@ByRef IntPointer mask, @StdVector FloatPointer scales);
-    public native void get_output_scales(@ByRef IntBuffer mask, @StdVector FloatBuffer scales);
-    public native void get_output_scales(@ByRef int[] mask, @StdVector float[] scales);
-
-    /** Sets output scaling factors correspondence mask and values.
-     * 
-     *  Example usage:
-     *  <pre>{@code
-     *      int mb = 32, oc = 32,
-     *          oh = 14, ow = 14; // convolution output params
-     *      // unique output scales per output channel
-     *      vector<float> scales = { ... };
-     *      int oc_dim = 1; // mb_dim = 0, channel_dim = 1, height_dim = 2, ...
-     * 
-     *      // construct a convolution descriptor
-     *      dnnl::convolution::desc conv_d;
-     * 
-     *      dnnl::primitive_attr attr;
-     *      attr.set_output_scales(attr, oc, 1 << oc_dim, scales);
-     * 
-     *      dnnl::primitive_desc conv_pd(conv_d, attr, engine);
-     *  }</pre>
-     * 
-     *  \note
-     *      The order of dimensions does not depend on how elements are laid
-     *      out in memory. For example:
-     *      - for a 2D CNN activations tensor the order is always (n, c)
-     *      - for a 4D CNN activations tensor the order is always (n, c, h, w)
-     *      - for a 5D CNN weights tensor the order is always
-     *         (g, oc, ic, kh, kw)
-     * 
-     *  @param mask Defines the correspondence between the output tensor
-     *      dimensions and the \p scales vector. The set i-th bit indicates
-     *      that a dedicated scaling factor is used for each index along that
-     *      dimension. Set the mask to 0 to use a common output scaling factor
-     *      for the whole output tensor.
-     *  @param scales Constant vector of output scaling factors. If the
-     *      scaling factors are known at the time of this call, the following
-     *      equality must hold:
-     *      {@code scales.size() = \prod\limits_{d \in mask} output.dims[d].}
-     *      Violations can only be detected when the attributes
-     *      are used to create a primitive descriptor.
-     *      If the scaling factors are not known at the time of the call,
-     *      this vector must contain a single #DNNL_RUNTIME_F32_VAL value and
-     *      the output scaling factors must be passed at execution time as an
-     *      argument with index #DNNL_ARG_ATTR_OUTPUT_SCALES. */
-    
-    ///
-    public native void set_output_scales(int mask, @StdVector FloatPointer scales);
-    public native void set_output_scales(int mask, @StdVector FloatBuffer scales);
-    public native void set_output_scales(int mask, @StdVector float[] scales);
-
-    /** Returns scaling factors correspondence mask and values for a given
-     *  memory argument.
-     * 
-     *  @param arg Parameter argument index as passed to the
-     *      primitive::execute() call.
-     *  @param mask Scaling factors correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the \p
-     *      scales vector. The set i-th bit indicates that a dedicated scaling
-     *      factor is used for each index along that dimension. Set the mask to
-     *      0 to use a common scaling factor for the whole output tensor.
-     *  @param scales Output vector of scaling factors. */
-    
-    ///
-    ///
-    public native void get_scales(int arg, @ByRef IntPointer mask, @StdVector FloatPointer scales);
-    public native void get_scales(int arg, @ByRef IntBuffer mask, @StdVector FloatBuffer scales);
-    public native void get_scales(int arg, @ByRef int[] mask, @StdVector float[] scales);
-
     /** Sets scaling factors for primitive operations for a given memory
-     *  argument.
+     *  argument. The scaling factors must be passed at execution time
+     *  as an argument with index #DNNL_ARG_ATTR_SCALES | arg.
      * 
-     *  @see dnnl_primitive_attr_set_scales
-     *  @see dnnl::primitive_attr::set_output_scales
+     *  @see dnnl_primitive_attr_set_scales_mask
      * 
      *  @param arg Parameter argument index as passed to the
      *      primitive::execute() call.
@@ -176,40 +91,17 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      correspondence between the tensor dimensions and the \p scales
      *      vector. The set i-th bit indicates that a dedicated scaling factor
      *      is used for each index along that dimension. Set the mask to 0 to
-     *      use a common scaling factor for the whole output tensor.
-     *  @param scales Constant vector of scaling factors. The following equality
-     *      must hold:
-     *      {@code scales.size() = \prod\limits_{d \in mask} argument.dims[d].} */
-    
-    ///
-    public native void set_scales(int arg, int mask, @StdVector FloatPointer scales);
-    public native void set_scales(int arg, int mask, @StdVector FloatBuffer scales);
-    public native void set_scales(int arg, int mask, @StdVector float[] scales);
-
-    /** Returns zero points correspondence mask and values.
-     * 
-     *  @param arg Parameter argument index as passed to the
-     *      primitive::execute() call.
-     *  @param mask Zero points correspondence mask that defines the
-     *      correspondence between the output tensor dimensions and the \p
-     *      zero_points vector. The set i-th bit indicates that a dedicated
-     *      zero point is used for each index along that dimension. Set the
-     *      mask to 0 to use a common zero point for the whole output tensor.
-     *  @param zero_points Output vector of zero points. */
+     *      use a common scaling factor for the whole output tensor. */
     
     ///
     ///
-    public native void get_zero_points(
-                int arg, @ByRef IntPointer mask, @StdVector IntPointer zero_points);
-    public native void get_zero_points(
-                int arg, @ByRef IntBuffer mask, @StdVector IntBuffer zero_points);
-    public native void get_zero_points(
-                int arg, @ByRef int[] mask, @StdVector int[] zero_points);
+    public native void set_scales_mask(int arg, int mask);
 
     /** Sets zero points for primitive operations for a given memory argument.
+     *  The zero points must be passed at execution time as an argument with
+     *  index #DNNL_ARG_ATTR_ZERO_POINTS | arg.
      * 
-     *  @see dnnl_primitive_attr_set_zero_points
-     *  @see dnnl::primitive_attr::set_output_scales
+     *  @see dnnl_primitive_attr_set_zero_points_mask
      * 
      *  @param arg Parameter argument index as passed to the
      *      primitive::execute() call.
@@ -217,23 +109,10 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      correspondence between the tensor dimensions and the \p
      *      zero_points vector. The set i-th bit indicates that a dedicated
      *      zero point is used for each index along that dimension. Set the
-     *      mask to 0 to use a common zero point for the whole output tensor.
-     *  @param zero_points Constant vector of zero points. If the zero points
-     *      are known at the time of this call, the following equality must
-     *      hold: {@code zero\_points.size() = \prod\limits_{d \in mask}
-     *      argument.dims[d].} If the zero points are not known at the time
-     *      of the call, this vector must contain a single
-     *      #DNNL_RUNTIME_S32_VAL value and the zero points must be passed at
-     *      execution time as an argument with index
-     *      #DNNL_ARG_ATTR_ZERO_POINTS. */
+     *      mask to 0 to use a common zero point for the whole output tensor. */
     
     ///
-    public native void set_zero_points(
-                int arg, int mask, @StdVector IntPointer zero_points);
-    public native void set_zero_points(
-                int arg, int mask, @StdVector IntBuffer zero_points);
-    public native void set_zero_points(
-                int arg, int mask, @StdVector int[] zero_points);
+    public native void set_zero_points_mask(int arg, int mask);
 
     /** Returns post-ops previously set via set_post_ops().
      * 
@@ -284,9 +163,9 @@ public class primitive_attr extends dnnl_primitive_attr_handle {
      *      // Set scale and shift for int8 quantization of activation
      *      attr.set_rnn_data_qparams(scale, shift);
      * 
-     *      // Create and configure rnn op_desc
-     *      vanilla_rnn_forward::desc rnn_d(/* arguments * /);
-     *      vanilla_rnn_forward::primitive_desc rnn_d(rnn_d, attr, engine);
+     *      // Create an RNN primitive descriptor.
+     *      vanilla_rnn_forward::primitive_desc rnn_d(
+     *              engine, /* arguments * /, attr);
      *  }</pre>
      * 
      *  \note

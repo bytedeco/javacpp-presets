@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 Samuel Audet
+ * Copyright (C) 2015-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,13 +34,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.11"),
-    @Platform(value = "windows-x86_64", preload = "cusparse64_11")},
+    @Platform(include = "<cusparse.h>", link = "cusparse@.12", preload = "nvJitLink@.12"),
+    @Platform(value = "windows-x86_64", preload = {"cusparse64_12", "nvJitLink_120_0"})},
         target = "org.bytedeco.cuda.cusparse", global = "org.bytedeco.cuda.global.cusparse")
 @NoException
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUSPARSEAPI", "CUSPARSE_CPP_VERSION").cppTypes().annotations().cppText(""))
+               .put(new Info("cusparse.h").linePatterns("typedef struct cusparse.* const.* cusparseConst.*").skip())
                .put(new Info("cusparseHandle_t").valueTypes("cusparseContext").pointerTypes("@ByPtrPtr cusparseContext"))
                .put(new Info("cusparseMatDescr_t").valueTypes("cusparseMatDescr").pointerTypes("@ByPtrPtr cusparseMatDescr"))
                .put(new Info("cusparseSolveAnalysisInfo_t").valueTypes("cusparseSolveAnalysisInfo").pointerTypes("@ByPtrPtr cusparseSolveAnalysisInfo"))
@@ -57,10 +58,10 @@ public class cusparse implements InfoMapper {
                .put(new Info("csru2csrInfo_t").valueTypes("csru2csrInfo").pointerTypes("@ByPtrPtr csru2csrInfo"))
                .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"))
                .put(new Info("pruneInfo_t").valueTypes("pruneInfo").pointerTypes("@ByPtrPtr pruneInfo"))
-               .put(new Info("cusparseSpVecDescr_t").valueTypes("cusparseSpVecDescr").pointerTypes("@ByPtrPtr cusparseSpVecDescr"))
-               .put(new Info("cusparseDnVecDescr_t").valueTypes("cusparseDnVecDescr").pointerTypes("@ByPtrPtr cusparseDnVecDescr"))
-               .put(new Info("cusparseSpMatDescr_t").valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
-               .put(new Info("cusparseDnMatDescr_t").valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
+               .put(new Info("cusparseSpVecDescr_t", "cusparseConstSpVecDescr_t").cast().valueTypes("cusparseSpVecDescr").pointerTypes("@ByPtrPtr cusparseSpVecDescr"))
+               .put(new Info("cusparseDnVecDescr_t", "cusparseConstDnVecDescr_t").cast().valueTypes("cusparseDnVecDescr").pointerTypes("@ByPtrPtr cusparseDnVecDescr"))
+               .put(new Info("cusparseSpMatDescr_t", "cusparseConstSpMatDescr_t").cast().valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
+               .put(new Info("cusparseDnMatDescr_t", "cusparseConstDnMatDescr_t").cast().valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
                .put(new Info("cusparseSpSVDescr_t").valueTypes("cusparseSpSVDescr").pointerTypes("@ByPtrPtr cusparseSpSVDescr"))
                .put(new Info("cusparseSpSMDescr_t").valueTypes("cusparseSpSMDescr").pointerTypes("@ByPtrPtr cusparseSpSMDescr"))
                .put(new Info("cusparseSpGEMMDescr_t").valueTypes("cusparseSpGEMMDescr").pointerTypes("@ByPtrPtr cusparseSpGEMMDescr"))
