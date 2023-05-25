@@ -27,8 +27,10 @@ public class GenericInferRequest extends Pointer {
    *  inference is completed and result is returned.
    *  @param name The name of the input tensor.
    *  @param input A Tensor object that describes an input tensor. */
-  public native @NoException(true) void AddInput(@StdString BytePointer name, @Const @ByRef Tensor input);
-  public native @NoException(true) void AddInput(@StdString String name, @Const @ByRef Tensor input);
+  public native @NoException(true) void AddInput(
+        @StdString BytePointer name, @Const @ByRef Tensor input);
+  public native @NoException(true) void AddInput(
+        @StdString String name, @Const @ByRef Tensor input);
 
   /** Add a requested output to be sent within an InferRequest object.
    *  Calling this function is optional. If no output(s) are specifically
@@ -38,8 +40,8 @@ public class GenericInferRequest extends Pointer {
    *  @param name The name of the output tensor.
    *  @param output A Tensor object that describes an output tensor containing
    *  its pre-allocated buffer. */
- public native void AddRequestedOutput(@StdString BytePointer name, @ByRef Tensor output);
- public native void AddRequestedOutput(@StdString String name, @ByRef Tensor output);
+  public native void AddRequestedOutput(@StdString BytePointer name, @ByRef Tensor output);
+  public native void AddRequestedOutput(@StdString String name, @ByRef Tensor output);
 
   /** Add a requested output to be sent within an InferRequest object.
    *  Calling this function is optional. If no output(s) are specifically
@@ -52,5 +54,4 @@ public class GenericInferRequest extends Pointer {
   /** Clear inputs and outputs of the request. This allows users to reuse the
    *  InferRequest object if needed. */
   public native void Reset();
-
 }

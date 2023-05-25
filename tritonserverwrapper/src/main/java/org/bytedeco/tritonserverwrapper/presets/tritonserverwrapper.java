@@ -31,7 +31,6 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-import org.bytedeco.tritonserver.presets.tritonserver;
 
 /**
  *

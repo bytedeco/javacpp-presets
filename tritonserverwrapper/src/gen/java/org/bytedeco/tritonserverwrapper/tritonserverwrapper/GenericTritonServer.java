@@ -107,7 +107,7 @@ public class GenericTritonServer extends Pointer {
    *  @param model_name The name of the model.
    *  @param model_version The version of the model to get configuration.
    *  The default value is -1 which means then the server will choose a version
-   *  based on the model and internal policy. This field is optional. 
+   *  based on the model and internal policy. This field is optional.
    *  @return Returns JSON representation of model metadata as a string. */
   public native @StdString BytePointer ModelMetadata(
         @StdString BytePointer model_name, @Cast("const int64_t") long model_version/*=-1*/);
@@ -129,4 +129,6 @@ public class GenericTritonServer extends Pointer {
    *  @param repo_path The full path to the model repository. */
   public native void UnregisterModelRepo(@StdString BytePointer repo_path);
   public native void UnregisterModelRepo(@StdString String repo_path);
+ 
+  public native @UniquePtr GenericInferResult Infer(@ByRef GenericInferRequest infer_request);
 }

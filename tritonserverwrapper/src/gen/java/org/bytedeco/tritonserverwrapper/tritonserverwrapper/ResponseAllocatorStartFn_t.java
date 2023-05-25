@@ -8,6 +8,8 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tritonserverwrapper.global.tritonserverwrapper.*;
 
+
+///
 @Properties(inherit = org.bytedeco.tritonserverwrapper.presets.tritonserverwrapper.class)
 public class ResponseAllocatorStartFn_t extends FunctionPointer {
     static { Loader.load(); }

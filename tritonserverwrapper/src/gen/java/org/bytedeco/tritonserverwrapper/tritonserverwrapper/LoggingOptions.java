@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tritonserverwrapper.global.tritonserverwrapper.*;
 
+
 //==============================================================================
 /** Structure to hold logging options for setting 'ServerOptions'.
  *  */

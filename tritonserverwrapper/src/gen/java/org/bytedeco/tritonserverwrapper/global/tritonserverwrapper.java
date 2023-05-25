@@ -45,6 +45,9 @@ public class tritonserverwrapper extends org.bytedeco.tritonserverwrapper.preset
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // #pragma once
+// #include <vector>
+// #include <set>
+// #include <climits>
 
 //==============================================================================
 /** enum classes
@@ -82,57 +85,6 @@ public static final int UNKNOWN = 0, READY = 1, UNAVAILABLE = 2, LOADING = 3, UN
 
 
 // Targeting ../tritonserverwrapper/ResponseAllocatorStartFn_t.java
-
-
-
-  // namespace triton::developer_tools::server
-
-
-// Parsed from generic_server_wrapper.h
-
-// Copyright 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//  * Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-//  * Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//  * Neither the name of NVIDIA CORPORATION nor the names of its
-//    contributors may be used to endorse or promote products derived
-//    from this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// #pragma once
-// #include <memory>
-// #include <set>
-// #include <vector>
-// #include <unordered_map>
-// #include <list>
-// #include "common.h"
-// #include "../src/infer_requested_output.h"
-// #include "../src/tracer.h"
-
-///
-// Targeting ../tritonserverwrapper/GenericTritonServer.java
-
-
-// Targeting ../tritonserverwrapper/GenericInferResult.java
-
-
-// Targeting ../tritonserverwrapper/GenericInferRequest.java
 
 
 // Targeting ../tritonserverwrapper/LoggingOptions.java
@@ -179,5 +131,56 @@ public static final int UNKNOWN = 0, READY = 1, UNAVAILABLE = 2, LOADING = 3, UN
 
 
   // namespace triton::developer_tools::server
+
+
+// Parsed from generic_server_wrapper.h
+
+// Copyright 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  * Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//  * Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//  * Neither the name of NVIDIA CORPORATION nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// #pragma once
+// #include <list>
+// #include <memory>
+// #include <unordered_map>
+// #include <vector>
+// #include "../src/infer_requested_output.h"
+// #include "../src/tracer.h"
+// #include "common.h"
+
+///
+// Targeting ../tritonserverwrapper/GenericTritonServer.java
+
+
+// Targeting ../tritonserverwrapper/GenericInferResult.java
+
+
+// Targeting ../tritonserverwrapper/GenericInferRequest.java
+
+
+
+  // namespace triton::developer_tools::server
+
 
 }

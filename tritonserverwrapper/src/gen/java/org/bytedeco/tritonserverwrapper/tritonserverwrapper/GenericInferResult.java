@@ -35,6 +35,7 @@ public class GenericInferResult extends Pointer {
   /** Get the output names from the infer result
    *  @return Vector of output names */
   public native @ByVal StringVector OutputNames();
+  
   /** Get the result output as a shared pointer of 'Tensor' object. The 'buffer'
    *  field of the output is owned by the returned 'Tensor' object itself. Note
    *  that for string data, need to use 'StringData' function for string data
@@ -50,8 +51,10 @@ public class GenericInferResult extends Pointer {
    *  @param output_name The name of the output to get result data.
    *  @return Returns the result data represented as a vector of strings. The
    *  strings are stored in the row-major order. */
-  public native @ByVal StringVector StringData(@StdString BytePointer output_name);
-  public native @ByVal StringVector StringData(@StdString String output_name);
+  public native @ByVal StringVector StringData(
+        @StdString BytePointer output_name);
+  public native @ByVal StringVector StringData(
+        @StdString String output_name);
 
   /** Return the complete response as a user friendly string.
    *  @return The string describing the complete response. */
