@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Jack He, Samuel Audet
+ * Copyright (C) 2023
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -46,12 +46,6 @@ import org.bytedeco.tritonserver.presets.tritonserver;
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools", "/opt/tritonserver/include/triton/developer_tools/src"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
-        // @Platform(
-        //     value = "windows-x86_64",
-        //     includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/include/triton/core/",
-        //     linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/lib/",
-        //     preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/bin/"
-        // )
     },
     target = "org.bytedeco.tritonserverwrapper.tritonserverwrapper",
     global = "org.bytedeco.tritonserverwrapper.global.tritonserverwrapper"
@@ -69,10 +63,6 @@ public class tritonserverwrapper implements InfoMapper {
                .put(new Info("std::set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("INT_MAX").javaNames("Integer.MAX_VALUE").define())
-               .put(new Info("TritonServer").purify(false).virtualize())
-            //    .put(new Info("server_wrapper.h").linePatterns("  // START_JAVA_CUSTOM_FUNCTIONS", "  // END_JAVA_CUSTOM_FUNCTIONS").skip())
-            //    .put(new Info("server_wrapper.cc").linePatterns("  // START_JAVA_CUSTOM_FUNCTIONS", "  // END_JAVA_CUSTOM_FUNCTIONS").skip())
-            //    .put(new Info("server_wrapper.h").linePatterns("std::future<std::unique_ptr<InferResult>>*", ";", "std::unique_ptr<std::future<std::unique_ptr<InferResult>>>*", ";").skip())
-        ;
+               .put(new Info("TritonServer").purify(false).virtualize());
     }
 }

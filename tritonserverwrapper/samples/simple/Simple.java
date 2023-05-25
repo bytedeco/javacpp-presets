@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.tritonserverwrapper.tritonserverwrapper.*;
 import static org.bytedeco.tritonserverwrapper.global.tritonserverwrapper.*;
 
-public class SimpleTest {
+public class Simple {
     // Helper functions
     static void FAIL(String MSG) {
         System.err.println("Failure: " + MSG);
@@ -45,7 +45,7 @@ public class SimpleTest {
         System.err.println(msg);
       }
 
-      System.err.println("Usage: java " + SimpleTest.class.getSimpleName() +" [options]");
+      System.err.println("Usage: java " + Simple.class.getSimpleName() +" [options]");
       System.err.println("\t-v Enable verbose logging");
       System.err.println("\t-r [model repository absolute path]");
       System.exit(1);

@@ -20,11 +20,11 @@
   </properties>
 
   <dependencies>
-    <dependency>
+    <!-- <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tritonserver-platform</artifactId>
       <version>2.26-${project.parent.version}</version>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -48,7 +48,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>

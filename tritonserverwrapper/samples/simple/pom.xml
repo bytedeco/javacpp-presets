@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tritonserverwrapper</groupId>
-    <artifactId>simpletest</artifactId>
+    <artifactId>simple</artifactId>
     <version>1.5.9-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SimpleTest</exec.mainClass>
+        <exec.mainClass>Simple</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
