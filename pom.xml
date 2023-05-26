@@ -623,7 +623,7 @@
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>tritonserver</module>
-        <module>tritonserverwrapper</module>
+        <module>tritondevelopertoolsserver</module>
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
@@ -1407,7 +1407,7 @@
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>tritonserver</module>
-        <module>tritonserverwrapper</module>
+        <module>tritondevelopertoolsserver</module>
         <module>ale</module>
         <module>depthai</module>
         <module>onnx</module>
