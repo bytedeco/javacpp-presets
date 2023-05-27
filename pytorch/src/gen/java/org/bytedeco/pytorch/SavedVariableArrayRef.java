@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public SavedVariableArrayRef(@Const @ByRef SavedVariable OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Const @ByRef SavedVariable OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public SavedVariableArrayRef(@Const SavedVariable data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

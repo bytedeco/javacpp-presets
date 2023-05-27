@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public LongVectorArrayRef(@Cast("const std::vector<int64_t>*") @ByRef LongVector OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Cast("const std::vector<int64_t>*") @ByRef LongVector OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public LongVectorArrayRef(@Cast("const std::vector<int64_t>*") LongVector data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

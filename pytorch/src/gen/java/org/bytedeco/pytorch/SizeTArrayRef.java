@@ -22,6 +22,15 @@ public class SizeTArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeTArrayRef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SizeTArrayRef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SizeTArrayRef position(long position) {
+        return (SizeTArrayRef)super.position(position);
+    }
+    @Override public SizeTArrayRef getPointer(long i) {
+        return new SizeTArrayRef((Pointer)this).offsetAddress(i);
+    }
 
   /** \name Constructors
    *  \{
@@ -32,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public SizeTArrayRef(@Cast("const size_t") long OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Cast("const size_t") long OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public SizeTArrayRef(@Cast("const size_t*") SizeTPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

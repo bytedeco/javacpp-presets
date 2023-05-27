@@ -22,6 +22,15 @@ public class LongArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongArrayRef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LongArrayRef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public LongArrayRef position(long position) {
+        return (LongArrayRef)super.position(position);
+    }
+    @Override public LongArrayRef getPointer(long i) {
+        return new LongArrayRef((Pointer)this).offsetAddress(i);
+    }
 
   /** \name Constructors
    *  \{
@@ -32,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public LongArrayRef(@Cast("const int64_t") long OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Cast("const int64_t") long OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public LongArrayRef(@Cast("const int64_t*") LongPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

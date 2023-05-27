@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public BoolArrayRef(@Cast("const bool") boolean OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Cast("const bool") boolean OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public BoolArrayRef(@Cast("const bool*") BoolPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

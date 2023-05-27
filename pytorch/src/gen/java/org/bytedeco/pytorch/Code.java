@@ -83,6 +83,4 @@ public class Code extends Pointer {
   public native @Cast("torch::jit::Node**") @StdVector PointerPointer instructions_source();
   public native void request_bailout(@Cast("size_t") long index);
   public native @Cast("size_t") long register_size();
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Code code);
-  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
 }

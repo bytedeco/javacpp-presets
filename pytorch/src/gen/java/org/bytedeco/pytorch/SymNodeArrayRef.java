@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public SymNodeArrayRef(@Const @ByRef SymNode OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Const @ByRef SymNode OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public SymNodeArrayRef(@Const SymNode data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

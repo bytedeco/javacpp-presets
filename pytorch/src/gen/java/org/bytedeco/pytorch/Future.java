@@ -125,10 +125,7 @@ public class Future extends Pointer {
 
   public native @ByVal @Cast("std::exception_ptr*") Pointer exception_ptr();
 
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-        @Cast("std::ostream*") @ByRef Pointer out,
-        @Const @ByRef Future v);
-  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+  
 
   public native @ByVal Type.TypePtr elementType();
 

@@ -22,6 +22,15 @@ public class DoubleArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleArrayRef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DoubleArrayRef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DoubleArrayRef position(long position) {
+        return (DoubleArrayRef)super.position(position);
+    }
+    @Override public DoubleArrayRef getPointer(long i) {
+        return new DoubleArrayRef((Pointer)this).offsetAddress(i);
+    }
 
   /** \name Constructors
    *  \{
@@ -32,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public DoubleArrayRef(double OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(double OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public DoubleArrayRef(@Const DoublePointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

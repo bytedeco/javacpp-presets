@@ -33,16 +33,6 @@ public class ClassDef extends TreeView {
   public native @ByVal StmtList body();
   public native @ByVal PropertyListMaybe properties();
   public native @ByVal AssignListMaybe assigns();
-  public static native @ByVal ClassDef create(
-        @Const @ByRef SourceRange range,
-        @Const @ByRef Ident name,
-        @Const @ByRef ExprMaybe superclass,
-        @Const @ByRef StmtList body);
-  public static native @ByVal ClassDef create(
-        @Const @ByRef SourceRange range,
-        @Const @ByRef Ident name,
-        @Const @ByRef ExprMaybe superclass,
-        @Const @ByRef StmtList body,
-        @Const @ByRef PropertyList properties,
-        @Const @ByRef AssignList assigns);
+  
+  
 }

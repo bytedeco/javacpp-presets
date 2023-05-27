@@ -41,10 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public StringArrayRef(@StdString BytePointer OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@StdString BytePointer OneElt);
-  public StringArrayRef(@StdString String OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@StdString String OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public StringArrayRef(PointerPointer<BytePointer> data, long length) { super((Pointer)null); allocate(data, length); }

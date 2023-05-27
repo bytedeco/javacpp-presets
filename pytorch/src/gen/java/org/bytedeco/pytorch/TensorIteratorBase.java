@@ -134,8 +134,7 @@ public class TensorIteratorBase extends MetaBase {
 
   /** Reapply same re-ordering as it is done by reorder_dimensions. This can
    *  only be called *before* coalesce_dimensions() is called. */
-  public native @ByVal DimVector apply_perm_and_mul(@ByVal LongArrayRef input, int mul);
-  public native @ByVal DimVector apply_perm_and_mul(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] input, int mul);
+  
 
   /** Helper functions for CPU iteration */
   public native @ByVal @Cast("at::TensorIteratorBase::StrideVector*") SymDimVector get_dim_strides(int dim);

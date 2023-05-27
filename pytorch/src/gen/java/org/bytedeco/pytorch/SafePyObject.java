@@ -37,14 +37,14 @@ public class SafePyObject extends Pointer {
     public SafePyObject(Pointer p) { super(p); }
 
   // Steals a reference to data
-  public SafePyObject(@Cast("PyObject*") Pointer data, @Cast("c10::impl::PyInterpreter*") Pointer pyinterpreter) { super((Pointer)null); allocate(data, pyinterpreter); }
-  private native void allocate(@Cast("PyObject*") Pointer data, @Cast("c10::impl::PyInterpreter*") Pointer pyinterpreter);
+  public SafePyObject(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter) { super((Pointer)null); allocate(data, pyinterpreter); }
+  private native void allocate(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter);
 
   // In principle this could be copyable if we add an incref to PyInterpreter
   // but for now it's easier to just disallow it.
   
   
 
-  public native @Cast("c10::impl::PyInterpreter*") @ByRef Pointer pyinterpreter();
-  public native @Cast("PyObject*") Pointer ptr(@Cast("const c10::impl::PyInterpreter*") Pointer arg0);
+  public native @ByRef PyInterpreter pyinterpreter();
+  public native @Cast("PyObject*") Pointer ptr(@Const PyInterpreter arg0);
 }

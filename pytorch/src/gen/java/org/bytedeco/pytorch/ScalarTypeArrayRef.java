@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public ScalarTypeArrayRef(ScalarType OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(ScalarType OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public ScalarTypeArrayRef(@Cast("c10::ScalarType*") BytePointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

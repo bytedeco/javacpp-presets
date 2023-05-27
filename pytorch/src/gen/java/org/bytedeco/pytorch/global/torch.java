@@ -1592,7 +1592,7 @@ public static final int HAS_DEMANGLE = 0;
 
 
 
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef SourceLocation loc);
+
 
 // unix isprint but insensitive to locale
 @Namespace("c10") public static native @Cast("bool") boolean isPrint(@Cast("char") byte s);
@@ -6876,6 +6876,9 @@ public static final byte min_lookups = min_lookups();
 // Targeting ../PyInterpreterVTable.java
 
 
+// Targeting ../PyInterpreter.java
+
+
 
 // PyInterpreterStatus describes what the state of its interpreter tag
 // is, relative to the thread currently holding the GIL.
@@ -7690,8 +7693,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 
 
-@Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl>") Generator make_generator_cuda();
-@Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Cast("int8_t&&") byte device_index);
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CPUGeneratorImpl>") Generator make_generator_cpu();
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CPUGeneratorImpl,uint64_t>") Generator make_generator_cpu(@Cast("uint64_t&&") long seed_in);
 
@@ -16957,7 +16958,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch::autograd") public static native @Cast("bool") boolean get_current_graph_task_keep_graph();
 @Namespace("torch::autograd") public static native @Cast("torch::autograd::Node**") @StdVector PointerPointer get_current_graph_task_execution_order();
 @Namespace("torch::autograd") public static native int get_current_graph_task_id();
-@Namespace("torch::autograd") public static native void add_node_to_current_graph_task_exec_info(Node fn);
+
 
  // namespace autograd
  // namespace torch
@@ -56633,7 +56634,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native void assert_no_partial_overlap(
     @Const @ByRef TensorBase a,
     @Const @ByRef TensorBase b);
-@Namespace("at") public static native void assert_no_partial_overlap(TensorImpl a, TensorImpl b);
+
 
 @Namespace("at") public static native void assert_no_overlap(@Const @ByRef TensorBase a, @Const @ByRef TensorBase b);
 @Namespace("at") public static native void assert_no_overlap(TensorImpl a, TensorImpl b);
@@ -64999,26 +65000,7 @@ body of your function, only data pointers.
 
 // Convert `getCount` results to Nanoseconds since unix epoch.
 
-@Namespace("torch::profiler::impl") public static native @StdString BytePointer getNvtxStr(
-    @Cast("const char*") BytePointer name,
-    @Cast("int64_t") long sequence_nr,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector shapes,
-    long op_id/*=0*/,
-    @Const @ByRef(nullValue = "std::list<std::pair<at::RecordFunctionHandle,int> >{}") RecordFunctionHandleIntList input_op_ids);
-@Namespace("torch::profiler::impl") public static native @StdString BytePointer getNvtxStr(
-    @Cast("const char*") BytePointer name,
-    @Cast("int64_t") long sequence_nr,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector shapes);
-@Namespace("torch::profiler::impl") public static native @StdString String getNvtxStr(
-    String name,
-    @Cast("int64_t") long sequence_nr,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector shapes,
-    long op_id/*=0*/,
-    @Const @ByRef(nullValue = "std::list<std::pair<at::RecordFunctionHandle,int> >{}") RecordFunctionHandleIntList input_op_ids);
-@Namespace("torch::profiler::impl") public static native @StdString String getNvtxStr(
-    String name,
-    @Cast("int64_t") long sequence_nr,
-    @Cast("std::vector<int64_t>*") @StdVector LongVector shapes);
+
 // Targeting ../FileLineFunc.java
 
 
@@ -74619,11 +74601,7 @@ public static final String TORCH_VERSION =
 
 // Returns a record to be appended to the local user extra data entry in order
 // to make data beginning aligned at kFieldAlignment bytes boundary.
-@Namespace("caffe2::serialize::detail") public static native @Cast("size_t") long getPadding(
-    @Cast("size_t") long cursor,
-    @Cast("size_t") long filename_size,
-    @Cast("size_t") long size,
-    @StdString @ByRef BytePointer padding_buf);
+
  // namespace detail
 
  // namespace serialize

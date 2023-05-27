@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public TensorArrayRef(@Const @ByRef Tensor OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Const @ByRef Tensor OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public TensorArrayRef(@Const Tensor data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

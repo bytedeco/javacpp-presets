@@ -38,11 +38,11 @@ public class SafePyHandle extends Pointer {
 
   public SafePyHandle() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public SafePyHandle(@Cast("PyObject*") Pointer data, @Cast("c10::impl::PyInterpreter*") Pointer pyinterpreter) { super((Pointer)null); allocate(data, pyinterpreter); }
-  private native void allocate(@Cast("PyObject*") Pointer data, @Cast("c10::impl::PyInterpreter*") Pointer pyinterpreter);
+  public SafePyHandle(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter) { super((Pointer)null); allocate(data, pyinterpreter); }
+  private native void allocate(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter);
 
-  public native @Cast("c10::impl::PyInterpreter*") @ByRef Pointer pyinterpreter();
-  public native @Cast("PyObject*") Pointer ptr(@Cast("const c10::impl::PyInterpreter*") Pointer arg0);
+  public native @ByRef PyInterpreter pyinterpreter();
+  public native @Cast("PyObject*") Pointer ptr(@Const PyInterpreter arg0);
   public native void reset();
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
 }

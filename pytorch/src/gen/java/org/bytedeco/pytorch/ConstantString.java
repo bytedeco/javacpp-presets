@@ -37,8 +37,5 @@ public class ConstantString extends Pointer {
   public native @ByVal @Cast("c10::string_view*") Pointer string_view();
 
   public native @Const @ByRef @Name("operator const std::string&") @StdString @Override String toString();
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-        @Cast("std::ostream*") @ByRef Pointer out,
-        @Const @ByRef ConstantString v);
-  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+  
 }

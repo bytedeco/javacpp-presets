@@ -36,7 +36,7 @@ public class PythonDispatcherTLS extends Pointer {
         return new PythonDispatcherTLS((Pointer)this).offsetAddress(i);
     }
 
-  public static native void set_state(@Cast("c10::impl::PyInterpreter*") Pointer state);
-  public static native @Cast("c10::impl::PyInterpreter*") Pointer get_state();
+  public static native void set_state(PyInterpreter state);
+  public static native PyInterpreter get_state();
   public static native void reset_state();
 }

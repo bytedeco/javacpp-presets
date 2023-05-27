@@ -31,19 +31,13 @@ public class EnumHolder extends Pointer {
 
   public native @Cast("bool") boolean is(@Const @ByRef EnumHolder rhs);
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") boolean equals(
-        @Const @ByRef EnumHolder lhs,
-        @Const @ByRef EnumHolder rhs);
-  public boolean equals(EnumHolder rhs) { return equals(this, rhs); }
+  
 
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-        @Cast("std::ostream*") @ByRef Pointer out,
-        @Const @ByRef EnumHolder v);
-  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+  
 
   public native @StdString BytePointer qualifiedClassName();
 
-  public native @StdString BytePointer unqualifiedClassName();
+  
 
   public native @StdString BytePointer name();
 

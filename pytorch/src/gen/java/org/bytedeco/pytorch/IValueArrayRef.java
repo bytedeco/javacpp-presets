@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public IValueArrayRef(@Const @ByRef IValue OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Const @ByRef IValue OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public IValueArrayRef(@Const IValue data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

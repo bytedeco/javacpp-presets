@@ -35,5 +35,5 @@ public class DisablePythonDispatcher extends Pointer {
 
   public DisablePythonDispatcher() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public native @Cast("c10::impl::PyInterpreter*") Pointer old_(); public native DisablePythonDispatcher old_(Pointer setter);
+  public native PyInterpreter old_(); public native DisablePythonDispatcher old_(PyInterpreter setter);
 }

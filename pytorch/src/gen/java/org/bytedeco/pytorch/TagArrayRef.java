@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public TagArrayRef(@Const @ByRef Tag OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@Const @ByRef Tag OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public TagArrayRef(IntPointer data, long length) { super((Pointer)null); allocate(data, length); }

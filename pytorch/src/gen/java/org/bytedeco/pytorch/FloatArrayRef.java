@@ -22,6 +22,15 @@ public class FloatArrayRef extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatArrayRef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FloatArrayRef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FloatArrayRef position(long position) {
+        return (FloatArrayRef)super.position(position);
+    }
+    @Override public FloatArrayRef getPointer(long i) {
+        return new FloatArrayRef((Pointer)this).offsetAddress(i);
+    }
 
   /** \name Constructors
    *  \{
@@ -32,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public FloatArrayRef(float OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(float OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public FloatArrayRef(@Const FloatPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

@@ -39,10 +39,7 @@ public class Await extends Pointer {
 
   public native void markCompleted(@ByVal IValue value);
 
-  private static native @Namespace @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-        @Cast("std::ostream*") @ByRef Pointer out,
-        @Const @ByRef Await v);
-  public Pointer shiftLeft(Pointer out) { return shiftLeft(out, this); }
+  
 
   public native @ByVal Type.TypePtr elementType();
 
