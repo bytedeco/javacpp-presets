@@ -2891,7 +2891,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.11.8"},
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.11.8", "nvfuser_codegen"},
             includepath = {"/usr/local/cuda/include"},
             preloadpath = {
                 "/usr/local/cuda-11.8/lib64/",
