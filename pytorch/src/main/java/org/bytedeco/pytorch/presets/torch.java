@@ -4901,10 +4901,26 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
         //// Functions not part of the API
+        //// TORCH_API and the like are not honored on Linux but are one Windows. We must skip all public
+        //// function not marked as part of API.
         infoMap.put(new Info(
             "c10::detail::makeBaseType",
             "torch::detail::constructSchemaOrName",
-            "at::operator <<(std::ostream&, const at::Range&)"
+            "at::operator <<(std::ostream&, at::Range&)",
+            "caffe2::serialize::detail::getPadding",
+            "at::assert_no_partial_overlap(c10::TensorImpl*, c10::TensorImpl*)",
+            "at::TensorIteratorBase::apply_perm_and_mul",
+            "c10::ivalue::ConstantString::operator <<", // No idea why these are not exported. TODO: dig
+            "c10::ivalue::Future::operator <<",
+            "c10::ivalue::EnumHolder::operator <<",
+            "c10::ivalue::Await::operator <<",
+            "c10::ivalue::EnumHolder::operator ==", // The friend operator is truly a member of c10::ivalue and not c10::ivalue::EnumHolder
+            "c10::ivalue::EnumHolder::unqualifiedClassName",
+            "c10::operator <<(std::ostream&, c10::SourceLocation&)",
+            "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
+            "torch::jit::ClassDef::create",
+            "torch::profiler::impl::getNvtxStr",
+            "torch::autograd::add_node_to_current_graph_task_exec_info"
         ).skip());
 
         //// Aliases necessary because of Parser limited namespace resolution
