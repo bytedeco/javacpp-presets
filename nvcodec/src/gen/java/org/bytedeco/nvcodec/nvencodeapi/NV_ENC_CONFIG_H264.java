@@ -82,9 +82,7 @@ public class NV_ENC_CONFIG_H264 extends Pointer {
     /** [in]: Set 1 to enable constrained intra prediction. */
     public native @Cast("uint32_t") @NoOffset int useConstrainedIntraPred(); public native NV_ENC_CONFIG_H264 useConstrainedIntraPred(int setter);
     /** [in]: Set to 1 to enable insertion of filler data in the bitstream.
-                                                                                   This flag will take effect only when one of the CBR rate
-                                                                                   control modes (NV_ENC_PARAMS_RC_CBR, NV_ENC_PARAMS_RC_CBR_HQ,
-                                                                                   NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ) is in use and both
+                                                                                   This flag will take effect only when CBR rate control mode is in use and both
                                                                                    NV_ENC_INITIALIZE_PARAMS::frameRateNum and
                                                                                    NV_ENC_INITIALIZE_PARAMS::frameRateDen are set to non-zero
                                                                                    values. Setting this field when

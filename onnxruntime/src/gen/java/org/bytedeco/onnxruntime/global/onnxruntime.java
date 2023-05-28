@@ -124,6 +124,8 @@ public static final int ORT_API_VERSION = 15;
 // #define ORTCHAR_T char
 // #endif
 
+/** ORTCHAR_T, ORT_TSTR are reserved specifically for path handling.
+ *  All other strings are UTF-8 encoded, use char and std::string */
 // #ifndef ORT_TSTR
 // #ifdef _WIN32
 // #define ORT_TSTR(X) L##X
@@ -647,14 +649,14 @@ public static native OrtStatus OrtSessionOptionsAppendExecutionProvider_Dnnl( Or
  *  This function returns the onnxruntime version string
  *  </summary>
  *  <returns>version string major.minor.rev</returns> */
-@Namespace("Ort") public static native @ByVal @Cast("std::basic_string<ORTCHAR_T>*") Pointer GetVersionString();
+@Namespace("Ort") public static native @StdString BytePointer GetVersionString();
 
 /** <summary>
  *  This function returns the onnxruntime build information: including git branch,
  *  git commit id, build type(Debug/Release/RelWithDebInfo) and cmake cpp flags.
  *  </summary>
  *  <returns>string</returns> */
-@Namespace("Ort") public static native @ByVal @Cast("std::basic_string<ORTCHAR_T>*") Pointer GetBuildInfoString();
+@Namespace("Ort") public static native @StdString BytePointer GetBuildInfoString();
 
 /** <summary>
  *  This is a C++ wrapper for OrtApi::GetAvailableProviders() and

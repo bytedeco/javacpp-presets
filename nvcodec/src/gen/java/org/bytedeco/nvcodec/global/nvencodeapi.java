@@ -22,7 +22,7 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 /*
  * This copyright notice applies to this header file only:
  *
- * Copyright (c) 2010-2022 NVIDIA Corporation
+ * Copyright (c) 2010-2023 NVIDIA Corporation
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -106,7 +106,7 @@ public class nvencodeapi extends org.bytedeco.nvcodec.presets.nvencodeapi {
 
 
 public static final int NVENCAPI_MAJOR_VERSION = 12;
-public static final int NVENCAPI_MINOR_VERSION = 0;
+public static final int NVENCAPI_MINOR_VERSION = 1;
 
 public static final int NVENCAPI_VERSION = (NVENCAPI_MAJOR_VERSION | (NVENCAPI_MINOR_VERSION << 24));
 
@@ -185,33 +185,6 @@ public static final int NV_MAX_SEQ_HDR_LEN =  (512);
 // =========================================================================================
 // *   Preset GUIDS supported by the NvEncodeAPI interface.
 // =========================================================================================
-// {B2DFB705-4EBD-4C49-9B5F-24A777D3E587}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_DEFAULT_GUID();
-
-// {60E4C59F-E846-4484-A56D-CD45BE9FDDF6}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_HP_GUID();
-
-// {34DBA71D-A77B-4B8F-9C3E-B6D5DA24C012}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_HQ_GUID();
-
-// {82E3E450-BDBB-4e40-989C-82A90DF9EF32}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_BD_GUID();
-
-// {49DF21C5-6DFA-4feb-9787-6ACC9EFFB726}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_LOW_LATENCY_DEFAULT_GUID();
-
-// {C5F733B9-EA97-4cf9-BEC2-BF78A74FD105}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_LOW_LATENCY_HQ_GUID();
-
-// {67082A44-4BAD-48FA-98EA-93056D150A58}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_LOW_LATENCY_HP_GUID();
-
-// {D5BFB716-C604-44e7-9BB8-DEA5510FC3AC}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_LOSSLESS_DEFAULT_GUID();
-
-// {149998E7-2364-411d-82EF-179888093409}
-@MemberGetter public static native @Const @Deprecated @ByRef GUID NV_ENC_PRESET_LOSSLESS_HP_GUID();
-
 // Performance degrades and quality improves as we move from P1 to P7. Presets P3 to P7 for H264 and Presets P2 to P7 for HEVC have B frames enabled by default
 // for HIGH_QUALITY and LOSSLESS tuning info, and will not work with Weighted Prediction enabled. In case Weighted Prediction is required, disable B frames by
 // setting frameIntervalP = 1
@@ -263,14 +236,7 @@ public static final int
     /** Variable bitrate mode */
     NV_ENC_PARAMS_RC_VBR                    = 0x1,
     /** Constant bitrate mode */
-    NV_ENC_PARAMS_RC_CBR                    = 0x2,
-    /** Deprecated, use NV_ENC_PARAMS_RC_CBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION +
-                                                              lowDelayKeyFrameScale=1 */
-    NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ        = 0x8,
-    /** Deprecated, use NV_ENC_PARAMS_RC_CBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION */
-    NV_ENC_PARAMS_RC_CBR_HQ                 = 0x10,
-    /** Deprecated, use NV_ENC_PARAMS_RC_VBR + NV_ENC_TWO_PASS_QUARTER_RESOLUTION / NV_ENC_TWO_PASS_FULL_RESOLUTION */
-    NV_ENC_PARAMS_RC_VBR_HQ                 = 0x20;
+    NV_ENC_PARAMS_RC_CBR                    = 0x2;
 
 /**
  * Multi Pass encoding
@@ -283,6 +249,26 @@ public static final int
     NV_ENC_TWO_PASS_QUARTER_RESOLUTION      = 0x1,
     /** Two Pass encoding is enabled where first Pass is full resolution */
     NV_ENC_TWO_PASS_FULL_RESOLUTION         = 0x2;
+
+/**
+ * Restore Encoder state
+ */
+/** enum NV_ENC_STATE_RESTORE_TYPE */
+public static final int
+    /** Restore full encoder state */
+    NV_ENC_STATE_RESTORE_FULL               = 0x01,
+    /** Restore only rate control state */
+    NV_ENC_STATE_RESTORE_RATE_CONTROL       = 0x02,
+    /** Restore full encoder state except for rate control state */
+    NV_ENC_STATE_RESTORE_ENCODE             = 0x03;
+
+/** enum NV_ENC_OUTPUT_STATS_LEVEL */
+public static final int
+    NV_ENC_OUTPUT_STATS_NONE          = 0,             /** No output stats */
+    NV_ENC_OUTPUT_STATS_BLOCK_LEVEL   = 1,             /** Output stats for every block. 
+                                                           Block represents a CTB for HEVC, macroblock for H.264, super block for AV1 */
+    NV_ENC_OUTPUT_STATS_ROW_LEVEL     = 2;             /** Output stats for every row. 
+                                                           Row represents a CTB row for HEVC, macroblock row for H.264, super block row for AV1 */
 
 /**
  * Emphasis Levels
@@ -315,7 +301,6 @@ public static final int
     NV_ENC_QP_MAP_DELTA                  = 0x2,
     /** Currently This is not supported. Value in NV_ENC_PIC_PARAMS::qpDeltaMap will be treated as QP value.   */
     NV_ENC_QP_MAP                        = 0x3;
-
 
 /**
  * Input picture structure
@@ -680,7 +665,17 @@ public static final int
      * This indicates that the client is attempting to unmap a resource
      * that has not been successfully mapped.
      */
-    NV_ENC_ERR_RESOURCE_NOT_MAPPED = 25;
+    NV_ENC_ERR_RESOURCE_NOT_MAPPED = 25,
+    
+    /**
+     * This indicates encode driver requires more output buffers to write an output
+     * bitstream. If this error is returned from ::NvEncRestoreEncoderState() API, this
+     * is not a fatal error. If the client is encoding with B frames then,
+     * ::NvEncRestoreEncoderState() API might be requiring the extra output buffer for accomodating overlay frame output in a separate buffer, for AV1 codec.
+     * In this case, client must call NvEncRestoreEncoderState() API again with NV_ENC_RESTORE_ENCODER_STATE_PARAMS::outputBitstream as input along with 
+     * the parameters in the previous call. When operating in asynchronous mode of encoding, client must also specify NV_ENC_RESTORE_ENCODER_STATE_PARAMS::completionEvent.
+     */
+    NV_ENC_ERR_NEED_MORE_OUTPUT = 26;
 
 /**
  * Encode Picture encode flags.
@@ -696,7 +691,11 @@ public static final int
     /** Write the sequence and picture header in encoded bitstream of the current picture */
     NV_ENC_PIC_FLAG_OUTPUT_SPSPPS      = 0x4,
     /** Indicates end of the input stream */
-    NV_ENC_PIC_FLAG_EOS                = 0x8;
+    NV_ENC_PIC_FLAG_EOS                = 0x8,
+    /** Do not advance encoder state during encode */
+    NV_ENC_PIC_FLAG_DISABLE_ENC_STATE_ADVANCE = 0x10, 
+    /** Write reconstructed frame */
+    NV_ENC_PIC_FLAG_OUTPUT_RECON_FRAME        = 0x20;
 
 /**
  * Memory heap to allocate input and output buffers.
@@ -821,7 +820,9 @@ public static final int
                                                          This buffer usage type is not supported for HEVC ME only mode. */
     NV_ENC_OUTPUT_MOTION_VECTOR     = 0x1,
     /** Registered surface will be used for output bitstream in encoding */
-    NV_ENC_OUTPUT_BITSTREAM         = 0x2;
+    NV_ENC_OUTPUT_BITSTREAM         = 0x2,
+    /** Registered surface will be used for output reconstructed frame in encoding */
+    NV_ENC_OUTPUT_RECON             = 0x4;
 
 /**
  *  Encoder Device type
@@ -1210,10 +1211,30 @@ public static final int
      */
     NV_ENC_CAPS_SINGLE_SLICE_INTRA_REFRESH = 50,
 
+    /**
+     * Indicates encoding without advancing the state support.
+     */
+    NV_ENC_CAPS_DISABLE_ENC_STATE_ADVANCE = 51,
+
+    /**
+     * Indicates reconstructed output support.
+     */
+    NV_ENC_CAPS_OUTPUT_RECON_SURFACE = 52,
+
+    /**
+     * Indicates encoded frame output stats support for every block. Block represents a CTB for HEVC, macroblock for H.264 and super block for AV1.
+     */
+    NV_ENC_CAPS_OUTPUT_BLOCK_STATS = 53,
+
+    /**
+     * Indicates encoded frame output stats support for every row. Row represents a CTB row for HEVC, macroblock row for H.264 and super block row for AV1.
+     */
+    NV_ENC_CAPS_OUTPUT_ROW_STATS = 54,
+
      /**
      * Reserved - Not to be used by clients.
      */
-    NV_ENC_CAPS_EXPOSED_COUNT = 51;
+    NV_ENC_CAPS_EXPOSED_COUNT = 55;
 
 /**
  *  HEVC CU SIZE
@@ -1310,6 +1331,27 @@ public static final int
 /** NV_ENC_CAPS_PARAM struct version. */
 public static native @MemberGetter int NV_ENC_CAPS_PARAM_VER();
 public static final int NV_ENC_CAPS_PARAM_VER = NV_ENC_CAPS_PARAM_VER();
+// Targeting ../nvencodeapi/NV_ENC_RESTORE_ENCODER_STATE_PARAMS.java
+
+
+
+/** NV_ENC_RESTORE_ENCODER_STATE_PARAMS struct version. */
+public static native @MemberGetter int NV_ENC_RESTORE_ENCODER_STATE_PARAMS_VER();
+public static final int NV_ENC_RESTORE_ENCODER_STATE_PARAMS_VER = NV_ENC_RESTORE_ENCODER_STATE_PARAMS_VER();
+// Targeting ../nvencodeapi/NV_ENC_OUTPUT_STATS_BLOCK.java
+
+
+
+/** NV_ENC_OUTPUT_STATS_BLOCK struct version. */
+public static native @MemberGetter int NV_ENC_OUTPUT_STATS_BLOCK_VER();
+public static final int NV_ENC_OUTPUT_STATS_BLOCK_VER = NV_ENC_OUTPUT_STATS_BLOCK_VER();
+// Targeting ../nvencodeapi/NV_ENC_OUTPUT_STATS_ROW.java
+
+
+
+/** NV_ENC_OUTPUT_STATS_ROW struct version. */
+public static native @MemberGetter int NV_ENC_OUTPUT_STATS_ROW_VER();
+public static final int NV_ENC_OUTPUT_STATS_ROW_VER = NV_ENC_OUTPUT_STATS_ROW_VER();
 // Targeting ../nvencodeapi/NV_ENC_ENCODE_OUT_PARAMS.java
 
 
@@ -1317,6 +1359,13 @@ public static final int NV_ENC_CAPS_PARAM_VER = NV_ENC_CAPS_PARAM_VER();
 /** NV_ENC_ENCODE_OUT_PARAMS struct version. */
 public static native @MemberGetter int NV_ENC_ENCODE_OUT_PARAMS_VER();
 public static final int NV_ENC_ENCODE_OUT_PARAMS_VER = NV_ENC_ENCODE_OUT_PARAMS_VER();
+// Targeting ../nvencodeapi/NV_ENC_LOOKAHEAD_PIC_PARAMS.java
+
+
+
+/** NV_ENC_LOOKAHEAD_PIC_PARAMS struct version. */
+public static native @MemberGetter int NV_ENC_LOOKAHEAD_PIC_PARAMS_VER();
+public static final int NV_ENC_LOOKAHEAD_PIC_PARAMS_VER = NV_ENC_LOOKAHEAD_PIC_PARAMS_VER();
 // Targeting ../nvencodeapi/NV_ENC_CREATE_INPUT_BUFFER.java
 
 
@@ -1426,6 +1475,22 @@ public static final int
     NV_ENC_TUNING_INFO_LOSSLESS          = 4,
     /** Count number of tuningInfos. Invalid value. */
     NV_ENC_TUNING_INFO_COUNT = 5;
+
+/**
+ * Split Encoding Modes (Split Encoding is not applicable to H264).
+ */
+/** enum NV_ENC_SPLIT_ENCODE_MODE */
+public static final int
+    /** Default value, split frame forced mode disabled, split frame auto mode enabled */
+    NV_ENC_SPLIT_AUTO_MODE               = 0,
+    /** Split frame forced mode enabled with number of strips automatically selected by driver to best fit configuration */
+    NV_ENC_SPLIT_AUTO_FORCED_MODE        = 1,
+    /** Forced 2-strip split frame encoding (if NVENC number > 1, 1-strip encode otherwise) */
+    NV_ENC_SPLIT_TWO_FORCED_MODE         = 2,
+    /** Forced 3-strip split frame encoding (if NVENC number > 2, NVENC number of strips otherwise) */
+    NV_ENC_SPLIT_THREE_FORCED_MODE       = 3,
+    /** Both split frame auto mode and forced mode are disabled  */
+    NV_ENC_SPLIT_DISABLE_MODE            = 15;
 // Targeting ../nvencodeapi/NV_ENC_INITIALIZE_PARAMS.java
 
 
@@ -1494,7 +1559,6 @@ public static final int NV_ENC_MEONLY_PARAMS_VER = NV_ENC_MEONLY_PARAMS_VER();
 
 
 
-/** Macro for constructing the version field of ::_NV_ENC_LOCK_BITSTREAM */
 public static native @MemberGetter int NV_ENC_LOCK_BITSTREAM_VER();
 public static final int NV_ENC_LOCK_BITSTREAM_VER = NV_ENC_LOCK_BITSTREAM_VER();
 // Targeting ../nvencodeapi/NV_ENC_LOCK_INPUT_BUFFER.java
@@ -2474,6 +2538,34 @@ public static final int NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER = NV_ENC_OPEN_E
  */
 
 
+// NvEncRestoreEncoderState
+/**
+ * \brief Restore state of encoder
+ *
+ * This function is used to restore the state of encoder with state saved internally in
+ * state buffer corresponding to index equal to 'NV_ENC_RESTORE_ENCODER_STATE_PARAMS::bfrIndex'. 
+ * Client can specify the state type to be updated by specifying appropriate value in
+ * 'NV_ENC_RESTORE_ENCODER_STATE_PARAMS::state'. The client must call this 
+ * function after all previous encodes have finished.
+ *
+ * @param encoder [in]
+ *   Pointer to the NvEncodeAPI interface.
+ * @param restoreState [in]
+ *   Pointer to the ::_NV_ENC_RESTORE_ENCODER_STATE_PARAMS structure
+ *
+ * @return
+ * ::NV_ENC_SUCCESS \n
+ * ::NV_ENC_ERR_INVALID_PTR \n
+ * ::NV_ENC_ERR_INVALID_ENCODERDEVICE \n
+ * ::NV_ENC_ERR_DEVICE_NOT_EXIST \n
+ * ::NV_ENC_ERR_UNSUPPORTED_PARAM \n
+ * ::NV_ENC_ERR_OUT_OF_MEMORY \n
+ * ::NV_ENC_ERR_INVALID_PARAM \n
+ * ::NV_ENC_ERR_ENCODER_NOT_INITIALIZED \n
+ * ::NV_ENC_ERR_GENERIC \n
+ *
+ */
+
 
 // NvLockInputBuffer
 /**
@@ -3090,6 +3182,33 @@ public static native @Cast("NVENCSTATUS") int NvEncodeAPIGetMaxSupportedVersion(
  *   Pointer to buffer containing the details of the last error encountered by the API.
  */
 
+
+// NvEncLookaheadPicture
+/**
+ * \brief Submit an input picture for lookahead.
+ *
+ * This function can be used by clients to submit input frame for lookahead. Client could call this function 
+ * NV_ENC_INITIALIZE_PARAMS::lookaheadDepth plus one number of frames, before calling NvEncEncodePicture() for the first frame.
+ *
+ * @param encoder [in]
+ *   Pointer to the NvEncodeAPI interface.
+ * @param lookaheadParams [in]
+ *   Pointer to the ::_NV_ENC_LOOKAHEAD_PIC_PARAMS structure.
+ *
+ * @return
+ * ::NV_ENC_SUCCESS \n
+ * ::NV_ENC_NEED_MORE_INPUT \n  should we return this error is lookahead queue is not full? 
+ * ::NV_ENC_ERR_INVALID_PTR \n
+ * ::NV_ENC_ERR_ENCODER_NOT_INITIALIZED \n
+ * ::NV_ENC_ERR_GENERIC \n
+ * ::NV_ENC_ERR_INVALID_ENCODERDEVICE \n
+ * ::NV_ENC_ERR_DEVICE_NOT_EXIST \n
+ * ::NV_ENC_ERR_UNSUPPORTED_PARAM \n
+ * ::NV_ENC_ERR_OUT_OF_MEMORY \n
+ * ::NV_ENC_ERR_INVALID_PARAM \n
+ * ::NV_ENC_ERR_INVALID_VERSION \n
+ */
+
 // Targeting ../nvencodeapi/PNVENCOPENENCODESESSION.java
 
 
@@ -3208,6 +3327,12 @@ public static native @Cast("NVENCSTATUS") int NvEncodeAPIGetMaxSupportedVersion(
 
 
 // Targeting ../nvencodeapi/PNVENCGETSEQUENCEPARAMEX.java
+
+
+// Targeting ../nvencodeapi/PNVENCRESTOREENCODERSTATE.java
+
+
+// Targeting ../nvencodeapi/PNVENCLOOKAHEADPICTURE.java
 
 
 // Targeting ../nvencodeapi/NV_ENCODE_API_FUNCTION_LIST.java

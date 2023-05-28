@@ -156,7 +156,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.14.0-${project.version}</version>
+      <version>1.14.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>16.0.3-${project.version}</version>
+      <version>16.0.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -276,7 +276,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>nvcodec-platform</artifactId>
-      <version>12.0.16-${project.version}</version>
+      <version>12.1.14-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
