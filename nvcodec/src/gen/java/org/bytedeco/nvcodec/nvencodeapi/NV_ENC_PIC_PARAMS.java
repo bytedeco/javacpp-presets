@@ -115,9 +115,19 @@ public class NV_ENC_PIC_PARAMS extends Pointer {
                                                                                                 NV_ENC_PIC_PARAMS::meSbHintsCount must never exceed the total number of SBs in frame * the max number of candidates per SB provided during encoder initialization.
                                                                                                 The max number of candidates per SB is maxMeHintCountsPerBlock[0].numCandsPerSb + maxMeHintCountsPerBlock[1].numCandsPerSb */
     public native @Cast("uint32_t") int meSbHintsCount(); public native NV_ENC_PIC_PARAMS meSbHintsCount(int setter);
+    /** [in]: Specifies the buffer index in which the encoder state will be saved for current frame encode. It must be in the 
+                                                                                                range 0 to NV_ENC_INITIALIZE_PARAMS::numStateBuffers - 1. */
+    public native @Cast("uint32_t") int stateBufferIdx(); public native NV_ENC_PIC_PARAMS stateBufferIdx(int setter);
+    /** [in]: Specifies the reconstructed frame buffer pointer to output reconstructed frame, if enabled by setting NV_ENC_INITIALIZE_PARAMS::enableReconFrameOutput.
+                                                                                                Client must allocate buffers for writing the reconstructed frames and register them with the Nvidia Video Encoder Interface with NV_ENC_REGISTER_RESOURCE::bufferUsage
+                                                                                                set to NV_ENC_OUTPUT_RECON. 
+                                                                                                Client must use the pointer obtained from ::NvEncMapInputResource() API and assign it to NV_ENC_PIC_PARAMS::outputReconBuffer.
+                                                                                                Reconstructed output will be in NV_ENC_BUFFER_FORMAT_NV12 format when chromaFormatIDC is set to 1.
+                                                                                                chromaFormatIDC = 3 is not supported. */
+    public native NV_ENC_OUTPUT_PTR outputReconBuffer(); public native NV_ENC_PIC_PARAMS outputReconBuffer(NV_ENC_OUTPUT_PTR setter);
     /** [in]: Reserved and must be set to 0 */
     public native @Cast("uint32_t") int reserved3(int i); public native NV_ENC_PIC_PARAMS reserved3(int i, int setter);
-    @MemberGetter public native @Cast("uint32_t*") IntPointer reserved3();
+    @MemberGetter public native @Cast("uint32_t*") IntPointer reserved3();    
     /** [in]: Reserved and must be set to NULL */
     public native Pointer reserved4(int i); public native NV_ENC_PIC_PARAMS reserved4(int i, Pointer setter);
     @MemberGetter public native @Cast("void**") PointerPointer reserved4();

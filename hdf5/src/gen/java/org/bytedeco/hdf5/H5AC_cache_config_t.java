@@ -57,7 +57,7 @@ public class H5AC_cache_config_t extends Pointer {
     /* general configuration fields: */
     /** <!-- [H5AC_cache_config_t_general_snip] --> */
     
-    /** Integer field indicating the the version of the H5AC_cache_config_t
+    /** Integer field indicating the version of the H5AC_cache_config_t
          * in use. This field should be set to #H5AC__CURR_CACHE_CONFIG_VERSION
          * (defined in H5ACpublic.h). */
     public native int version(); public native H5AC_cache_config_t version(int setter);

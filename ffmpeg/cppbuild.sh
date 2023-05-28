@@ -32,20 +32,20 @@ SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.0.8
+OPENSSL=openssl-3.1.0
 OPENH264_VERSION=2.3.1
 X264=x264-stable
 X265=3.4
 VPX_VERSION=1.13.0
-ALSA_VERSION=1.2.8
+ALSA_VERSION=1.2.9
 FREETYPE_VERSION=2.13.0
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=11.1.5.2
+NVCODEC_VERSION=12.0.16.0
 XML2=libxml2-2.9.12
 LIBSRT_VERSION=1.5.1
 WEBP_VERSION=1.3.0
-AOMAV1_VERSION=3.6.0
-SVTAV1_VERSION=1.4.1
+AOMAV1_VERSION=3.6.1
+SVTAV1_VERSION=1.5.0
 FFMPEG_VERSION=6.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
@@ -67,7 +67,7 @@ download https://github.com/Haivision/srt/archive/refs/tags/v$LIBSRT_VERSION.tar
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download https://github.com/webmproject/libwebp/archive/refs/tags/v$WEBP_VERSION.tar.gz libwebp-$WEBP_VERSION.tar.gz
 download https://storage.googleapis.com/aom-releases/libaom-$AOMAV1_VERSION.tar.gz aom-$AOMAV1_VERSION.tar.gz
-download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v1.4.1/SVT-AV1-v$SVTAV1_VERSION.tar.gz svt-av1-$SVTAV1_VERSION.tar.gz
+download https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$SVTAV1_VERSION/SVT-AV1-v$SVTAV1_VERSION.tar.gz SVT-AV1-$SVTAV1_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 mkdir -p $PLATFORM$EXTENSION
@@ -93,7 +93,7 @@ tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xzf ../$XML2.tar.gz
 tar --totals -xzf ../libwebp-$WEBP_VERSION.tar.gz
 tar --totals -xzf ../aom-$AOMAV1_VERSION.tar.gz
-tar --totals -xzf ../svt-av1-$SVTAV1_VERSION.tar.gz
+tar --totals -xzf ../SVT-AV1-$SVTAV1_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
@@ -113,12 +113,11 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
-patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1.patch
-patch -Np1 -d SVT-AV1-v$SVTAV1_VERSION < ../../SVT-AV1-2059.diff
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
+sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
 sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 sedinplace 's/#define MAX_SLICES 32/#define MAX_SLICES 256/g' ffmpeg-*/libavcodec/h264dec.h
 

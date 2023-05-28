@@ -74,9 +74,7 @@ public class NV_ENC_CONFIG_HEVC extends Pointer {
     /** [in]: Specifies pixel bit depth minus 8. Should be set to 0 for 8 bit input, 2 for 10 bit input.*/
     public native @Cast("uint32_t") @NoOffset int pixelBitDepthMinus8(); public native NV_ENC_CONFIG_HEVC pixelBitDepthMinus8(int setter);
     /** [in]: Set to 1 to enable insertion of filler data in the bitstream.
-                                                                                   This flag will take effect only when one of the CBR rate
-                                                                                   control modes (NV_ENC_PARAMS_RC_CBR, NV_ENC_PARAMS_RC_CBR_HQ,
-                                                                                   NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ) is in use and both
+                                                                                   This flag will take effect only when CBR rate control mode is in use and both
                                                                                    NV_ENC_INITIALIZE_PARAMS::frameRateNum and
                                                                                    NV_ENC_INITIALIZE_PARAMS::frameRateDen are set to non-zero
                                                                                    values. Setting this field when

@@ -17,7 +17,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * NVIDIA Video Codec SDK 12.0.16  https://developer.nvidia.com/nvidia-video-codec-sdk
+ * NVIDIA Video Codec SDK 12.1.14  https://developer.nvidia.com/nvidia-video-codec-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -31,7 +31,7 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_12.0.16.zip` available at:
+Here is a simple example ported to Java from C code based on `Samples/AppEncode/AppEncCuda` and `Samples/AppDecode/AppDec` included in `Video_Codec_SDK_12.1.14.zip` available at:
 
  * https://developer.nvidia.com/nvidia-video-codec-sdk/download
 
@@ -55,7 +55,7 @@ You can find more encoder and decoder samples in the [`samples`](samples) subdir
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>nvcodec-platform</artifactId>
-            <version>12.0.16-1.5.9-SNAPSHOT</version>
+            <version>12.1.14-1.5.9-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA -->

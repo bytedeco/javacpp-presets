@@ -15,7 +15,6 @@ import static org.bytedeco.nvcodec.global.nvcuvid.*;
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 
 
-
 /**
  * Encoder Output parameters
  */
