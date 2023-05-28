@@ -76,13 +76,18 @@ public class NV_ENC_RC_PARAMS extends Pointer {
     /** [in]: When AQ (Spatial) is enabled (i.e. NV_ENC_RC_PARAMS::enableAQ is set), this field is used to specify AQ strength. AQ strength scale is from 1 (low) - 15 (aggressive).
                                                                                                 If not set, strength is auto selected by driver. */
     public native @Cast("uint32_t") @NoOffset int aqStrength(); public native NV_ENC_RC_PARAMS aqStrength(int setter);
+    /** [in]: Set this to 1 to enable lookahead externally. 
+                                                                                                Application must call NvEncLookahead() for NV_ENC_RC_PARAMS::lookaheadDepth number of frames,
+                                                                                                before calling NvEncEncodePicture() for the first frame */
+    public native @Cast("uint32_t") @NoOffset int enableExtLookahead(); public native NV_ENC_RC_PARAMS enableExtLookahead(int setter);
     /** [in]: Reserved bitfields and must be set to 0 */
     public native @Cast("uint32_t") @NoOffset int reservedBitFields(); public native NV_ENC_RC_PARAMS reservedBitFields(int setter);
     /** [in]: Specifies the minimum QP used for rate control. Client must set NV_ENC_CONFIG::enableMinQP to 1. */
     public native @ByRef NV_ENC_QP minQP(); public native NV_ENC_RC_PARAMS minQP(NV_ENC_QP setter);
     /** [in]: Specifies the maximum QP used for rate control. Client must set NV_ENC_CONFIG::enableMaxQP to 1. */
     public native @ByRef NV_ENC_QP maxQP(); public native NV_ENC_RC_PARAMS maxQP(NV_ENC_QP setter);
-    /** [in]: Specifies the initial QP used for rate control. Client must set NV_ENC_CONFIG::enableInitialRCQP to 1. */
+    /** [in]: Specifies the initial QP hint used for rate control. The parameter is just used as hint to influence the QP difference between I,P and B frames.
+                                                                                                Client must set NV_ENC_CONFIG::enableInitialRCQP to 1. */
     public native @ByRef NV_ENC_QP initialRCQP(); public native NV_ENC_RC_PARAMS initialRCQP(NV_ENC_QP setter);
     /** [in]: Specifies the temporal layers (as a bitmask) whose QPs have changed. Valid max bitmask is [2^NV_ENC_CAPS_NUM_MAX_TEMPORAL_LAYERS - 1].
                                                                                                 Applicable only for constant QP mode (NV_ENC_RC_PARAMS::rateControlMode = NV_ENC_PARAMS_RC_CONSTQP). */

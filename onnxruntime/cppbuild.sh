@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=rel-1.15.0
+ONNXRUNTIME=1.15.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -33,7 +33,7 @@ if [[ ! -d onnxruntime ]]; then
 fi
 cd onnxruntime
 git reset --hard
-git checkout $ONNXRUNTIME
+git checkout v$ONNXRUNTIME
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
 

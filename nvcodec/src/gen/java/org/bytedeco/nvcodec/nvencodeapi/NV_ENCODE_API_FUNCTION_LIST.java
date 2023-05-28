@@ -128,6 +128,10 @@ public class NV_ENCODE_API_FUNCTION_LIST extends Pointer {
     public native PNVENCGETENCODEPRESETCONFIGEX nvEncGetEncodePresetConfigEx(); public native NV_ENCODE_API_FUNCTION_LIST nvEncGetEncodePresetConfigEx(PNVENCGETENCODEPRESETCONFIGEX setter);
     /** [out]: Client should access ::NvEncGetSequenceParamEx() API through this pointer.       */
     public native PNVENCGETSEQUENCEPARAMEX nvEncGetSequenceParamEx(); public native NV_ENCODE_API_FUNCTION_LIST nvEncGetSequenceParamEx(PNVENCGETSEQUENCEPARAMEX setter);
+    /** [out]: Client should access ::NvEncRestoreEncoderState() API through this pointer.      */
+    public native PNVENCRESTOREENCODERSTATE nvEncRestoreEncoderState(); public native NV_ENCODE_API_FUNCTION_LIST nvEncRestoreEncoderState(PNVENCRESTOREENCODERSTATE setter);
+    /** [out]: Client should access ::NvEncLookaheadPicture() API through this pointer.         */
+    public native PNVENCLOOKAHEADPICTURE nvEncLookaheadPicture(); public native NV_ENCODE_API_FUNCTION_LIST nvEncLookaheadPicture(PNVENCLOOKAHEADPICTURE setter);
     /** [in]:  Reserved and must be set to NULL                                                 */
     public native Pointer reserved2(int i); public native NV_ENCODE_API_FUNCTION_LIST reserved2(int i, Pointer setter);
     @MemberGetter public native @Cast("void**") PointerPointer reserved2();

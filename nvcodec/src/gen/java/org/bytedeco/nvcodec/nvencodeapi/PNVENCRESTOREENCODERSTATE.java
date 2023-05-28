@@ -14,17 +14,12 @@ import static org.bytedeco.nvcodec.global.nvcuvid.*;
 
 import static org.bytedeco.nvcodec.global.nvencodeapi.*;
 
-
-/** \cond API PFN */
-/*
- *  Defines API function pointers
- */
 @Properties(inherit = org.bytedeco.nvcodec.presets.nvencodeapi.class)
-public class PNVENCOPENENCODESESSION extends FunctionPointer {
+public class PNVENCRESTOREENCODERSTATE extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    PNVENCOPENENCODESESSION(Pointer p) { super(p); }
-    protected PNVENCOPENENCODESESSION() { allocate(); }
+    public    PNVENCRESTOREENCODERSTATE(Pointer p) { super(p); }
+    protected PNVENCRESTOREENCODERSTATE() { allocate(); }
     private native void allocate();
-    public native @Cast("NVENCSTATUS") int call(Pointer device, @Cast("uint32_t") int deviceType, @Cast("void**") PointerPointer encoder);
+    public native @Cast("NVENCSTATUS") int call(Pointer encoder, NV_ENC_RESTORE_ENCODER_STATE_PARAMS restoreState);
 }

@@ -93,7 +93,8 @@ runs:
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_531.14_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn_8.8.0.121_windows.exe
+          rem curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn_8.8.0.121_windows.exe
+          python -m gdown.cli https://drive.google.com/uc?id=11XXD0D91vd-SnvdlNOMP5C9S_dWyT8Cv
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
           cuda_11.8.0_522.06_windows.exe -s
           bash -c "rm -Rf 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8'"
@@ -101,11 +102,15 @@ runs:
           cuda_12.1.1_531.14_windows.exe -s
           bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old' 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
           bash -c "ls 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
-          cudnn_8.8.0.121_windows.exe -s
+          rem cudnn_8.8.0.121_windows.exe -s
+          unzip cudnn-windows-x86_64-8.9.1.23_cuda12-archive.zip
           unzip zlib123dllx64.zip
-          move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\bin\*.dll" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin"
-          move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\include\*.h" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include"
-          move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\lib\x64\*.lib" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\lib\x64"
+          rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\bin\*.dll" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin"
+          rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\include\*.h" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include"
+          rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\lib\x64\*.lib" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\lib\x64"
+          move cudnn-windows-x86_64-8.9.1.23_cuda12-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin"
+          move cudnn-windows-x86_64-8.9.1.23_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include"
+          move cudnn-windows-x86_64-8.9.1.23_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin"
 
           rem echo Applying hotfix to Visual Studio 2019 for CUDA
@@ -120,9 +125,9 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="nvcodec" (
           echo Installing NVIDIA Video Codec SDK
-          python -m gdown.cli https://drive.google.com/uc?id=1ner_cjzhKhdlrP2VzHGZvyEnW3UQ4uOy
-          unzip Video_Codec_SDK_12.0.16.zip
-          move Video_Codec_SDK_12.0.16 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
+          python -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          unzip Video_Codec_SDK_12.1.14.zip
+          move Video_Codec_SDK_12.1.14 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\VideoCodecSDK"
         )
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
