@@ -4919,6 +4919,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::ivalue::EnumHolder::operator <<",
             "c10::ivalue::Await::operator <<",
             "c10::ivalue::EnumHolder::operator ==", // The friend operator is truly a member of c10::ivalue and not c10::ivalue::EnumHolder
+            "c10::ivalue::EnumHolder::is", // Calls ==, which is not exported
             "c10::ivalue::EnumHolder::unqualifiedClassName",
             "c10::operator <<(std::ostream&, c10::SourceLocation&)",
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code

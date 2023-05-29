@@ -29,7 +29,7 @@ public class EnumHolder extends Pointer {
   public EnumHolder(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value) { super((Pointer)null); allocate(type, name, value); }
   private native void allocate(@SharedPtr EnumType type, @StdString String name, @ByVal IValue value);
 
-  public native @Cast("bool") boolean is(@Const @ByRef EnumHolder rhs);
+  
 
   
 
