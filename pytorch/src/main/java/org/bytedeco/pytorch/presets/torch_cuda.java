@@ -93,17 +93,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
                 // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
             },
-            link = {"c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch"},
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.11.8", "nvfuser_codegen"},
+            link = {"c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
             includepath = {"/usr/local/cuda/include"},
             preloadpath = {
-                "/usr/local/cuda-11.8/lib64/",
-                "/usr/local/cuda-11.8/extras/CUPTI/lib64/",
+                "/usr/local/cuda-12.1/lib64/",
+                "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/local/cuda/extras/CUPTI/lib64/",
                 "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/extras/CUPTI/lib64/",
                 "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             }
         ),
