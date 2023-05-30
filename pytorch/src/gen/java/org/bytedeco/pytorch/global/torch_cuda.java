@@ -338,7 +338,7 @@ manage their own state. There is only a single CUDA context/state.
 
 
 
-@Namespace("c10::cuda") public static native @StdString BytePointer c10_retrieve_device_side_assertion_info();
+
 
  // namespace cuda
  // namespace c10
@@ -686,7 +686,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <ATen/ops/empty.h>
 // #endif
 
-@Namespace("at::native") public static native @StdString BytePointer cudnnTypeToString(@Cast("cudnnDataType_t") int dtype);
+
 
 // TODO: Add constructors for all of the descriptors
 
@@ -706,12 +706,12 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 
 
 
-@Namespace("at::native") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TensorDescriptor d);
+
 // Targeting ../cuda/FilterDescriptor.java
 
 
 
-@Namespace("at::native") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef FilterDescriptor d);
+
 // Targeting ../cuda/ConvolutionDescriptor.java
 
 
@@ -745,9 +745,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <ATen/Tensor.h>
 
 @Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(@Const @ByVal ScalarType dtype);
-@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataType(@Const @ByRef Tensor tensor);
 
-@Namespace("at::native") public static native @Cast("int64_t") long cudnn_version();
+
+
 
   // namespace at::cudnn
 

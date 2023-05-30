@@ -21,10 +21,15 @@
  */
 package org.bytedeco.pytorch.presets;
 
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+
+import java.util.List;
 
 /**
  * @author Samuel Audet, Hervé Guillemet
@@ -111,7 +116,41 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.pytorch.cuda",
     global = "org.bytedeco.pytorch.global.torch_cuda"
 )
-public class torch_cuda implements InfoMapper {
+public class torch_cuda implements InfoMapper, LoadEnabled {
+    @Override
+    public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        List<String> preloads = properties.get("platform.preload");
+        List<String> resources = properties.get("platform.preloadresource");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || extension == null) {
+            return;
+        }
+        int i = 0;
+        if (platform.startsWith("windows")) {
+            preloads.add(i++, "zlibwapi");
+        }
+        String[] libs = {"cudart", "cusparse", "cudnn" };
+        for (String lib : libs) {
+            if (platform.startsWith("linux")) {
+                lib += lib.startsWith("cudnn") ? "@.8"
+                    : lib.equals("cudart") ? "@.12"
+                    : "@.12";
+            } else if (platform.startsWith("windows")) {
+                lib += lib.startsWith("cudnn") ? "64_8"
+                    : lib.equals("cudart") ? "64_12"
+                    : "64_12";
+            } else {
+                continue; // no CUDA
+            }
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
 
         torch.sharedMap(infoMap);
@@ -162,6 +201,10 @@ public class torch_cuda implements InfoMapper {
             .put(new Info("c10::CuDNNError").purify())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())
             .put(new Info("at::native::RNNDescriptor::dropout_desc_").skip())
+            .put(new Info("at::native::operator <<(std::ostream&, at::native::TensorDescriptor&)",
+                "at::native::operator <<(std::ostream&, at::native::FilterDescriptor&)",
+                "at::native::cudnnTypeToString", "at::native::getCudnnDataType", "at::native::cudnn_version",
+                "c10::cuda::c10_retrieve_device_side_assertion_info").skip())
 
             .put(new Info(
                 "at::native::Descriptor<cudnnActivationStruct,cudnnCreateActivationDescriptor&,cudnnDestroyActivationDescriptor&>",
