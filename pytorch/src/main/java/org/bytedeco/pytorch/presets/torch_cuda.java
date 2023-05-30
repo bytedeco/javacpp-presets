@@ -95,7 +95,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = {"c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
-            includepath = {"/usr/local/cuda/include"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
             preloadpath = {
                 "/usr/local/cuda-12.1/lib64/",
                 "/usr/local/cuda-12.1/extras/CUPTI/lib64/",

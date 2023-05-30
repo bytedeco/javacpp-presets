@@ -1463,12 +1463,6 @@ import org.bytedeco.openblas.presets.openblas;
                 // See also https://github.com/pytorch/pytorch/blob/main/docs/cpp/source/Doxyfile
                 // for an approximation of what should be in API in addition to torch.h
                 "torch/torch.h",
-                // Uncomment if we build with CUDA installed
-                /*
-                "ATen/cudnn/Descriptors.h",
-                "ATen/cudnn/Types.h",
-                "c10/cuda/CUDAGuard.h",
-                 */
                 "ATen/native/TensorShape.h",
                 "torch/csrc/jit/runtime/custom_operator.h",
                 "torch/csrc/jit/serialization/storage_context.h",
@@ -2892,7 +2886,7 @@ import org.bytedeco.openblas.presets.openblas;
             value = {"linux", "macosx", "windows"},
             link = {"c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
-            includepath = {"/usr/local/cuda/include"},
+            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
             preloadpath = {
                 "/usr/local/cuda-12.1/lib64/",
                 "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
