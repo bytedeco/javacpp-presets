@@ -98,7 +98,17 @@ import java.util.List;
                 // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
                 // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
             },
-            link = {"c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
+            link = {"cudart", "cudnn", "cusparse", "c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
+            linkpath = {
+                "/usr/local/cuda-12.1/lib64/",
+                "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
+                "/usr/local/cuda/lib64/",
+                "/usr/local/cuda/extras/CUPTI/lib64/",
+                "/usr/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/extras/CUPTI/lib64/",
+                "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
+            },
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
             includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
             preloadpath = {
@@ -116,40 +126,7 @@ import java.util.List;
     target = "org.bytedeco.pytorch.cuda",
     global = "org.bytedeco.pytorch.global.torch_cuda"
 )
-public class torch_cuda implements InfoMapper, LoadEnabled {
-    @Override
-    public void init(ClassProperties properties) {
-        String platform = properties.getProperty("platform");
-        String extension = properties.getProperty("platform.extension");
-        List<String> preloads = properties.get("platform.preload");
-        List<String> resources = properties.get("platform.preloadresource");
-
-        // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || extension == null) {
-            return;
-        }
-        int i = 0;
-        if (platform.startsWith("windows")) {
-            preloads.add(i++, "zlibwapi");
-        }
-        String[] libs = {"cudart", "cusparse", "cudnn" };
-        for (String lib : libs) {
-            if (platform.startsWith("linux")) {
-                lib += lib.startsWith("cudnn") ? "@.8"
-                    : lib.equals("cudart") ? "@.12"
-                    : "@.12";
-            } else if (platform.startsWith("windows")) {
-                lib += lib.startsWith("cudnn") ? "64_8"
-                    : lib.equals("cudart") ? "64_12"
-                    : "64_12";
-            } else {
-                continue; // no CUDA
-            }
-            if (!preloads.contains(lib)) {
-                preloads.add(i++, lib);
-            }
-        }
-    }
+public class torch_cuda implements InfoMapper {
 
     public void map(InfoMap infoMap) {
 
