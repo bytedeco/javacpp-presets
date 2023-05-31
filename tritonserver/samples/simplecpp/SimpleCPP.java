@@ -29,10 +29,10 @@ import java.util.*;
 import java.util.concurrent.*;
 import com.google.gson.*;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.tritondevelopertoolsserver.tritondevelopertoolsserver.*;
-import static org.bytedeco.tritondevelopertoolsserver.global.tritondevelopertoolsserver.*;
+import org.bytedeco.tritonserver.tritonserver.*;
+import static org.bytedeco.tritonserver.global.tritonserver.*;
 
-public class Simple {
+public class SimpleCPP {
     // Helper functions
     static void FAIL(String MSG) {
         System.err.println("Failure: " + MSG);
@@ -45,7 +45,7 @@ public class Simple {
         System.err.println(msg);
       }
 
-      System.err.println("Usage: java " + Simple.class.getSimpleName() +" [options]");
+      System.err.println("Usage: java " + SimpleCPP.class.getSimpleName() +" [options]");
       System.err.println("\t-v Enable verbose logging");
       System.err.println("\t-r [model repository absolute path]");
       System.exit(1);
