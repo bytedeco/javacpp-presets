@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Park JeongHwan
+ * Copyright (C) 2021 Jeonghwan Park
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import org.bytedeco.cuda.presets.cudart;
 
 /**
  *
- * @author Park JeongHwan
+ * @author Jeonghwan Park
  */
 @Properties(
     inherit = cudart.class,
