@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Park JeongHwan
+ * Copyright (C) 2022 Jeonghwan Park
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ public class SampleJpeg {
 
         nvjpegDecodeParams params = new nvjpegDecodeParams();
 
-        // Create Components
+        // Create components
         CHECK_NVJPEG("nvjpegCreateEx", nvjpegCreateEx(NVJPEG_BACKEND_DEFAULT, devAllocator, pinnedAllocator, NVJPEG_FLAGS_DEFAULT, handle));
         CHECK_NVJPEG("nvjpegJpegStateCreate", nvjpegJpegStateCreate(handle, state));
 
@@ -108,7 +108,7 @@ public class SampleJpeg {
 
         CHECK_NVJPEG("nvjpegDecodeParamsCreate", nvjpegDecodeParamsCreate(handle, params));
 
-        // Destroy Components
+        // Destroy components
         CHECK_NVJPEG("nvjpegDecodeParamsDestroy", nvjpegDecodeParamsDestroy(params));
 
         CHECK_NVJPEG("nvjpegJpegStreamDestroy", nvjpegJpegStreamDestroy(streams[0]));

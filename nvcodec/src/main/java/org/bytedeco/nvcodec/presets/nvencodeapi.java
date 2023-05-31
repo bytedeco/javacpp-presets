@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Park JeongHwan, Samuel Audet
+ * Copyright (C) 2021-2023 Jeonghwan Park, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import org.bytedeco.nvcodec.presets.*;
 
 /**
  *
- * @author Park JeongHwan
+ * @author Jeonghwan Park
  */
 @Properties(
     inherit = nvcuvid.class,
