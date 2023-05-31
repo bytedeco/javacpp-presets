@@ -1,4 +1,5 @@
 
+ * Add new `SampleJpegEncoder` code for nvJPEG module of CUDA ([pull #1365](https://github.com/bytedeco/javacpp-presets/pull/1365))
  * Map `std::vector` of `CameraParams`, `ImageFeatures`, and `MatchesInfo` from `cv::detail` ([issue bytedeco/javacv#2027](https://github.com/bytedeco/javacv/issues/2027))
  * Fix H.264 decoder of FFmpeg by increasing MAX_SLICES to 256 ([pull #1349](https://github.com/bytedeco/javacpp-presets/pull/1349))
  * Link FFmpeg with latest version of VA-API libraries ([pull #1296](https://github.com/bytedeco/javacpp-presets/pull/1296))
