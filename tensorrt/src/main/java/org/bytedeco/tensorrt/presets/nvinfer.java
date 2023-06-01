@@ -142,7 +142,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                              "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
                              "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
-               .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
+               .put(new Info("nvinfer1::IGpuAllocator", "nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
                              "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator").virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
                              "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
