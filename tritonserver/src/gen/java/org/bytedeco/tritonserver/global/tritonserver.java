@@ -11,6 +11,12 @@ import org.bytedeco.javacpp.annotation.*;
 public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver {
     static { Loader.load(); }
 
+// Targeting ../tritonserver/StringSet.java
+
+
+// Targeting ../tritonserver/StringVector.java
+
+
 // Parsed from tritonserver.h
 
 // Copyright 2020-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
@@ -130,7 +136,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 public static final int TRITONSERVER_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONSERVER_API_VERSION_MINOR = 21;
+public static final int TRITONSERVER_API_VERSION_MINOR = 22;
 
 /** Get the TRITONBACKEND API version supported by the Triton shared
  *  library. This value can be compared against the
@@ -1432,9 +1438,11 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetStringPa
 
 ///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetIntParameter(
-    TRITONSERVER_InferenceRequest request, String key, @Cast("const int64_t") long value);
+    TRITONSERVER_InferenceRequest request, String key,
+    @Cast("const int64_t") long value);
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetIntParameter(
-    TRITONSERVER_InferenceRequest request, @Cast("const char*") BytePointer key, @Cast("const int64_t") long value);
+    TRITONSERVER_InferenceRequest request, @Cast("const char*") BytePointer key,
+    @Cast("const int64_t") long value);
 
 /** Set a boolean parameter in the request.
  * 
@@ -2331,13 +2339,30 @@ public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetBackendConf
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-///
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetHostPolicy(
     TRITONSERVER_ServerOptions options, String policy_name,
     String setting, String value);
 public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetHostPolicy(
     TRITONSERVER_ServerOptions options, @Cast("const char*") BytePointer policy_name,
     @Cast("const char*") BytePointer setting, @Cast("const char*") BytePointer value);
+
+/** Set a configuration setting for metrics in server options.
+ * 
+ *  @param options The server options object.
+ *  @param name The name of the configuration group. An empty string indicates
+ *              a global configuration option.
+ *  @param setting The name of the setting.
+ *  @param value The setting value.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+///
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetMetricsConfig(
+    TRITONSERVER_ServerOptions options, String name, String setting,
+    String value);
+public static native TRITONSERVER_Error TRITONSERVER_ServerOptionsSetMetricsConfig(
+    TRITONSERVER_ServerOptions options, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer setting,
+    @Cast("const char*") BytePointer value);
 
 /** TRITONSERVER_Server
  * 
@@ -5571,6 +5596,172 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ModelAction(
 
 // #ifdef __cplusplus
 // #endif
+
+
+// Parsed from common.h
+
+// Copyright 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  * Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//  * Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//  * Neither the name of NVIDIA CORPORATION nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// #pragma once
+// #include <climits>
+// #include <set>
+// #include <vector>
+
+//==============================================================================
+/** enum classes
+ *  */
+/** enum class triton::developer_tools::server::ModelControlMode */
+public static final int NONE = 0, POLL = 1, EXPLICIT = 2;
+/** enum class triton::developer_tools::server::MemoryType */
+public static final int CPU = 0, CPU_PINNED = 1, GPU = 2;
+/** enum class triton::developer_tools::server::DataType */
+public static final int
+  INVALID = 0,
+  BOOL = 1,
+  UINT8 = 2,
+  UINT16 = 3,
+  UINT32 = 4,
+  UINT64 = 5,
+  INT8 = 6,
+  INT16 = 7,
+  INT32 = 8,
+  INT64 = 9,
+  FP16 = 10,
+  FP32 = 11,
+  FP64 = 12,
+  BYTES = 13,
+  BF16 = 14;
+/** enum class triton::developer_tools::server::ModelReadyState */
+public static final int UNKNOWN = 0, READY = 1, UNAVAILABLE = 2, LOADING = 3, UNLOADING = 4;
+// Targeting ../tritonserver/TritonException.java
+
+
+// Targeting ../tritonserver/ResponseAllocatorAllocFn_t.java
+
+
+// Targeting ../tritonserver/OutputBufferReleaseFn_t.java
+
+
+// Targeting ../tritonserver/ResponseAllocatorStartFn_t.java
+
+
+// Targeting ../tritonserver/LoggingOptions.java
+
+
+// Targeting ../tritonserver/MetricsOptions.java
+
+
+// Targeting ../tritonserver/RateLimitResource.java
+
+
+// Targeting ../tritonserver/ModelLoadGPULimit.java
+
+
+// Targeting ../tritonserver/Allocator.java
+
+
+// Targeting ../tritonserver/BackendConfig.java
+
+
+// Targeting ../tritonserver/CUDAMemoryPoolByteSize.java
+
+
+// Targeting ../tritonserver/HostPolicy.java
+
+
+// Targeting ../tritonserver/Trace.java
+
+
+// Targeting ../tritonserver/ServerOptions.java
+
+
+// Targeting ../tritonserver/RepositoryIndex.java
+
+
+// Targeting ../tritonserver/Tensor.java
+
+
+// Targeting ../tritonserver/NewModelRepo.java
+
+
+// Targeting ../tritonserver/InferOptions.java
+
+
+
+  // namespace triton::developer_tools::server
+
+
+// Parsed from generic_server_wrapper.h
+
+// Copyright 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//  * Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//  * Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//  * Neither the name of NVIDIA CORPORATION nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// #pragma once
+// #include <list>
+// #include <memory>
+// #include <unordered_map>
+// #include <vector>
+// #include "../src/infer_requested_output.h"
+// #include "../src/tracer.h"
+// #include "common.h"
+
+///
+// Targeting ../tritonserver/GenericTritonServer.java
+
+
+// Targeting ../tritonserver/GenericInferResult.java
+
+
+// Targeting ../tritonserver/GenericInferRequest.java
+
+
+
+  // namespace triton::developer_tools::server
 
 
 }
