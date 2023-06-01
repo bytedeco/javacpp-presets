@@ -9,13 +9,13 @@ fi
 
 case $PLATFORM in
     linux-arm64)
-        if [[ ! -f "/opt/tritonserver/include/triton/core/tritonserver.h" ]] && [[ ! -d "/opt/tritonserver/lib/" ]]; then
+        if [[ ! -f "/opt/tritonserver/include/triton/core/tritonserver.h" ]] && [[ ! -d "/opt/tritonserver/lib/" ]] && [[ ! -d "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]]; then
             echo "Please make sure library and include files exist"
             exit 1
         fi
         ;;
     linux-x86_64)
-        if [[ ! -f "/opt/tritonserver/include/triton/core/tritonserver.h" ]] && [[ ! -d "/opt/tritonserver/lib/" ]]; then
+        if [[ ! -f "/opt/tritonserver/include/triton/core/tritonserver.h" ]] && [[ ! -d "/opt/tritonserver/lib/" ]] && [[ ! -d "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]]; then
             echo "Please make sure library and include files exist"
             exit 1
         fi
