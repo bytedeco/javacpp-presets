@@ -39,8 +39,8 @@ import org.bytedeco.cuda.presets.nvrtc;
 
 /**
  *
-* @author Samuel Audet
-*/
+ * @author Samuel Audet
+ */
 @Properties(
     inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = {
@@ -48,7 +48,7 @@ import org.bytedeco.cuda.presets.nvrtc;
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             compiler = "cpp11",
             include = {"NvInferVersion.h", "NvInferRuntimeBase.h", "NvInferRuntimePlugin.h", "NvInferRuntimeCommon.h",
-                    "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
+                       "NvInferLegacyDims.h", "NvInferRuntime.h", "NvInfer.h", "NvInferImpl.h", "NvUtils.h"},
             link = "nvinfer@.8",
             preload = "nvinfer_builder_resource@.8.6.1"
         ),
@@ -93,8 +93,8 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             preloads.add(i++, "zlibwapi");
         }
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn", "nvrtc",
-                        "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
-                        "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
+                         "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer",
+                         "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
                 lib += lib.startsWith("cudnn") ? "@.8" : lib.equals("cudart") ? "@.12" : lib.equals("nvrtc") ? "@.12" : "@.12";
@@ -114,39 +114,39 @@ public class nvinfer implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-            .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
-            .put(new Info("NV_TENSORRT_VERSION").translate(false))
+               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_VERSION").translate(false))
 
-            .put(new Info("TRT_DEPRECATED").cppText("#define TRT_DEPRECATED deprecated").cppTypes())
-            .put(new Info("TRT_DEPRECATED_API").cppText("#define TRT_DEPRECATED_API deprecated").cppTypes())
-            .put(new Info("deprecated").annotations("@Deprecated"))
+               .put(new Info("TRT_DEPRECATED").cppText("#define TRT_DEPRECATED deprecated").cppTypes())
+               .put(new Info("TRT_DEPRECATED_API").cppText("#define TRT_DEPRECATED_API deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
 
-            .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-            .put(new Info("const char", "nvinfer1::AsciiChar").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
-            .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
-            .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
-            .put(new Info("nvinfer1::safe::IPluginRegistry").pointerTypes("SafeIPluginRegistry"))
-            .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl").skip())
-            .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
-            .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
-                            "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",
-                            "nvinfer1::ILRNLayer", "nvinfer1::IScaleLayer", "nvinfer1::IPluginV2Layer", "nvinfer1::IUnaryLayer", "nvinfer1::IReduceLayer",
-                            "nvinfer1::IPaddingLayer", "nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
-                            "nvinfer1::IConcatenationLayer", "nvinfer1::IDeconvolutionLayer", "nvinfer1::IElementWiseLayer", "nvinfer1::IGatherLayer",
-                            "nvinfer1::IRNNv2Layer", "nvinfer1::IIteratorLayer", "nvinfer1::IParametricReLULayer", "nvinfer1::IShuffleLayer",
-                            "nvinfer1::ISliceLayer", "nvinfer1::IShapeLayer", "nvinfer1::ITopKLayer", "nvinfer1::IMatrixMultiplyLayer", "nvinfer1::ISelectLayer",
-                            "nvinfer1::IConstantLayer", "nvinfer1::IResizeLayer", "nvinfer1::ILoop", "nvinfer1::ILoopBoundaryLayer", "nvinfer1::ILoopOutputLayer",
-                            "nvinfer1::IRecurrenceLayer", "nvinfer1::ITripLimitLayer", "nvinfer1::IFillLayer", "nvinfer1::IQuantizeLayer", "nvinfer1::IDequantizeLayer",
-                            "nvinfer1::IAssertionLayer", "nvinfer1::IConditionLayer", "nvinfer1::IEinsumLayer", "nvinfer1::IIfConditional",
-                            "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
-                            "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
-                            "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer").purify())
-            .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
-            .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
-                            "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator",
-                            "nvinfer1::IGpuAllocator").virtualize())
-            .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
-                            "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
+               .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("const char", "nvinfer1::AsciiChar").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("nvinfer1::safe::IPluginRegistry").pointerTypes("SafeIPluginRegistry"))
+               .put(new Info("nvinfer1::EnumMax", "nvinfer1::EnumMaxImpl").skip())
+               .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
+               .put(new Info("nvinfer1::IDimensionExpr", "nvinfer1::IExprBuilder", "nvinfer1::IOptimizationProfile", "nvinfer1::ITensor", "nvinfer1::ILayer",
+                             "nvinfer1::IConvolutionLayer", "nvinfer1::IFullyConnectedLayer", "nvinfer1::IActivationLayer", "nvinfer1::IPoolingLayer",
+                             "nvinfer1::ILRNLayer", "nvinfer1::IScaleLayer", "nvinfer1::IPluginV2Layer", "nvinfer1::IUnaryLayer", "nvinfer1::IReduceLayer",
+                             "nvinfer1::IPaddingLayer", "nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
+                             "nvinfer1::IConcatenationLayer", "nvinfer1::IDeconvolutionLayer", "nvinfer1::IElementWiseLayer", "nvinfer1::IGatherLayer",
+                             "nvinfer1::IRNNv2Layer", "nvinfer1::IIteratorLayer", "nvinfer1::IParametricReLULayer", "nvinfer1::IShuffleLayer",
+                             "nvinfer1::ISliceLayer", "nvinfer1::IShapeLayer", "nvinfer1::ITopKLayer", "nvinfer1::IMatrixMultiplyLayer", "nvinfer1::ISelectLayer",
+                             "nvinfer1::IConstantLayer", "nvinfer1::IResizeLayer", "nvinfer1::ILoop", "nvinfer1::ILoopBoundaryLayer", "nvinfer1::ILoopOutputLayer",
+                             "nvinfer1::IRecurrenceLayer", "nvinfer1::ITripLimitLayer", "nvinfer1::IFillLayer", "nvinfer1::IQuantizeLayer", "nvinfer1::IDequantizeLayer",
+                             "nvinfer1::IAssertionLayer", "nvinfer1::IConditionLayer", "nvinfer1::IEinsumLayer", "nvinfer1::IIfConditional",
+                             "nvinfer1::IIfConditionalBoundaryLayer", "nvinfer1::IIfConditionalInputLayer", "nvinfer1::IIfConditionalOutputLayer", "nvinfer1::IScatterLayer",
+                             "nvinfer1::IAlgorithmIOInfo", "nvinfer1::IAlgorithmVariant", "nvinfer1::IAlgorithmContext", "nvinfer1::IAlgorithm", "nvinfer1::ICastLayer",
+                             "nvinfer1::IGridSampleLayer", "nvinfer1::INMSLayer", "nvinfer1::INonZeroLayer", "nvinfer1::INormalizationLayer", "nvinfer1::IReverseSequenceLayer").purify())
+               .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
+               .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger", "nvinfer1::IInt8Calibrator", "nvinfer1::IInt8EntropyCalibrator",
+                             "nvinfer1::IInt8EntropyCalibrator2", "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IInt8LegacyCalibrator",
+                             "nvinfer1::IGpuAllocator").virtualize())
+               .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
+                             "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
         ;
     }
 }
