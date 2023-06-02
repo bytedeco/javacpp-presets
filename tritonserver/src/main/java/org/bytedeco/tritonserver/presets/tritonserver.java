@@ -45,6 +45,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools", "/opt/tritonserver/include/triton/developer_tools/src"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
+        @Platform(
+            value = "windows-x86_64",
+            includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/include/triton/core/",
+            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/lib/",
+            preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/bin/"
+        )
     },
     target = "org.bytedeco.tritonserver.tritonserver",
     global = "org.bytedeco.tritonserver.global.tritonserver"
