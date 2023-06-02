@@ -1,4 +1,5 @@
 
+### June 6, 2023 version 1.5.9
  * Virtualize `nvinfer1::IGpuAllocator` from TensorRT to allow customization ([pull #1367](https://github.com/bytedeco/javacpp-presets/pull/1367))
  * Add new `SampleJpegEncoder` code for nvJPEG module of CUDA ([pull #1365](https://github.com/bytedeco/javacpp-presets/pull/1365))
  * Map `std::vector` of `CameraParams`, `ImageFeatures`, and `MatchesInfo` from `cv::detail` ([issue bytedeco/javacv#2027](https://github.com/bytedeco/javacv/issues/2027))

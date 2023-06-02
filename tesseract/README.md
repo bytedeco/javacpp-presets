@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>1.5.9-SNAPSHOT</version>
+    <version>1.5.9</version>
     <properties>
         <exec.mainClass>BasicExample</exec.mainClass>
     </properties>
@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>5.3.1-1.5.9-SNAPSHOT</version>
+            <version>5.3.1-1.5.9</version>
         </dependency>
     </dependencies>
     <build>
@@ -61,7 +61,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 import org.bytedeco.javacpp.*;
 import org.bytedeco.leptonica.*;
 import org.bytedeco.tesseract.*;
-import static org.bytedeco.leptonica.global.lept.*;
+import static org.bytedeco.leptonica.global.leptonica.*;
 import static org.bytedeco.tesseract.global.tesseract.*;
 
 public class BasicExample {
