@@ -157,10 +157,10 @@ runs:
           tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
-
-        if [[ "$CI_DEPLOY_MODULE" == "tritonserver" ]]; then
-          echo for tritonserver all mentions of python is python3
-          apt install python-is-python3
+        
+        if [[ "$CI_DEPLOY_MODULE" == "tritonserver" ]]; then      
+          echo For tritonserver all mentions of python is python3
+          ln -s /usr/bin/python3 /usr/bin/python
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then

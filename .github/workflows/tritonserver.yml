@@ -21,4 +21,4 @@ jobs:
     runs-on: ubuntu-20.04
     container: nvcr.io/nvidia/tritonserver:23.05-py3
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
+      - uses: ./.github/actions/deploy-ubuntu
