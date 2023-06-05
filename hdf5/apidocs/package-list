@@ -1,3 +1,7 @@
+hdf.hdf5lib
+hdf.hdf5lib.callbacks
+hdf.hdf5lib.exceptions
+hdf.hdf5lib.structs
 org.bytedeco.hdf5
 org.bytedeco.hdf5.global
 org.bytedeco.hdf5.presets
