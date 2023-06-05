@@ -158,6 +158,11 @@ runs:
           ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
+        if [[ "$CI_DEPLOY_MODULE" == "tritonserver" ]]; then
+          echo for tritonserver all mentions of python is python3
+          apt install python-is-python3
+        fi
+
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amdhf
           python3 -m gdown.cli https://drive.google.com/uc?id=16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
