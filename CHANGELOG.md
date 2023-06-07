@@ -1,4 +1,7 @@
 
+ * Map new higher-level C++ API of Triton Inference Server ([pull #1361](https://github.com/bytedeco/javacpp-presets/pull/1361))
+ * Upgrade presets for Triton Inference Server 2.34.0
+
 ### June 6, 2023 version 1.5.9
  * Virtualize `nvinfer1::IGpuAllocator` from TensorRT to allow customization ([pull #1367](https://github.com/bytedeco/javacpp-presets/pull/1367))
  * Add new `SampleJpegEncoder` code for nvJPEG module of CUDA ([pull #1365](https://github.com/bytedeco/javacpp-presets/pull/1365))
