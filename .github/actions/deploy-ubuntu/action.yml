@@ -7,10 +7,13 @@ runs:
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
-        SUDO=sudo
-        if [[ "$USER" == "root" ]]; then
-          SUDO=
-          cd /root
+        export SUDO=$(which sudo)
+        echo "SUDO=$SUDO" >> $GITHUB_ENV
+        if [[ -z "$SUDO" ]]; then
+          echo "Fixing HOME to /root (was '$HOME')"
+          export HOME=/root
+          echo "HOME=$HOME" >> $GITHUB_ENV
+          cd $HOME
         fi
 
         mkdir -p .ccache
@@ -78,14 +81,13 @@ runs:
           $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
           TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
         fi
-
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
         # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install gcc-multilib g++-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
+        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev
 
         ln -sf /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
@@ -194,7 +196,7 @@ runs:
           curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/cd17b7fe-500e-4305-a89b-bd5b42bfd9f8/l_onemkl_p_2023.1.0.46342_offline.sh
           $SUDO bash l_onemkl_p_2023.1.0.46342_offline.sh -s -a -s --eula accept
         fi
-        
+
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
           echo Installing FlyCapture amdhf
           python3 -m gdown.cli https://drive.google.com/uc?id=16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI
@@ -263,16 +265,12 @@ runs:
 
         export MAKEJ=$(getconf _NPROCESSORS_ONLN)
         echo Fetching $GITHUB_REPOSITORY@$GITHUB_SHA
+        git config --global --add safe.directory '*'
         git init
         git fetch --depth 1 https://github.com/$GITHUB_REPOSITORY $GITHUB_SHA
         git checkout $GITHUB_SHA
         git submodule update --init --recursive
         git submodule foreach --recursive 'git reset --hard'
-
-        if [[ "$USER" == "root" ]]; then
-          echo "Fixing HOME to /root (was '$HOME')"
-          export HOME=/root
-        fi
 
         if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
           echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} $CI_DEPLOY_OPTIONS on $MAKEJ processors
@@ -307,7 +305,4 @@ runs:
     - name: Clean up
       shell: bash
       run: |
-        if [[ "$USER" == "root" ]]; then
-          cd /root
-        fi
-        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+        rm -Rf $(find $HOME/.m2/repository/ -name '*SNAPSHOT*')
