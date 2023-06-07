@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.9-SNAPSHOT</version>
+    <version>1.5.9</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>nvcodec-platform</artifactId>
-  <version>12.0.16-${project.parent.version}</version>
+  <version>12.1.14-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NVIDIA Video Codec SDK</name>
 
   <properties>

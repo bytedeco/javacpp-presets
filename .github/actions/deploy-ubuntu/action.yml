@@ -7,12 +7,19 @@ runs:
       env:
         GITHUB_EVENT_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
       run: |
-        cd /root
+        SUDO=sudo
+        if [[ "$USER" == "root" ]]; then
+          SUDO=
+          cd /root
+        fi
+
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
         echo "hash_dir = false"                                                                      >> .ccache/ccache.conf
         echo "sloppiness = file_macro,include_file_ctime,include_file_mtime,pch_defines,time_macros" >> .ccache/ccache.conf
 
+        export ARCH=amd64
+        export PREFIX=x86_64-linux-gnu
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]]; then
           export ARCH=armhf
           export PREFIX=arm-linux-gnueabihf
@@ -47,52 +54,55 @@ runs:
         echo "ARCH2=$ARCH2" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
-        apt-get update
-        apt-get -y install gnupg
+        $SUDO apt-get update
+        $SUDO apt-get -y install gnupg
         source /etc/os-release
         export CODENAME=$UBUNTU_CODENAME
 
+        if [[ ! "$ARCH" == "amd64" ]]; then
+          # https://github.com/actions/runner-images/issues/4589
+          $SUDO apt-add-repository -y ppa:ondrej/php
+          $SUDO apt-get -y install ppa-purge
+          $SUDO ppa-purge -y ppa:ondrej/php
+        fi
+
         if [[ "$ARCH" == "i386" ]]; then
-          dpkg --add-architecture $ARCH
+          $SUDO dpkg --add-architecture $ARCH
           TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX"
         elif [[ ! "$ARCH" == "amd64" ]]; then
-          dpkg --add-architecture $ARCH
-          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse >> /etc/apt/sources.list
-          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse >> /etc/apt/sources.list
-          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse >> /etc/apt/sources.list
-          echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse >> /etc/apt/sources.list
+          $SUDO dpkg --add-architecture $ARCH
+          $SUDO sed -i 's/deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
+          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-updates main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-backports main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
+          $SUDO echo deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $CODENAME-security main restricted universe multiverse | $SUDO tee -a /etc/apt/sources.list
           TOOLCHAIN="gcc-$PREFIX g++-$PREFIX gfortran-$PREFIX linux-libc-dev-$ARCH-cross binutils-multiarch"
         fi
 
-        if [[ "$CI_DEPLOY_MODULE" == "tritonserver" ]]; then      
-          echo For tritonserver all mentions of python is python3 for Ubuntu 20.04
-          ln -s /usr/bin/python3 /usr/bin/python
-        fi
+        # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
+        # $SUDO echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main | $SUDO tee -a /etc/apt/sources.list
+        # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
+        # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
+        $SUDO apt-get update
+        $SUDO apt-get -y install gcc-multilib g++-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
+        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
 
-        echo deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-        echo deb [arch=amd64] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu $CODENAME main >> /etc/apt/sources.list
-        sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
-        apt-get update
-        apt-get -y install gcc-multilib g++-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
-        apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev
-
+        ln -sf /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.tar.gz
         curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
-        tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
-        tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
-        tar -xzf git-2.18.3.tar.gz
-        unzip gradle-7.1.1-bin.zip -d /opt/
-        pushd git-2.18.3; make -j2 prefix=/usr/local/; make -j2 prefix=/usr/local/ install; popd
-        ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
-        ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
-        ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
+        $SUDO tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
+        $SUDO tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
+        $SUDO tar -xzf git-2.18.3.tar.gz
+        $SUDO unzip gradle-7.1.1-bin.zip -d /opt/
+        # pushd git-2.18.3; make -j2 prefix=/usr/local/; $SUDO make -j2 prefix=/usr/local/ install; popd
+        $SUDO ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
+        $SUDO ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
+        $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 
-        python3 -m pip install gdown || python3 -m pip install gdown
+        $SUDO python3 -m pip install gdown || $SUDO python3 -m pip install gdown
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
@@ -103,7 +113,15 @@ runs:
           export USERLAND_PATH=$(pwd)/userland-master/
           echo "USERLAND_PATH=$USERLAND_PATH" >> $GITHUB_ENV
         fi
-        export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
+
+        if [[ $CI_DEPLOY_PLATFORM == android-* ]]; then
+          curl -LO https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+          unzip -qq android-ndk-r21e-linux-x86_64.zip
+          ln -sf android-ndk-r21e android-ndk
+          export MAVEN_OPTIONS="-Djavacpp.platform.root=$(pwd)/android-ndk/ -Djava.library.path="
+        else
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
+        fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
@@ -113,55 +131,68 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm
 
-          rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
-          pushd /var/cuda-repo-rhel8-12-1-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
-          ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
-          ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
-          mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
-          mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
+          $SUDO rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
+          rm -f *.rpm *.tgz *.txz *.tar.*
+          pushd /var/cuda-repo-rhel8-12-1-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
+          $SUDO ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
+          $SUDO ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
+          $SUDO mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
+          $SUDO mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
 
           # Work around issues with CUDA 10.2/11.x
-          mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
-          mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/ || true
-          for f in /usr/local/cuda/include/*_v8.h; do ln -sf $f ${f:0:${#f}-5}.h; done
-          for f in /usr/local/cuda/lib64/libcudnn*so.8.*; do ln -sf $f ${f:0:${#f}-4}; ln -sf $f ${f:0:${#f}-6}; done
-          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f $f.2; done
-          for f in /usr/local/cuda/lib64/*.so.10; do ln -s $f ${f:0:${#f}-1}1; done
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.7
-          ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.8
-          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
-          cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
-          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
-          cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
-          sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h /usr/local/cuda/include/cusolverDn.h /usr/local/cuda/include/cusolverSp.h
-          sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
-          sed -i /warp_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          $SUDO mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
+          $SUDO mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/ || true
+          for f in /usr/local/cuda/include/*_v8.h; do $SUDO ln -sf $f ${f:0:${#f}-5}.h; done
+          for f in /usr/local/cuda/lib64/libcudnn*so.8.*; do $SUDO ln -sf $f ${f:0:${#f}-4}; $SUDO ln -sf $f ${f:0:${#f}-6}; done
+          for f in /usr/local/cuda/lib64/*.so.10; do $SUDO ln -s $f $f.2; done
+          for f in /usr/local/cuda/lib64/*.so.10; do $SUDO ln -s $f ${f:0:${#f}-1}1; done
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.1
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.2
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.3
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.4
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.5
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.6
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.7
+          $SUDO ln -s libcudart.so.11.0 /usr/local/cuda/lib64/libcudart.so.11.8
+          $SUDO cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so
+          $SUDO cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1
+          $SUDO cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so
+          $SUDO cp /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/lib64/libnvidia-ml.so.1
+          $SUDO sed -i s/cublas_v2.h/cublas_api.h/g /usr/local/cuda/include/cublasXt.h /usr/local/cuda/include/cusolverDn.h /usr/local/cuda/include/cusolverSp.h
+          $SUDO sed -i /block_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          $SUDO sed -i /device_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          $SUDO sed -i /device_segmented_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
+          $SUDO sed -i /warp_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
 
           # Remove downloaded archives and unused libraries to avoid running out of disk space
-          rm -f *.rpm *.tgz *.txz *.tar.*
-          rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
+          $SUDO rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown.cli https://drive.google.com/uc?id=1ner_cjzhKhdlrP2VzHGZvyEnW3UQ4uOy
-          unzip Video_Codec_SDK_12.0.16.zip -d /usr/local
-          ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
+          python3 -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          $SUDO unzip Video_Codec_SDK_12.1.14.zip -d /usr/local
+          $SUDO ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 
-        if [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
           python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
-          tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
-          ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+          $SUDO tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
+          $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
+          echo Installing TensorRT
+          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          $SUDO tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
+          $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
+        fi
+
+        if [[ "$CI_DEPLOY_MODULE" == "mkl" ]]; then
+          echo Installing MKL
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/cd17b7fe-500e-4305-a89b-bd5b42bfd9f8/l_onemkl_p_2023.1.0.46342_offline.sh
+          $SUDO bash l_onemkl_p_2023.1.0.46342_offline.sh -s -a -s --eula accept
         fi
         
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
@@ -176,6 +207,27 @@ runs:
           python3 -m gdown.cli https://drive.google.com/uc?id=1LhnuRMT3urYsApCcuBEcaotGRK8h4kJv
           mkdir -p $GITHUB_WORKSPACE/downloads
           ln -s $(pwd)/flycapture.2.13.3.31_arm64_xenial.tar.gz $GITHUB_WORKSPACE/downloads/flycapture.2.13.3.31_arm64.tar.gz
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture i386
+          python3 -m gdown.cli https://drive.google.com/uc?id=1BOpSik1Fndagzjf4ykwzermt2qlTzsWI
+          tar -xzvf flycapture2-2.13.3.31-i386-pkg_xenial.tgz
+          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xf data.tar.xz -C /; done;
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
+          echo Installing FlyCapture amd64
+          python3 -m gdown.cli https://drive.google.com/uc?id=1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd
+          tar -xzvf flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
+          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xf data.tar.xz -C /; done;
+        fi
+
+        if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "spinnaker" ]]; then
+          echo Installing Spinnaker amd64
+          python3 -m gdown.cli https://drive.google.com/uc?id=1B91OxuFgT-T29fNlBc2gsgr-K2l2LNtw
+          tar -xzvf spinnaker-3.0.0.118-amd64-pkg.tar.gz
+          find -name *.deb | while read f; do ar -xv $f; $SUDO tar --totals -xvf data.tar.xz -C /; done;
         fi
 
         GRADLE_TASK=publishToMavenLocal
@@ -217,8 +269,10 @@ runs:
         git submodule update --init --recursive
         git submodule foreach --recursive 'git reset --hard'
 
-        echo "Fixing HOME to /root (was '$HOME')"
-        export HOME=/root
+        if [[ "$USER" == "root" ]]; then
+          echo "Fixing HOME to /root (was '$HOME')"
+          export HOME=/root
+        fi
 
         if [[ -n ${CI_DEPLOY_NEED_GRADLE:-} ]]; then
           echo Executing Gradle $GRADLE_TASK ${{ matrix.options }} $CI_DEPLOY_OPTIONS on $MAKEJ processors
@@ -253,5 +307,7 @@ runs:
     - name: Clean up
       shell: bash
       run: |
-        cd /root
+        if [[ "$USER" == "root" ]]; then
+          cd /root
+        fi
         rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')

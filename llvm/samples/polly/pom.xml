@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>MatMulBenchmark</artifactId>
-    <version>1.5.9-SNAPSHOT</version>
+    <version>1.5.9</version>
     <properties>
         <exec.mainClass>MatMulBenchmark</exec.mainClass>
         <java.version>1.8</java.version>
@@ -13,22 +13,22 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>16.0.3-1.5.9-SNAPSHOT</version>
+            <version>16.0.4-1.5.9</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libffi-platform</artifactId>
-            <version>3.4.4-1.5.9-SNAPSHOT</version>
+            <version>3.4.4-1.5.9</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2023.1-1.5.9-SNAPSHOT</version>
+            <version>2023.1-1.5.9</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2023.1-1.5.9-SNAPSHOT</version>
+            <version>2023.1-1.5.9</version>
         </dependency>
     </dependencies>
     <build>

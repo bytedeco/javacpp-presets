@@ -79,6 +79,7 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/libnccl-devel-2.18.1-1+cuda12.1.x86_64.rpm
 
           rpm -i --force --ignorearch --nodeps cuda-repo-rhel7-* libcudnn*.rpm libnccl*.rpm
+          rm -f *.rpm *.tgz *.txz *.tar.*
           pushd /var/cuda-repo-rhel7-12-1-local/; rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; rm *.rpm; popd
           ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so
           ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so
@@ -111,14 +112,13 @@ runs:
           sed -i /warp_merge_sort.cuh/d /usr/local/cuda/include/cub/cub.cuh
 
           # Remove downloaded archives and unused libraries to avoid running out of disk space
-          rm -f *.rpm *.tgz *.txz *.tar.*
           rm -f $(find /usr/local/cuda/ -name '*.a' -and -not -name libcudart_static.a -and -not -name libcudadevrt.a)
         fi
 
         if [[ "$CI_DEPLOY_MODULE" == "nvcodec" ]]; then
           echo Installing NVIDIA Video Codec SDK
-          python3 -m gdown.cli https://drive.google.com/uc?id=1ner_cjzhKhdlrP2VzHGZvyEnW3UQ4uOy
-          unzip Video_Codec_SDK_12.0.16.zip -d /usr/local
+          python3 -m gdown.cli https://drive.google.com/uc?id=13KyYoq8ZOLIA7jugDkdFma34mnyxnz4x
+          unzip Video_Codec_SDK_12.1.14.zip -d /usr/local
           ln -sf /usr/local/Video_Codec_SDK_* /usr/local/videocodecsdk
         fi
 

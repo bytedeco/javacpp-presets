@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.9-SNAPSHOT</version>
+    <version>1.5.9</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>hdf5-platform</artifactId>
-  <version>1.14.0-${project.parent.version}</version>
+  <version>1.14.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for HDF5</name>
 
   <properties>
