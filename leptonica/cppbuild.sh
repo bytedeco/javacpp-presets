@@ -101,7 +101,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -146,7 +146,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -190,7 +190,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -234,7 +234,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -275,7 +275,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -316,7 +316,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -361,7 +361,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -403,7 +403,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -445,7 +445,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -486,7 +486,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -526,7 +526,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -566,7 +566,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION
@@ -606,7 +606,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Dlzma=OFF -Dzstd=OFF .
+        $CMAKE -G "MSYS Makefiles" $CMAKE_CONFIG -Djbig=OFF -Dlzma=OFF -Dzstd=OFF .
         make -j $MAKEJ
         make install
         cd ../openjpeg-$OPENJPEG_VERSION

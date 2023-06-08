@@ -54,7 +54,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         make -j $MAKEJ
         make install
         ;;
@@ -75,7 +75,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         make -j $MAKEJ
         make install
         ;;
@@ -100,7 +100,7 @@ case $PLATFORM in
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="powerpc64le-linux-gnu-gcc -m64" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no --disable-ipv6
+        CC="powerpc64le-linux-gnu-gcc -m64" ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         make -j $MAKEJ
         make install
         ;;
@@ -110,7 +110,7 @@ case $PLATFORM in
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION
-        CC="gcc -m32" ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/'
+        CC="gcc -m32" ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         make -j $MAKEJ
         make install
         ;;
@@ -120,7 +120,7 @@ case $PLATFORM in
         make -s -j $MAKEJ
         make install_sw
         cd ../Python-$CPYTHON_VERSION
-        CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/'
+        CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         make -j $MAKEJ
         make install
         ;;
@@ -132,7 +132,7 @@ case $PLATFORM in
         cd ../Python-$CPYTHON_VERSION
         sedinplace 's/libintl.h//g' configure
         sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
-        ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../,-rpath,@loader_path/../lib/'
+        ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../,-rpath,@loader_path/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
         sedinplace 's:-install_name,$(prefix)/lib/:-install_name,@rpath/:g' Makefile
         make -j $MAKEJ
         make install
