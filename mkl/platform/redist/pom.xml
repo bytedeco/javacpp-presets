@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.9</version>
+    <version>1.5.10-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
@@ -26,12 +26,12 @@
       <artifactId>${javacpp.moduleId}-platform</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-x86}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-x86}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -44,12 +44,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.windows-x86}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.windows-x86}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -113,10 +113,10 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform.redist {
-                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86.redist;
+//                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64.redist;
-                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86.redist;
+//                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86.redist;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64.redist;
                     }
                   </moduleInfoSource>

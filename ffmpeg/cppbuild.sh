@@ -117,6 +117,7 @@ patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
+sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
 sedinplace 's/defined(__linux__)/defined(__linux__) \&\& !defined(__ANDROID__)/g' SVT-AV1-*/Source/Lib/Common/Codec/EbThreads.h
 sedinplace '/ANativeWindow_release/d' ffmpeg-*/libavutil/hwcontext_mediacodec.c
 sedinplace 's/#define MAX_SLICES 32/#define MAX_SLICES 256/g' ffmpeg-*/libavcodec/h264dec.h

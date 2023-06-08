@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.ffmpeg.global.postproc",
     value = {
         // GPL only
-        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version_major.h>", "<libpostproc/version.h>"}, link = "postproc@.56", extension = "-gpl"),
-        @Platform(value = "windows", preload = "postproc-56", extension = "-gpl")
+        @Platform(cinclude = {"<libpostproc/postprocess.h>", "<libpostproc/version_major.h>", "<libpostproc/version.h>"}, link = "postproc@.57", extension = "-gpl"),
+        @Platform(value = "windows", preload = "postproc-57", extension = "-gpl")
     }
 )
 public class postproc implements InfoMapper {
