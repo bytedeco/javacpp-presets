@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             include = {"common.h", "generic_server_wrapper.h"},
-            link = {"tritondevelopertoolsserver"},
+            link = {"tritonserver", "tritondevelopertoolsserver"},
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools", "/opt/tritonserver/include/triton/developer_tools/src"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
@@ -52,10 +52,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/TritonServer/bin/"
         )
     },
-    target = "org.bytedeco.tritonserver.tritonserver",
-    global = "org.bytedeco.tritonserver.global.tritonserver"
+    target = "org.bytedeco.tritonserver.tritondevelopertoolsserver",
+    global = "org.bytedeco.tritonserver.global.tritondevelopertoolsserver"
 )
-public class tritonserver implements InfoMapper {
+public class tritondevelopertoolsserver implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tritonserver"); }
     public void map(InfoMap infoMap) {
         infoMap.putFirst(new Info().enumerate(false))
@@ -64,7 +64,7 @@ public class tritonserver implements InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
-                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations());
+                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
                .put(new Info("std::set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("INT_MAX").javaNames("Integer.MAX_VALUE").define())

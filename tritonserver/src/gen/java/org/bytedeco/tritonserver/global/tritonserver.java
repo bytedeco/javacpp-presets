@@ -11,12 +11,6 @@ import org.bytedeco.javacpp.annotation.*;
 public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver {
     static { Loader.load(); }
 
-// Targeting ../tritonserver/StringSet.java
-
-
-// Targeting ../tritonserver/StringVector.java
-
-
 // Parsed from tritonserver.h
 
 // Copyright 2020-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
@@ -136,7 +130,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 public static final int TRITONSERVER_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONSERVER_API_VERSION_MINOR = 22;
+public static final int TRITONSERVER_API_VERSION_MINOR = 23;
 
 /** Get the TRITONBACKEND API version supported by the Triton shared
  *  library. This value can be compared against the
@@ -450,21 +444,119 @@ public static native String TRITONSERVER_ErrorCodeString(
 ///
 public static native String TRITONSERVER_ErrorMessage(
     TRITONSERVER_Error error);
-// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorAllocFn_t.java
 
+/** TRITONSERVER_ResponseAllocator
+ * 
+ *  Object representing a memory allocator for output tensors in an
+ *  inference response.
+ * 
+ <p>
+ *  Type for allocation function that allocates a buffer to hold an
+ *  output tensor.
+ * 
+ *  @param allocator The allocator that is provided in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param tensor_name The name of the output tensor to allocate for.
+ *  @param byte_size The size of the buffer to allocate.
+ *  @param memory_type The type of memory that the caller prefers for
+ *  the buffer allocation.
+ *  @param memory_type_id The ID of the memory that the caller prefers
+ *  for the buffer allocation.
+ *  @param userp The user data pointer that is provided as
+ *  'response_allocator_userp' in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param buffer Returns a pointer to the allocated memory.
+ *  @param buffer_userp Returns a user-specified value to associate
+ *  with the buffer, or nullptr if no user-specified value should be
+ *  associated with the buffer. This value will be provided in the
+ *  call to TRITONSERVER_ResponseAllocatorReleaseFn_t when the buffer
+ *  is released and will also be returned by
+ *  TRITONSERVER_InferenceResponseOutput.
+ *  @param actual_memory_type Returns the type of memory where the
+ *  allocation resides. May be different than the type of memory
+ *  requested by 'memory_type'.
+ *  @param actual_memory_type_id Returns the ID of the memory where
+ *  the allocation resides. May be different than the ID of the memory
+ *  requested by 'memory_type_id'.
+ *  @return a TRITONSERVER_Error object if a failure occurs while
+ *  attempting an allocation. If an error is returned all other return
+ *  values will be ignored. */
 
-// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorBufferAttributesFn_t.java
+/** Type for allocation function that allocates a buffer to hold an
+ *  output tensor with buffer attributes. The callback function must fill in the
+ *  appropriate buffer attributes information related to this buffer. If set,
+ *  this function is always called after TRITONSERVER_ResponseAllocatorAllocFn_t
+ *  function.
+ * 
+ *  @param allocator The allocator that is provided in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param tensor_name The name of the output tensor to allocate for.
+ *  @param buffer_attributes The buffer attributes associated with the buffer.
+ *  @param userp The user data pointer that is provided as
+ *  'response_allocator_userp' in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param buffer_userp Returns a user-specified value to associate
+ *  with the buffer, or nullptr if no user-specified value should be
+ *  associated with the buffer. This value will be provided in the
+ *  call to TRITONSERVER_ResponseAllocatorReleaseFn_t when the buffer
+ *  is released and will also be returned by
+ *  TRITONSERVER_InferenceResponseOutput.
+ *  @return a TRITONSERVER_Error object if a failure occurs while
+ *  attempting an allocation. If an error is returned all other return
+ *  values will be ignored. */
 
+/** Type for function that is called to query the allocator's preferred memory
+ *  type and memory type ID. As much as possible, the allocator should attempt
+ *  to return the same memory_type and memory_type_id values that will be
+ *  returned by the subsequent call to TRITONSERVER_ResponseAllocatorAllocFn_t.
+ *  But the allocator is not required to do so.
+ * 
+ *  @param allocator The allocator that is provided in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param userp The user data pointer that is provided as
+ *  'response_allocator_userp' in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param tensor_name The name of the output tensor. This is optional
+ *  and it should be set to nullptr to indicate that the tensor name has
+ *  not determined.
+ *  @param byte_size The expected size of the buffer. This is optional
+ *  and it should be set to nullptr to indicate that the byte size has
+ *  not determined.
+ *  @param memory_type Acts as both input and output. On input gives
+ *  the memory type preferred by the caller. Returns memory type preferred
+ *  by the allocator, taken account of the caller preferred type.
+ *  @param memory_type_id Acts as both input and output. On input gives
+ *  the memory type ID preferred by the caller. Returns memory type ID preferred
+ *  by the allocator, taken account of the caller preferred type ID.
+ *  @return a TRITONSERVER_Error object if a failure occurs. */
 
-// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorQueryFn_t.java
+/** Type for function that is called when the server no longer holds
+ *  any reference to a buffer allocated by
+ *  TRITONSERVER_ResponseAllocatorAllocFn_t. In practice this function
+ *  is typically called when the response object associated with the
+ *  buffer is deleted by TRITONSERVER_InferenceResponseDelete.
+ * 
+ *  @param allocator The allocator that is provided in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param buffer Pointer to the buffer to be freed.
+ *  @param buffer_userp The user-specified value associated
+ *  with the buffer in TRITONSERVER_ResponseAllocatorAllocFn_t.
+ *  @param byte_size The size of the buffer.
+ *  @param memory_type The type of memory holding the buffer.
+ *  @param memory_type_id The ID of the memory holding the buffer.
+ *  @return a TRITONSERVER_Error object if a failure occurs while
+ *  attempting the release. If an error is returned Triton will not
+ *  attempt to release the buffer again. */
 
-
-// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorReleaseFn_t.java
-
-
-// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorStartFn_t.java
-
-
+/** Type for function that is called to indicate that subsequent
+ *  allocation requests will refer to a new response.
+ * 
+ *  @param allocator The allocator that is provided in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @param userp The user data pointer that is provided as
+ *  'response_allocator_userp' in the call to
+ *  TRITONSERVER_InferenceRequestSetResponseCallback.
+ *  @return a TRITONSERVER_Error object if a failure occurs. */
 
 /** Create a new response allocator object.
  * 
@@ -520,14 +612,14 @@ public static native String TRITONSERVER_ErrorMessage(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
     @Cast("TRITONSERVER_ResponseAllocator**") PointerPointer allocator,
-    TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
-    TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
-    TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
+    @ByVal TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
+    @ByVal TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
+    @ByVal TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
     @ByPtrPtr TRITONSERVER_ResponseAllocator allocator,
-    TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
-    TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
-    TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
+    @ByVal TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
+    @ByVal TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
+    @ByVal TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
 
 /** Set the buffer attributes function for a response allocator object.
  *  The function will be called after alloc_fn to set the buffer attributes
@@ -545,7 +637,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetBufferAttributesFunction(
     TRITONSERVER_ResponseAllocator allocator,
-    TRITONSERVER_ResponseAllocatorBufferAttributesFn_t buffer_attributes_fn);
+    @ByVal TRITONSERVER_ResponseAllocatorBufferAttributesFn_t buffer_attributes_fn);
 
 /** Set the query function to a response allocator object. Usually the
  *  function will be called before alloc_fn to understand what is the
@@ -563,7 +655,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetBufferA
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetQueryFunction(
     TRITONSERVER_ResponseAllocator allocator,
-    TRITONSERVER_ResponseAllocatorQueryFn_t query_fn);
+    @ByVal TRITONSERVER_ResponseAllocatorQueryFn_t query_fn);
 
 /** Delete a response allocator.
  * 
@@ -1120,6 +1212,7 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelat
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
+///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelationIdString(
     TRITONSERVER_InferenceRequest inference_request,
     String correlation_id);
@@ -1127,7 +1220,9 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelat
     TRITONSERVER_InferenceRequest inference_request,
     @Cast("const char*") BytePointer correlation_id);
 
-/** Get the priority for a request. The default is 0 indicating that
+/** Deprecated. See TRITONSERVER_InferenceRequestPriorityUInt64 instead.
+ * 
+ *  Get the priority for a request. The default is 0 indicating that
  *  the request does not specify a priority and so will use the
  *  model's default priority.
  * 
@@ -1143,7 +1238,29 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriority(
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriority(
     TRITONSERVER_InferenceRequest inference_request, @Cast("uint32_t*") int[] priority);
 
-/** Set the priority for a request. The default is 0 indicating that
+/** Get the priority for a request. The default is 0 indicating that
+ *  the request does not specify a priority and so will use the
+ *  model's default priority.
+ * 
+ *  @param inference_request The request object.
+ *  @param priority Returns the priority level.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+///
+public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
+    TRITONSERVER_InferenceRequest inference_request,
+    @Cast("uint64_t*") LongPointer priority);
+public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
+    TRITONSERVER_InferenceRequest inference_request,
+    @Cast("uint64_t*") LongBuffer priority);
+public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
+    TRITONSERVER_InferenceRequest inference_request,
+    @Cast("uint64_t*") long[] priority);
+
+/** Deprecated. See TRITONSERVER_InferenceRequestSetPriorityUInt64 instead.
+ * 
+ *  Set the priority for a request. The default is 0 indicating that
  *  the request does not specify a priority and so will use the
  *  model's default priority.
  * 
@@ -1154,6 +1271,18 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriority(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetPriority(
     TRITONSERVER_InferenceRequest inference_request, @Cast("uint32_t") int priority);
+  
+/** Set the priority for a request. The default is 0 indicating that
+ *  the request does not specify a priority and so will use the
+ *  model's default priority.
+ * 
+ *  @param inference_request The request object.
+ *  @param priority The priority level.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetPriorityUInt64(
+    TRITONSERVER_InferenceRequest inference_request, @Cast("uint64_t") long priority);
 
 /** Get the timeout for a request, in microseconds. The default is 0
  *  which indicates that the request has no timeout.
@@ -3089,7 +3218,7 @@ public static native TRITONSERVER_Error TRITONSERVER_GetMetricKind(
 public static final int TRITONBACKEND_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONBACKEND_API_VERSION_MINOR = 12;
+public static final int TRITONBACKEND_API_VERSION_MINOR = 13;
 
 /** Get the TRITONBACKEND API version supported by Triton. This value
  *  can be compared against the TRITONBACKEND_API_VERSION_MAJOR and
@@ -4512,13 +4641,39 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelState(
  *  @param state The user state, or nullptr if no user state.
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
+///
+public static native TRITONSERVER_Error TRITONBACKEND_ModelSetState(
+    TRITONBACKEND_Model model, Pointer state);
+
+/** Report the memory usage of the model that will be released on
+ *  TRITONBACKEND_ModelFinalize. The backend may call this function within the
+ *  lifecycle of the TRITONBACKEND_Model object (between
+ *  TRITONBACKEND_ModelInitialize and TRITONBACKEND_ModelFinalize) to report the
+ *  latest usage. To report the memory usage of a model instance,
+ *  see TRITONBACKEND_ModelInstanceReportMemoryUsage.
+ * 
+ *  @param model The model.
+ *  @param usage The list of buffer attributes that records the memory usage,
+ *  each entry should record the total memory usage of a given memory type and
+ *  id. For example, if the model itself occupies 64 bytes on each of
+ *  CUDA device 0 and CUDA device 1. Then 'usage' should have first two entries
+ *  set, one has the buffer attributes of "type GPU, id 0, 64 bytes" and the
+ *  other has "type GPU, id 1, 64 bytes". 'usage' is owned by the backend and
+ *  may be released after the function returns.
+ *  @param usage_size The number of entries in 'usage'.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
 
 ///
 ///
 ///
 ///
-public static native TRITONSERVER_Error TRITONBACKEND_ModelSetState(
-    TRITONBACKEND_Model model, Pointer state);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelReportMemoryUsage(
+    TRITONBACKEND_Model model, @Cast("TRITONSERVER_BufferAttributes**") PointerPointer usage,
+    @Cast("uint32_t") int usage_size);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelReportMemoryUsage(
+    TRITONBACKEND_Model model, @ByPtrPtr TRITONSERVER_BufferAttributes usage,
+    @Cast("uint32_t") int usage_size);
 
 /**
  *  TRITONBACKEND_ModelInstance
@@ -4728,12 +4883,38 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceState(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-///
-///
-///
-///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSetState(
     TRITONBACKEND_ModelInstance instance, Pointer state);
+
+/** Report the memory usage of the model instance that will be released on
+ *  TRITONBACKEND_ModelInstanceFinalize. The backend may call this function
+ *  within the lifecycle of the TRITONBACKEND_Model object (between
+ *  TRITONBACKEND_ModelInstanceInitialize and
+ *  TRITONBACKEND_ModelInstanceFinalize) to report the latest usage. To report
+ *  the memory usage of the model, see TRITONBACKEND_ModelReportMemoryUsage.
+ * 
+ *  @param instance The model instance.
+ *  @param usage The list of buffer attributes that records the memory usage,
+ *  each entry should record the total memory usage of a given memory type and
+ *  id. For example, if the instance itself occupies 64 bytes on each of
+ *  CUDA device 0 and CUDA device 1. Then 'usage' should have first two entries
+ *  set, one has the buffer attributes of "type GPU, id 0, 64 bytes" and the
+ *  other has "type GPU, id 1, 64 bytes". 'usage' is owned by the backend and
+ *  may be released after the function returns.
+ *  @param usage_size The number of entries in 'usage'.
+ *  @return a TRITONSERVER_Error indicating success or failure. */
+
+///
+///
+///
+///
+///
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportMemoryUsage(
+    TRITONBACKEND_ModelInstance instance,
+    @Cast("TRITONSERVER_BufferAttributes**") PointerPointer usage, @Cast("uint32_t") int usage_size);
+public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportMemoryUsage(
+    TRITONBACKEND_ModelInstance instance,
+    @ByPtrPtr TRITONSERVER_BufferAttributes usage, @Cast("uint32_t") int usage_size);
 
 /** Record statistics for an inference request.
  * 
@@ -5596,172 +5777,6 @@ public static native TRITONSERVER_Error TRITONREPOAGENT_ModelAction(
 
 // #ifdef __cplusplus
 // #endif
-
-
-// Parsed from common.h
-
-// Copyright 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//  * Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-//  * Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//  * Neither the name of NVIDIA CORPORATION nor the names of its
-//    contributors may be used to endorse or promote products derived
-//    from this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// #pragma once
-// #include <climits>
-// #include <set>
-// #include <vector>
-
-//==============================================================================
-/** enum classes
- *  */
-/** enum class triton::developer_tools::server::ModelControlMode */
-public static final int NONE = 0, POLL = 1, EXPLICIT = 2;
-/** enum class triton::developer_tools::server::MemoryType */
-public static final int CPU = 0, CPU_PINNED = 1, GPU = 2;
-/** enum class triton::developer_tools::server::DataType */
-public static final int
-  INVALID = 0,
-  BOOL = 1,
-  UINT8 = 2,
-  UINT16 = 3,
-  UINT32 = 4,
-  UINT64 = 5,
-  INT8 = 6,
-  INT16 = 7,
-  INT32 = 8,
-  INT64 = 9,
-  FP16 = 10,
-  FP32 = 11,
-  FP64 = 12,
-  BYTES = 13,
-  BF16 = 14;
-/** enum class triton::developer_tools::server::ModelReadyState */
-public static final int UNKNOWN = 0, READY = 1, UNAVAILABLE = 2, LOADING = 3, UNLOADING = 4;
-// Targeting ../tritonserver/TritonException.java
-
-
-// Targeting ../tritonserver/ResponseAllocatorAllocFn_t.java
-
-
-// Targeting ../tritonserver/OutputBufferReleaseFn_t.java
-
-
-// Targeting ../tritonserver/ResponseAllocatorStartFn_t.java
-
-
-// Targeting ../tritonserver/LoggingOptions.java
-
-
-// Targeting ../tritonserver/MetricsOptions.java
-
-
-// Targeting ../tritonserver/RateLimitResource.java
-
-
-// Targeting ../tritonserver/ModelLoadGPULimit.java
-
-
-// Targeting ../tritonserver/Allocator.java
-
-
-// Targeting ../tritonserver/BackendConfig.java
-
-
-// Targeting ../tritonserver/CUDAMemoryPoolByteSize.java
-
-
-// Targeting ../tritonserver/HostPolicy.java
-
-
-// Targeting ../tritonserver/Trace.java
-
-
-// Targeting ../tritonserver/ServerOptions.java
-
-
-// Targeting ../tritonserver/RepositoryIndex.java
-
-
-// Targeting ../tritonserver/Tensor.java
-
-
-// Targeting ../tritonserver/NewModelRepo.java
-
-
-// Targeting ../tritonserver/InferOptions.java
-
-
-
-  // namespace triton::developer_tools::server
-
-
-// Parsed from generic_server_wrapper.h
-
-// Copyright 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-//  * Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-//  * Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-//  * Neither the name of NVIDIA CORPORATION nor the names of its
-//    contributors may be used to endorse or promote products derived
-//    from this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// #pragma once
-// #include <list>
-// #include <memory>
-// #include <unordered_map>
-// #include <vector>
-// #include "../src/infer_requested_output.h"
-// #include "../src/tracer.h"
-// #include "common.h"
-
-///
-// Targeting ../tritonserver/GenericTritonServer.java
-
-
-// Targeting ../tritonserver/GenericInferResult.java
-
-
-// Targeting ../tritonserver/GenericInferRequest.java
-
-
-
-  // namespace triton::developer_tools::server
 
 
 }

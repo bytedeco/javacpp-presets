@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrapper.h" ]] && [[ ! -f "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]]; then
+if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrapper.h" ]] && [[ ! -f "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]] && [ ${INCLUDE_DEVELOPER_TOOLS_SERVER} -ne 1 ]; then
     TOOLS_BRANCH=${TOOLS_BRANCH:="https://github.com/triton-inference-server/developer_tools.git"}
     TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="main"}
     TRITON_HOME="/opt/tritonserver"

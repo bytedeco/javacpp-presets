@@ -40,9 +40,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
-            include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h", "common.h", "generic_server_wrapper.h"},
-            link = {"tritonserver", "tritondevelopertoolsserver"},
-            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include", "/opt/tritonserver/include/triton/developer_tools", "/opt/tritonserver/include/triton/developer_tools/src"},
+            include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
+            link = {"tritonserver"},
+            includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
         @Platform(
@@ -64,10 +64,6 @@ public class tritonserver implements InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
-                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
-               .put(new Info("std::set<std::string>").pointerTypes("StringSet").define())
-               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
-               .put(new Info("INT_MAX").javaNames("Integer.MAX_VALUE").define())
-               .put(new Info("TritonServer").purify(false).virtualize());
+                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations());
     }
 }
