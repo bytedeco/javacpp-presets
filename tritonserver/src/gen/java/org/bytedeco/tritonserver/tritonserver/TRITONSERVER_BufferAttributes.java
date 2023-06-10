@@ -11,7 +11,7 @@ import static org.bytedeco.tritonserver.global.tritonserver.*;
 // #endif
 // #endif
 
-@Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
+@Name("struct TRITONSERVER_BufferAttributes") @Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
 public class TRITONSERVER_BufferAttributes extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TRITONSERVER_BufferAttributes() { super((Pointer)null); }

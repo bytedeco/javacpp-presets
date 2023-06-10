@@ -64,6 +64,19 @@ public class tritonserver implements InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
-                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations());
+                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
+               .put(new Info("struct TRITONSERVER_BufferAttributes").cppText("TRITONSERVER_BufferAttributes"))
+               .put(new Info("struct TRITONSERVER_Error").cppText("TRITONSERVER_Error"))
+               .put(new Info("struct TRITONSERVER_InferenceRequest").cppText("TRITONSERVER_InferenceRequest"))
+               .put(new Info("struct TRITONSERVER_InferenceResponse").cppText("TRITONSERVER_InferenceResponse"))
+               .put(new Info("struct TRITONSERVER_InferenceTrace").cppText("TRITONSERVER_InferenceTrace"))
+               .put(new Info("struct TRITONSERVER_Message").cppText("TRITONSERVER_Message"))
+               .put(new Info("struct TRITONSERVER_Metrics").cppText("TRITONSERVER_Metrics"))
+               .put(new Info("struct TRITONSERVER_Parameter").cppText("TRITONSERVER_Parameter"))
+               .put(new Info("struct TRITONSERVER_ResponseAllocator").cppText("TRITONSERVER_ResponseAllocator"))
+               .put(new Info("struct TRITONSERVER_Server").cppText("TRITONSERVER_Server"))
+               .put(new Info("struct TRITONSERVER_ServerOptions").cppText("TRITONSERVER_ServerOptions"))
+               .put(new Info("struct TRITONSERVER_Metric").cppText("TRITONSERVER_Metric"))
+               .put(new Info("struct TRITONSERVER_MetricFamily").cppText("TRITONSERVER_MetricFamily"));
     }
 }

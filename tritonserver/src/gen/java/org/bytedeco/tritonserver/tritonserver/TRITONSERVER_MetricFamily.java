@@ -14,7 +14,7 @@ import static org.bytedeco.tritonserver.global.tritonserver.*;
 ///
 ///
 ///
-@Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
+@Name("struct TRITONSERVER_MetricFamily") @Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
 public class TRITONSERVER_MetricFamily extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TRITONSERVER_MetricFamily() { super((Pointer)null); }

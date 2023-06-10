@@ -130,7 +130,7 @@ public class tritonserver extends org.bytedeco.tritonserver.presets.tritonserver
 public static final int TRITONSERVER_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONSERVER_API_VERSION_MINOR = 23;
+public static final int TRITONSERVER_API_VERSION_MINOR = 22;
 
 /** Get the TRITONBACKEND API version supported by the Triton shared
  *  library. This value can be compared against the
@@ -1212,7 +1212,6 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelat
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
-///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelationIdString(
     TRITONSERVER_InferenceRequest inference_request,
     String correlation_id);
@@ -1220,9 +1219,7 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetCorrelat
     TRITONSERVER_InferenceRequest inference_request,
     @Cast("const char*") BytePointer correlation_id);
 
-/** Deprecated. See TRITONSERVER_InferenceRequestPriorityUInt64 instead.
- * 
- *  Get the priority for a request. The default is 0 indicating that
+/** Get the priority for a request. The default is 0 indicating that
  *  the request does not specify a priority and so will use the
  *  model's default priority.
  * 
@@ -1238,29 +1235,7 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriority(
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriority(
     TRITONSERVER_InferenceRequest inference_request, @Cast("uint32_t*") int[] priority);
 
-/** Get the priority for a request. The default is 0 indicating that
- *  the request does not specify a priority and so will use the
- *  model's default priority.
- * 
- *  @param inference_request The request object.
- *  @param priority Returns the priority level.
- *  @return a TRITONSERVER_Error indicating success or failure. */
-
-///
-///
-public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
-    TRITONSERVER_InferenceRequest inference_request,
-    @Cast("uint64_t*") LongPointer priority);
-public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
-    TRITONSERVER_InferenceRequest inference_request,
-    @Cast("uint64_t*") LongBuffer priority);
-public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUInt64(
-    TRITONSERVER_InferenceRequest inference_request,
-    @Cast("uint64_t*") long[] priority);
-
-/** Deprecated. See TRITONSERVER_InferenceRequestSetPriorityUInt64 instead.
- * 
- *  Set the priority for a request. The default is 0 indicating that
+/** Set the priority for a request. The default is 0 indicating that
  *  the request does not specify a priority and so will use the
  *  model's default priority.
  * 
@@ -1271,18 +1246,6 @@ public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestPriorityUIn
 ///
 public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetPriority(
     TRITONSERVER_InferenceRequest inference_request, @Cast("uint32_t") int priority);
-  
-/** Set the priority for a request. The default is 0 indicating that
- *  the request does not specify a priority and so will use the
- *  model's default priority.
- * 
- *  @param inference_request The request object.
- *  @param priority The priority level.
- *  @return a TRITONSERVER_Error indicating success or failure. */
-
-///
-public static native TRITONSERVER_Error TRITONSERVER_InferenceRequestSetPriorityUInt64(
-    TRITONSERVER_InferenceRequest inference_request, @Cast("uint64_t") long priority);
 
 /** Get the timeout for a request, in microseconds. The default is 0
  *  which indicates that the request has no timeout.
@@ -3218,7 +3181,7 @@ public static native TRITONSERVER_Error TRITONSERVER_GetMetricKind(
 public static final int TRITONBACKEND_API_VERSION_MAJOR = 1;
 
 ///
-public static final int TRITONBACKEND_API_VERSION_MINOR = 13;
+public static final int TRITONBACKEND_API_VERSION_MINOR = 12;
 
 /** Get the TRITONBACKEND API version supported by Triton. This value
  *  can be compared against the TRITONBACKEND_API_VERSION_MAJOR and
@@ -4641,39 +4604,13 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelState(
  *  @param state The user state, or nullptr if no user state.
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
+
+///
+///
+///
 ///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelSetState(
     TRITONBACKEND_Model model, Pointer state);
-
-/** Report the memory usage of the model that will be released on
- *  TRITONBACKEND_ModelFinalize. The backend may call this function within the
- *  lifecycle of the TRITONBACKEND_Model object (between
- *  TRITONBACKEND_ModelInitialize and TRITONBACKEND_ModelFinalize) to report the
- *  latest usage. To report the memory usage of a model instance,
- *  see TRITONBACKEND_ModelInstanceReportMemoryUsage.
- * 
- *  @param model The model.
- *  @param usage The list of buffer attributes that records the memory usage,
- *  each entry should record the total memory usage of a given memory type and
- *  id. For example, if the model itself occupies 64 bytes on each of
- *  CUDA device 0 and CUDA device 1. Then 'usage' should have first two entries
- *  set, one has the buffer attributes of "type GPU, id 0, 64 bytes" and the
- *  other has "type GPU, id 1, 64 bytes". 'usage' is owned by the backend and
- *  may be released after the function returns.
- *  @param usage_size The number of entries in 'usage'.
- *  @return a TRITONSERVER_Error indicating success or failure. */
-
-
-///
-///
-///
-///
-public static native TRITONSERVER_Error TRITONBACKEND_ModelReportMemoryUsage(
-    TRITONBACKEND_Model model, @Cast("TRITONSERVER_BufferAttributes**") PointerPointer usage,
-    @Cast("uint32_t") int usage_size);
-public static native TRITONSERVER_Error TRITONBACKEND_ModelReportMemoryUsage(
-    TRITONBACKEND_Model model, @ByPtrPtr TRITONSERVER_BufferAttributes usage,
-    @Cast("uint32_t") int usage_size);
 
 /**
  *  TRITONBACKEND_ModelInstance
@@ -4883,38 +4820,12 @@ public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceState(
  *  @return a TRITONSERVER_Error indicating success or failure. */
 
 ///
+///
+///
+///
+///
 public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceSetState(
     TRITONBACKEND_ModelInstance instance, Pointer state);
-
-/** Report the memory usage of the model instance that will be released on
- *  TRITONBACKEND_ModelInstanceFinalize. The backend may call this function
- *  within the lifecycle of the TRITONBACKEND_Model object (between
- *  TRITONBACKEND_ModelInstanceInitialize and
- *  TRITONBACKEND_ModelInstanceFinalize) to report the latest usage. To report
- *  the memory usage of the model, see TRITONBACKEND_ModelReportMemoryUsage.
- * 
- *  @param instance The model instance.
- *  @param usage The list of buffer attributes that records the memory usage,
- *  each entry should record the total memory usage of a given memory type and
- *  id. For example, if the instance itself occupies 64 bytes on each of
- *  CUDA device 0 and CUDA device 1. Then 'usage' should have first two entries
- *  set, one has the buffer attributes of "type GPU, id 0, 64 bytes" and the
- *  other has "type GPU, id 1, 64 bytes". 'usage' is owned by the backend and
- *  may be released after the function returns.
- *  @param usage_size The number of entries in 'usage'.
- *  @return a TRITONSERVER_Error indicating success or failure. */
-
-///
-///
-///
-///
-///
-public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportMemoryUsage(
-    TRITONBACKEND_ModelInstance instance,
-    @Cast("TRITONSERVER_BufferAttributes**") PointerPointer usage, @Cast("uint32_t") int usage_size);
-public static native TRITONSERVER_Error TRITONBACKEND_ModelInstanceReportMemoryUsage(
-    TRITONBACKEND_ModelInstance instance,
-    @ByPtrPtr TRITONSERVER_BufferAttributes usage, @Cast("uint32_t") int usage_size);
 
 /** Record statistics for an inference request.
  * 

@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tritonserver.global.tritonserver.*;
 
-@Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
+@Name("struct TRITONSERVER_ServerOptions") @Opaque @Properties(inherit = org.bytedeco.tritonserver.presets.tritonserver.class)
 public class TRITONSERVER_ServerOptions extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public TRITONSERVER_ServerOptions() { super((Pointer)null); }
