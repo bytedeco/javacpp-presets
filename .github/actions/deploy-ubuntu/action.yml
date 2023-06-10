@@ -13,8 +13,8 @@ runs:
           echo "Fixing HOME to /root (was '$HOME')"
           export HOME=/root
           echo "HOME=$HOME" >> $GITHUB_ENV
-          cd $HOME
         fi
+        cd $HOME
 
         mkdir -p .ccache
         echo "max_size = 2.0G"                                                                        > .ccache/ccache.conf
@@ -29,7 +29,7 @@ runs:
           export USERLAND_BUILDME="buildme"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
           export ARCH=arm64
-          export ARCH2=sbsa
+          export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
           export CUDA=cuda-repo-rhel8-12-1-local-12.1.1_530.30.02-1.aarch64.rpm
           export CUDNN=8.9.1.23-1.cuda12.1.aarch64
@@ -37,7 +37,7 @@ runs:
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
-          export ARCH2=ppc64le
+          export ARCH_CUDA=ppc64le
           export PREFIX=powerpc64le-linux-gnu
           export CUDA=cuda-repo-rhel8-12-1-local-12.1.1_530.30.02-1.ppc64le.rpm
           export CUDNN=8.9.1.23-1.cuda12.1.ppc64le
@@ -47,14 +47,13 @@ runs:
           export PREFIX=i686-linux-gnu
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]]; then
           export ARCH=amd64
-          export ARCH2=x86_64
+          export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
           export CUDA=cuda-repo-rhel8-12-1-local-12.1.1_530.30.02-1.x86_64.rpm
           export CUDNN=8.9.1.23-1.cuda12.1.x86_64
           export NCCL=2.18.1-1+cuda12.1.x86_64
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
-        echo "ARCH2=$ARCH2" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
 
         $SUDO apt-get update
@@ -87,12 +86,18 @@ runs:
         # $SUDO apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA6932366A755776
         $SUDO apt-get update
         $SUDO apt-get -y install gcc-multilib g++-multilib python3 python2.7 python3-minimal python2.7-minimal rpm libasound2-dev:$ARCH freeglut3-dev:$ARCH libfontconfig-dev:$ARCH libgtk2.0-dev:$ARCH libusb-dev:$ARCH libusb-1.0-0-dev:$ARCH libffi-dev:$ARCH libbz2-dev:$ARCH zlib1g-dev:$ARCH libxcb1-dev:$ARCH
+<<<<<<< HEAD
         $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk-headless ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev
+=======
+        $SUDO apt-get -y install pkg-config ccache clang $TOOLCHAIN openjdk-8-jdk ant python2 python3-pip swig git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake make libtool bison flex perl nasm curl libcurl4-openssl-dev libssl-dev libffi-dev libbz2-dev zlib1g-dev rapidjson-dev
+>>>>>>> master
 
-        ln -sf /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+        echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+        ln -sf $JAVA_HOME /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
         curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.tar.gz
-        curl -LO https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+        curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
         $SUDO tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
@@ -125,13 +130,13 @@ runs:
           export MAVEN_OPTIONS="-Djavacpp.platform.compiler=$PREFIX-g++ -Djava.library.path=/usr/$PREFIX/lib/:/usr/lib/$PREFIX/:$USERLAND_PATH/build/lib/"
         fi
 
-        if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] || [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
+        if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/$CUDA
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libcudnn8-$CUDNN.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libcudnn8-devel-$CUDNN.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-$NCCL.rpm
-          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH2/libnccl-devel-$NCCL.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-$CUDNN.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-devel-$CUDNN.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
+          curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-devel-$NCCL.rpm
 
           $SUDO rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
           rm -f *.rpm *.tgz *.txz *.tar.*
@@ -251,8 +256,6 @@ runs:
     - name: Build project
       shell: bash
       run: |
-        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-
         git --version
         $PREFIX-gcc --version
         cmake --version
@@ -305,4 +308,9 @@ runs:
     - name: Clean up
       shell: bash
       run: |
+<<<<<<< HEAD
         rm -Rf $(find $HOME/.m2/repository/ -name '*SNAPSHOT*')
+=======
+        cd $HOME
+        rm -Rf $(find .m2/repository/ -name '*SNAPSHOT*')
+>>>>>>> master
