@@ -20,14 +20,12 @@ env:
 jobs:
   linux-arm64:
     runs-on: ubuntu-20.04
-    container: ubuntu:bionic
     steps:
       - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
     runs-on: ubuntu-20.04
-    container: centos:7
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   windows-x86_64:
     runs-on: windows-2019
     steps:

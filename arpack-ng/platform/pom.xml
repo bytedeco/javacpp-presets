@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.9</version>
+    <version>1.5.10-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
@@ -31,24 +31,24 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-x86}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-x86}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.linux-armhf}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.linux-armhf}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -67,12 +67,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.windows-x86}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.windows-x86}</classifier>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -136,13 +136,13 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.packageName}.platform {
-                      requires static org.bytedeco.${javacpp.packageName}.linux.x86;
+//                      requires static org.bytedeco.${javacpp.packageName}.linux.x86;
                       requires static org.bytedeco.${javacpp.packageName}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.packageName}.linux.armhf;
+//                      requires static org.bytedeco.${javacpp.packageName}.linux.armhf;
                       requires static org.bytedeco.${javacpp.packageName}.linux.arm64;
                       requires static org.bytedeco.${javacpp.packageName}.linux.ppc64le;
                       requires static org.bytedeco.${javacpp.packageName}.macosx.x86_64;
-                      requires static org.bytedeco.${javacpp.packageName}.windows.x86;
+//                      requires static org.bytedeco.${javacpp.packageName}.windows.x86;
                       requires static org.bytedeco.${javacpp.packageName}.windows.x86_64;
                     }
                   </moduleInfoSource>
