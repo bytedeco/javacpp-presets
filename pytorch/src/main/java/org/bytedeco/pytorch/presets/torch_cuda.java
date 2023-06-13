@@ -35,99 +35,31 @@ import java.util.List;
  * @author Samuel Audet, Hervé Guillemet
  */
 @Properties(
-    //inherit = torch.class,
+    inherit = torch.class,
     value = {
         @Platform(
-            value = {"linux", "macosx", "windows"},
             extension = "-gpu",
             include = {
-                "c10/util/ArrayRef.h",
-
-                // Included by
-                // ATen/cudnn/Descriptors.h
-                // ATen/cudnn/Types.h
-                // c10/cuda/CUDAGuard.h
-                "c10/cuda/CUDAStream.h",
-                "ATen/cuda/CUDAContext.h",
-                "c10/core/impl/GPUTrace.h",
-                "c10/cuda/CUDADeviceAssertionHost.h",
-                "c10/cuda/CUDAMacros.h",
-                "c10/cuda/impl/cuda_cmake_macros.h",
-                "c10/cuda/CUDAGraphsC10Utils.h",
-                "ATen/cuda/Exceptions.h",
-                "ATen/cudnn/cudnn-wrapper.h",
-                "ATen/cudnn/Utils.h",
-                "ATen/cudnn/Handle.h",
-                "ATen/cuda/ATenCUDAGeneral.h",
-                // "c10/cuda/CUDAFunctions.h", // Parsing error
-                // "c10/cuda/CUDAException.h", // Parsing error
-                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
-                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
-
-                // Parsed and for inclusion in JNI
-                "torch/torch.h",
                 "ATen/cudnn/Descriptors.h",
                 "ATen/cudnn/Types.h",
                 "c10/cuda/CUDAGuard.h",
 
-                // For inclusion in JNI only (skipped in infoMap)
+                // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h"
-
-            },
-            exclude = {
-                "c10/util/ArrayRef.h",
-
-                // Included by
-                // ATen/cudnn/Descriptors.h
-                // ATen/cudnn/Types.h
-                // c10/cuda/CUDAGuard.h
-                "c10/cuda/CUDAStream.h",
-                "ATen/cuda/CUDAContext.h",
-                "c10/core/impl/GPUTrace.h",
-                "c10/cuda/CUDADeviceAssertionHost.h",
-                "c10/cuda/CUDAMacros.h",
-                "c10/cuda/impl/cuda_cmake_macros.h",
-                "c10/cuda/CUDAGraphsC10Utils.h",
-                "ATen/cuda/Exceptions.h",
-                "ATen/cudnn/cudnn-wrapper.h",
-                "ATen/cudnn/Utils.h",
-                "ATen/cudnn/Handle.h",
-                "ATen/cuda/ATenCUDAGeneral.h",
-                // "c10/cuda/CUDAFunctions.h", // Parsing error
-                // "c10/cuda/CUDAException.h", // Parsing error
-                // "c10/cuda/CUDAMiscFunctions.h", // Parsing error
-                // "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
-            },
-            link = {"cudart", "cudnn", "cusparse", "c10", "c10_cuda", "nvfuser_codegen", "torch_cpu", "torch_cuda", "torch"},
-            linkpath = {
-                "/usr/local/cuda-12.1/lib64/",
-                "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
-                "/usr/local/cuda/lib64/",
-                "/usr/local/cuda/extras/CUPTI/lib64/",
-                "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/extras/CUPTI/lib64/",
-                "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
-            },
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
-            includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
-            preloadpath = {
-                "/usr/local/cuda-12.1/lib64/",
-                "/usr/local/cuda-12.1/extras/CUPTI/lib64/",
-                "/usr/local/cuda/lib64/",
-                "/usr/local/cuda/extras/CUPTI/lib64/",
-                "/usr/lib64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/extras/CUPTI/lib64/",
-                "C:/Program Files/NVIDIA Corporation/NvToolsExt/bin/x64/",
             }
         ),
     },
     target = "org.bytedeco.pytorch.cuda",
     global = "org.bytedeco.pytorch.global.torch_cuda"
 )
-public class torch_cuda implements InfoMapper {
+public class torch_cuda implements LoadEnabled, InfoMapper {
 
+    @Override
+    public void init(ClassProperties properties) {
+        torch.initIncludes(getClass(), properties);
+    }
+
+    @Override
     public void map(InfoMap infoMap) {
 
         torch.sharedMap(infoMap);

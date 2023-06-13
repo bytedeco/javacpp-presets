@@ -6847,11 +6847,6 @@ public static final byte min_lookups = min_lookups();
  // namespace c10
 
 
-// Parsed from c10/util/python_stub.h
-
-// #pragma once
-
-
 // Parsed from c10/core/impl/PyInterpreter.h
 
 // #pragma once
@@ -75781,25 +75776,6 @@ public static final String TORCH_VERSION =
 @Namespace("at::native") public static native @Cast("int64_t") long get_num_splits(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim);
 
  // namespace at::native
-
-
-// Parsed from torch/csrc/jit/runtime/custom_operator.h
-
-// #pragma once
-
-// #include <ATen/core/op_registration/op_registration.h>
-// #include <ATen/core/stack.h>
-// #include <torch/csrc/jit/runtime/operator.h>
-
-/** Registration class for new operators. Effectively calls
- *  {@code torch::jit::registerOperator} for every supplied operator, but allows doing
- *  so in the global scope when a {@code RegisterOperators} object is assigned to a
- *  static variable.
- *  Note: This is *not* the custom operator API. If you want to register custom
- *  operators, take a look at torch::RegisterOperators. */
-
- // namespace jit
- // namespace torch
 
 
 // Parsed from torch/csrc/jit/serialization/storage_context.h

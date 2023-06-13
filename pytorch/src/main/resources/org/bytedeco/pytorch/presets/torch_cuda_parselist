@@ -1,0 +1,26 @@
+c10/util/ArrayRef.h
+
+# Included by
+# ATen/cudnn/Descriptors.h
+# ATen/cudnn/Types.h
+# c10/cuda/CUDAGuard.h
+c10/cuda/CUDAStream.h
+ATen/cuda/CUDAContext.h
+c10/core/impl/GPUTrace.h
+c10/cuda/CUDADeviceAssertionHost.h
+c10/cuda/CUDAMacros.h
+c10/cuda/impl/cuda_cmake_macros.h
+c10/cuda/CUDAGraphsC10Utils.h
+ATen/cuda/Exceptions.h
+ATen/cudnn/cudnn-wrapper.h
+ATen/cudnn/Utils.h
+ATen/cudnn/Handle.h
+ATen/cuda/ATenCUDAGeneral.h
+# "c10/cuda/CUDAFunctions.h", // Parsing error
+# "c10/cuda/CUDAException.h", // Parsing error
+# "c10/cuda/CUDAMiscFunctions.h", // Parsing error
+# "c10/cuda/CUDACachingAllocator.h", // If map needed, rename global symbols
+
+ATen/cudnn/Descriptors.h
+ATen/cudnn/Types.h
+c10/cuda/CUDAGuard.h

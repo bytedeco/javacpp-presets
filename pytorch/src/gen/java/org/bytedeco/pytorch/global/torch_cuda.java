@@ -14,6 +14,12 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.presets.javacpp.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+import org.bytedeco.pytorch.*;
+import static org.bytedeco.pytorch.global.torch.*;
+
 public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
     static { Loader.load(); }
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl>") Generator make_generator_cuda();
@@ -298,9 +304,6 @@ manage their own state. There is only a single CUDA context/state.
 // #pragma once
 
 // #include <c10/core/impl/PyInterpreter.h>
-// Targeting ../cuda/GPUTrace.java
-
-
 
  // namespace impl
  // namespace c10
@@ -652,18 +655,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
 
 
-// Parsed from torch/torch.h
-
-// #pragma once
-
-// #include <torch/all.h>
-
-// #ifdef TORCH_API_INCLUDE_EXTENSION_H
-// #include <torch/extension.h>
-
-// #endif // defined(TORCH_API_INCLUDE_EXTENSION_H)
-
-
 // Parsed from ATen/cudnn/Descriptors.h
 
 // #pragma once
@@ -744,7 +735,7 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #include <ATen/cudnn/cudnn-wrapper.h>
 // #include <ATen/Tensor.h>
 
-@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(@Const @ByVal ScalarType dtype);
+@Namespace("at::native") public static native @Cast("cudnnDataType_t") int getCudnnDataTypeFromScalarType(ScalarType dtype);
 
 
 
