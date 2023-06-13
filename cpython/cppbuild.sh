@@ -124,7 +124,20 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
-    macosx-*)
+    macosx-arm64)
+        cd ../$OPENSSL
+        ./Configure enable-rc5 zlib darwin64-arm64-cc no-asm -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../Python-$CPYTHON_VERSION
+        sedinplace 's/libintl.h//g' configure
+        sedinplace 's/ac_cv_lib_intl_textdomain=yes/ac_cv_lib_intl_textdomain=no/g' configure
+        ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../,-rpath,@loader_path/../lib/' ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        sedinplace 's:-install_name,$(prefix)/lib/:-install_name,@rpath/:g' Makefile
+        make -j $MAKEJ
+        make install
+        ;;
+    macosx-x86_64)
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
         make -s -j $MAKEJ
