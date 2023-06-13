@@ -1460,6 +1460,7 @@
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>cpython</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
