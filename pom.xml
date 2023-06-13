@@ -1464,6 +1464,7 @@
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>numpy</module>
         <module>sentencepiece</module>
       </modules>
       <properties>
