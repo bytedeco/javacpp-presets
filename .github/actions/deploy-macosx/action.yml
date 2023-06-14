@@ -93,7 +93,8 @@ runs:
         echo "GRADLE_TASK=$GRADLE_TASK" >> $GITHUB_ENV
         echo "MAVEN_PHASE=$MAVEN_PHASE" >> $GITHUB_ENV
         echo "MAVEN_OPTIONS=$MAVEN_OPTIONS" >> $GITHUB_ENV
-
+    - name: Setup upterm session
+      uses: lhotari/action-upterm@v1
     - name: Build project
       shell: bash
       run: |

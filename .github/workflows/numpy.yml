@@ -37,8 +37,9 @@ jobs:
   macosx-arm64:
     runs-on: macos-11
     steps:
-      #   - uses: ./../actions/deploy-macosx@actions
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-macosx
+      #- uses: bytedeco/javacpp-presets/.github/actions/deploy-macosx@actions
   #  windows-x86:
   #    runs-on: windows-2019
   #    steps:
