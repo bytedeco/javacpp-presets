@@ -56,7 +56,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
     @Override
     public void init(ClassProperties properties) {
-        torch.initIncludes(getClass(), properties);
+        String extension = properties.getProperty("platform.extension");
+        if (extension != null && extension.endsWith("-gpu"))
+          torch.initIncludes(getClass(), properties);
     }
 
     @Override
@@ -65,10 +67,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         torch.sharedMap(infoMap);
 
         infoMap
-            .putFirst(new Info("openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h",
-                "CUDAGeneratorImpl.h"
-            ).skip())
-
             .put(new Info("basic/containers").cppTypes("c10::optional"))
 
             .put(new Info().enumerate().friendly())

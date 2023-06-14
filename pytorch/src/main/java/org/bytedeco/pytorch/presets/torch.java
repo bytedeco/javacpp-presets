@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
@@ -75,7 +77,7 @@ import org.bytedeco.openblas.presets.openblas;
             link = { "c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch" },
             // If nvfuser_codegen is linked and not preloaded, and javacpp cache is empty, we get:
             // Loading nvfuser library failed with: Error in dlopen: libtorch.so: Cannot open...  (function LoadingNvfuserLibrary)
-            // The warning disappear once the cache is filled. Probably some obscure race condition.
+            // The warning disappears once the cache is filled. Probably some obscure race condition.
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12", "nvfuser_codegen"},
             includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
             preloadpath = {
@@ -107,11 +109,12 @@ public class torch implements LoadEnabled, InfoMapper {
                 Class caller = Loader.getCallerClass(i);
                 if (caller == null) return;
                 if (caller == Parser.class) {
+                    Pattern re = Pattern.compile("^#include\\s+[\"<]([^\">]+)[\">]");
                     properties.put("platform.include", new ArrayList<String>());
                     Class presets = properties.getEffectiveClasses().get(0);
                     // We don't want to fill the include list of torch when we are processing torch_cuda
                     if (presets == thisClass) {
-                        InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parselist");
+                        InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
                         if (includesStream == null) {
                             throw new RuntimeException("Cannot find parse list for " + presets);
                         }
@@ -119,11 +122,9 @@ public class torch implements LoadEnabled, InfoMapper {
                         String line;
                         try {
                             while ((line = br.readLine()) != null) {
-                                int commentIdx = line.indexOf('#');
-                                if (commentIdx >= 0) line = line.substring(0, commentIdx);
-                                line = line.trim();
-                                if (line.length() > 0)
-                                    properties.addAll("platform.include", line);
+                                Matcher m = re.matcher(line);
+                                if (m.find())
+                                    properties.addAll("platform.include", m.group(1));
                             }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -286,8 +287,6 @@ public class torch implements LoadEnabled, InfoMapper {
         sharedMap(infoMap);
 
         infoMap
-            //.putFirst(new Info("openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h").skip())
-
             .put(new Info("ordered_dict.h").linePatterns(".*class Item;.*").skip())
             .put(new Info("util.h").linePatterns(".*using approx_time_t = decltype.*").skip())
 
