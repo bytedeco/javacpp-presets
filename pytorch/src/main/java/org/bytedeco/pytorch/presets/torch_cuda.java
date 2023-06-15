@@ -48,6 +48,12 @@ import java.util.List;
                 "ATen/cuda/CUDAGeneratorImpl.h"
             }
         ),
+        @Platform(
+                value = "windows",
+                extension = "-gpu",
+                link = { "cudart" },
+                linkpath    = { "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/" }
+        ),
     },
     target = "org.bytedeco.pytorch.cuda",
     global = "org.bytedeco.pytorch.global.torch_cuda"
