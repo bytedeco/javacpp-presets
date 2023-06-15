@@ -444,119 +444,21 @@ public static native String TRITONSERVER_ErrorCodeString(
 ///
 public static native String TRITONSERVER_ErrorMessage(
     TRITONSERVER_Error error);
+// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorAllocFn_t.java
 
-/** TRITONSERVER_ResponseAllocator
- * 
- *  Object representing a memory allocator for output tensors in an
- *  inference response.
- * 
- <p>
- *  Type for allocation function that allocates a buffer to hold an
- *  output tensor.
- * 
- *  @param allocator The allocator that is provided in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param tensor_name The name of the output tensor to allocate for.
- *  @param byte_size The size of the buffer to allocate.
- *  @param memory_type The type of memory that the caller prefers for
- *  the buffer allocation.
- *  @param memory_type_id The ID of the memory that the caller prefers
- *  for the buffer allocation.
- *  @param userp The user data pointer that is provided as
- *  'response_allocator_userp' in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param buffer Returns a pointer to the allocated memory.
- *  @param buffer_userp Returns a user-specified value to associate
- *  with the buffer, or nullptr if no user-specified value should be
- *  associated with the buffer. This value will be provided in the
- *  call to TRITONSERVER_ResponseAllocatorReleaseFn_t when the buffer
- *  is released and will also be returned by
- *  TRITONSERVER_InferenceResponseOutput.
- *  @param actual_memory_type Returns the type of memory where the
- *  allocation resides. May be different than the type of memory
- *  requested by 'memory_type'.
- *  @param actual_memory_type_id Returns the ID of the memory where
- *  the allocation resides. May be different than the ID of the memory
- *  requested by 'memory_type_id'.
- *  @return a TRITONSERVER_Error object if a failure occurs while
- *  attempting an allocation. If an error is returned all other return
- *  values will be ignored. */
 
-/** Type for allocation function that allocates a buffer to hold an
- *  output tensor with buffer attributes. The callback function must fill in the
- *  appropriate buffer attributes information related to this buffer. If set,
- *  this function is always called after TRITONSERVER_ResponseAllocatorAllocFn_t
- *  function.
- * 
- *  @param allocator The allocator that is provided in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param tensor_name The name of the output tensor to allocate for.
- *  @param buffer_attributes The buffer attributes associated with the buffer.
- *  @param userp The user data pointer that is provided as
- *  'response_allocator_userp' in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param buffer_userp Returns a user-specified value to associate
- *  with the buffer, or nullptr if no user-specified value should be
- *  associated with the buffer. This value will be provided in the
- *  call to TRITONSERVER_ResponseAllocatorReleaseFn_t when the buffer
- *  is released and will also be returned by
- *  TRITONSERVER_InferenceResponseOutput.
- *  @return a TRITONSERVER_Error object if a failure occurs while
- *  attempting an allocation. If an error is returned all other return
- *  values will be ignored. */
+// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorBufferAttributesFn_t.java
 
-/** Type for function that is called to query the allocator's preferred memory
- *  type and memory type ID. As much as possible, the allocator should attempt
- *  to return the same memory_type and memory_type_id values that will be
- *  returned by the subsequent call to TRITONSERVER_ResponseAllocatorAllocFn_t.
- *  But the allocator is not required to do so.
- * 
- *  @param allocator The allocator that is provided in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param userp The user data pointer that is provided as
- *  'response_allocator_userp' in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param tensor_name The name of the output tensor. This is optional
- *  and it should be set to nullptr to indicate that the tensor name has
- *  not determined.
- *  @param byte_size The expected size of the buffer. This is optional
- *  and it should be set to nullptr to indicate that the byte size has
- *  not determined.
- *  @param memory_type Acts as both input and output. On input gives
- *  the memory type preferred by the caller. Returns memory type preferred
- *  by the allocator, taken account of the caller preferred type.
- *  @param memory_type_id Acts as both input and output. On input gives
- *  the memory type ID preferred by the caller. Returns memory type ID preferred
- *  by the allocator, taken account of the caller preferred type ID.
- *  @return a TRITONSERVER_Error object if a failure occurs. */
 
-/** Type for function that is called when the server no longer holds
- *  any reference to a buffer allocated by
- *  TRITONSERVER_ResponseAllocatorAllocFn_t. In practice this function
- *  is typically called when the response object associated with the
- *  buffer is deleted by TRITONSERVER_InferenceResponseDelete.
- * 
- *  @param allocator The allocator that is provided in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param buffer Pointer to the buffer to be freed.
- *  @param buffer_userp The user-specified value associated
- *  with the buffer in TRITONSERVER_ResponseAllocatorAllocFn_t.
- *  @param byte_size The size of the buffer.
- *  @param memory_type The type of memory holding the buffer.
- *  @param memory_type_id The ID of the memory holding the buffer.
- *  @return a TRITONSERVER_Error object if a failure occurs while
- *  attempting the release. If an error is returned Triton will not
- *  attempt to release the buffer again. */
+// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorQueryFn_t.java
 
-/** Type for function that is called to indicate that subsequent
- *  allocation requests will refer to a new response.
- * 
- *  @param allocator The allocator that is provided in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @param userp The user data pointer that is provided as
- *  'response_allocator_userp' in the call to
- *  TRITONSERVER_InferenceRequestSetResponseCallback.
- *  @return a TRITONSERVER_Error object if a failure occurs. */
+
+// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorReleaseFn_t.java
+
+
+// Targeting ../tritonserver/TRITONSERVER_ResponseAllocatorStartFn_t.java
+
+
 
 /** Create a new response allocator object.
  * 
@@ -612,14 +514,14 @@ public static native String TRITONSERVER_ErrorMessage(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
     @Cast("TRITONSERVER_ResponseAllocator**") PointerPointer allocator,
-    @ByVal TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
-    @ByVal TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
-    @ByVal TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
+    TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
+    TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
+    TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
     @ByPtrPtr TRITONSERVER_ResponseAllocator allocator,
-    @ByVal TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
-    @ByVal TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
-    @ByVal TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
+    TRITONSERVER_ResponseAllocatorAllocFn_t alloc_fn,
+    TRITONSERVER_ResponseAllocatorReleaseFn_t release_fn,
+    TRITONSERVER_ResponseAllocatorStartFn_t start_fn);
 
 /** Set the buffer attributes function for a response allocator object.
  *  The function will be called after alloc_fn to set the buffer attributes
@@ -637,7 +539,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorNew(
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetBufferAttributesFunction(
     TRITONSERVER_ResponseAllocator allocator,
-    @ByVal TRITONSERVER_ResponseAllocatorBufferAttributesFn_t buffer_attributes_fn);
+    TRITONSERVER_ResponseAllocatorBufferAttributesFn_t buffer_attributes_fn);
 
 /** Set the query function to a response allocator object. Usually the
  *  function will be called before alloc_fn to understand what is the
@@ -655,7 +557,7 @@ public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetBufferA
 ///
 public static native TRITONSERVER_Error TRITONSERVER_ResponseAllocatorSetQueryFunction(
     TRITONSERVER_ResponseAllocator allocator,
-    @ByVal TRITONSERVER_ResponseAllocatorQueryFn_t query_fn);
+    TRITONSERVER_ResponseAllocatorQueryFn_t query_fn);
 
 /** Delete a response allocator.
  * 

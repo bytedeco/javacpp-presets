@@ -29,18 +29,16 @@ import java.util.*;
 import java.util.concurrent.*;
 import com.google.gson.*;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.tritonserver.tritonserver.*;
-import static org.bytedeco.tritonserver.global.tritonserver.*;
-
+import org.bytedeco.tritonserver.tritondevelopertoolsserver.*;
+import static org.bytedeco.tritonserver.global.tritondevelopertoolsserver.*;
 public class SimpleCPP {
     // Helper functions
     static void FAIL(String MSG) {
-        System.err.println("Failure: " + MSG);
-        System.exit(1);
+      System.err.println("Failure: " + MSG);
+      System.exit(1);
     }
 
-    static void Usage(String msg)
-    {
+    static void Usage(String msg) {
       if (msg != null) {
         System.err.println(msg);
       }
@@ -55,8 +53,7 @@ public class SimpleCPP {
     CompareResult(
         String output0_name, String output1_name,
         IntPointer input0, IntPointer input1, IntPointer output0,
-        IntPointer output1)
-    {
+        IntPointer output1) {
       for (int i = 0; i < 16; ++i) {
         System.out.println(input0.get(i) + " + " + input1.get(i) + " = "
                          + output0.get(i));
@@ -74,8 +71,7 @@ public class SimpleCPP {
 
     static void
     GenerateInputData(
-        IntPointer[] input0_data, IntPointer[] input1_data)
-    {
+        IntPointer[] input0_data, IntPointer[] input1_data) {
       input0_data[0] = new IntPointer(16);
       input1_data[0] = new IntPointer(16);
       for (int i = 0; i < 16; ++i) {
@@ -85,52 +81,51 @@ public class SimpleCPP {
     }
 
     static int RunInference(int verbose_level, String model_repository_path, String model_name) {
-        StringVector model_repository_paths = new StringVector(model_repository_path);
-        ServerOptions options = new ServerOptions(model_repository_paths);
-        LoggingOptions logging_options = options.logging_();
-        logging_options.SetVerboseLevel(verbose_level);
-        options.SetLoggingOptions(logging_options);
+      StringVector model_repository_paths = new StringVector(model_repository_path);
+      ServerOptions options = new ServerOptions(model_repository_paths);
+      LoggingOptions logging_options = options.logging_();
+      logging_options.SetVerboseLevel(verbose_level);
+      options.SetLoggingOptions(logging_options);
 
-        GenericTritonServer server = GenericTritonServer.Create(options);
-        StringSet loaded_models = server.LoadedModels();
-	System.out.println("Loaded_models count : " + loaded_models.size());
-        
-        InferOptions infer_options = new InferOptions(model_name);
-        GenericInferRequest request = GenericInferRequest.Create(infer_options);
+      GenericTritonServer server = GenericTritonServer.Create(options);
+      StringSet loaded_models = server.LoadedModels();
+      System.out.println("Loaded_models count : " + loaded_models.size());
+      
+      InferOptions infer_options = new InferOptions(model_name);
+      GenericInferRequest request = GenericInferRequest.Create(infer_options);
 
-        BytePointer input0_data;
-        BytePointer input1_data; 
-        IntPointer[] p0 = {null}, p1 = {null};
-        GenerateInputData(p0, p1);
-        input0_data = p0[0].getPointer(BytePointer.class);
-        input1_data = p1[0].getPointer(BytePointer.class);
+      BytePointer input0_data;
+      BytePointer input1_data; 
+      IntPointer[] p0 = {null}, p1 = {null};
+      GenerateInputData(p0, p1);
+      input0_data = p0[0].getPointer(BytePointer.class);
+      input1_data = p1[0].getPointer(BytePointer.class);
 
-	LongPointer shape0 = new LongPointer(2);
-	LongPointer shape1 = new LongPointer(2);
-	shape0.put(0, 1);
-	shape0.put(1, 16);
-	shape1.put(0, 1);
-	shape1.put(1, 16);
-	Tensor tensor0 = new Tensor(input0_data, 4 * 16, 8, shape0, 0, 1);
-	Tensor tensor1 = new Tensor(input1_data, 4 * 16, 8, shape1, 0, 1);
-	request.AddInput("INPUT0", tensor0);
-	request.AddInput("INPUT1", tensor1);
-	GenericInferResult result = server.Infer(request);
+      LongPointer shape0 = new LongPointer(2);
+      LongPointer shape1 = new LongPointer(2);
+      shape0.put(0, 1);
+      shape0.put(1, 16);
+      shape1.put(0, 1);
+      shape1.put(1, 16);
+      Tensor tensor0 = new Tensor(input0_data, 4 * 16, 8, shape0, 0, 1);
+      Tensor tensor1 = new Tensor(input1_data, 4 * 16, 8, shape1, 0, 1);
+      request.AddInput("INPUT0", tensor0);
+      request.AddInput("INPUT1", tensor1);
+      GenericInferResult result = server.Infer(request);
 
-        Tensor output = result.Output("OUTPUT0");
-	BytePointer buffer = output.buffer_();
+            Tensor output = result.Output("OUTPUT0");
+      BytePointer buffer = output.buffer_();
 
-	System.out.println("buffer to string : " + buffer.toString());
-
-	System.out.println("output val at index 0 : " + buffer.getInt(0));
-	System.out.println("output val at index 1 : " + buffer.getInt(1 * 4));
-	System.out.println("output val at index 2 : " + buffer.getInt(2 * 4));
-	System.out.println("output val at index 3 : " + buffer.getInt(3 * 4));
-	System.out.println("output val at index 4 : " + buffer.getInt(4 * 4));
-	System.out.println("output val at index 5 : " + buffer.getInt(5 * 4));
-	System.out.println("output val at index 6 : " + buffer.getInt(6 * 4));
-	System.out.println("output val at index 7 : " + buffer.getInt(7 * 4));
-        return 0;
+      System.out.println("buffer to string : " + buffer.toString());
+      System.out.println("output val at index 0 : " + buffer.getInt(0));
+      System.out.println("output val at index 1 : " + buffer.getInt(1 * 4));
+      System.out.println("output val at index 2 : " + buffer.getInt(2 * 4));
+      System.out.println("output val at index 3 : " + buffer.getInt(3 * 4));
+      System.out.println("output val at index 4 : " + buffer.getInt(4 * 4));
+      System.out.println("output val at index 5 : " + buffer.getInt(5 * 4));
+      System.out.println("output val at index 6 : " + buffer.getInt(6 * 4));
+      System.out.println("output val at index 7 : " + buffer.getInt(7 * 4));
+      return 0;
     }
 
     public static void
