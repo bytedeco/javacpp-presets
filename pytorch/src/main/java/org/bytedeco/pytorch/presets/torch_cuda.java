@@ -45,14 +45,15 @@ import java.util.List;
                 "c10/cuda/CUDAGuard.h",
 
                 // For inclusion in JNI only, not parsed
-                "ATen/cuda/CUDAGeneratorImpl.h"
+                "ATen/cuda/CUDAGeneratorImpl.h",
+            },
+            link = "cudart",
+            linkpath = {
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
+                "/usr/local/cuda-12.1/lib64/",
+                "/usr/local/cuda/lib64/",
+                "/usr/lib64/"
             }
-        ),
-        @Platform(
-                value = "windows",
-                extension = "-gpu",
-                link = { "cudart" },
-                linkpath    = { "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/" }
         ),
     },
     target = "org.bytedeco.pytorch.cuda",
