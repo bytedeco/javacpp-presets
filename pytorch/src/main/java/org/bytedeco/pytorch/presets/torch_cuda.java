@@ -47,7 +47,7 @@ import java.util.List;
                 // For inclusion in JNI only, not parsed
                 "ATen/cuda/CUDAGeneratorImpl.h",
             },
-            link = "cudart",
+            link = { "cudart", "cusparse" },
             linkpath = {
                 "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
                 "/usr/local/cuda-12.1/lib64/",
