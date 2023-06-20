@@ -45,7 +45,6 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-import org.bytedeco.javacpp.tools.Parser;
 
 import org.bytedeco.openblas.presets.openblas;
 
@@ -104,34 +103,31 @@ public class torch implements LoadEnabled, InfoMapper {
 
     static void initIncludes(Class thisClass, ClassProperties properties) {
         // If we are called from Parser, fetch the list of headers to parse from resources
-        if (!Loader.isLoadLibraries()) {
-            for (int i = 3; i < 10; i++) {
-                Class caller = Loader.getCallerClass(i);
-                if (caller == null) return;
-                if (caller == Parser.class) {
-                    Pattern re = Pattern.compile("^#include\\s+[\"<]([^\">]+)[\">]");
-                    properties.put("platform.include", new ArrayList<String>());
-                    Class presets = properties.getEffectiveClasses().get(0);
-                    // We don't want to fill the include list of torch when we are processing torch_cuda
-                    if (presets == thisClass) {
-                        InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
-                        if (includesStream == null) {
-                            throw new RuntimeException("Cannot find parse list for " + presets);
-                        }
-                        BufferedReader br = new BufferedReader(new InputStreamReader(includesStream));
-                        String line;
-                        try {
-                            while ((line = br.readLine()) != null) {
-                                Matcher m = re.matcher(line);
-                                if (m.find())
-                                    properties.addAll("platform.include", m.group(1));
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+        for (int i = 3; i < 10; i++) {
+            Class caller = Loader.getCallerClass(i);
+            if (caller == null) return;
+            if (caller.getName().equals("org.bytedeco.javacpp.tools.Parser")) {
+                properties.put("platform.include", new ArrayList<String>());
+                Class presets = properties.getEffectiveClasses().get(0);
+                // We don't want to fill the include list of torch when we are processing torch_cuda
+                if (presets == thisClass) {
+                    InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
+                    if (includesStream == null) {
+                        throw new RuntimeException("Cannot find parse list for " + presets);
                     }
-                    return;
+                    Pattern re = Pattern.compile("^#include\\s+[\"<]([^\">]+)[\">]");
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(includesStream))) {
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            Matcher m = re.matcher(line);
+                            if (m.find())
+                                properties.addAll("platform.include", m.group(1));
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+                return;
             }
         }
     }
