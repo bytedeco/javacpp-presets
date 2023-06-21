@@ -102,32 +102,26 @@ public class torch implements LoadEnabled, InfoMapper {
     }
 
     static void initIncludes(Class thisClass, ClassProperties properties) {
-        // If we are called from Parser, fetch the list of headers to parse from resources
-        for (int i = 3; i < 10; i++) {
-            Class caller = Loader.getCallerClass(i);
-            if (caller == null) return;
-            if (caller.getName().equals("org.bytedeco.javacpp.tools.Parser")) {
-                properties.put("platform.include", new ArrayList<String>());
-                Class presets = properties.getEffectiveClasses().get(0);
-                // We don't want to fill the include list of torch when we are processing torch_cuda
-                if (presets == thisClass) {
-                    InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
-                    if (includesStream == null) {
-                        throw new RuntimeException("Cannot find parse list for " + presets);
-                    }
-                    Pattern re = Pattern.compile("^#include\\s+[\"<]([^\">]+)[\">]");
-                    try (BufferedReader br = new BufferedReader(new InputStreamReader(includesStream))) {
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            Matcher m = re.matcher(line);
-                            if (m.find())
-                                properties.addAll("platform.include", m.group(1));
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+        // If we are called from Parser, fetch the list of headers to parse from resources.
+        // This check for stack depth 5 also excludes the code path where, because of property inheritance,
+        // we are called from torch class while processing torch_cuda. Parser stack depth is 6 in that code path.
+        if (Loader.getCallerClass(5).getName().equals("org.bytedeco.javacpp.tools.Parser")) {
+            properties.put("platform.include", new ArrayList<String>());
+            Class presets = properties.getEffectiveClasses().get(0);
+            InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
+            if (includesStream == null) {
+                throw new RuntimeException("Cannot find parse list for " + presets);
+            }
+            Pattern re = Pattern.compile("^#include\\s+[\"<]([^\">]+)[\">]");
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(includesStream))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    Matcher m = re.matcher(line);
+                    if (m.find())
+                        properties.addAll("platform.include", m.group(1));
                 }
-                return;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
