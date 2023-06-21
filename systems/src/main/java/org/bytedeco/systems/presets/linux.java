@@ -148,7 +148,8 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_BIND",
                              "_POSIX2_C_DEV", "_POSIX2_SW_DEV", "_POSIX2_LOCALEDEF").cppTypes("long"))
-               .put(new Info("_POSIX2_C_VERSION").skip())
+               .put(new Info("__glibc_reserved1", "__glibc_reserved2", "__glibc_reserved3",
+                             "__glibc_reserved4", "__glibc_reserved5", "_POSIX2_C_VERSION").skip())
 
                .put(new Info("__u16", "__uint16_t")
                        .cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
