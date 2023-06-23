@@ -11,7 +11,7 @@ INCLUDE_DEVELOPER_TOOLS_SERVER=${INCLUDE_DEVELOPER_TOOLS_SERVER:=0}
 
 if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrapper.h" ]] && [[ ! -f "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]] && [[ ${INCLUDE_DEVELOPER_TOOLS_SERVER} -eq 0 ]]; then
     TOOLS_BRANCH=${TOOLS_BRANCH:="https://github.com/triton-inference-server/developer_tools.git"}
-    TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="r23.05"}
+    TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="main"}
     TRITON_CORE_REPO=${TRITON_CORE_REPO:="https://github.com/triton-inference-server/core.git"}
     TRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG="r23.05"}
     TRITON_HOME="/opt/tritonserver"
@@ -27,7 +27,7 @@ if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrap
     cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/install -DTRITON_BUILD_TEST=ON -DTRITON_ENABLE_EXAMPLES=ON -DTRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG} -DTRITON_BUILD_STATIC_LIBRARY=OFF ..
     make -j"$(grep -c ^processor /proc/cpuinfo)" install
     # Copy dynamic library to triton home
-    cp ${BUILD_HOME}/developer_tools/server/build/libtritondevelopertoolsserver.so ${TRITON_HOME}/lib/.
+    cp ${BUILD_HOME}/developer_tools/server/build/install/lib/libtritondevelopertoolsserver.so ${TRITON_HOME}/lib/.
     BUILD_INCLUDE_REPO=${BUILD_HOME}/developer_tools/server/include/triton/developer_tools
     BUILD_SRC_REPO=${BUILD_HOME}/developer_tools/server/src
     TRITON_INCLUDE_REPO=${TRITON_HOME}/include/triton/developer_tools
