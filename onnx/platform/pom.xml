@@ -28,7 +28,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.11.3-${project.parent.version}</version>
+      <version>3.11.4-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
