@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.24.3
+NUMPY_VERSION=1.25.0
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -53,7 +53,7 @@ if [[ -n ${INCLUDE:-} ]]; then
         echo '"/I'$P'"' >> include
     done
     export INCLUDE=
-    export CL="@include"
+    export CL="@include -std:c++17"
     export DISTUTILS_USE_SDK=1
     export MSSdk=1
     IFS="$PREVIFS"
@@ -98,7 +98,7 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-TOOLS="setuptools==59.1.0 cython==0.29.30"
+TOOLS="setuptools==59.1.0 cython==0.29.35"
 if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.11"

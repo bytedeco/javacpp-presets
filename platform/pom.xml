@@ -211,17 +211,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.11.3-${project.version}</version>
+      <version>3.11.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.24.3-${project.version}</version>
+      <version>1.25.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.10.1-${project.version}</version>
+      <version>1.11.0-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->

@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 OPENSSL=openssl-3.1.0
-CPYTHON_VERSION=3.11.3
+CPYTHON_VERSION=3.11.4
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 

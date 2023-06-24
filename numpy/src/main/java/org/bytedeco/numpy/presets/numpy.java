@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2022 Samuel Audet
+ * Copyright (C) 2019-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ public class numpy implements InfoMapper {
                                                            "         PyUFunc_API\\[42\\]\\)").skip())
                .put(new Info("npy_math.h").linePatterns("#define npy_.*").skip())
 
-               .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
+               .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_FEATURE_VERSION", "NPY_NOINLINE", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
                              "NPY_GCC_TARGET_AVX", "NPY_GCC_TARGET_FMA", "NPY_GCC_TARGET_AVX2", "NPY_GCC_TARGET_AVX512F", "NPY_GCC_TARGET_AVX512_SKX",
                              "NPY_INLINE", "NPY_TLS", "NPY_RETURNS_BORROWED_REF", "constchar",
                              "NPY_SIGINT_ON", "NPY_SIGINT_OFF", "NPY_INPLACE", "NPY_FINLINE",
@@ -145,6 +145,8 @@ public class numpy implements InfoMapper {
 
                .put(new Info("defined(_MSC_VER) && defined(_WIN64) && (_MSC_VER > 1400) ||"
                            + "    defined(__MINGW32__) || defined(__MINGW64__)",
+                             "NPY_FEATURE_VERSION >= NPY_1_20_API_VERSION",
+                             "NPY_FEATURE_VERSION >= NPY_1_22_API_VERSION",
                              "defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD",
                              "NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_INT",
                              "NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONG",
@@ -186,7 +188,8 @@ public class numpy implements InfoMapper {
                .put(new Info("PyArrayDescr_TypeFull").javaText(
                        "public static native @ByRef PyTypeObject PyArrayDescr_Type(); public static native void PyArrayDescr_Type(PyTypeObject setter);"))
 
-               .put(new Info("PyArrayMapIter_Type", "PyArrayNeighborhoodIter_Type").skip())
+               .put(new Info("PyArrayMapIter_Type", "PyArrayNeighborhoodIter_Type",
+                             "PyArray_HANDLER", "PyDataMem_SetHandler", "PyDataMem_GetHandler").skip())
         ;
     }
 }
