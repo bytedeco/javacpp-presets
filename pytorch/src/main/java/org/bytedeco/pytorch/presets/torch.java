@@ -153,9 +153,7 @@ public class torch implements LoadEnabled, InfoMapper {
                     : lib.equals("nvinfer") ? "@.8"
                     : lib.equals("cufft") ? "@.11"
                     : lib.equals("curand") ? "@.10"
-                    : lib.equals("cudart") ? "@.12"
-                    : lib.equals("nvrtc") ? "@.12"
-                    : lib.equals("nvJitLink") ? "@.12"
+                    : lib.equals("cusolver") ? "@.11"
                     : "@.12";
             } else if (platform.startsWith("windows")) {
                 lib += lib.startsWith("cudnn") ? "64_8"
@@ -164,7 +162,7 @@ public class torch implements LoadEnabled, InfoMapper {
                     : lib.equals("nvinfer") ? "64_8"
                     : lib.equals("cufft") ? "64_11"
                     : lib.equals("curand") ? "64_10"
-                    : lib.equals("cudart") ? "64_12"
+                    : lib.equals("cusolver") ? "64_11"
                     : lib.equals("nvrtc") ? "64_120_0"
                     : lib.equals("nvJitLink") ? "64_120_0"
                     : "64_12";
