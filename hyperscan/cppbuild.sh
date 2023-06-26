@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 HYPERSCAN_VERSION=5.4.2
-BOOST=1_70_0
+BOOST=1_75_0
 download "https://github.com/intel/hyperscan/archive/v$HYPERSCAN_VERSION.tar.gz" hyperscan-$HYPERSCAN_VERSION.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 mkdir -p $PLATFORM
