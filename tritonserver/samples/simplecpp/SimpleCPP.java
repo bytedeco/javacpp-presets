@@ -31,6 +31,7 @@ import com.google.gson.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.tritonserver.tritondevelopertoolsserver.*;
 import static org.bytedeco.tritonserver.global.tritondevelopertoolsserver.*;
+
 public class SimpleCPP {
     // Helper functions
     static void FAIL(String MSG) {
@@ -48,7 +49,7 @@ public class SimpleCPP {
       System.err.println("\t-r [model repository absolute path]");
       System.exit(1);
     }
-    
+
     static void
     CompareResult(
         String output0_name, String output1_name,
@@ -90,12 +91,12 @@ public class SimpleCPP {
       GenericTritonServer server = GenericTritonServer.Create(options);
       StringSet loaded_models = server.LoadedModels();
       System.out.println("Loaded_models count : " + loaded_models.size());
-      
+
       InferOptions infer_options = new InferOptions(model_name);
       GenericInferRequest request = GenericInferRequest.Create(infer_options);
 
       BytePointer input0_data;
-      BytePointer input1_data; 
+      BytePointer input1_data;
       IntPointer[] p0 = {null}, p1 = {null};
       GenerateInputData(p0, p1);
       input0_data = p0[0].getPointer(BytePointer.class);
@@ -147,7 +148,7 @@ public class SimpleCPP {
           break;
         }
       }
-    
+
       // We use a simple model that takes 2 input tensors of 16 strings
       // each and returns 2 output tensors of 16 strings each. The input
       // strings must represent integers. One output tensor is the
@@ -162,5 +163,4 @@ public class SimpleCPP {
 
       System.exit(0);
     }
-
 }

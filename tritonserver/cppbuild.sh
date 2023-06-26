@@ -19,7 +19,7 @@ if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrap
     mkdir -p ${BUILD_HOME} && cd ${BUILD_HOME}
     git clone --single-branch --depth=1 -b ${TRITON_CORE_REPO_TAG} ${TRITON_CORE_REPO}
     cp core/include/triton/core/* ${TRITON_HOME}/include/triton/core/.
-    
+
     # Build CPP library and copy over dependencies
     git clone --single-branch --depth=1 -b ${TOOLS_BRANCH_TAG} ${TOOLS_BRANCH}
     cd developer_tools/server

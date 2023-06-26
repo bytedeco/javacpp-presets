@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
  *
- * @author Katherine Yang, Baojun Liu, Samuel Audet
+ * @author Katherine Yang, Baojun Liu
  */
 @Properties(
     value = {

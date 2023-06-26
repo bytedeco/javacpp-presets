@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Jack He, Samuel Audet, Katherine Yang, Baojun Liu
+ * Copyright (C) 2021 Jack He, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,14 +34,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
  *
- * @author Katherine Yang, Jack He, Baojun Liu
+ * @author Jack He
  */
 @Properties(
     value = {
         @Platform(
             value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "windows-x86_64"},
             include = {"tritonserver.h", "tritonbackend.h", "tritonrepoagent.h"},
-            link = {"tritonserver"},
+            link = "tritonserver",
             includepath = {"/opt/tritonserver/include/triton/core/", "/opt/tritonserver/include/", "/usr/include"},
             linkpath = {"/opt/tritonserver/lib/"}
         ),
@@ -64,6 +64,7 @@ public class tritonserver implements InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("TRITONSERVER_EXPORT", "TRITONSERVER_DECLSPEC",
                              "TRITONBACKEND_DECLSPEC", "TRITONBACKEND_ISPEC",
-                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations());
+                             "TRITONREPOAGENT_DECLSPEC", "TRITONREPOAGENT_ISPEC").cppTypes().annotations())
+        ;
     }
 }
