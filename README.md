@@ -225,7 +225,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.12.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.33.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * Triton Inference Server 2.34.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.21.x  https://github.com/luxonis/depthai-core
  * ONNX 1.14.x  https://github.com/onnx/onnx
