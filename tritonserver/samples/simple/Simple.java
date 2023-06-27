@@ -370,6 +370,7 @@ public class Simple {
           "getting Triton API version");
       if ((TRITONSERVER_API_VERSION_MAJOR != api_version_major[0]) ||
           (TRITONSERVER_API_VERSION_MINOR > api_version_minor[0])) {
+        System.out.println("MAJOR " + api_version_major[0] + ", MINOR " + api_version_minor[0]);
         FAIL("triton server API version mismatch");
       }
 
