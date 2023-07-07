@@ -20,7 +20,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 // this wraps map_type::iterator to make sure user code can't rely
 // on it being the type of the underlying map.
-@Name("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class GenericDictIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -32,6 +32,10 @@ public class GenericDictIterator extends Pointer {
   public native @ByRef @Name("operator ++") GenericDictIterator increment();
 
   public native @ByVal @Name("operator ++") GenericDictIterator increment(int arg0);
+
+  public native @Const @ByRef @Name("operator *") GenericDictEntryRef multiply();
+
+  public native @Const @Name("operator ->") GenericDictEntryRef access();
 
   
 

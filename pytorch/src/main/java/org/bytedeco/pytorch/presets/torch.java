@@ -975,6 +975,7 @@ public class torch implements LoadEnabled, InfoMapper {
         //// c10 Dict
         infoMap
             .put(new Info("c10::Dict<c10::IValue,c10::IValue>").purify().pointerTypes("GenericDict"))
+            .put(new Info("c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>").pointerTypes("GenericDictEntryRef"))
             .put(new Info("c10::impl::DictIterator<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>",
                 "c10::Dict<c10::IValue,c10::IValue>::iterator").purify().pointerTypes("GenericDictIterator").friendly())
             .put(new Info("c10::Dict<std::string,c10::impl::GenericList>").pointerTypes("StringGenericListDict"))
@@ -2019,7 +2020,6 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::hash<std::tuple<> >::tuple_hash<0><std::tuple<> >",
             "c10::hash<std::tuple<> >::tuple_hash<std::tuple<> >",
             "c10::impl::AnnotatedSchema",
-            "c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator>",
             "c10::impl::ListElementConstReferenceTraits<c10::optional<std::string> >",
             "c10::impl::SizesAndStrides::",
             "c10::impl::VirtualGuardImpl",
