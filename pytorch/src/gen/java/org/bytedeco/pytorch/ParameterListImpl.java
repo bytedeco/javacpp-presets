@@ -60,7 +60,7 @@ public class ParameterListImpl extends ParameterListImplCloneable {
   /** Returns an iterator to the start of the ParameterList
    *  the iterator returned will be type of {@code OrderedDict<std::string,
    *  torch::Tensor>::Item} */
-  public native @ByVal @Cast("torch::nn::ParameterListImpl::Iterator*") StringTensorDictItem begin();
+  public native @ByVal @Cast("torch::nn::ParameterListImpl::Iterator*") StringTensorDictItemVector.Iterator begin();
 
   /** Returns a const iterator to the start of the ParameterList
    *  the iterator returned will be type of {@code OrderedDict<std::string,
@@ -69,7 +69,7 @@ public class ParameterListImpl extends ParameterListImplCloneable {
   /** Returns an iterator to the end of the ParameterList
    *  the iterator returned will be type of {@code OrderedDict<std::string,
    *  torch::Tensor>::Item} */
-  public native @ByVal @Cast("torch::nn::ParameterListImpl::Iterator*") StringTensorDictItem end();
+  public native @ByVal @Cast("torch::nn::ParameterListImpl::Iterator*") StringTensorDictItemVector.Iterator end();
 
   /** Returns a const iterator to the end of the ParameterList
    *  the iterator returned will be type of {@code OrderedDict<std::string,

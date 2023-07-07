@@ -323,6 +323,18 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../FunctionSchemaVector.java
 
 
+// Targeting ../StringTensorDictItemVector.java
+
+
+// Targeting ../StringModuleDictItemVector.java
+
+
+// Targeting ../StringAnyModuleDictItemVector.java
+
+
+// Targeting ../StringSharedModuleDictItemVector.java
+
+
 // Targeting ../WeakStorageVector.java
 
 
@@ -464,9 +476,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../EnumNameValue.java
 
 
-// Targeting ../SizeTMatchedSchemaPair.java
-
-
 // Targeting ../StringTensorPair.java
 
 
@@ -480,6 +489,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../RecordFunctionHandleIntPair.java
+
+
+// Targeting ../SizeTMatchedSchemaPair.java
 
 
 // Targeting ../T_DataPtrSizeT_T.java
@@ -11835,11 +11847,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 
 
+// Targeting ../GenericDictEntryRef.java
 
-/**
- * A reference to an entry in the Dict.
- * Use the {@code key()} and {@code value()} methods to read the element.
- */
+
 // Targeting ../GenericDictIterator.java
 
 

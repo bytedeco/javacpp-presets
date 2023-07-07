@@ -109,9 +109,9 @@ public class SequentialImpl extends SequentialImplCloneable {
 
   /** Constructs the {@code Sequential} from an {@code OrderedDict} of named {@code AnyModule}s. */
   public SequentialImpl(
-        @Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
+        @ByRef(true) StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
   @SharedPtr private native void allocate(
-        @Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict ordered_dict);
+        @ByRef(true) StringAnyModuleDict ordered_dict);
 
   /** Constructs the {@code Sequential} from a braced-init-list of named {@code AnyModule}s.
    *  It enables the following use case:

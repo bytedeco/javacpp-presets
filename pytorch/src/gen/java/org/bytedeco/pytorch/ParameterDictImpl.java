@@ -67,12 +67,12 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
   public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector values();
 
   /** Return an iterator to the start of ParameterDict */
-  public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItem begin();
+  public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItemVector.Iterator begin();
 
   /** Return a const iterator to the start of ParameterDict */
 
   /** Return an iterator to the end of ParameterDict */
-  public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItem end();
+  public native @ByVal @Cast("torch::nn::ParameterDictImpl::Iterator*") StringTensorDictItemVector.Iterator end();
 
   /** Return a const iterator to the end of ParameterDict */
 

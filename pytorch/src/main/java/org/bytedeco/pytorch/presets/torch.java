@@ -933,7 +933,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::bitset<64>", "std::bitset<at::kVmapNumLevels>", "std::bitset<dim_bitset_size>",
                 "std::bitset<at::kVmapMaxTensorDims>", "std::bitset<at::dim_bitset_size>").valueTypes("long"))
             .put(new Info("std::basic_string<char>").annotations("@StdString").valueTypes("BytePointer").pointerTypes("@Cast({\"char*\", \"std::string\"}) BytePointer"))
-            .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
 
@@ -996,32 +995,36 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
 
-        //// OrderedDict
-        infoMap
-            .put(new Info("torch::OrderedDict<std::string,torch::Tensor>", "torch::OrderedDict<std::string,torch::Tensor>").pointerTypes("StringTensorDict"))
-            .put(new Info("torch::OrderedDict<Key,Value>::Item<std::string,torch::Tensor>", "torch::OrderedDict<std::string,torch::Tensor>::Item",
-                "std::vector<torch::OrderedDict<std::string,torch::Tensor>::Item>::iterator").pointerTypes("StringTensorDictItem"))
-            .put(new Info("torch::OrderedDict<std::string,torch::nn::Module>").pointerTypes("StringModuleDict"))
-            .put(new Info("torch::OrderedDict<Key,Value>::Item<std::string,torch::nn::Module>", "torch::OrderedDict<std::string,torch::nn::Module>::Item",
-                "std::vector<torch::OrderedDict<std::string,torch::nn::Module>::Item>::iterator").pointerTypes("StringModuleDictItem"))
-            .put(new Info("torch::OrderedDict<std::string,torch::nn::AnyModule>")
-                .valueTypes("@Cast({\"\", \"torch::OrderedDict<std::string,torch::nn::AnyModule>&&\"}) @StdMove StringAnyModuleDict").pointerTypes("StringAnyModuleDict"))
-            .put(new Info("torch::OrderedDict<Key,Value>::Item<std::string,torch::nn::AnyModule>", "torch::OrderedDict<std::string,torch::nn::AnyModule>::Item",
-                "std::vector<torch::OrderedDict<std::string,torch::nn::AnyModule>::Item>::iterator").pointerTypes("StringAnyModuleDictItem"))
-            .put(new Info("torch::OrderedDict<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModuleDict"))
+        //// torch::OrderedDict
+        for (String[] o: new String[][] {
+            { "std::string", "torch::Tensor", "StringTensor" },
+            { "std::string", "torch::nn::Module", "StringModule" },
+            { "std::string", "torch::nn::AnyModule", "StringAnyModule" },
+            { "std::string", "std::shared_ptr<torch::nn::Module>", "StringSharedModule" }
+        }) {
+            infoMap
+                .put(new Info(template("torch::OrderedDict", o[0], o[1])).pointerTypes(o[2] + "Dict"))
+                .put(new Info(template("torch::OrderedDict<Key,Value>::Item", o[0], o[1]), template("torch::OrderedDict", o[0], o[1]) + "::Item").pointerTypes(o[2] + "DictItem"))
+                // Adding const since items don't have no-arg constructors. See PR #664.
+                .put(new Info("const " + template("std::vector", template("torch::OrderedDict", o[0], o[1]) + "::Item")).pointerTypes(o[2] + "DictItemVector").define())
+                .put(new Info(template("std::vector", template("torch::OrderedDict", o[0], o[1]) + "::Item") + "::iterator").pointerTypes(o[2] + "DictItemVector.Iterator"))
+            ;
+        }
 
+        // What is the use for this ?
+        //.put(new Info("torch::OrderedDict<std::string,torch::nn::AnyModule>")
+        //        .valueTypes("@Cast({\"\", \"torch::OrderedDict<std::string,torch::nn::AnyModule>&&\"}) @StdMove StringAnyModuleDict"))
+
+        //// std::pair
+        infoMap
             // Parser doesn't generate iterators for vector of pairs, so function returning such iterators, like ParameterListImpl::begin()
             // must be mapped to returning item instead. Issue #673. Change when issue resolved.
-            .put(new Info("torch::OrderedDict<Key,Value>::Item<std::string,std::shared_ptr<torch::nn::Module> >", "torch::OrderedDict<std::string,std::shared_ptr<torch::nn::Module> >::Item",
-                "std::vector<torch::OrderedDict<std::string,std::shared_ptr<torch::nn::Module> >::Item>::iterator").pointerTypes("StringSharedModuleDictItem"))
-            .put(new Info("std::pair<std::string,torch::Tensor>", "std::pair<std::string,torch::Tensor>", "torch::OrderedDict<std::string,torch::Tensor>::Item",
-                "std::vector<torch::OrderedDict<std::string,torch::Tensor>::Item>::iterator").cast().pointerTypes("StringTensorPair").define())
-            .put(new Info("std::vector<torch::OrderedDict<std::string,torch::Tensor>::Item>::iterator").pointerTypes("StringTensorVector.Iterator"))
-            .put(new Info("std::vector<torch::OrderedDict<std::string,torch::Tensor>::Item>").pointerTypes("StringTensorVector")) // Already defined as vector<pair>
+            .put(new Info("std::pair<std::string,torch::Tensor>", "std::pair<std::string,torch::Tensor>").cast().pointerTypes("StringTensorPair").define())
             .put(new Info("std::pair<std::string,torch::nn::Module>").pointerTypes("StringModulePair").define())
             .put(new Info("std::pair<std::string,torch::nn::AnyModule>").pointerTypes("StringAnyModulePair").define())
             .put(new Info("std::pair<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModulePair").define())
             .put(new Info("std::pair<at::RecordFunctionHandle,int>").pointerTypes("RecordFunctionHandleIntPair").define())
+            .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
         //// Intrusive pointers

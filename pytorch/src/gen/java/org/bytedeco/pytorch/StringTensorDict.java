@@ -119,13 +119,13 @@ public class StringTensorDict extends Pointer {
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItem begin();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItemVector.Iterator begin();
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItem end();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::Tensor>::Iterator*") StringTensorDictItemVector.Iterator end();
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
 
@@ -171,7 +171,7 @@ public class StringTensorDict extends Pointer {
   // Observers
 
   /** Returns the items stored in the {@code OrderedDict}. */
-  public native @Const @ByRef @NoException(true) StringTensorVector items();
+  public native @Const @ByRef @NoException(true) StringTensorDictItemVector items();
 
   /** Returns a newly allocated vector and copies all keys from this
    *  {@code OrderedDict} into the vector. */

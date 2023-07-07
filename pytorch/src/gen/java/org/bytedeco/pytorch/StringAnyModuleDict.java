@@ -49,11 +49,11 @@ public class StringAnyModuleDict extends Pointer {
   private native void allocate(@StdString String key_description/*="Key"*/);
 
   /** Copy constructs this {@code OrderedDict} from {@code other}. */
-  public StringAnyModuleDict(@Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict other);
+  public StringAnyModuleDict(@Const @ByRef StringAnyModuleDict other) { super((Pointer)null); allocate(other); }
+  private native void allocate(@Const @ByRef StringAnyModuleDict other);
 
   /** Assigns items from {@code other} to this {@code OrderedDict}. */
-  public native @ByRef @Name("operator =") StringAnyModuleDict put(@Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict other);
+  public native @ByRef @Name("operator =") StringAnyModuleDict put(@Const @ByRef StringAnyModuleDict other);
 
   // NB: Move works by default, because you can move-construct vectors of const
   // values. I tried to make this noexcept (conditional on the move constructors
@@ -118,13 +118,13 @@ public class StringAnyModuleDict extends Pointer {
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::AnyModule>::Iterator*") StringAnyModuleDictItem begin();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::AnyModule>::Iterator*") StringAnyModuleDictItemVector.Iterator begin();
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::AnyModule>::Iterator*") StringAnyModuleDictItem end();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::AnyModule>::Iterator*") StringAnyModuleDictItemVector.Iterator end();
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
 
@@ -154,7 +154,7 @@ public class StringAnyModuleDict extends Pointer {
 
   /** Inserts all items from {@code other} into this {@code OrderedDict}. If any key from
    *  {@code other} is already present in this {@code OrderedDict}, an exception is thrown. */
-  public native void update(@Cast({"", "torch::OrderedDict<std::string,torch::nn::AnyModule>&&"}) @StdMove StringAnyModuleDict other);
+  public native void update(@ByRef(true) StringAnyModuleDict other);
 
   /** Inserts all items from {@code other} into this {@code OrderedDict}. If any key from
    *  {@code other} is already present in this {@code OrderedDict}, an exception is thrown. */
@@ -170,7 +170,7 @@ public class StringAnyModuleDict extends Pointer {
   // Observers
 
   /** Returns the items stored in the {@code OrderedDict}. */
-  public native @StdVector @NoException(true) StringAnyModuleDictItem items();
+  public native @Const @ByRef @NoException(true) StringAnyModuleDictItemVector items();
 
   /** Returns a newly allocated vector and copies all keys from this
    *  {@code OrderedDict} into the vector. */

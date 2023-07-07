@@ -118,13 +118,13 @@ public class StringModuleDict extends Pointer {
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::Module>::Iterator*") StringModuleDictItem begin();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::Module>::Iterator*") StringModuleDictItemVector.Iterator begin();
 
   /** Returns an iterator to the first item in the {@code OrderedDict}. Iteration is
    *  ordered. */
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
-  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::Module>::Iterator*") StringModuleDictItem end();
+  public native @ByVal @Cast("torch::OrderedDict<std::string,torch::nn::Module>::Iterator*") StringModuleDictItemVector.Iterator end();
 
   /** Returns an iterator one past the last item in the {@code OrderedDict}. */
 
@@ -172,7 +172,7 @@ public class StringModuleDict extends Pointer {
   // Observers
 
   /** Returns the items stored in the {@code OrderedDict}. */
-  public native @StdVector @NoException(true) StringModuleDictItem items();
+  public native @Const @ByRef @NoException(true) StringModuleDictItemVector items();
 
   /** Returns a newly allocated vector and copies all keys from this
    *  {@code OrderedDict} into the vector. */
