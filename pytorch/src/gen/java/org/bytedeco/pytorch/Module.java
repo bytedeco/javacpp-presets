@@ -167,16 +167,16 @@ public class Module extends Pointer {
    *  \endrst */
   
   ///
-  public void apply(Pointer function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
+  public void apply(NamedModuleApplyFunction function, BytePointer name_prefix) { asModule()._apply(function, name_prefix); }
   private native @Name("apply") void _apply(
-        @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function,
+        @Const @ByRef NamedModuleApplyFunction function,
         @StdString BytePointer name_prefix/*=std::string()*/);
-  public void apply(Pointer function) { asModule()._apply(function); }
+  public void apply(NamedModuleApplyFunction function) { asModule()._apply(function); }
   private native @Name("apply") void _apply(
-        @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function);
-  public void apply(Pointer function, String name_prefix) { asModule()._apply(function, name_prefix); }
+        @Const @ByRef NamedModuleApplyFunction function);
+  public void apply(NamedModuleApplyFunction function, String name_prefix) { asModule()._apply(function, name_prefix); }
   private native @Name("apply") void _apply(
-        @Cast("const torch::nn::Module::NamedModuleApplyFunction*") @ByRef Pointer function,
+        @Const @ByRef NamedModuleApplyFunction function,
         @StdString String name_prefix/*=std::string()*/);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
@@ -203,6 +203,10 @@ public class Module extends Pointer {
    *      std::cout << module->name() << std::endl;
    *    });
    *  \endrst */
+  
+  ///
+  public void apply(SharedModuleApplyFunction function) { asModule()._apply(function); }
+  private native @Name("apply") void _apply(@Cast("const torch::nn::Module::ModulePointerApplyFunction*") @ByRef SharedModuleApplyFunction function);
 
   /** Applies the {@code function} to the {@code Module} and recursively to every submodule.
    *  The function must accept a {@code const std::string&} for the key of the module,

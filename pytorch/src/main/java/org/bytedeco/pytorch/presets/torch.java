@@ -2149,7 +2149,8 @@ public class torch implements LoadEnabled, InfoMapper {
                    "torch::autograd::ViewInfo", "torch::jit::InlinedCallStackPtr", "InlinedCallStackPtr", "torch::jit::ScopePtr", "torch::jit::BackendDebugInfoRecorder",
                    "torch::detail::TensorDataContainer", "at::ArrayRef<torch::detail::TensorDataContainer>",
                    "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
-                   "std::function<torch::Tensor(const torch::Tensor&)>", "c10::detail::DictImpl::dict_map_type::iterator",
+                   "std::function<torch::Tensor(const torch::Tensor&)>", // Returned by  transformer_activation_t.get2()
+                   "c10::detail::DictImpl::dict_map_type::iterator",
                    "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
                    "c10::optional<PyObject*>", "c10::optional<c10::string_view>", "c10::optional<std::vector<c10::string_view> >", "c10::optional<std::chrono::milliseconds>",
                    "c10::intrusive_ptr<torch::CustomClassHolder>", "c10::intrusive_ptr<caffe2::Blob>",
@@ -2217,34 +2218,24 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::function<void(const std::string&)>").pointerTypes("StringConsumer"))
             .put(new Info("std::function<void(const c10::DDPLoggingData&)>",
                 "std::function<void(const DDPLoggingData&)>").pointerTypes("DDPLogger"))
-            .put(new Info("std::function<c10::TypePtr(c10::TypePtr)>",
-                "std::function<c10::TypePtr(TypePtr)>").pointerTypes("TypeMapper"))
-            .put(new Info("std::function<torch::jit::Value*(torch::jit::Value*)>",
-                "std::function<torch::jit::Value*(Value*)>").pointerTypes("ValueMapper"))
-            .put(new Info("std::function<void(torch::jit::GraphFunction&)>",
-                "std::function<void(GraphFunction&)>").pointerTypes("GraphFunctionCreator"))
-            // Parser doesn't qualify type of arguments in function pointer and we cannot distinguish
-            // std::function<void(torch::jit::Module&)> from std::function<void(torch::nn::Module&)>
-            // when used as std::function<void(Module&)>. So we rely on javaText for the jit version.
+            .put(new Info("std::function<c10::TypePtr(c10::TypePtr)>").pointerTypes("TypeMapper"))
+            .put(new Info("std::function<torch::jit::Value*(torch::jit::Value*)>").pointerTypes("ValueMapper"))
+            .put(new Info("std::function<void(torch::jit::GraphFunction&)>").pointerTypes("GraphFunctionCreator"))
             .put(new Info("torch::nn::Module::ModuleApplyFunction", "torch::nn::Module::ConstModuleApplyFunction", "std::function<void(const torch::nn::Module&)>", "std::function<void(torch::nn::Module&)>").pointerTypes("ModuleApplyFunction"))
             .put(new Info("std::function<void(const torch::jit::Module&)>", "std::function<void(torch::jit::Module&)>").pointerTypes("JitModuleApplyFunction"))
-            .put(new Info("torch::jit::Module::apply").javaText(
-                "public native void apply(@Const @ByRef JitModuleApplyFunction fn);"
-            ))
             .put(new Info("torch::nn::NamedModuleApplyFunction", "torch::nn::ConstNamedModuleApplyFunction", "std::function<void(const std::string&,const torch::nn::Module&)>", "std::function<void(const std::string&,torch::nn::Module&)>").pointerTypes("NamedModuleApplyFunction"))
             .put(new Info("torch::nn::ModulePointerApplyFunction", "std::function<void(const std::shared_ptr<torch::nn::Module>&)>").pointerTypes("SharedModuleApplyFunction"))
             .put(new Info("torch::nn::Module::NamedModulePointerApplyFunction", "std::function<void(const std::string&,const std::shared_ptr<torch::nn::Module>&)>").pointerTypes("NamedSharedModuleApplyFunction"))
-            .put(new Info("std::function<void(std::vector<c10::IValue>&)>",
-                "std::function<void(std::vector<IValue>&)>").pointerTypes("IValueVectorConsumer"))
+            .put(new Info("std::function<void(std::vector<c10::IValue>&)>").pointerTypes("IValueVectorConsumer"))
             .put(new Info("std::function<c10::IValue()>").pointerTypes("IValueSupplier"))
-            .put(new Info("std::function<size_t(uint64_tpos,void*buf,size_tnbytes)>").pointerTypes("Reader"))
+            .put(new Info("std::function<size_t(uint64_t,void*,size_t)>").pointerTypes("Reader"))
             .put(new Info("std::function<size_t(const void*,size_t)>").pointerTypes("ArchiveWriter"))
             .put(new Info("std::function<void(const char*,size_t)>").pointerTypes("PickleWriter"))
-            .put(new Info("std::function<c10::QualifiedName(const c10::ClassTypePtr&)>").pointerTypes("TypeRenamer"))
+            .put(new Info("std::function<c10::QualifiedName(const std::shared_ptr<c10::ClassType>&)>").pointerTypes("TypeRenamer"))
             .put(new Info("std::function<std::string(const at::Tensor&)>").pointerTypes("TensorIdGetter"))
             .put(new Info("std::function<size_t(void)>").pointerTypes("SizeTSupplier"))
             .put(new Info("std::function<torch::Tensor()>").pointerTypes("LossClosure"))
-            .put(new Info("std::function<Tensor(const Tensor&,const Tensor&)>",
+            .put(new Info("std::function<torch::Tensor(const torch::Tensor&,const torch::Tensor&)>",
                 "torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t",
                 "torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t").pointerTypes("DistanceFunction"))
             .put(new Info("std::function<void(std::function<void()>)>").pointerTypes("Pointer"))
