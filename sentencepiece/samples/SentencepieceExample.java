@@ -2,6 +2,11 @@ import java.nio.ByteBuffer;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.sentencepiece.*;
 
+/**
+ * To try encoding you can download an existing model, i.e.
+ * wget https://nlp.h-its.org/bpemb/en/en.wiki.bpe.vs10000.model
+ * mvn compile exec:java -e -Dexec.mainClass=SentencepieceExample -D exec.args="en.wiki.bpe.vs10000.model"
+ */
 public final class SentencepieceExample {
 
     public static void main(String[] args) {
