@@ -24,7 +24,6 @@ CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -D
 mkdir -p build
 cd build
 $CMAKE $CMAKE_CONFIG ..
-make -j $MAKEJ
-make install
+$CMAKE --build . --config Release --target install --parallel $MAKEJ
 
 cd ../..

@@ -6,8 +6,12 @@ import org.bytedeco.javacpp.tools.*;
 
 @Properties(
     value = {
-        @Platform(compiler = "cpp17", include = {"<sentencepiece_processor.h>", "<sentencepiece_trainer.h>"}, link = "sentencepiece"),
-        @Platform(value = "windows", link = "sentencepiece#")
+        @Platform(
+            compiler = "cpp17",
+            include = {"<sentencepiece_processor.h>", "<sentencepiece_trainer.h>"},
+            link = {"sentencepiece", "sentencepiece_train"}
+        ),
+        @Platform(value = "windows", link = {"sentencepiece#", "sentencepiece_train#"})
     },
     target = "org.bytedeco.sentencepiece",
     global = "org.bytedeco.sentencepiece.global.sentencepiece"
