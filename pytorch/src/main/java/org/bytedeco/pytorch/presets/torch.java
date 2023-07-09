@@ -1007,7 +1007,6 @@ public class torch implements LoadEnabled, InfoMapper {
                 .put(new Info(template("torch::OrderedDict<Key,Value>::Item", o[0], o[1]), template("torch::OrderedDict", o[0], o[1]) + "::Item").pointerTypes(o[2] + "DictItem"))
                 // Adding const since items don't have no-arg constructors. See PR #664.
                 .put(new Info("const " + template("std::vector", template("torch::OrderedDict", o[0], o[1]) + "::Item")).pointerTypes(o[2] + "DictItemVector").define())
-                .put(new Info(template("std::vector", template("torch::OrderedDict", o[0], o[1]) + "::Item") + "::iterator").pointerTypes(o[2] + "DictItemVector.Iterator"))
             ;
         }
 
