@@ -7,7 +7,7 @@ module org.bytedeco.opencv {
   exports org.bytedeco.opencv.helper;
   exports org.bytedeco.opencv.presets;
   exports org.bytedeco.opencv.opencv_aruco;
-  exports org.bytedeco.opencv.opencv_barcode;
+//  exports org.bytedeco.opencv.opencv_barcode;
   exports org.bytedeco.opencv.opencv_bgsegm;
   exports org.bytedeco.opencv.opencv_bioinspired;
   exports org.bytedeco.opencv.opencv_calib3d;
@@ -57,7 +57,7 @@ module org.bytedeco.opencv {
 
   exports org.opencv.android;
   exports org.opencv.aruco;
-  exports org.opencv.barcode;
+//  exports org.opencv.barcode;
   exports org.opencv.bgsegm;
   exports org.opencv.bioinspired;
   exports org.opencv.calib3d;

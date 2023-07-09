@@ -40,14 +40,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(
             include = "<opencv2/cudaobjdetect.hpp>",
-            link = "opencv_cudaobjdetect@.407",
-            preload = "opencv_cudalegacy@.407",
+            link = "opencv_cudaobjdetect@.408",
+            preload = "opencv_cudalegacy@.408",
             extension = "-gpu"
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudaobjdetect470",
-            preload = "opencv_cudalegacy470",
+            link = "opencv_cudaobjdetect480",
+            preload = "opencv_cudalegacy480",
             extension = "-gpu"
         )
     },

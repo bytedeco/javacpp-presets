@@ -87,6 +87,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/kernels/register.h",
                 "tensorflow/lite/core/kernels/register.h",
                 "tensorflow/lite/optional_debug_tools.h",
+//                "tensorflow/lite/core/async/c/types.h",
+//                "tensorflow/lite/core/async/interop/c/types.h",
+//                "tensorflow/lite/core/async/interop/c/attribute_map.h",
+//                "tensorflow/lite/core/async/async_signature_runner.h",
+//                "tensorflow/lite/core/async/c/async_signature_runner.h",
                 "tensorflow/lite/profiling/telemetry/c/profiler.h",
                 "tensorflow/lite/profiling/telemetry/c/telemetry_setting.h",
                 "tensorflow/lite/profiling/telemetry/telemetry_status.h",
@@ -101,14 +106,16 @@ public class tensorflowlite implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "tensorflow-lite"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT").cppTypes().annotations())
+        infoMap.put(new Info("TFLITE_ATTRIBUTE_WEAK", "TFL_CAPI_EXPORT", "TFLITE_NOINLINE").cppTypes().annotations())
+               .put(new Info("FLATBUFFERS_LITTLEENDIAN == 0").define(false))
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
                .put(new Info("tflite::ops::builtin::BuiltinOpResolver").pointerTypes("BuiltinOpResolver"))
                .put(new Info("tflite::ops::builtin::BuiltinOpResolverWithoutDefaultDelegates").pointerTypes("BuiltinOpResolverWithoutDefaultDelegates"))
                .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
                              "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators",
-                             "tflite::InterpreterBuilder::PreserveAllTensorsExperimental").skip())
-               .put(new Info("tflite::Model", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators").cast().pointerTypes("Pointer"))
+                             "tflite::InterpreterBuilder::PreserveAllTensorsExperimental", "tflite::async::AsyncSignatureRunner", "TfLiteAsyncKernel").skip())
+               .put(new Info("tflite::Model", "tflite::ModelT", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators",
+                             "tflite::internal::SignatureDef").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
                .put(new Info("std::int32_t", "std::uint32_t", "tflite::BuiltinOperator",
                              "tflite::profiling::RootProfiler::EventType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
@@ -130,6 +137,8 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("std::vector<std::pair<TfLiteNode,TfLiteRegistration> >").valueTypes("@StdMove RegistrationNodePairVector").pointerTypes("RegistrationNodePairVector").define())
                .put(new Info("const std::vector<std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)> >", "tflite::OpResolver::TfLiteDelegatePtrVector").pointerTypes("TfLiteDelegatePtrVector").define())
                .put(new Info("std::unordered_map<std::int32_t,std::unique_ptr<tflite::resource::ResourceBase> >").valueTypes("@StdMove IntResourceBaseMap").pointerTypes("IntResourceBaseMap").define())
+               .put(new Info("const TfLiteRegistrationExternal* (*)(void*, int, int)").pointerTypes("Find_builtin_op_external_Pointer_int_int"))
+               .put(new Info("const TfLiteRegistrationExternal* (*)(void*, const char*, int)").pointerTypes("Find_custom_op_external_Pointer_String_int"))
 
                .put(new Info("tflite::impl::Interpreter::typed_tensor<int8_t>").javaNames("typed_tensor_byte"))
                .put(new Info("tflite::impl::Interpreter::typed_tensor<int16_t>").javaNames("typed_tensor_short"))

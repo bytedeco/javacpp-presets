@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -57,9 +57,9 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/utils/instrumentation.hpp>", "<opencv2/core/utils/tls.hpp>",
             "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.407", "opencv_imgproc@.407"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.408", "opencv_imgproc@.408"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
-            preload = {"opencv_cudev@.407"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
+            preload = {"opencv_cudev@.408"}, compiler = "cpp11", define = "SHARED_PTR_NAMESPACE std"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
@@ -68,7 +68,7 @@ import org.bytedeco.openblas.presets.*;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core470", "opencv_imgproc470"}, preload = {"opencv_cudev470"}),
+        @Platform(value = "windows", define = {"SHARED_PTR_NAMESPACE std", "_WIN32_WINNT 0x0502"}, link =  {"opencv_core480", "opencv_imgproc480"}, preload = {"opencv_cudev480"}),
         @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
@@ -145,7 +145,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("constexpr").annotations("@Const"))
 
                .put(new Info("CV_EXPORTS_AS", "CV_WRAP_AS").annotations("@Name").cppTypes().cppText(""))
-               .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
+               .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP", "CV_EXPORTS_W_PARAMS",
                              "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").annotations().cppTypes().cppText(""))
                .put(new Info("CvRNG").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
@@ -415,7 +415,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::min(cv::InputArray, cv::InputArray, cv::OutputArray)",
                              "cv::max(cv::InputArray, cv::InputArray, cv::OutputArray)").skip()) // don't work with GpuMat
 
-               .put(new Info("std::function<void(const Range&)>").pointerTypes("Functor"))
+               .put(new Info("std::function<void(const cv::Range&)>").pointerTypes("Functor"))
                .put(new Info("cv::Ptr").skip().annotations("@Ptr"))
                .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"));
     }

@@ -45,22 +45,22 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",
             "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/inpainting.hpp>",
             "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/wobble_suppression.hpp>", "<opencv2/videostab/stabilizer.hpp>",
-            "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.407",
-            preload = {"opencv_cuda@.407", "opencv_cudaarithm@.407", "opencv_cudafilters@.407",
-                "opencv_cudaimgproc@.407", "opencv_cudafeatures2d@.407", "opencv_cudalegacy@.407",
-                "opencv_cudaoptflow@.407", "opencv_cudawarping@.407"}),
+            "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.408",
+            preload = {"opencv_cuda@.408", "opencv_cudaarithm@.408", "opencv_cudafilters@.408",
+                "opencv_cudaimgproc@.408", "opencv_cudafeatures2d@.408", "opencv_cudalegacy@.408",
+                "opencv_cudaoptflow@.408", "opencv_cudawarping@.408"}),
         @Platform(value = "ios", preload = "libopencv_videostab"),
-        @Platform(value = "windows", link = "opencv_videostab470",
-            preload = {"opencv_cuda470", "opencv_cudaarithm470", "opencv_cudafilters470",
-                "opencv_cudaimgproc470", "opencv_cudafeatures2d470", "opencv_cudalegacy470",
-                "opencv_cudaoptflow470", "opencv_cudawarping470"})},
+        @Platform(value = "windows", link = "opencv_videostab480",
+            preload = {"opencv_cuda480", "opencv_cudaarithm480", "opencv_cudafilters480",
+                "opencv_cudaimgproc480", "opencv_cudafeatures2d480", "opencv_cudalegacy480",
+                "opencv_cudaoptflow480", "opencv_cudawarping480"})},
     target = "org.bytedeco.opencv.opencv_videostab",
     global = "org.bytedeco.opencv.global.opencv_videostab"
 )
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("override").annotations()) // pure virtual functions are not mapped unless virtualized, so disable override annotation
-               .put(new Info("std::function<void(Mat&)>").pointerTypes("MaskCallback"))
+               .put(new Info("std::function<void(cv::Mat&)>").pointerTypes("MaskCallback"))
                .put(new Info("cv::videostab::IFrameSource").virtualize());
     }
 
