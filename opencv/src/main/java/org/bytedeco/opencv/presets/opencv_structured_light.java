@@ -38,10 +38,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/structured_light/graycodepattern.hpp>",
                 "<opencv2/structured_light/sinusoidalpattern.hpp>",
             },
-            link = "opencv_structured_light@.407"
+            link = "opencv_structured_light@.408"
         ),
         @Platform(value = "ios", preload = "libopencv_structured_light"),
-        @Platform(value = "windows", link = "opencv_structured_light470")
+        @Platform(value = "windows", link = "opencv_structured_light480")
     },
     target = "org.bytedeco.opencv.opencv_structured_light",
     global = "org.bytedeco.opencv.global.opencv_structured_light"
