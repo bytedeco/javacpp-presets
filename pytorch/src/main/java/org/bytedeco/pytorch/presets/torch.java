@@ -1723,7 +1723,9 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::detail::SlotCursor::i_",
             "torch::jit::detail::SlotCursor::module_",
             "torch::jit::StackEntry::filename",
-            "torch::jit::StackEntry::range"
+            "torch::jit::StackEntry::range",
+            "torch::jit::Call::fn_name",
+            "torch::jit::Call::caller_range"
         }) {
             Info i = infoMap.getFirst(n, false);
             if (i == null) {

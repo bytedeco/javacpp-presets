@@ -36,6 +36,6 @@ public class Call extends Pointer {
         return new Call((Pointer)this).offsetAddress(i);
     }
 
-  public native @StdString BytePointer fn_name(); public native Call fn_name(BytePointer setter);
-  public native @ByRef SourceRange caller_range(); public native Call caller_range(SourceRange setter);
+  public native @StdString @NoOffset BytePointer fn_name(); public native Call fn_name(BytePointer setter);
+  public native @ByRef @NoOffset SourceRange caller_range(); public native Call caller_range(SourceRange setter);
 }
