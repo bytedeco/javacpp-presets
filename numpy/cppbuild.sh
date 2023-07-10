@@ -102,7 +102,10 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
     chmod +x "$CPYTHON_HOST_PATH/bin/python3.12"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CPYTHON_HOST_PATH/lib/:$CPYTHON_HOST_PATH"
-    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.0 $TOOLS
+
+    # crossenv 1.4 for python 3.11+ support.
+    # See https://github.com/bytedeco/javacpp-presets/issues/1381
+    "$CPYTHON_HOST_PATH/bin/python3.12" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.12/" crossenv==1.4 $TOOLS
     "$CPYTHON_HOST_PATH/bin/python3.12" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython
