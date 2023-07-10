@@ -29,11 +29,11 @@ public class SentencePieceProcessor extends Pointer {
 
   // Loads model from `filename`.
   // Returns false if `filename` cannot be loaded.
-  public native @ByVal Status Load(@ByVal @StdString String filename);
+  public native @ByVal Status Load(@StdString String filename);
 
   // Loads model from `filename`.
   // Crash if `filename` cannot be loaded.
-  public native void LoadOrDie(@ByVal @StdString String filename);
+  public native void LoadOrDie(@StdString String filename);
 
   // Loads model from `model_proto`.
   // `model_proto` is copied.
@@ -44,16 +44,16 @@ public class SentencePieceProcessor extends Pointer {
 
   // Loads model from `serialized`, which is a string-serialized model proto.
   // Useful to load the model from a platform independent blob object.
-  public native @ByVal Status LoadFromSerializedProto(@ByVal @StdString String serialized);
+  public native @ByVal Status LoadFromSerializedProto(@StdString String serialized);
 
   // Returns the status. Encode/Decode methods are valid when status is OK.
   public native @ByVal Status status();
 
   // Sets encode extra_option sequence.
-  public native @ByVal Status SetEncodeExtraOptions(@ByVal @StdString String extra_option);
+  public native @ByVal Status SetEncodeExtraOptions(@StdString String extra_option);
 
   // Sets decode extra_option sequence.
-  public native @ByVal Status SetDecodeExtraOptions(@ByVal @StdString String extra_option);
+  public native @ByVal Status SetDecodeExtraOptions(@StdString String extra_option);
 
   //////////////////////////////////////////////////////////////
   // Vocabulary restriction.
@@ -70,39 +70,40 @@ public class SentencePieceProcessor extends Pointer {
   // Loads the valid vocabulary set from `filename` in TSV format.
   // Format:  <token> <tab> <freq>.
   // Any token with frequency < threshold will be treated as OOV.
-  public native @ByVal Status LoadVocabulary(@ByVal @StdString String filename,
+  public native @ByVal Status LoadVocabulary(@StdString String filename,
                                         int threshold);
 
   //////////////////////////////////////////////////////////////
   // Simple Encode and Decode API.
   //
   // Given a UTF8 input, encodes it into a sequence of sentence pieces.
-  public native @ByVal Status Encode(@ByVal @StdString String input,
+  public native @ByVal Status Encode(@StdString String input,
                                 StringVector pieces);
 
   // Given a UTF8 input, encodes it into a sequence of ids.
-  public native @ByVal Status Encode(@ByVal @StdString String input,
+  public native @ByVal Status Encode(@StdString String input,
                                 IntVector ids);
 
   // Given a sequence of pieces, decodes it into a detokenized output.
-  
+  public native @ByVal Status Decode(@Const @ByRef StringVector pieces,
+                                @StdString @Cast({"char*", "std::string*"}) BytePointer detokenized);
 
   // Given a sequence of pieces, decodes it into a detokenized output.
-  
 
   // Given a sequence of ids, decodes it into a detokenized output.
-  
+  public native @ByVal Status Decode(@Const @ByRef IntVector ids,
+                                @StdString @Cast({"char*", "std::string*"}) BytePointer detokenized);
 
   //////////////////////////////////////////////////////////////
   // NBest API.
   //
   // Same as Encode, but returns nbest results.
   public native @ByVal Status NBestEncode(
-        @ByVal @StdString String input, int nbest_size,
+        @StdString String input, int nbest_size,
         @StdVector StringVector pieces);
 
   // Same as Encode, but returns nbest results.
-  public native @ByVal Status NBestEncode(@ByVal @StdString String input, int nbest_size,
+  public native @ByVal Status NBestEncode(@StdString String input, int nbest_size,
                                      @StdVector IntVector ids);
 
   //////////////////////////////////////////////////////////////
@@ -125,12 +126,12 @@ public class SentencePieceProcessor extends Pointer {
   // `alpha`: The dropout probability `p` of bpe merge operations in
   // https://arxiv.org/abs/1910.13267 Nbest-based sampling is not supported so
   // nbest_size parameter is ignored in BPE.
-  public native @ByVal Status SampleEncode(@ByVal @StdString String input, int nbest_size,
+  public native @ByVal Status SampleEncode(@StdString String input, int nbest_size,
                                       float alpha,
                                       StringVector pieces);
 
   // Same as above, but returns a sequence of ids.
-  public native @ByVal Status SampleEncode(@ByVal @StdString String input, int nbest_size,
+  public native @ByVal Status SampleEncode(@StdString String input, int nbest_size,
                                       float alpha, IntVector ids);
 
   //////////////////////////////////////////////////////////////
@@ -149,13 +150,13 @@ public class SentencePieceProcessor extends Pointer {
   // included in the sample, and the remaining elements are sampled excluding
   // the best.
   public native @ByVal Status SampleEncodeAndScore(
-        @ByVal @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
+        @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best,
         StringVectorFloatPairVector pieces);
 
   // Same as above, but returns a sequence of ids.
   public native @ByVal Status SampleEncodeAndScore(
-        @ByVal @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
+        @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best,
         IntVectorFloatPairVector ids);
 
@@ -164,11 +165,11 @@ public class SentencePieceProcessor extends Pointer {
   //
   // This only available in model_type=unigram.
   // Calculate entropy of possible tokenisations
-  public native @ByVal Status CalculateEntropy(@ByVal @StdString String input, float alpha,
+  public native @ByVal Status CalculateEntropy(@StdString String input, float alpha,
                                           FloatPointer entropy);
-  public native @ByVal Status CalculateEntropy(@ByVal @StdString String input, float alpha,
+  public native @ByVal Status CalculateEntropy(@StdString String input, float alpha,
                                           FloatBuffer entropy);
-  public native @ByVal Status CalculateEntropy(@ByVal @StdString String input, float alpha,
+  public native @ByVal Status CalculateEntropy(@StdString String input, float alpha,
                                           float[] entropy);
 
   //////////////////////////////////////////////////////////////
@@ -184,25 +185,25 @@ public class SentencePieceProcessor extends Pointer {
   // ImmutableSentencePieceText spt;
   // Encode("hello", spt.mutable_proto()).IgnoreError();
   // std::cout << spt.pieces_size() << std::endl;
-  public native @ByVal Status Encode(@ByVal @StdString String input,
+  public native @ByVal Status Encode(@StdString String input,
                                 SentencePieceText spt);
 
-  public native @ByVal Status NBestEncode(@ByVal @StdString String input, int nbest_size,
+  public native @ByVal Status NBestEncode(@StdString String input, int nbest_size,
                                      NBestSentencePieceText nbest_spt);
 
-  public native @ByVal Status SampleEncode(@ByVal @StdString String input, int nbest_size,
+  public native @ByVal Status SampleEncode(@StdString String input, int nbest_size,
                                       float alpha, SentencePieceText spt);
 
   public native @ByVal Status SampleEncodeAndScore(
-        @ByVal @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
+        @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best, NBestSentencePieceText samples_spt);
 
   // DEPRECATED: Remove this API and use std::vector<std::string_view>
-  
+  public native @ByVal Status Decode(@Const @ByRef StringVector pieces,
+                                SentencePieceText spt);
 
-  
-
-  
+  public native @ByVal Status Decode(@Const @ByRef IntVector ids,
+                                SentencePieceText spt);
 // #ifdef SWIG
 // #define SPP_SWIG_CHECK_AND_THROW
 //   if (!status.ok()) throw status;
@@ -234,28 +235,28 @@ public class SentencePieceProcessor extends Pointer {
   // Handy methods that return the result directly.
   // These functions ignore internal errors.
   public native @ByVal StringVector EncodeAsPieces(
-        @ByVal @StdString String input);
+        @StdString String input);
 
-  public native @ByVal IntVector EncodeAsIds(@ByVal @StdString String input);
+  public native @ByVal IntVector EncodeAsIds(@StdString String input);
 
   public native @StdVector StringVector NBestEncodeAsPieces(
-        @ByVal @StdString String input, int nbest_size);
+        @StdString String input, int nbest_size);
 
   public native @StdVector IntVector NBestEncodeAsIds(
-        @ByVal @StdString String input, int nbest_size);
+        @StdString String input, int nbest_size);
 
-  public native @ByVal StringVector SampleEncodeAsPieces(@ByVal @StdString String input,
+  public native @ByVal StringVector SampleEncodeAsPieces(@StdString String input,
                                                           int nbest_size,
                                                           float alpha);
 
-  public native @ByVal IntVector SampleEncodeAsIds(@ByVal @StdString String input,
+  public native @ByVal IntVector SampleEncodeAsIds(@StdString String input,
                                                int nbest_size,
                                                float alpha);
 
-  public native @ByVal StringVectorFloatPairVector SampleEncodeAndScoreAsPieces(@ByVal @StdString String input, int num_samples,
+  public native @ByVal StringVectorFloatPairVector SampleEncodeAndScoreAsPieces(@StdString String input, int num_samples,
                                  float alpha, @Cast("bool") boolean wor, @Cast("bool") boolean include_best);
 
-  public native @ByVal IntVectorFloatPairVector SampleEncodeAndScoreAsIds(@ByVal @StdString String input, int num_samples,
+  public native @ByVal IntVectorFloatPairVector SampleEncodeAndScoreAsIds(@StdString String input, int num_samples,
                               float alpha, @Cast("bool") boolean wor, @Cast("bool") boolean include_best);
 
   // DEPRECATED: Remove this API and use std::vector<std::string_view>
@@ -265,24 +266,24 @@ public class SentencePieceProcessor extends Pointer {
 
   public native @StdString BytePointer DecodeIds(@Const @ByRef IntVector ids);
 
-  public native float CalculateEntropy(@ByVal @StdString String text, float alpha);
+  public native float CalculateEntropy(@StdString String text, float alpha);
 
   //////////////////////////////////////////////////////////////
   // SerializedProto API. (DEPRECATED). Use ImmutableProto API.
   // They are used in Python interface. Returns serialized proto.
   // In python module, we can get access to the full Proto after
   // deserialzing the returned byte sequence.
-  public native @StdString BytePointer EncodeAsSerializedProto(@ByVal @StdString String input);
+  public native @StdString BytePointer EncodeAsSerializedProto(@StdString String input);
 
-  public native @StdString BytePointer SampleEncodeAsSerializedProto(@ByVal @StdString String input,
+  public native @StdString BytePointer SampleEncodeAsSerializedProto(@StdString String input,
                                                       int nbest_size,
                                                       float alpha);
 
-  public native @StdString BytePointer NBestEncodeAsSerializedProto(@ByVal @StdString String input,
+  public native @StdString BytePointer NBestEncodeAsSerializedProto(@StdString String input,
                                                      int nbest_size);
 
   public native @StdString BytePointer SampleEncodeAndScoreAsSerializedProto(
-        @ByVal @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
+        @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best);
 
   // TODO(taku): Remove this API and use std::vector<std::string_view>
@@ -296,16 +297,16 @@ public class SentencePieceProcessor extends Pointer {
   //////////////////////////////////////////////////////////////
   // ImmutableProto API.
   public native @ByVal ImmutableSentencePieceText EncodeAsImmutableProto(
-        @ByVal @StdString String input);
+        @StdString String input);
 
   public native @ByVal ImmutableSentencePieceText SampleEncodeAsImmutableProto(
-        @ByVal @StdString String input, int nbest_size, float alpha);
+        @StdString String input, int nbest_size, float alpha);
 
   public native @ByVal ImmutableNBestSentencePieceText NBestEncodeAsImmutableProto(
-        @ByVal @StdString String input, int nbest_size);
+        @StdString String input, int nbest_size);
 
   public native @ByVal ImmutableNBestSentencePieceText SampleEncodeAndScoreAsImmutableProto(
-        @ByVal @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
+        @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best);
 
   // TODO(taku): Remove this API and use std::vector<std::string_view>
@@ -329,7 +330,7 @@ public class SentencePieceProcessor extends Pointer {
 
   // Returns the vocab id of `piece`.
   // Returns UNK(0) if `piece` is unknown.
-  public native int PieceToId(@ByVal @StdString String piece);
+  public native int PieceToId(@StdString String piece);
 
   // Returns the string representation of vocab with `id`.
   public native @StdString BytePointer IdToPiece(int id);

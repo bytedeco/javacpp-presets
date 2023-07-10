@@ -26,8 +26,8 @@ public class Status extends Pointer {
 
   public Status() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public Status(@Cast("sentencepiece::util::StatusCode") int code, @ByVal @StdString String error_message) { super((Pointer)null); allocate(code, error_message); }
-  private native void allocate(@Cast("sentencepiece::util::StatusCode") int code, @ByVal @StdString String error_message);
+  public Status(@Cast("sentencepiece::util::StatusCode") int code, @StdString String error_message) { super((Pointer)null); allocate(code, error_message); }
+  private native void allocate(@Cast("sentencepiece::util::StatusCode") int code, @StdString String error_message);
   public Status(@Const @ByRef Status s) { super((Pointer)null); allocate(s); }
   private native void allocate(@Const @ByRef Status s);
   public native @Name("operator =") void put(@Const @ByRef Status s);

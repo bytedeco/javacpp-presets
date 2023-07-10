@@ -14,7 +14,7 @@ public final class SentencepieceExample {
         SentencePieceProcessor processor = new SentencePieceProcessor();
         Status status = processor.Load(args[0]);
         if (!status.ok()) {
-            throw new RuntimeException(status.ToString().getString());
+            throw new RuntimeException(status.ToString());
         }
 
         IntVector ids = new IntVector();

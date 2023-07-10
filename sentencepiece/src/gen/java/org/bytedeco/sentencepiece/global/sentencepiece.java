@@ -126,10 +126,10 @@ public static final int
 //  io::LoadModelProto("//path/spm.model", model_proto.get());
 //  SentencePieceProcessor sp;
 //  CHECK_OK(sp.Load(std::move(model_proto)));
-@Namespace("sentencepiece::io") public static native @ByVal Status LoadModelProto(@ByVal @StdString String arg0, ModelProto model_proto);
+@Namespace("sentencepiece::io") public static native @ByVal Status LoadModelProto(@StdString String arg0, ModelProto model_proto);
 
 // Saves `model_proto` as `filename`.
-@Namespace("sentencepiece::io") public static native @ByVal Status SaveModelProto(@ByVal @StdString String arg0, @Const @ByRef ModelProto model_proto);
+@Namespace("sentencepiece::io") public static native @ByVal Status SaveModelProto(@StdString String arg0, @Const @ByRef ModelProto model_proto);
   // namespace io
   // namespace sentencepiece
 // #endif  // SENTENCEPIECE_PROCESSOR_H_

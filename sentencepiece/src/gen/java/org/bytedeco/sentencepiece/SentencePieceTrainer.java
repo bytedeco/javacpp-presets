@@ -59,7 +59,7 @@ public class SentencePieceTrainer extends Pointer {
 
   // Overrides `trainer_spec`, `normalizer_spec`, `denormalizer_spec` with the
   // command line flags in `args`.
-  public static native @ByVal Status MergeSpecsFromArgs(@ByVal @StdString String args,
+  public static native @ByVal Status MergeSpecsFromArgs(@StdString String args,
                                            TrainerSpec trainer_spec,
                                            NormalizerSpec normalizer_spec,
                                            NormalizerSpec denormalizer_spec);
@@ -79,16 +79,16 @@ public class SentencePieceTrainer extends Pointer {
   // with comma-separated values. `field_name` must not be a nested message.
   // The body of these functions are automatically generated with
   // data/gen_spec_parser.pl
-  public static native @ByVal Status SetProtoField(@ByVal @StdString String name,
-                                      @ByVal @StdString String value,
+  public static native @ByVal Status SetProtoField(@StdString String name,
+                                      @StdString String value,
                                       TrainerSpec message);
 
-  public static native @ByVal Status SetProtoField(@ByVal @StdString String name,
-                                      @ByVal @StdString String value,
+  public static native @ByVal Status SetProtoField(@StdString String name,
+                                      @StdString String value,
                                       NormalizerSpec message);
 
   // Populates model type from string representation, e.g., "bpe".
   // Supported model: "unigram", "bpe", "word", "char".
-  public static native @ByVal Status PopulateModelTypeFromString(@ByVal @StdString String type,
+  public static native @ByVal Status PopulateModelTypeFromString(@StdString String type,
                                                     TrainerSpec trainer_spec);
 }
