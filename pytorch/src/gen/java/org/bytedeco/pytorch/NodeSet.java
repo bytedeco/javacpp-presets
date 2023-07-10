@@ -29,6 +29,7 @@ public class NodeSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Node front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(Node value);
     public native void erase(Node value);
     public native @ByVal Iterator begin();

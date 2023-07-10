@@ -35,6 +35,8 @@ public class FunctionVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Function front() { return get(0); }
+    public Function back() { return get(size() - 1); }
     @Index(function = "at") public native Function get(@Cast("size_t") long i);
     public native FunctionVector put(@Cast("size_t") long i, Function value);
 

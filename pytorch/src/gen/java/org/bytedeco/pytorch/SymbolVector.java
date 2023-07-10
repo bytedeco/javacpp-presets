@@ -35,6 +35,8 @@ public class SymbolVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Symbol front() { return get(0); }
+    public Symbol back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Symbol get(@Cast("size_t") long i);
     public native SymbolVector put(@Cast("size_t") long i, Symbol value);
 

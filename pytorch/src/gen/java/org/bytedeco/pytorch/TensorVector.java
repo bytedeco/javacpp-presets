@@ -35,6 +35,8 @@ public class TensorVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Tensor front() { return get(0); }
+    public Tensor back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Tensor get(@Cast("size_t") long i);
     public native TensorVector put(@Cast("size_t") long i, Tensor value);
 

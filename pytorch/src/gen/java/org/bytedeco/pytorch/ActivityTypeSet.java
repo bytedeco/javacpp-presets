@@ -29,6 +29,7 @@ public class ActivityTypeSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public ActivityType front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@ByRef ActivityType value);
     public native void erase(@ByRef ActivityType value);
     public native @ByVal Iterator begin();

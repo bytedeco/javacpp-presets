@@ -29,6 +29,8 @@ public class StringModuleDictItemVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public StringModuleDictItem front() { return get(0); }
+    public StringModuleDictItem back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef StringModuleDictItem get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

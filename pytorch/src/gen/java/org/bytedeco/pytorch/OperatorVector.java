@@ -35,6 +35,8 @@ public class OperatorVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Operator front() { return get(0); }
+    public Operator back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("torch::jit::Operator") Operator get(@Cast("size_t") long i);
     public native OperatorVector put(@Cast("size_t") long i, Operator value);
 

@@ -29,6 +29,7 @@ public class SymbolSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Symbol front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@ByRef Symbol value);
     public native void erase(@ByRef Symbol value);
     public native @ByVal Iterator begin();

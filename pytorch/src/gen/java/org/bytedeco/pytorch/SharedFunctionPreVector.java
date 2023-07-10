@@ -35,6 +35,8 @@ public class SharedFunctionPreVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public FunctionPreHook front() { return get(0); }
+    public FunctionPreHook back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("torch::autograd::FunctionPreHook") FunctionPreHook get(@Cast("size_t") long i);
     public native SharedFunctionPreVector put(@Cast("size_t") long i, FunctionPreHook value);
 

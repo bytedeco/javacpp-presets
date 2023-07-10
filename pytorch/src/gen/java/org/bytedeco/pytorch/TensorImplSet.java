@@ -29,6 +29,7 @@ public class TensorImplSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public TensorImpl front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(TensorImpl value);
     public native void erase(TensorImpl value);
     public native @ByVal Iterator begin();

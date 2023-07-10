@@ -29,6 +29,7 @@ public class StreamSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Stream front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@ByRef Stream value);
     public native void erase(@ByRef Stream value);
     public native @ByVal Iterator begin();

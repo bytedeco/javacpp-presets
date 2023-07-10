@@ -35,6 +35,8 @@ public class ExampleVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Example front() { return get(0); }
+    public Example back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Example get(@Cast("size_t") long i);
     public native ExampleVector put(@Cast("size_t") long i, Example value);
 

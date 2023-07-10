@@ -35,6 +35,8 @@ public class AnyModuleVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public AnyModule front() { return get(0); }
+    public AnyModule back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef AnyModule get(@Cast("size_t") long i);
     public native AnyModuleVector put(@Cast("size_t") long i, AnyModule value);
 

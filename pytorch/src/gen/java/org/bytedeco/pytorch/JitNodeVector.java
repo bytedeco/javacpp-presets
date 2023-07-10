@@ -35,6 +35,8 @@ public class JitNodeVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public JitNode front() { return get(0); }
+    public JitNode back() { return get(size() - 1); }
     @Index(function = "at") public native @Const JitNode get(@Cast("size_t") long i);
     public native JitNodeVector put(@Cast("size_t") long i, JitNode value);
 

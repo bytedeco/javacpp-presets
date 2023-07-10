@@ -35,6 +35,8 @@ public class SharedClassTypeVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public ClassType front() { return get(0); }
+    public ClassType back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("c10::ClassType") ClassType get(@Cast("size_t") long i);
     public native SharedClassTypeVector put(@Cast("size_t") long i, ClassType value);
 

@@ -35,6 +35,8 @@ public class ValueVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Value front() { return get(0); }
+    public Value back() { return get(size() - 1); }
     @Index(function = "at") public native Value get(@Cast("size_t") long i);
     public native ValueVector put(@Cast("size_t") long i, Value value);
 

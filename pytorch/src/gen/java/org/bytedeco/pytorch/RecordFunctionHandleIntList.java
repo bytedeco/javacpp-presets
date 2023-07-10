@@ -29,6 +29,7 @@ public class RecordFunctionHandleIntList extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public RecordFunctionHandleIntPair front() { try (Iterator it = begin()) { return it.get(); } }
     public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef RecordFunctionHandleIntPair value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();

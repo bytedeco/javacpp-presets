@@ -35,6 +35,8 @@ public class ScalarTypeVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public ScalarType front() { return get(0); }
+    public ScalarType back() { return get(size() - 1); }
     @Index(function = "at") public native ScalarType get(@Cast("size_t") long i);
     public native ScalarTypeVector put(@Cast("size_t") long i, ScalarType value);
 

@@ -35,6 +35,8 @@ public class StackEntryVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public StackEntry front() { return get(0); }
+    public StackEntry back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef StackEntry get(@Cast("size_t") long i);
     public native StackEntryVector put(@Cast("size_t") long i, StackEntry value);
 

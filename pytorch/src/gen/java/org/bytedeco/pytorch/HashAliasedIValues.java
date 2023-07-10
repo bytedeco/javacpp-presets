@@ -29,6 +29,7 @@ public class HashAliasedIValues extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public IValue front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@ByRef IValue value);
     public native void erase(@ByRef IValue value);
     public native @ByVal Iterator begin();

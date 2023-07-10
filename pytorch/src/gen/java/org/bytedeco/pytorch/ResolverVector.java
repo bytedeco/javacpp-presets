@@ -35,6 +35,8 @@ public class ResolverVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Resolver front() { return get(0); }
+    public Resolver back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("torch::jit::Resolver") Resolver get(@Cast("size_t") long i);
     public native ResolverVector put(@Cast("size_t") long i, Resolver value);
 

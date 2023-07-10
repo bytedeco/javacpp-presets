@@ -35,6 +35,8 @@ public class StrideVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Stride front() { return get(0); }
+    public Stride back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Stride get(@Cast("size_t") long i);
     public native StrideVector put(@Cast("size_t") long i, Stride value);
 

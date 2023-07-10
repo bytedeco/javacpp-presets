@@ -35,6 +35,8 @@ public class TensorImplVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public TensorImpl front() { return get(0); }
+    public TensorImpl back() { return get(size() - 1); }
     @Index(function = "at") public native TensorImpl get(@Cast("size_t") long i);
     public native TensorImplVector put(@Cast("size_t") long i, TensorImpl value);
 

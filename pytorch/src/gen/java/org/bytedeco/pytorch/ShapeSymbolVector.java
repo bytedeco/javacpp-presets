@@ -35,6 +35,8 @@ public class ShapeSymbolVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public ShapeSymbol front() { return get(0); }
+    public ShapeSymbol back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef ShapeSymbol get(@Cast("size_t") long i);
     public native ShapeSymbolVector put(@Cast("size_t") long i, ShapeSymbol value);
 

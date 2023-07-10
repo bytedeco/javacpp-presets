@@ -29,6 +29,8 @@ public class OptimizerParamGroupVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public OptimizerParamGroup front() { return get(0); }
+    public OptimizerParamGroup back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef OptimizerParamGroup get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

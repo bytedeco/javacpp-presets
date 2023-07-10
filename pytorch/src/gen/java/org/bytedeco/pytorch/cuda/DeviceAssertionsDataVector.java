@@ -38,6 +38,8 @@ public class DeviceAssertionsDataVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public DeviceAssertionsData front() { return get(0); }
+    public DeviceAssertionsData back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef DeviceAssertionsData get(@Cast("size_t") long i);
     public native DeviceAssertionsDataVector put(@Cast("size_t") long i, DeviceAssertionsData value);
 

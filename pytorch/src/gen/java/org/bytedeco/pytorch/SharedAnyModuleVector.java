@@ -35,6 +35,8 @@ public class SharedAnyModuleVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public AnyModule front() { return get(0); }
+    public AnyModule back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("torch::nn::AnyModule") AnyModule get(@Cast("size_t") long i);
     public native SharedAnyModuleVector put(@Cast("size_t") long i, AnyModule value);
 

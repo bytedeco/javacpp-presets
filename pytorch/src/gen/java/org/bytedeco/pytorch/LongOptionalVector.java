@@ -35,6 +35,8 @@ public class LongOptionalVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public LongOptional front() { return get(0); }
+    public LongOptional back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef LongOptional get(@Cast("size_t") long i);
     public native LongOptionalVector put(@Cast("size_t") long i, LongOptional value);
 

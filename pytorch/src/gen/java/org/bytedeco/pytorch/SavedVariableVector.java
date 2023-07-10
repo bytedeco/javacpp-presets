@@ -29,6 +29,8 @@ public class SavedVariableVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public SavedVariable front() { return get(0); }
+    public SavedVariable back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef SavedVariable get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

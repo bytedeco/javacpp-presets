@@ -35,6 +35,8 @@ public class SharedSugaredValueVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public SugaredValue front() { return get(0); }
+    public SugaredValue back() { return get(size() - 1); }
     @Index(function = "at") public native @SharedPtr("torch::jit::SugaredValue") SugaredValue get(@Cast("size_t") long i);
     public native SharedSugaredValueVector put(@Cast("size_t") long i, SugaredValue value);
 

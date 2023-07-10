@@ -29,6 +29,7 @@ public class StringSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public BytePointer front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@StdString BytePointer value);
     public native void erase(@StdString BytePointer value);
     public native @ByVal Iterator begin();

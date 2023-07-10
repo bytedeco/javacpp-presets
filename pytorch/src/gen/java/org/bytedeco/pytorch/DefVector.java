@@ -29,6 +29,8 @@ public class DefVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Def front() { return get(0); }
+    public Def back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Def get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

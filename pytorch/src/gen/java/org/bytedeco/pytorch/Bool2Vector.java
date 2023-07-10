@@ -35,6 +35,8 @@ public class Bool2Vector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public BoolPointer front() { return get(0); }
+    public BoolPointer back() { return get(size() - 1); }
     @Index(function = "at") public native @Cast("std::array<bool,2>*") @ByRef BoolPointer get(@Cast("size_t") long i);
     public native Bool2Vector put(@Cast("size_t") long i, BoolPointer value);
 

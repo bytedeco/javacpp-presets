@@ -35,6 +35,8 @@ public class TensorExampleVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public TensorExample front() { return get(0); }
+    public TensorExample back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef TensorExample get(@Cast("size_t") long i);
     public native TensorExampleVector put(@Cast("size_t") long i, TensorExample value);
 

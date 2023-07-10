@@ -29,6 +29,8 @@ public class CompilationUnitVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public CompilationUnit front() { return get(0); }
+    public CompilationUnit back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef CompilationUnit get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

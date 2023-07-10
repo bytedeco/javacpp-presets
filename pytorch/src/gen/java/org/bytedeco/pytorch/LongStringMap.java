@@ -29,6 +29,8 @@ public class LongStringMap extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public BytePointer front() { return get(0); }
+    public BytePointer back() { return get(size() - 1); }
     @Index public native @StdString BytePointer get(@Cast("int64_t") long i);
     public native LongStringMap put(@Cast("int64_t") long i, BytePointer value);
     @ValueSetter @Index public native LongStringMap put(@Cast("int64_t") long i, @StdString String value);

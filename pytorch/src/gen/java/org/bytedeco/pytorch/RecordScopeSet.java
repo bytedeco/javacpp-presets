@@ -29,6 +29,7 @@ public class RecordScopeSet extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public RecordScope front() { try (Iterator it = begin()) { return it.get(); } }
     public native void insert(@ByRef RecordScope value);
     public native void erase(@ByRef RecordScope value);
     public native @ByVal Iterator begin();

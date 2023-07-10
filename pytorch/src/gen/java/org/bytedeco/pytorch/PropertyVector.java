@@ -29,6 +29,8 @@ public class PropertyVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Property front() { return get(0); }
+    public Property back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Property get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();
