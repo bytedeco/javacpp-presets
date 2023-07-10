@@ -19,11 +19,21 @@ unzip -o ../sentencepiece-$SENTENCEPIECE_VERSION.zip
 
 cd sentencepiece-$SENTENCEPIECE_VERSION
 
-CMAKE_CONFIG="-DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=$INSTALL_PATH/lib"
+CMAKE_CONFIG="-DSPM_BUILD_TEST=ON -DSPM_ENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=$INSTALL_PATH/lib"
 
 mkdir -p build
 cd build
-$CMAKE $CMAKE_CONFIG ..
+
+case $PLATFORM in
+    linux-arm64)
+        export PREFIX=aarch64-linux-gnu
+        CXX=$PREFIX-g++ CC=/$PREFIX-gcc $CMAKE $CMAKE_CONFIG -DCMAKE_FIND_ROOT_PATH=/usr/aarch64-linux-gnu -DSPM_CROSS_SYSTEM_PROCESSOR=aarch64 ..
+        ;;
+    *)
+        $CMAKE $CMAKE_CONFIG ..
+        ;;
+esac
+
 $CMAKE --build . --config Release --target install --parallel $MAKEJ
 
 cd ../..
