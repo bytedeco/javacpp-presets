@@ -49,12 +49,14 @@ case $PLATFORM in
         make install_sw
         make distclean
         cd ../Python-$CPYTHON_VERSION
-        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host
+        # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
+        # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
+        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        CC="arm-linux-gnueabihf-gcc -std=c99" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 $INSTALL_PATH/host ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         ;;
@@ -70,12 +72,14 @@ case $PLATFORM in
         make install_sw
         make distclean
         cd ../Python-$CPYTHON_VERSION
-        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host
+        # ac_cv_buggy_getaddrinfo=no disables the runtime ./configure checks for ipv6 support
+        # Without it, the build fails because it can't detect ipv6 on the host. Needed on both host and cross-compiled builds
+        ./configure --prefix=$INSTALL_PATH/host --with-system-ffi --with-openssl=$INSTALL_PATH/host ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         make distclean
         export PATH=$INSTALL_PATH/host/bin/:$PATH
-        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes
+        CC="aarch64-linux-gnu-gcc -mabi=lp64 $CFLAGS" ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --build=$(uname -m)-pc-linux-gnu --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/' --with-build-python=$INSTALL_PATH/host/bin/python3 ac_cv_working_openssl_hashlib=yes ac_cv_working_openssl_ssl=yes ac_cv_buggy_getaddrinfo=no
         make -j $MAKEJ
         make install
         ;;
