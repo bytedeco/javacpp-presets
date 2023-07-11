@@ -264,7 +264,7 @@ public class SentencePieceProcessor extends Pointer {
 
   
 
-  public native @StdString BytePointer DecodeIds(@Const @ByRef IntVector ids);
+  public native @StdString String DecodeIds(@Const @ByRef IntVector ids);
 
   public native float CalculateEntropy(@StdString String text, float alpha);
 
@@ -273,16 +273,16 @@ public class SentencePieceProcessor extends Pointer {
   // They are used in Python interface. Returns serialized proto.
   // In python module, we can get access to the full Proto after
   // deserialzing the returned byte sequence.
-  public native @StdString BytePointer EncodeAsSerializedProto(@StdString String input);
+  public native @StdString String EncodeAsSerializedProto(@StdString String input);
 
-  public native @StdString BytePointer SampleEncodeAsSerializedProto(@StdString String input,
+  public native @StdString String SampleEncodeAsSerializedProto(@StdString String input,
                                                       int nbest_size,
                                                       float alpha);
 
-  public native @StdString BytePointer NBestEncodeAsSerializedProto(@StdString String input,
+  public native @StdString String NBestEncodeAsSerializedProto(@StdString String input,
                                                      int nbest_size);
 
-  public native @StdString BytePointer SampleEncodeAndScoreAsSerializedProto(
+  public native @StdString String SampleEncodeAndScoreAsSerializedProto(
         @StdString String input, int num_samples, float alpha, @Cast("bool") boolean wor,
         @Cast("bool") boolean include_best);
 
@@ -291,7 +291,7 @@ public class SentencePieceProcessor extends Pointer {
 
   
 
-  public native @StdString BytePointer DecodeIdsAsSerializedProto(
+  public native @StdString String DecodeIdsAsSerializedProto(
         @Const @ByRef IntVector ids);
 
   //////////////////////////////////////////////////////////////
@@ -333,7 +333,7 @@ public class SentencePieceProcessor extends Pointer {
   public native int PieceToId(@StdString String piece);
 
   // Returns the string representation of vocab with `id`.
-  public native @StdString BytePointer IdToPiece(int id);
+  public native @StdString String IdToPiece(int id);
 
   // Returns the score of `id`.
   // Usually score is an emission log probability of unigram language
@@ -380,5 +380,5 @@ public class SentencePieceProcessor extends Pointer {
 
   // returns immutable model proto as std::string.
   // Useful to save the state of this instance via Python's pickle object.
-  public native @StdString BytePointer serialized_model_proto();
+  public native @StdString String serialized_model_proto();
 }

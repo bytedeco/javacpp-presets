@@ -31,8 +31,8 @@ public class ImmutableSentencePieceText_ImmutableSentencePiece extends Pointer {
   public ImmutableSentencePieceText_ImmutableSentencePiece() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native @StdString BytePointer piece();
-  public native @StdString BytePointer surface();
+  public native @StdString String piece();
+  public native @StdString String surface();
   public native @Cast("uint32_t") int id();
   public native @Cast("uint32_t") int begin();
   public native @Cast("uint32_t") int end();

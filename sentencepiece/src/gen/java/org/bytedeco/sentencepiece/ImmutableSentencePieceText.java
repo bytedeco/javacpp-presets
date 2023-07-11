@@ -32,10 +32,10 @@ public class ImmutableSentencePieceText extends Pointer {
   public native @Cast("size_t") long pieces_size();
   public native @ByVal ImmutableSentencePieceText_ImmutableSentencePiece pieces(int index);
 
-  public native @StdString BytePointer text();
+  public native @StdString String text();
   public native float score();
 
-  public native @StdString BytePointer SerializeAsString();
+  public native @StdString String SerializeAsString();
 
   // Returns the actual mutable proto.
   // Do not use this outside of SentencePieceProcessor, as

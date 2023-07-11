@@ -26,7 +26,7 @@ public class sentencepiece implements InfoMapper {
             .put(new Info("SPP_SWIG_CHECK_AND_THROW").cppTypes().annotations())
             .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("StringStringMap").define())
             .put(new Info("string_view", "absl::string_view").annotations("@StdString").valueTypes("String").pointerTypes("String"))
-            .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+            .put(new Info("std::string").annotations("@StdString").valueTypes("String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
             .put(new Info("std::vector<std::string>", "std::vector<absl::string_view>").pointerTypes("StringVector").define())
             .put(new Info("std::vector<int>").pointerTypes("IntVector").define())
             .put(new Info("std::vector<std::pair<std::vector<std::string>,float> >").pointerTypes("StringVectorFloatPairVector").define())

@@ -28,6 +28,6 @@ public class SentenceIterator extends Pointer {
   // all sentences are loaded successfully.
   public native @Cast("bool") boolean done();
   public native void Next();
-  public native @StdString BytePointer value();
+  public native @StdString String value();
   public native @ByVal Status status();
 }

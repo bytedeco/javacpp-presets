@@ -36,7 +36,7 @@ public class ImmutableNBestSentencePieceText extends Pointer {
   public native @Cast("size_t") long nbests_size();
   public native @ByVal ImmutableSentencePieceText nbests(int index);
 
-  public native @StdString BytePointer SerializeAsString();
+  public native @StdString String SerializeAsString();
 
   // Returns the actual mutable proto.
   // Do not use this outside of SentencePieceProcessor, as

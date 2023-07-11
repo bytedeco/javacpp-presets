@@ -20,9 +20,9 @@ public class StringStringMap extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native @StdString BytePointer get(@StdString BytePointer i);
-    public native StringStringMap put(@StdString BytePointer i, BytePointer value);
-    @ValueSetter @Index public native StringStringMap put(@StdString BytePointer i, @StdString String value);
+    @Index public native @StdString String get(@StdString String i);
+    public native StringStringMap put(@StdString String i, String value);
+    @ValueSetter @Index public native StringStringMap put(@StdString String i, @StdString BytePointer value);
 
     public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
@@ -33,8 +33,8 @@ public class StringStringMap extends Pointer {
 
         public native @Name("operator ++") @ByRef Iterator increment();
         public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator *().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator *().second") @MemberGetter @StdString BytePointer second();
+        public native @Name("operator *().first") @MemberGetter @StdString String first();
+        public native @Name("operator *().second") @MemberGetter @StdString String second();
     }
 }
 

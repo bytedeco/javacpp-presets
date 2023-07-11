@@ -40,7 +40,7 @@ public class Status extends Pointer {
   public native @Cast("const char*") BytePointer error_message();
   public native @Cast("const char*") BytePointer message();
   public native @Cast("sentencepiece::util::StatusCode") int code();
-  public native @StdString BytePointer ToString();
+  public native @StdString String ToString();
 
   public native void IgnoreError();
 }
