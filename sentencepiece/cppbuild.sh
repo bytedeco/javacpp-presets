@@ -29,6 +29,9 @@ case $PLATFORM in
         export PREFIX=aarch64-linux-gnu
         CXX=$PREFIX-g++ CC=/$PREFIX-gcc $CMAKE $CMAKE_CONFIG -DCMAKE_FIND_ROOT_PATH=/usr/aarch64-linux-gnu -DSPM_CROSS_SYSTEM_PROCESSOR=aarch64 ..
         ;;
+    macosx-arm64)
+        $CMAKE $CMAKE_CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64" ..
+        ;;
     *)
         $CMAKE $CMAKE_CONFIG ..
         ;;
