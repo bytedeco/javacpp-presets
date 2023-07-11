@@ -63,7 +63,7 @@ public class TransformerOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer num_decoder_layers();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer dim_feedforward();
   public native @ByRef @NoException(true) DoublePointer dropout();
-  public native @ByRef @NoException(true) transformer_activation_t activation();
+  public native @ByRef @NoException(true) TransformerActivation activation();
   public native @ByRef @NoException(true) AnyModule custom_encoder();
   public native @ByRef @NoException(true) AnyModule custom_decoder();
 }

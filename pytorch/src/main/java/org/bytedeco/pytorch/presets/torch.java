@@ -552,9 +552,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 "torch::nn::functional::InterpolateFuncOptions::mode_t").pointerTypes("interpolate_mode_t").define())
 
             .put(new Info("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<torch::Tensor(const torch::Tensor&)> >",
-                "torch::nn::TransformerEncoderLayerOptions::activation_t",
-                "torch::nn::TransformerDecoderLayerOptions::activation_t",
-                "torch::nn::TransformerOptions::activation_t").pointerTypes("transformer_activation_t").define())
+                "torch::nn::activation_t",
+                "torch::nn::TransformerOptions::activation_t").pointerTypes("TransformerActivation")) // Defined explicitly
         ;
 
         /*
@@ -2150,7 +2149,6 @@ public class torch implements LoadEnabled, InfoMapper {
                    "torch::autograd::ViewInfo", "torch::jit::InlinedCallStackPtr", "InlinedCallStackPtr", "torch::jit::ScopePtr", "torch::jit::BackendDebugInfoRecorder",
                    "torch::detail::TensorDataContainer", "at::ArrayRef<torch::detail::TensorDataContainer>",
                    "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
-                   "std::function<torch::Tensor(const torch::Tensor&)>", // Returned by  transformer_activation_t.get2()
                    "c10::detail::DictImpl::dict_map_type::iterator",
                    "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
                    "c10::optional<PyObject*>", "c10::optional<c10::string_view>", "c10::optional<std::vector<c10::string_view> >", "c10::optional<std::chrono::milliseconds>",
@@ -2245,6 +2243,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("at::TensorBase::register_hook<std::function<at::TensorBase(at::TensorBase)> >").javaNames("register_hook"))
             .put(new Info("std::function<void(at::TensorBase)>").pointerTypes("VoidTensorHook"))
             .put(new Info("std::function<at::TensorBase(at::TensorBase)>").pointerTypes("TensorTensorHook"))
+            .put(new Info("std::function<torch::Tensor(const torch::Tensor&)>").pointerTypes("TensorMapper"))
             .put(new Info("at::TensorBase::hook_return_void_t<std::function<void(at::TensorBase)> > ",
                 "at::TensorBase::hook_return_void_t<std::function<at::TensorBase(at::TensorBase)> >").valueTypes("int"))
         ;
