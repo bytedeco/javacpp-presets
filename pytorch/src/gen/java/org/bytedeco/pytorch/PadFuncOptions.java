@@ -36,6 +36,6 @@ public class PadFuncOptions extends Pointer {
   public PadFuncOptions(@ByVal @Cast("std::vector<int64_t>*") LongVector pad) { super((Pointer)null); allocate(pad); }
   private native void allocate(@ByVal @Cast("std::vector<int64_t>*") LongVector pad);
   public native @Cast("std::vector<int64_t>*") @ByRef @NoException(true) LongVector pad();
-  public native @ByRef @NoException(true) pad_mode_t mode();
+  public native @ByRef @NoException(true) PaddingMode mode();
   public native @ByRef @NoException(true) DoublePointer value();
 }

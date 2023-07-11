@@ -36,9 +36,9 @@ public class Conv3dOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer out_channels();
   public native @Cast("torch::ExpandingArray<3>*") @ByRef @NoException(true) LongPointer kernel_size();
   public native @Cast("torch::ExpandingArray<3>*") @ByRef @NoException(true) LongPointer stride();
-  public native @ByRef @NoException(true) conv_padding_t3 padding();
+  public native @ByRef @NoException(true) Conv3dPadding padding();
   public native @Cast("torch::ExpandingArray<3>*") @ByRef @NoException(true) LongPointer dilation();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer groups();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer bias();
-  public native @ByRef @NoException(true) conv_padding_mode_t padding_mode();
+  public native @ByRef @NoException(true) ConvPaddingMode padding_mode();
 }

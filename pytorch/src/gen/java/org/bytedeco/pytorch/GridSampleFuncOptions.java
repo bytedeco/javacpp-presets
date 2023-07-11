@@ -44,7 +44,7 @@ public class GridSampleFuncOptions extends Pointer {
         return new GridSampleFuncOptions((Pointer)this).offsetAddress(i);
     }
 
-  public native @ByRef @NoException(true) grid_sample_mode_t mode();
-  public native @ByRef @NoException(true) grid_sample_padding_mode_t padding_mode();
+  public native @ByRef @NoException(true) GridSampleMode mode();
+  public native @ByRef @NoException(true) GridSamplePaddingMode padding_mode();
   public native @ByRef @NoException(true) BoolOptional align_corners();
 }

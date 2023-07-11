@@ -47,5 +47,5 @@ public class MultiMarginLossOptions extends Pointer {
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer p();
   public native @ByRef @NoException(true) DoublePointer margin();
   public native @ByRef @NoException(true) Tensor weight();
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
 }

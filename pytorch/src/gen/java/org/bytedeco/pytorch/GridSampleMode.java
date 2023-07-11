@@ -18,21 +18,21 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @NoOffset @Name("c10::variant<torch::enumtype::kBilinear,torch::enumtype::kNearest>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class grid_sample_mode_t extends Pointer {
+public class GridSampleMode extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public grid_sample_mode_t(Pointer p) { super(p); }
-    public grid_sample_mode_t(kBilinear value) { this(); put(value); }
-    public grid_sample_mode_t(kNearest value) { this(); put(value); }
-    public grid_sample_mode_t()       { allocate();  }
+    public GridSampleMode(Pointer p) { super(p); }
+    public GridSampleMode(kBilinear value) { this(); put(value); }
+    public GridSampleMode(kNearest value) { this(); put(value); }
+    public GridSampleMode()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef grid_sample_mode_t put(@ByRef grid_sample_mode_t x);
+    public native @Name("operator =") @ByRef GridSampleMode put(@ByRef GridSampleMode x);
 
     public @ByRef kBilinear get0() { return get0(this); }
-    @Namespace @Name("c10::get<0>") public static native @ByRef kBilinear get0(@ByRef grid_sample_mode_t container);
-    @ValueSetter public native grid_sample_mode_t put(@ByRef kBilinear value);
+    @Namespace @Name("c10::get<0>") public static native @ByRef kBilinear get0(@ByRef GridSampleMode container);
+    @ValueSetter public native GridSampleMode put(@ByRef kBilinear value);
     public @ByRef kNearest get1() { return get1(this); }
-    @Namespace @Name("c10::get<1>") public static native @ByRef kNearest get1(@ByRef grid_sample_mode_t container);
-    @ValueSetter public native grid_sample_mode_t put(@ByRef kNearest value);
+    @Namespace @Name("c10::get<1>") public static native @ByRef kNearest get1(@ByRef GridSampleMode container);
+    @ValueSetter public native GridSampleMode put(@ByRef kNearest value);
 }
 

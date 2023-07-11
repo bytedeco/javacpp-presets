@@ -53,5 +53,5 @@ public class MultiLabelMarginLossOptions extends Pointer {
       
   public MultiLabelMarginLossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
   private native void allocate(@ByVal kSum reduction);
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
 }

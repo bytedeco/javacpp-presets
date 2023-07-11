@@ -27,14 +27,14 @@ public class RNNOptionsBase extends Pointer {
 
 
   public RNNOptionsBase(
-        @ByVal rnn_options_base_mode_t mode,
+        @ByVal RNNBaseMode mode,
         @Cast("int64_t") long input_size,
         @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(mode, input_size, hidden_size); }
   private native void allocate(
-        @ByVal rnn_options_base_mode_t mode,
+        @ByVal RNNBaseMode mode,
         @Cast("int64_t") long input_size,
         @Cast("int64_t") long hidden_size);
-  public native @ByRef @NoException(true) rnn_options_base_mode_t mode();
+  public native @ByRef @NoException(true) RNNBaseMode mode();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer input_size();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer hidden_size();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer num_layers();

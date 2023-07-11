@@ -18,25 +18,25 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @NoOffset @Name("c10::variant<torch::enumtype::kNone,torch::enumtype::kMean,torch::enumtype::kSum>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class loss_reduction_t extends Pointer {
+public class LossReduction extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public loss_reduction_t(Pointer p) { super(p); }
-    public loss_reduction_t(kNone value) { this(); put(value); }
-    public loss_reduction_t(kMean value) { this(); put(value); }
-    public loss_reduction_t(kSum value) { this(); put(value); }
-    public loss_reduction_t()       { allocate();  }
+    public LossReduction(Pointer p) { super(p); }
+    public LossReduction(kNone value) { this(); put(value); }
+    public LossReduction(kMean value) { this(); put(value); }
+    public LossReduction(kSum value) { this(); put(value); }
+    public LossReduction()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef loss_reduction_t put(@ByRef loss_reduction_t x);
+    public native @Name("operator =") @ByRef LossReduction put(@ByRef LossReduction x);
 
     public @ByRef kNone get0() { return get0(this); }
-    @Namespace @Name("c10::get<0>") public static native @ByRef kNone get0(@ByRef loss_reduction_t container);
-    @ValueSetter public native loss_reduction_t put(@ByRef kNone value);
+    @Namespace @Name("c10::get<0>") public static native @ByRef kNone get0(@ByRef LossReduction container);
+    @ValueSetter public native LossReduction put(@ByRef kNone value);
     public @ByRef kMean get1() { return get1(this); }
-    @Namespace @Name("c10::get<1>") public static native @ByRef kMean get1(@ByRef loss_reduction_t container);
-    @ValueSetter public native loss_reduction_t put(@ByRef kMean value);
+    @Namespace @Name("c10::get<1>") public static native @ByRef kMean get1(@ByRef LossReduction container);
+    @ValueSetter public native LossReduction put(@ByRef kMean value);
     public @ByRef kSum get2() { return get2(this); }
-    @Namespace @Name("c10::get<2>") public static native @ByRef kSum get2(@ByRef loss_reduction_t container);
-    @ValueSetter public native loss_reduction_t put(@ByRef kSum value);
+    @Namespace @Name("c10::get<2>") public static native @ByRef kSum get2(@ByRef LossReduction container);
+    @ValueSetter public native LossReduction put(@ByRef kSum value);
 }
 

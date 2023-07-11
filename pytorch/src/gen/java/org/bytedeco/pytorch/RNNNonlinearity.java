@@ -18,21 +18,21 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @NoOffset @Name("c10::variant<torch::enumtype::kTanh,torch::enumtype::kReLU>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class rnn_nonlinearity_t extends Pointer {
+public class RNNNonlinearity extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public rnn_nonlinearity_t(Pointer p) { super(p); }
-    public rnn_nonlinearity_t(kTanh value) { this(); put(value); }
-    public rnn_nonlinearity_t(kReLU value) { this(); put(value); }
-    public rnn_nonlinearity_t()       { allocate();  }
+    public RNNNonlinearity(Pointer p) { super(p); }
+    public RNNNonlinearity(kTanh value) { this(); put(value); }
+    public RNNNonlinearity(kReLU value) { this(); put(value); }
+    public RNNNonlinearity()       { allocate();  }
     private native void allocate();
-    public native @Name("operator =") @ByRef rnn_nonlinearity_t put(@ByRef rnn_nonlinearity_t x);
+    public native @Name("operator =") @ByRef RNNNonlinearity put(@ByRef RNNNonlinearity x);
 
     public @ByRef kTanh get0() { return get0(this); }
-    @Namespace @Name("c10::get<0>") public static native @ByRef kTanh get0(@ByRef rnn_nonlinearity_t container);
-    @ValueSetter public native rnn_nonlinearity_t put(@ByRef kTanh value);
+    @Namespace @Name("c10::get<0>") public static native @ByRef kTanh get0(@ByRef RNNNonlinearity container);
+    @ValueSetter public native RNNNonlinearity put(@ByRef kTanh value);
     public @ByRef kReLU get1() { return get1(this); }
-    @Namespace @Name("c10::get<1>") public static native @ByRef kReLU get1(@ByRef rnn_nonlinearity_t container);
-    @ValueSetter public native rnn_nonlinearity_t put(@ByRef kReLU value);
+    @Namespace @Name("c10::get<1>") public static native @ByRef kReLU get1(@ByRef RNNNonlinearity container);
+    @ValueSetter public native RNNNonlinearity put(@ByRef kReLU value);
 }
 

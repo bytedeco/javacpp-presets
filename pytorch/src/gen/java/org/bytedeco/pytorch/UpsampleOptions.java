@@ -45,6 +45,6 @@ public class UpsampleOptions extends Pointer {
 
   public native @ByRef @NoException(true) LongVectorOptional size();
   public native @ByRef @NoException(true) DoubleVectorOptional scale_factor();
-  public native @ByRef @NoException(true) upsample_mode_t mode();
+  public native @ByRef @NoException(true) UpsampleMode mode();
   public native @ByRef @NoException(true) BoolOptional align_corners();
 }

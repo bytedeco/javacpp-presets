@@ -46,5 +46,5 @@ public class MultiLabelSoftMarginLossOptions extends Pointer {
     }
 
   public native @ByRef @NoException(true) Tensor weight();
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
 }

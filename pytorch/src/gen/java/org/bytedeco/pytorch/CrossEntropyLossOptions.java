@@ -47,6 +47,6 @@ public class CrossEntropyLossOptions extends Pointer {
 
   public native @ByRef @NoException(true) Tensor weight();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer ignore_index();
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
   public native @ByRef @NoException(true) DoublePointer label_smoothing();
 }

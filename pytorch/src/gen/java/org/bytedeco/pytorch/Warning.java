@@ -38,39 +38,39 @@ public class Warning extends Pointer {
   }
 
   public Warning(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @Const @ByRef SourceLocation source_location,
         @StdString BytePointer msg,
         @Cast("bool") boolean verbatim) { super((Pointer)null); allocate(type, source_location, msg, verbatim); }
   private native void allocate(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @Const @ByRef SourceLocation source_location,
         @StdString BytePointer msg,
         @Cast("bool") boolean verbatim);
   public Warning(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @Const @ByRef SourceLocation source_location,
         @StdString String msg,
         @Cast("bool") boolean verbatim) { super((Pointer)null); allocate(type, source_location, msg, verbatim); }
   private native void allocate(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @Const @ByRef SourceLocation source_location,
         @StdString String msg,
         @Cast("bool") boolean verbatim);
 
   public Warning(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @ByVal SourceLocation source_location,
         @ByVal CompileTimeEmptyString msg,
         @Cast("bool") boolean verbatim) { super((Pointer)null); allocate(type, source_location, msg, verbatim); }
   private native void allocate(
-        @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type,
+        @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type,
         @ByVal SourceLocation source_location,
         @ByVal CompileTimeEmptyString msg,
         @Cast("bool") boolean verbatim);
 
   // Getters for members
-  public native @ByVal @Cast("c10::Warning::warning_variant_t*") NonlinearityType type();
+  public native @ByVal @Cast("c10::Warning::warning_variant_t*") Nonlinearity type();
   public native @Const @ByRef SourceLocation source_location();
   public native @StdString BytePointer msg();
   public native @Cast("bool") boolean verbatim();

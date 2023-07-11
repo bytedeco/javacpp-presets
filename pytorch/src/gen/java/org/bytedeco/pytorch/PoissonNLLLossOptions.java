@@ -48,5 +48,5 @@ public class PoissonNLLLossOptions extends Pointer {
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer log_input();
   public native @Cast("bool*") @ByRef @NoException(true) BoolPointer full();
   public native @ByRef @NoException(true) DoublePointer eps();
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
 }

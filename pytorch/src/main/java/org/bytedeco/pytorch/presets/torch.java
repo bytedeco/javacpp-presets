@@ -475,12 +475,12 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
 
-        //// Variant
+        //// c10::variant
         infoMap
             .put(new Info("c10::variant<torch::enumtype::kLinear,torch::enumtype::kConv1D,torch::enumtype::kConv2D,torch::enumtype::kConv3D,"
                           + "torch::enumtype::kConvTranspose1D,torch::enumtype::kConvTranspose2D,torch::enumtype::kConvTranspose3D,"
                           + "torch::enumtype::kSigmoid,torch::enumtype::kTanh,torch::enumtype::kReLU,torch::enumtype::kLeakyReLU>",
-                "torch::nn::init::NonlinearityType").pointerTypes("NonlinearityType").define())
+                "torch::nn::init::NonlinearityType").pointerTypes("Nonlinearity").define())
             .put(new Info("c10::variant<torch::enumtype::kFanIn,torch::enumtype::kFanOut>",
                 "torch::nn::init::FanModeType").pointerTypes("FanModeType").define())
 
@@ -491,27 +491,27 @@ public class torch implements LoadEnabled, InfoMapper {
                 "torch::nn::ConvTransposeOptions<1>::padding_mode_t",
                 "torch::nn::ConvTransposeOptions<2>::padding_mode_t",
                 "torch::nn::ConvTransposeOptions<3>::padding_mode_t",
-                "torch::nn::detail::conv_padding_mode_t").pointerTypes("conv_padding_mode_t").define())
+                "torch::nn::detail::conv_padding_mode_t").pointerTypes("ConvPaddingMode").define())
             .put(new Info("c10::variant<torch::ExpandingArray<1>,torch::enumtype::kValid,torch::enumtype::kSame>",
                 "torch::nn::ConvOptions<1>::padding_t",
                 "torch::nn::detail::ConvNdOptions<1>::padding_t",
                 "torch::nn::functional::ConvFuncOptions<1>::padding_t",
-                "torch::nn::functional::Conv1dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t1").define())
+                "torch::nn::functional::Conv1dFuncOptions::padding_t").purify().pointerTypes("Conv1dPadding").define())
             .put(new Info("c10::variant<torch::ExpandingArray<2>,torch::enumtype::kValid,torch::enumtype::kSame>",
                 "torch::nn::ConvOptions<2>::padding_t",
                 "torch::nn::detail::ConvNdOptions<2>::padding_t",
                 "torch::nn::functional::ConvFuncOptions<2>::padding_t",
-                "torch::nn::functional::Conv2dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t2").define())
+                "torch::nn::functional::Conv2dFuncOptions::padding_t").purify().pointerTypes("Conv2dPadding").define())
             .put(new Info("c10::variant<torch::ExpandingArray<3>,torch::enumtype::kValid,torch::enumtype::kSame>",
                 "torch::nn::ConvOptions<3>::padding_t",
                 "torch::nn::detail::ConvNdOptions<3>::padding_t",
                 "torch::nn::functional::ConvFuncOptions<3>::padding_t",
-                "torch::nn::functional::Conv3dFuncOptions::padding_t").purify().pointerTypes("conv_padding_t3").define())
+                "torch::nn::functional::Conv3dFuncOptions::padding_t").purify().pointerTypes("Conv3dPadding").define())
 
             .put(new Info("c10::variant<torch::enumtype::kSum,torch::enumtype::kMean,torch::enumtype::kMax>",
                 "torch::nn::EmbeddingBagMode").pointerTypes("EmbeddingBagMode").define())
             .put(new Info("c10::variant<torch::enumtype::kConstant,torch::enumtype::kReflect,torch::enumtype::kReplicate,torch::enumtype::kCircular>",
-                "torch::nn::functional::PadFuncOptions::mode_t").pointerTypes("pad_mode_t").define())
+                "torch::nn::functional::PadFuncOptions::mode_t").pointerTypes("PaddingMode").define())
 
             .put(new Info("c10::variant<torch::enumtype::kNone,torch::enumtype::kMean,torch::enumtype::kSum>",
                 "torch::nn::L1LossOptions::reduction_t", "torch::nn::functional::L1LossFuncOptions::reduction_t",
@@ -532,24 +532,24 @@ public class torch implements LoadEnabled, InfoMapper {
                 "torch::nn::MarginRankingLossOptions::reduction_t", "torch::nn::functional::MarginRankingLossFuncOptions::reduction_t",
                 "torch::nn::NLLLossOptions::reduction_t", "torch::nn::functional::NLLLossFuncOptions::reduction_t",
                 "torch::nn::CrossEntropyLossOptions::reduction_t", "torch::nn::functional::CrossEntropyFuncOptions::reduction_t",
-                "torch::nn::BCEWithLogitsLossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyWithLogitsFuncOptions::reduction_t").pointerTypes("loss_reduction_t").define())
+                "torch::nn::BCEWithLogitsLossOptions::reduction_t", "torch::nn::functional::BinaryCrossEntropyWithLogitsFuncOptions::reduction_t").pointerTypes("LossReduction").define())
             .put(new Info("c10::variant<torch::enumtype::kNone,torch::enumtype::kBatchMean,torch::enumtype::kSum,torch::enumtype::kMean>",
-                "torch::nn::KLDivLossOptions::reduction_t", "torch::nn::functional::KLDivFuncOptions::reduction_t").pointerTypes("kldiv_loss_reduction_t").define())
+                "torch::nn::KLDivLossOptions::reduction_t", "torch::nn::functional::KLDivFuncOptions::reduction_t").pointerTypes("KLDivLossReduction").define())
 
             .put(new Info("c10::variant<torch::enumtype::kBilinear,torch::enumtype::kNearest>",
-                "torch::nn::functional::GridSampleFuncOptions::mode_t").pointerTypes("grid_sample_mode_t").define())
+                "torch::nn::functional::GridSampleFuncOptions::mode_t").pointerTypes("GridSampleMode").define())
             .put(new Info("c10::variant<torch::enumtype::kZeros,torch::enumtype::kBorder,torch::enumtype::kReflection>",
-                "torch::nn::functional::GridSampleFuncOptions::padding_mode_t").pointerTypes("grid_sample_padding_mode_t").define())
+                "torch::nn::functional::GridSampleFuncOptions::padding_mode_t").pointerTypes("GridSamplePaddingMode").define())
 
             .put(new Info("c10::variant<torch::enumtype::kLSTM,torch::enumtype::kGRU,torch::enumtype::kRNN_TANH,torch::enumtype::kRNN_RELU>",
-                "torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t").pointerTypes("rnn_options_base_mode_t").define())
+                "torch::nn::detail::RNNOptionsBase::rnn_options_base_mode_t").pointerTypes("RNNBaseMode").define())
             .put(new Info("c10::variant<torch::enumtype::kTanh,torch::enumtype::kReLU>",
-                "torch::nn::RNNOptions::nonlinearity_t", "torch::nn::RNNCellOptions::nonlinearity_t").pointerTypes("rnn_nonlinearity_t").define())
+                "torch::nn::RNNOptions::nonlinearity_t", "torch::nn::RNNCellOptions::nonlinearity_t").pointerTypes("RNNNonlinearity").define())
 
             .put(new Info("c10::variant<torch::enumtype::kNearest,torch::enumtype::kLinear,torch::enumtype::kBilinear,torch::enumtype::kBicubic,torch::enumtype::kTrilinear>",
-                "torch::nn::UpsampleOptions::mode_t").pointerTypes("upsample_mode_t").define())
+                "torch::nn::UpsampleOptions::mode_t").pointerTypes("UpsampleMode").define())
             .put(new Info("c10::variant<torch::enumtype::kNearest,torch::enumtype::kLinear,torch::enumtype::kBilinear,torch::enumtype::kBicubic,torch::enumtype::kTrilinear,torch::enumtype::kArea,torch::enumtype::kNearestExact>",
-                "torch::nn::functional::InterpolateFuncOptions::mode_t").pointerTypes("interpolate_mode_t").define())
+                "torch::nn::functional::InterpolateFuncOptions::mode_t").pointerTypes("InterpolateMode").define())
 
             .put(new Info("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<torch::Tensor(const torch::Tensor&)> >",
                 "torch::nn::activation_t",

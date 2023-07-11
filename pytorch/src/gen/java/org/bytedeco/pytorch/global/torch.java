@@ -218,55 +218,52 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_TensorTensor_TOptional.java
 
 
-// Targeting ../NonlinearityType.java
+// Targeting ../Nonlinearity.java
 
 
 // Targeting ../FanModeType.java
 
 
-// Targeting ../conv_padding_mode_t.java
+// Targeting ../ConvPaddingMode.java
 
 
-// Targeting ../conv_padding_t1.java
+// Targeting ../Conv1dPadding.java
 
 
-// Targeting ../conv_padding_t2.java
+// Targeting ../Conv2dPadding.java
 
 
-// Targeting ../conv_padding_t3.java
+// Targeting ../Conv3dPadding.java
 
 
 // Targeting ../EmbeddingBagMode.java
 
 
-// Targeting ../pad_mode_t.java
+// Targeting ../PaddingMode.java
 
 
-// Targeting ../loss_reduction_t.java
+// Targeting ../LossReduction.java
 
 
-// Targeting ../kldiv_loss_reduction_t.java
+// Targeting ../KLDivLossReduction.java
 
 
-// Targeting ../grid_sample_mode_t.java
+// Targeting ../GridSampleMode.java
 
 
-// Targeting ../grid_sample_padding_mode_t.java
+// Targeting ../GridSamplePaddingMode.java
 
 
-// Targeting ../rnn_options_base_mode_t.java
+// Targeting ../RNNBaseMode.java
 
 
-// Targeting ../rnn_nonlinearity_t.java
+// Targeting ../RNNNonlinearity.java
 
 
-// Targeting ../upsample_mode_t.java
+// Targeting ../UpsampleMode.java
 
 
-// Targeting ../interpolate_mode_t.java
-
-
-// Targeting ../transformer_activation_t.java
+// Targeting ../InterpolateMode.java
 
 
 // Targeting ../TensorDeque.java
@@ -65951,7 +65948,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer stride,
-    @Const @ByRef conv_padding_t1 padding,
+    @Const @ByRef Conv1dPadding padding,
     @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -65980,7 +65977,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer stride,
-    @Const @ByRef conv_padding_t2 padding,
+    @Const @ByRef Conv2dPadding padding,
     @ByVal @Cast("torch::ExpandingArray<2>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -66009,7 +66006,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor weight,
     @Const @ByRef Tensor bias,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer stride,
-    @Const @ByRef conv_padding_t3 padding,
+    @Const @ByRef Conv3dPadding padding,
     @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer dilation,
     @Cast("int64_t") long groups);
  // namespace detail
@@ -67933,7 +67930,7 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -67960,12 +67957,12 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal kldiv_loss_reduction_t reduction,
+    @ByVal KLDivLossReduction reduction,
     @Cast("bool") boolean log_target/*=false*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor kl_div(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal kldiv_loss_reduction_t reduction);
+    @ByVal KLDivLossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -67993,7 +67990,7 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor mse_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68021,7 +68018,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68051,7 +68048,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     double margin,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68083,7 +68080,7 @@ body of your function, only data pointers.
     @Cast("int64_t") long p,
     double margin,
     @Const @ByRef Tensor weight,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68114,7 +68111,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input2,
     @Const @ByRef Tensor target,
     double margin,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68152,12 +68149,12 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction,
+    @ByVal LossReduction reduction,
     double beta/*=1.*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor smooth_l1_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68185,12 +68182,12 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction,
+    @ByVal LossReduction reduction,
     double delta/*=1.*/);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor huber_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68218,7 +68215,7 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor multilabel_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68247,7 +68244,7 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor soft_margin_loss(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68276,7 +68273,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68313,7 +68310,7 @@ body of your function, only data pointers.
     double p,
     double eps,
     @Cast("bool") boolean swap,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68347,7 +68344,7 @@ body of your function, only data pointers.
     @ByVal @Cast("c10::optional<torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t>*") Pointer distance_function,
     double margin,
     @Cast("bool") boolean swap,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68384,7 +68381,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input_lengths,
     @Const @ByRef Tensor target_lengths,
     @Cast("int64_t") long blank,
-    @ByVal loss_reduction_t reduction,
+    @ByVal LossReduction reduction,
     @Cast("bool") boolean zero_infinity);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -68418,7 +68415,7 @@ body of your function, only data pointers.
     @Cast("bool") boolean log_input,
     @Cast("bool") boolean full,
     double eps,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68451,7 +68448,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input2,
     @Const @ByRef Tensor target,
     double margin,
-    @ByVal loss_reduction_t reduction);
+    @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68483,7 +68480,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
     @Cast("int64_t") long ignore_index,
-    @Const @ByVal loss_reduction_t reduction);
+    @Const @ByVal LossReduction reduction);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68513,7 +68510,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
     @Cast("int64_t") long ignore_index,
-    @ByVal loss_reduction_t reduction,
+    @ByVal LossReduction reduction,
     double label_smoothing);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -68546,7 +68543,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor target,
     @Const @ByRef Tensor weight,
-    @ByVal loss_reduction_t reduction,
+    @ByVal LossReduction reduction,
     @Const @ByRef Tensor pos_weight);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -68740,12 +68737,12 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(
     @Const @ByRef Tensor input,
     @ByVal LongArrayRef pad,
-    @ByVal pad_mode_t mode,
+    @ByVal PaddingMode mode,
     double value);
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor pad(
     @Const @ByRef Tensor input,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] pad,
-    @ByVal pad_mode_t mode,
+    @ByVal PaddingMode mode,
     double value);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -70261,7 +70258,7 @@ body of your function, only data pointers.
     @Const @ByRef Tensor input,
     @Const @ByRef LongVectorOptional size,
     @Const @ByRef DoubleVectorOptional scale_factor,
-    @ByVal interpolate_mode_t mode,
+    @ByVal InterpolateMode mode,
     @ByVal BoolOptional align_corners,
     @ByVal BoolOptional recompute_scale_factor,
     @Cast("bool") boolean antialias);
@@ -70337,8 +70334,8 @@ body of your function, only data pointers.
 @Namespace("torch::nn::functional::detail") public static native @ByVal Tensor grid_sample(
     @Const @ByRef Tensor input,
     @Const @ByRef Tensor grid,
-    @ByVal grid_sample_mode_t mode,
-    @ByVal grid_sample_padding_mode_t padding_mode,
+    @ByVal GridSampleMode mode,
+    @ByVal GridSamplePaddingMode padding_mode,
     @ByVal BoolOptional align_corners);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -70403,10 +70400,10 @@ body of your function, only data pointers.
 
 /** Return the recommended gain value for the given nonlinearity function. */
 @Namespace("torch::nn::init") public static native double calculate_gain(
-    @ByVal NonlinearityType nonlinearity,
+    @ByVal Nonlinearity nonlinearity,
     double param/*=0.01*/);
 @Namespace("torch::nn::init") public static native double calculate_gain(
-    @ByVal NonlinearityType nonlinearity);
+    @ByVal Nonlinearity nonlinearity);
 
 /** Fills the given {@code tensor} with the provided {@code value} in-place, and returns it.
  *  No gradient will be recorded for this operation. */
@@ -70464,7 +70461,7 @@ body of your function, only data pointers.
     @ByVal Tensor tensor,
     double a/*=0*/,
     @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") FanModeType mode,
-    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") NonlinearityType nonlinearity);
+    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") Nonlinearity nonlinearity);
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_normal_(
     @ByVal Tensor tensor);
 
@@ -70477,7 +70474,7 @@ body of your function, only data pointers.
     @ByVal Tensor tensor,
     double a/*=0*/,
     @ByVal(nullValue = "torch::nn::init::FanModeType(torch::kFanIn)") FanModeType mode,
-    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") NonlinearityType nonlinearity);
+    @ByVal(nullValue = "torch::nn::init::NonlinearityType(torch::kLeakyReLU)") Nonlinearity nonlinearity);
 @Namespace("torch::nn::init") public static native @ByVal Tensor kaiming_uniform_(
     @ByVal Tensor tensor);
 

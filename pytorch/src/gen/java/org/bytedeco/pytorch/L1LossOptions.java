@@ -48,5 +48,5 @@ public class L1LossOptions extends Pointer {
   private native void allocate(@ByVal kMean reduction);
   public L1LossOptions(@ByVal kSum reduction) { super((Pointer)null); allocate(reduction); }
   private native void allocate(@ByVal kSum reduction);
-  public native @ByRef @NoException(true) loss_reduction_t reduction();
+  public native @ByRef @NoException(true) LossReduction reduction();
 }
