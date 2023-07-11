@@ -42,34 +42,34 @@ public class TransformerActivation extends Pointer {
 
     public native @Name("operator =") @ByRef TransformerActivation put(@ByRef TransformerActivation x);
 
-    public @ByRef kReLU get0() {
+    public kReLU get0() {
         return get0(this);
     }
 
-    @Namespace @Name("c10::get<0>") public static native @ByRef kReLU get0(@ByRef TransformerActivation container);
+    @Namespace @Name("c10::get<0>") static native @ByRef kReLU get0(@ByRef TransformerActivation container);
 
     @ValueSetter public native TransformerActivation put(@ByRef kReLU value);
 
-    public @ByRef kGELU get1() {
+    public kGELU get1() {
         return get1(this);
     }
 
-    @Namespace @Name("c10::get<1>") public static native @ByRef kGELU get1(@ByRef TransformerActivation container);
+    @Namespace @Name("c10::get<1>") static native @ByRef kGELU get1(@ByRef TransformerActivation container);
 
     @ValueSetter public native TransformerActivation put(@ByRef kGELU value);
 
-    public @ByRef TensorMapperFunction get2() {
-        return get2(this);
+    public TensorMapper get2() {
+        return get2(this).target();
     }
 
-    @Namespace @Name("c10::get<2>") public static native @ByRef TensorMapperFunction get2(@ByRef TransformerActivation container);
+    @Namespace @Name("c10::get<2>") static native @ByRef TensorMapperFunction get2(@ByRef TransformerActivation container);
 
     @ValueSetter public native TransformerActivation put(@ByRef TensorMapper value);
 
     @Name("std::function<torch::Tensor(const torch::Tensor&)>")
     @Namespace
-    static public class TensorMapperFunction extends Pointer {
-        @Name("target<torch::Tensor(const torch::Tensor&)>") public native TensorMapper target();
+    static class TensorMapperFunction extends Pointer {
+        @Name("target<torch::Tensor(const torch::Tensor&)>") native TensorMapper target();
     }
 }
 
