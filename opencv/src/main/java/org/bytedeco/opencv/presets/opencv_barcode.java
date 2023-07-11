@@ -28,16 +28,16 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-@Properties(
-    inherit = opencv_dnn.class,
-    value = {
-        @Platform(include = "<opencv2/barcode.hpp>", link = "opencv_barcode@.407"),
-        @Platform(value = "ios", preload = "libopencv_barcode"),
-        @Platform(value = "windows", link = "opencv_barcode470")
-    },
-    target = "org.bytedeco.opencv.opencv_barcode",
-    global = "org.bytedeco.opencv.global.opencv_barcode"
-)
+//@Properties(
+//    inherit = opencv_dnn.class,
+//    value = {
+//        @Platform(include = "<opencv2/barcode.hpp>", link = "opencv_barcode@.408"),
+//        @Platform(value = "ios", preload = "libopencv_barcode"),
+//        @Platform(value = "windows", link = "opencv_barcode480")
+//    },
+//    target = "org.bytedeco.opencv.opencv_barcode",
+//    global = "org.bytedeco.opencv.global.opencv_barcode"
+//)
 public class opencv_barcode implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
     }

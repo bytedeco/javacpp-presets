@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,11 +36,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = {opencv_calib3d.class, opencv_dnn.class},
     value = {
         @Platform(include = {/*"<opencv2/objdetect/objdetect_c.h>",*/ "<opencv2/objdetect.hpp>",
+            "opencv2/objdetect/graphical_code_detector.hpp", "<opencv2/objdetect/barcode.hpp>",
             "<opencv2/objdetect/detection_based_tracker.hpp>", "<opencv2/objdetect/face.hpp>",
             "<opencv2/objdetect/aruco_board.hpp>", "<opencv2/objdetect/aruco_dictionary.hpp>",
-            "<opencv2/objdetect/aruco_detector.hpp>", "<opencv2/objdetect/charuco_detector.hpp>"}, link = "opencv_objdetect@.407"),
+            "<opencv2/objdetect/aruco_detector.hpp>", "<opencv2/objdetect/charuco_detector.hpp>"}, link = "opencv_objdetect@.408"),
         @Platform(value = "ios", preload = "libopencv_objdetect"),
-        @Platform(value = "windows", link = "opencv_objdetect470")},
+        @Platform(value = "windows", link = "opencv_objdetect480")},
     target = "org.bytedeco.opencv.opencv_objdetect",
     global = "org.bytedeco.opencv.global.opencv_objdetect"
 )
