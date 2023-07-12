@@ -4,8 +4,8 @@ import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-/* This is a modified version of the variant container whose get2 method
- * returns a function pointer instead of a std::function */
+/* This is a modified version of the variant container without the get2 method, that would
+ * return a std::function and not a function pointer. */
 @NoOffset @Name("c10::variant<torch::enumtype::kReLU,torch::enumtype::kGELU,std::function<torch::Tensor(const torch::Tensor&)> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class TransformerActivation extends Pointer {
     static {
@@ -58,18 +58,6 @@ public class TransformerActivation extends Pointer {
 
     @ValueSetter public native TransformerActivation put(@ByRef kGELU value);
 
-    public TensorMapper get2() {
-        return get2(this).target();
-    }
-
-    @Namespace @Name("c10::get<2>") static native @ByRef TensorMapperFunction get2(@ByRef TransformerActivation container);
-
     @ValueSetter public native TransformerActivation put(@ByRef TensorMapper value);
-
-    @Name("std::function<torch::Tensor(const torch::Tensor&)>")
-    @Namespace
-    static class TensorMapperFunction extends Pointer {
-        @Name("target<torch::Tensor(const torch::Tensor&)>") native TensorMapper target();
-    }
 }
 
