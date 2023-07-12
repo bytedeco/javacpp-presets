@@ -4,7 +4,7 @@
     <artifactId>sentencepiece-example</artifactId>
     <version>1.5.10-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SentencepieceExample</exec.mainClass>
+        <exec.mainClass>SentencePieceExample</exec.mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>

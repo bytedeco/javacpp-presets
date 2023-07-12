@@ -22,7 +22,6 @@ public class StringStringMap extends Pointer {
 
     @Index public native @StdString String get(@StdString String i);
     public native StringStringMap put(@StdString String i, String value);
-    @ValueSetter @Index public native StringStringMap put(@StdString String i, @StdString BytePointer value);
 
     public native void erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();

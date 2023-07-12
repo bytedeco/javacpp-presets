@@ -15,8 +15,6 @@ public class StringVector extends Pointer {
     public StringVector(Pointer p) { super(p); }
     public StringVector(String value) { this(1); put(0, value); }
     public StringVector(String ... array) { this(array.length); put(array); }
-    public StringVector(BytePointer value) { this(1); put(0, value); }
-    public StringVector(BytePointer ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
     private native void allocate();
@@ -32,7 +30,6 @@ public class StringVector extends Pointer {
     public String back() { return get(size() - 1); }
     @Index(function = "at") public native @StdString String get(@Cast("size_t") long i);
     public native StringVector put(@Cast("size_t") long i, String value);
-    @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @StdString BytePointer value);
 
     public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString String value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
@@ -74,23 +71,6 @@ public class StringVector extends Pointer {
         return put(0, value);
     }
     public StringVector put(String ... array) {
-        if (size() != array.length) { resize(array.length); }
-        for (int i = 0; i < array.length; i++) {
-            put(i, array[i]);
-        }
-        return this;
-    }
-
-    public StringVector push_back(BytePointer value) {
-        long size = size();
-        resize(size + 1);
-        return put(size, value);
-    }
-    public StringVector put(BytePointer value) {
-        if (size() != 1) { resize(1); }
-        return put(0, value);
-    }
-    public StringVector put(BytePointer ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
