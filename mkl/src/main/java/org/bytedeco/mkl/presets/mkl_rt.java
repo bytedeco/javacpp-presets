@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2022 Samuel Audet
+ * Copyright (C) 2017-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = javacpp.class, global = "org.bytedeco.mkl.global.mkl_rt", names = {"linux-x86", "macosx-x86", "windows-x86"}, value = {
-    @Platform(include = {"mkl.h", "mkl_version.h", "mkl_types.h", /*"mkl_blas.h",*/ "mkl_trans.h", "mkl_cblas.h", "mkl_spblas.h", /*"mkl_lapack.h",*/ "mkl_lapacke.h",
+    @Platform(include = {"mkl.h", "mkl_version.h", "mkl_types.h", /*"mkl_blas.h",*/ "mkl_trans.h", "mkl_cblas.h", "mkl_spblas.h", "mkl_lapack.h", "mkl_lapacke.h",
         "mkl_dss.h", "mkl_pardiso.h", "mkl_sparse_handle.h", "mkl_service.h", "mkl_rci.h", "mkl_vml.h", "mkl_vml_defines.h", "mkl_vml_types.h", "mkl_vml_functions.h",
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",
@@ -61,7 +61,8 @@ public class mkl_rt implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mkl"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
+        infoMap.put(new Info("mkl_lapack.h").linePatterns(".*_\\(.*", ".*\\).*").skip())
+               .put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
                              "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_BF16", "MKL_INT32", "MKL_F16", "NOTHROW",
 
                              "CBLAS_INDEX", "lapack_int", "lapack_logical", "lapack_complex_float", "lapack_complex_double", "_INTEGER_t", "_DoubleComplexType",
