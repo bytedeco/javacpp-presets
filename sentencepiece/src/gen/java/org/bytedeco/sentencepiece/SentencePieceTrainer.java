@@ -18,26 +18,49 @@ public class SentencePieceTrainer extends Pointer {
   // Trains SentencePiece model with `trainer_spec`.
   // Default `normalizer_spec` is used.
   // When `sentence_iterator` is passed, load sentences from the iterator.
-  
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec,
+                              SentenceIterator sentence_iterator/*=nullptr*/,
+                              @StdString @Cast({"char*", "std::string*"}) BytePointer serialized_model_proto/*=nullptr*/);
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec);
 
   // Trains SentencePiece model with `trainer_spec` and
   // `normalizer_spec`.
   // When `sentence_iterator` is passed, load sentences from the iterator.
-  
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec,
+                              @Const @ByRef NormalizerSpec normalizer_spec,
+                              SentenceIterator sentence_iterator/*=nullptr*/,
+                              @StdString @Cast({"char*", "std::string*"}) BytePointer serialized_model_proto/*=nullptr*/);
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec,
+                              @Const @ByRef NormalizerSpec normalizer_spec);
 
   // Trains SentencePiece model with `trainer_spec`, `normalizer_spec`
   // and `denormalizer_spec`.
   // When `sentence_iterator` is passed, load sentences from the iterator.
-  
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec,
+                              @Const @ByRef NormalizerSpec normalizer_spec,
+                              @Const @ByRef NormalizerSpec denormalizer_spec,
+                              SentenceIterator sentence_iterator/*=nullptr*/,
+                              @StdString @Cast({"char*", "std::string*"}) BytePointer serialized_model_proto/*=nullptr*/);
+  public static native @ByVal Status Train(@Const @ByRef TrainerSpec trainer_spec,
+                              @Const @ByRef NormalizerSpec normalizer_spec,
+                              @Const @ByRef NormalizerSpec denormalizer_spec);
   // Trains SentencePiece model with command-line string in `args`,
   // e.g.,
   // '--input=data --model_prefix=m --vocab_size=8192 model_type=unigram'
   // When `sentence_iterator` is passed, load sentences from the iterator.
-  
+  public static native @ByVal Status Train(@StdString String args,
+                              SentenceIterator sentence_iterator/*=nullptr*/,
+                              @StdString @Cast({"char*", "std::string*"}) BytePointer serialized_model_proto/*=nullptr*/);
+  public static native @ByVal Status Train(@StdString String args);
 
   // Trains SentencePiece model with mapin `kwargs`.
   // e.g., {{"input", "data"}, {"model_prefix, "m"}, {"vocab_size", "8192"}...}
-  
+  public static native @ByVal Status Train(
+        @Const @ByRef StringStringMap kwargs,
+        SentenceIterator sentence_iterator/*=nullptr*/,
+        @StdString @Cast({"char*", "std::string*"}) BytePointer serialized_model_proto/*=nullptr*/);
+  public static native @ByVal Status Train(
+        @Const @ByRef StringStringMap kwargs);
 
   // Handy function to make a normalizer spec from the pre-compiled
   // normalization name. Do not use this method in production as it crashes

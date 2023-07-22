@@ -260,9 +260,8 @@ public class SentencePieceProcessor extends Pointer {
                               float alpha, @Cast("bool") boolean wor, @Cast("bool") boolean include_best);
 
   // DEPRECATED: Remove this API and use std::vector<std::string_view>
-  
-
-  
+  public native @StdString String DecodePieces(
+        @Const @ByRef StringVector pieces);
 
   public native @StdString String DecodeIds(@Const @ByRef IntVector ids);
 
@@ -287,9 +286,8 @@ public class SentencePieceProcessor extends Pointer {
         @Cast("bool") boolean include_best);
 
   // TODO(taku): Remove this API and use std::vector<std::string_view>
-  
-
-  
+  public native @StdString String DecodePiecesAsSerializedProto(
+        @Const @ByRef StringVector pieces);
 
   public native @StdString String DecodeIdsAsSerializedProto(
         @Const @ByRef IntVector ids);
@@ -310,9 +308,8 @@ public class SentencePieceProcessor extends Pointer {
         @Cast("bool") boolean include_best);
 
   // TODO(taku): Remove this API and use std::vector<std::string_view>
-  
-
-  
+  public native @ByVal ImmutableSentencePieceText DecodePiecesAsImmutableProto(
+        @Const @ByRef StringVector pieces);
 
   public native @ByVal ImmutableSentencePieceText DecodeIdsAsImmutableProto(
         @Const @ByRef IntVector ids);

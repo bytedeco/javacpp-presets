@@ -35,11 +35,6 @@ public class sentencepiece implements InfoMapper {
                 "sentencepiece::ModelInterface",
                 "sentencepiece::normalizer::Normalizer",
                 "sentencepiece::SentencePieceTrainer::GetNormalizerSpec",
-                "sentencepiece::SentencePieceTrainer::Train",
-                "sentencepiece::SentencePieceProcessor::DecodePiecesAsImmutableProto",
-                "sentencepiece::SentencePieceProcessor::DecodePiecesAsSerializedProto",
-                "sentencepiece::SentencePieceProcessor::DecodePieces",
-                 // "sentencepiece::SentencePieceProcessor::Decode",
                 "sentencepiece::SentencePieceProcessor::SetVocabulary"
             ).skip());
     }
