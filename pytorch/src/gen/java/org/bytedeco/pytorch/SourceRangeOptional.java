@@ -28,6 +28,7 @@ public class SourceRangeOptional extends Pointer {
     public native @Name("operator =") @ByRef SourceRangeOptional put(@ByRef SourceRangeOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef SourceRange get();
     @ValueSetter public native SourceRangeOptional put(@ByRef SourceRange value);
 }

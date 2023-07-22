@@ -28,6 +28,7 @@ public class ExampleVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef ExampleVectorOptional put(@ByRef ExampleVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef ExampleVector get();
     @ValueSetter public native ExampleVectorOptional put(@ByRef ExampleVector value);
 }

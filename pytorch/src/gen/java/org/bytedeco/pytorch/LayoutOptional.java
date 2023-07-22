@@ -28,6 +28,7 @@ public class LayoutOptional extends Pointer {
     public native @Name("operator =") @ByRef LayoutOptional put(@ByRef LayoutOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Layout get();
     @ValueSetter public native LayoutOptional put(@ByRef Layout value);
 }

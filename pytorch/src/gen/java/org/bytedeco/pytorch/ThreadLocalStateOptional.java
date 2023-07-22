@@ -28,6 +28,7 @@ public class ThreadLocalStateOptional extends Pointer {
     public native @Name("operator =") @ByRef ThreadLocalStateOptional put(@ByRef ThreadLocalStateOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef ThreadLocalState get();
     @ValueSetter public native ThreadLocalStateOptional put(@ByRef ThreadLocalState value);
 }

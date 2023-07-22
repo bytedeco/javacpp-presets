@@ -28,6 +28,7 @@ public class ExecutorExecutionModeOptional extends Pointer {
     public native @Name("operator =") @ByRef ExecutorExecutionModeOptional put(@ByRef ExecutorExecutionModeOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef ExecutorExecutionMode get();
     @ValueSetter public native ExecutorExecutionModeOptional put(@ByRef ExecutorExecutionMode value);
 }

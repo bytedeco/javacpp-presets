@@ -28,6 +28,7 @@ public class QualifiedNameOptional extends Pointer {
     public native @Name("operator =") @ByRef QualifiedNameOptional put(@ByRef QualifiedNameOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef QualifiedName get();
     @ValueSetter public native QualifiedNameOptional put(@ByRef QualifiedName value);
 }

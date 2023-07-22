@@ -28,6 +28,7 @@ public class OperatorHandleOptional extends Pointer {
     public native @Name("operator =") @ByRef OperatorHandleOptional put(@ByRef OperatorHandleOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef OperatorHandle get();
     @ValueSetter public native OperatorHandleOptional put(@ByRef OperatorHandle value);
 }

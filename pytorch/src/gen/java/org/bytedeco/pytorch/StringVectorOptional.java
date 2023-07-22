@@ -28,6 +28,7 @@ public class StringVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef StringVectorOptional put(@ByRef StringVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef StringVector get();
     @ValueSetter public native StringVectorOptional put(@ByRef StringVector value);
 }

@@ -28,6 +28,7 @@ public class FunctionSchemaOptional extends Pointer {
     public native @Name("operator =") @ByRef FunctionSchemaOptional put(@ByRef FunctionSchemaOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef FunctionSchema get();
     @ValueSetter public native FunctionSchemaOptional put(@ByRef FunctionSchema value);
 }

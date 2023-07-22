@@ -28,6 +28,7 @@ public class TensorVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef TensorVectorOptional put(@ByRef TensorVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector get();
     @ValueSetter public native TensorVectorOptional put(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector value);
 }

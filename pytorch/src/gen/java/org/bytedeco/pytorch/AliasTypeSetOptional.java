@@ -28,6 +28,7 @@ public class AliasTypeSetOptional extends Pointer {
     public native @Name("operator =") @ByRef AliasTypeSetOptional put(@ByRef AliasTypeSetOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef TypeVector get();
     @ValueSetter public native AliasTypeSetOptional put(@ByRef TypeVector value);
 }

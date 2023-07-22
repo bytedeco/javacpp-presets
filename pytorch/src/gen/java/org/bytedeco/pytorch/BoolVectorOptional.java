@@ -28,6 +28,7 @@ public class BoolVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef BoolVectorOptional put(@ByRef BoolVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef BoolVector get();
     @ValueSetter public native BoolVectorOptional put(@ByRef BoolVector value);
 }

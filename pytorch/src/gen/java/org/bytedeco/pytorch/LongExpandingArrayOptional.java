@@ -28,6 +28,7 @@ public class LongExpandingArrayOptional extends Pointer {
     public native @Name("operator =") @ByRef LongExpandingArrayOptional put(@ByRef LongExpandingArrayOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @Cast("torch::ExpandingArray<1>*") @ByRef LongPointer get();
     @ValueSetter public native LongExpandingArrayOptional put(@Cast("torch::ExpandingArray<1>*") @ByRef LongPointer value);
 }

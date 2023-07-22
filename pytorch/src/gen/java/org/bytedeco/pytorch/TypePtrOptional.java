@@ -28,6 +28,7 @@ public class TypePtrOptional extends Pointer {
     public native @Name("operator =") @ByRef TypePtrOptional put(@ByRef TypePtrOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Type.TypePtr get();
     @ValueSetter public native TypePtrOptional put(@ByRef Type.TypePtr value);
 }

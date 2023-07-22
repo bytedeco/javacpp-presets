@@ -28,6 +28,7 @@ public class ShapeSymbolVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef ShapeSymbolVectorOptional put(@ByRef ShapeSymbolVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef ShapeSymbolVector get();
     @ValueSetter public native ShapeSymbolVectorOptional put(@ByRef ShapeSymbolVector value);
 }

@@ -28,6 +28,7 @@ public class StrideVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef StrideVectorOptional put(@ByRef StrideVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef StrideVector get();
     @ValueSetter public native StrideVectorOptional put(@ByRef StrideVector value);
 }

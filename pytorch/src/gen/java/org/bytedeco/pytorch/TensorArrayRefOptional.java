@@ -28,6 +28,7 @@ public class TensorArrayRefOptional extends Pointer {
     public native @Name("operator =") @ByRef TensorArrayRefOptional put(@ByRef TensorArrayRefOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef TensorArrayRef get();
     @ValueSetter public native TensorArrayRefOptional put(@ByRef TensorArrayRef value);
 }

@@ -28,6 +28,7 @@ public class TypeMetaOptional extends Pointer {
     public native @Name("operator =") @ByRef TypeMetaOptional put(@ByRef TypeMetaOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef TypeMeta get();
     @ValueSetter public native TypeMetaOptional put(@ByRef TypeMeta value);
 }

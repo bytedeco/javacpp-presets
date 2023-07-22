@@ -28,6 +28,7 @@ public class FloatOptional extends Pointer {
     public native @Name("operator =") @ByRef FloatOptional put(@ByRef FloatOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") float get();
     @ValueSetter public native FloatOptional put(float value);
 }

@@ -28,6 +28,7 @@ public class ByteOptional extends Pointer {
     public native @Name("operator =") @ByRef ByteOptional put(@ByRef ByteOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") byte get();
     @ValueSetter public native ByteOptional put(byte value);
 }

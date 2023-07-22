@@ -28,6 +28,7 @@ public class SymDimVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef SymDimVectorOptional put(@ByRef SymDimVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef SymDimVector get();
     @ValueSetter public native SymDimVectorOptional put(@ByRef SymDimVector value);
 }

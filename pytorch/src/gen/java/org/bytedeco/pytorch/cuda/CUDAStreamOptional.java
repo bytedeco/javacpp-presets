@@ -31,6 +31,7 @@ public class CUDAStreamOptional extends Pointer {
     public native @Name("operator =") @ByRef CUDAStreamOptional put(@ByRef CUDAStreamOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef CUDAStream get();
     @ValueSetter public native CUDAStreamOptional put(@ByRef CUDAStream value);
 }

@@ -28,6 +28,7 @@ public class ExampleOptional extends Pointer {
     public native @Name("operator =") @ByRef ExampleOptional put(@ByRef ExampleOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Example get();
     @ValueSetter public native ExampleOptional put(@ByRef Example value);
 }

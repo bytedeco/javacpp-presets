@@ -28,6 +28,7 @@ public class SizeTVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef SizeTVectorOptional put(@ByRef SizeTVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @Cast("std::vector<size_t>*") @ByRef SizeTVector get();
     @ValueSetter public native SizeTVectorOptional put(@Cast("std::vector<size_t>*") @ByRef SizeTVector value);
 }

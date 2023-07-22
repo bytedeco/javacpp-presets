@@ -28,6 +28,7 @@ public class StreamOptional extends Pointer {
     public native @Name("operator =") @ByRef StreamOptional put(@ByRef StreamOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Stream get();
     @ValueSetter public native StreamOptional put(@ByRef Stream value);
 }

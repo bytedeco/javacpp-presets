@@ -28,6 +28,7 @@ public class SymIntArrayRefOptional extends Pointer {
     public native @Name("operator =") @ByRef SymIntArrayRefOptional put(@ByRef SymIntArrayRefOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef SymIntArrayRef get();
     @ValueSetter public native SymIntArrayRefOptional put(@ByRef SymIntArrayRef value);
 }

@@ -28,6 +28,7 @@ public class DoubleExpandingArrayOptional extends Pointer {
     public native @Name("operator =") @ByRef DoubleExpandingArrayOptional put(@ByRef DoubleExpandingArrayOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @Cast("torch::ExpandingArray<1,double>*") @ByRef DoublePointer get();
     @ValueSetter public native DoubleExpandingArrayOptional put(@Cast("torch::ExpandingArray<1,double>*") @ByRef DoublePointer value);
 }

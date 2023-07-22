@@ -28,6 +28,7 @@ public class T_StringSizeTSizeT_TOptional extends Pointer {
     public native @Name("operator =") @ByRef T_StringSizeTSizeT_TOptional put(@ByRef T_StringSizeTSizeT_TOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef T_StringSizeTSizeT_T get();
     @ValueSetter public native T_StringSizeTSizeT_TOptional put(@ByRef T_StringSizeTSizeT_T value);
 }

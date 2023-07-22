@@ -28,6 +28,7 @@ public class CppSignatureOptional extends Pointer {
     public native @Name("operator =") @ByRef CppSignatureOptional put(@ByRef CppSignatureOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef CppSignature get();
     @ValueSetter public native CppSignatureOptional put(@ByRef CppSignature value);
 }

@@ -28,6 +28,7 @@ public class GeneratorOptional extends Pointer {
     public native @Name("operator =") @ByRef GeneratorOptional put(@ByRef GeneratorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Generator get();
     @ValueSetter public native GeneratorOptional put(@ByRef Generator value);
 }

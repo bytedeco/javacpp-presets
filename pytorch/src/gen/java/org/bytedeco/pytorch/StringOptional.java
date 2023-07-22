@@ -29,6 +29,7 @@ public class StringOptional extends Pointer {
     public native @Name("operator =") @ByRef StringOptional put(@ByRef StringOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @StdString BytePointer get();
     @ValueSetter public native StringOptional put(@StdString BytePointer value);
     @ValueSetter public native StringOptional put(@StdString String value);

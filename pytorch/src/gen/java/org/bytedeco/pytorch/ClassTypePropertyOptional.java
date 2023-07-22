@@ -28,6 +28,7 @@ public class ClassTypePropertyOptional extends Pointer {
     public native @Name("operator =") @ByRef ClassTypePropertyOptional put(@ByRef ClassTypePropertyOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef ClassType.Property get();
     @ValueSetter public native ClassTypePropertyOptional put(@ByRef ClassType.Property value);
 }

@@ -28,6 +28,7 @@ public class BatchSizeOptional extends Pointer {
     public native @Name("operator =") @ByRef BatchSizeOptional put(@ByRef BatchSizeOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef BatchSize get();
     @ValueSetter public native BatchSizeOptional put(@ByRef BatchSize value);
 }

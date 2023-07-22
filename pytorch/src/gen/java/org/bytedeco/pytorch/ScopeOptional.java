@@ -28,6 +28,7 @@ public class ScopeOptional extends Pointer {
     public native @Name("operator =") @ByRef ScopeOptional put(@ByRef ScopeOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Scope get();
     @ValueSetter public native ScopeOptional put(@ByRef Scope value);
 }

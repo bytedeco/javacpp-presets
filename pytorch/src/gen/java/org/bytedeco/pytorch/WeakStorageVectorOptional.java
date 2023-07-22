@@ -28,6 +28,7 @@ public class WeakStorageVectorOptional extends Pointer {
     public native @Name("operator =") @ByRef WeakStorageVectorOptional put(@ByRef WeakStorageVectorOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef WeakStorageVector get();
     @ValueSetter public native WeakStorageVectorOptional put(@ByRef WeakStorageVector value);
 }

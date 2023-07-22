@@ -28,6 +28,7 @@ public class MethodOptional extends Pointer {
     public native @Name("operator =") @ByRef MethodOptional put(@ByRef MethodOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef Method get();
     @ValueSetter public native MethodOptional put(@ByRef Method value);
 }

@@ -28,6 +28,7 @@ public class SymIntOptional extends Pointer {
     public native @Name("operator =") @ByRef SymIntOptional put(@ByRef SymIntOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef SymInt get();
     @ValueSetter public native SymIntOptional put(@ByRef SymInt value);
 }

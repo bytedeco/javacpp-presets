@@ -28,6 +28,7 @@ public class T_TensorTensor_TOptional extends Pointer {
     public native @Name("operator =") @ByRef T_TensorTensor_TOptional put(@ByRef T_TensorTensor_TOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @ByRef T_TensorTensor_T get();
     @ValueSetter public native T_TensorTensor_TOptional put(@ByRef T_TensorTensor_T value);
 }

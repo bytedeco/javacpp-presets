@@ -28,6 +28,7 @@ public class SizeTOptional extends Pointer {
     public native @Name("operator =") @ByRef SizeTOptional put(@ByRef SizeTOptional x);
 
     public native boolean has_value();
+    public native void reset();
     public native @Name("value") @Cast("size_t") long get();
     @ValueSetter public native SizeTOptional put(@Cast("size_t") long value);
 }
