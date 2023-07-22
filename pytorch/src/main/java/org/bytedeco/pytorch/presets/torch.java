@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2020-2023 Hervé Guillemet, Samuel Audet, Eduardo Gonzalez
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ public class torch implements LoadEnabled, InfoMapper {
         if (Loader.getCallerClass(5).getName().equals("org.bytedeco.javacpp.tools.Parser")) {
             properties.put("platform.include", new ArrayList<String>());
             Class presets = properties.getEffectiveClasses().get(0);
-            InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_parsed.h");
+            InputStream includesStream = thisClass.getResourceAsStream(presets.getSimpleName() + "_include.h");
             if (includesStream == null) {
                 throw new RuntimeException("Cannot find parse list for " + presets);
             }
@@ -1835,7 +1835,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// Instantiation of templated functions.
-        infoMap.put(new Info("c10_complex_math::sqrt<float>").javaNames("sqrt"))
+        infoMap.put(new Info("at::sqrt<float>").javaNames("sqrt"))
+               .put(new Info("c10_complex_math::sqrt<float>").javaNames("sqrt"))
                .put(new Info("c10_complex_math::sqrt<double>").javaNames("sqrt"))
                .put(new Info("c10::util::get_type_index<std::string>").javaNames("get_type_index_string"))
                .put(new Info("at::TensorBase::data_ptr<int8_t>").javaNames("data_ptr_char"))

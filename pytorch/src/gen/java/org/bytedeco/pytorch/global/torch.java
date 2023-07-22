@@ -50393,7 +50393,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::sqrt(Tensor self) -> Tensor
-
+@Namespace("at") public static native @ByVal Tensor sqrt(@Const @ByRef Tensor self);
 
 // aten::sqrt_(Tensor(a!) self) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sqrt_(@ByRef Tensor self);

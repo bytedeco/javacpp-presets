@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2023 Samuel Audet, Eduardo Gonzalez
+ * Copyright (C) 2023 Hervé Guillemet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 import java.util.List;
 
 /**
- * @author Samuel Audet, Hervé Guillemet
+ * @author Hervé Guillemet
  */
 @Properties(
     inherit = torch.class,
