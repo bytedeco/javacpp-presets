@@ -59,6 +59,8 @@ private native void allocate();
   // The enable_if stuff here makes sure that this isn't used for
   // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
   // bitfield.
+  public StrideArrayRef(@ByRef StrideVector vec) { super((Pointer)null); allocate(vec); }
+  private native void allocate(@ByRef StrideVector vec);
 
   /** Construct an ArrayRef from a std::array */
 

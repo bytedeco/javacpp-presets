@@ -749,16 +749,6 @@ public class torch implements LoadEnabled, InfoMapper {
         )).put(new Info("c10::ArrayRef<at::Tag>::vec()").skip() // Is there any way to make this work ?
         );
 
-        infoMap
-            .put(new Info("c10::ArrayRef<torch::Tensor>(std::vector<torch::Tensor,A>&)").javaText(
-                "public TensorArrayRef(@ByRef TensorVector Vec) { super((Pointer)null); allocate(Vec); }\n"
-                + "private native void allocate(@ByRef TensorVector Vec);"))
-
-            .put(new Info("c10::ArrayRef<at::indexing::TensorIndex>(std::vector<at::indexing::TensorIndex,A>&)").javaText(
-                "public TensorIndexArrayRef(@ByRef TensorIndexVector Vec) { super((Pointer)null); allocate(Vec); }\n"
-                + "private native void allocate(@ByRef TensorIndexVector Vec);"))
-        ;
-
 
         //// c10::List
         for (ArrayInfo ai : new ArrayInfo[]{
@@ -948,7 +938,7 @@ public class torch implements LoadEnabled, InfoMapper {
         }) {
             infoMap.put(new Info(template("torch::jit::List", t[1])).pointerTypes(t[0]))
                    .put(new Info(template("torch::jit::ListIterator", t[1])).pointerTypes(t[0] + "Iterator"))
-                   .put(new Info(template("torch::jit::List", t[1]) + "::map").skip()); // Could map if needed
+                   .put(new Info(template("torch::jit::List", t[1]) + "::map").skip()) // Could map if needed
             ;
         }
         infoMap.put(new Info("torch::jit::TreeList::const_iterator").cast().pointerTypes("TreeRef"));
@@ -2361,6 +2351,14 @@ public class torch implements LoadEnabled, InfoMapper {
             infoMap.put(info);
             infoMap.put(new Info(cppNamesRIterator).skip());
 
+            // Add templated constructor taking a std::vector, if the vector class has been mapped.
+            // Relies on the fact that std::vector info are created before.
+            Info vectorInfo = infoMap.getFirst(template("std::vector", elementTypes[0]), false);
+            if (vectorInfo != null && !elementTypes[0].equals("bool"))
+                infoMap.put(new Info(template(cppNames[0], template("std::allocator", elementTypes[0])) + "(" + elementTypes[0] + "*)")
+                    .javaText(
+                        "public " + baseJavaName + "ArrayRef(@ByRef " + baseJavaName + "Vector vec) { super((Pointer)null); allocate(vec); }\n"
+                        + "private native void allocate(@ByRef " + baseJavaName + "Vector vec);"));
         }
 
         void mapList(InfoMap infoMap) {

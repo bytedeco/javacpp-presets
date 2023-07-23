@@ -63,6 +63,8 @@ private native void allocate();
   /** Construct an ArrayRef from a std::array */
 
   /** Construct an ArrayRef from a C array. */
+  public TensorIndexArrayRef(@ByRef TensorIndexVector vec) { super((Pointer)null); allocate(vec); }
+  private native void allocate(@ByRef TensorIndexVector vec);
 
   /** Construct an ArrayRef from a std::initializer_list. */
   /* implicit */
