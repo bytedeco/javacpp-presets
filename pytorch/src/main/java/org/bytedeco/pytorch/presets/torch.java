@@ -1835,9 +1835,26 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// Instantiation of templated functions.
-        infoMap.put(new Info("at::sqrt<float>").javaNames("sqrt"))
-               .put(new Info("c10_complex_math::sqrt<float>").javaNames("sqrt"))
-               .put(new Info("c10_complex_math::sqrt<double>").javaNames("sqrt"))
+        for (String op : new String[]{"exp", "log", "log10", "log2", "sqrt", "pow", "sin", "cos", "tan",
+            "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "log1p" }) {
+            infoMap.put(new Info("c10_complex_math::" + op + "<float>").javaNames(op))
+                   .put(new Info("c10_complex_math::" + op + "<double>").javaNames(op))
+                   .put(new Info("at::" + op).javaNames(op)); // Needed because "ATen/ops/*.h"
+            // are parsed after complex_math.h and Parser would set the qualified names to the first
+            // matching cppName it finds in infoMap.
+        }
+        infoMap.put(new Info("c10_complex_math::pow(c10::complex<T>&, c10::complex<U>&)").javaText(
+                   "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<double,float>\") DoubleComplex pow(@Const @ByRef DoubleComplex x, @Const @ByRef FloatComplex y);\n"
+                   + "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<float,double>\") DoubleComplex pow(@Const @ByRef FloatComplex x, @Const @ByRef DoubleComplex y);\n"
+               ))
+               .put(new Info("c10_complex_math::pow(c10::complex<T>&, U&)").javaText(
+                   "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<double,float>\") DoubleComplex pow(@Const @ByRef DoubleComplex x, @Const @ByRef float y);\n"
+                   + "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<float,double>\") DoubleComplex pow(@Const @ByRef FloatComplex x, @Const @ByRef double y);\n"
+               ))
+               .put(new Info("c10_complex_math::pow(T&, c10::complex<U>&)").javaText(
+                   "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<double,float>\") DoubleComplex pow(@Const @ByRef double x, @Const @ByRef FloatComplex y);\n"
+                   + "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<float,double>\") DoubleComplex pow(@Const @ByRef float x, @Const @ByRef DoubleComplex y);\n"
+               ))
                .put(new Info("c10::util::get_type_index<std::string>").javaNames("get_type_index_string"))
                .put(new Info("at::TensorBase::data_ptr<int8_t>").javaNames("data_ptr_char"))
                .put(new Info("at::TensorBase::data_ptr<int16_t>").javaNames("data_ptr_short"))

@@ -4334,6 +4334,22 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 // Exponential functions
 
+@Namespace("c10_complex_math") public static native @ByVal @Name("exp<float>") FloatComplex exp(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("exp<double>") DoubleComplex exp(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log<float>") FloatComplex log(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log<double>") DoubleComplex log(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log10<float>") FloatComplex log10(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log10<double>") DoubleComplex log10(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log2<float>") FloatComplex log2(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log2<double>") DoubleComplex log2(@Const @ByRef DoubleComplex x);
+
 // Power functions
 //
 // #if defined(_LIBCPP_VERSION) ||
@@ -4349,9 +4365,94 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 @Namespace("c10_complex_math") public static native @ByVal @Name("sqrt<double>") DoubleComplex sqrt(@Const @ByRef DoubleComplex x);
 
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float>") FloatComplex pow(
+    @Const @ByRef FloatComplex x,
+    @Const @ByRef FloatComplex y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double>") DoubleComplex pow(
+    @Const @ByRef DoubleComplex x,
+    @Const @ByRef DoubleComplex y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float>") FloatComplex pow(
+    @Const @ByRef FloatComplex x,
+    float y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double>") DoubleComplex pow(
+    @Const @ByRef DoubleComplex x,
+    double y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float>") FloatComplex pow(
+    float x,
+    @Const @ByRef FloatComplex y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double>") DoubleComplex pow(
+    double x,
+    @Const @ByRef DoubleComplex y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double,float>") DoubleComplex pow(@Const @ByRef DoubleComplex x, @Const @ByRef FloatComplex y);
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float,double>") DoubleComplex pow(@Const @ByRef FloatComplex x, @Const @ByRef DoubleComplex y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double,float>") DoubleComplex pow(@Const @ByRef DoubleComplex x, @Const @ByRef float y);
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float,double>") DoubleComplex pow(@Const @ByRef FloatComplex x, @Const @ByRef double y);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<double,float>") DoubleComplex pow(@Const @ByRef double x, @Const @ByRef FloatComplex y);
+@Namespace("c10_complex_math") public static native @ByVal @Name("pow<float,double>") DoubleComplex pow(@Const @ByRef float x, @Const @ByRef DoubleComplex y);
+
 // Trigonometric functions
 
+@Namespace("c10_complex_math") public static native @ByVal @Name("sin<float>") FloatComplex sin(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("sin<double>") DoubleComplex sin(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("cos<float>") FloatComplex cos(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("cos<double>") DoubleComplex cos(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("tan<float>") FloatComplex tan(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("tan<double>") DoubleComplex tan(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("asin<float>") FloatComplex asin(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("asin<double>") DoubleComplex asin(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("acos<float>") FloatComplex acos(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("acos<double>") DoubleComplex acos(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("atan<float>") FloatComplex atan(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("atan<double>") DoubleComplex atan(@Const @ByRef DoubleComplex x);
+
 // Hyperbolic functions
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("sinh<float>") FloatComplex sinh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("sinh<double>") DoubleComplex sinh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("cosh<float>") FloatComplex cosh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("cosh<double>") DoubleComplex cosh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("tanh<float>") FloatComplex tanh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("tanh<double>") DoubleComplex tanh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("asinh<float>") FloatComplex asinh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("asinh<double>") DoubleComplex asinh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("acosh<float>") FloatComplex acosh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("acosh<double>") DoubleComplex acosh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("atanh<float>") FloatComplex atanh(@Const @ByRef FloatComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("atanh<double>") DoubleComplex atanh(@Const @ByRef DoubleComplex x);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log1p<float>") FloatComplex log1p(@Const @ByRef FloatComplex z);
+
+@Namespace("c10_complex_math") public static native @ByVal @Name("log1p<double>") DoubleComplex log1p(@Const @ByRef DoubleComplex z);
 
  // namespace c10_complex_math
 
@@ -5571,7 +5672,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 @Namespace("ska::detailv3") @MemberGetter public static native byte min_lookups();
 public static final byte min_lookups = min_lookups();
 
-@Namespace("ska::detailv3") public static native byte log2(@Cast("uint64_t") long value);
+
 
 @Namespace("ska::detailv3") public static native @Cast("uint64_t") long next_power_of_two(@Cast("uint64_t") long i);
 
@@ -11748,6 +11849,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #else
 // #define SKA_NOINLINE(...) __VA_ARGS__ __attribute__((noinline))
 // #endif
+
+
 
 // Implementation taken from http://en.cppreference.com/w/cpp/types/void_t
 // (it takes CWG1558 into account and also works for older compilers)
@@ -73797,6 +73900,7 @@ in Python API, we skip c10::nullopt values when serializing the param state. */
  *  auto t = torch::randn(128, dtype=kDouble);
  *  torch::special::log1p(t);
  *  }</pre> */
+
 
 /** Computes log followed by softmax(x) of the input
  *  See https://pytorch.org/docs/master/special.html#torch.special.log_softmax.
