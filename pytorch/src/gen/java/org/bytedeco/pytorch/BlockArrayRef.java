@@ -41,8 +41,7 @@ private native void allocate();
 
   /** Construct an ArrayRef from a single element. */
   // TODO Make this explicit
-  public BlockArrayRef(@ByPtrRef Block OneElt) { super((Pointer)null); allocate(OneElt); }
-  private native void allocate(@ByPtrRef Block OneElt);
+  
 
   /** Construct an ArrayRef from a pointer and length. */
   public BlockArrayRef(@Cast("torch::jit::Block**") PointerPointer data, @Cast("size_t") long length) { super((Pointer)null); allocate(data, length); }

@@ -59,8 +59,6 @@ private native void allocate();
   // The enable_if stuff here makes sure that this isn't used for
   // std::vector<bool>, because ArrayRef can't work on a std::vector<bool>
   // bitfield.
-  public TensorIndexArrayRef(@ByRef TensorIndexVector Vec) { super((Pointer)null); allocate(Vec); }
-  private native void allocate(@ByRef TensorIndexVector Vec);
 
   /** Construct an ArrayRef from a std::array */
 

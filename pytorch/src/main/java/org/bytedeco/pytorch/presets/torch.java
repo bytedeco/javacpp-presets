@@ -2328,7 +2328,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 String mainName = cppNames[n++] = template("c10::ArrayRef", vt);
                 cppNames[n++] = template("at::ArrayRef", vt);
                 cppNames[n++] = template("torch::ArrayRef", vt);
-                infoMap.put(new Info(mainName + "(const " + vt + "&)").skip());// Causes SIGSEGV since it just make a pointer to the value
+                infoMap.put(new Info(mainName + "(const " + vt + "&)").skip())// Causes SIGSEGV since it just make a pointer to the value
+                       .put(new Info(mainName + "(" + vt + "&)").skip());// Parser removes const for non-investigated reasons for some elementTypes (eg Block*)
                 // With the following info, any operator<<
                 //infoMap.put(new Info(template("c10::operator <<", vt)).javaNames("shiftLeft"));
             }
