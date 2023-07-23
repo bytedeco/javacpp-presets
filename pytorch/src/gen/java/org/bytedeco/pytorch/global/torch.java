@@ -5672,7 +5672,7 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 @Namespace("ska::detailv3") @MemberGetter public static native byte min_lookups();
 public static final byte min_lookups = min_lookups();
 
-
+@Namespace("ska::detailv3") public static native byte log2(@Cast("uint64_t") long value);
 
 @Namespace("ska::detailv3") public static native @Cast("uint64_t") long next_power_of_two(@Cast("uint64_t") long i);
 

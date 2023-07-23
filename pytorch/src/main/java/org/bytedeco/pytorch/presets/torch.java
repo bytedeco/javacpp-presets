@@ -1843,7 +1843,8 @@ public class torch implements LoadEnabled, InfoMapper {
             // are parsed after complex_math.h and Parser would set the qualified names to the first
             // matching cppName it finds in infoMap.
         }
-        infoMap.put(new Info("c10_complex_math::pow(c10::complex<T>&, c10::complex<U>&)").javaText(
+        infoMap.put(new Info("ska::detailv3::log2").javaNames("log2")) // Same reason
+               .put(new Info("c10_complex_math::pow(c10::complex<T>&, c10::complex<U>&)").javaText(
                    "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<double,float>\") DoubleComplex pow(@Const @ByRef DoubleComplex x, @Const @ByRef FloatComplex y);\n"
                    + "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<float,double>\") DoubleComplex pow(@Const @ByRef FloatComplex x, @Const @ByRef DoubleComplex y);\n"
                ))
