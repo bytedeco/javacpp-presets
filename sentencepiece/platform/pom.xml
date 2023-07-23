@@ -13,7 +13,7 @@
   <groupId>org.bytedeco</groupId>
   <artifactId>sentencepiece-platform</artifactId>
   <version>0.1.99-${project.parent.version}</version>
-  <name>JavaCPP Presets Platform for sentencepiece</name>
+  <name>JavaCPP Presets Platform for SentencePiece</name>
 
   <properties>
     <javacpp.moduleId>sentencepiece</javacpp.moduleId>

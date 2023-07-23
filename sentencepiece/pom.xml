@@ -12,7 +12,7 @@
   <groupId>org.bytedeco</groupId>
   <artifactId>sentencepiece</artifactId>
   <version>0.1.99-${project.parent.version}</version>
-  <name>JavaCPP Presets for sentencepiece</name>
+  <name>JavaCPP Presets for SentencePiece</name>
 
   <dependencies>
     <dependency>

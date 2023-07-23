@@ -1,4 +1,3 @@
-import java.nio.ByteBuffer;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.sentencepiece.*;
 

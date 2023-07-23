@@ -619,6 +619,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
@@ -636,7 +637,6 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
-        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
@@ -1198,13 +1198,13 @@
         <module>cuda</module>
         <module>nvcodec</module>
         <module>opencl</module>
+        <module>sentencepiece</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>depthai</module>
         <module>onnxruntime</module>
         <module>cpu_features</module>
         <module>systems</module>
-        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1404,6 +1404,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
@@ -1421,7 +1422,6 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
-        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1533,6 +1533,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>ale</module>
@@ -1548,7 +1549,6 @@
         <module>cpu_features</module>
         <module>modsecurity</module>
         <module>systems</module>
-        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1685,6 +1685,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
@@ -1697,7 +1698,6 @@
         <module>qt</module>
         <module>cpu_features</module>
         <module>systems</module>
-        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
