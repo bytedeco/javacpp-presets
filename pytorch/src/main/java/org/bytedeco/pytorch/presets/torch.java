@@ -66,7 +66,9 @@ import org.bytedeco.openblas.presets.openblas;
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
-                "torch/csrc/jit/serialization/source_range_serialization.h"
+                "torch/csrc/jit/serialization/source_range_serialization.h",
+
+                "pytorch_adapters.h"
             },
             link = {"c10", "torch_cpu", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm"}
@@ -442,6 +444,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<std::tuple<std::string,size_t,size_t> >").pointerTypes("T_StringSizeTSizeT_TOptional").define())
             .put(new Info("torch::optional<std::tuple<torch::Tensor,torch::Tensor> >").pointerTypes("T_TensorTensor_TOptional").define())
             .put(new Info("c10::optional<std::tuple<c10::TypePtr,int32_t> >", "c10::optional<std::pair<c10::TypePtr,int32_t> >").pointerTypes("T_TypePtrLong_TOptional").cast().define())
+            .put(new Info("c10::optional<c10::string_view>").pointerTypes("StringViewOptional").define())
+            .put(new Info("c10::optional<std::vector<c10::string_view> >").pointerTypes("StringViewVectorOptional").define())
         ;
 
 
@@ -595,6 +599,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+            .put(new Info("std::vector<c10::string_view>").pointerTypes("StringViewVector").define())
             .put(new Info("std::vector<std::pair<std::string,int64_t> >").pointerTypes("StringLongVector").define())
             .put(new Info("const std::vector<std::pair<at::RecordFunctionCallback,uint64_t> >",
                 "std::vector<std::pair<at::RecordFunctionCallback,at::CallbackHandle> >").pointerTypes("RecordFunctionCallbackHandleVector").define())
@@ -1887,6 +1892,10 @@ public class torch implements LoadEnabled, InfoMapper {
                    .put(new Info("c10::cast_and_store<" + t[0] + ">").javaNames("cast_and_store_from_" + t[1]));
         }
 
+
+        //// c10::string_view
+        infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("String", "BytePointer"));
+
         // Registries.
         // Skipped them for now. Much burden with variadic args and creator function pointers.
         // We cannot map ThreadPoolRegistry because it takes 3 arguments in the variadic Args Registry template arguments
@@ -2115,7 +2124,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::nn::functions::CrossMapLRN2d",
             "torch::profiler::impl::HashCombine",
 
-            "torch::autograd::_jvp_fn_t", "torch::autograd::profiler::post_process_t"
+            "torch::autograd::_jvp_fn_t", "torch::autograd::profiler::post_process_t",
+            "at::StringView" // Confusion with string_view and @StringView, and doesn't seem to be of any use in API
 
         ).skip())
         ;
@@ -2150,7 +2160,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
                //// Classes kept but passed as generic pointer
-               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::string_view", "c10::impl::PyObjectSlot",
+               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::impl::PyObjectSlot",
                    "_object",
                    "PyObject", "std::function<PyObject*(void*)>", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
                    "std::pair<PyObject*,PyObject*>", "std::stack<std::pair<PyObject*,PyObject*> >", "torch::autograd::utils::DelayWarningHandler",
@@ -2160,7 +2170,7 @@ public class torch implements LoadEnabled, InfoMapper {
                    "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
                    "c10::detail::DictImpl::dict_map_type::iterator",
                    "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
-                   "c10::optional<PyObject*>", "c10::optional<c10::string_view>", "c10::optional<std::vector<c10::string_view> >", "c10::optional<std::chrono::milliseconds>",
+                   "c10::optional<PyObject*>", "c10::optional<std::chrono::milliseconds>",
                    "c10::intrusive_ptr<torch::CustomClassHolder>", "c10::intrusive_ptr<caffe2::Blob>",
                    "c10::intrusive_ptr<c10::ivalue::Object>", "c10::ArrayRef<c10::intrusive_ptr<c10::ivalue::Object> >",
                    "torch::jit::DetachedBuffer::UniqueDetachedBuffer", "c10::optional<at::StepCallbacks>",

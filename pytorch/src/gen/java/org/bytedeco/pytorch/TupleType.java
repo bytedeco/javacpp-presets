@@ -35,7 +35,7 @@ public class TupleType extends NamedType {
         @Const @ByRef TypeVector field_types);
 
   public static native @SharedPtr TupleType createNamed(@Const @ByRef QualifiedNameOptional name,
-        @Cast("c10::string_view*") @StdVector Pointer field_names,
+        @Const @ByRef StringViewVector field_names,
         @Const @ByRef TypeVector field_types);
 
   public static native @SharedPtr TupleType create(
@@ -53,7 +53,7 @@ public class TupleType extends NamedType {
   public native @ByVal Type.TypePtr createWithContained(
         @ByVal TypeVector contained_types);
   public native @SharedPtr FunctionSchema schema();
-  public native @ByVal @Cast("c10::optional<std::vector<c10::string_view> >*") Pointer names();
+  public native @ByVal StringViewVectorOptional names();
 
   @MemberGetter public static native TypeKind Kind();
 }

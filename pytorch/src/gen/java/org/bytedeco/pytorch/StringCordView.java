@@ -41,10 +41,10 @@ public class StringCordView extends Pointer {
   public StringCordView(@Const @ByRef StringCordView arg0) { super((Pointer)null); allocate(arg0); }
   private native void allocate(@Const @ByRef StringCordView arg0);
   public StringCordView(
-        @Cast("c10::string_view*") @StdVector Pointer inputs,
+        @ByVal StringViewVector inputs,
         @ByVal @Cast("std::vector<std::shared_ptr<std::string> >*") Pointer ownerships) { super((Pointer)null); allocate(inputs, ownerships); }
   private native void allocate(
-        @Cast("c10::string_view*") @StdVector Pointer inputs,
+        @ByVal StringViewVector inputs,
         @ByVal @Cast("std::vector<std::shared_ptr<std::string> >*") Pointer ownerships);
 
   public native @ByRef @Name("operator =") StringCordView put(@Const @ByRef StringCordView arg0);
@@ -65,7 +65,7 @@ public class StringCordView extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef StringCordView rhs);
 
-  public native @ByVal @Cast("c10::string_view*") Pointer piece(@Cast("size_t") long index);
+  public native @StringView String piece(@Cast("size_t") long index);
 
   @NoOffset public static class Iterator extends Pointer {
       static { Loader.load(); }
@@ -116,7 +116,7 @@ public class StringCordView extends Pointer {
     public native @Cast("char") @Name("operator *") byte multiply();
 
     // returns rest of the line of the current iterator
-    public native @ByVal @Cast("c10::string_view*") Pointer rest_line();
+    public native @StringView String rest_line();
 
     public native @Cast("size_t") long pos();
   }
