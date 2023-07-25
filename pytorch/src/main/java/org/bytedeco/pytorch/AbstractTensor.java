@@ -58,6 +58,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     public static Tensor create(boolean[] data, long... shape) { Tensor t = empty(shape, new TensorOptions(ScalarType.Bool), null);  BooleanIndexer i = t.createIndexer(); i.put(0, data); return t; }
 
     public abstract TensorOptions options();
+    public abstract ScalarType scalar_type();
     public abstract long ndimension();
     public abstract long size(long dim);
     public abstract long stride(long dim);
@@ -92,7 +93,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
         if (options.device().type().intern() != DeviceType.CPU) {
             throw new UnsupportedOperationException("Device type not supported: " + options.device().type().intern());
         }
-        ScalarType dtype = options.dtype().toScalarType().intern();
+        ScalarType dtype = scalar_type().intern();
         Pointer ptr = data_ptr();
         long size = nbytes();
         switch (dtype) {
@@ -129,7 +130,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
         if (options.device().type().intern() != DeviceType.CPU) {
             throw new UnsupportedOperationException("Device type not supported: " + options.device().type().intern());
         }
-        ScalarType dtype = options.dtype().toScalarType().intern();
+        ScalarType dtype = scalar_type().intern();
         Pointer ptr = data_ptr();
         long size = nbytes();
         int dims = (int)ndimension();
