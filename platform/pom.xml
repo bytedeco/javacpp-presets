@@ -57,6 +57,7 @@
     <module>../opencl/platform</module>
 <!--    <module>../mxnet/platform</module>-->
     <module>../pytorch/platform</module>
+    <module>../sentencepiece/platform</module>
 <!--    <module>../tensorflow/platform</module>-->
     <module>../tensorflow-lite/platform</module>
     <module>../tensorrt/platform</module>
@@ -292,6 +293,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>pytorch-platform</artifactId>
       <version>2.0.1-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>sentencepiece-platform</artifactId>
+      <version>0.1.99-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->

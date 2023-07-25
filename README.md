@@ -45,6 +45,7 @@ JavaCPP Presets
 [![opencl](https://github.com/bytedeco/javacpp-presets/workflows/opencl/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Aopencl)
 [![mxnet](https://github.com/bytedeco/javacpp-presets/workflows/mxnet/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Amxnet)
 [![pytorch](https://github.com/bytedeco/javacpp-presets/workflows/pytorch/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Apytorch)
+[![sentencepiece](https://github.com/bytedeco/javacpp-presets/workflows/sentencepiece/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Asentencepiece)
 [![tensorflow](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow)
 [![tensorflow-lite](https://github.com/bytedeco/javacpp-presets/workflows/tensorflow-lite/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorflow-lite)
 [![tensorrt](https://github.com/bytedeco/javacpp-presets/workflows/tensorrt/badge.svg)](https://github.com/bytedeco/javacpp-presets/actions?query=workflow%3Atensorrt)
@@ -222,6 +223,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
  * PyTorch 2.0.x  https://github.com/pytorch/pytorch
+ * SentencePiece 0.1.99  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.13.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt

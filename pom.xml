@@ -619,6 +619,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
@@ -1197,6 +1198,7 @@
         <module>cuda</module>
         <module>nvcodec</module>
         <module>opencl</module>
+        <module>sentencepiece</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
         <module>depthai</module>
@@ -1402,6 +1404,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
@@ -1460,6 +1463,7 @@
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>sentencepiece</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
@@ -1529,6 +1533,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>ale</module>
@@ -1680,6 +1685,7 @@
         <module>opencl</module>
         <module>mxnet</module>
         <module>pytorch</module>
+        <module>sentencepiece</module>
         <module>tensorflow</module>
         <module>tensorflow-lite</module>
         <module>tensorrt</module>
