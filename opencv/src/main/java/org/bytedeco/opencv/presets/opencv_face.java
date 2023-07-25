@@ -38,9 +38,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>",
             "<opencv2/face/facemark.hpp>", "<opencv2/face/facemark_train.hpp>", "<opencv2/face/facemarkLBF.hpp>",
             "<opencv2/face/facemarkAAM.hpp>", "<opencv2/face/face_alignment.hpp>"},
-            link = "opencv_face@.407"),
+            link = "opencv_face@.408"),
         @Platform(value = "ios", preload = "libopencv_face"),
-        @Platform(value = "windows", link = "opencv_face470")},
+        @Platform(value = "windows", link = "opencv_face480")},
     target = "org.bytedeco.opencv.opencv_face",
     global = "org.bytedeco.opencv.global.opencv_face"
 )

@@ -203,6 +203,13 @@ runs:
           echo Installing MKL
           curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/cd17b7fe-500e-4305-a89b-bd5b42bfd9f8/l_onemkl_p_2023.1.0.46342_offline.sh
           $SUDO bash l_onemkl_p_2023.1.0.46342_offline.sh -s -a -s --eula accept
+          export MAVEN_OPTIONS="-Djavacpp.platform.compiler=clang++"
+
+          # Allocate a swapfile on Linux as it's not enabled by default
+          $SUDO fallocate -l 4GB /swapfile
+          $SUDO chmod 600 /swapfile
+          $SUDO mkswap /swapfile
+          $SUDO swapon /swapfile
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-armhf" ]] && [[ "$CI_DEPLOY_MODULE" == "flycapture" ]]; then
