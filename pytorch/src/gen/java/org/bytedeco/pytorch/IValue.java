@@ -285,7 +285,7 @@ public class IValue extends Pointer {
   public native @ByVal @Name("toString") ConstantStringPtr toConstantString();
   public native @StdString BytePointer toStringRef();
   public native @ByVal @Cast("c10::optional<std::reference_wrapper<const std::string> >*") Pointer toOptionalStringRef();
-  public native @StringView String toStringView();
+  public native @StringView BytePointer toStringView();
 
   // DoubleList
   public native @Cast("bool") boolean isDoubleList();

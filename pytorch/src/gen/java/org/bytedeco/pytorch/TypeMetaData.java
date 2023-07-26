@@ -88,24 +88,6 @@ public class TypeMetaData extends Pointer {
         PlacementDelete placementDelete,
         Delete deleteFn,
         @ByVal TypeIdentifier id,
-        @StringView String name) { super((Pointer)null); allocate(itemsize, newFn, placementNew, copy, placementDelete, deleteFn, id, name); }
-  @NoException(true) private native void allocate(
-        @Cast("size_t") long itemsize,
-        New newFn,
-        PlacementNew placementNew,
-        Copy copy,
-        PlacementDelete placementDelete,
-        Delete deleteFn,
-        @ByVal TypeIdentifier id,
-        @StringView String name);
-  public TypeMetaData(
-        @Cast("size_t") long itemsize,
-        New newFn,
-        PlacementNew placementNew,
-        Copy copy,
-        PlacementDelete placementDelete,
-        Delete deleteFn,
-        @ByVal TypeIdentifier id,
         @StringView BytePointer name) { super((Pointer)null); allocate(itemsize, newFn, placementNew, copy, placementDelete, deleteFn, id, name); }
   @NoException(true) private native void allocate(
         @Cast("size_t") long itemsize,
@@ -116,6 +98,24 @@ public class TypeMetaData extends Pointer {
         Delete deleteFn,
         @ByVal TypeIdentifier id,
         @StringView BytePointer name);
+  public TypeMetaData(
+        @Cast("size_t") long itemsize,
+        New newFn,
+        PlacementNew placementNew,
+        Copy copy,
+        PlacementDelete placementDelete,
+        Delete deleteFn,
+        @ByVal TypeIdentifier id,
+        @StringView String name) { super((Pointer)null); allocate(itemsize, newFn, placementNew, copy, placementDelete, deleteFn, id, name); }
+  @NoException(true) private native void allocate(
+        @Cast("size_t") long itemsize,
+        New newFn,
+        PlacementNew placementNew,
+        Copy copy,
+        PlacementDelete placementDelete,
+        Delete deleteFn,
+        @ByVal TypeIdentifier id,
+        @StringView String name);
 
   public native @Cast("size_t") long itemsize_(); public native TypeMetaData itemsize_(long setter);
   public native New new_(); public native TypeMetaData new_(New setter);
@@ -124,5 +124,5 @@ public class TypeMetaData extends Pointer {
   public native PlacementDelete placementDelete_(); public native TypeMetaData placementDelete_(PlacementDelete setter);
   public native Delete delete_(); public native TypeMetaData delete_(Delete setter);
   public native @ByRef TypeIdentifier id_(); public native TypeMetaData id_(TypeIdentifier setter);
-  public native @StringView String name_(); public native TypeMetaData name_(String setter);
+  public native @StringView BytePointer name_(); public native TypeMetaData name_(BytePointer setter);
 }

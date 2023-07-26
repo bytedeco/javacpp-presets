@@ -65,7 +65,7 @@ public class StringCordView extends Pointer {
 
   public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef StringCordView rhs);
 
-  public native @StringView String piece(@Cast("size_t") long index);
+  public native @StringView BytePointer piece(@Cast("size_t") long index);
 
   @NoOffset public static class Iterator extends Pointer {
       static { Loader.load(); }
@@ -116,7 +116,7 @@ public class StringCordView extends Pointer {
     public native @Cast("char") @Name("operator *") byte multiply();
 
     // returns rest of the line of the current iterator
-    public native @StringView String rest_line();
+    public native @StringView BytePointer rest_line();
 
     public native @Cast("size_t") long pos();
   }

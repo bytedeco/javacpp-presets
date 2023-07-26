@@ -177,8 +177,8 @@ public class Context extends Pointer {
   //    }
 
   // Throws an error if `Context::deterministicAlgorithms()` is true
-  public static native void alertNotDeterministic(@StringView String caller);
   public static native void alertNotDeterministic(@StringView BytePointer caller);
+  public static native void alertNotDeterministic(@StringView String caller);
 
   // Throws an error if `Context::deterministicAlgorithms()` is true, CUDA
   // >= 10.2, and CUBLAS_WORKSPACE_CONFIG is not set to either ":16:8" or

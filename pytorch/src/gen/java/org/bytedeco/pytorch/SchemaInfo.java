@@ -41,11 +41,11 @@ public class SchemaInfo extends Pointer {
 
   public native @Cast("bool") boolean is_mutable(@Const @ByRef SchemaArgument argument);
 
-  public native @Cast("bool") boolean is_mutable(@StringView String name);
   public native @Cast("bool") boolean is_mutable(@StringView BytePointer name);
+  public native @Cast("bool") boolean is_mutable(@StringView String name);
 
-  public native @Cast("bool") boolean has_argument(@StringView String name);
   public native @Cast("bool") boolean has_argument(@StringView BytePointer name);
+  public native @Cast("bool") boolean has_argument(@StringView String name);
 
   public native @Cast("bool") boolean is_nondeterministic();
 

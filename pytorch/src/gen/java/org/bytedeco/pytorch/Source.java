@@ -41,37 +41,37 @@ public class Source extends Pointer {
   }
 
   public Source(
-        @StringView String text_view,
+        @StringView BytePointer text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
-        @StringView String text_view,
+        @StringView BytePointer text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/);
   public Source(
-        @StringView String text_view) { super((Pointer)null); allocate(text_view); }
+        @StringView BytePointer text_view) { super((Pointer)null); allocate(text_view); }
   private native void allocate(
-        @StringView String text_view);
+        @StringView BytePointer text_view);
   public Source(
-        @StringView BytePointer text_view,
+        @StringView String text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
-        @StringView BytePointer text_view,
+        @StringView String text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/);
   public Source(
-        @StringView BytePointer text_view) { super((Pointer)null); allocate(text_view); }
+        @StringView String text_view) { super((Pointer)null); allocate(text_view); }
   private native void allocate(
-        @StringView BytePointer text_view);
+        @StringView String text_view);
 
   public Source(
         @ByVal StringCordView str,

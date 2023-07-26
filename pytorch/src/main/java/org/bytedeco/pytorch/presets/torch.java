@@ -1894,7 +1894,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// c10::string_view
-        infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("String", "BytePointer"));
+        infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("BytePointer", "String"));
 
         // Registries.
         // Skipped them for now. Much burden with variadic args and creator function pointers.

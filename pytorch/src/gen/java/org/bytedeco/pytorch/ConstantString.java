@@ -33,7 +33,7 @@ public class ConstantString extends Pointer {
   public static native @ByVal ConstantStringPtr create(@StdString String str_);
 
   public native @StdString BytePointer string();
-  public native @StringView String string_view();
+  public native @StringView BytePointer string_view();
 
   public native @Const @ByRef @Name("operator const std::string&") @StdString @Override String toString();
   
