@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.functions;
 
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
@@ -26,5 +27,5 @@ public class StringSupplier extends FunctionPointer {
 
     private native void allocate();
 
-    public native @StdString @Cast({"", "char *"}) String call();
+    public native @StdString @Cast({"", "char *"}) BytePointer call();
 }
