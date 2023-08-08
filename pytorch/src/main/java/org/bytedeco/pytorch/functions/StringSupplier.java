@@ -27,5 +27,6 @@ public class StringSupplier extends FunctionPointer {
 
     private native void allocate();
 
-    public native @StdString @Cast({"", "char *"}) BytePointer call();
+    // Without the cast, the function returns a std::basic_string<char>& and the cast from StringAdapter returns a reference to a variable in the stack.
+    public native @StdString @Cast({"", "char*"}) BytePointer call();
 }
