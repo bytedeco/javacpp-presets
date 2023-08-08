@@ -27,5 +27,5 @@ public class PickleWriter extends FunctionPointer {
 
     private native void allocate();
 
-    public native void call(@Cast("const char *") BytePointer buf, @Cast("size_t") long nbytes);
+    public native void call(@Cast("const char*") BytePointer buf, @Cast("size_t") long nbytes);
 }

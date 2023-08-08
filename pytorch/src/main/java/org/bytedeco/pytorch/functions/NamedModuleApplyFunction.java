@@ -1,5 +1,6 @@
 package org.bytedeco.pytorch.functions;
 
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
@@ -25,5 +26,5 @@ public class NamedModuleApplyFunction extends FunctionPointer {
 
     private native void allocate();
 
-    public native void call(@Const @StdString @ByRef String name, @ByRef Module m);
+    public native void call(@Const @StdString BytePointer name, @ByRef Module m);
 }
