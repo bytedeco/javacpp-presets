@@ -26,5 +26,5 @@ public class StringSupplier extends FunctionPointer {
 
     private native void allocate();
 
-    public native @StdString @Cast({"", "char *"}) String call();
+    public native @StdString @Cast({"", "char*"}) String call();
 }

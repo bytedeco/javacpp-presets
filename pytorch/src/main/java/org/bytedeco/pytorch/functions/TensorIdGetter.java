@@ -26,5 +26,5 @@ public class TensorIdGetter extends FunctionPointer {
     private native void allocate();
 
     // std::function<std::string(const at::Tensor&)>
-    public native @StdString @Cast({"", "char *"}) String call(@Const @ByRef Tensor tensor);
+    public native @StdString @Cast({"", "char*"}) String call(@Const @ByRef Tensor tensor);
 }
