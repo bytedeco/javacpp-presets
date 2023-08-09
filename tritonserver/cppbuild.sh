@@ -24,6 +24,16 @@ if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrap
     git clone --single-branch --depth=1 -b ${TOOLS_BRANCH_TAG} ${TOOLS_BRANCH}
     cd developer_tools/server
     mkdir build && cd build
+    apt update && apt install -y gpg wget && \
+    wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
+        gpg --dearmor - |  \
+        tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
+    . /etc/os-release && \
+    echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $UBUNTU_CODENAME main" | \
+    tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends cmake cmake-data rapidjson-dev && \
+    cmake --version
     cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/install -DTRITON_BUILD_TEST=ON -DTRITON_ENABLE_EXAMPLES=ON -DTRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG} -DTRITON_BUILD_STATIC_LIBRARY=OFF ..
     make -j"$(grep -c ^processor /proc/cpuinfo)" install
     # Copy dynamic library to triton home
