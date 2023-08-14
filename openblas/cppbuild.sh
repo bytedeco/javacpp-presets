@@ -178,6 +178,13 @@ case $PLATFORM in
         export BINARY=64
         export TARGET=MIPS
         ;;
+    linux-loongarch64)
+        export CC="gcc -mabi=lp64"
+        export FC="gfortran -mabi=lp64"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/ -Wl,-z,noexecstack'
+        export BINARY=BINARY64
+        export TARGET=
+        ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc"
         export FC="arm-linux-gnueabihf-gfortran"

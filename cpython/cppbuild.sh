@@ -124,6 +124,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    linux-loongarch64)
+        cd ../$OPENSSL
+        ./Configure  linux64-loongarch64 -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib
+        make -s -j $MAKEJ
+        make install_sw
+        cd ../Python-$CPYTHON_VERSION
+        CC="gcc -mabi=lp64" ./configure --prefix=$INSTALL_PATH --enable-shared --with-system-ffi --with-openssl=$INSTALL_PATH LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/,-rpath,\$$ORIGIN/../,-rpath,\$$ORIGIN/../lib/'
+        make -j $MAKEJ
+        make install
+        ;;
     macosx-*)
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH --libdir=lib

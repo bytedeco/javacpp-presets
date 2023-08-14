@@ -374,6 +374,18 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.so ../lib
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
+    linux-loongarch64)
+        CC="gcc -mabi=lp64" CXX="g++ -std=c++11 -mabi=lp64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which g++)" $BUILD_CONTRIB_X .
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
+        make -j $MAKEJ
+        make install/strip
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
+        ;;
     macosx-arm64)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/IF HAVE_GCD/d' CMakeLists.txt

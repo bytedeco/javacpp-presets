@@ -1,0 +1,26 @@
+diff --git a/config.guess b/config.guess
+index d437be0..3a3f5fc 100755
+--- a/config.guess
++++ b/config.guess
+@@ -875,6 +875,9 @@ EOF
+ 	UNAME_MACHINE=aarch64_be
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
++    loongarch64:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     alpha:Linux:*:*)
+ 	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+ 	  EV5)   UNAME_MACHINE=alphaev5 ;;
+diff --git a/config.sub b/config.sub
+index 72e9265..51cd1c4 100755
+--- a/config.sub
++++ b/config.sub
+@@ -256,6 +256,7 @@ case $basic_machine in
+ 	1750a | 580 \
+ 	| a29k \
+ 	| aarch64 | aarch64_be | arm64 \
++	| loongarch64 \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+ 	| am33_2.0 \

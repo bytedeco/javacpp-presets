@@ -135,6 +135,10 @@ case $PLATFORM in
         ATLAS=None CC="gcc -m64" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
+    linux-loongarch64)
+        ATLAS=None CC="gcc -mabi=lp64" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        strip $(find ../ -iname *.so)
+        ;;
     macosx-*)
         sedinplace 's/-std=c99/-w/g' numpy/distutils/ccompiler.py
         ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
