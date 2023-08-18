@@ -32,7 +32,7 @@ public class SoftsignImpl extends SoftsignImplCloneable {
     public SoftsignImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftsignImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public SoftsignImpl position(long position) {
         return (SoftsignImpl)super.position(position);

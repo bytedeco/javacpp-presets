@@ -32,7 +32,7 @@ public class TanhImpl extends TanhImplCloneable {
     public TanhImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanhImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public TanhImpl position(long position) {
         return (TanhImpl)super.position(position);

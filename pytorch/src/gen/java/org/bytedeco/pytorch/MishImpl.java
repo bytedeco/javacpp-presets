@@ -32,7 +32,7 @@ public class MishImpl extends MishImplCloneable {
     public MishImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MishImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public MishImpl position(long position) {
         return (MishImpl)super.position(position);

@@ -32,7 +32,7 @@ public class IdentityImpl extends IdentityImplCloneable {
     public IdentityImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IdentityImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public IdentityImpl position(long position) {
         return (IdentityImpl)super.position(position);

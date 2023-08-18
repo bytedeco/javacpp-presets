@@ -32,7 +32,7 @@ public class Softmax2dImpl extends Softmax2dImplCloneable {
     public Softmax2dImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Softmax2dImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public Softmax2dImpl position(long position) {
         return (Softmax2dImpl)super.position(position);

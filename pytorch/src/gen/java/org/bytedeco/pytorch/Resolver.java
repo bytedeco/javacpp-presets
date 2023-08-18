@@ -41,7 +41,7 @@ public class Resolver extends Pointer {
     public Resolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Resolver(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public Resolver position(long position) {
         return (Resolver)super.position(position);

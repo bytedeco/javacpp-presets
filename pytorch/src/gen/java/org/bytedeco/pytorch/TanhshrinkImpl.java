@@ -32,7 +32,7 @@ public class TanhshrinkImpl extends TanhshrinkImplCloneable {
     public TanhshrinkImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanhshrinkImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public TanhshrinkImpl position(long position) {
         return (TanhshrinkImpl)super.position(position);

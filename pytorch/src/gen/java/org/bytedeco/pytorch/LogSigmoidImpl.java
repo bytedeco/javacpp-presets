@@ -32,7 +32,7 @@ public class LogSigmoidImpl extends LogSigmoidImplCloneable {
     public LogSigmoidImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogSigmoidImpl(Pointer p) { super(p); }
-    private native void allocate();
+    @SharedPtr private native void allocate();
     private native void allocateArray(long size);
     @Override public LogSigmoidImpl position(long position) {
         return (LogSigmoidImpl)super.position(position);
