@@ -7,12 +7,20 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-
+  // namespace internal
+// #endif
 
 /** Abstract interface that returns TfLiteRegistrations given op codes or custom
  *  op names. This is the mechanism that ops being referenced in the flatbuffer
- *  model are mapped to executable function pointers (TfLiteRegistrations). */
-@Namespace("tflite") @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+ *  model are mapped to executable function pointers (TfLiteRegistrations).
+ * 
+ *  The lifetime of the TfLiteRegistration object whose address is
+ *  returned by FindOp must exceed the lifetime of any InterpreterBuilder or
+ *  Interpreter created with this OpResolver.
+ *  Likewise the lifetime of the TfLiteRegistrationExternal object referenced
+ *  from the TfLiteRegistration object, if any, must exceed the lifetime of
+ *  any InterpreterBuilder or Interpreter created with this OpResolver. */
+@Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class OpResolver extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -12,7 +12,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 // --------------------------------------------------------------------------
 // Opaque types used by c_api.h, c_api_opaque.h and common.h.
 
-// TfLiteOpaqueContext is an opaque version of TfLiteContext;
+/** TfLiteOpaqueContext is an opaque version of TfLiteContext; */
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteOpaqueContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

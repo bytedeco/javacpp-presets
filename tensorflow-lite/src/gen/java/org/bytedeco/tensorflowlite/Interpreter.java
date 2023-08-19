@@ -255,51 +255,51 @@ public class Interpreter extends Pointer {
         String buffer, @Cast("size_t") long bytes);
 
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
         @Cast("const char*") BytePointer buffer, @Cast("size_t") long bytes);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes, @Const Allocation allocation/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadOnly(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
         String buffer, @Cast("size_t") long bytes);
 
@@ -412,52 +412,52 @@ public class Interpreter extends Pointer {
         int tensor_index, @Cast("TfLiteType") int type, String name,
         @StdVector int[] dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const IntPointer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const IntBuffer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const int[] dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const IntPointer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const IntPointer dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const IntBuffer dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, @Cast("const char*") BytePointer name, @Cast("size_t") long rank,
         @Const IntBuffer dims, @ByVal TfLiteQuantizationParams quantization);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization,
-        @Cast("bool") boolean is_variable/*=false*/, @Cast("const size_t") long rank_dims_signature/*=0*/,
+        @Cast("bool") boolean is_variable/*=false*/, @Cast("size_t") long rank_dims_signature/*=0*/,
         @Const int[] dims_signature/*=nullptr*/);
   public native @Cast("TfLiteStatus") int SetTensorParametersReadWrite(
-        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("const size_t") long rank,
+        int tensor_index, @Cast("TfLiteType") int type, String name, @Cast("size_t") long rank,
         @Const int[] dims, @ByVal TfLiteQuantizationParams quantization);
 
   /** Enables application to cancel in flight invocation with {@code Cancel}.
@@ -548,6 +548,8 @@ public class Interpreter extends Pointer {
    *  \brief Returns a pointer to the AsyncSignatureRunner instance to run the
    *  part of the graph identified by a SignatureDef. The nullptr is returned if
    *  the given signature key is not valid.
+   *  if the model does not have signature def, pass nullptr to signature_key
+   *  and AsyncSignatureRunner will be created using primary subgraph (0).
    *  The async delegate should be applied before calling this function. */
 
   /** \warning Experimental interface, subject to change. \n
@@ -878,7 +880,7 @@ public class Interpreter extends Pointer {
    *  When using hardware delegation, Interpreter will make the data of output
    *  tensors available in {@code tensor->data} by default. If the application can
    *  consume the buffer handle directly (e.g. reading output from OpenGL
-   *  texture), it can set this flag to false, so Interpreter won't copy the
+   *  texture), it can set this flag to true, so Interpreter won't copy the
    *  data from buffer handle to CPU memory. */
   public native void SetAllowBufferHandleOutput(@Cast("bool") boolean allow_buffer_handle_output);
 

@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.12.0
+TVM_VERSION=0.13.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -87,6 +87,7 @@ sedinplace 's/llvm::None/std::nullopt/g' src/target/llvm/codegen_llvm.cc
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
 sedinplace '/candidate_path/d' python/setup.py
+sedinplace '/dir == "3rdparty"/d' python/setup.py
 sedinplace '/find_library/a\
 include_directories(SYSTEM ${USE_DNNL}/include)\
 ' cmake/modules/contrib/DNNL.cmake
@@ -111,7 +112,7 @@ if [[ -f $f ]]; then
     chmod +x $LLVM_PATH/bin/llvm-config*
 fi
 if [[ -f "$LLVM_PATH/lib/libLLVM.dylib" ]]; then
-    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-16.dylib
+    ln -sf libLLVM.dylib $LLVM_PATH/lib/libLLVM-17rc.dylib
 fi
 if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib

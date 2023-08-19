@@ -193,6 +193,10 @@ public class FlatBufferModel extends Pointer {
   public static native @ByVal StringStringMap ReadAllMetadata(
         @Cast("const tflite::Model*") Pointer model);
 
+  // If the buffer is stored as part of the Flatbuffer or outside
+  // return false if the buffers are part of the Flatbuffer
+  public static native @Cast("bool") boolean CheckBufferOutsideModel(@Cast("const tflite::Model*") Pointer model);
+
   // Validates if the FlatBufferModel's buffer is well-formed. Specifically, it
   // checks if the 0th entry of the model buffers is an empty buffer (sentinel).
   // This is a convention so that tensors without a buffer can provide 0

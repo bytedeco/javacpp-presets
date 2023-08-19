@@ -480,6 +480,10 @@ public class Subgraph extends Pointer {
   // Returns status of success or failure.
   public native @Cast("TfLiteStatus") int AllocateTensors();
 
+  // Returns the number of times each tensor is consumed. Subgraph output
+  // tensors are considered as consumed.
+  public native @StdVector IntPointer GetInputTensorsCount();
+
   // Invoke the subgraph (run the whole graph in dependency order).
   //
   // NOTE: It is possible that the interpreter is not in a ready state
@@ -607,7 +611,7 @@ public class Subgraph extends Pointer {
   // the TfLite library and allow users to plug-in their own memory planner
   // debugger, we have utilized weak symbols to meet these two requirements. By
   // default, there is no debugging info dumped. However, if the TfLite-provided
-  // lite:simple_memory_arena_debug_dump (i.e. containing the strong defintion)
+  // lite:simple_memory_arena_debug_dump (i.e. containing the strong definition)
   // is linked to the program, calling this function will output memory usage
   // information about tenosrs and ops.
   public native void DumpMemoryPlannerDebugInfo();
@@ -678,12 +682,34 @@ public class Subgraph extends Pointer {
   public native @Cast("bool") boolean DisableDelegateClustering();
 
   // Retrieves the corresponding TfLiteContext of a subgraph given a subgraph
-  // index. If an invalid subgraph index is given, then returns nullptr.
-  public native TfLiteContext GetSubgraphContext(int subgraph_index);
+  // index and switches to the delegate context for this subgraph. If an invalid
+  // subgraph index is given, returns kTfLiteError.
+  // NOTE: This function is expected to be paired with ReleaseSubgraphContext()
+  // once the delegate preparation is done and/or the delegate context functions
+  // are no longer needed.
+  public native @Cast("TfLiteStatus") int AcquireSubgraphContext(int subgraph_index,
+                                        @Cast("TfLiteContext**") PointerPointer acquired_context);
+  public native @Cast("TfLiteStatus") int AcquireSubgraphContext(int subgraph_index,
+                                        @ByPtrPtr TfLiteContext acquired_context);
+  // WARNING: This is an experimental interface that is subject to change.
+  // Entry point for C node plugin API to acquire the subgraph context.
+  public static native @Cast("TfLiteStatus") int AcquireSubgraphContext(TfLiteContext context,
+                                               int subgraph_index,
+                                               @Cast("TfLiteContext**") PointerPointer acquired_context);
+  public static native @Cast("TfLiteStatus") int AcquireSubgraphContext(TfLiteContext context,
+                                               int subgraph_index,
+                                               @ByPtrPtr TfLiteContext acquired_context);
 
-  // Retrieves a const pointer to the corresponding TfLiteContext of a subgraph
-  // given a subgraph index. If an invalid subgraph index is given, then returns
-  // nullptr.
+  // Releases the subgraph context by switching back to the TFLite kernel
+  // context for this specified subgraph.
+  // NOTE: This function is expected to be used after AcquireSubgraphContext()
+  // once the delegate preparation is done and/or the delegate context functions
+  // are no longer needed.
+  public native @Cast("TfLiteStatus") int ReleaseSubgraphContext(int subgraph_index);
+  // WARNING: This is an experimental interface that is subject to change.
+  // Entry point for C node plugin API to release the subgraph context.
+  public static native @Cast("TfLiteStatus") int ReleaseSubgraphContext(TfLiteContext context,
+                                               int subgraph_index);
 
   // Marks the subgraph with the given index as "delegation-skippable". Returns
   // kTfLiteOk if the given subgraph index is valid and is successfully marked
@@ -727,4 +753,36 @@ public class Subgraph extends Pointer {
   // NOTE: This function is expected to be called only when this subgraph will
   // be skipped by the interpreter.
   public native void MarkAsDelegationSkippable();
+
+  // Loads metadata of a TF Lite node's custom initialization data.
+  // Specifically:
+  // * Loads into the supplied 'fd' the file descriptor of the file that stores
+  //   the 'node's custom  initialization data.  This output parameter will be
+  //   loaded if the TF Lite runtime has access to the file descriptor, though
+  //   this is not always the case, e.g. if a client provides a tflite::Model
+  //   directly to the TF Lite runtime.  If 'fd' can be loaded then 'kTfLiteOk'
+  //   will be returned, otherwise 'kTfLiteError' is returned.
+  // * Loads into the supplied 'custom_initial_data_offset_in_file' pointer the
+  //   offset of the 'node's custom init data in the file associated with 'fd'.
+  //   This output parameter will be set to -1 if the 'node' does not have
+  //   custom init data set.
+  // * Loads into the supplied 'custom_initial_data_size' the size of the
+  //   custom initialization data.  This output parameter will be set to -1 if
+  //   the 'node' does not have custom init data set.
+  //
+  // Returns 'kTfLiteOk' when 'fd' has been loaded successfully and
+  // 'kTfLiteError' otherwise.  Note that this means that 'kTfLiteOk' can be
+  // returned, even if the 'node' does not have custom init data set.
+  public native @Cast("TfLiteStatus") int GetNodeInitDataMmapInfo(
+        @Const TfLiteNode node, IntPointer fd,
+        @Cast("int64_t*") LongPointer custom_initial_data_offset_in_file,
+        @Cast("int64_t*") LongPointer custom_initial_data_size);
+  public native @Cast("TfLiteStatus") int GetNodeInitDataMmapInfo(
+        @Const TfLiteNode node, IntBuffer fd,
+        @Cast("int64_t*") LongBuffer custom_initial_data_offset_in_file,
+        @Cast("int64_t*") LongBuffer custom_initial_data_size);
+  public native @Cast("TfLiteStatus") int GetNodeInitDataMmapInfo(
+        @Const TfLiteNode node, int[] fd,
+        @Cast("int64_t*") long[] custom_initial_data_offset_in_file,
+        @Cast("int64_t*") long[] custom_initial_data_size);
 }

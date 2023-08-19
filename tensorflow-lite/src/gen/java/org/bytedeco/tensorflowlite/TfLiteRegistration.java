@@ -9,11 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// `TfLiteRegistrationExternal` is an external version of `TfLiteRegistration`
-// for C API which doesn't use internal types (such as `TfLiteContext`) but only
-// uses stable API types (such as `TfLiteOpaqueContext`). The purpose of each
-// field is the exactly the same as with `TfLiteRegistration`.
-
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteRegistration extends Pointer {
     static { Loader.load(); }
@@ -149,4 +144,8 @@ public class TfLiteRegistration extends Pointer {
   // by applying a delegate.
   // If the function returns nullptr, that means that the underlying delegate
   // does not support asynchronous execution for this `node`.
+
+  // Indicates if an operator's output may safely overwrite its inputs.
+  // See the comments in `TfLiteInPlaceOp`.
+  public native @Cast("uint64_t") long inplace_operator(); public native TfLiteRegistration inplace_operator(long setter);
 }

@@ -9,12 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// Legacy. Will be deprecated in favor of TfLiteAffineQuantization.
-// If per-layer quantization is specified this field will still be populated in
-// addition to TfLiteAffineQuantization.
-// Parameters for asymmetric quantization. Quantized values can be converted
-// back to float using:
-//     real_value = scale * (quantized_value - zero_point)
+/** Legacy. Will be deprecated in favor of TfLiteAffineQuantization.
+ *  If per-layer quantization is specified this field will still be populated in
+ *  addition to TfLiteAffineQuantization.
+ *  Parameters for asymmetric quantization. Quantized values can be converted
+ *  back to float using:
+ *      real_value = scale * (quantized_value - zero_point) */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteQuantizationParams extends Pointer {
     static { Loader.load(); }

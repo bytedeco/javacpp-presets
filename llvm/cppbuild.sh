@@ -7,15 +7,16 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=16.0.6
-download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION.src.tar.xz llvm-project-$LLVM_VERSION.src.tar.xz
+LLVM_VERSION=17.0.0-rc3
+LLVM_VERSION2=17.0.0rc3
+download https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/llvm-project-$LLVM_VERSION2.src.tar.xz llvm-project-$LLVM_VERSION2.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives... (ignore any symlink errors)"
-tar --totals -xf ../llvm-project-$LLVM_VERSION.src.tar.xz || true
-cd llvm-project-$LLVM_VERSION.src
+tar --totals -xf ../llvm-project-$LLVM_VERSION2.src.tar.xz || true
+cd llvm-project-$LLVM_VERSION2.src
 patch -Np1 < ../../../llvm.patch
 sedinplace '/find_package(Git/d' llvm/cmake/modules/AddLLVM.cmake llvm/cmake/modules/VersionFromVCS.cmake
 sedinplace '/Generating libLLVM is not supported on MSVC/d' llvm/tools/llvm-shlib/CMakeLists.txt

@@ -273,7 +273,7 @@ public class TfLiteContext extends Pointer {
   // }
   //
   // NOTE: The context owns the memory referenced by partition_params_array. It
-  // will be cleared with another call to PreviewDelegateParitioning, or after
+  // will be cleared with another call to PreviewDelegatePartitioning, or after
   // TfLiteDelegateParams::Prepare returns.
   //
   // WARNING: This is an experimental interface that is subject to change.
@@ -336,4 +336,41 @@ public class TfLiteContext extends Pointer {
                                      @Cast("size_t*") SizeTPointer bytes);
   }
   public native GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer GetModelMetadata(); public native TfLiteContext GetModelMetadata(GetModelMetadata_TfLiteContext_BytePointer_PointerPointer_SizeTPointer setter);
+
+  // Retrieves the corresponding TfLiteContext of a subgraph that the given
+  // subgraph_index points to and switches to the delegate context for that
+  // subgraph. If an invalid subgraph index is given, returns kTfLiteError.
+  // NOTE: This function is expected to be paired with ReleaseSubgraphContext()
+  // once the delegate preparation is done and/or the delegate context functions
+  // are no longer needed.
+  //
+  // WARNING: This is an experimental interface that is subject to change.
+  public static class AcquireSubgraphContext_TfLiteContext_int_PointerPointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    AcquireSubgraphContext_TfLiteContext_int_PointerPointer(Pointer p) { super(p); }
+      protected AcquireSubgraphContext_TfLiteContext_int_PointerPointer() { allocate(); }
+      private native void allocate();
+      public native @Cast("TfLiteStatus") int call(
+        TfLiteContext context, int subgraph_index,
+        @Cast("TfLiteContext**") PointerPointer acquired_context);
+  }
+  public native AcquireSubgraphContext_TfLiteContext_int_PointerPointer AcquireSubgraphContext(); public native TfLiteContext AcquireSubgraphContext(AcquireSubgraphContext_TfLiteContext_int_PointerPointer setter);
+  // Releases the subgraph context by switching back to the TFLite kernel
+  // context for the subgraph that the given subgraph_index points to.
+  // NOTE: This function is expected to be used after AcquireSubgraphContext()
+  // once the delegate preparation is done and/or the delegate context functions
+  // are no longer needed.
+  //
+  // WARNING: This is an experimental interface that is subject to change.
+  public static class ReleaseSubgraphContext_TfLiteContext_int extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    ReleaseSubgraphContext_TfLiteContext_int(Pointer p) { super(p); }
+      protected ReleaseSubgraphContext_TfLiteContext_int() { allocate(); }
+      private native void allocate();
+      public native @Cast("TfLiteStatus") int call(TfLiteContext context,
+                                           int subgraph_index);
+  }
+  public native ReleaseSubgraphContext_TfLiteContext_int ReleaseSubgraphContext(); public native TfLiteContext ReleaseSubgraphContext(ReleaseSubgraphContext_TfLiteContext_int setter);
 }

@@ -52,6 +52,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/core/c/c_api_types.h",
                 "tensorflow/lite/c/c_api.h",
                 "tensorflow/lite/core/c/c_api.h",
+                "tensorflow/lite/core/c/registration_external.h",
                 "tensorflow/lite/c/c_api_experimental.h",
                 "tensorflow/lite/core/c/c_api_experimental.h",
                 "tensorflow/lite/c/common.h",
@@ -68,12 +69,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "tensorflow/lite/interpreter_options.h",
                 "tensorflow/lite/memory_planner.h",
                 "tensorflow/lite/util.h",
+//                "tensorflow/lite/array.h",
                 "tensorflow/lite/core/macros.h",
                 "tensorflow/lite/core/subgraph.h",
                 "tensorflow/lite/external_cpu_backend_context.h",
                 "tensorflow/lite/portable_type_to_tflitetype.h",
                 "tensorflow/lite/profiling/root_profiler.h",
                 "tensorflow/lite/signature_runner.h",
+                "tensorflow/lite/core/signature_runner.h",
                 "tensorflow/lite/type_to_tflitetype.h",
                 "tensorflow/lite/string_type.h",
                 "tensorflow/lite/mutable_op_resolver.h",
@@ -111,9 +114,10 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("TfLiteIntArray", "TfLiteFloatArray").purify())
                .put(new Info("tflite::ops::builtin::BuiltinOpResolver").pointerTypes("BuiltinOpResolver"))
                .put(new Info("tflite::ops::builtin::BuiltinOpResolverWithoutDefaultDelegates").pointerTypes("BuiltinOpResolverWithoutDefaultDelegates"))
-               .put(new Info("std::initializer_list", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
-                             "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators",
+               .put(new Info("std::initializer_list", "tflite::BuildTfLiteTensor", "tflite::typeToTfLiteType", "TfLiteContext::ReportError", "tflite::MMAPAllocation",
+                             "tflite::OpResolver::GetOpaqueDelegateCreators", "tflite::MutableOpResolver::GetOpaqueDelegateCreators", "IntArrayUniquePtr",
                              "tflite::InterpreterBuilder::PreserveAllTensorsExperimental", "tflite::async::AsyncSignatureRunner", "TfLiteAsyncKernel").skip())
+               .put(new Info("kTfLiteInplaceOpMaxValue").translate(false))
                .put(new Info("tflite::Model", "tflite::ModelT", "tflite::OperatorCode", "tflite::OpResolver::TfLiteDelegateCreators",
                              "tflite::internal::SignatureDef").cast().pointerTypes("Pointer"))
                .put(new Info("tflite::Subgraph").valueTypes("@StdMove Subgraph").pointerTypes("Subgraph"))
@@ -124,7 +128,7 @@ public class tensorflowlite implements InfoMapper {
                .put(new Info("std::map<std::string,uint32_t>").pointerTypes("StringIntMap").define())
                .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("std::unique_ptr<TfLiteDelegate,void(*)(TfLiteDelegate*)>").annotations("@UniquePtr(\"TfLiteDelegate,void(*)(TfLiteDelegate*)\")").pointerTypes("TfLiteDelegate"))
-               .put(new Info("std::unique_ptr<TfLiteIntArray,tflite::TfLiteIntArrayDeleter>").annotations("@UniquePtr(\"TfLiteIntArray,tflite::TfLiteIntArrayDeleter\")").pointerTypes("TfLiteIntArray"))
+               .put(new Info("std::unique_ptr<TfLiteIntArray,tflite::TfLiteArrayDeleter>").annotations("@UniquePtr(\"TfLiteIntArray,tflite::TfLiteArrayDeleter\")").pointerTypes("TfLiteIntArray"))
                .put(new Info("std::unique_ptr<tflite::Subgraph>").annotations("@UniquePtr").pointerTypes("Subgraph")
                                                                  .valueTypes("@Cast({\"\", \"std::unique_ptr<tflite::Subgraph>&&\"}) Subgraph"))
                .put(new Info("std::unique_ptr<tflite::resource::ResourceBase>").annotations("@UniquePtr").pointerTypes("ResourceBase")

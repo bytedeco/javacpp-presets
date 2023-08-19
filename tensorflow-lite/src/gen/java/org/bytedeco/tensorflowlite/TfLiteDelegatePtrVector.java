@@ -20,6 +20,8 @@ public class TfLiteDelegatePtrVector extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public TfLiteDelegate front() { return get(0); }
+    public TfLiteDelegate back() { return get(size() - 1); }
     @Index(function = "at") public native @UniquePtr("TfLiteDelegate,void(*)(TfLiteDelegate*)") TfLiteDelegate get(@Cast("size_t") long i);
 
     public native @ByVal Iterator begin();

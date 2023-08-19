@@ -9,23 +9,24 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
+// `unique_ptr` wrapper for `TfLiteTensor`s.
 @Namespace("tflite") @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
-public class TfLiteIntArrayDeleter extends Pointer {
+public class TfLiteTensorDeleter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public TfLiteIntArrayDeleter() { super((Pointer)null); allocate(); }
+    public TfLiteTensorDeleter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TfLiteIntArrayDeleter(long size) { super((Pointer)null); allocateArray(size); }
+    public TfLiteTensorDeleter(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TfLiteIntArrayDeleter(Pointer p) { super(p); }
+    public TfLiteTensorDeleter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public TfLiteIntArrayDeleter position(long position) {
-        return (TfLiteIntArrayDeleter)super.position(position);
+    @Override public TfLiteTensorDeleter position(long position) {
+        return (TfLiteTensorDeleter)super.position(position);
     }
-    @Override public TfLiteIntArrayDeleter getPointer(long i) {
-        return new TfLiteIntArrayDeleter((Pointer)this).offsetAddress(i);
+    @Override public TfLiteTensorDeleter getPointer(long i) {
+        return new TfLiteTensorDeleter((Pointer)this).offsetAddress(i);
     }
 
-  public native @Name("operator ()") void apply(TfLiteIntArray a);
+  public native @Name("operator ()") void apply(TfLiteTensor t);
 }

@@ -26,6 +26,8 @@ public class SubgraphVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Subgraph front() { return get(0); }
+    public Subgraph back() { return get(size() - 1); }
     @Index(function = "at") public native @UniquePtr @Cast({"", "std::unique_ptr<tflite::Subgraph>&&"}) Subgraph get(@Cast("size_t") long i);
     public native SubgraphVector put(@Cast("size_t") long i, Subgraph value);
 
