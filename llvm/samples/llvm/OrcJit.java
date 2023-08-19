@@ -21,10 +21,12 @@
  */
 
 import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.libffi.ffi_cif;
+import org.bytedeco.llvm.global.LLVM;
 import org.bytedeco.llvm.LLVM.LLVMBasicBlockRef;
 import org.bytedeco.llvm.LLVM.LLVMBuilderRef;
 import org.bytedeco.llvm.LLVM.LLVMContextRef;
@@ -57,7 +59,7 @@ public class OrcJit {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
+//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeTarget();
         LLVMInitializeNativeAsmPrinter();
 
@@ -90,22 +92,23 @@ public class OrcJit {
         // Stage 3: Execute using OrcJIT
         LLVMOrcLLJITRef jit = new LLVMOrcLLJITRef();
         LLVMOrcLLJITBuilderRef jitBuilder = LLVMOrcCreateLLJITBuilder();
+        Loader.loadGlobal(Loader.load(LLVM.class));
         if ((err = LLVMOrcCreateLLJIT(jit, jitBuilder)) != null) {
-            System.err.println("Failed to create LLJIT: " + LLVMGetErrorMessage(err));
+            System.err.println("Failed to create LLJIT: " + LLVMGetErrorMessage(err).getString());
             LLVMConsumeError(err);
             return;
         }
 
         LLVMOrcJITDylibRef mainDylib = LLVMOrcLLJITGetMainJITDylib(jit);
         if ((err = LLVMOrcLLJITAddLLVMIRModule(jit, mainDylib, threadModule)) != null) {
-            System.err.println("Failed to add LLVM IR module: " + LLVMGetErrorMessage(err));
+            System.err.println("Failed to add LLVM IR module: " + LLVMGetErrorMessage(err).getString());
             LLVMConsumeError(err);
             return;
         }
 
         final LongPointer res = new LongPointer(1);
         if ((err = LLVMOrcLLJITLookup(jit, res, "sum")) != null) {
-            System.err.println("Failed to look up 'sum' symbol: " + LLVMGetErrorMessage(err));
+            System.err.println("Failed to look up 'sum' symbol: " + LLVMGetErrorMessage(err).getString());
             LLVMConsumeError(err);
             return;
         }

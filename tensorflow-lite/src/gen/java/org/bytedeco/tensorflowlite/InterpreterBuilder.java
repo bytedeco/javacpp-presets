@@ -37,11 +37,13 @@ public class InterpreterBuilder extends Pointer {
   public InterpreterBuilder(@Cast("const tflite::Model*") Pointer model,
                        @Const @ByRef OpResolver op_resolver,
                        ErrorReporter error_reporter/*=tflite::DefaultErrorReporter()*/,
-                       @Const InterpreterOptions options_experimental/*=nullptr*/) { super((Pointer)null); allocate(model, op_resolver, error_reporter, options_experimental); }
+                       @Const InterpreterOptions options_experimental/*=nullptr*/,
+                       @Const Allocation allocation/*=nullptr*/) { super((Pointer)null); allocate(model, op_resolver, error_reporter, options_experimental, allocation); }
   private native void allocate(@Cast("const tflite::Model*") Pointer model,
                        @Const @ByRef OpResolver op_resolver,
                        ErrorReporter error_reporter/*=tflite::DefaultErrorReporter()*/,
-                       @Const InterpreterOptions options_experimental/*=nullptr*/);
+                       @Const InterpreterOptions options_experimental/*=nullptr*/,
+                       @Const Allocation allocation/*=nullptr*/);
   public InterpreterBuilder(@Cast("const tflite::Model*") Pointer model,
                        @Const @ByRef OpResolver op_resolver) { super((Pointer)null); allocate(model, op_resolver); }
   private native void allocate(@Cast("const tflite::Model*") Pointer model,

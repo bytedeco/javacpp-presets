@@ -198,7 +198,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LZ4 1.9.x  https://github.com/lz4/lz4
  * MKL 2023.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
- * DNNL 3.1.x  https://github.com/oneapi-src/oneDNN
+ * DNNL 3.2.x  https://github.com/oneapi-src/oneDNN
  * OpenBLAS 0.3.23  http://www.openblas.net/
  * ARPACK-NG 3.9.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
@@ -208,7 +208,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * NumPy 1.25.x  https://github.com/numpy/numpy
  * SciPy 1.11.x  https://github.com/scipy/scipy
  * Gym 0.26.x  https://github.com/openai/gym
- * LLVM 16.0.x  http://llvm.org/releases/download.html
+ * LLVM 17.0.x  http://llvm.org/releases/download.html
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
@@ -225,7 +225,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * PyTorch 2.0.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.1.99  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.13.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.14.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.34.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
@@ -233,7 +233,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.14.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.15.x  https://github.com/microsoft/onnxruntime
- * TVM 0.12.x  https://github.com/apache/tvm
+ * TVM 0.13.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

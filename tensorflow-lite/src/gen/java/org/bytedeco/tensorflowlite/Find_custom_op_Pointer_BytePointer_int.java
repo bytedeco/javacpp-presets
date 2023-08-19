@@ -15,7 +15,6 @@ public class Find_custom_op_Pointer_BytePointer_int extends FunctionPointer {
     public    Find_custom_op_Pointer_BytePointer_int(Pointer p) { super(p); }
     protected Find_custom_op_Pointer_BytePointer_int() { allocate(); }
     private native void allocate();
-    public native @Const TfLiteRegistration call(Pointer user_data,
-                                                @Cast("const char*") BytePointer custom_op,
+    public native @Const TfLiteRegistration call(Pointer user_data, @Cast("const char*") BytePointer op,
                                                 int version);
 }

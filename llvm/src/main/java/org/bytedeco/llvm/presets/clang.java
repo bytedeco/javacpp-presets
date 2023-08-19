@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.*;
     include = {"<clang-c/Platform.h>", "<clang-c/CXErrorCode.h>", "<clang-c/CXString.h>", "<clang-c/CXCompilationDatabase.h>",
                "<clang-c/BuildSystem.h>", "<clang-c/CXFile.h>", "<clang-c/CXSourceLocation.h>", "<clang-c/CXDiagnostic.h>",
                "<clang-c/Index.h>", "<clang-c/Documentation.h>"},
-    compiler = "cpp17", link = "clang@.16"), @Platform(value = "windows", link = "libclang") })
+    compiler = "cpp17", link = "clang@.17rc"), @Platform(value = "windows", link = "libclang") })
 @NoException
 public class clang implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -40,6 +40,7 @@ public class clang implements InfoMapper {
                .put(new Info("CINDEX_DEPRECATED").cppTypes().annotations("@Deprecated"))
                .put(new Info("CINDEX_VERSION").cppTypes("int").translate(false))
                .put(new Info("__has_feature(blocks)").define(false))
+               .put(new Info("CXCursorVisitorBlock", "CXCursorAndRangeVisitorBlock").skip())
 
                .put(new Info("CXString::data").javaText(
                        "public String getString() {\n"

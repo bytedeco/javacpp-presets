@@ -15,7 +15,6 @@ public class Find_custom_op_Pointer_String_int extends FunctionPointer {
     public    Find_custom_op_Pointer_String_int(Pointer p) { super(p); }
     protected Find_custom_op_Pointer_String_int() { allocate(); }
     private native void allocate();
-    public native @Const TfLiteRegistration call(Pointer user_data,
-                                                String custom_op,
+    public native @Const TfLiteRegistration call(Pointer user_data, String op,
                                                 int version);
 }

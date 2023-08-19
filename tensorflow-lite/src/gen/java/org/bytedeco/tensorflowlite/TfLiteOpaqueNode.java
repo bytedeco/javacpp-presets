@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 
-// TfLiteOpaqueNode is an opaque version of TfLiteNode;
+/** TfLiteOpaqueNode is an opaque version of TfLiteNode; */
 @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class TfLiteOpaqueNode extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

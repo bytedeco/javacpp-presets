@@ -10,6 +10,10 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
 // #endif  // __cplusplus
 
+/** \addtogroup c_api tensorflow/lite/c/c_api.h
+ *  \{
+ */
+
 // This header should be valid in both C (e.g. C99) and C++,
 // so 'void' in parameters is not redundant.
 // NOLINTBEGIN(modernize-redundant-void-arg)

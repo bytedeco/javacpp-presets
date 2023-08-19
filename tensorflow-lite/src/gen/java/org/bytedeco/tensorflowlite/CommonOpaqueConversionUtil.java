@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-  // Class for friend declarations.
+            // For friend declaration below.
 @Namespace("tflite::internal") @Opaque @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class CommonOpaqueConversionUtil extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

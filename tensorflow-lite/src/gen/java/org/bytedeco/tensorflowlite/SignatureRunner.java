@@ -7,7 +7,6 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
-     // Class for friend declarations.
 
 /** WARNING: Experimental interface, subject to change
  * 
@@ -64,7 +63,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 /** SignatureRunner objects. Therefore, it is recommended not to call other
 /** Interpreter methods after calling GetSignatureRunner to create
 /** SignatureRunner instances. */
-@Namespace("tflite") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
+@Namespace("tflite::impl") @NoOffset @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)
 public class SignatureRunner extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -141,10 +140,92 @@ public class SignatureRunner extends Pointer {
   public native @Cast("TfLiteStatus") int Invoke();
 
   /** Attempts to cancel in flight invocation if any.
-   *  This will not affect calls to {@code Invoke} that happend after this.
+   *  This will not affect calls to {@code Invoke} that happened after this.
    *  Non blocking and thread safe.
    *  Returns kTfLiteError if cancellation is not enabled, otherwise returns
    *  kTfLiteOk.
    *  WARNING: This is an experimental API and subject to change. */
+  
+  ///
+  ///
   public native @Cast("TfLiteStatus") int Cancel();
+
+  /** \brief Assigns (or reassigns) a custom memory allocation for the given
+   *  tensor name. {@code flags} is a bitmask, see TfLiteCustomAllocationFlags.
+   *  The runtime does NOT take ownership of the underlying memory.
+   * 
+   *  NOTE: User needs to call AllocateTensors() after this.
+   *  Invalid/insufficient buffers will cause an error during AllocateTensors or
+   *  Invoke (in case of dynamic shapes in the graph).
+   * 
+   *  Parameters should satisfy the following conditions:
+   *  1. tensor->allocation_type == kTfLiteArenaRw or kTfLiteArenaRwPersistent
+   *     In general, this is true for I/O tensors & variable tensors.
+   *  2. allocation->data has the appropriate permissions for runtime access
+   *     (Read-only for inputs, Read-Write for others), and outlives
+   *     Interpreter.
+   *  3. allocation->bytes >= tensor->bytes.
+   *     This condition is checked again if any tensors are resized.
+   *  4. allocation->data should be aligned to kDefaultTensorAlignment
+   *     defined in lite/util.h. (Currently 64 bytes)
+   *     This check is skipped if kTfLiteCustomAllocationFlagsSkipAlignCheck is
+   *     set through {@code flags}.
+   *  \warning This is an experimental API and subject to change. \n */
+  
+  ///
+  ///
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForInputTensor(
+        @Cast("const char*") BytePointer input_name, @Const @ByRef TfLiteCustomAllocation allocation,
+        @Cast("int64_t") long flags/*=kTfLiteCustomAllocationFlagsNone*/);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForInputTensor(
+        @Cast("const char*") BytePointer input_name, @Const @ByRef TfLiteCustomAllocation allocation);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForInputTensor(
+        String input_name, @Const @ByRef TfLiteCustomAllocation allocation,
+        @Cast("int64_t") long flags/*=kTfLiteCustomAllocationFlagsNone*/);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForInputTensor(
+        String input_name, @Const @ByRef TfLiteCustomAllocation allocation);
+
+  /** \brief Assigns (or reassigns) a custom memory allocation for the given
+   *  tensor name. {@code flags} is a bitmask, see TfLiteCustomAllocationFlags.
+   *  The runtime does NOT take ownership of the underlying memory.
+   * 
+   *  NOTE: User needs to call AllocateTensors() after this.
+   *  Invalid/insufficient buffers will cause an error during AllocateTensors or
+   *  Invoke (in case of dynamic shapes in the graph).
+   * 
+   *  Parameters should satisfy the following conditions:
+   *  1. tensor->allocation_type == kTfLiteArenaRw or kTfLiteArenaRwPersistent
+   *     In general, this is true for I/O tensors & variable tensors.
+   *  2. allocation->data has the appropriate permissions for runtime access
+   *     (Read-only for inputs, Read-Write for others), and outlives
+   *     Interpreter.
+   *  3. allocation->bytes >= tensor->bytes.
+   *     This condition is checked again if any tensors are resized.
+   *  4. allocation->data should be aligned to kDefaultTensorAlignment
+   *     defined in lite/util.h. (Currently 64 bytes)
+   *     This check is skipped if kTfLiteCustomAllocationFlagsSkipAlignCheck is
+   *     set through {@code flags}.
+   *  \warning This is an experimental API and subject to change. \n */
+  
+  ///
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForOutputTensor(
+        @Cast("const char*") BytePointer output_name, @Const @ByRef TfLiteCustomAllocation allocation,
+        @Cast("int64_t") long flags/*=kTfLiteCustomAllocationFlagsNone*/);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForOutputTensor(
+        @Cast("const char*") BytePointer output_name, @Const @ByRef TfLiteCustomAllocation allocation);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForOutputTensor(
+        String output_name, @Const @ByRef TfLiteCustomAllocation allocation,
+        @Cast("int64_t") long flags/*=kTfLiteCustomAllocationFlagsNone*/);
+  public native @Cast("TfLiteStatus") int SetCustomAllocationForOutputTensor(
+        String output_name, @Const @ByRef TfLiteCustomAllocation allocation);
+
+  /** \brief Set if buffer handle output is allowed.
+   * 
+   *  When using hardware delegation, Interpreter will make the data of output
+   *  tensors available in {@code tensor->data} by default. If the application can
+   *  consume the buffer handle directly (e.g. reading output from OpenGL
+   *  texture), it can set this flag to true, so Interpreter won't copy the
+   *  data from buffer handle to CPU memory.
+   *  \warning This is an experimental API and subject to change. \n */
+  public native void SetAllowBufferHandleOutput(@Cast("bool") boolean allow_buffer_handle_output);
 }

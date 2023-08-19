@@ -14,6 +14,7 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  *  The {@code TfLiteInterpreterOptionsSetOpResolverExternal} function provides an
  *  alternative method for registering builtin ops and/or custom ops, by
  *  providing operator resolver callbacks.  Unlike using
+ *  {@code TfLiteInterpreterOptionsAddRegistrationExternal},
  *  {@code TfLiteInterpreterOptionsAddBuiltinOp} and/or
  *  {@code TfLiteInterpreterOptionsAddAddCustomOp}, these let you register all the
  *  operators in a single call.
@@ -24,6 +25,10 @@ import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
  * 
  *  If {@code op_resolver_user_data} is non-null, its lifetime must be at least as
  *  long as the lifetime of the {@code TfLiteInterpreterOptions}.
+ * 
+ *  The TfLiteRegistrationExternal objects whose addresses are returned by
+ *  {@code find_builtin_op} and {@code find_custom_op} must outlive both the
+ *  InterpreterOptions object and any Interpreter object created from it.
  * 
  *  WARNING: This is an experimental API and subject to change. */
 @Properties(inherit = org.bytedeco.tensorflowlite.presets.tensorflowlite.class)

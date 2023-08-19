@@ -60,7 +60,7 @@ public class Factorial {
 
     public static void main(String[] args) {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
+//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMLinkInMCJIT();
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
@@ -115,8 +115,8 @@ public class Factorial {
         // Stage 4: Create a pass pipeline using the legacy pass manager
         LLVMPassManagerRef pm = LLVMCreatePassManager();
 //        LLVMAddAggressiveInstCombinerPass(pm);
-        LLVMAddNewGVNPass(pm);
-        LLVMAddCFGSimplificationPass(pm);
+//        LLVMAddNewGVNPass(pm);
+//        LLVMAddCFGSimplificationPass(pm);
         LLVMRunPassManager(pm, module);
         LLVMDumpModule(module);
 

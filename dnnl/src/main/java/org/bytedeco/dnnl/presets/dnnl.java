@@ -69,6 +69,7 @@ public class dnnl implements InfoMapper {
                .put(new Info("DNNL_CPU_RUNTIME == DNNL_RUNTIME_THREADPOOL",
                              "DNNL_CPU_THREADING_RUNTIME == DNNL_RUNTIME_THREADPOOL",
                              "DNNL_GPU_RUNTIME == DNNL_RUNTIME_OCL",
+                             "DNNL_EXPERIMENTAL_PROFILING",
                              "DNNL_EXPERIMENTAL_SPARSE").define(false))
                .put(new Info("DNNL_RUNTIME_F32_VAL_REP").skip())
 

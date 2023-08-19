@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.13.0
+TENSORFLOW_VERSION=2.14.0-rc0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -87,7 +87,7 @@ case $PLATFORM in
         ;;
 esac
 
-"$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
+"$CMAKE" $CMAKE_FLAGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR=lib -DTFLITE_C_BUILD_SHARED_LIBS=OFF ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/c
 "$CMAKE" --build . --parallel $MAKEJ
 #"$CMAKE" --install .
 

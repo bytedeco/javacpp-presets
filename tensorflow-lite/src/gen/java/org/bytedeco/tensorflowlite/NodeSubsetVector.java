@@ -26,6 +26,8 @@ public class NodeSubsetVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public NodeSubset front() { return get(0); }
+    public NodeSubset back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef NodeSubset get(@Cast("size_t") long i);
     public native NodeSubsetVector put(@Cast("size_t") long i, NodeSubset value);
 

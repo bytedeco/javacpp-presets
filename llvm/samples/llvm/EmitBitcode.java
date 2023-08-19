@@ -69,7 +69,7 @@ public class EmitBitcode {
      */
     public static void EmitBitcodeAndRelocatableObject() {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
+//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeDisassembler();
@@ -157,7 +157,7 @@ public class EmitBitcode {
      */
     public static void EvaluateBitcode() {
         // Stage 1: Initialize LLVM components
-        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
+//        LLVMInitializeCore(LLVMGetGlobalPassRegistry());
         LLVMInitializeNativeAsmPrinter();
         LLVMInitializeNativeAsmParser();
         LLVMInitializeNativeTarget();
