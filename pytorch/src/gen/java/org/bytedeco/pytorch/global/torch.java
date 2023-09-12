@@ -449,9 +449,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../SharedModuleVector.java
 
 
-// Targeting ../SharedAnyModuleVector.java
-
-
 // Targeting ../StringTensorVector.java
 
 
@@ -5205,9 +5202,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <c10/util/in_place.h>
 
 // #include <type_traits>
-// Targeting ../MaybeOwnedTraitsGenericImplTensor.java
 
-
+/** MaybeOwnedTraits<T> describes how to borrow from T.  Here is how we
+ *  can implement borrowing from an arbitrary type T using a raw
+ *  pointer to const: */
 
 /** It is possible to eliminate the extra layer of indirection for
  *  borrows for some types that we control. For examples, see

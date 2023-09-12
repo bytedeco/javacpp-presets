@@ -37,11 +37,14 @@ public class LSTMCellImpl extends LSTMCellImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LSTMCellImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LSTMCellImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::LSTMCellImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LSTMCellImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
+  @SharedPtr @Name("std::make_shared<torch::nn::LSTMCellImpl>") private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
   public LSTMCellImpl(@Const @ByRef LSTMCellOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef LSTMCellOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::LSTMCellImpl>") private native void allocate(@Const @ByRef LSTMCellOptions options_);
 
   public native @ByVal T_TensorTensor_T forward(
         @Const @ByRef Tensor input,

@@ -65,29 +65,20 @@ public class Module extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Module(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Module(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Module position(long position) {
-        return (Module)super.position(position);
-    }
-    @Override public Module getPointer(long i) {
-        return new Module((Pointer)this).offsetAddress(i);
-    }
     public Module asModule() { return this; }
 
 
   /** Tells the base {@code Module} about the name of the submodule. */
   public Module(@StdString BytePointer name) { super((Pointer)null); allocate(name); }
-  @SharedPtr private native void allocate(@StdString BytePointer name);
+  @SharedPtr @Name("std::make_shared<JavaCPP_torch_0003a_0003ann_0003a_0003aModule>") private native void allocate(@StdString BytePointer name);
   public Module(@StdString String name) { super((Pointer)null); allocate(name); }
-  @SharedPtr private native void allocate(@StdString String name);
+  @SharedPtr @Name("std::make_shared<JavaCPP_torch_0003a_0003ann_0003a_0003aModule>") private native void allocate(@StdString String name);
 
   /** Constructs the module without immediate knowledge of the submodule's name.
    *  The name of the submodule is inferred via RTTI (if possible) the first
    *  time {@code .name()} is invoked. */
   public Module() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<JavaCPP_torch_0003a_0003ann_0003a_0003aModule>") private native void allocate();
 
   /** Returns the name of the {@code Module}.
    * 

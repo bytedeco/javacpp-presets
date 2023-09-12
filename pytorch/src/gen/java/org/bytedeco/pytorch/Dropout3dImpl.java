@@ -45,15 +45,9 @@ public class Dropout3dImpl extends Dropout3dImplBase {
     private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dropout3dImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Dropout3dImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Dropout3dImpl position(long position) {
-        return (Dropout3dImpl)super.position(position);
-    }
-    @Override public Dropout3dImpl getPointer(long i) {
-        return new Dropout3dImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public Dropout3dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::Dropout3dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@ByVal Tensor input);

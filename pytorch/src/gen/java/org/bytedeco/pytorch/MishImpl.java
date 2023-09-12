@@ -28,18 +28,12 @@ public class MishImpl extends MishImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public MishImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MishImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MishImpl(Pointer p) { super(p); }
-    @SharedPtr private native void allocate();
-    private native void allocateArray(long size);
-    @Override public MishImpl position(long position) {
-        return (MishImpl)super.position(position);
-    }
-    @Override public MishImpl getPointer(long i) {
-        return new MishImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::MishImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public MishImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MishImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

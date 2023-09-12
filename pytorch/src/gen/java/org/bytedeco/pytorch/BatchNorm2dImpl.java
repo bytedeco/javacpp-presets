@@ -43,5 +43,8 @@ public class BatchNorm2dImpl extends BatchNorm2dImplBase {
       private native void allocate(@Const @ByRef BatchNormOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchNorm2dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BatchNorm2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::BatchNorm2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 }

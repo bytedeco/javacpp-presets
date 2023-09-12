@@ -38,20 +38,14 @@ public class HuberLossImpl extends HuberLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HuberLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public HuberLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public HuberLossImpl position(long position) {
-        return (HuberLossImpl)super.position(position);
-    }
-    @Override public HuberLossImpl getPointer(long i) {
-        return new HuberLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public HuberLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::HuberLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HuberLossImpl(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::HuberLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::HuberLossOptions{}") HuberLossOptions options_);
   public HuberLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::HuberLossImpl>") private native void allocate();
 
   public native void reset();
 

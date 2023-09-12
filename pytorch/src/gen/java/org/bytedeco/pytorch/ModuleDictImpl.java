@@ -79,30 +79,24 @@ public class ModuleDictImpl extends ModuleDictImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModuleDictImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ModuleDictImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ModuleDictImpl position(long position) {
-        return (ModuleDictImpl)super.position(position);
-    }
-    @Override public ModuleDictImpl getPointer(long i) {
-        return new ModuleDictImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public ModuleDictImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ModuleDictImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ModuleDictImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::ModuleDictImpl>") private native void allocate();
 
   /** Constructs the {@code ModuleDict} from a list of string-Module pairs. */
   public ModuleDictImpl(
         @Const @ByRef StringSharedModuleVector modules) { super((Pointer)null); allocate(modules); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::ModuleDictImpl>") private native void allocate(
         @Const @ByRef StringSharedModuleVector modules);
 
   /** Constructs the {@code ModuleDict} from an {@code OrderedDict}. */
   public ModuleDictImpl(
         @Const @ByRef StringSharedModuleDict modules) { super((Pointer)null); allocate(modules); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::ModuleDictImpl>") private native void allocate(
         @Const @ByRef StringSharedModuleDict modules);
 
   /** Return the items in the {@code ModuleDict}. */

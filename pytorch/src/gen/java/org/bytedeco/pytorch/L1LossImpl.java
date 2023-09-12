@@ -37,20 +37,14 @@ public class L1LossImpl extends L1LossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L1LossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public L1LossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public L1LossImpl position(long position) {
-        return (L1LossImpl)super.position(position);
-    }
-    @Override public L1LossImpl getPointer(long i) {
-        return new L1LossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public L1LossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::L1LossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public L1LossImpl(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::L1LossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::L1LossOptions{}") L1LossOptions options_);
   public L1LossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::L1LossImpl>") private native void allocate();
 
   public native void reset();
 

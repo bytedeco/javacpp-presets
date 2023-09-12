@@ -211,7 +211,7 @@ public class torch implements LoadEnabled, InfoMapper {
         }
 
         infoMap.put(new Info("torch::nn::" + name + "Impl")) // Ensure qualified name is in Info when Cloneable<XImpl> inheritance is parsed (and before class XImpl is finished parsing)
-               .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr"))
+               .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr", "@Name(\"std::make_shared<torch::nn::" + name + "Impl>\")"))
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
                .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
                .put(new Info("torch::nn::" + name).skip());
@@ -220,7 +220,7 @@ public class torch implements LoadEnabled, InfoMapper {
             anyModuleConstructors +=
                 "public AnyModule(" + name + "Impl module) { super((Pointer)null); allocate(module); }\n" +
                 // We need a @Cast because AnyModule constructor is explicit
-                "@SharedPtr private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n";
+                "private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n";
             infoMap.put(new Info("torch::nn::SequentialImpl::push_back<torch::nn::" + name + "Impl>").javaNames("push_back"));
         }
     }
@@ -342,7 +342,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::MaybeOwned<at::Tensor>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::Tensor>&&\"}) @StdMove TensorMaybeOwned").pointerTypes("TensorMaybeOwned"))
             .put(new Info("c10::MaybeOwned<at::TensorBase>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::TensorBase>&&\"}) @StdMove TensorBaseMaybeOwned").pointerTypes("TensorBaseMaybeOwned"))
             .put(new Info("c10::MaybeOwnedTraits<at::Tensor>").pointerTypes("MaybeOwnedTraitsTensor"))
-            .put(new Info("c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >").pointerTypes("MaybeOwnedTraitsGenericImplTensor"))
             .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
             .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
@@ -648,8 +647,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<torch::nn::AnyModule>::iterator").pointerTypes("AnyModuleVector.Iterator"))
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >").pointerTypes("SharedModuleVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >::iterator").pointerTypes("SharedModuleVector.Iterator"))
-            .put(new Info("std::vector<std::shared_ptr<torch::nn::AnyModule> >").pointerTypes("SharedAnyModuleVector").define())
-            .put(new Info("std::vector<std::shared_ptr<torch::nn::AnyModule> >::iterator").pointerTypes("SharedAnyModuleVector.Iterator"))
             .put(new Info("std::vector<std::pair<std::string,torch::Tensor> >").pointerTypes("StringTensorVector").define())
             .put(new Info("std::vector<std::pair<std::string,torch::nn::Module> >").pointerTypes("StringModuleVector").define())
             .put(new Info("std::vector<std::pair<std::string,torch::nn::AnyModule> >").pointerTypes("StringAnyModuleVector").define())
@@ -1630,16 +1627,17 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// Classes handled with @SharedPtr
+        // Annotating the constructor is normally needed for all classes for which
+        // at least an API call takes a shared pointer of this class AND
+        // if instances of this class can be created from a Java constructor.
         for (PointerInfo pi : new PointerInfo[]{
             new PointerInfo("torch::jit::Graph"),
             new PointerInfo("torch::jit::Operator"),
             new PointerInfo("torch::jit::Resolver"),
-            new PointerInfo("at::Tensor"),
             new PointerInfo("torch::jit::tensorexpr::analysis::AccessInfo"),
             new PointerInfo("c10::ClassType"),
             new PointerInfo("c10::TensorType").otherCppNames("c10::TensorTypePtr", "at::TensorTypePtr", "torch::TensorTypePtr"),
             new PointerInfo("torch::autograd::FunctionPreHook"),
-            new PointerInfo("torch::nn::AnyModule"),
             new PointerInfo("torch::nn::Module"),
             new PointerInfo("const at::functorch::FuncTorchTLSBase"),
             new PointerInfo("const torch::jit::CompilationUnit"),
@@ -1657,7 +1655,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
             // Also annotate constructor of target class to ensure only one shared_ptr exists for each instance
             String n = pi.argumentNames[0].substring(pi.argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
-            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr"));
+            String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
+            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
         }
 
 

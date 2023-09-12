@@ -36,20 +36,14 @@ public class FlattenImpl extends FlattenImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlattenImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FlattenImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FlattenImpl position(long position) {
-        return (FlattenImpl)super.position(position);
-    }
-    @Override public FlattenImpl getPointer(long i) {
-        return new FlattenImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public FlattenImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::FlattenImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public FlattenImpl(@Const @ByRef(nullValue = "torch::nn::FlattenOptions{}") FlattenOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::FlattenOptions{}") FlattenOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::FlattenImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::FlattenOptions{}") FlattenOptions options_);
   public FlattenImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::FlattenImpl>") private native void allocate();
 
   public native void reset();
 

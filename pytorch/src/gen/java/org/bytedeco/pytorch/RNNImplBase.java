@@ -23,6 +23,9 @@ public class RNNImplBase extends RNNImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNNImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RNNImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::detail::RNNImplBase<torch::nn::RNNImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public RNNImplBase(@Const @ByRef RNNOptionsBase options_) { super((Pointer)null); allocate(options_); }
   private native void allocate(@Const @ByRef RNNOptionsBase options_);

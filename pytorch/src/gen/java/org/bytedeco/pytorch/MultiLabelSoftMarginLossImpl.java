@@ -40,22 +40,16 @@ public class MultiLabelSoftMarginLossImpl extends MultiLabelSoftMarginLossImplCl
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiLabelSoftMarginLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MultiLabelSoftMarginLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public MultiLabelSoftMarginLossImpl position(long position) {
-        return (MultiLabelSoftMarginLossImpl)super.position(position);
-    }
-    @Override public MultiLabelSoftMarginLossImpl getPointer(long i) {
-        return new MultiLabelSoftMarginLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public MultiLabelSoftMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MultiLabelSoftMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MultiLabelSoftMarginLossImpl(
         @ByVal(nullValue = "torch::nn::MultiLabelSoftMarginLossOptions{}") MultiLabelSoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiLabelSoftMarginLossImpl>") private native void allocate(
         @ByVal(nullValue = "torch::nn::MultiLabelSoftMarginLossOptions{}") MultiLabelSoftMarginLossOptions options_);
   public MultiLabelSoftMarginLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiLabelSoftMarginLossImpl>") private native void allocate();
 
   /** Pretty prints the {@code MultiLabelSoftMarginLoss} module into the given
    *  {@code stream}. */

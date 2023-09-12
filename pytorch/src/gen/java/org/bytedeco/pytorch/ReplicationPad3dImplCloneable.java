@@ -22,6 +22,9 @@ public class ReplicationPad3dImplCloneable extends Module {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReplicationPad3dImplCloneable(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ReplicationPad3dImplCloneable(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::Cloneable<torch::nn::ReplicationPad3dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
     @Override public Module asModule() { return asModule(this); }
     @Namespace public static native @SharedPtr @Name("SHARED_PTR_NAMESPACE::static_pointer_cast<torch::nn::Module, torch::nn::Cloneable<torch::nn::ReplicationPad3dImpl>>") Module asModule(@SharedPtr ReplicationPad3dImplCloneable pointer);
 

@@ -91,26 +91,20 @@ public class SequentialImpl extends SequentialImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SequentialImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SequentialImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SequentialImpl position(long position) {
-        return (SequentialImpl)super.position(position);
-    }
-    @Override public SequentialImpl getPointer(long i) {
-        return new SequentialImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public SequentialImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SequentialImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public SequentialImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate();
 
   /** Constructs the {@code Sequential} from a variadic list of modules. */
 
   /** Constructs the {@code Sequential} from an {@code OrderedDict} of named {@code AnyModule}s. */
   public SequentialImpl(
         @ByRef(true) StringAnyModuleDict ordered_dict) { super((Pointer)null); allocate(ordered_dict); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::SequentialImpl>") private native void allocate(
         @ByRef(true) StringAnyModuleDict ordered_dict);
 
   /** Constructs the {@code Sequential} from a braced-init-list of named {@code AnyModule}s.

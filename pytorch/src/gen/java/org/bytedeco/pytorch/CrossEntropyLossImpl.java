@@ -39,20 +39,14 @@ public class CrossEntropyLossImpl extends CrossEntropyLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CrossEntropyLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CrossEntropyLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CrossEntropyLossImpl position(long position) {
-        return (CrossEntropyLossImpl)super.position(position);
-    }
-    @Override public CrossEntropyLossImpl getPointer(long i) {
-        return new CrossEntropyLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public CrossEntropyLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CrossEntropyLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CrossEntropyLossImpl(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CrossEntropyLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CrossEntropyLossOptions{}") CrossEntropyLossOptions options_);
   public CrossEntropyLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::CrossEntropyLossImpl>") private native void allocate();
 
   public native void reset();
 

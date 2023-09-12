@@ -38,11 +38,14 @@ public class RNNCellImpl extends RNNCellImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNNCellImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RNNCellImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::RNNCellImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public RNNCellImpl(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size) { super((Pointer)null); allocate(input_size, hidden_size); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
+  @SharedPtr @Name("std::make_shared<torch::nn::RNNCellImpl>") private native void allocate(@Cast("int64_t") long input_size, @Cast("int64_t") long hidden_size);
   public RNNCellImpl(@Const @ByRef RNNCellOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef RNNCellOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::RNNCellImpl>") private native void allocate(@Const @ByRef RNNCellOptions options_);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input, @ByVal(nullValue = "torch::Tensor{}") Tensor hx);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

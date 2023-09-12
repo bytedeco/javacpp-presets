@@ -28,18 +28,12 @@ public class SiLUImpl extends SiLUImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public SiLUImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SiLUImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SiLUImpl(Pointer p) { super(p); }
-    @SharedPtr private native void allocate();
-    private native void allocateArray(long size);
-    @Override public SiLUImpl position(long position) {
-        return (SiLUImpl)super.position(position);
-    }
-    @Override public SiLUImpl getPointer(long i) {
-        return new SiLUImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::SiLUImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public SiLUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SiLUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

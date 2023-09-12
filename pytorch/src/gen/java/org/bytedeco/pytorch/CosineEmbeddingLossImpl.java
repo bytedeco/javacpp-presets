@@ -41,20 +41,14 @@ public class CosineEmbeddingLossImpl extends CosineEmbeddingLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CosineEmbeddingLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CosineEmbeddingLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CosineEmbeddingLossImpl position(long position) {
-        return (CosineEmbeddingLossImpl)super.position(position);
-    }
-    @Override public CosineEmbeddingLossImpl getPointer(long i) {
-        return new CosineEmbeddingLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public CosineEmbeddingLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CosineEmbeddingLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CosineEmbeddingLossImpl(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CosineEmbeddingLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CosineEmbeddingLossOptions{}") CosineEmbeddingLossOptions options_);
   public CosineEmbeddingLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::CosineEmbeddingLossImpl>") private native void allocate();
 
   public native void reset();
 

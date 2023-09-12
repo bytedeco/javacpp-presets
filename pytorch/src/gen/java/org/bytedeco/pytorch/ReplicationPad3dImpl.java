@@ -43,5 +43,8 @@ public class ReplicationPad3dImpl extends ReplicationPad3dImplBase {
     private native void allocate(@Const @ByRef ReplicationPad3dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReplicationPad3dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ReplicationPad3dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ReplicationPad3dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 }

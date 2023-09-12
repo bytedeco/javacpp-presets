@@ -36,11 +36,14 @@ public class ThresholdImpl extends ThresholdImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThresholdImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ThresholdImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ThresholdImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ThresholdImpl(double threshold, double value) { super((Pointer)null); allocate(threshold, value); }
-  @SharedPtr private native void allocate(double threshold, double value);
+  @SharedPtr @Name("std::make_shared<torch::nn::ThresholdImpl>") private native void allocate(double threshold, double value);
   public ThresholdImpl(@Const @ByRef ThresholdOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef ThresholdOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::ThresholdImpl>") private native void allocate(@Const @ByRef ThresholdOptions options_);
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 
