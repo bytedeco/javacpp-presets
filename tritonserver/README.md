@@ -67,6 +67,20 @@ Now, this `models` directory will be our model repository.
  $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
  $ tar zxvf apache-maven-3.8.4-bin.tar.gz
  $ export PATH=/opt/tritonserver/apache-maven-3.8.4/bin:$PATH
+ # The CAPI Bindings will also need some additional dependencies
+ $ apt update && apt install -y gpg \
+ $                             wget \
+ $                             rapidjson-dev \
+ $                             software-properties-common && \
+ $ wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | \
+ $     gpg --dearmor - |  \
+ $     tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
+ $ . /etc/os-release && \
+ $ echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $UBUNTU_CODENAME main" | \
+ $ tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+ $ apt-get update && \
+ $ apt-get install -y --no-install-recommends cmake cmake-data
+
  $ git clone https://github.com/bytedeco/javacpp-presets.git
  $ cd javacpp-presets
 ```
