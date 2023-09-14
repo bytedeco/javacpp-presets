@@ -40,20 +40,14 @@ public class SmoothL1LossImpl extends SmoothL1LossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SmoothL1LossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SmoothL1LossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SmoothL1LossImpl position(long position) {
-        return (SmoothL1LossImpl)super.position(position);
-    }
-    @Override public SmoothL1LossImpl getPointer(long i) {
-        return new SmoothL1LossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public SmoothL1LossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SmoothL1LossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SmoothL1LossImpl(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options) { super((Pointer)null); allocate(options); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options);
+  @SharedPtr @Name("std::make_shared<torch::nn::SmoothL1LossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::SmoothL1LossOptions{}") SmoothL1LossOptions options);
   public SmoothL1LossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::SmoothL1LossImpl>") private native void allocate();
 
   public native void reset();
 

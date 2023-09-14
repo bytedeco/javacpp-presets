@@ -185,7 +185,8 @@ public class FunctionSchema extends Pointer {
   public native @Cast("bool") boolean is_aliasing(@Const @ByRef SchemaArgument argument);
   public native @Cast("bool") boolean is_mutable();
   public native @Cast("bool") boolean is_mutable(@Const @ByRef SchemaArgument argument);
-  public native @Cast("bool") boolean is_mutable(@ByVal @Cast("c10::string_view*") Pointer name);
+  public native @Cast("bool") boolean is_mutable(@StringView BytePointer name);
+  public native @Cast("bool") boolean is_mutable(@StringView String name);
 
   // Returns whether lhs and rhs may alias directly.
   // This does not account for cases where lhs or rhs are a container that
@@ -218,7 +219,8 @@ public class FunctionSchema extends Pointer {
   public native @StdVector Argument getCorrectList(SchemaArgType type);
   public native @StdVector Argument getCorrectList(@Cast("c10::SchemaArgType") int type);
 
-  public native @ByVal IntOptional argumentIndexWithName(@ByVal @Cast("c10::string_view*") Pointer name);
+  public native @ByVal IntOptional argumentIndexWithName(@StringView BytePointer name);
+  public native @ByVal IntOptional argumentIndexWithName(@StringView String name);
   public native @ByVal FunctionSchema cloneWithName(@StdString BytePointer name, @StdString BytePointer overload_name);
   public native @ByVal FunctionSchema cloneWithName(@StdString String name, @StdString String overload_name);
   public native @ByVal FunctionSchema cloneWithArguments(@StdVector Argument new_arguments);
@@ -261,7 +263,7 @@ public class FunctionSchema extends Pointer {
   public native void setAliasAnalysis(AliasAnalysisKind v);
   public native void setAliasAnalysis(@Cast("c10::AliasAnalysisKind") byte v);
 
-  public native @ByVal @Cast("c10::optional<c10::string_view>*") Pointer getNamespace();
+  public native @ByVal StringViewOptional getNamespace();
 
   // Returns true if we successfully set the namespace (as there
   // was none set, and false otherwise)

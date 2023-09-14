@@ -22,6 +22,9 @@ public class AdaptiveMaxPool2dImplBase extends AdaptiveMaxPool2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveMaxPool2dImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AdaptiveMaxPool2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::AdaptiveMaxPoolImpl<2,torch::ExpandingArrayWithOptionalElem<2>,torch::nn::AdaptiveMaxPool2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public AdaptiveMaxPool2dImplBase(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size) { super((Pointer)null); allocate(output_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArrayWithOptionalElem<2>*") LongOptional output_size);

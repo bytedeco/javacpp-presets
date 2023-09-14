@@ -37,11 +37,14 @@ public class GroupNormImpl extends GroupNormImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GroupNormImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GroupNormImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::GroupNormImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GroupNormImpl(@Cast("int64_t") long num_groups, @Cast("int64_t") long num_channels) { super((Pointer)null); allocate(num_groups, num_channels); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long num_groups, @Cast("int64_t") long num_channels);
+  @SharedPtr @Name("std::make_shared<torch::nn::GroupNormImpl>") private native void allocate(@Cast("int64_t") long num_groups, @Cast("int64_t") long num_channels);
   public GroupNormImpl(@Const @ByRef GroupNormOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef GroupNormOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::GroupNormImpl>") private native void allocate(@Const @ByRef GroupNormOptions options_);
 
   public native void reset();
 

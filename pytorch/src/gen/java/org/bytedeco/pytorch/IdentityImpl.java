@@ -28,18 +28,12 @@ public class IdentityImpl extends IdentityImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public IdentityImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public IdentityImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IdentityImpl(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public IdentityImpl position(long position) {
-        return (IdentityImpl)super.position(position);
-    }
-    @Override public IdentityImpl getPointer(long i) {
-        return new IdentityImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::IdentityImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public IdentityImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::IdentityImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native void reset();
 

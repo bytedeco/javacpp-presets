@@ -22,6 +22,9 @@ public class InstanceNorm1dImplBaseBase extends InstanceNorm1dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InstanceNorm1dImplBaseBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public InstanceNorm1dImplBaseBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::NormImplBase<1,torch::nn::InstanceNorm1dImpl,torch::nn::InstanceNormOptions>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native void reset();

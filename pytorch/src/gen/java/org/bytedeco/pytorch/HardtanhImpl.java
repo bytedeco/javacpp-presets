@@ -37,20 +37,14 @@ public class HardtanhImpl extends HardtanhImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HardtanhImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public HardtanhImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public HardtanhImpl position(long position) {
-        return (HardtanhImpl)super.position(position);
-    }
-    @Override public HardtanhImpl getPointer(long i) {
-        return new HardtanhImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public HardtanhImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::HardtanhImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HardtanhImpl(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::HardtanhImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::HardtanhOptions{}") HardtanhOptions options_);
   public HardtanhImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::HardtanhImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

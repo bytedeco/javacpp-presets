@@ -203,6 +203,12 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_TypePtrLong_TOptional.java
 
 
+// Targeting ../StringViewOptional.java
+
+
+// Targeting ../StringViewVectorOptional.java
+
+
 // Targeting ../ExampleVectorOptional.java
 
 
@@ -356,6 +362,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringVector.java
 
 
+// Targeting ../StringViewVector.java
+
+
 // Targeting ../StringLongVector.java
 
 
@@ -438,9 +447,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../SharedModuleVector.java
-
-
-// Targeting ../SharedAnyModuleVector.java
 
 
 // Targeting ../StringTensorVector.java
@@ -1494,64 +1500,6 @@ public static final int HAS_DEMANGLE = 0;
  // namespace c10
 
 
-// Parsed from c10/util/string_view.h
-
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/reverse_iterator.h>
-// #include <algorithm>
-// #include <cstring>
-// #include <limits>
-// #include <stdexcept>
-// #include <string>
-
-// #if __cpp_lib_string_view
-// #include <string_view>
-// #define C10_HAS_STD_STRING_VIEW() 1
-// #define C10_HAS_STD_EXPERIMENTAL_STRING_VIEW() 0
-// #elif defined(__has_include)
-// #if __has_include(<experimental/string_view>)
-// libc++ 7.0 has experimental/string_view but it's just a #error
-// #if !defined(_LIBCPP_VERSION) || (_LIBCPP_VERSION < 7000)
-// #include <experimental/string_view>
-// #endif
-// #if __cpp_lib_experimental_string_view
-// #define C10_HAS_STD_STRING_VIEW() 0
-// #define C10_HAS_STD_EXPERIMENTAL_STRING_VIEW() 1
-// #endif
-// #endif
-// #endif
-
-// #ifndef C10_HAS_STD_STRING_VIEW
-// #define C10_HAS_STD_STRING_VIEW() 0
-// #endif
-// #ifndef C10_HAS_STD_EXPERIMENTAL_STRING_VIEW
-// #define C10_HAS_STD_EXPERIMENTAL_STRING_VIEW() 0
-// #endif
-
-// #if C10_CLANG_HAS_WARNING("-Wdeprecated")
-// #endif
-
-/**
- * Reimplementation of std::string_view for C++11.
- * Implemented following the interface definition in
- * https://en.cppreference.com/w/cpp/string/basic_string_view
- * See there for the API documentation.
- *
- * Difference: We don't have a Traits template parameter because
- * std::char_traits isn't constexpr and we'd have to reimplement
- * std::char_traits if we wanted to use it with our constexpr basic_string_view.
- */
-
-
-
- // namespace c10
- // namespace std
-
-
-
 // Parsed from c10/util/StringUtil.h
 
 // #ifndef C10_UTIL_STRINGUTIL_H_
@@ -1596,7 +1544,8 @@ public static final int HAS_DEMANGLE = 0;
 
 // Replace all occurrences of "from" substring to "to" string.
 // Returns number of replacements
-@Namespace("c10") public static native @Cast("size_t") long ReplaceAll(@StdString @ByRef BytePointer s, @ByVal @Cast("c10::string_view*") Pointer from, @ByVal @Cast("c10::string_view*") Pointer to);
+@Namespace("c10") public static native @Cast("size_t") long ReplaceAll(@StdString @ByRef BytePointer s, @StringView BytePointer from, @StringView BytePointer to);
+@Namespace("c10") public static native @Cast("size_t") long ReplaceAll(@StdString @ByRef BytePointer s, @StringView String from, @StringView String to);
 // Targeting ../SourceLocation.java
 
 
@@ -1606,7 +1555,8 @@ public static final int HAS_DEMANGLE = 0;
 // unix isprint but insensitive to locale
 @Namespace("c10") public static native @Cast("bool") boolean isPrint(@Cast("char") byte s);
 
-@Namespace("c10") public static native void printQuotedString(@Cast("std::ostream*") @ByRef Pointer stmt, @ByVal @Cast("const c10::string_view*") Pointer str);
+@Namespace("c10") public static native void printQuotedString(@Cast("std::ostream*") @ByRef Pointer stmt, @StringView BytePointer str);
+@Namespace("c10") public static native void printQuotedString(@Cast("std::ostream*") @ByRef Pointer stmt, @StringView String str);
 
  // namespace c10
 
@@ -5252,9 +5202,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // #include <c10/util/in_place.h>
 
 // #include <type_traits>
-// Targeting ../MaybeOwnedTraitsGenericImplTensor.java
 
-
+/** MaybeOwnedTraits<T> describes how to borrow from T.  Here is how we
+ *  can implement borrowing from an arbitrary type T using a raw
+ *  pointer to const: */
 
 /** It is possible to eliminate the extra layer of indirection for
  *  borrows for some types that we control. For examples, see
@@ -5549,7 +5500,8 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 @Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@Cast("const char*") BytePointer str, @Cast("size_t") long size);
 @Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(String str, @Cast("size_t") long size);
 
-@Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@ByVal @Cast("c10::string_view*") Pointer str);
+@Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@StringView BytePointer str);
+@Namespace("c10::util") public static native @Const @ByVal crc64_t crc64(@StringView String str);
  // namespace util
  // namespace c10
 
@@ -5605,10 +5557,14 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
 // #error "You're running a too old version of Clang. We need Clang 4 or later."
 // #endif
 
-@Namespace("c10::util::detail") public static native @ByVal @Cast("const c10::string_view*") Pointer extract(
-    @ByVal @Cast("c10::string_view*") Pointer prefix,
-    @ByVal @Cast("c10::string_view*") Pointer suffix,
-    @ByVal @Cast("c10::string_view*") Pointer str);
+@Namespace("c10::util::detail") public static native @StringView BytePointer extract(
+    @StringView BytePointer prefix,
+    @StringView BytePointer suffix,
+    @StringView BytePointer str);
+@Namespace("c10::util::detail") public static native @StringView String extract(
+    @StringView String prefix,
+    @StringView String suffix,
+    @StringView String str);
 
 // #if !defined(__CUDA_ARCH__)
 // #endif
@@ -15168,10 +15124,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 }
 
  // namespace at
-
-// Targeting ../StringView.java
-
-
+ // namespace std
 
 // Soft limit on the number of callbacks to use;
 @Namespace("at") @MemberGetter public static native @Cast("const std::size_t") long kSoftLimitCallbacks();
@@ -15436,7 +15389,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <ATen/record_function.h>
 // #endif
 
-@Namespace("c10::impl") public static native @Cast("const bool") boolean allowlist_contains(@ByVal @Cast("c10::string_view*") Pointer allowlist, @ByVal @Cast("c10::string_view*") Pointer item);  // Forward Declare
+@Namespace("c10::impl") public static native @Cast("const bool") boolean allowlist_contains(@StringView BytePointer allowlist, @StringView BytePointer item);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean allowlist_contains(@StringView String allowlist, @StringView String item);  // Forward Declare
 
 /**
  * In selective build mode returns true/false depending on whether a build
@@ -15489,19 +15443,23 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 // Returns true iff the given op name is on the allowlist
 // and should be registered
-@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_check(@ByVal @Cast("c10::string_view*") Pointer op_name);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_check(@StringView BytePointer op_name);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_check(@StringView String op_name);
 
 // Returns true iff the given schema string is on the allowlist
 // and should be registered
-@Namespace("c10::impl") public static native @Cast("const bool") boolean schema_allowlist_check(@ByVal @Cast("c10::string_view*") Pointer schema);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean schema_allowlist_check(@StringView BytePointer schema);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean schema_allowlist_check(@StringView String schema);
 
 // Returns true iff the given custom class name is on the allowlist
 // and should be registered
-@Namespace("c10::impl") public static native @Cast("const bool") boolean custom_class_allowlist_check(@ByVal @Cast("c10::string_view*") Pointer custom_class_name);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean custom_class_allowlist_check(@StringView BytePointer custom_class_name);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean custom_class_allowlist_check(@StringView String custom_class_name);
 
 // schema_allowlist_check() implicitly depends on a macro, TORCH_OPERATOR_WHITELIST.
 // Add this API to pass arbitrary allowlist.
-@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_contains_name_in_schema(@ByVal @Cast("c10::string_view*") Pointer allowlist, @ByVal @Cast("c10::string_view*") Pointer schema);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_contains_name_in_schema(@StringView BytePointer allowlist, @StringView BytePointer schema);
+@Namespace("c10::impl") public static native @Cast("const bool") boolean op_allowlist_contains_name_in_schema(@StringView String allowlist, @StringView String schema);
 
 // Returns true iff the given dispatch key is on the allowlist
 // and should be registered.  When we turn this on, the list of valid
@@ -23225,10 +23183,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
 
 // aten::conv1d.padding(Tensor input, Tensor weight, Tensor? bias=None, int[1] stride=1, str padding="valid", int[1] dilation=1, int groups=1) -> Tensor
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding);
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv1d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding);
 
 
 
@@ -23263,10 +23221,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
 
 // aten::conv2d.padding(Tensor input, Tensor weight, Tensor? bias=None, int[2] stride=1, str padding="valid", int[2] dilation=1, int groups=1) -> Tensor
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding);
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv2d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding);
 
 
 
@@ -23301,10 +23259,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional bias, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal(nullValue = "at::IntArrayRef(0)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
 
 // aten::conv3d.padding(Tensor input, Tensor weight, Tensor? bias=None, int[3] stride=1, str padding="valid", int[3] dilation=1, int groups=1) -> Tensor
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @ByVal @Cast("c10::string_view*") Pointer padding);
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
-@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @ByVal @Cast("c10::string_view*") Pointer padding);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding, @ByVal(nullValue = "at::IntArrayRef(1)") LongArrayRef dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal LongArrayRef stride, @StringView BytePointer padding);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding, @ByVal(nullValue = "at::IntArrayRef(1)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dilation, @Cast("int64_t") long groups/*=1*/);
+@Namespace("at") public static native @ByVal Tensor conv3d(@Const @ByRef Tensor input, @Const @ByRef Tensor weight, @Const @ByRef TensorOptional bias, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] stride, @StringView String padding);
 
 
 
@@ -25573,18 +25531,18 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByRef Tensor out);
 
 // aten::div.Tensor_mode(Tensor self, Tensor other, *, str? rounding_mode) -> Tensor
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode);
 
 // aten::div.out_mode(Tensor self, Tensor other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode);
 // aten::div.out_mode(Tensor self, Tensor other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode, @ByRef Tensor out);
 
 // aten::div.Scalar(Tensor self, Scalar other) -> Tensor
 @Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 
 // aten::div.Scalar_mode(Tensor self, Scalar other, *, str? rounding_mode) -> Tensor
-@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByVal Tensor div(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringViewOptional rounding_mode);
 
 // aten::div.Scalar_out(Tensor self, Scalar other, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other);
@@ -25592,9 +25550,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByRef Tensor out);
 
 // aten::div.Scalar_mode_out(Tensor self, Scalar other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByRef Tensor div_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringViewOptional rounding_mode);
 // aten::div.Scalar_mode_out(Tensor self, Scalar other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor div_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringViewOptional rounding_mode, @ByRef Tensor out);
 
 
 
@@ -25635,15 +25593,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other);
 
 // aten::divide.Tensor_mode(Tensor self, Tensor other, *, str? rounding_mode) -> Tensor
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode);
 
 // aten::divide.out_mode(Tensor self, Tensor other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByRef Tensor divide_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode);
 // aten::divide.out_mode(Tensor self, Tensor other, *, str? rounding_mode, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor divide_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor other, @ByVal StringViewOptional rounding_mode, @ByRef Tensor out);
 
 // aten::divide.Scalar_mode(Tensor self, Scalar other, *, str? rounding_mode) -> Tensor
-@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer rounding_mode);
+@Namespace("at") public static native @ByVal Tensor divide(@Const @ByRef Tensor self, @Const @ByRef Scalar other, @ByVal StringViewOptional rounding_mode);
 
 
 
@@ -25810,9 +25768,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::einsum(str equation, Tensor[] tensors, *, int[]? path=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional path);
-@Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors);
-@Namespace("at") public static native @ByVal Tensor einsum(@ByVal @Cast("c10::string_view*") Pointer equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... path);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView BytePointer equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional path);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView BytePointer equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... path);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal @Cast("at::TensorList*") TensorArrayRef tensors);
 
 
 
@@ -27370,14 +27329,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_fft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_fft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fft(@Const @ByRef Tensor self);
 
 // aten::fft_fft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_fft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27407,17 +27366,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_fft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_fft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_fft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27486,17 +27445,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_fftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_fftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_fftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_fftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_fftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27558,14 +27517,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_hfft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_hfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_hfft(@Const @ByRef Tensor self);
 
 // aten::fft_hfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_hfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_hfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_hfft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_hfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_hfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_hfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27595,17 +27554,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_hfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_hfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_hfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
 
 
 
@@ -27635,17 +27594,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_hfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_hfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_hfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_hfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_hfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
 
 
 
@@ -27675,14 +27634,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ifft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ifft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifft(@Const @ByRef Tensor self);
 
 // aten::fft_ifft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_ifft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27712,17 +27671,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ifft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_ifft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_ifft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27752,17 +27711,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ifftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ifftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_ifftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_ifftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ifftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27824,14 +27783,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ihfft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ihfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ihfft(@Const @ByRef Tensor self);
 
 // aten::fft_ihfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ihfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_ihfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_ihfft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_ihfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_ihfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_ihfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27861,17 +27820,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ihfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_ihfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_ihfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
 
 
 
@@ -27901,17 +27860,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_ihfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_ihfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_ihfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_out(@Const @ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_ihfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
-@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
+@Namespace("at") public static native @Const @ByRef Tensor fft_ihfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @Const @ByRef Tensor out);
 
 
 
@@ -27941,14 +27900,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_irfft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_irfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfft(@Const @ByRef Tensor self);
 
 // aten::fft_irfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_irfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -27978,17 +27937,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_irfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_irfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_irfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -28018,17 +27977,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_irfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_irfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_irfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_irfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_irfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -28058,14 +28017,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_rfft(Tensor self, int? n=None, int dim=-1, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_rfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfft(@Const @ByRef Tensor self);
 
 // aten::fft_rfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n, @Cast("int64_t") long dim/*=-1*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfft_out(@ByRef Tensor out, @Const @ByRef Tensor self);
 // aten::fft_rfft.out(Tensor self, int? n=None, int dim=-1, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfft_outf(@Const @ByRef Tensor self, @ByVal LongOptional n, @Cast("int64_t") long dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -28095,17 +28054,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_rfft2(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfft2(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_rfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_rfft2.out(Tensor self, int[1]? s=None, int[1] dim=[-2,-1], str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRef dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfft2_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -28174,17 +28133,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::fft_rfftn(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByVal Tensor fft_rfftn(@Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 // aten::fft_rfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 // aten::fft_rfftn.out(Tensor self, int[1]? s=None, int[1]? dim=None, str? norm=None, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal LongArrayRefOptional s, @ByVal LongArrayRefOptional dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor fft_rfftn_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @ByVal StringViewOptional norm, @ByRef Tensor out);
 
 
 
@@ -29269,16 +29228,22 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::from_file(str filename, bool? shared=None, int? size=0, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor from_file(@ByVal @Cast("c10::string_view*") Pointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor from_file(@ByVal @Cast("c10::string_view*") Pointer filename);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView BytePointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView BytePointer filename);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView String filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView String filename);
 // aten::from_file(str filename, bool? shared=None, int? size=0, *, ScalarType? dtype=None, Layout? layout=None, Device? device=None, bool? pin_memory=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor from_file(@ByVal @Cast("c10::string_view*") Pointer filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView BytePointer filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
+@Namespace("at") public static native @ByVal Tensor from_file(@StringView String filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByVal ScalarTypeOptional dtype, @ByVal LayoutOptional layout, @ByVal DeviceOptional device, @ByVal BoolOptional pin_memory);
 
 // aten::from_file.out(str filename, bool? shared=None, int? size=0, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @ByVal @Cast("c10::string_view*") Pointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size);
-@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @ByVal @Cast("c10::string_view*") Pointer filename);
+@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @StringView BytePointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size);
+@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @StringView BytePointer filename);
+@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @StringView String filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size);
+@Namespace("at") public static native @ByRef Tensor from_file_out(@ByRef Tensor out, @StringView String filename);
 // aten::from_file.out(str filename, bool? shared=None, int? size=0, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor from_file_outf(@ByVal @Cast("c10::string_view*") Pointer filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor from_file_outf(@StringView BytePointer filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor from_file_outf(@StringView String filename, @ByVal BoolOptional shared, @ByVal LongOptional size, @ByRef Tensor out);
 
 
 
@@ -29618,18 +29583,22 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::gelu.out(Tensor self, *, str approximate='none', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gelu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"none\")") @Cast("c10::string_view*") Pointer approximate);
+@Namespace("at") public static native @ByRef Tensor gelu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer approximate/*="none"*/);
 @Namespace("at") public static native @ByRef Tensor gelu_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor gelu_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String approximate/*="none"*/);
 // aten::gelu.out(Tensor self, *, str approximate='none', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gelu_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer approximate, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor gelu_outf(@Const @ByRef Tensor self, @StringView BytePointer approximate, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor gelu_outf(@Const @ByRef Tensor self, @StringView String approximate, @ByRef Tensor out);
 
 // aten::gelu_(Tensor(a!) self, *, str approximate='none') -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gelu_(@ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"none\")") @Cast("c10::string_view*") Pointer approximate);
+@Namespace("at") public static native @ByRef Tensor gelu_(@ByRef Tensor self, @StringView BytePointer approximate/*="none"*/);
 @Namespace("at") public static native @ByRef Tensor gelu_(@ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor gelu_(@ByRef Tensor self, @StringView String approximate/*="none"*/);
 
 // aten::gelu(Tensor self, *, str approximate='none') -> Tensor
-@Namespace("at") public static native @ByVal Tensor gelu(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"none\")") @Cast("c10::string_view*") Pointer approximate);
+@Namespace("at") public static native @ByVal Tensor gelu(@Const @ByRef Tensor self, @StringView BytePointer approximate/*="none"*/);
 @Namespace("at") public static native @ByVal Tensor gelu(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor gelu(@Const @ByRef Tensor self, @StringView String approximate/*="none"*/);
 
 
 
@@ -29659,14 +29628,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::gelu_backward.grad_input(Tensor grad_output, Tensor self, *, str approximate='none', Tensor(a!) grad_input) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gelu_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"none\")") @Cast("c10::string_view*") Pointer approximate);
+@Namespace("at") public static native @ByRef Tensor gelu_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView BytePointer approximate/*="none"*/);
 @Namespace("at") public static native @ByRef Tensor gelu_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor gelu_backward_out(@ByRef Tensor grad_input, @Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView String approximate/*="none"*/);
 // aten::gelu_backward.grad_input(Tensor grad_output, Tensor self, *, str approximate='none', Tensor(a!) grad_input) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor gelu_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer approximate, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByRef Tensor gelu_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView BytePointer approximate, @ByRef Tensor grad_input);
+@Namespace("at") public static native @ByRef Tensor gelu_backward_outf(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView String approximate, @ByRef Tensor grad_input);
 
 // aten::gelu_backward(Tensor grad_output, Tensor self, *, str approximate='none') -> Tensor
-@Namespace("at") public static native @ByVal Tensor gelu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"none\")") @Cast("c10::string_view*") Pointer approximate);
+@Namespace("at") public static native @ByVal Tensor gelu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView BytePointer approximate/*="none"*/);
 @Namespace("at") public static native @ByVal Tensor gelu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor gelu_backward(@Const @ByRef Tensor grad_output, @Const @ByRef Tensor self, @StringView String approximate/*="none"*/);
 
 
 
@@ -31598,14 +31570,19 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::index_reduce.out(Tensor self, int dim, Tensor index, Tensor source, str reduce, *, bool include_self=True, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self/*=true*/);
-@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView BytePointer reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView String reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByRef Tensor index_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView String reduce);
 // aten::index_reduce.out(Tensor self, int dim, Tensor index, Tensor source, str reduce, *, bool include_self=True, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor index_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor index_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView BytePointer reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor index_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView String reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
 
 // aten::index_reduce(Tensor self, int dim, Tensor index, Tensor source, str reduce, *, bool include_self=True) -> Tensor
-@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self/*=true*/);
-@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView BytePointer reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView String reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByVal Tensor index_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor source, @StringView String reduce);
 
 
 
@@ -33487,12 +33464,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByRef Tensor out);
 
 // aten::linalg_cond.p_str(Tensor self, str p) -> Tensor
-@Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer p);
+@Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @StringView BytePointer p);
+@Namespace("at") public static native @ByVal Tensor linalg_cond(@Const @ByRef Tensor self, @StringView String p);
 
 // aten::linalg_cond.p_str_out(Tensor self, str p, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer p);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer p);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String p);
 // aten::linalg_cond.p_str_out(Tensor self, str p, *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer p, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @StringView BytePointer p, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_cond_outf(@Const @ByRef Tensor self, @StringView String p, @ByRef Tensor out);
 
 
 
@@ -33660,14 +33640,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_eigh(Tensor self, str UPLO="L") -> (Tensor eigenvalues, Tensor eigenvectors)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"L\")") @Cast("c10::string_view*") Pointer UPLO);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh(@Const @ByRef Tensor self, @StringView BytePointer UPLO/*="L"*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh(@Const @ByRef Tensor self, @StringView String UPLO/*="L"*/);
 
 // aten::linalg_eigh.eigvals(Tensor self, str UPLO="L", *, Tensor(a!) eigvals, Tensor(b!) eigvecs) -> (Tensor(a!) eigenvalues, Tensor(b!) eigenvectors)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_out(@ByRef Tensor eigvals, @ByRef Tensor eigvecs, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"L\")") @Cast("c10::string_view*") Pointer UPLO);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_out(@ByRef Tensor eigvals, @ByRef Tensor eigvecs, @Const @ByRef Tensor self, @StringView BytePointer UPLO/*="L"*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_out(@ByRef Tensor eigvals, @ByRef Tensor eigvecs, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_out(@ByRef Tensor eigvals, @ByRef Tensor eigvecs, @Const @ByRef Tensor self, @StringView String UPLO/*="L"*/);
 // aten::linalg_eigh.eigvals(Tensor self, str UPLO="L", *, Tensor(a!) eigvals, Tensor(b!) eigvecs) -> (Tensor(a!) eigenvalues, Tensor(b!) eigenvectors)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer UPLO, @ByRef Tensor eigvals, @ByRef Tensor eigvecs);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_outf(@Const @ByRef Tensor self, @StringView BytePointer UPLO, @ByRef Tensor eigvals, @ByRef Tensor eigvecs);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_eigh_outf(@Const @ByRef Tensor self, @StringView String UPLO, @ByRef Tensor eigvals, @ByRef Tensor eigvecs);
 
 
 
@@ -33732,14 +33715,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_eigvalsh(Tensor self, str UPLO="L") -> Tensor
-@Namespace("at") public static native @ByVal Tensor linalg_eigvalsh(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"L\")") @Cast("c10::string_view*") Pointer UPLO);
+@Namespace("at") public static native @ByVal Tensor linalg_eigvalsh(@Const @ByRef Tensor self, @StringView BytePointer UPLO/*="L"*/);
 @Namespace("at") public static native @ByVal Tensor linalg_eigvalsh(@Const @ByRef Tensor self);
+@Namespace("at") public static native @ByVal Tensor linalg_eigvalsh(@Const @ByRef Tensor self, @StringView String UPLO/*="L"*/);
 
 // aten::linalg_eigvalsh.out(Tensor self, str UPLO="L", *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"L\")") @Cast("c10::string_view*") Pointer UPLO);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer UPLO/*="L"*/);
 @Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_out(@ByRef Tensor out, @Const @ByRef Tensor self);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String UPLO/*="L"*/);
 // aten::linalg_eigvalsh.out(Tensor self, str UPLO="L", *, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer UPLO, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_outf(@Const @ByRef Tensor self, @StringView BytePointer UPLO, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_eigvalsh_outf(@Const @ByRef Tensor self, @StringView String UPLO, @ByRef Tensor out);
 
 
 
@@ -33987,14 +33973,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_lstsq(Tensor self, Tensor b, float? rcond=None, *, str? driver=None) -> (Tensor solution, Tensor residuals, Tensor rank, Tensor singular_values)
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq(@Const @ByRef Tensor self, @Const @ByRef Tensor b);
 
 // aten::linalg_lstsq.out(Tensor self, Tensor b, float? rcond=None, *, str? driver=None, Tensor(a!) solution, Tensor(b!) residuals, Tensor(c!) rank, Tensor(d!) singular_values) -> (Tensor(a!) solution, Tensor(b!) residuals, Tensor(c!) rank, Tensor(d!) singular_values)
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq_out(@ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values, @Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq_out(@ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values, @Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional rcond, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq_out(@ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values, @Const @ByRef Tensor self, @Const @ByRef Tensor b);
 // aten::linalg_lstsq.out(Tensor self, Tensor b, float? rcond=None, *, str? driver=None, Tensor(a!) solution, Tensor(b!) residuals, Tensor(c!) rank, Tensor(d!) singular_values) -> (Tensor(a!) solution, Tensor(b!) residuals, Tensor(c!) rank, Tensor(d!) singular_values)
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal DoubleOptional rcond, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver, @ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensor_T linalg_lstsq_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor b, @ByVal DoubleOptional rcond, @ByVal StringViewOptional driver, @ByRef Tensor solution, @ByRef Tensor residuals, @ByRef Tensor rank, @ByRef Tensor singular_values);
 
 
 
@@ -34255,17 +34241,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @Const @ByRef Scalar ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::linalg_matrix_norm.str_ord(Tensor self, str ord='fro', int[] dim=[-2,-1], bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"fro\")") @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @StringView BytePointer ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self);
-@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"fro\")") @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_matrix_norm(@Const @ByRef Tensor self, @StringView String ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_matrix_norm.str_ord_out(Tensor self, str ord='fro', int[] dim=[-2,-1], bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"fro\")") @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") LongArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self);
-@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::string_view(\"fro\")") @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String ord/*="fro"*/, @ByVal(nullValue = "at::IntArrayRef({-2,-1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 // aten::linalg_matrix_norm.str_ord_out(Tensor self, str ord='fro', int[] dim=[-2,-1], bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @StringView BytePointer ord, @ByVal LongArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_matrix_norm_outf(@Const @ByRef Tensor self, @StringView String ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -34437,9 +34423,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 
 // aten::linalg_norm.ord_str(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord);
-@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StringView BytePointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StringView BytePointer ord);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StringView String ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor linalg_norm(@Const @ByRef Tensor self, @StringView String ord);
 
 // aten::linalg_norm.out(Tensor self, Scalar? ord=None, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -34450,12 +34437,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::linalg_norm.ord_str_out(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView BytePointer ord);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String ord, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @StringView String ord);
 // aten::linalg_norm.ord_str_out(Tensor self, str ord, int[1]? dim=None, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
-@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @StringView BytePointer ord, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_norm_outf(@Const @ByRef Tensor self, @StringView String ord, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -34552,14 +34540,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_qr(Tensor A, str mode='reduced') -> (Tensor Q, Tensor R)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr(@Const @ByRef Tensor A, @ByVal(nullValue = "c10::string_view(\"reduced\")") @Cast("c10::string_view*") Pointer mode);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr(@Const @ByRef Tensor A, @StringView BytePointer mode/*="reduced"*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr(@Const @ByRef Tensor A);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr(@Const @ByRef Tensor A, @StringView String mode/*="reduced"*/);
 
 // aten::linalg_qr.out(Tensor A, str mode='reduced', *, Tensor(a!) Q, Tensor(b!) R) -> (Tensor(a!) Q, Tensor(b!) R)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_out(@ByRef Tensor Q, @ByRef Tensor R, @Const @ByRef Tensor A, @ByVal(nullValue = "c10::string_view(\"reduced\")") @Cast("c10::string_view*") Pointer mode);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_out(@ByRef Tensor Q, @ByRef Tensor R, @Const @ByRef Tensor A, @StringView BytePointer mode/*="reduced"*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_out(@ByRef Tensor Q, @ByRef Tensor R, @Const @ByRef Tensor A);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_out(@ByRef Tensor Q, @ByRef Tensor R, @Const @ByRef Tensor A, @StringView String mode/*="reduced"*/);
 // aten::linalg_qr.out(Tensor A, str mode='reduced', *, Tensor(a!) Q, Tensor(b!) R) -> (Tensor(a!) Q, Tensor(b!) R)
-@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_outf(@Const @ByRef Tensor A, @ByVal @Cast("c10::string_view*") Pointer mode, @ByRef Tensor Q, @ByRef Tensor R);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_outf(@Const @ByRef Tensor A, @StringView BytePointer mode, @ByRef Tensor Q, @ByRef Tensor R);
+@Namespace("at") public static native @ByVal T_TensorTensor_T linalg_qr_outf(@Const @ByRef Tensor A, @StringView String mode, @ByRef Tensor Q, @ByRef Tensor R);
 
 
 
@@ -34735,14 +34726,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_svd(Tensor A, bool full_matrices=True, *, str? driver=None) -> (Tensor U, Tensor S, Tensor Vh)
-@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd(@Const @ByRef Tensor A, @Cast("bool") boolean full_matrices/*=true*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd(@Const @ByRef Tensor A, @Cast("bool") boolean full_matrices/*=true*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd(@Const @ByRef Tensor A);
 
 // aten::linalg_svd.U(Tensor A, bool full_matrices=True, *, str? driver=None, Tensor(a!) U, Tensor(b!) S, Tensor(c!) Vh) -> (Tensor(a!) U, Tensor(b!) S, Tensor(c!) Vh)
-@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh, @Const @ByRef Tensor A, @Cast("bool") boolean full_matrices/*=true*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh, @Const @ByRef Tensor A, @Cast("bool") boolean full_matrices/*=true*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd_out(@ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh, @Const @ByRef Tensor A);
 // aten::linalg_svd.U(Tensor A, bool full_matrices=True, *, str? driver=None, Tensor(a!) U, Tensor(b!) S, Tensor(c!) Vh) -> (Tensor(a!) U, Tensor(b!) S, Tensor(c!) Vh)
-@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd_outf(@Const @ByRef Tensor A, @Cast("bool") boolean full_matrices, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver, @ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh);
+@Namespace("at") public static native @ByVal T_TensorTensorTensor_T linalg_svd_outf(@Const @ByRef Tensor A, @Cast("bool") boolean full_matrices, @ByVal StringViewOptional driver, @ByRef Tensor U, @ByRef Tensor S, @ByRef Tensor Vh);
 
 
 
@@ -34772,14 +34763,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::linalg_svdvals(Tensor A, *, str? driver=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor linalg_svdvals(@Const @ByRef Tensor A, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByVal Tensor linalg_svdvals(@Const @ByRef Tensor A, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByVal Tensor linalg_svdvals(@Const @ByRef Tensor A);
 
 // aten::linalg_svdvals.out(Tensor A, *, str? driver=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_svdvals_out(@ByRef Tensor out, @Const @ByRef Tensor A, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer driver);
+@Namespace("at") public static native @ByRef Tensor linalg_svdvals_out(@ByRef Tensor out, @Const @ByRef Tensor A, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional driver);
 @Namespace("at") public static native @ByRef Tensor linalg_svdvals_out(@ByRef Tensor out, @Const @ByRef Tensor A);
 // aten::linalg_svdvals.out(Tensor A, *, str? driver=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor linalg_svdvals_outf(@Const @ByRef Tensor A, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_svdvals_outf(@Const @ByRef Tensor A, @ByVal StringViewOptional driver, @ByRef Tensor out);
 
 
 
@@ -37193,7 +37184,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal @Cast("at::TensorList*") TensorArrayRef tensors);
 
 // aten::meshgrid.indexing(Tensor[] tensors, *, str indexing) -> Tensor[]
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @ByVal @Cast("c10::string_view*") Pointer indexing);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @StringView BytePointer indexing);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal @Cast("at::TensorList*") TensorArrayRef tensors, @StringView String indexing);
 
 
 
@@ -39200,24 +39192,30 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::nanquantile(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear') -> Tensor
-@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 
 // aten::nanquantile.out(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 // aten::nanquantile.out(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @ByVal @Cast("c10::string_view*") Pointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView String interpolation, @ByRef Tensor out);
 
 // aten::nanquantile.scalar(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear') -> Tensor
-@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q);
+@Namespace("at") public static native @ByVal Tensor nanquantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 
 // aten::nanquantile.scalar_out(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q);
+@Namespace("at") public static native @ByRef Tensor nanquantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 // aten::nanquantile.scalar_out(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @ByVal @Cast("c10::string_view*") Pointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor nanquantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView String interpolation, @ByRef Tensor out);
 
 
 
@@ -41319,15 +41317,16 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::pad(Tensor self, SymInt[] pad, str mode="constant", float? value=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal LongArrayRef pad, @ByVal(nullValue = "c10::string_view(\"constant\")") @Cast("c10::string_view*") Pointer mode, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
+@Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal LongArrayRef pad, @StringView BytePointer mode/*="constant"*/, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
 @Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal LongArrayRef pad);
-@Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] pad, @ByVal(nullValue = "c10::string_view(\"constant\")") @Cast("c10::string_view*") Pointer mode, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
+@Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] pad, @StringView String mode/*="constant"*/, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
 @Namespace("at") public static native @ByVal Tensor pad(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... pad);
 
 
 // aten::pad(Tensor self, SymInt[] pad, str mode="constant", float? value=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor pad_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef pad, @ByVal(nullValue = "c10::string_view(\"constant\")") @Cast("c10::string_view*") Pointer mode, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
+@Namespace("at") public static native @ByVal Tensor pad_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef pad, @StringView BytePointer mode/*="constant"*/, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
 @Namespace("at") public static native @ByVal Tensor pad_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef pad);
+@Namespace("at") public static native @ByVal Tensor pad_symint(@Const @ByRef Tensor self, @ByVal SymIntArrayRef pad, @StringView String mode/*="constant"*/, @ByVal(nullValue = "c10::optional<double>(c10::nullopt)") DoubleOptional value);
 
 
 
@@ -42246,24 +42245,30 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::quantile(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear') -> Tensor
-@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 
 // aten::quantile.out(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 // aten::quantile.out(Tensor self, Tensor q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @ByVal @Cast("c10::string_view*") Pointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, @Const @ByRef Tensor q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView String interpolation, @ByRef Tensor out);
 
 // aten::quantile.scalar(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear') -> Tensor
-@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q);
+@Namespace("at") public static native @ByVal Tensor quantile(@Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 
 // aten::quantile.scalar_out(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::string_view(\"linear\")") @Cast("c10::string_view*") Pointer interpolation);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView BytePointer interpolation/*="linear"*/);
 @Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q);
+@Namespace("at") public static native @ByRef Tensor quantile_out(@ByRef Tensor out, @Const @ByRef Tensor self, double q, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("bool") boolean keepdim/*=false*/, @StringView String interpolation/*="linear"*/);
 // aten::quantile.scalar_out(Tensor self, float q, int? dim=None, bool keepdim=False, *, str interpolation='linear', Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @ByVal @Cast("c10::string_view*") Pointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView BytePointer interpolation, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor quantile_outf(@Const @ByRef Tensor self, double q, @ByVal LongOptional dim, @Cast("bool") boolean keepdim, @StringView String interpolation, @ByRef Tensor out);
 
 
 
@@ -45674,20 +45679,26 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @ByRef Tensor out);
 
 // aten::scatter.reduce(Tensor self, int dim, Tensor index, Tensor src, *, str reduce) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce);
 
 // aten::scatter.reduce_out(Tensor self, int dim, Tensor index, Tensor src, *, str reduce, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce);
 // aten::scatter.reduce_out(Tensor self, int dim, Tensor index, Tensor src, *, str reduce, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce, @ByRef Tensor out);
 
 // aten::scatter.value_reduce(Tensor self, int dim, Tensor index, Scalar value, *, str reduce) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView String reduce);
 
 // aten::scatter.value_reduce_out(Tensor self, int dim, Tensor index, Scalar value, *, str reduce, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView String reduce);
 // aten::scatter.value_reduce_out(Tensor self, int dim, Tensor index, Scalar value, *, str reduce, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @ByVal @Cast("c10::string_view*") Pointer reduce, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView BytePointer reduce, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Scalar value, @StringView String reduce, @ByRef Tensor out);
 
 // aten::scatter.dimname_src(Tensor self, Dimname dim, Tensor index, Tensor src) -> Tensor
 @Namespace("at") public static native @ByVal Tensor scatter(@Const @ByRef Tensor self, @ByVal Dimname dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src);
@@ -45761,14 +45772,19 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::scatter_reduce.two(Tensor self, int dim, Tensor index, Tensor src, str reduce, *, bool include_self=True) -> Tensor
-@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self/*=true*/);
-@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByVal Tensor scatter_reduce(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce);
 
 // aten::scatter_reduce.two_out(Tensor self, int dim, Tensor index, Tensor src, str reduce, *, bool include_self=True, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self/*=true*/);
-@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce, @Cast("bool") boolean include_self/*=true*/);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce);
 // aten::scatter_reduce.two_out(Tensor self, int dim, Tensor index, Tensor src, str reduce, *, bool include_self=True, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor scatter_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @ByVal @Cast("c10::string_view*") Pointer reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView BytePointer reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor scatter_reduce_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @Const @ByRef Tensor index, @Const @ByRef Tensor src, @StringView String reduce, @Cast("bool") boolean include_self, @ByRef Tensor out);
 
 
 
@@ -45798,24 +45814,24 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::searchsorted.Tensor(Tensor sorted_sequence, Tensor self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
+@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
 @Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self);
 
 // aten::searchsorted.Tensor_out(Tensor sorted_sequence, Tensor self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
+@Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
 @Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self);
 // aten::searchsorted.Tensor_out(Tensor sorted_sequence, Tensor self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor searchsorted_outf(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef TensorOptional sorter, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor searchsorted_outf(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Tensor self, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByVal StringViewOptional side, @Const @ByRef TensorOptional sorter, @ByRef Tensor out);
 
 // aten::searchsorted.Scalar(Tensor sorted_sequence, Scalar self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
+@Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
 @Namespace("at") public static native @ByVal Tensor searchsorted(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self);
 
 // aten::searchsorted.Scalar_out(Tensor sorted_sequence, Scalar self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
+@Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32/*=false*/, @Cast("bool") boolean right/*=false*/, @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional side, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional sorter);
 @Namespace("at") public static native @ByRef Tensor searchsorted_out(@ByRef Tensor out, @Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self);
 // aten::searchsorted.Scalar_out(Tensor sorted_sequence, Scalar self, *, bool out_int32=False, bool right=False, str? side=None, Tensor? sorter=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor searchsorted_outf(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByVal @Cast("c10::optional<c10::string_view>*") Pointer side, @Const @ByRef TensorOptional sorter, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor searchsorted_outf(@Const @ByRef Tensor sorted_sequence, @Const @ByRef Scalar self, @Cast("bool") boolean out_int32, @Cast("bool") boolean right, @ByVal StringViewOptional side, @Const @ByRef TensorOptional sorter, @ByRef Tensor out);
 
 
 
@@ -45845,14 +45861,19 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 // aten::segment_reduce(Tensor data, str reduce, *, Tensor? lengths=None, Tensor? indices=None, Tensor? offsets=None, int axis=0, bool unsafe=False, Scalar? initial=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @ByVal @Cast("c10::string_view*") Pointer reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
-@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StringView BytePointer reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StringView String reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByVal Tensor segment_reduce(@Const @ByRef Tensor data, @StringView String reduce);
 
 // aten::segment_reduce.out(Tensor data, str reduce, *, Tensor? lengths=None, Tensor? indices=None, Tensor? offsets=None, int axis=0, bool unsafe=False, Scalar? initial=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @ByVal @Cast("c10::string_view*") Pointer reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
-@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @ByVal @Cast("c10::string_view*") Pointer reduce);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @StringView BytePointer reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @StringView BytePointer reduce);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @StringView String reduce, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional lengths, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional indices, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional offsets, @Cast("int64_t") long axis/*=0*/, @Cast("bool") boolean unsafe/*=false*/, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional initial);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_out(@ByRef Tensor out, @Const @ByRef Tensor data, @StringView String reduce);
 // aten::segment_reduce.out(Tensor data, str reduce, *, Tensor? lengths=None, Tensor? indices=None, Tensor? offsets=None, int axis=0, bool unsafe=False, Scalar? initial=None, Tensor(a!) out) -> Tensor(a!)
-@Namespace("at") public static native @ByRef Tensor segment_reduce_outf(@Const @ByRef Tensor data, @ByVal @Cast("c10::string_view*") Pointer reduce, @Const @ByRef TensorOptional lengths, @Const @ByRef TensorOptional indices, @Const @ByRef TensorOptional offsets, @Cast("int64_t") long axis, @Cast("bool") boolean unsafe, @Const @ByRef ScalarOptional initial, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_outf(@Const @ByRef Tensor data, @StringView BytePointer reduce, @Const @ByRef TensorOptional lengths, @Const @ByRef TensorOptional indices, @Const @ByRef TensorOptional offsets, @Cast("int64_t") long axis, @Cast("bool") boolean unsafe, @Const @ByRef ScalarOptional initial, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor segment_reduce_outf(@Const @ByRef Tensor data, @StringView String reduce, @Const @ByRef TensorOptional lengths, @Const @ByRef TensorOptional indices, @Const @ByRef TensorOptional offsets, @Cast("int64_t") long axis, @Cast("bool") boolean unsafe, @Const @ByRef ScalarOptional initial, @ByRef Tensor out);
 
 
 
@@ -50878,7 +50899,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByVal Tensor stft(@Const @ByRef Tensor self, @Cast("int64_t") long n_fft, @ByVal LongOptional hop_length, @ByVal LongOptional win_length, @Const @ByRef TensorOptional window, @Cast("bool") boolean normalized, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional onesided, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional return_complex);
 
 // aten::stft.center(Tensor self, int n_fft, int? hop_length=None, int? win_length=None, Tensor? window=None, bool center=True, str pad_mode="reflect", bool normalized=False, bool? onesided=None, bool? return_complex=None) -> Tensor
-@Namespace("at") public static native @ByVal Tensor stft(@Const @ByRef Tensor self, @Cast("int64_t") long n_fft, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional hop_length, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional win_length, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional window, @Cast("bool") boolean center/*=true*/, @ByVal(nullValue = "c10::string_view(\"reflect\")") @Cast("c10::string_view*") Pointer pad_mode, @Cast("bool") boolean normalized/*=false*/, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional onesided, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional return_complex);
+@Namespace("at") public static native @ByVal Tensor stft(@Const @ByRef Tensor self, @Cast("int64_t") long n_fft, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional hop_length, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional win_length, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional window, @Cast("bool") boolean center/*=true*/, @StringView BytePointer pad_mode/*="reflect"*/, @Cast("bool") boolean normalized/*=false*/, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional onesided, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional return_complex);
+@Namespace("at") public static native @ByVal Tensor stft(@Const @ByRef Tensor self, @Cast("int64_t") long n_fft, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional hop_length, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional win_length, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional window, @Cast("bool") boolean center/*=true*/, @StringView String pad_mode/*="reflect"*/, @Cast("bool") boolean normalized/*=false*/, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional onesided, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional return_complex);
 
 
 
@@ -60179,8 +60201,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("torch") public static native @ByVal @Name("full") Tensor torch_full(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] size, @Const @ByRef Scalar fill_value);
 @Namespace("torch") public static native @ByVal @Name("full_like") Tensor torch_full_like(@Const @ByRef Tensor self, @Const @ByRef Scalar fill_value, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options, @ByVal(nullValue = "c10::optional<at::MemoryFormat>(c10::nullopt)") MemoryFormatOptional memory_format);
 @Namespace("torch") public static native @ByVal @Name("full_like") Tensor torch_full_like(@Const @ByRef Tensor self, @Const @ByRef Scalar fill_value);
-@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@ByVal @Cast("c10::string_view*") Pointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
-@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@ByVal @Cast("c10::string_view*") Pointer filename);
+@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@StringView BytePointer filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@StringView BytePointer filename);
+@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@StringView String filename, @ByVal(nullValue = "c10::optional<bool>(c10::nullopt)") BoolOptional shared, @ByVal(nullValue = "c10::optional<int64_t>(0)") LongOptional size, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("torch") public static native @ByVal @Name("from_file") Tensor torch_from_file(@StringView String filename);
 @Namespace("torch") public static native @ByVal @Name("hann_window") Tensor torch_hann_window(@Cast("int64_t") long window_length, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch") public static native @ByVal @Name("hann_window") Tensor torch_hann_window(@Cast("int64_t") long window_length);
 @Namespace("torch") public static native @ByVal @Name("hann_window") Tensor torch_hann_window(@Cast("int64_t") long window_length, @Cast("bool") boolean periodic, @ByVal(nullValue = "at::TensorOptions{}") TensorOptions options);
@@ -63174,7 +63198,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft(
     @Const @ByRef Tensor self);
 
@@ -63192,7 +63216,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft(
     @Const @ByRef Tensor self);
 
@@ -63210,14 +63234,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor fft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.fft2
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.ifft2.
@@ -63233,14 +63257,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ifft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional fast Fourier transform over given dimensions.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.fftn.
@@ -63256,14 +63280,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor fftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor fftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional fast Fourier transform over given dimensions.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.ifftn.
@@ -63279,14 +63303,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ifftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the 1 dimensional FFT of real input with onesided Hermitian output.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.rfft.
@@ -63304,7 +63328,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft(
     @Const @ByRef Tensor self);
 
@@ -63325,7 +63349,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft(
     @Const @ByRef Tensor self);
 
@@ -63343,14 +63367,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor rfft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.rfft2.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.irfft2.
@@ -63366,14 +63390,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor irfft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the N dimensional FFT of real input with onesided Hermitian output.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.rfftn
@@ -63389,14 +63413,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor rfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor rfftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the inverse of torch.fft.rfftn.
  *  See https://pytorch.org/docs/master/fft.html#torch.fft.irfftn.
@@ -63413,14 +63437,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor irfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor irfftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the 1 dimensional FFT of a onesided Hermitian signal
  * 
@@ -63441,7 +63465,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft(
     @Const @ByRef Tensor self);
 
@@ -63463,7 +63487,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional n,
     @Cast("int64_t") long dim/*=-1*/,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft(
     @Const @ByRef Tensor self);
 
@@ -63485,14 +63509,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor hfft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the 2-dimensional IFFT of a real input signal.
  * 
@@ -63513,14 +63537,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfft2(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the N-dimensional FFT of a Hermitian symmetric input signal.
  * 
@@ -63540,14 +63564,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor hfftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the N-dimensional IFFT of a real input signal.
  * 
@@ -63568,14 +63592,14 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") LongArrayRef dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self);
 @Namespace("torch::fft") public static native @ByVal Tensor ihfftn(
     @Const @ByRef Tensor self,
     @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] s,
     @ByVal(nullValue = "torch::IntArrayRef({-2, -1})") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] dim,
-    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") @Cast("c10::optional<c10::string_view>*") Pointer norm);
+    @ByVal(nullValue = "c10::optional<c10::string_view>(c10::nullopt)") StringViewOptional norm);
 
 /** Computes the discrete Fourier Transform sample frequencies for a signal of
  *  size n.
@@ -63716,20 +63740,33 @@ apis for specific fusers.
 
 @Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T eigh(
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer uplo);
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T eigh(
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
 
 @Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
     @ByRef Tensor eigvals,
     @ByRef Tensor eigvecs,
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer uplo);
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> eigh_out(
+    @ByRef Tensor eigvals,
+    @ByRef Tensor eigvecs,
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
 
-@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @ByVal @Cast("c10::string_view*") Pointer uplo);
+@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView BytePointer uplo);
+@Namespace("torch::linalg::detail") public static native @ByVal Tensor eigvalsh(@Const @ByRef Tensor self, @StringView String uplo);
 
 @Namespace("torch::linalg::detail") public static native @ByRef Tensor eigvalsh_out(
     @ByRef Tensor result,
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer uplo);
+    @StringView BytePointer uplo);
+@Namespace("torch::linalg::detail") public static native @ByRef Tensor eigvalsh_out(
+    @ByRef Tensor result,
+    @Const @ByRef Tensor self,
+    @StringView String uplo);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor householder_product(@Const @ByRef Tensor input, @Const @ByRef Tensor tau);
 
@@ -63763,7 +63800,7 @@ apis for specific fusers.
     @Const @ByRef Tensor self,
     @Const @ByRef Tensor b,
     @ByVal DoubleOptional cond,
-    @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver);
+    @ByVal StringViewOptional driver);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
     @Const @ByRef Tensor self,
@@ -63780,13 +63817,13 @@ apis for specific fusers.
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer ord,
+    @StringView BytePointer ord,
     @ByVal LongArrayRefOptional opt_dim,
     @Cast("bool") boolean keepdim,
     @ByVal ScalarTypeOptional opt_dtype);
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor norm(
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer ord,
+    @StringView String ord,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
     @Cast("bool") boolean keepdim,
     @ByVal ScalarTypeOptional opt_dtype);
@@ -63809,14 +63846,14 @@ apis for specific fusers.
 @Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
     @ByRef Tensor result,
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer ord,
+    @StringView BytePointer ord,
     @ByVal LongArrayRefOptional opt_dim,
     @Cast("bool") boolean keepdim,
     @ByVal ScalarTypeOptional opt_dtype);
 @Namespace("torch::linalg::detail") public static native @ByRef Tensor norm_out(
     @ByRef Tensor result,
     @Const @ByRef Tensor self,
-    @ByVal @Cast("c10::string_view*") Pointer ord,
+    @StringView String ord,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
     @Cast("bool") boolean keepdim,
     @ByVal ScalarTypeOptional opt_dtype);
@@ -63966,13 +64003,21 @@ apis for specific fusers.
 
 @Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T qr(
     @Const @ByRef Tensor input,
-    @ByVal @Cast("c10::string_view*") Pointer mode);
+    @StringView BytePointer mode);
+@Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T qr(
+    @Const @ByRef Tensor input,
+    @StringView String mode);
 
 @Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
     @ByRef Tensor Q,
     @ByRef Tensor R,
     @Const @ByRef Tensor input,
-    @ByVal @Cast("c10::string_view*") Pointer mode);
+    @StringView BytePointer mode);
+@Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> qr_out(
+    @ByRef Tensor Q,
+    @ByRef Tensor R,
+    @Const @ByRef Tensor input,
+    @StringView String mode);
 
 @Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensor_T solve_ex(
     @Const @ByRef Tensor input,
@@ -64014,7 +64059,7 @@ apis for specific fusers.
 @Namespace("torch::linalg::detail") public static native @ByVal T_TensorTensorTensor_T svd(
     @Const @ByRef Tensor input,
     @Cast("bool") boolean full_matrices,
-    @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver);
+    @ByVal StringViewOptional driver);
 
 @Namespace("torch::linalg::detail") public static native @ByVal @Cast("std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&>*") PointerPointer<Tensor> svd_out(
     @ByRef Tensor U,
@@ -64022,16 +64067,16 @@ apis for specific fusers.
     @ByRef Tensor Vh,
     @Const @ByRef Tensor input,
     @Cast("bool") boolean full_matrices,
-    @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver);
+    @ByVal StringViewOptional driver);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor svdvals(
     @Const @ByRef Tensor input,
-    @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver);
+    @ByVal StringViewOptional driver);
 
 @Namespace("torch::linalg::detail") public static native @ByRef Tensor svdvals_out(
     @ByRef Tensor result,
     @Const @ByRef Tensor input,
-    @ByVal @Cast("c10::optional<c10::string_view>*") Pointer driver);
+    @ByVal StringViewOptional driver);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor tensorinv(@Const @ByRef Tensor self, @Cast("int64_t") long ind);
 
@@ -64144,34 +64189,6 @@ apis for specific fusers.
     @ByRef Tensor L,
     @ByRef Tensor U,
     @Const @ByRef Tensor self);
-
-@Namespace("torch::linalg") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg") public static native @ByVal Tensor norm(
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-
-@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StdString BytePointer ord,
-    @ByVal LongArrayRefOptional opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
-@Namespace("torch::linalg") public static native @ByRef Tensor norm_out(
-    @ByRef Tensor result,
-    @Const @ByRef Tensor self,
-    @StdString String ord,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] opt_dim,
-    @Cast("bool") boolean keepdim,
-    @ByVal ScalarTypeOptional opt_dtype);
 
 /** See https://pytorch.org/docs/master/linalg.html#torch.linalg.vector_norm */
 
@@ -67475,8 +67492,6 @@ body of your function, only data pointers.
 // ============================================================================
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor gelu(@Const @ByRef Tensor input, @StdString BytePointer approximate);
-@Namespace("torch::nn::functional::detail") public static native @ByVal Tensor gelu(@Const @ByRef Tensor input, @StdString String approximate);
  // namespace detail
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
@@ -68694,8 +68709,8 @@ body of your function, only data pointers.
     @Override public String toString() { return intern().name(); }
 }
 
-@Namespace("at") public static native @ByVal @Cast("c10::string_view*") Pointer padding_mode_string(padding_mode m);
-@Namespace("at") public static native @ByVal @Cast("c10::string_view*") Pointer padding_mode_string(@Cast("at::padding_mode") int m);
+@Namespace("at") public static native @StringView BytePointer padding_mode_string(padding_mode m);
+@Namespace("at") public static native @StringView String padding_mode_string(@Cast("at::padding_mode") int m);
 
  // namespace at
 

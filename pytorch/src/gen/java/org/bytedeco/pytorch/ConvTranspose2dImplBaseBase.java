@@ -22,6 +22,9 @@ public class ConvTranspose2dImplBaseBase extends ConvTranspose2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvTranspose2dImplBaseBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ConvTranspose2dImplBaseBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ConvNdImpl<2,torch::nn::ConvTranspose2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ConvTranspose2dImplBaseBase(@ByVal DetailConv2dOptions options_) { super((Pointer)null); allocate(options_); }
   private native void allocate(@ByVal DetailConv2dOptions options_);

@@ -22,6 +22,9 @@ public class BatchNorm2dImplBaseBase extends BatchNorm2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchNorm2dImplBaseBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BatchNorm2dImplBaseBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::NormImplBase<2,torch::nn::BatchNorm2dImpl,torch::nn::BatchNormOptions>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native void reset();

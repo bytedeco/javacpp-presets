@@ -23,6 +23,9 @@ public class AlphaDropoutImplBase extends AlphaDropoutImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlphaDropoutImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AlphaDropoutImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::detail::_DropoutNd<torch::nn::AlphaDropoutImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public AlphaDropoutImplBase(double p) { super((Pointer)null); allocate(p); }
   private native void allocate(double p);

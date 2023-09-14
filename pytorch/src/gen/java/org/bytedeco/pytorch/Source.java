@@ -27,6 +27,8 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Source extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Source(Pointer p) { super(p); }
 
   // Whether or not Source should copy the string passed in the constructor.
   public enum CopiesString { COPIES_STRING(0), DONT_COPY(1);
@@ -39,33 +41,37 @@ public class Source extends Pointer {
   }
 
   public Source(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @StringView BytePointer text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @StringView BytePointer text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         CopiesString copies_str/*=torch::jit::Source::COPIES_STRING*/);
   public Source(
-        @ByVal @Cast("c10::string_view*") Pointer text_view) { super((Pointer)null); allocate(text_view); }
+        @StringView BytePointer text_view) { super((Pointer)null); allocate(text_view); }
   private native void allocate(
-        @ByVal @Cast("c10::string_view*") Pointer text_view);
+        @StringView BytePointer text_view);
   public Source(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @StringView String text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/) { super((Pointer)null); allocate(text_view, filename, starting_line_no, gen_ranges, copies_str); }
   private native void allocate(
-        @ByVal @Cast("c10::string_view*") Pointer text_view,
+        @StringView String text_view,
         @ByVal(nullValue = "c10::optional<std::string>(c10::nullopt)") StringOptional filename,
         @Cast("size_t") long starting_line_no/*=0*/,
         @SharedPtr SourceRangeUnpickler gen_ranges/*=nullptr*/,
         @Cast("torch::jit::Source::CopiesString") int copies_str/*=torch::jit::Source::COPIES_STRING*/);
+  public Source(
+        @StringView String text_view) { super((Pointer)null); allocate(text_view); }
+  private native void allocate(
+        @StringView String text_view);
 
   public Source(
         @ByVal StringCordView str,

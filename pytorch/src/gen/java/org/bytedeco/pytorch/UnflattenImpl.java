@@ -38,15 +38,18 @@ public class UnflattenImpl extends UnflattenImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UnflattenImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public UnflattenImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::UnflattenImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public UnflattenImpl(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes) { super((Pointer)null); allocate(dim, sizes); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
+  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@Cast("int64_t") long dim, @ByVal @Cast("std::vector<int64_t>*") LongVector sizes);
   public UnflattenImpl(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @SharedPtr private native void allocate(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
+  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@StdString BytePointer dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public UnflattenImpl(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape) { super((Pointer)null); allocate(dimname, namedshape); }
-  @SharedPtr private native void allocate(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
+  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@StdString String dimname, @ByVal @Cast("torch::nn::UnflattenOptions::namedshape_t*") StringLongVector namedshape);
   public UnflattenImpl(@ByVal UnflattenOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal UnflattenOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::UnflattenImpl>") private native void allocate(@ByVal UnflattenOptions options_);
 
   public native void reset();
 

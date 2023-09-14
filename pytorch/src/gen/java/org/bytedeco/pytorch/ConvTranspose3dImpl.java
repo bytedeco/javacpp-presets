@@ -38,17 +38,20 @@ public class ConvTranspose3dImpl extends ConvTranspose3dImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvTranspose3dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ConvTranspose3dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ConvTranspose3dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ConvTranspose3dImpl(
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size) { super((Pointer)null); allocate(input_channels, output_channels, kernel_size); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::ConvTranspose3dImpl>") private native void allocate(
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<3>*") LongPointer kernel_size);
   public ConvTranspose3dImpl(@ByVal ConvTranspose3dOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal ConvTranspose3dOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::ConvTranspose3dImpl>") private native void allocate(@ByVal ConvTranspose3dOptions options_);
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,
         @Const @ByRef(nullValue = "c10::optional<at::IntArrayRef>(c10::nullopt)") LongArrayRefOptional output_size);

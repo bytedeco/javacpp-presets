@@ -28,18 +28,12 @@ public class Softmax2dImpl extends Softmax2dImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public Softmax2dImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Softmax2dImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Softmax2dImpl(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public Softmax2dImpl position(long position) {
-        return (Softmax2dImpl)super.position(position);
-    }
-    @Override public Softmax2dImpl getPointer(long i) {
-        return new Softmax2dImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::Softmax2dImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public Softmax2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::Softmax2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

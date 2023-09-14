@@ -37,20 +37,14 @@ public class BCELossImpl extends BCELossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BCELossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public BCELossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public BCELossImpl position(long position) {
-        return (BCELossImpl)super.position(position);
-    }
-    @Override public BCELossImpl getPointer(long i) {
-        return new BCELossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public BCELossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::BCELossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public BCELossImpl(@ByVal(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::BCELossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::BCELossOptions{}") BCELossOptions options_);
   public BCELossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::BCELossImpl>") private native void allocate();
 
   public native void reset();
 

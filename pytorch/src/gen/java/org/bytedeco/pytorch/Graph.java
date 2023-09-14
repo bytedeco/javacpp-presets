@@ -21,22 +21,13 @@ import static org.bytedeco.pytorch.global.torch.*;
 @Namespace("torch::jit") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class Graph extends Pointer {
     static { Loader.load(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Graph(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Graph position(long position) {
-        return (Graph)super.position(position);
-    }
-    @Override public Graph getPointer(long i) {
-        return new Graph((Pointer)this).offsetAddress(i);
-    }
 
   
   
   public Graph(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root) { super((Pointer)null); allocate(scope_root); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root);
+  @SharedPtr @Name("std::make_shared<torch::jit::Graph>") private native void allocate(@ByVal(nullValue = "torch::jit::ScopePtr(c10::make_intrusive<torch::jit::Scope>())") @Cast("torch::jit::ScopePtr*") Pointer scope_root);
   public Graph() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::jit::Graph>") private native void allocate();
 
   public native @ByVal ValueArrayRef inputs();
   public native @ByVal ValueArrayRef outputs();

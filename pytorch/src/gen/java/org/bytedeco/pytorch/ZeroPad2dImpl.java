@@ -36,11 +36,14 @@ public class ZeroPad2dImpl extends ZeroPad2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ZeroPad2dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ZeroPad2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ZeroPad2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ZeroPad2dImpl(@ByVal @Cast("torch::ExpandingArray<4>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
-  @SharedPtr private native void allocate(@ByVal @Cast("torch::ExpandingArray<4>*") LongPointer padding);
+  @SharedPtr @Name("std::make_shared<torch::nn::ZeroPad2dImpl>") private native void allocate(@ByVal @Cast("torch::ExpandingArray<4>*") LongPointer padding);
   public ZeroPad2dImpl(@Const @ByRef ZeroPad2dOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef ZeroPad2dOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::ZeroPad2dImpl>") private native void allocate(@Const @ByRef ZeroPad2dOptions options_);
 
   public native void reset();
 

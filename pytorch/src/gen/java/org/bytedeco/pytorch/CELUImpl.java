@@ -36,20 +36,14 @@ public class CELUImpl extends CELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CELUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CELUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CELUImpl position(long position) {
-        return (CELUImpl)super.position(position);
-    }
-    @Override public CELUImpl getPointer(long i) {
-        return new CELUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public CELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CELUImpl(@Const @ByRef(nullValue = "torch::nn::CELUOptions{}") CELUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::CELUOptions{}") CELUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CELUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::CELUOptions{}") CELUOptions options_);
   public CELUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::CELUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

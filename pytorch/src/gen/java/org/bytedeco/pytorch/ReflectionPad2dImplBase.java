@@ -22,6 +22,9 @@ public class ReflectionPad2dImplBase extends ReflectionPad2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReflectionPad2dImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ReflectionPad2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ReflectionPadImpl<2,torch::nn::ReflectionPad2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ReflectionPad2dImplBase(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding);

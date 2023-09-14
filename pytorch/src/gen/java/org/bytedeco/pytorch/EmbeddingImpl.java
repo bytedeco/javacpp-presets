@@ -38,11 +38,14 @@ public class EmbeddingImpl extends EmbeddingImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EmbeddingImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public EmbeddingImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::EmbeddingImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public EmbeddingImpl(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim) { super((Pointer)null); allocate(num_embeddings, embedding_dim); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
+  @SharedPtr @Name("std::make_shared<torch::nn::EmbeddingImpl>") private native void allocate(@Cast("int64_t") long num_embeddings, @Cast("int64_t") long embedding_dim);
   public EmbeddingImpl(@ByVal EmbeddingOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal EmbeddingOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::EmbeddingImpl>") private native void allocate(@ByVal EmbeddingOptions options_);
 
   public native void reset();
 

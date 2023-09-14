@@ -37,20 +37,14 @@ public class CTCLossImpl extends CTCLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CTCLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CTCLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CTCLossImpl position(long position) {
-        return (CTCLossImpl)super.position(position);
-    }
-    @Override public CTCLossImpl getPointer(long i) {
-        return new CTCLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public CTCLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CTCLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CTCLossImpl(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CTCLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::CTCLossOptions{}") CTCLossOptions options_);
   public CTCLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::CTCLossImpl>") private native void allocate();
 
   public native void reset();
 

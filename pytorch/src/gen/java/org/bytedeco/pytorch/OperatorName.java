@@ -38,7 +38,7 @@ public class OperatorName extends Pointer {
   // Return the namespace of this OperatorName, if it exists.  The
   // returned string_view is only live as long as the OperatorName
   // exists and name is not mutated
-  public native @ByVal @Cast("c10::optional<c10::string_view>*") Pointer getNamespace();
+  public native @ByVal StringViewOptional getNamespace();
 
   // Returns true if we successfully set the namespace
   public native @Cast("bool") boolean setNamespaceIfNotSet(@Cast("const char*") BytePointer ns);

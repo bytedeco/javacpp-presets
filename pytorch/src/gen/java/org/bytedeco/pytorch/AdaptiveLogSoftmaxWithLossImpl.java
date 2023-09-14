@@ -41,19 +41,22 @@ public class AdaptiveLogSoftmaxWithLossImpl extends AdaptiveLogSoftmaxWithLossIm
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdaptiveLogSoftmaxWithLossImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AdaptiveLogSoftmaxWithLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::AdaptiveLogSoftmaxWithLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public AdaptiveLogSoftmaxWithLossImpl(
         @Cast("int64_t") long in_features,
         @Cast("int64_t") long n_classes,
         @ByVal @Cast("std::vector<int64_t>*") LongVector cutoffs) { super((Pointer)null); allocate(in_features, n_classes, cutoffs); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") private native void allocate(
         @Cast("int64_t") long in_features,
         @Cast("int64_t") long n_classes,
         @ByVal @Cast("std::vector<int64_t>*") LongVector cutoffs);
 
   public AdaptiveLogSoftmaxWithLossImpl(
         @ByVal AdaptiveLogSoftmaxWithLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::AdaptiveLogSoftmaxWithLossImpl>") private native void allocate(
         @ByVal AdaptiveLogSoftmaxWithLossOptions options_);
 
   public native @ByVal ASMoutput forward(@Const @ByRef Tensor input, @Const @ByRef Tensor target);

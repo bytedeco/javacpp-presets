@@ -36,11 +36,14 @@ public class LogSoftmaxImpl extends LogSoftmaxImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogSoftmaxImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LogSoftmaxImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::LogSoftmaxImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LogSoftmaxImpl(@Cast("int64_t") long dim) { super((Pointer)null); allocate(dim); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long dim);
+  @SharedPtr @Name("std::make_shared<torch::nn::LogSoftmaxImpl>") private native void allocate(@Cast("int64_t") long dim);
   public LogSoftmaxImpl(@Const @ByRef LogSoftmaxOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef LogSoftmaxOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::LogSoftmaxImpl>") private native void allocate(@Const @ByRef LogSoftmaxOptions options_);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

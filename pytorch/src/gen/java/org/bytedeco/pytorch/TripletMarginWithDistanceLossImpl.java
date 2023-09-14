@@ -45,22 +45,16 @@ public class TripletMarginWithDistanceLossImpl extends TripletMarginWithDistance
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TripletMarginWithDistanceLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TripletMarginWithDistanceLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TripletMarginWithDistanceLossImpl position(long position) {
-        return (TripletMarginWithDistanceLossImpl)super.position(position);
-    }
-    @Override public TripletMarginWithDistanceLossImpl getPointer(long i) {
-        return new TripletMarginWithDistanceLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public TripletMarginWithDistanceLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::TripletMarginWithDistanceLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public TripletMarginWithDistanceLossImpl(
         @ByVal(nullValue = "torch::nn::TripletMarginWithDistanceLossOptions{}") TripletMarginWithDistanceLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::TripletMarginWithDistanceLossImpl>") private native void allocate(
         @ByVal(nullValue = "torch::nn::TripletMarginWithDistanceLossOptions{}") TripletMarginWithDistanceLossOptions options_);
   public TripletMarginWithDistanceLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::TripletMarginWithDistanceLossImpl>") private native void allocate();
 
   public native void reset();
 

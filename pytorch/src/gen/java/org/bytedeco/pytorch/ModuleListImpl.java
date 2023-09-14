@@ -67,19 +67,13 @@ public class ModuleListImpl extends ModuleListImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModuleListImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ModuleListImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ModuleListImpl position(long position) {
-        return (ModuleListImpl)super.position(position);
-    }
-    @Override public ModuleListImpl getPointer(long i) {
-        return new ModuleListImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public ModuleListImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ModuleListImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ModuleListImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::ModuleListImpl>") private native void allocate();
 
   /** Constructs the {@code ModuleList} from a variadic list of modules. */
 
