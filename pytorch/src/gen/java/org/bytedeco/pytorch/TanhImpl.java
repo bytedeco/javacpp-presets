@@ -28,18 +28,12 @@ public class TanhImpl extends TanhImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public TanhImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TanhImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanhImpl(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public TanhImpl position(long position) {
-        return (TanhImpl)super.position(position);
-    }
-    @Override public TanhImpl getPointer(long i) {
-        return new TanhImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::TanhImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public TanhImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::TanhImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

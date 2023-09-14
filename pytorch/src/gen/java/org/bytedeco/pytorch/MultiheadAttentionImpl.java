@@ -36,11 +36,14 @@ public class MultiheadAttentionImpl extends MultiheadAttentionImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiheadAttentionImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MultiheadAttentionImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MultiheadAttentionImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MultiheadAttentionImpl(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads) { super((Pointer)null); allocate(embed_dim, num_heads); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads);
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiheadAttentionImpl>") private native void allocate(@Cast("int64_t") long embed_dim, @Cast("int64_t") long num_heads);
   public MultiheadAttentionImpl(@Const @ByRef MultiheadAttentionOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiheadAttentionImpl>") private native void allocate(@Const @ByRef MultiheadAttentionOptions options_);
 
   public native @ByVal T_TensorTensor_T forward(
         @Const @ByRef Tensor query,

@@ -22,6 +22,9 @@ public class ReplicationPad2dImplBase extends ReplicationPad2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReplicationPad2dImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ReplicationPad2dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ReplicationPadImpl<2,torch::nn::ReplicationPad2dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ReplicationPad2dImplBase(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding);

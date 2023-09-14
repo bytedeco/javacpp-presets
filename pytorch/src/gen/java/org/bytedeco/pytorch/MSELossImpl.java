@@ -37,20 +37,14 @@ public class MSELossImpl extends MSELossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSELossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MSELossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public MSELossImpl position(long position) {
-        return (MSELossImpl)super.position(position);
-    }
-    @Override public MSELossImpl getPointer(long i) {
-        return new MSELossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public MSELossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MSELossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MSELossImpl(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::MSELossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::MSELossOptions{}") MSELossOptions options_);
   public MSELossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::MSELossImpl>") private native void allocate();
 
   public native void reset();
 

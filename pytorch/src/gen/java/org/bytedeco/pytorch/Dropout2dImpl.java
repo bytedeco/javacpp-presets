@@ -45,15 +45,9 @@ public class Dropout2dImpl extends Dropout2dImplBase {
     private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dropout2dImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Dropout2dImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Dropout2dImpl position(long position) {
-        return (Dropout2dImpl)super.position(position);
-    }
-    @Override public Dropout2dImpl getPointer(long i) {
-        return new Dropout2dImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public Dropout2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::Dropout2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@ByVal Tensor input);

@@ -22,6 +22,9 @@ public class BatchNorm3dImplBaseBase extends BatchNorm3dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchNorm3dImplBaseBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BatchNorm3dImplBaseBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::NormImplBase<3,torch::nn::BatchNorm3dImpl,torch::nn::BatchNormOptions>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native void reset();

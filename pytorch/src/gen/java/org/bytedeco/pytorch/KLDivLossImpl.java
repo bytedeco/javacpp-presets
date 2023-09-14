@@ -37,20 +37,14 @@ public class KLDivLossImpl extends KLDivLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KLDivLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public KLDivLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public KLDivLossImpl position(long position) {
-        return (KLDivLossImpl)super.position(position);
-    }
-    @Override public KLDivLossImpl getPointer(long i) {
-        return new KLDivLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public KLDivLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::KLDivLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public KLDivLossImpl(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::KLDivLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::KLDivLossOptions{}") KLDivLossOptions options_);
   public KLDivLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::KLDivLossImpl>") private native void allocate();
 
   public native void reset();
 

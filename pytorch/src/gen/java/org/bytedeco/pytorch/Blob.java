@@ -63,7 +63,7 @@ public class Blob extends Pointer {
   /**
    * Returns a printable typename of the blob.
    */
-  public native @ByVal @Cast("c10::string_view*") @NoException(true) Pointer TypeName();
+  public native @StringView @NoException(true) BytePointer TypeName();
 
   /**
    * \brief Gets the const reference of the stored object. The code checks if

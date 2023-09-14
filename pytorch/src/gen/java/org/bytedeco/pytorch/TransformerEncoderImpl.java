@@ -41,9 +41,12 @@ public class TransformerEncoderImpl extends TransformerEncoderImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerEncoderImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TransformerEncoderImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::TransformerEncoderImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public TransformerEncoderImpl(@ByVal TransformerEncoderOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal TransformerEncoderOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::TransformerEncoderImpl>") private native void allocate(@ByVal TransformerEncoderOptions options_);
 
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor src,

@@ -50,7 +50,7 @@ public class SourceRange extends Pointer {
         @ByVal StringCordView.Iterator start_iter,
         @Cast("size_t") long end_);
 
-  public native @ByVal @Cast("const c10::string_view*") Pointer token_text();
+  public native @StringView BytePointer token_text();
 
   public native @Const @ByVal StringCordView text();
   public native @Cast("size_t") long size();

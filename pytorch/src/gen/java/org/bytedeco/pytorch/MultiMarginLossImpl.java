@@ -40,20 +40,14 @@ public class MultiMarginLossImpl extends MultiMarginLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiMarginLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MultiMarginLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public MultiMarginLossImpl position(long position) {
-        return (MultiMarginLossImpl)super.position(position);
-    }
-    @Override public MultiMarginLossImpl getPointer(long i) {
-        return new MultiMarginLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public MultiMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MultiMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MultiMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiMarginLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::MultiMarginLossOptions{}") MultiMarginLossOptions options_);
   public MultiMarginLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiMarginLossImpl>") private native void allocate();
 
   public native void reset();
 

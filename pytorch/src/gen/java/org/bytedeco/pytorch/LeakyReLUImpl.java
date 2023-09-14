@@ -36,20 +36,14 @@ public class LeakyReLUImpl extends LeakyReLUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LeakyReLUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LeakyReLUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public LeakyReLUImpl position(long position) {
-        return (LeakyReLUImpl)super.position(position);
-    }
-    @Override public LeakyReLUImpl getPointer(long i) {
-        return new LeakyReLUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public LeakyReLUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::LeakyReLUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LeakyReLUImpl(@Const @ByRef(nullValue = "torch::nn::LeakyReLUOptions{}") LeakyReLUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::LeakyReLUOptions{}") LeakyReLUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::LeakyReLUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::LeakyReLUOptions{}") LeakyReLUOptions options_);
   public LeakyReLUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::LeakyReLUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

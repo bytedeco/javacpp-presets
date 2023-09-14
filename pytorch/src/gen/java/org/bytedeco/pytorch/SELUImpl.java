@@ -36,20 +36,14 @@ public class SELUImpl extends SELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SELUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SELUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SELUImpl position(long position) {
-        return (SELUImpl)super.position(position);
-    }
-    @Override public SELUImpl getPointer(long i) {
-        return new SELUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public SELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SELUImpl(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::SELUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::SELUOptions{}") SELUOptions options_);
   public SELUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::SELUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

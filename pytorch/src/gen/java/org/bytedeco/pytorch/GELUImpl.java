@@ -28,20 +28,14 @@ public class GELUImpl extends GELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GELUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GELUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public GELUImpl position(long position) {
-        return (GELUImpl)super.position(position);
-    }
-    @Override public GELUImpl getPointer(long i) {
-        return new GELUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public GELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::GELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GELUImpl(@ByVal(nullValue = "torch::nn::GELUOptions{}") GELUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::GELUOptions{}") GELUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::GELUImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::GELUOptions{}") GELUOptions options_);
   public GELUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::GELUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

@@ -42,6 +42,9 @@ public class MaxUnpool1dImpl extends MaxUnpool1dImplBase {
     private native void allocate(@Const @ByRef MaxUnpool1dOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxUnpool1dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MaxUnpool1dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MaxUnpool1dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(
         @Const @ByRef Tensor input,

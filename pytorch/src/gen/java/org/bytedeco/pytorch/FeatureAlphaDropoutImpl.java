@@ -42,15 +42,9 @@ public class FeatureAlphaDropoutImpl extends FeatureAlphaDropoutImplBase {
     private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeatureAlphaDropoutImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FeatureAlphaDropoutImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FeatureAlphaDropoutImpl position(long position) {
-        return (FeatureAlphaDropoutImpl)super.position(position);
-    }
-    @Override public FeatureAlphaDropoutImpl getPointer(long i) {
-        return new FeatureAlphaDropoutImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public FeatureAlphaDropoutImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::FeatureAlphaDropoutImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

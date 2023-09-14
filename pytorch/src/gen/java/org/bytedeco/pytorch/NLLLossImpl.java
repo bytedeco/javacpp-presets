@@ -37,20 +37,14 @@ public class NLLLossImpl extends NLLLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NLLLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public NLLLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public NLLLossImpl position(long position) {
-        return (NLLLossImpl)super.position(position);
-    }
-    @Override public NLLLossImpl getPointer(long i) {
-        return new NLLLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public NLLLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::NLLLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public NLLLossImpl(@ByVal(nullValue = "torch::nn::NLLLossOptions{}") NLLLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::NLLLossOptions{}") NLLLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::NLLLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::NLLLossOptions{}") NLLLossOptions options_);
   public NLLLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::NLLLossImpl>") private native void allocate();
 
   /** Pretty prints the {@code NLLLoss} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);

@@ -43,5 +43,8 @@ public class InstanceNorm1dImpl extends InstanceNorm1dImplBase {
       private native void allocate(@Const @ByRef InstanceNormOptions options_);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InstanceNorm1dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public InstanceNorm1dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::InstanceNorm1dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 }

@@ -43,9 +43,12 @@ public class TransformerDecoderImpl extends TransformerDecoderImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformerDecoderImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TransformerDecoderImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::TransformerDecoderImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public TransformerDecoderImpl(@ByVal TransformerDecoderOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal TransformerDecoderOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::TransformerDecoderImpl>") private native void allocate(@ByVal TransformerDecoderOptions options_);
 
   public native void reset();
 

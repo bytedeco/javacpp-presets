@@ -36,20 +36,14 @@ public class SoftplusImpl extends SoftplusImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftplusImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SoftplusImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SoftplusImpl position(long position) {
-        return (SoftplusImpl)super.position(position);
-    }
-    @Override public SoftplusImpl getPointer(long i) {
-        return new SoftplusImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public SoftplusImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SoftplusImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SoftplusImpl(@Const @ByRef(nullValue = "torch::nn::SoftplusOptions{}") SoftplusOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::SoftplusOptions{}") SoftplusOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::SoftplusImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::SoftplusOptions{}") SoftplusOptions options_);
   public SoftplusImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::SoftplusImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

@@ -28,18 +28,12 @@ public class SoftsignImpl extends SoftsignImplCloneable {
     static { Loader.load(); }
     /** Default native constructor. */
     public SoftsignImpl() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SoftsignImpl(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftsignImpl(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public SoftsignImpl position(long position) {
-        return (SoftsignImpl)super.position(position);
-    }
-    @Override public SoftsignImpl getPointer(long i) {
-        return new SoftsignImpl((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::nn::SoftsignImpl>") private native void allocate();
+    /** Downcast constructor. */
+    public SoftsignImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SoftsignImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

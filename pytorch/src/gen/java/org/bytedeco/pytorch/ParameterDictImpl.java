@@ -23,23 +23,17 @@ public class ParameterDictImpl extends ParameterDictImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParameterDictImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ParameterDictImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ParameterDictImpl position(long position) {
-        return (ParameterDictImpl)super.position(position);
-    }
-    @Override public ParameterDictImpl getPointer(long i) {
-        return new ParameterDictImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public ParameterDictImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ParameterDictImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public ParameterDictImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::ParameterDictImpl>") private native void allocate();
 
   public ParameterDictImpl(
         @Const @ByRef StringTensorDict params) { super((Pointer)null); allocate(params); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::ParameterDictImpl>") private native void allocate(
         @Const @ByRef StringTensorDict params);
 
   /** {@code reset()} is empty for {@code ParameterDict}, since it does not have

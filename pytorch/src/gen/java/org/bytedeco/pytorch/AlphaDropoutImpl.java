@@ -45,15 +45,9 @@ public class AlphaDropoutImpl extends AlphaDropoutImplBase {
     private native void allocate();
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlphaDropoutImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AlphaDropoutImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public AlphaDropoutImpl position(long position) {
-        return (AlphaDropoutImpl)super.position(position);
-    }
-    @Override public AlphaDropoutImpl getPointer(long i) {
-        return new AlphaDropoutImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public AlphaDropoutImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::AlphaDropoutImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);

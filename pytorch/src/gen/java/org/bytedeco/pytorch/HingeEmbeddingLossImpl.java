@@ -39,20 +39,14 @@ public class HingeEmbeddingLossImpl extends HingeEmbeddingLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HingeEmbeddingLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public HingeEmbeddingLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public HingeEmbeddingLossImpl position(long position) {
-        return (HingeEmbeddingLossImpl)super.position(position);
-    }
-    @Override public HingeEmbeddingLossImpl getPointer(long i) {
-        return new HingeEmbeddingLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public HingeEmbeddingLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::HingeEmbeddingLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public HingeEmbeddingLossImpl(@ByVal(nullValue = "torch::nn::HingeEmbeddingLossOptions{}") HingeEmbeddingLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::HingeEmbeddingLossOptions{}") HingeEmbeddingLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::HingeEmbeddingLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::HingeEmbeddingLossOptions{}") HingeEmbeddingLossOptions options_);
   public HingeEmbeddingLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::HingeEmbeddingLossImpl>") private native void allocate();
 
   public native void reset();
 

@@ -36,20 +36,14 @@ public class GLUImpl extends GLUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GLUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GLUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public GLUImpl position(long position) {
-        return (GLUImpl)super.position(position);
-    }
-    @Override public GLUImpl getPointer(long i) {
-        return new GLUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public GLUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::GLUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public GLUImpl(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::GLUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::GLUOptions{}") GLUOptions options_);
   public GLUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::GLUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

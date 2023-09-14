@@ -29,15 +29,6 @@ public class CompilationUnit extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompilationUnit(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CompilationUnit(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CompilationUnit position(long position) {
-        return (CompilationUnit)super.position(position);
-    }
-    @Override public CompilationUnit getPointer(long i) {
-        return new CompilationUnit((Pointer)this).offsetAddress(i);
-    }
 
   public enum FunctionType { Method(0), Hook(1), PreHook(2);
 
@@ -50,15 +41,15 @@ public class CompilationUnit extends Pointer {
   // constructor that takes a set of functions to compile using the native
   // resolver
   public CompilationUnit(@StdString BytePointer source) { super((Pointer)null); allocate(source); }
-  @SharedPtr private native void allocate(@StdString BytePointer source);
+  @SharedPtr @Name("std::make_shared<torch::jit::CompilationUnit>") private native void allocate(@StdString BytePointer source);
   public CompilationUnit(@StdString String source) { super((Pointer)null); allocate(source); }
-  @SharedPtr private native void allocate(@StdString String source);
+  @SharedPtr @Name("std::make_shared<torch::jit::CompilationUnit>") private native void allocate(@StdString String source);
   public CompilationUnit() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::jit::CompilationUnit>") private native void allocate();
 
   public native @ByRef @Name("operator =") CompilationUnit put(@ByRef(true) CompilationUnit arg0);
   public CompilationUnit(@ByRef(true) CompilationUnit arg0) { super((Pointer)null); allocate(arg0); }
-  @SharedPtr private native void allocate(@ByRef(true) CompilationUnit arg0);
+  @SharedPtr @Name("std::make_shared<torch::jit::CompilationUnit>") private native void allocate(@ByRef(true) CompilationUnit arg0);
   
   
 

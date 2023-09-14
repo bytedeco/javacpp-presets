@@ -26,6 +26,9 @@ public class MaxUnpool1dImplBase extends MaxUnpool1dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MaxUnpool1dImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MaxUnpool1dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MaxUnpoolImpl<1,torch::nn::MaxUnpool1dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MaxUnpool1dImplBase(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
   private native void allocate(@ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);

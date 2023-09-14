@@ -37,11 +37,14 @@ public class FractionalMaxPool2dImpl extends FractionalMaxPool2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FractionalMaxPool2dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FractionalMaxPool2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::FractionalMaxPool2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public FractionalMaxPool2dImpl(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size) { super((Pointer)null); allocate(kernel_size); }
-  @SharedPtr private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
+  @SharedPtr @Name("std::make_shared<torch::nn::FractionalMaxPool2dImpl>") private native void allocate(@ByVal @Cast("torch::ExpandingArray<2>*") LongPointer kernel_size);
   public FractionalMaxPool2dImpl(@ByVal FractionalMaxPool2dOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal FractionalMaxPool2dOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::FractionalMaxPool2dImpl>") private native void allocate(@ByVal FractionalMaxPool2dOptions options_);
 
   public native void reset();
 

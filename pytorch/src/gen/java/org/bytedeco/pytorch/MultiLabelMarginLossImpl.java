@@ -40,20 +40,14 @@ public class MultiLabelMarginLossImpl extends MultiLabelMarginLossImplCloneable 
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiLabelMarginLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MultiLabelMarginLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public MultiLabelMarginLossImpl position(long position) {
-        return (MultiLabelMarginLossImpl)super.position(position);
-    }
-    @Override public MultiLabelMarginLossImpl getPointer(long i) {
-        return new MultiLabelMarginLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public MultiLabelMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::MultiLabelMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public MultiLabelMarginLossImpl(@ByVal(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiLabelMarginLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::MultiLabelMarginLossOptions{}") MultiLabelMarginLossOptions options_);
   public MultiLabelMarginLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::MultiLabelMarginLossImpl>") private native void allocate();
 
   public native void reset();
 

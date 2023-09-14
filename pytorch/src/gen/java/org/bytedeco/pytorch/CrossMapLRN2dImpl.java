@@ -32,11 +32,14 @@ public class CrossMapLRN2dImpl extends CrossMapLRN2dImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CrossMapLRN2dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CrossMapLRN2dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CrossMapLRN2dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CrossMapLRN2dImpl(@Cast("int64_t") long size) { super((Pointer)null); allocate(size); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long size);
+  @SharedPtr @Name("std::make_shared<torch::nn::CrossMapLRN2dImpl>") private native void allocate(@Cast("int64_t") long size);
   public CrossMapLRN2dImpl(@Const @ByRef CrossMapLRN2dOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef CrossMapLRN2dOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CrossMapLRN2dImpl>") private native void allocate(@Const @ByRef CrossMapLRN2dOptions options_);
 
   public native void reset();
 

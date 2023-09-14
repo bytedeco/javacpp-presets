@@ -36,20 +36,14 @@ public class PReLUImpl extends PReLUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PReLUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PReLUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public PReLUImpl position(long position) {
-        return (PReLUImpl)super.position(position);
-    }
-    @Override public PReLUImpl getPointer(long i) {
-        return new PReLUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public PReLUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::PReLUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public PReLUImpl(@Const @ByRef(nullValue = "torch::nn::PReLUOptions{}") PReLUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::PReLUOptions{}") PReLUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::PReLUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::PReLUOptions{}") PReLUOptions options_);
   public PReLUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::PReLUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

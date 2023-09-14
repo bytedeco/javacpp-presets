@@ -36,20 +36,14 @@ public class ReLU6Impl extends ReLU6ImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReLU6Impl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ReLU6Impl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ReLU6Impl position(long position) {
-        return (ReLU6Impl)super.position(position);
-    }
-    @Override public ReLU6Impl getPointer(long i) {
-        return new ReLU6Impl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public ReLU6Impl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ReLU6Impl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ReLU6Impl(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::ReLU6Impl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::ReLU6Options{}") ReLU6Options options_);
   public ReLU6Impl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::ReLU6Impl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

@@ -36,20 +36,14 @@ public class ELUImpl extends ELUImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ELUImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ELUImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ELUImpl position(long position) {
-        return (ELUImpl)super.position(position);
-    }
-    @Override public ELUImpl getPointer(long i) {
-        return new ELUImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public ELUImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::ELUImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public ELUImpl(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::ELUImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::ELUOptions{}") ELUOptions options_);
   public ELUImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::ELUImpl>") private native void allocate();
 
   public native @ByVal Tensor forward(@ByVal Tensor input);
 

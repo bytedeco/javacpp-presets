@@ -15,7 +15,7 @@
 // #include "c10/util/string_utils.h" // Android only
 // #include "c10/util/C++17.h"
 #include "c10/util/reverse_iterator.h"
-#include "c10/util/string_view.h"
+// #include "c10/util/string_view.h" // Not mapped. Using custom adapter instead.
 #include "c10/util/StringUtil.h"
 #include "c10/util/in_place.h"
 // #include "c10/util/variant.h" // Not parseable and incompatible with declaring c10::variant as basic container

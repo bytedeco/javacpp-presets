@@ -66,7 +66,9 @@ import org.bytedeco.openblas.presets.openblas;
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
-                "torch/csrc/jit/serialization/source_range_serialization.h"
+                "torch/csrc/jit/serialization/source_range_serialization.h",
+
+                "pytorch_adapters.h"
             },
             link = {"c10", "torch_cpu", "torch"},
             preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm"}
@@ -209,7 +211,7 @@ public class torch implements LoadEnabled, InfoMapper {
         }
 
         infoMap.put(new Info("torch::nn::" + name + "Impl")) // Ensure qualified name is in Info when Cloneable<XImpl> inheritance is parsed (and before class XImpl is finished parsing)
-               .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr"))
+               .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr", "@Name(\"std::make_shared<torch::nn::" + name + "Impl>\")"))
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
                .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
                .put(new Info("torch::nn::" + name).skip());
@@ -218,7 +220,7 @@ public class torch implements LoadEnabled, InfoMapper {
             anyModuleConstructors +=
                 "public AnyModule(" + name + "Impl module) { super((Pointer)null); allocate(module); }\n" +
                 // We need a @Cast because AnyModule constructor is explicit
-                "@SharedPtr private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n";
+                "private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n";
             infoMap.put(new Info("torch::nn::SequentialImpl::push_back<torch::nn::" + name + "Impl>").javaNames("push_back"));
         }
     }
@@ -340,7 +342,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::MaybeOwned<at::Tensor>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::Tensor>&&\"}) @StdMove TensorMaybeOwned").pointerTypes("TensorMaybeOwned"))
             .put(new Info("c10::MaybeOwned<at::TensorBase>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::TensorBase>&&\"}) @StdMove TensorBaseMaybeOwned").pointerTypes("TensorBaseMaybeOwned"))
             .put(new Info("c10::MaybeOwnedTraits<at::Tensor>").pointerTypes("MaybeOwnedTraitsTensor"))
-            .put(new Info("c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >").pointerTypes("MaybeOwnedTraitsGenericImplTensor"))
             .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
             .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
@@ -442,6 +443,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<std::tuple<std::string,size_t,size_t> >").pointerTypes("T_StringSizeTSizeT_TOptional").define())
             .put(new Info("torch::optional<std::tuple<torch::Tensor,torch::Tensor> >").pointerTypes("T_TensorTensor_TOptional").define())
             .put(new Info("c10::optional<std::tuple<c10::TypePtr,int32_t> >", "c10::optional<std::pair<c10::TypePtr,int32_t> >").pointerTypes("T_TypePtrLong_TOptional").cast().define())
+            .put(new Info("c10::optional<c10::string_view>").pointerTypes("StringViewOptional").define())
+            .put(new Info("c10::optional<std::vector<c10::string_view> >").pointerTypes("StringViewVectorOptional").define())
         ;
 
 
@@ -595,6 +598,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<double>").cast().pointerTypes("DoubleVector").define())
             .put(new Info("std::vector<size_t>").cast().pointerTypes("SizeTVector").define())
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+            .put(new Info("std::vector<c10::string_view>").pointerTypes("StringViewVector").define())
             .put(new Info("std::vector<std::pair<std::string,int64_t> >").pointerTypes("StringLongVector").define())
             .put(new Info("const std::vector<std::pair<at::RecordFunctionCallback,uint64_t> >",
                 "std::vector<std::pair<at::RecordFunctionCallback,at::CallbackHandle> >").pointerTypes("RecordFunctionCallbackHandleVector").define())
@@ -643,8 +647,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<torch::nn::AnyModule>::iterator").pointerTypes("AnyModuleVector.Iterator"))
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >").pointerTypes("SharedModuleVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >::iterator").pointerTypes("SharedModuleVector.Iterator"))
-            .put(new Info("std::vector<std::shared_ptr<torch::nn::AnyModule> >").pointerTypes("SharedAnyModuleVector").define())
-            .put(new Info("std::vector<std::shared_ptr<torch::nn::AnyModule> >::iterator").pointerTypes("SharedAnyModuleVector.Iterator"))
             .put(new Info("std::vector<std::pair<std::string,torch::Tensor> >").pointerTypes("StringTensorVector").define())
             .put(new Info("std::vector<std::pair<std::string,torch::nn::Module> >").pointerTypes("StringModuleVector").define())
             .put(new Info("std::vector<std::pair<std::string,torch::nn::AnyModule> >").pointerTypes("StringAnyModuleVector").define())
@@ -1625,16 +1627,17 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// Classes handled with @SharedPtr
+        // Annotating the constructor is normally needed for all classes for which
+        // at least an API call takes a shared pointer of this class AND
+        // if instances of this class can be created from a Java constructor.
         for (PointerInfo pi : new PointerInfo[]{
             new PointerInfo("torch::jit::Graph"),
             new PointerInfo("torch::jit::Operator"),
             new PointerInfo("torch::jit::Resolver"),
-            new PointerInfo("at::Tensor"),
             new PointerInfo("torch::jit::tensorexpr::analysis::AccessInfo"),
             new PointerInfo("c10::ClassType"),
             new PointerInfo("c10::TensorType").otherCppNames("c10::TensorTypePtr", "at::TensorTypePtr", "torch::TensorTypePtr"),
             new PointerInfo("torch::autograd::FunctionPreHook"),
-            new PointerInfo("torch::nn::AnyModule"),
             new PointerInfo("torch::nn::Module"),
             new PointerInfo("const at::functorch::FuncTorchTLSBase"),
             new PointerInfo("const torch::jit::CompilationUnit"),
@@ -1652,7 +1655,8 @@ public class torch implements LoadEnabled, InfoMapper {
 
             // Also annotate constructor of target class to ensure only one shared_ptr exists for each instance
             String n = pi.argumentNames[0].substring(pi.argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
-            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr"));
+            String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
+            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
         }
 
 
@@ -1887,6 +1891,10 @@ public class torch implements LoadEnabled, InfoMapper {
                    .put(new Info("c10::cast_and_store<" + t[0] + ">").javaNames("cast_and_store_from_" + t[1]));
         }
 
+
+        //// c10::string_view
+        infoMap.put(new Info("c10::basic_string_view<char>", "c10::string_view").annotations("@StringView").valueTypes("BytePointer", "String"));
+
         // Registries.
         // Skipped them for now. Much burden with variadic args and creator function pointers.
         // We cannot map ThreadPoolRegistry because it takes 3 arguments in the variadic Args Registry template arguments
@@ -2115,7 +2123,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::nn::functions::CrossMapLRN2d",
             "torch::profiler::impl::HashCombine",
 
-            "torch::autograd::_jvp_fn_t", "torch::autograd::profiler::post_process_t"
+            "torch::autograd::_jvp_fn_t", "torch::autograd::profiler::post_process_t",
+            "at::StringView" // Confusion with string_view and @StringView, and doesn't seem to be of any use in API
 
         ).skip())
         ;
@@ -2150,7 +2159,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
                //// Classes kept but passed as generic pointer
-               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::string_view", "c10::impl::PyObjectSlot",
+               .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::impl::PyObjectSlot",
                    "_object",
                    "PyObject", "std::function<PyObject*(void*)>", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
                    "std::pair<PyObject*,PyObject*>", "std::stack<std::pair<PyObject*,PyObject*> >", "torch::autograd::utils::DelayWarningHandler",
@@ -2160,7 +2169,7 @@ public class torch implements LoadEnabled, InfoMapper {
                    "std::shared_ptr<caffe2::serialize::PyTorchStreamReader>", "caffe2::serialize::PyTorchStreamWriter",
                    "c10::detail::DictImpl::dict_map_type::iterator",
                    "std::iterator<std::forward_iterator_tag,c10::impl::DictEntryRef<c10::IValue,c10::IValue,c10::detail::DictImpl::dict_map_type::iterator> >",
-                   "c10::optional<PyObject*>", "c10::optional<c10::string_view>", "c10::optional<std::vector<c10::string_view> >", "c10::optional<std::chrono::milliseconds>",
+                   "c10::optional<PyObject*>", "c10::optional<std::chrono::milliseconds>",
                    "c10::intrusive_ptr<torch::CustomClassHolder>", "c10::intrusive_ptr<caffe2::Blob>",
                    "c10::intrusive_ptr<c10::ivalue::Object>", "c10::ArrayRef<c10::intrusive_ptr<c10::ivalue::Object> >",
                    "torch::jit::DetachedBuffer::UniqueDetachedBuffer", "c10::optional<at::StepCallbacks>",

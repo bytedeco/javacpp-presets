@@ -35,20 +35,14 @@ public class CosineSimilarityImpl extends CosineSimilarityImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CosineSimilarityImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CosineSimilarityImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CosineSimilarityImpl position(long position) {
-        return (CosineSimilarityImpl)super.position(position);
-    }
-    @Override public CosineSimilarityImpl getPointer(long i) {
-        return new CosineSimilarityImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public CosineSimilarityImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::CosineSimilarityImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public CosineSimilarityImpl(@Const @ByRef(nullValue = "torch::nn::CosineSimilarityOptions{}") CosineSimilarityOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef(nullValue = "torch::nn::CosineSimilarityOptions{}") CosineSimilarityOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::CosineSimilarityImpl>") private native void allocate(@Const @ByRef(nullValue = "torch::nn::CosineSimilarityOptions{}") CosineSimilarityOptions options_);
   public CosineSimilarityImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::CosineSimilarityImpl>") private native void allocate();
 
   public native void reset();
 

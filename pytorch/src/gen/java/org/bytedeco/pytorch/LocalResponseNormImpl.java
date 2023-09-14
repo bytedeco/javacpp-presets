@@ -40,11 +40,14 @@ public class LocalResponseNormImpl extends LocalResponseNormImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LocalResponseNormImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LocalResponseNormImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::LocalResponseNormImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public LocalResponseNormImpl(@Cast("int64_t") long size) { super((Pointer)null); allocate(size); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long size);
+  @SharedPtr @Name("std::make_shared<torch::nn::LocalResponseNormImpl>") private native void allocate(@Cast("int64_t") long size);
   public LocalResponseNormImpl(@Const @ByRef LocalResponseNormOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef LocalResponseNormOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::LocalResponseNormImpl>") private native void allocate(@Const @ByRef LocalResponseNormOptions options_);
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 

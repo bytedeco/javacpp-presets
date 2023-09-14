@@ -36,11 +36,14 @@ public class BilinearImpl extends BilinearImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BilinearImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BilinearImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::BilinearImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public BilinearImpl(@Cast("int64_t") long in1_features, @Cast("int64_t") long in2_features, @Cast("int64_t") long out_features) { super((Pointer)null); allocate(in1_features, in2_features, out_features); }
-  @SharedPtr private native void allocate(@Cast("int64_t") long in1_features, @Cast("int64_t") long in2_features, @Cast("int64_t") long out_features);
+  @SharedPtr @Name("std::make_shared<torch::nn::BilinearImpl>") private native void allocate(@Cast("int64_t") long in1_features, @Cast("int64_t") long in2_features, @Cast("int64_t") long out_features);
   public BilinearImpl(@Const @ByRef BilinearOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@Const @ByRef BilinearOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::BilinearImpl>") private native void allocate(@Const @ByRef BilinearOptions options_);
 
   public native void reset();
 

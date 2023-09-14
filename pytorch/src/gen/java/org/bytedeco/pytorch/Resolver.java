@@ -37,18 +37,9 @@ public class Resolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Resolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Resolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Resolver(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public Resolver position(long position) {
-        return (Resolver)super.position(position);
-    }
-    @Override public Resolver getPointer(long i) {
-        return new Resolver((Pointer)this).offsetAddress(i);
-    }
+    @SharedPtr @Name("std::make_shared<torch::jit::Resolver>") private native void allocate();
 
 
   // Resolve a given name to a SugaredValue. This takes the method `m` that the

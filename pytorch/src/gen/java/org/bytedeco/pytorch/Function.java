@@ -28,7 +28,7 @@ public class Function extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Function(Pointer p) { super(p); }
 
-  public native @ByVal @Cast("c10::string_view*") Pointer doc_string();
+  public native @StringView BytePointer doc_string();
 
   public native @Cast("bool") boolean isGraphFunction();
 

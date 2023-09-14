@@ -36,16 +36,19 @@ public class Conv1dImpl extends Conv1dImplBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Conv1dImpl(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Conv1dImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::Conv1dImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public Conv1dImpl(
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size) { super((Pointer)null); allocate(input_channels, output_channels, kernel_size); }
-  @SharedPtr private native void allocate(
+  @SharedPtr @Name("std::make_shared<torch::nn::Conv1dImpl>") private native void allocate(
         @Cast("int64_t") long input_channels,
         @Cast("int64_t") long output_channels,
         @ByVal @Cast("torch::ExpandingArray<1>*") LongPointer kernel_size);
   public Conv1dImpl(@ByVal Conv1dOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal Conv1dOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::Conv1dImpl>") private native void allocate(@ByVal Conv1dOptions options_);
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
 }

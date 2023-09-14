@@ -38,20 +38,14 @@ public class PoissonNLLLossImpl extends PoissonNLLLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PoissonNLLLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PoissonNLLLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public PoissonNLLLossImpl position(long position) {
-        return (PoissonNLLLossImpl)super.position(position);
-    }
-    @Override public PoissonNLLLossImpl getPointer(long i) {
-        return new PoissonNLLLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public PoissonNLLLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::PoissonNLLLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public PoissonNLLLossImpl(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::PoissonNLLLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::PoissonNLLLossOptions{}") PoissonNLLLossOptions options_);
   public PoissonNLLLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::PoissonNLLLossImpl>") private native void allocate();
 
   public native void reset();
 

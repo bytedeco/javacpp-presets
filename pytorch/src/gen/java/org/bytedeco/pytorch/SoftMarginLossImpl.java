@@ -39,20 +39,14 @@ public class SoftMarginLossImpl extends SoftMarginLossImplCloneable {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftMarginLossImpl(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SoftMarginLossImpl(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SoftMarginLossImpl position(long position) {
-        return (SoftMarginLossImpl)super.position(position);
-    }
-    @Override public SoftMarginLossImpl getPointer(long i) {
-        return new SoftMarginLossImpl((Pointer)this).offsetAddress(i);
-    }
+    /** Downcast constructor. */
+    public SoftMarginLossImpl(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::SoftMarginLossImpl, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
   public SoftMarginLossImpl(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_) { super((Pointer)null); allocate(options_); }
-  @SharedPtr private native void allocate(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
+  @SharedPtr @Name("std::make_shared<torch::nn::SoftMarginLossImpl>") private native void allocate(@ByVal(nullValue = "torch::nn::SoftMarginLossOptions{}") SoftMarginLossOptions options_);
   public SoftMarginLossImpl() { super((Pointer)null); allocate(); }
-  @SharedPtr private native void allocate();
+  @SharedPtr @Name("std::make_shared<torch::nn::SoftMarginLossImpl>") private native void allocate();
 
   /** Pretty prints the {@code SoftMarginLoss} module into the given {@code stream}. */
   public native void pretty_print(@Cast("std::ostream*") @ByRef Pointer stream);

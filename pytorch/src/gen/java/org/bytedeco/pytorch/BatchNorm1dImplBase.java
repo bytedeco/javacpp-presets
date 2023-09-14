@@ -24,6 +24,9 @@ public class BatchNorm1dImplBase extends BatchNorm1dImplBaseBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchNorm1dImplBase(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BatchNorm1dImplBase(Module pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @SharedPtr @Name("SHARED_PTR_NAMESPACE::dynamic_pointer_cast<torch::nn::BatchNormImplBase<1,torch::nn::BatchNorm1dImpl>, torch::nn::Module>") void allocate(@SharedPtr Module pointer);
 
 
   public native @ByVal Tensor forward(@Const @ByRef Tensor input);
