@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.23
+OPENBLAS_VERSION=0.3.24
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -24,8 +24,8 @@ cd OpenBLAS-$OPENBLAS_VERSION
 cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # https://github.com/xianyi/OpenBLAS/issues/3989
-patch -Np1 < ../../../OpenBLAS-cross.patch
-patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-cross.patch
+#patch -Np1 < ../../../OpenBLAS-cross.patch
+#patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-cross.patch
 
 # remove broken cross-compiler workaround on Mac
 sedinplace '/if (($os eq "Darwin")/,/}/d' c_check ../OpenBLAS-$OPENBLAS_VERSION-nolapack/c_check
@@ -33,6 +33,7 @@ sedinplace 's/common.h/param.h/g' getarch_2nd.c ../OpenBLAS-$OPENBLAS_VERSION-no
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export FEXTRALIB="-lgfortran"
+export MAKE_NB_JOBS=$MAKEJ
 export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0

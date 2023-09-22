@@ -144,12 +144,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        11;
-public static final int PY_MICRO_VERSION =        4;
+public static final int PY_MICRO_VERSION =        5;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.11.4";
+public static final String PY_VERSION =              "3.11.5";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -351,40 +351,40 @@ public static final int HAVE_CTERMID = 1;
 /* #undef HAVE_CTERMID_R */
 
 /* Define if you have the 'filter' function. */
-public static final int HAVE_CURSES_FILTER = 1;
+/* #undef HAVE_CURSES_FILTER */
 
 /* Define to 1 if you have the <curses.h> header file. */
-public static final int HAVE_CURSES_H = 1;
+/* #undef HAVE_CURSES_H */
 
 /* Define if you have the 'has_key' function. */
-public static final int HAVE_CURSES_HAS_KEY = 1;
+/* #undef HAVE_CURSES_HAS_KEY */
 
 /* Define if you have the 'immedok' function. */
-public static final int HAVE_CURSES_IMMEDOK = 1;
+/* #undef HAVE_CURSES_IMMEDOK */
 
 /* Define if you have the 'is_pad' function. */
-public static final int HAVE_CURSES_IS_PAD = 1;
+/* #undef HAVE_CURSES_IS_PAD */
 
 /* Define if you have the 'is_term_resized' function. */
-public static final int HAVE_CURSES_IS_TERM_RESIZED = 1;
+/* #undef HAVE_CURSES_IS_TERM_RESIZED */
 
 /* Define if you have the 'resizeterm' function. */
-public static final int HAVE_CURSES_RESIZETERM = 1;
+/* #undef HAVE_CURSES_RESIZETERM */
 
 /* Define if you have the 'resize_term' function. */
-public static final int HAVE_CURSES_RESIZE_TERM = 1;
+/* #undef HAVE_CURSES_RESIZE_TERM */
 
 /* Define if you have the 'syncok' function. */
-public static final int HAVE_CURSES_SYNCOK = 1;
+/* #undef HAVE_CURSES_SYNCOK */
 
 /* Define if you have the 'typeahead' function. */
-public static final int HAVE_CURSES_TYPEAHEAD = 1;
+/* #undef HAVE_CURSES_TYPEAHEAD */
 
 /* Define if you have the 'use_env' function. */
-public static final int HAVE_CURSES_USE_ENV = 1;
+/* #undef HAVE_CURSES_USE_ENV */
 
 /* Define if you have the 'wchgat' function. */
-public static final int HAVE_CURSES_WCHGAT = 1;
+/* #undef HAVE_CURSES_WCHGAT */
 
 /* Define to 1 if you have the <db.h> header file. */
 public static final int HAVE_DB_H = 1;
@@ -884,6 +884,9 @@ public static final int HAVE_LINUX_CAN_RAW_H = 1;
 /* Define if compiling using Linux 4.1 or later. */
 public static final int HAVE_LINUX_CAN_RAW_JOIN_FILTERS = 1;
 
+/* Define to 1 if you have the <linux/limits.h> header file. */
+public static final int HAVE_LINUX_LIMITS_H = 1;
+
 /* Define to 1 if you have the <linux/memfd.h> header file. */
 public static final int HAVE_LINUX_MEMFD_H = 1;
 
@@ -948,7 +951,7 @@ public static final int HAVE_MBRTOWC = 1;
 public static final int HAVE_MEMFD_CREATE = 1;
 
 /* Define to 1 if you have the <memory.h> header file. */
-/* #undef HAVE_MEMORY_H */
+public static final int HAVE_MEMORY_H = 1;
 
 /* Define to 1 if you have the `memrchr' function. */
 public static final int HAVE_MEMRCHR = 1;
@@ -981,7 +984,7 @@ public static final int HAVE_MREMAP = 1;
 public static final int HAVE_NANOSLEEP = 1;
 
 /* Define to 1 if you have the <ncurses.h> header file. */
-public static final int HAVE_NCURSES_H = 1;
+/* #undef HAVE_NCURSES_H */
 
 /* Define to 1 if you have the <ndbm.h> header file. */
 public static final int HAVE_NDBM_H = 1;
@@ -1549,7 +1552,7 @@ public static final int HAVE_TEMPNAM = 1;
 public static final int HAVE_TERMIOS_H = 1;
 
 /* Define to 1 if you have the <term.h> header file. */
-public static final int HAVE_TERM_H = 1;
+/* #undef HAVE_TERM_H */
 
 /* Define to 1 if you have the `timegm' function. */
 public static final int HAVE_TIMEGM = 1;
@@ -1685,7 +1688,7 @@ public static final int HAVE_ZLIB_COPY = 1;
 public static final int MAJOR_IN_SYSMACROS = 1;
 
 /* Define if mvwdelch in curses.h is an expression. */
-public static final int MVWDELCH_IS_EXPRESSION = 1;
+/* #undef MVWDELCH_IS_EXPRESSION */
 
 /* Define to the address where bug reports for this package should be sent. */
 /* #undef PACKAGE_BUGREPORT */
@@ -1866,7 +1869,7 @@ public static final int __EXTENSIONS__ = 1;
 
 
 /* Define if WINDOW in curses.h offers a field _flags. */
-public static final int WINDOW_HAS_FLAGS = 1;
+/* #undef WINDOW_HAS_FLAGS */
 
 /* Define if you want build the _decimal module using a coroutine-local rather
    than a thread-local context */
@@ -11406,11 +11409,13 @@ public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg
 @NoException public static native PyObject Py_VaBuildValue(@Cast("const char*") BytePointer arg0, @ByVal @Cast("va_list*") Pointer arg1);
 @NoException public static native PyObject Py_VaBuildValue(String arg0, @ByVal @Cast("va_list*") Pointer arg1);
 
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030a0000
 // Add an attribute with name 'name' and value 'obj' to the module 'mod.
 // On success, return 0 on success.
 // On error, raise an exception and return -1.
 @NoException public static native int PyModule_AddObjectRef(PyObject mod, @Cast("const char*") BytePointer name, PyObject value);
 @NoException public static native int PyModule_AddObjectRef(PyObject mod, String name, PyObject value);
+// #endif   /* Py_LIMITED_API */
 
 // Similar to PyModule_AddObjectRef() but steal a reference to 'obj'
 // (Py_DECREF(obj)) on success (if it returns 0).

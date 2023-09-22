@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.annotation.Properties;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            preload = {"LLVM-15", "clang-cpp@.15"},
+            preload = {"LLVM-17", "clang-cpp@.17"},
             executable = {
                 "clang",
                 "clang-check",

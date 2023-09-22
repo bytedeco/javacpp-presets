@@ -73,6 +73,8 @@ runs:
           $SUDO gem install apt-spy2
           $SUDO apt-spy2 check
           $SUDO apt-spy2 fix --commit
+          $SUDO sed -i 's/azure\.//' /etc/apt/apt-mirrors.txt /etc/apt/sources.list
+          $SUDO cat /etc/apt/apt-mirrors.txt /etc/apt/sources.list
           $SUDO apt-get update
         fi
 
@@ -100,16 +102,16 @@ runs:
         echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
         ln -sf $JAVA_HOME /usr/lib/jvm/default-java
         find /usr/lib/jvm/default-java/
-        curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.tar.gz
+        # curl -LO https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.tar.gz
         curl -LO https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
         curl -LO https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.18.3.tar.gz
         curl -LO https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
-        $SUDO tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
+        # $SUDO tar -xzf cmake-3.24.2-linux-x86_64.tar.gz -C /opt/
         $SUDO tar -xzf apache-maven-3.6.3-bin.tar.gz -C /opt/
         $SUDO tar -xzf git-2.18.3.tar.gz
         $SUDO unzip gradle-7.1.1-bin.zip -d /opt/
         # pushd git-2.18.3; make -j2 prefix=/usr/local/; $SUDO make -j2 prefix=/usr/local/ install; popd
-        $SUDO ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
+        # $SUDO ln -sf /opt/cmake-3.24.2-linux-x86_64/bin/* /usr/bin/
         $SUDO ln -sf /opt/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
         $SUDO ln -sf /opt/gradle-7.1.1/bin/gradle /usr/bin/gradle
 

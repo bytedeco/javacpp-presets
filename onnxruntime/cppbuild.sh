@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.15.1
+ONNXRUNTIME=1.16.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -36,6 +36,7 @@ git reset --hard
 git checkout v$ONNXRUNTIME
 git submodule update --init --recursive
 git submodule foreach --recursive 'git reset --hard'
+git checkout v1.15.1 onnxruntime/core/platform/windows/stacktrace.cc # revert https://github.com/microsoft/onnxruntime/pull/17173
 
 case $PLATFORM in
     linux-arm64)
@@ -80,7 +81,7 @@ patch -p1 < ../../../onnxruntime.patch
 #patch -p1 < ../../../onnxruntime-windows.patch # https://github.com/microsoft/onnxruntime/pull/7883
 sedinplace '/--Werror/d' cmake/CMakeLists.txt
 sedinplace "s/return 'ON'/return 'OFF'/g" tools/ci_build/build.py
-sedinplace "s/default='Visual Studio 1. 201.'/default='Ninja'/g" tools/ci_build/build.py
+sedinplace "s/Visual Studio 1. 20../Ninja/g" tools/ci_build/build.py
 sedinplace 's/Darwin|iOS/iOS/g' cmake/onnxruntime_providers.cmake
 sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_compile_flags.cmake cmake/onnxruntime_providers.cmake
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
@@ -152,6 +153,11 @@ sedinplace 's/outputValues = allocarray/outputValues = (OrtValue**)allocarray/g'
 sedinplace 's/(\*jniEnv)->GetMethodID(/jniEnv->GetMethodID(/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/jniEnv, metadataClazz/metadataClazz/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
 sedinplace 's/return metadataJava/return (jstring)metadataJava/g' java/src/main/native/ai_onnxruntime_OrtSession.cpp
+sedinplace 's/return NULL/return/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
+sedinplace 's/names = allocarray/names = (const char**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
+sedinplace 's/Strings = allocarray/Strings = (jobject*)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
+sedinplace 's/UTFChars(javaNameStrings/UTFChars((jstring)javaNameStrings/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
+sedinplace 's/initializers = allocarray/initializers = (const OrtValue**)allocarray/g' java/src/main/native/ai_onnxruntime_OrtSession_SessionOptions.cpp
 
 which ctest3 &> /dev/null && CTEST="ctest3" || CTEST="ctest"
 "$PYTHON_BIN_PATH" tools/ci_build/build.py --build_dir ../build --config Release --cmake_path "$CMAKE" --ctest_path "$CTEST" --build_shared_lib $ARCH_FLAGS $DNNL_FLAGS $OPENMP_FLAGS $GPU_FLAGS
@@ -162,7 +168,7 @@ cp -r orttraining/orttraining/models/runner/training_runner.h ../include
 cp -r orttraining/orttraining/models/runner/training_util.h ../include
 #sedinplace '/#include "core\/framework\/provider_options.h"/,/};/d' ../include/onnxruntime/core/providers/cuda/cuda_provider_factory.h
 sedinplace '/struct ProviderInfo_OpenVINO {/,/};/d' ../include/onnxruntime/core/providers/openvino/openvino_provider_factory.h
-cp -r java/src/main/java/* ../java
+cp -r java/src/main/jvm/* java/src/main/java/* ../java
 cp -a ../build/Release/lib* ../build/Release/Release/lib* ../lib || true
 cp ../build/Release/onnxruntime*.dll ../build/Release/Release/onnxruntime*.dll ../bin || true
 cp ../build/Release/onnxruntime*.lib ../build/Release/Release/onnxruntime*.lib ../lib || true

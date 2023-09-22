@@ -1,5 +1,5 @@
 diff --git a/cmake/adjust_global_compile_flags.cmake b/cmake/adjust_global_compile_flags.cmake
-index d4421a6211..219ac9daba 100644
+index 68522a7dda..69432fa783 100644
 --- a/cmake/adjust_global_compile_flags.cmake
 +++ b/cmake/adjust_global_compile_flags.cmake
 @@ -11,8 +11,8 @@ endif()
@@ -12,12 +12,12 @@ index d4421a6211..219ac9daba 100644
 +  string(APPEND CMAKE_C_FLAGS " -Wextra -I/usr/local/include")
  endif()
  
- if (onnxruntime_BUILD_WEBASSEMBLY)
+ if (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
 diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
-index 02861458c9..b2a24008a7 100644
+index 59ebf8eca4..2a326e4057 100644
 --- a/cmake/onnxruntime.cmake
 +++ b/cmake/onnxruntime.cmake
-@@ -115,9 +115,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
+@@ -131,9 +131,9 @@ target_compile_definitions(onnxruntime PRIVATE FILE_NAME=\"onnxruntime.dll\")
  
  if(UNIX)
    if (APPLE)
@@ -30,10 +30,10 @@ index 02861458c9..b2a24008a7 100644
  else()
    set(ONNXRUNTIME_SO_LINK_FLAG " -DEF:${SYMBOL_FILE}")
 diff --git a/onnxruntime/core/session/provider_bridge_ort.cc b/onnxruntime/core/session/provider_bridge_ort.cc
-index 9a4fe6900c..edd12a248b 100644
+index 8f0a5aeaa3..c684682e7d 100644
 --- a/onnxruntime/core/session/provider_bridge_ort.cc
 +++ b/onnxruntime/core/session/provider_bridge_ort.cc
-@@ -1070,13 +1070,33 @@ struct ProviderHostImpl : ProviderHost {
+@@ -1132,13 +1132,33 @@ struct ProviderHostImpl : ProviderHost {
  #if defined(_MSC_VER) && !defined(__clang__)
  #pragma warning(pop)
  #endif
@@ -67,7 +67,7 @@ index 9a4fe6900c..edd12a248b 100644
      ORT_THROW_IF_ERROR(Env::Default().LoadDynamicLibrary(full_path, true /*shared_globals on unix*/, &handle_));
  
      void (*PProvider_SetHost)(void*);
-@@ -1095,7 +1115,7 @@ struct ProviderSharedLibrary {
+@@ -1157,7 +1177,7 @@ struct ProviderSharedLibrary {
      }
    }
  
@@ -76,7 +76,7 @@ index 9a4fe6900c..edd12a248b 100644
    ~ProviderSharedLibrary() {
      // assert(!handle_); // We should already be unloaded at this point (disabled until Python shuts down deterministically)
    }
-@@ -1128,6 +1148,18 @@ struct ProviderLibrary {
+@@ -1190,6 +1210,18 @@ struct ProviderLibrary {
          s_library_shared.Ensure();
  
          auto full_path = Env::Default().GetRuntimePath() + filename_;
@@ -96,10 +96,10 @@ index 9a4fe6900c..edd12a248b 100644
  
          Provider* (*PGetProvider)();
 diff --git a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-index 2e4d5b6bfa..b12b848e93 100644
+index d6546ccdd9..70914d6758 100644
 --- a/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
 +++ b/onnxruntime/core/providers/shared_library/provider_bridge_provider.cc
-@@ -109,18 +109,21 @@ struct OnUnload {
+@@ -113,10 +113,11 @@ struct OnUnload {
  
  } g_on_unload;
  
@@ -113,17 +113,7 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->CreateAllocator(info);
  }
  
- void AllocatorManager::InsertAllocator(AllocatorPtr allocator) {
-+  g_host = Provider_GetHost();
-   return g_host->AllocatorManager__InsertAllocator(this, allocator);
- }
- 
- AllocatorPtr AllocatorManager::GetAllocator(OrtMemType mem_type, OrtDevice device) const {
-+  g_host = Provider_GetHost();
-   return g_host->AllocatorManager__GetAllocator(this, mem_type, device);
- }
- 
-@@ -220,19 +223,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<MLFloat16>() { return Provider_GetH
+@@ -251,19 +252,22 @@ MLDataType DataTypeImpl::GetSparseTensorType<Float8E5M2FNUZ>() { return Provider
  #endif
  
  Status IDataTransfer::CopyTensor(const Tensor& src, Tensor& dst) const {
@@ -147,7 +137,7 @@ index 2e4d5b6bfa..b12b848e93 100644
  
  TensorShape::TensorShape(gsl::span<const int64_t> dims) {
    Allocate(dims.size());
-@@ -240,16 +246,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
+@@ -271,16 +275,19 @@ TensorShape::TensorShape(gsl::span<const int64_t> dims) {
  }
  
  TensorShape& TensorShape::operator=(const TensorShape& other) {
@@ -167,7 +157,7 @@ index 2e4d5b6bfa..b12b848e93 100644
    g_host->TensorShape__Allocate(this, size);
  }
  
-@@ -260,6 +269,7 @@ int64_t TensorShape::Size() const {
+@@ -291,6 +298,7 @@ int64_t TensorShape::Size() const {
  }
  
  int64_t TensorShape::SizeHelper(size_t start, size_t end) const {
@@ -175,7 +165,7 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->TensorShape__SizeHelper(this, start, end);
  }
  
-@@ -269,6 +279,7 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
+@@ -300,74 +308,89 @@ TensorShape TensorShape::Slice(size_t dimstart, size_t dimend) const {
  }
  
  std::string TensorShape::ToString() const {
@@ -183,8 +173,13 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->TensorShape__ToString(this);
  }
  
-@@ -278,77 +289,94 @@ int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->
- std::ostream& operator<<(std::ostream& out, const TensorShape& shape) { return g_host->operator_left_shift(out, shape); }
+-int64_t TensorShape::SizeToDimension(size_t dimension) const { return g_host->TensorShape__SizeToDimension(this, dimension); }
+-int64_t TensorShape::SizeFromDimension(size_t dimension) const { return g_host->TensorShape__SizeFromDimension(this, dimension); }
++int64_t TensorShape::SizeToDimension(size_t dimension) const { g_host = Provider_GetHost(); return g_host->TensorShape__SizeToDimension(this, dimension); }
++int64_t TensorShape::SizeFromDimension(size_t dimension) const { g_host = Provider_GetHost(); return g_host->TensorShape__SizeFromDimension(this, dimension); }
+ 
+-std::ostream& operator<<(std::ostream& out, const TensorShape& shape) { return g_host->operator_left_shift(out, shape); }
++std::ostream& operator<<(std::ostream& out, const TensorShape& shape) { g_host = Provider_GetHost(); return g_host->operator_left_shift(out, shape); }
  
  AllocatorPtr CreateAllocator(AllocatorCreationInfo info) {
 +  g_host = Provider_GetHost();
@@ -199,16 +194,6 @@ index 2e4d5b6bfa..b12b848e93 100644
  bool IAllocator::CalcMemSizeForArrayWithAlignment(size_t nmemb, size_t size, size_t alignment, size_t* out) noexcept {
 +  g_host = Provider_GetHost();
    return g_host->IAllocator__CalcMemSizeForArrayWithAlignment(nmemb, size, alignment, out);
- }
- 
- AllocatorPtr IExecutionProvider::GetAllocator(OrtMemType mem_type) const {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__GetAllocator(this, mem_type);
- }
- 
- void IExecutionProvider::InsertAllocator(AllocatorPtr allocator) {
-+  g_host = Provider_GetHost();
-   g_host->IExecutionProvider__InsertAllocator(this, allocator);
  }
  
  std::vector<std::unique_ptr<ComputeCapability>> IExecutionProvider::GetCapability(const onnxruntime::GraphViewer& graph_viewer,
@@ -227,20 +212,15 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->IExecutionProvider__GenerateMetaDefId(this, graph_viewer, model_hash);
  }
  
- void IExecutionProvider::RegisterAllocator(AllocatorManager& allocator_manager) {
-+  g_host = Provider_GetHost();
-   return g_host->IExecutionProvider__RegisterAllocator(this, allocator_manager);
- }
- 
  #ifdef USE_TENSORRT
  std::unique_ptr<IAllocator> CreateCUDAAllocator(int16_t device_id, const char* name) {
 +  g_host = Provider_GetHost();
    return g_host->CreateCUDAAllocator(device_id, name);
  }
  
- std::unique_ptr<IAllocator> CreateCUDAPinnedAllocator(int16_t device_id, const char* name) {
+ std::unique_ptr<IAllocator> CreateCUDAPinnedAllocator(const char* name) {
 +  g_host = Provider_GetHost();
-   return g_host->CreateCUDAPinnedAllocator(device_id, name);
+   return g_host->CreateCUDAPinnedAllocator(name);
  }
  
  std::unique_ptr<IDataTransfer> CreateGPUDataTransfer() {
@@ -255,9 +235,9 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->CreateROCMAllocator(device_id, name);
  }
  
- std::unique_ptr<IAllocator> CreateROCMPinnedAllocator(int16_t device_id, const char* name) {
+ std::unique_ptr<IAllocator> CreateROCMPinnedAllocator(const char* name) {
 +  g_host = Provider_GetHost();
-   return g_host->CreateROCMPinnedAllocator(device_id, name);
+   return g_host->CreateROCMPinnedAllocator(name);
  }
  
  std::unique_ptr<IDataTransfer> CreateGPUDataTransfer() {
@@ -278,7 +258,7 @@ index 2e4d5b6bfa..b12b848e93 100644
    return g_host->GetCpuPreferredNodes(graph, kernel_lookup, tentative_nodes);
  }
  
-@@ -449,10 +477,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
+@@ -464,10 +487,12 @@ std::vector<std::string> GetStackTrace() { return g_host->GetStackTrace(); }
  
  void LogRuntimeError(uint32_t session_id, const common::Status& status,
                       const char* file, const char* function, uint32_t line) {
@@ -292,10 +272,10 @@ index 2e4d5b6bfa..b12b848e93 100644
  }
  
 diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
-index 1065f7397e..9b756c57e9 100644
+index 4c3e8b76e8..24b8b715d7 100644
 --- a/tools/ci_build/build.py
 +++ b/tools/ci_build/build.py
-@@ -887,6 +887,9 @@ def generate_build_tree(
+@@ -946,6 +946,9 @@ def generate_build_tree(
      cmake_args += [
          "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
          "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
@@ -305,7 +285,7 @@ index 1065f7397e..9b756c57e9 100644
          # There are two ways of locating python C API header file. "find_package(PythonLibs 3.5 REQUIRED)"
          # and "find_package(Python 3.5 COMPONENTS Development.Module)". The first one is deprecated and it
          # depends on the "PYTHON_EXECUTABLE" variable. The second needs "Python_EXECUTABLE". Here we set both
-@@ -2440,6 +2443,9 @@ def main():
+@@ -2525,6 +2528,9 @@ def main():
              log.info("Activating emsdk...")
              run_subprocess([emsdk_file, "activate", emsdk_version], cwd=emsdk_dir)
  
@@ -314,4 +294,4 @@ index 1065f7397e..9b756c57e9 100644
 +
          if is_ubuntu_1604():
              if args.arm or args.arm64:
-                 raise BuildError(
+                 raise BuildError("Only Windows ARM(64) cross-compiled builds supported currently through this script")
