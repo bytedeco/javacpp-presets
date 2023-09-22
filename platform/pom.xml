@@ -187,7 +187,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.23-${project.version}</version>
+      <version>0.3.24-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -212,17 +212,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.11.4-${project.version}</version>
+      <version>3.11.5-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.25.1-${project.version}</version>
+      <version>1.25.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy-platform</artifactId>
-      <version>1.11.1-${project.version}</version>
+      <version>1.11.2-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -232,7 +232,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm-platform</artifactId>
-      <version>17.0.0-${project.version}</version>
+      <version>17.0.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -332,7 +332,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnx-platform</artifactId>
-      <version>1.14.0-${project.version}</version>
+      <version>1.14.1-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -342,7 +342,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>onnxruntime-platform</artifactId>
-      <version>1.15.1-${project.version}</version>
+      <version>1.16.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

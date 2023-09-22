@@ -28,10 +28,10 @@ runs:
         brew install boost ccache swig autoconf-archive automake cmake libomp libtool libusb ant nasm xz pkg-config sdl2 gpg1 bison flex perl ragel binutils gradle gmp isl libmpc mpfr geoip pcre ssdeep yajl
         brew link --force libomp
 
-        echo Installing an older less buggy version of CMake
-        curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
-        brew unlink cmake
-        brew install cmake.rb
+        # echo Installing an older less buggy version of CMake
+        # curl -LO https://raw.githubusercontent.com/Homebrew/homebrew-core/30a3e5e02420a515f9bad02e3cfcde95316db529/Formula/cmake.rb
+        # brew unlink cmake
+        # brew install cmake.rb
 
         if [[ -n ${CI_DEPLOY_NEED_GCC:-} ]]; then
           echo Installing an older less buggy version of GCC

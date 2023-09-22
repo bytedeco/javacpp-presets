@@ -147,6 +147,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cgetsqrhrt", "dgetsqrhrt", "sgetsqrhrt", "zgetsqrhrt", "dorgtsqr_row", "sorgtsqr_row", "cungtsqr_row", "zungtsqr_row",
             "clangb", "dlangb", "slangb", "zlangb", "ctrsyl3", "dtrsyl3", "strsyl3", "ztrsyl3",
             "ctz_trans", "dtz_trans", "stz_trans", "ztz_trans", "ctz_nancheck", "dtz_nancheck", "stz_nancheck", "ztz_nancheck",
+            "sgedmd", "dgedmd", "cgedmd", "zgedmd", "sgedmdq", "dgedmdq", "cgedmdq", "zgedmdq", "sorhr_col", "dorhr_col", "cunhr_col", "zunhr_col",
             // deprecated
             "cgegs",   "cggsvd",  "ctzrqf",  "dgeqpf",  "dlatzm",  "sgelsx",  "slahrd",  "zgegv",   "zggsvp",
             "cgegv",   "cggsvp",  "dgegs",   "dggsvd",  "dtzrqf",  "sgeqpf",  "slatzm",  "zgelsx",  "zlahrd",
