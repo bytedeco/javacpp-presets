@@ -13,7 +13,7 @@ if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrap
     TOOLS_BRANCH=${TOOLS_BRANCH:="https://github.com/triton-inference-server/developer_tools.git"}
     TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="main"}
     TRITON_CORE_REPO=${TRITON_CORE_REPO:="https://github.com/triton-inference-server/core.git"}
-    TRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG="main"}
+    TRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG="r23.05"}
     TRITON_HOME="/opt/tritonserver"
     BUILD_HOME="$PWD"/tritonbuild
     mkdir -p ${BUILD_HOME} && cd ${BUILD_HOME}
