@@ -23,7 +23,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Triton Inference Server 2.34.0  https://github.com/triton-inference-server/server
+ * Triton Inference Server 2.38.0  https://github.com/triton-inference-server/server
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -51,9 +51,9 @@ This sample intends to show how to call the Java-mapped C API of Triton to execu
 
  1. Get the source code of Triton Inference Server to prepare the model repository:
 ```bash
- $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.34.0.tar.gz
- $ tar zxvf v2.34.0.tar.gz
- $ cd server-2.34.0/docs/examples/model_repository
+ $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.38.0.tar.gz
+ $ tar zxvf v2.38.0.tar.gz
+ $ cd server-2.38.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
 ```
