@@ -61,7 +61,7 @@ Now, this `models` directory will be our model repository.
 
  2. Start the Docker container to run the sample (assuming we are under the `models` directory created above):
 ```bash
- $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:23.05-py3 bash
+ $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:23.09-py3 bash
  $ apt update
  $ apt install -y openjdk-11-jdk
  $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz

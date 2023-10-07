@@ -3,8 +3,7 @@
  * Refactor and improve presets for PyTorch ([pull #1360](https://github.com/bytedeco/javacpp-presets/pull/1360))
  * Include `mkl_lapack.h` header file in presets for MKL ([issue #1388](https://github.com/bytedeco/javacpp-presets/issues/1388))
  * Map new higher-level C++ API of Triton Inference Server ([pull #1361](https://github.com/bytedeco/javacpp-presets/pull/1361))
- * Upgrade presets for OpenCV 4.8.0, DNNL 3.2.1, OpenBLAS 0.3.24, CPython 3.11.5, NumPy 1.25.2, SciPy 1.11.2, LLVM 17.0.1, TensorFlow Lite 2.14.0, Triton Inference Server 2.34.0, ONNX 1.14.1, ONNX Runtime 1.16.0, TVM 0.13.0, and their dependencies
- * Upgrade presets for Triton Inference Server 2.38.0
+ * Upgrade presets for OpenCV 4.8.0, DNNL 3.2.1, OpenBLAS 0.3.24, CPython 3.11.5, NumPy 1.25.2, SciPy 1.11.2, LLVM 17.0.1, TensorFlow Lite 2.14.0, Triton Inference Server 2.38.0, ONNX 1.14.1, ONNX Runtime 1.16.0, TVM 0.13.0, and their dependencies
 
 ### June 6, 2023 version 1.5.9
  * Virtualize `nvinfer1::IGpuAllocator` from TensorRT to allow customization ([pull #1367](https://github.com/bytedeco/javacpp-presets/pull/1367))
