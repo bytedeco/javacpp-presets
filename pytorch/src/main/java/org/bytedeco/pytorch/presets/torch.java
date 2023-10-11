@@ -1857,6 +1857,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("at::TensorBase::data_ptr<int64_t>").javaNames("data_ptr_long"))
                .put(new Info("at::TensorBase::data_ptr<float>").javaNames("data_ptr_float"))
                .put(new Info("at::TensorBase::data_ptr<double>").javaNames("data_ptr_double"))
+               .put(new Info("at::Tensor::item<bool>").javaNames("item_bool"))
                .put(new Info("at::Tensor::item<int8_t>").javaNames("item_char"))
                .put(new Info("at::Tensor::item<int16_t>").javaNames("item_short"))
                .put(new Info("at::Tensor::item<int>").javaNames("item_int"))

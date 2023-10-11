@@ -148,6 +148,8 @@ public class Tensor extends TensorBase {
 
   
 
+  public native @Cast("bool") @Name("item<bool>") boolean item_bool();
+
   public native @Name("item<int8_t>") byte item_char();
 
   public native @Name("item<int16_t>") short item_short();
