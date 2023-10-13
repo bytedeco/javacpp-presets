@@ -32,6 +32,8 @@ public class Vec2fVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Point2f front() { return get(0); }
+    public Point2f back() { return get(size() - 1); }
     @Index(function = "at") public native @Cast("cv::Vec2f*") @ByRef Point2f get(@Cast("size_t") long i);
     public native Vec2fVector put(@Cast("size_t") long i, Point2f value);
 

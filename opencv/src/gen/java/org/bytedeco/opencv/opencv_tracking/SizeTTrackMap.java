@@ -46,6 +46,8 @@ public class SizeTTrackMap extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public Track front() { return get(0); }
+    public Track back() { return get(size() - 1); }
     @Index public native @ByRef Track get(@Cast("size_t") long i);
     public native SizeTTrackMap put(@Cast("size_t") long i, Track value);
 

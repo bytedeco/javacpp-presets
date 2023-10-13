@@ -54,6 +54,12 @@ public class MotionSaliencyBinWangApr2014 extends MotionSaliency {
     @Override public MotionSaliencyBinWangApr2014 getPointer(long i) {
         return new MotionSaliencyBinWangApr2014((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public MotionSaliencyBinWangApr2014(Saliency pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::MotionSaliencyBinWangApr2014*>") void allocate(Saliency pointer);
+    /** Downcast constructor. */
+    public MotionSaliencyBinWangApr2014(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::MotionSaliencyBinWangApr2014*>") void allocate(Algorithm pointer);
 
   public MotionSaliencyBinWangApr2014() { super((Pointer)null); allocate(); }
   private native void allocate();

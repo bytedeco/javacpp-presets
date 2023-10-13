@@ -41,6 +41,9 @@ public class DisparityWLSFilter extends DisparityFilter {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DisparityWLSFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DisparityWLSFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::DisparityWLSFilter*>") void allocate(Algorithm pointer);
 
     /** filter parameters */
 

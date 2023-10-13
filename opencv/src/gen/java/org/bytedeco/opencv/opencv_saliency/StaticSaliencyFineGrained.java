@@ -46,6 +46,9 @@ public class StaticSaliencyFineGrained extends StaticSaliency {
     @Override public StaticSaliencyFineGrained getPointer(long i) {
         return new StaticSaliencyFineGrained((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public StaticSaliencyFineGrained(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::StaticSaliencyFineGrained*>") void allocate(Algorithm pointer);
 
 
   public StaticSaliencyFineGrained() { super((Pointer)null); allocate(); }

@@ -44,6 +44,9 @@ public class BackgroundSubtractorMOG extends BackgroundSubtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorMOG(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::bgsegm::BackgroundSubtractorMOG*>") void allocate(Algorithm pointer);
 
     public native int getHistory();
     public native void setHistory(int nframes);

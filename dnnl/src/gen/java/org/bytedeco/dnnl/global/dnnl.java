@@ -1208,10 +1208,15 @@ public static final int
     dnnl_ABc16b48a = 759,
     dnnl_ABcd16b48a = 760,
     dnnl_ABcde16b48a = 761,
+    dnnl_ABc16a4b = 762,
+    dnnl_ABcd16a4b = 763,
+    dnnl_ABcde16a4b = 764,
+    dnnl_defcbA16a = 765,
+    dnnl_defcbA8a = 766,
 
     /** Just a sentinel, not real memory format tag. Must be changed after new
      *  format tag is added. */
-    dnnl_format_tag_last = 762,
+    dnnl_format_tag_last = 767,
 
     // Aliases
 
@@ -2016,6 +2021,8 @@ public static final int
     dnnl_gIdhwO16o64i4o = dnnl_aCdefB16b64c4b,
     dnnl_hwioG16g = dnnl_decbA16a,
     dnnl_hwioG8g = dnnl_decbA8a,
+    dnnl_dhwioG16g = dnnl_defcbA16a,
+    dnnl_dhwioG8g = dnnl_defcbA8a,
     dnnl_NCdhw40n16c = dnnl_ABcde40a16b,
     dnnl_NCw40n16c = dnnl_ABc40a16b,
     dnnl_NChw40n16c = dnnl_ABcd40a16b,
@@ -2138,6 +2145,8 @@ public static final int
     dnnl_softmax = 19,
     /** A layer normalization primitive. */
     dnnl_layer_normalization = 20,
+    /** A group normalization primitive. */
+    dnnl_group_normalization = 21,
 
     /** Parameter to allow internal only primitives without undefined behavior.
      *  This parameter is chosen to be valid for so long as sizeof(int) >= 2. */
@@ -3025,7 +3034,7 @@ public static final int
 // Parsed from oneapi/dnnl/dnnl_common.h
 
 /*******************************************************************************
-* Copyright 2022 Intel Corporation
+* Copyright 2022-2023 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3205,8 +3214,8 @@ public static native @Cast("dnnl_status_t") int dnnl_set_default_fpmath_mode(@Ca
  * 
  *  @param level Verbosity level:
  *   - 0: no verbose output (default),
- *   - 1: primitive information at execution,
- *   - 2: primitive information at creation and execution.
+ *   - 1: primitive and graph information at execution,
+ *   - 2: primitive and graph information at creation/compilation and execution.
  *  @return #dnnl_invalid_arguments/#dnnl::status::invalid_arguments if the
  *      \p level value is invalid, and #dnnl_success/#dnnl::status::success on
  *      success. */
@@ -3399,6 +3408,7 @@ public static final int BUILD_CONCAT = 0;
 public static final int BUILD_CONVOLUTION = 0;
 public static final int BUILD_DECONVOLUTION = 0;
 public static final int BUILD_ELTWISE = 0;
+public static final int BUILD_GROUP_NORMALIZATION = 0;
 public static final int BUILD_INNER_PRODUCT = 0;
 public static final int BUILD_LAYER_NORMALIZATION = 0;
 public static final int BUILD_LRN = 0;
@@ -3426,6 +3436,12 @@ public static final int BUILD_XELP = 0;
 public static final int BUILD_XEHP = 0;
 public static final int BUILD_XEHPG = 0;
 public static final int BUILD_XEHPC = 0;
+// GeMM kernels ISA controls
+public static final int BUILD_GEMM_KERNELS_ALL = 1;
+public static final int BUILD_GEMM_KERNELS_NONE = 0;
+public static final int BUILD_GEMM_SSE41 = 0;
+public static final int BUILD_GEMM_AVX2 = 0;
+public static final int BUILD_GEMM_AVX512 = 0;
 // #endif
 
 
@@ -3456,10 +3472,10 @@ public static final int BUILD_XEHPC = 0;
 public static final int DNNL_VERSION_MAJOR = 3;
 
 /** Minor version */
-public static final int DNNL_VERSION_MINOR = 2;
+public static final int DNNL_VERSION_MINOR = 3;
 
 /** Patch version */
-public static final int DNNL_VERSION_PATCH = 1;
+public static final int DNNL_VERSION_PATCH = 0;
 
 /** Git commit hash */
 public static native @MemberGetter String DNNL_VERSION_HASH();
@@ -6172,6 +6188,85 @@ public static native @Cast("dnnl_status_t") int dnnl_batch_normalization_backwar
         @Const dnnl_primitive_attr attr);
 
 /** \} dnnl_api_batch_normalization
+ <p>
+ *  \addtogroup dnnl_api_group_normalization
+ *  \{
+ <p>
+ *  Creates a primitive descriptor for a group normalization forward propagation
+ *      primitive.
+ * 
+ *  \note
+ *      In-place operation is supported: the dst can refer to the same memory
+ *      as the src.
+ * 
+ *  @param primitive_desc Output primitive_descriptor.
+ *  @param engine Engine to use.
+ *  @param prop_kind Propagation kind. Possible values are
+ *      #dnnl_forward_training and #dnnl_forward_inference.
+ *  @param src_desc Source memory descriptor.
+ *  @param dst_desc Destination memory descriptor.
+ *  @param groups Group normalization groups parameter.
+ *  @param epsilon Group normalization epsilon parameter.
+ *  @param flags Group normalization flags (\ref dnnl_normalization_flags_t).
+ *  @param attr Primitive attributes (can be NULL).
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_group_normalization_forward_primitive_desc_create(
+        @ByPtrPtr dnnl_primitive_desc primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc src_desc,
+        @Const dnnl_memory_desc dst_desc, @Cast("dnnl_dim_t") long groups, float epsilon,
+        @Cast("unsigned") int flags, @Const dnnl_primitive_attr attr);
+public static native @Cast("dnnl_status_t") int dnnl_group_normalization_forward_primitive_desc_create(
+        @Cast("dnnl_primitive_desc_t*") PointerPointer primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc src_desc,
+        @Const dnnl_memory_desc dst_desc, @Cast("dnnl_dim_t") long groups, float epsilon,
+        @Cast("unsigned") int flags, @Const dnnl_primitive_attr attr);
+
+/** Creates a primitive descriptor for a group normalization backward
+ *      propagation primitive.
+ * 
+ *  \note
+ *      In-place operation is supported: the diff_dst can refer to the same
+ *      memory as the diff_src.
+ * 
+ *  @param primitive_desc Output primitive_descriptor.
+ *  @param engine Engine to use.
+ *  @param prop_kind Propagation kind. Possible values are
+ *      #dnnl_backward_data and #dnnl_backward (diffs for all parameters are
+ *      computed in this case).
+ *  @param diff_src_desc Diff source memory descriptor.
+ *  @param diff_dst_desc Diff destination memory descriptor.
+ *  @param src_desc Source memory descriptor.
+ *  @param groups Group normalization groups parameter.
+ *  @param epsilon Group normalization epsilon parameter.
+ *  @param flags Group normalization flags (\ref dnnl_normalization_flags_t).
+ *  @param hint_fwd_pd Primitive descriptor for a respective forward propagation
+ *      primitive.
+ *  @param attr Primitive attributes (can be NULL).
+ *  @return #dnnl_success on success and a status describing the error
+ *      otherwise. */
+
+///
+///
+public static native @Cast("dnnl_status_t") int dnnl_group_normalization_backward_primitive_desc_create(
+        @ByPtrPtr dnnl_primitive_desc primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc diff_src_desc,
+        @Const dnnl_memory_desc diff_dst_desc,
+        @Const dnnl_memory_desc src_desc, @Cast("dnnl_dim_t") long groups, float epsilon,
+        @Cast("unsigned") int flags, @Const dnnl_primitive_desc hint_fwd_pd,
+        @Const dnnl_primitive_attr attr);
+public static native @Cast("dnnl_status_t") int dnnl_group_normalization_backward_primitive_desc_create(
+        @Cast("dnnl_primitive_desc_t*") PointerPointer primitive_desc, dnnl_engine engine,
+        @Cast("dnnl_prop_kind_t") int prop_kind, @Const dnnl_memory_desc diff_src_desc,
+        @Const dnnl_memory_desc diff_dst_desc,
+        @Const dnnl_memory_desc src_desc, @Cast("dnnl_dim_t") long groups, float epsilon,
+        @Cast("unsigned") int flags, @Const dnnl_primitive_desc hint_fwd_pd,
+        @Const dnnl_primitive_attr attr);
+
+/** \} dnnl_api_group_normalization
  <p>
  *  \addtogroup dnnl_api_layer_normalization
  *  \{
@@ -9190,6 +9285,12 @@ public static final int DNNL_ENABLE_EXCEPTIONS = 1;
 
 
 // Targeting ../batch_normalization_backward.java
+
+
+// Targeting ../group_normalization_forward.java
+
+
+// Targeting ../group_normalization_backward.java
 
 
 // Targeting ../layer_normalization_forward.java

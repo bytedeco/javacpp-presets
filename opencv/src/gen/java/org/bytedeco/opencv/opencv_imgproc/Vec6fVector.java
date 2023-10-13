@@ -32,6 +32,8 @@ public class Vec6fVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public FloatPointer front() { return get(0); }
+    public FloatPointer back() { return get(size() - 1); }
     @Index(function = "at") public native @Cast("cv::Vec6f*") @ByRef FloatPointer get(@Cast("size_t") long i);
     public native Vec6fVector put(@Cast("size_t") long i, FloatPointer value);
 

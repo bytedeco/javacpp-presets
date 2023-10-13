@@ -41,6 +41,9 @@ public class StructuredEdgeDetection extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StructuredEdgeDetection(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StructuredEdgeDetection(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::StructuredEdgeDetection*>") void allocate(Algorithm pointer);
 
 
     /** \brief The function detects edges in src and draw them to dst.

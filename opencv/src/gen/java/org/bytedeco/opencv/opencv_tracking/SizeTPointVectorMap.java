@@ -46,6 +46,8 @@ public class SizeTPointVectorMap extends Pointer {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public PointVector front() { return get(0); }
+    public PointVector back() { return get(size() - 1); }
     @Index public native @ByRef PointVector get(@Cast("size_t") long i);
     public native SizeTPointVectorMap put(@Cast("size_t") long i, PointVector value);
 

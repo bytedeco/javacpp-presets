@@ -2008,7 +2008,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    8;
-public static final int CV_VERSION_REVISION = 0;
+public static final int CV_VERSION_REVISION = 1;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A

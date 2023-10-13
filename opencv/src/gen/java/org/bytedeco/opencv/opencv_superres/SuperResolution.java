@@ -48,6 +48,9 @@ public class SuperResolution extends Algorithm {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResolution(Pointer p) { super(p); }
+            /** Downcast constructor. */
+            public SuperResolution(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::SuperResolution*>") void allocate(Algorithm pointer);
             public FrameSource asFrameSource() { return asFrameSource(this); }
             @Namespace public static native @Name("static_cast<cv::superres::FrameSource*>") FrameSource asFrameSource(SuperResolution pointer);
         

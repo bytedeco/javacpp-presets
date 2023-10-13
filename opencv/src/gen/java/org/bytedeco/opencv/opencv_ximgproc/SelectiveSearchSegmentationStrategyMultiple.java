@@ -39,6 +39,9 @@ public class SelectiveSearchSegmentationStrategyMultiple extends SelectiveSearch
                         static { Loader.load(); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategyMultiple(Pointer p) { super(p); }
+                        /** Downcast constructor. */
+                        public SelectiveSearchSegmentationStrategyMultiple(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+                        @Namespace private native @Name("dynamic_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategyMultiple*>") void allocate(Algorithm pointer);
                     
 
                             /** \brief Add a new sub-strategy

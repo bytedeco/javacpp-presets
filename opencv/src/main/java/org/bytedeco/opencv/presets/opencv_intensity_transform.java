@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/intensity_transform.hpp>", link = "opencv_intensity_transform@.408"),
         @Platform(value = "ios", preload = "libopencv_intensity_transform"),
-        @Platform(value = "windows", link = "opencv_intensity_transform480")
+        @Platform(value = "windows", link = "opencv_intensity_transform481")
     },
     global = "org.bytedeco.opencv.global.opencv_intensity_transform"
 )

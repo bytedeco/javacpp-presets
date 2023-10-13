@@ -46,6 +46,9 @@ public class BackgroundSubtractorGMG extends BackgroundSubtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorGMG(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorGMG(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::bgsegm::BackgroundSubtractorGMG*>") void allocate(Algorithm pointer);
 
     /** \brief Returns total number of distinct colors to maintain in histogram.
     */

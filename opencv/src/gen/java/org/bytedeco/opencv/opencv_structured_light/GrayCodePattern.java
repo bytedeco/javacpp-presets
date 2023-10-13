@@ -52,6 +52,9 @@ public class GrayCodePattern extends StructuredLightPattern {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GrayCodePattern(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GrayCodePattern(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::structured_light::GrayCodePattern*>") void allocate(Algorithm pointer);
 
 
   /** \brief Parameters of StructuredLightPattern constructor.

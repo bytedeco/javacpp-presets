@@ -32,6 +32,14 @@ public class MotionSaliency extends Saliency {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionSaliency(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MotionSaliency(Saliency pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::MotionSaliency*>") void allocate(Saliency pointer);
+    /** Downcast constructor. */
+    public MotionSaliency(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::MotionSaliency*>") void allocate(Algorithm pointer);
+    public Saliency asSaliency() { return asSaliency(this); }
+    @Namespace public static native @Name("static_cast<cv::saliency::Saliency*>") Saliency asSaliency(MotionSaliency pointer);
 
 
 }

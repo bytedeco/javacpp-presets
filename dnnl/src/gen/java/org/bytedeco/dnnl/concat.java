@@ -71,16 +71,22 @@ public class concat extends primitive {
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
          *  @param attr Primitive attributes to use. Attributes are optional
-         *      and default to empty attributes. */
+         *      and default to empty attributes.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
         
         ///
         ///
         public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
                         int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(aengine, dst, concat_dimension, srcs, attr); }
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, dst, concat_dimension, srcs, attr, allow_empty); }
         private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
                         int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
                         int concat_dimension, @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs) { super((Pointer)null); allocate(aengine, dst, concat_dimension, srcs); }
         private native void allocate(@Const @ByRef engine aengine, @Const @ByRef org.bytedeco.dnnl.memory.desc dst,
@@ -98,15 +104,21 @@ public class concat extends primitive {
          *      not depend on memory format.
          *  @param srcs Vector of source memory descriptors.
          *  @param attr Primitive attributes to use. Attributes are optional
-         *      and default to empty attributes. */
+         *      and default to empty attributes.
+         *  @param allow_empty A flag signifying whether construction is
+         *      allowed to fail without throwing an exception. In this case an
+         *      empty object will be produced. This flag is optional and
+         *      defaults to false. */
         
         ///
         public primitive_desc(@Const @ByRef engine aengine, int concat_dimension,
                         @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr) { super((Pointer)null); allocate(aengine, concat_dimension, srcs, attr); }
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/) { super((Pointer)null); allocate(aengine, concat_dimension, srcs, attr, allow_empty); }
         private native void allocate(@Const @ByRef engine aengine, int concat_dimension,
                         @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs,
-                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr);
+                        @Const @ByRef(nullValue = "dnnl::primitive_attr()") primitive_attr attr,
+                        @Cast("bool") boolean allow_empty/*=false*/);
         public primitive_desc(@Const @ByRef engine aengine, int concat_dimension,
                         @Cast("const std::vector<dnnl::memory::desc>*") @ByRef memory_desc_vector srcs) { super((Pointer)null); allocate(aengine, concat_dimension, srcs); }
         private native void allocate(@Const @ByRef engine aengine, int concat_dimension,

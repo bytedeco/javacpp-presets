@@ -165,9 +165,9 @@ public class primitive_desc_base extends dnnl_primitive_desc_handle {
      *      a pooling kernel parameter. */
     public native @Cast({"dnnl_dim_t*", "std::vector<dnnl_dim_t>&"}) @StdVector("dnnl_dim_t") @ByVal LongPointer get_kernel();
 
-    /** Returns a shuffle group size parameter.
-     *  @return A shuffle group size parameter.
-     *  @return Zero if the primitive does not have a shuffle group size
+    /** Returns a group size parameter.
+     *  @return A group size parameter.
+     *  @return Zero if the primitive does not have a group size
      *      parameter. */
     public native @Cast("dnnl::memory::dim") long get_group_size();
 

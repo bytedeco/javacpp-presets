@@ -49,6 +49,9 @@ public class SuperpixelSLIC extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SuperpixelSLIC(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SuperpixelSLIC(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::SuperpixelSLIC*>") void allocate(Algorithm pointer);
 
 
     /** \brief Calculates the actual amount of superpixels on a given segmentation computed

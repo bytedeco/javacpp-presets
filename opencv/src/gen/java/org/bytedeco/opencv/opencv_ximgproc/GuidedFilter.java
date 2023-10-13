@@ -44,6 +44,9 @@ public class GuidedFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GuidedFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GuidedFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::GuidedFilter*>") void allocate(Algorithm pointer);
 
 
     /** \brief Apply Guided Filter to the filtering image.

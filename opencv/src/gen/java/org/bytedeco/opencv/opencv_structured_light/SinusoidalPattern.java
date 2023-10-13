@@ -40,6 +40,9 @@ public class SinusoidalPattern extends StructuredLightPattern {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SinusoidalPattern(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SinusoidalPattern(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::structured_light::SinusoidalPattern*>") void allocate(Algorithm pointer);
 
     /**
      * \brief Parameters of SinusoidalPattern constructor

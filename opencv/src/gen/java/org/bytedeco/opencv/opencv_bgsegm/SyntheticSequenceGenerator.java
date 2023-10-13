@@ -42,6 +42,9 @@ public class SyntheticSequenceGenerator extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SyntheticSequenceGenerator(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SyntheticSequenceGenerator(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::bgsegm::SyntheticSequenceGenerator*>") void allocate(Algorithm pointer);
 
     /** \brief Creates an instance of SyntheticSequenceGenerator.
     <p>

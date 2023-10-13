@@ -30,6 +30,8 @@ public class GpuMatVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public GpuMat front() { return get(0); }
+    public GpuMat back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef GpuMat get(@Cast("size_t") long i);
     public native GpuMatVector put(@Cast("size_t") long i, GpuMat value);
 

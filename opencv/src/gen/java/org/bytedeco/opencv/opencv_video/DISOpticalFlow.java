@@ -47,6 +47,9 @@ public class DISOpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DISOpticalFlow(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DISOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::DISOpticalFlow*>") void allocate(Algorithm pointer);
 
     /** enum cv::DISOpticalFlow:: */
     public static final int

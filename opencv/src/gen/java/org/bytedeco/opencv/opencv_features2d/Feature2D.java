@@ -48,6 +48,11 @@ public class Feature2D extends Algorithm {
     @Override public Feature2D getPointer(long i) {
         return new Feature2D((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public Feature2D(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::Feature2D*>") void allocate(Algorithm pointer);
+    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Feature2D pointer);
 
 
     /** \brief Detects keypoints in an image (first variant) or image set (second variant).

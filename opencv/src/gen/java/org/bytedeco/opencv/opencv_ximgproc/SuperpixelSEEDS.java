@@ -50,6 +50,9 @@ public class SuperpixelSEEDS extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SuperpixelSEEDS(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SuperpixelSEEDS(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::SuperpixelSEEDS*>") void allocate(Algorithm pointer);
 
 
     /** \brief Calculates the superpixel segmentation on a given image stored in SuperpixelSEEDS object.

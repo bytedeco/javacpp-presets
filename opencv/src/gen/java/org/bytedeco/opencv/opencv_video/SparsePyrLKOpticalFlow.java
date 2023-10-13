@@ -43,6 +43,9 @@ public class SparsePyrLKOpticalFlow extends SparseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparsePyrLKOpticalFlow(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SparsePyrLKOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::SparsePyrLKOpticalFlow*>") void allocate(Algorithm pointer);
 
     public native @ByVal Size getWinSize();
     public native void setWinSize(@ByVal Size winSize);

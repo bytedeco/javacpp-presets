@@ -38,6 +38,9 @@ public class FacemarkKazemi extends Facemark {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkKazemi(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FacemarkKazemi(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::face::FacemarkKazemi*>") void allocate(Algorithm pointer);
 
     @NoOffset public static class Params extends Pointer {
         static { Loader.load(); }

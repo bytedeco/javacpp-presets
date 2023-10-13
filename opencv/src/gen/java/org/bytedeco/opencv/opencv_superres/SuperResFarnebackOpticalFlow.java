@@ -44,6 +44,14 @@ public class SuperResFarnebackOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResFarnebackOpticalFlow(Pointer p) { super(p); }
+            /** Downcast constructor. */
+            public SuperResFarnebackOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::FarnebackOpticalFlow*>") void allocate(Algorithm pointer);
+            /** Downcast constructor. */
+            public SuperResFarnebackOpticalFlow(DenseOpticalFlowExt pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::FarnebackOpticalFlow*>") void allocate(DenseOpticalFlowExt pointer);
+            public DenseOpticalFlowExt asDenseOpticalFlowExt() { return asDenseOpticalFlowExt(this); }
+            @Namespace public static native @Name("static_cast<cv::superres::DenseOpticalFlowExt*>") DenseOpticalFlowExt asDenseOpticalFlowExt(SuperResFarnebackOpticalFlow pointer);
         
             /** @see setPyrScale */
             public native double getPyrScale();

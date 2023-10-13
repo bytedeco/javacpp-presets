@@ -92,7 +92,9 @@ public class primitive extends dnnl_primitive_handle {
         /** A softmax primitive. */
         softmax(dnnl_softmax),
         /** A layer normalization primitive. */
-        layer_normalization(dnnl_layer_normalization);
+        layer_normalization(dnnl_layer_normalization),
+        /** A group normalization primitive */
+        group_normalization(dnnl_group_normalization);
 
         public final int value;
         private kind(int v) { this.value = v; }

@@ -48,6 +48,8 @@ public class CCheckerVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public CChecker front() { return get(0); }
+    public CChecker back() { return get(size() - 1); }
     @Index(function = "at") public native @Ptr CChecker get(@Cast("size_t") long i);
     public native CCheckerVector put(@Cast("size_t") long i, CChecker value);
 

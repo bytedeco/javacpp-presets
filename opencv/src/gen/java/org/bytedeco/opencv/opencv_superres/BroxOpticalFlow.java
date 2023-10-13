@@ -44,6 +44,14 @@ public class BroxOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public BroxOpticalFlow(Pointer p) { super(p); }
+            /** Downcast constructor. */
+            public BroxOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::BroxOpticalFlow*>") void allocate(Algorithm pointer);
+            /** Downcast constructor. */
+            public BroxOpticalFlow(DenseOpticalFlowExt pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::BroxOpticalFlow*>") void allocate(DenseOpticalFlowExt pointer);
+            public DenseOpticalFlowExt asDenseOpticalFlowExt() { return asDenseOpticalFlowExt(this); }
+            @Namespace public static native @Name("static_cast<cv::superres::DenseOpticalFlowExt*>") DenseOpticalFlowExt asDenseOpticalFlowExt(BroxOpticalFlow pointer);
         
             /** \brief Flow smoothness
             /** @see setAlpha */

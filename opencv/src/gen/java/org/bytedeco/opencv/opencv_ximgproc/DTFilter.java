@@ -42,6 +42,9 @@ public class DTFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DTFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DTFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::DTFilter*>") void allocate(Algorithm pointer);
 
 
     /** \brief Produce domain transform filtering operation on source image.

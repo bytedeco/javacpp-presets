@@ -45,6 +45,9 @@ public class PCTSignaturesSQFD extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PCTSignaturesSQFD(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public PCTSignaturesSQFD(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::PCTSignaturesSQFD*>") void allocate(Algorithm pointer);
 
 
     /**

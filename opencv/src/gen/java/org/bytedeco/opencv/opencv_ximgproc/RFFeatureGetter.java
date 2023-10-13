@@ -43,6 +43,9 @@ public class RFFeatureGetter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RFFeatureGetter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RFFeatureGetter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::RFFeatureGetter*>") void allocate(Algorithm pointer);
 
 
     /**

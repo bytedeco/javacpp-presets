@@ -35,6 +35,9 @@ public class CharucoDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharucoDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CharucoDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::aruco::CharucoDetector*>") void allocate(Algorithm pointer);
 
     /** \brief Basic CharucoDetector constructor
      *

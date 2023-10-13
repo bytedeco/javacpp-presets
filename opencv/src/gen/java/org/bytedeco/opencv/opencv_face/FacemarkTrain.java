@@ -66,6 +66,9 @@ public class FacemarkTrain extends Facemark {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkTrain(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FacemarkTrain(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::face::FacemarkTrain*>") void allocate(Algorithm pointer);
 
     /** \brief Add one training sample to the trainer.
     <p>

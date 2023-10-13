@@ -30,6 +30,8 @@ public class Point3fVectorVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Point3fVector front() { return get(0); }
+    public Point3fVector back() { return get(size() - 1); }
     @Index(function = "at") public native @Cast("std::vector<cv::Point3f>*") @ByRef Point3fVector get(@Cast("size_t") long i);
     public native Point3fVectorVector put(@Cast("size_t") long i, Point3fVector value);
 

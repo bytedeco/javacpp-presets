@@ -58,6 +58,11 @@ public class Facemark extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Facemark(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Facemark(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::face::Facemark*>") void allocate(Algorithm pointer);
+    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Facemark pointer);
 
 
     /** \brief A function to load the trained model before the fitting process.

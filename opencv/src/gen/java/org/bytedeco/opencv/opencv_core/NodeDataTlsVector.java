@@ -30,6 +30,8 @@ public class NodeDataTlsVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public NodeDataTls front() { return get(0); }
+    public NodeDataTls back() { return get(size() - 1); }
     @Index(function = "at") public native NodeDataTls get(@Cast("size_t") long i);
     public native NodeDataTlsVector put(@Cast("size_t") long i, NodeDataTls value);
 

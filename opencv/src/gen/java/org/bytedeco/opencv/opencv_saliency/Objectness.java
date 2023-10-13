@@ -32,6 +32,14 @@ public class Objectness extends Saliency {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Objectness(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Objectness(Saliency pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::Objectness*>") void allocate(Saliency pointer);
+    /** Downcast constructor. */
+    public Objectness(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::Objectness*>") void allocate(Algorithm pointer);
+    public Saliency asSaliency() { return asSaliency(this); }
+    @Namespace public static native @Name("static_cast<cv::saliency::Saliency*>") Saliency asSaliency(Objectness pointer);
 
 
 }

@@ -40,6 +40,9 @@ public class SelectiveSearchSegmentationStrategy extends Algorithm {
                         static { Loader.load(); }
                         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                         public SelectiveSearchSegmentationStrategy(Pointer p) { super(p); }
+                        /** Downcast constructor. */
+                        public SelectiveSearchSegmentationStrategy(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+                        @Namespace private native @Name("dynamic_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategy*>") void allocate(Algorithm pointer);
                     
                             /** \brief Set a initial image, with a segmentation.
                                 @param img The input image. Any number of channel can be provided

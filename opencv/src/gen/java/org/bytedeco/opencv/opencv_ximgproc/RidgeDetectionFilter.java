@@ -46,6 +46,9 @@ public class RidgeDetectionFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RidgeDetectionFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RidgeDetectionFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::RidgeDetectionFilter*>") void allocate(Algorithm pointer);
 
     /**
     \brief Create pointer to the Ridge detection filter.

@@ -27,6 +27,11 @@ public class PhaseUnwrapping extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PhaseUnwrapping(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public PhaseUnwrapping(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::phase_unwrapping::PhaseUnwrapping*>") void allocate(Algorithm pointer);
+    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(PhaseUnwrapping pointer);
 
     /**
      * \brief Unwraps a 2D phase map.

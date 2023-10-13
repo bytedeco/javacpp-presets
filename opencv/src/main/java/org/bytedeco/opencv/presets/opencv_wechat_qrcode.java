@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_wechat_qrcode@.408"
         ),
         @Platform(value = "ios", preload = "libopencv_wechat_qrcode"),
-        @Platform(value = "windows", link = "opencv_wechat_qrcode480")
+        @Platform(value = "windows", link = "opencv_wechat_qrcode481")
     },
     target = "org.bytedeco.opencv.opencv_wechat_qrcode",
     global = "org.bytedeco.opencv.global.opencv_wechat_qrcode"

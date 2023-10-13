@@ -39,6 +39,9 @@ public class CCheckerDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CCheckerDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CCheckerDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::mcc::CCheckerDetector*>") void allocate(Algorithm pointer);
 
     /** \brief Set the net which will be used to find the approximate
     *         bounding boxes for the color charts.

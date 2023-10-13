@@ -36,6 +36,9 @@ public class OLSTracker extends Tracker {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OLSTracker(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public OLSTracker(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::rapid::OLSTracker*>") void allocate(Algorithm pointer);
 
     public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris, int histBins/*=8*/, @Cast("uchar") byte sobelThesh/*=10*/);
     public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris);

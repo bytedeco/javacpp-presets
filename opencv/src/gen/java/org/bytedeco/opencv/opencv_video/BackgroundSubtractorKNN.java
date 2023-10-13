@@ -40,6 +40,9 @@ public class BackgroundSubtractorKNN extends BackgroundSubtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorKNN(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorKNN(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::BackgroundSubtractorKNN*>") void allocate(Algorithm pointer);
 
     /** \brief Returns the number of last frames that affect the background model
     */

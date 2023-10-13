@@ -40,6 +40,9 @@ public class ERFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ERFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ERFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::text::ERFilter*>") void allocate(Algorithm pointer);
 
 
     /** \brief Callback with the classifier is made a class.

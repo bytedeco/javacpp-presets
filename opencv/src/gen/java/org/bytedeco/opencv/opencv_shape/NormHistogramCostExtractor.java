@@ -35,6 +35,9 @@ public class NormHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NormHistogramCostExtractor(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public NormHistogramCostExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::NormHistogramCostExtractor*>") void allocate(Algorithm pointer);
 
     public native void setNormFlag(int flag);
     public native int getNormFlag();

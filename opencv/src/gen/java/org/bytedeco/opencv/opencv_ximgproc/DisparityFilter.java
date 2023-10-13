@@ -42,6 +42,9 @@ public class DisparityFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DisparityFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DisparityFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::DisparityFilter*>") void allocate(Algorithm pointer);
 
 
     /** \brief Apply filtering to the disparity map.
