@@ -7,13 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-INCLUDE_DEVELOPER_TOOLS_SERVER=${INCLUDE_DEVELOPER_TOOLS_SERVER:=0}
+INCLUDE_DEVELOPER_TOOLS_SERVER=${INCLUDE_DEVELOPER_TOOLS_SERVER:=1}
 
-if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrapper.h" ]] && [[ ! -f "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]] && [[ ${INCLUDE_DEVELOPER_TOOLS_SERVER} -eq 0 ]]; then
+if [[ ! -f "/opt/tritonserver/include/triton/developer_tools/generic_server_wrapper.h" ]] && [[ ! -f "/opt/tritonserver/lib/libtritondevelopertoolsserver.so" ]] && [[ ${INCLUDE_DEVELOPER_TOOLS_SERVER} -ne 0 ]]; then
     TOOLS_BRANCH=${TOOLS_BRANCH:="https://github.com/triton-inference-server/developer_tools.git"}
-    TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="main"}
+    TOOLS_BRANCH_TAG=${TOOLS_BRANCH_TAG:="r23.09"}
     TRITON_CORE_REPO=${TRITON_CORE_REPO:="https://github.com/triton-inference-server/core.git"}
-    TRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG="r23.05"}
+    TRITON_CORE_REPO_TAG=${TRITON_CORE_REPO_TAG="r23.09"}
     TRITON_HOME="/opt/tritonserver"
     BUILD_HOME="$PWD"/tritonbuild
     mkdir -p ${BUILD_HOME} && cd ${BUILD_HOME}
