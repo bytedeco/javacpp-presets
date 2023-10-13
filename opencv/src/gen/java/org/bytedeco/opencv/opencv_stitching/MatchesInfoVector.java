@@ -58,6 +58,8 @@ public class MatchesInfoVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public MatchesInfo front() { return get(0); }
+    public MatchesInfo back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef MatchesInfo get(@Cast("size_t") long i);
     public native MatchesInfoVector put(@Cast("size_t") long i, MatchesInfo value);
 

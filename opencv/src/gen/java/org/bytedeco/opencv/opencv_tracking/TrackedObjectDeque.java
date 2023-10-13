@@ -52,6 +52,8 @@ public class TrackedObjectDeque extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public TrackedObject front() { return get(0); }
+    public TrackedObject back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef TrackedObject get(@Cast("size_t") long i);
     public native TrackedObjectDeque put(@Cast("size_t") long i, TrackedObject value);
 

@@ -51,6 +51,9 @@ public class SuperpixelLSC extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SuperpixelLSC(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SuperpixelLSC(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::SuperpixelLSC*>") void allocate(Algorithm pointer);
 
 
     /** \brief Calculates the actual amount of superpixels on a given segmentation computed

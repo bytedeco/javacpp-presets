@@ -30,6 +30,8 @@ public class Point3iVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Point3i front() { return get(0); }
+    public Point3i back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Point3i get(@Cast("size_t") long i);
     public native Point3iVector put(@Cast("size_t") long i, Point3i value);
 

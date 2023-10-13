@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_aruco@.408"
         ),
         @Platform(value = "ios", preload = "libopencv_aruco"),
-        @Platform(value = "windows", link = "opencv_aruco480")
+        @Platform(value = "windows", link = "opencv_aruco481")
     },
     target = "org.bytedeco.opencv.opencv_aruco",
     global = "org.bytedeco.opencv.global.opencv_aruco"

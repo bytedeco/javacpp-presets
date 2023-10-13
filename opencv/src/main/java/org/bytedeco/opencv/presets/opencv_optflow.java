@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.408"),
         @Platform(value = "ios", preload = "libopencv_optflow"),
-        @Platform(value = "windows", link = "opencv_optflow480")},
+        @Platform(value = "windows", link = "opencv_optflow481")},
     target = "org.bytedeco.opencv.opencv_optflow",
     global = "org.bytedeco.opencv.global.opencv_optflow"
 )

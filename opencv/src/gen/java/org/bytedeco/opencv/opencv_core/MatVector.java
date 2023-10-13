@@ -30,6 +30,8 @@ public class MatVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Mat front() { return get(0); }
+    public Mat back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Mat get(@Cast("size_t") long i);
     public native MatVector put(@Cast("size_t") long i, Mat value);
 

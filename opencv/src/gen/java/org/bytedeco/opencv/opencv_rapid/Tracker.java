@@ -34,6 +34,9 @@ public class Tracker extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tracker(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Tracker(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::rapid::Tracker*>") void allocate(Algorithm pointer);
 
     public native float compute(@ByVal Mat img, int num, int len, @ByVal Mat K, @ByVal Mat rvec, @ByVal Mat tvec,
                 @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 5, 1.5)") TermCriteria termcrit);

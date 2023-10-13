@@ -37,6 +37,11 @@ public class StructuredLightPattern extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StructuredLightPattern(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StructuredLightPattern(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::structured_light::StructuredLightPattern*>") void allocate(Algorithm pointer);
+    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(StructuredLightPattern pointer);
 
   /** \brief Generates the structured light pattern to project.
    <p>

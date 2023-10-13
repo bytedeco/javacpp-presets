@@ -46,6 +46,9 @@ public class FastLineDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastLineDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FastLineDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::FastLineDetector*>") void allocate(Algorithm pointer);
 
     /** \example fld_lines.cpp
       An example using the FastLineDetector

@@ -49,6 +49,12 @@ public class ObjectnessBING extends Objectness {
     @Override public ObjectnessBING getPointer(long i) {
         return new ObjectnessBING((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public ObjectnessBING(Saliency pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::ObjectnessBING*>") void allocate(Saliency pointer);
+    /** Downcast constructor. */
+    public ObjectnessBING(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::ObjectnessBING*>") void allocate(Algorithm pointer);
 
 
   public ObjectnessBING() { super((Pointer)null); allocate(); }

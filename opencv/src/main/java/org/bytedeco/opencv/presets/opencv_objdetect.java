@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/objdetect/aruco_board.hpp>", "<opencv2/objdetect/aruco_dictionary.hpp>",
             "<opencv2/objdetect/aruco_detector.hpp>", "<opencv2/objdetect/charuco_detector.hpp>"}, link = "opencv_objdetect@.408"),
         @Platform(value = "ios", preload = "libopencv_objdetect"),
-        @Platform(value = "windows", link = "opencv_objdetect480")},
+        @Platform(value = "windows", link = "opencv_objdetect481")},
     target = "org.bytedeco.opencv.opencv_objdetect",
     global = "org.bytedeco.opencv.global.opencv_objdetect"
 )

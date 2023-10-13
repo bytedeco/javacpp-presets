@@ -39,10 +39,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             preload = {"opencv_cuda@.408", "opencv_cudacodec@.408", "opencv_cudaarithm@.408", "opencv_cudafilters@.408",
                 "opencv_cudaimgproc@.408", "opencv_cudafeatures2d@.408", "opencv_cudalegacy@.408",
                 "opencv_cudaoptflow@.408", "opencv_cudawarping@.408"}),
-        @Platform(value = "windows", link = "opencv_superres480",
-            preload = {"opencv_cuda480", "opencv_cudacodec480", "opencv_cudaarithm480", "opencv_cudafilters480",
-                "opencv_cudaimgproc480", "opencv_cudafeatures2d480", "opencv_cudalegacy480",
-                "opencv_cudaoptflow480", "opencv_cudawarping480"})},
+        @Platform(value = "windows", link = "opencv_superres481",
+            preload = {"opencv_cuda481", "opencv_cudacodec481", "opencv_cudaarithm481", "opencv_cudafilters481",
+                "opencv_cudaimgproc481", "opencv_cudafeatures2d481", "opencv_cudalegacy481",
+                "opencv_cudaoptflow481", "opencv_cudawarping481"})},
     target = "org.bytedeco.opencv.opencv_superres",
     global = "org.bytedeco.opencv.global.opencv_superres"
 )

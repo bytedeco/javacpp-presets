@@ -38,6 +38,9 @@ public class ShapeTransformer extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeTransformer(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ShapeTransformer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ShapeTransformer*>") void allocate(Algorithm pointer);
 
     /** \brief Estimate the transformation parameters of the current transformer algorithm, based on point matches.
     <p>

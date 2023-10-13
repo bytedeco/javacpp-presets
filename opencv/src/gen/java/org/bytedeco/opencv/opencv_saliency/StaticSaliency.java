@@ -32,6 +32,14 @@ public class StaticSaliency extends Saliency {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StaticSaliency(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StaticSaliency(Saliency pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::StaticSaliency*>") void allocate(Saliency pointer);
+    /** Downcast constructor. */
+    public StaticSaliency(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::StaticSaliency*>") void allocate(Algorithm pointer);
+    public Saliency asSaliency() { return asSaliency(this); }
+    @Namespace public static native @Name("static_cast<cv::saliency::Saliency*>") Saliency asSaliency(StaticSaliency pointer);
 
 
     /** \brief This function perform a binary map of given saliency map. This is obtained in this

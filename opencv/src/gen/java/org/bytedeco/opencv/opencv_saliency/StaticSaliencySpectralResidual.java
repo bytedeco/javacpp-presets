@@ -52,6 +52,9 @@ public class StaticSaliencySpectralResidual extends StaticSaliency {
     @Override public StaticSaliencySpectralResidual getPointer(long i) {
         return new StaticSaliencySpectralResidual((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public StaticSaliencySpectralResidual(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::saliency::StaticSaliencySpectralResidual*>") void allocate(Algorithm pointer);
 
 
   public StaticSaliencySpectralResidual() { super((Pointer)null); allocate(); }

@@ -58,6 +58,8 @@ public class ImageFeaturesVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public ImageFeatures front() { return get(0); }
+    public ImageFeatures back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef ImageFeatures get(@Cast("size_t") long i);
     public native ImageFeaturesVector put(@Cast("size_t") long i, ImageFeatures value);
 

@@ -32,6 +32,8 @@ public class StringVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public BytePointer front() { return get(0); }
+    public BytePointer back() { return get(size() - 1); }
     @Index(function = "at") public native @Str BytePointer get(@Cast("size_t") long i);
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @Str String value);

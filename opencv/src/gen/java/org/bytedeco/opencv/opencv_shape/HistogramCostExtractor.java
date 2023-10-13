@@ -38,6 +38,9 @@ public class HistogramCostExtractor extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HistogramCostExtractor(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HistogramCostExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::HistogramCostExtractor*>") void allocate(Algorithm pointer);
 
     public native void buildCostMatrix(@ByVal Mat descriptors1, @ByVal Mat descriptors2, @ByVal Mat costMatrix);
     public native void buildCostMatrix(@ByVal UMat descriptors1, @ByVal UMat descriptors2, @ByVal UMat costMatrix);

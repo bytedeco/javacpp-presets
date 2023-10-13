@@ -47,6 +47,14 @@ public class SuperResDualTVL1OpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResDualTVL1OpticalFlow(Pointer p) { super(p); }
+            /** Downcast constructor. */
+            public SuperResDualTVL1OpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::DualTVL1OpticalFlow*>") void allocate(Algorithm pointer);
+            /** Downcast constructor. */
+            public SuperResDualTVL1OpticalFlow(DenseOpticalFlowExt pointer) { super((Pointer)null); allocate(pointer); }
+            @Namespace private native @Name("dynamic_cast<cv::superres::DualTVL1OpticalFlow*>") void allocate(DenseOpticalFlowExt pointer);
+            public DenseOpticalFlowExt asDenseOpticalFlowExt() { return asDenseOpticalFlowExt(this); }
+            @Namespace public static native @Name("static_cast<cv::superres::DenseOpticalFlowExt*>") DenseOpticalFlowExt asDenseOpticalFlowExt(SuperResDualTVL1OpticalFlow pointer);
         
             /** @see setTau */
             public native double getTau();

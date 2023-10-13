@@ -56,6 +56,9 @@ public class PCTSignatures extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PCTSignatures(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public PCTSignatures(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::PCTSignatures*>") void allocate(Algorithm pointer);
 
     /**
     * \brief Lp distance function selector.

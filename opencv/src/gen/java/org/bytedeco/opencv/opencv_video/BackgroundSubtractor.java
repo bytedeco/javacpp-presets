@@ -43,6 +43,9 @@ public class BackgroundSubtractor extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractor(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::BackgroundSubtractor*>") void allocate(Algorithm pointer);
 
     /** \brief Computes a foreground mask.
     <p>

@@ -40,6 +40,9 @@ public class EdgeAwareInterpolator extends SparseMatchInterpolator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeAwareInterpolator(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public EdgeAwareInterpolator(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ximgproc::EdgeAwareInterpolator*>") void allocate(Algorithm pointer);
 
     /** \brief Interface to provide a more elaborated cost map, i.e. edge map, for the edge-aware term.
      *  This implementation is based on a rather simple gradient-based edge map estimation.

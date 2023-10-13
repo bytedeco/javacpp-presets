@@ -44,6 +44,9 @@ public class BFMatcher extends DescriptorMatcher {
     @Override public BFMatcher getPointer(long i) {
         return new BFMatcher((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public BFMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::BFMatcher*>") void allocate(Algorithm pointer);
 
     /** \brief Brute-force matcher constructor (obsolete). Please use BFMatcher.create()
      *

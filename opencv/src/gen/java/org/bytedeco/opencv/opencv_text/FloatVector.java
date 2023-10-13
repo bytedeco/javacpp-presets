@@ -48,6 +48,8 @@ public class FloatVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public float front() { return get(0); }
+    public float back() { return get(size() - 1); }
     @Index(function = "at") public native float get(@Cast("size_t") long i);
     public native FloatVector put(@Cast("size_t") long i, float value);
 

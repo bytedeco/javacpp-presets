@@ -34,6 +34,8 @@ public class MatShapeVectorVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public MatShapeVector front() { return get(0); }
+    public MatShapeVector back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef MatShapeVector get(@Cast("size_t") long i);
     public native MatShapeVectorVector put(@Cast("size_t") long i, MatShapeVector value);
 

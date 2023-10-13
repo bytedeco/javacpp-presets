@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/face/facemarkAAM.hpp>", "<opencv2/face/face_alignment.hpp>"},
             link = "opencv_face@.408"),
         @Platform(value = "ios", preload = "libopencv_face"),
-        @Platform(value = "windows", link = "opencv_face480")},
+        @Platform(value = "windows", link = "opencv_face481")},
     target = "org.bytedeco.opencv.opencv_face",
     global = "org.bytedeco.opencv.global.opencv_face"
 )

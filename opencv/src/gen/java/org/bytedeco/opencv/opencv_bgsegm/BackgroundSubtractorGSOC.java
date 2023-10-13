@@ -41,6 +41,9 @@ public class BackgroundSubtractorGSOC extends BackgroundSubtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorGSOC(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorGSOC(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::bgsegm::BackgroundSubtractorGSOC*>") void allocate(Algorithm pointer);
 
     // BackgroundSubtractor interface
     public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);

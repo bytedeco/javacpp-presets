@@ -30,6 +30,8 @@ public class Rect2dVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Rect2d front() { return get(0); }
+    public Rect2d back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef Rect2d get(@Cast("size_t") long i);
     public native Rect2dVector put(@Cast("size_t") long i, Rect2d value);
 

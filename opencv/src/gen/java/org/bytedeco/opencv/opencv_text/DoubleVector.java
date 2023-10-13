@@ -48,6 +48,8 @@ public class DoubleVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public double front() { return get(0); }
+    public double back() { return get(size() - 1); }
     @Index(function = "at") public native double get(@Cast("size_t") long i);
     public native DoubleVector put(@Cast("size_t") long i, double value);
 

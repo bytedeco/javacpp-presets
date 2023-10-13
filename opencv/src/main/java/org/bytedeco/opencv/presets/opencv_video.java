@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(include = {"<opencv2/video.hpp>", /*"<opencv2/video/tracking_c.h>",*/ "<opencv2/video/tracking.hpp>",
             "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.408"),
         @Platform(value = "ios", preload = "libopencv_video"),
-        @Platform(value = "windows", link = "opencv_video480")},
+        @Platform(value = "windows", link = "opencv_video481")},
     target = "org.bytedeco.opencv.opencv_video",
     global = "org.bytedeco.opencv.global.opencv_video"
 )

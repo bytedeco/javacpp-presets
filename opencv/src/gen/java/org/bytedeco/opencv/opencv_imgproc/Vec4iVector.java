@@ -32,6 +32,8 @@ public class Vec4iVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public Scalar4i front() { return get(0); }
+    public Scalar4i back() { return get(size() - 1); }
     @Index(function = "at") public native @Cast("cv::Vec4i*") @ByRef Scalar4i get(@Cast("size_t") long i);
     public native Vec4iVector put(@Cast("size_t") long i, Scalar4i value);
 

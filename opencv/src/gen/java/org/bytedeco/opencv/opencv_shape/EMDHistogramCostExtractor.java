@@ -35,6 +35,9 @@ public class EMDHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EMDHistogramCostExtractor(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public EMDHistogramCostExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::EMDHistogramCostExtractor*>") void allocate(Algorithm pointer);
 
     public native void setNormFlag(int flag);
     public native int getNormFlag();

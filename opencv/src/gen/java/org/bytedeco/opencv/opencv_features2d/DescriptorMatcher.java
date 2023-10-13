@@ -41,6 +41,9 @@ public class DescriptorMatcher extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DescriptorMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::DescriptorMatcher*>") void allocate(Algorithm pointer);
 
    /** enum cv::DescriptorMatcher::MatcherType */
    public static final int

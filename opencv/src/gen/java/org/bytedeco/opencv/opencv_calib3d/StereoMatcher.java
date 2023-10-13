@@ -33,6 +33,9 @@ public class StereoMatcher extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoMatcher(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StereoMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::StereoMatcher*>") void allocate(Algorithm pointer);
 
     /** enum cv::StereoMatcher:: */
     public static final int DISP_SHIFT = 4,

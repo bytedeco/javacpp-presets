@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudaimgproc480",
+            link = "opencv_cudaimgproc481",
             extension = "-gpu"
         )
     },

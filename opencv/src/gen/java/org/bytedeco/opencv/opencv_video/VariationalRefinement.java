@@ -45,6 +45,9 @@ public class VariationalRefinement extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VariationalRefinement(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public VariationalRefinement(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::VariationalRefinement*>") void allocate(Algorithm pointer);
 
     /** \brief \ref calc function overload to handle separate horizontal (u) and vertical (v) flow components
     (to avoid extra splits/merges) */

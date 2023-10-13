@@ -38,8 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_photo@.408",
             preload = {"opencv_cuda@.408", "opencv_cudaarithm@.408", "opencv_cudafilters@.408", "opencv_cudaimgproc@.408"}),
         @Platform(value = "ios", preload = "libopencv_photo"),
-        @Platform(value = "windows", link = "opencv_photo480",
-            preload = {"opencv_cuda480", "opencv_cudaarithm480", "opencv_cudafilters480", "opencv_cudaimgproc480"})},
+        @Platform(value = "windows", link = "opencv_photo481",
+            preload = {"opencv_cuda481", "opencv_cudaarithm481", "opencv_cudafilters481", "opencv_cudaimgproc481"})},
     target = "org.bytedeco.opencv.opencv_photo",
     global = "org.bytedeco.opencv.global.opencv_photo"
 )

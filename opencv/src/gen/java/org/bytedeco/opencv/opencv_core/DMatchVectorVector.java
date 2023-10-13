@@ -30,6 +30,8 @@ public class DMatchVectorVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public DMatchVector front() { return get(0); }
+    public DMatchVector back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef DMatchVector get(@Cast("size_t") long i);
     public native DMatchVectorVector put(@Cast("size_t") long i, DMatchVector value);
 

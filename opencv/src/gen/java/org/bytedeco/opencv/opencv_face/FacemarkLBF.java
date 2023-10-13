@@ -42,6 +42,9 @@ public class FacemarkLBF extends FacemarkTrain {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkLBF(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FacemarkLBF(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::face::FacemarkLBF*>") void allocate(Algorithm pointer);
 
     @NoOffset public static class Params extends Pointer {
         static { Loader.load(); }

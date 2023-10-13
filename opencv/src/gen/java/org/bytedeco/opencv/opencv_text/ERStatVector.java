@@ -48,6 +48,8 @@ public class ERStatVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
+    public ERStat front() { return get(0); }
+    public ERStat back() { return get(size() - 1); }
     @Index(function = "at") public native @ByRef ERStat get(@Cast("size_t") long i);
     public native ERStatVector put(@Cast("size_t") long i, ERStat value);
 

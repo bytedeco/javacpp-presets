@@ -834,6 +834,8 @@ public class memory extends dnnl_memory_handle {
         BA16a64b4a(dnnl_BA16a64b4a),
         decbA16a(dnnl_decbA16a),
         decbA8a(dnnl_decbA8a),
+        defcbA16a(dnnl_defcbA16a),
+        defcbA8a(dnnl_defcbA8a),
         aCB16b16c(dnnl_aCB16b16c),
         aCB16b32c(dnnl_aCB16b32c),
         aCB16b48c(dnnl_aCB16b48c),
@@ -1462,6 +1464,8 @@ public class memory extends dnnl_memory_handle {
         AcdeB16b16a2b(dnnl_AcdeB16b16a2b),
         hwioG16g(dnnl_hwioG16g),
         hwioG8g(dnnl_hwioG8g),
+        dhwioG16g(dnnl_dhwioG16g),
+        dhwioG8g(dnnl_dhwioG8g),
         ABc4a2b(dnnl_ABc4a2b),
         ABc8a2b(dnnl_ABc8a2b),
         ABcd4a2b(dnnl_ABcd4a2b),
@@ -1842,7 +1846,22 @@ public class memory extends dnnl_memory_handle {
         BcdeA24b4a(dnnl_BcdeA24b4a),
         aCdB24c4b(dnnl_aCdB24c4b),
         aCdeB24c4b(dnnl_aCdeB24c4b),
-        aCdefB24c4b(dnnl_aCdefB24c4b);
+        aCdefB24c4b(dnnl_aCdefB24c4b),
+        ABc16a4b(dnnl_ABc16a4b),
+        ABcd16a4b(dnnl_ABcd16a4b),
+        ABcde16a4b(dnnl_ABcde16a4b),
+        IwO8i4o(dnnl_IwO8i4o),
+        IwO24i4o(dnnl_IwO24i4o),
+        IhwO8i4o(dnnl_IhwO8i4o),
+        IhwO24i4o(dnnl_IhwO24i4o),
+        IdhwO8i4o(dnnl_IdhwO8i4o),
+        IdhwO24i4o(dnnl_IdhwO24i4o),
+        gIwO8i4o(dnnl_gIwO8i4o),
+        gIwO24i4o(dnnl_gIwO24i4o),
+        gIhwO8i4o(dnnl_gIhwO8i4o),
+        gIhwO24i4o(dnnl_gIhwO24i4o),
+        gIdhwO8i4o(dnnl_gIdhwO8i4o),
+        gIdhwO24i4o(dnnl_gIdhwO24i4o);
 
         public final int value;
         private format_tag(int v) { this.value = v; }

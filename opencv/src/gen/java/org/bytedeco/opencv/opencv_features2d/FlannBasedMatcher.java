@@ -47,6 +47,9 @@ public class FlannBasedMatcher extends DescriptorMatcher {
     @Override public FlannBasedMatcher getPointer(long i) {
         return new FlannBasedMatcher((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public FlannBasedMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::FlannBasedMatcher*>") void allocate(Algorithm pointer);
 
     public FlannBasedMatcher( @Ptr IndexParams indexParams/*=makePtr<flann::KDTreeIndexParams>()*/,
                            @Ptr SearchParams searchParams/*=makePtr<flann::SearchParams>()*/ ) { super((Pointer)null); allocate(indexParams, searchParams); }

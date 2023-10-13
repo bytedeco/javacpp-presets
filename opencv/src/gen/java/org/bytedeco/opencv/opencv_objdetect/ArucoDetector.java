@@ -51,6 +51,9 @@ public class ArucoDetector extends Algorithm {
     @Override public ArucoDetector getPointer(long i) {
         return new ArucoDetector((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public ArucoDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::aruco::ArucoDetector*>") void allocate(Algorithm pointer);
 
     /** \brief Basic ArucoDetector constructor
      *
