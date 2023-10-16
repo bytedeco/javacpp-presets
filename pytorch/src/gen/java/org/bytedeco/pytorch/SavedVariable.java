@@ -78,4 +78,6 @@ public class SavedVariable extends Pointer {
   public native void register_hooks(@UniquePtr SavedVariableHooks hooks);
 
   public native void reset_data();
+
+  public native @Cast("bool") boolean has_hooks();
 }

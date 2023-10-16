@@ -18,6 +18,10 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
+// When you add a method, you also need to edit
+// torch/csrc/jit/python/init.cpp
+// torch/csrc/utils/python_symnode.h
+// c10/core/ConstantSymNodeImpl.h
 @Namespace("c10") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class SymNodeImpl extends Pointer {
     static { Loader.load(); }
@@ -63,6 +67,21 @@ public class SymNodeImpl extends Pointer {
   public native @ByVal SymNode sym_and(@Const @ByRef SymNode other);
   public native @ByVal SymNode sym_not();
   // NB: self is ignored here, only the arguments are used
+  public native @ByVal SymNode is_contiguous(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
+  public native @ByVal SymNode is_channels_last_contiguous_2d(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
+  public native @ByVal SymNode is_channels_last_contiguous_3d(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
+  public native @ByVal SymNode is_channels_last_strides_2d(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
+  public native @ByVal SymNode is_channels_last_strides_3d(
+        @ByVal SymNodeArrayRef sizes,
+        @ByVal SymNodeArrayRef strides);
   public native @ByVal SymNode is_non_overlapping_and_dense(
         @ByVal SymNodeArrayRef sizes,
         @ByVal SymNodeArrayRef strides);
@@ -77,8 +96,15 @@ public class SymNodeImpl extends Pointer {
   public native @Cast("bool") boolean guard_bool(String file, @Cast("int64_t") long line);
   public native double guard_float(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native double guard_float(String file, @Cast("int64_t") long line);
+  public native @Cast("bool") boolean expect_true(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
+  public native @Cast("bool") boolean expect_true(String file, @Cast("int64_t") long line);
   public native @Cast("int64_t") long int_();
   public native @Cast("bool") boolean bool_();
+  public native @Cast("bool") boolean has_hint();
   public native @StdString BytePointer str();
+  public native @ByVal LongOptional singleton_int();
+  public native @ByVal LongOptional constant_int();
+  public native @ByVal BoolOptional constant_bool();
+  public native @ByVal LongOptional maybe_as_int();
   public native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os);
 }

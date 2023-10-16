@@ -36,45 +36,35 @@ public class TypeMetaData extends Pointer {
         return new TypeMetaData((Pointer)this).offsetAddress(i);
     }
 
-  public static class New extends FunctionPointer {
-      static { Loader.load(); }
+  @Opaque public static class New extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public New() { super((Pointer)null); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    New(Pointer p) { super(p); }
-      protected New() { allocate(); }
-      private native void allocate();
-      public native Pointer call();
+      public New(Pointer p) { super(p); }
   }
-  public static class PlacementNew extends FunctionPointer {
-      static { Loader.load(); }
+  @Opaque public static class PlacementNew extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public PlacementNew() { super((Pointer)null); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    PlacementNew(Pointer p) { super(p); }
-      protected PlacementNew() { allocate(); }
-      private native void allocate();
-      public native void call(Pointer arg0, @Cast("size_t") long arg1);
+      public PlacementNew(Pointer p) { super(p); }
   }
-  public static class Copy extends FunctionPointer {
-      static { Loader.load(); }
+  @Opaque public static class Copy extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public Copy() { super((Pointer)null); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Copy(Pointer p) { super(p); }
-      protected Copy() { allocate(); }
-      private native void allocate();
-      public native void call(@Const Pointer arg0, Pointer arg1, @Cast("size_t") long arg2);
+      public Copy(Pointer p) { super(p); }
   }
-  public static class PlacementDelete extends FunctionPointer {
-      static { Loader.load(); }
+  @Opaque public static class PlacementDelete extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public PlacementDelete() { super((Pointer)null); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    PlacementDelete(Pointer p) { super(p); }
-      protected PlacementDelete() { allocate(); }
-      private native void allocate();
-      public native void call(Pointer arg0, @Cast("size_t") long arg1);
+      public PlacementDelete(Pointer p) { super(p); }
   }
-  public static class Delete extends FunctionPointer {
-      static { Loader.load(); }
+  @Opaque public static class Delete extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public Delete() { super((Pointer)null); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Delete(Pointer p) { super(p); }
-      protected Delete() { allocate(); }
-      private native void allocate();
-      public native void call(Pointer arg0);
+      public Delete(Pointer p) { super(p); }
   }
 
   public TypeMetaData() { super((Pointer)null); allocate(); }

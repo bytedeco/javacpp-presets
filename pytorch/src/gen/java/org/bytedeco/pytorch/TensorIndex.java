@@ -61,7 +61,9 @@ public class TensorIndex extends Pointer {
   public TensorIndex(String str) { super((Pointer)null); allocate(str); }
   private native void allocate(String str);
 
-  // Case 3: Integer value
+  // Case 3: (Sym) Integer value
+  public TensorIndex(@ByVal SymInt integer) { super((Pointer)null); allocate(integer); }
+  private native void allocate(@ByVal SymInt integer);
   public TensorIndex(@Cast("int64_t") long integer) { super((Pointer)null); allocate(integer); }
   private native void allocate(@Cast("int64_t") long integer);
   public TensorIndex(int integer) { super((Pointer)null); allocate(integer); }
@@ -83,7 +85,7 @@ public class TensorIndex extends Pointer {
 
   public native @Cast("bool") boolean is_integer();
 
-  public native @Cast("int64_t") long integer();
+  public native @ByVal SymInt integer();
 
   public native @Cast("bool") boolean is_boolean();
 

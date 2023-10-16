@@ -139,7 +139,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "cudaDeviceProp"
             ).pointerTypes("Pointer"))
             .put(new Info( // Pointers to opaque structs
-                "cudaStream_t", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnHandle_t"
+                "cudaStream_t", "cusparseHandle_t", "cublasHandle_t", "cusolverDnHandle_t", "cudnnHandle_t", "cudaEvent_t"
             ).valueTypes("Pointer").cast())
             .put(new Info( // Enums
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t",

@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-/** Represents a a compute device on which a tensor is located. A device is
+/** Represents a compute device on which a tensor is located. A device is
  *  uniquely identified by a type, which specifies the type of machine it is
  *  (e.g. CPU or CUDA GPU), and a device index or ordinal, which identifies the
  *  specific compute device when there is more than one of a certain type. The
@@ -79,6 +79,9 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of CUDA type. */
   public native @Cast("bool") @NoException(true) boolean is_cuda();
 
+  /** Return true if the device is of PrivateUse1 type. */
+  public native @Cast("bool") @NoException(true) boolean is_privateuseone();
+
   /** Return true if the device is of MPS type. */
   public native @Cast("bool") @NoException(true) boolean is_mps();
 
@@ -96,6 +99,9 @@ private native void allocate(@StdString String device_string);
 
   /** Return true if the device is of XLA type. */
   public native @Cast("bool") @NoException(true) boolean is_xla();
+
+  /** Return true if the device is of MTIA type. */
+  public native @Cast("bool") @NoException(true) boolean is_mtia();
 
   /** Return true if the device is of HPU type. */
   public native @Cast("bool") @NoException(true) boolean is_hpu();
@@ -118,7 +124,7 @@ private native void allocate(@StdString String device_string);
   /** Return true if the device is of CPU type. */
   public native @Cast("bool") @NoException(true) boolean is_cpu();
 
-  /** Return true if the device supports arbirtary strides. */
+  /** Return true if the device supports arbitrary strides. */
   public native @Cast("bool") @NoException(true) boolean supports_as_strided();
 
   /** Same string as returned from operator<<. */

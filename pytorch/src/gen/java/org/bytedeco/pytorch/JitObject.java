@@ -18,7 +18,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 @Name("torch::jit::Object") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class JitObject extends Pointer {
     static { Loader.load(); }
@@ -34,7 +33,9 @@ public class JitObject extends Pointer {
 
   public JitObject() { super((Pointer)null); allocate(); }
   private native void allocate();
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+  public JitObject(@Const @ByRef JitObject arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@Const @ByRef JitObject arg0);
+  public native @ByRef @Name("operator =") JitObject put(@Const @ByRef JitObject arg0);
   public JitObject(@ByVal @Cast("torch::jit::ObjectPtr*") Pointer _ivalue) { super((Pointer)null); allocate(_ivalue); }
   private native void allocate(@ByVal @Cast("torch::jit::ObjectPtr*") Pointer _ivalue);
   public JitObject(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type) { super((Pointer)null); allocate(cu, type); }

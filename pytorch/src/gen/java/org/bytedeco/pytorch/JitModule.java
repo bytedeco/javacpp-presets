@@ -37,6 +37,9 @@ public class JitModule extends JitObject {
   private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public JitModule() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public JitModule(@Const @ByRef JitModule arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@Const @ByRef JitModule arg0);
+  public native @ByRef @Name("operator =") JitModule put(@Const @ByRef JitModule arg0);
   public JitModule(
         @ByVal QualifiedName arg0,
         @SharedPtr CompilationUnit cu,
@@ -103,10 +106,10 @@ public class JitModule extends JitObject {
 
   public native void apply(@Const @ByRef JitModuleApplyFunction fn);
 
-  public native @ByVal buffer_list buffers(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal buffer_list buffers();
-  public native @ByVal named_buffer_list named_buffers(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal named_buffer_list named_buffers();
+  public native @ByVal @Cast("torch::jit::buffer_list*") module_list buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::buffer_list*") module_list buffers();
+  public native @ByVal @Cast("torch::jit::named_buffer_list*") module_list named_buffers(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::named_buffer_list*") module_list named_buffers();
 
   public native @ByVal module_list children(); // direct modules
   public native @ByVal named_module_list named_children();
@@ -114,16 +117,16 @@ public class JitModule extends JitObject {
   public native @ByVal named_module_list named_modules();
 
   // all tensors involved in gradient optimization
-  public native @ByVal parameter_list parameters(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal parameter_list parameters();
-  public native @ByVal named_parameter_list named_parameters(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal named_parameter_list named_parameters();
+  public native @ByVal @Cast("torch::jit::parameter_list*") module_list parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::parameter_list*") module_list parameters();
+  public native @ByVal @Cast("torch::jit::named_parameter_list*") module_list named_parameters(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::named_parameter_list*") module_list named_parameters();
 
   // all members of the object, similar to iterating over dir(obj) in python
-  public native @ByVal attribute_list attributes(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal attribute_list attributes();
-  public native @ByVal named_attribute_list named_attributes(@Cast("bool") boolean recurse/*=true*/);
-  public native @ByVal named_attribute_list named_attributes();
+  public native @ByVal @Cast("torch::jit::attribute_list*") module_list attributes(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::attribute_list*") module_list attributes();
+  public native @ByVal @Cast("torch::jit::named_attribute_list*") module_list named_attributes(@Cast("bool") boolean recurse/*=true*/);
+  public native @ByVal @Cast("torch::jit::named_attribute_list*") module_list named_attributes();
 
   public native void dump(
         @Cast("bool") boolean print_method_bodies,
@@ -219,6 +222,7 @@ public class JitModule extends JitObject {
 
   public native @ByVal JitModule copy();
 
+  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal JitModule deepcopy();
 
   // Clones both the underlying `ClassType` and the module instance(data), this

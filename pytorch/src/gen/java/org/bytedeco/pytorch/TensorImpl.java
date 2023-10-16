@@ -429,6 +429,8 @@ public class TensorImpl extends Pointer {
 
   public native @Cast("bool") boolean is_xla();
 
+  public native @Cast("bool") boolean is_mtia();
+
   public native @Cast("bool") boolean is_hpu();
 
   public native @Cast("bool") boolean is_lazy();
@@ -634,38 +636,56 @@ public class TensorImpl extends Pointer {
    */
 
   /**
+   * Return a mutable typed data pointer to the actual data which this
+   * tensor refers to. This checks that the requested type (from the
+   * template parameter) matches the internal type of the tensor.
+   *
+   * It is invalid to call data() on a dtype-uninitialized tensor, even if
+   * the size is 0.
+   *
+   * WARNING: If a tensor is not contiguous, you MUST use strides when
+   * performing index calculations to determine the location of elements in
+   * the tensor.  We recommend using 'TensorAccessor' to handle this computation
+   * for you; this class is available from 'Tensor'.
+   */
+  // Shared implementation of data_dtype_initialized() and
+  // mutable_data_dtype_initialized().
+
+  /**
    * More efficient helper for Tensor::data_ptr(). Like data<T>(), but
    * does not do a type check. Unlike the untemplated data(), does
    * check has_storage() and storage_initialized().
    */
+  // Shared implementation of mutable_data_ptr_impl() and the future
+  // mutable_data_ptr_impl().
+  public native @Const Pointer data();
 
   /**
    * Return a void* data pointer to the actual data which this tensor refers to.
    *
-   * It is invalid to call data() on a dtype-uninitialized tensor, even if the
-   * size is 0.
+   * It is invalid to call mutable_data() on a dtype-uninitialized
+   * tensor, even if the size is 0.
    *
    * WARNING: The data pointed to by this tensor may not contiguous; do NOT
    * assume that itemsize() * numel() is sufficient to compute the bytes that
    * can be validly read from this tensor.
    */
-  public native Pointer data();
-
-  /**
-   * Like data<T>(), but performs no checks.  You are responsible for ensuring
-   * that all invariants required by data() are upheld here.
-   */
-
-  /**
-   * Returns the TypeMeta of a tensor, which describes what data type
-   * it is (e.g., int, float, ...)
-   */
+  public native Pointer mutable_data();
   public native @Const @ByVal TypeMeta dtype();
 
   /**
    * Return the size of a single element of this tensor in bytes.
    */
   public native @Cast("size_t") long itemsize();
+
+  public native void set_backend_meta(@ByVal BackendMetaRef backend_meta);
+
+  public native BackendMeta get_backend_meta();
+
+  public native @ByVal BackendMetaRef get_backend_meta_intrusive_ptr();
+
+  public native void release_storage_and_set_meta_custom_data_ptr_error_msg_(
+        @ByVal StringOptional s);
   /**
    * True if a tensor has no elements (e.g., numel() == 0).
    */
@@ -949,7 +969,7 @@ public class TensorImpl extends Pointer {
    * If the existing data does not match the desired type, it will be deleted
    * and a new storage will be created.
    */
-  public native Pointer raw_mutable_data(@Const @ByVal TypeMeta meta);
+  public native Pointer raw_mutable_data(@Const @ByRef TypeMeta meta);
 
   /**
    * Returns a typed pointer of the underlying storage.

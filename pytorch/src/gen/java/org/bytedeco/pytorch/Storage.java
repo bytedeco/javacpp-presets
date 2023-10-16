@@ -107,9 +107,13 @@ public class Storage extends Pointer {
   public native @ByVal SymInt sym_nbytes();
   // get() use here is to get const-correctness
 
-  public native Pointer data();
+  public native @Const Pointer data();
 
-  public native @ByRef DataPtr data_ptr();
+  public native Pointer mutable_data();
+
+  public native @ByRef DataPtr mutable_data_ptr();
+
+  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr();
 
   // Returns the previous data_ptr
   public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr set_data_ptr(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
@@ -139,18 +143,10 @@ public class Storage extends Pointer {
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long _capacity,
-        @Cast("c10::DeleterFnPtr") PointerConsumer d/*=nullptr*/);
+        PointerConsumer d/*=nullptr*/);
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long _capacity);
-  public native void UniqueStorageShareExternalPointer(
-        Pointer src,
-        @Cast("size_t") long _capacity,
-        @Cast("c10::DeleterFnPtr") Pointer d/*=nullptr*/);
-  public native void UniqueStorageShareExternalPointer(
-        Pointer src,
-        @Cast("size_t") long _capacity,
-        @Cast("c10::DeleterFnPtr") long d/*=nullptr*/);
 
   public native void UniqueStorageShareExternalPointer(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,

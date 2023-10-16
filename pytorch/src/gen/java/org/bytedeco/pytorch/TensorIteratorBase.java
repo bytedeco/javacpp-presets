@@ -112,6 +112,11 @@ public class TensorIteratorBase extends MetaBase {
 
   /** Returns the dimension with the largest extent: (size[dim]-1) * stride[dim] */
   public native int get_dim_to_split();
+
+  /** Return scalar value from original_tensor_base if it is defined. When
+   *  common_dtype is Half, casting scalar input to common_dtype might overflow.
+   *  If the scalar is aleady given in the type of Half, then return scalar
+   *  value from tensor_base. */
   
 
   

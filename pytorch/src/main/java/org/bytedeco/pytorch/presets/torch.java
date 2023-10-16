@@ -56,17 +56,18 @@ import org.bytedeco.openblas.presets.openblas;
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
-            compiler = "cpp14",
+            compiler = "cpp17",
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
             include = {
                 "torch/torch.h",
-                "ATen/native/TensorShape.h",
-                "torch/csrc/jit/serialization/storage_context.h",
-                "torch/csrc/jit/serialization/import.h",
+                "torch/script.h",
 
                 // For inclusion in JNI only, not parsed (compiler needs some complete definitions)
                 "torch/csrc/jit/runtime/instruction.h",
                 "torch/csrc/jit/serialization/source_range_serialization.h",
+                "torch/csrc/jit/frontend/resolver.h",
+                "torch/csrc/jit/frontend/tree_views.h",
+                "torch/csrc/jit/serialization/storage_context.h",
 
                 "pytorch_adapters.h"
             },
@@ -76,10 +77,7 @@ import org.bytedeco.openblas.presets.openblas;
         @Platform(
             value = {"linux", "macosx", "windows"},
             link = { "c10", "c10_cuda", "torch_cpu", "torch_cuda", "torch" },
-            // If nvfuser_codegen is linked and not preloaded, and javacpp cache is empty, we get:
-            // Loading nvfuser library failed with: Error in dlopen: libtorch.so: Cannot open...  (function LoadingNvfuserLibrary)
-            // The warning disappears once the cache is filled. Probably some obscure race condition.
-            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12", "nvfuser_codegen"},
+            preload = {"gomp@.1", "iomp5", "omp", "tbb@.2", "asmjit", "fbgemm", "cupti@.12"},
             includepath = {"/usr/local/cuda/include", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/include/"},
             preloadpath = {
                 "/usr/local/cuda-12.1/lib64/",
@@ -245,7 +243,10 @@ public class torch implements LoadEnabled, InfoMapper {
                 "ERROR_UNSUPPORTED_CAST", "LEGACY_CONTIGUOUS_MEMORY_FORMAT", "GFLAGS_DLL_DEFINE_FLAG", "GFLAGS_DLL_DECLARE_FLAG",
                 "AT_X", "DEFINE_KEY", "C10_DISPATCHER_INLINE_UNLESS_MOBILE", "TH_DISALLOW_COPY_AND_ASSIGN", "__device__",
                 "TORCH_DSA_KERNEL_ARGS", "TORCH_DSA_KERNEL_ARGS_PASS",
-                "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT").cppTypes().annotations())
+                "C10_CUDA_API", "C10_CUDA_IMPORT", "C10_CUDA_EXPORT",
+                "__ubsan_ignore_float_divide_by_zero__", "__ubsan_ignore_undefined__",
+                "__ubsan_ignore_signed_int_overflow__", "__ubsan_ignore_pointer_overflow__",
+                "__ubsan_ignore_function__").cppTypes().annotations())
 
             .put(new Info("defined(__CUDACC__) || defined(__HIPCC__)",
                 "defined(__CUDACC__) && !defined(USE_ROCM)",
@@ -258,7 +259,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 "defined(_MSC_VER)", "_WIN32",
                 "defined(USE_ROCM)", "USE_ROCM", "SYCL_LANGUAGE_VERSION",
                 "defined(CUDA_VERSION) && CUDA_VERSION >= 11000",
-                "defined ENABLE_RECORD_KERNEL_FUNCTION_DTYPE").define(false))
+                "defined ENABLE_RECORD_KERNEL_FUNCTION_DTYPE",
+                "__OBJC__").define(false))
 
             .put(new Info("C10_DEFINE_DEPRECATED_USING").cppText("#define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)").cppTypes())
             .put(new Info("C10_DEPRECATED_MESSAGE").cppText("#define C10_DEPRECATED_MESSAGE() deprecated").cppTypes())
@@ -330,6 +332,8 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)").cast().valueTypes("boolean").pointerTypes("BoolPointer"))
             .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Half>::t)").pointerTypes("Half"))
             .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::BFloat16>::t)").pointerTypes("BFloat16"))
+            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e5m2>::t)").pointerTypes("Float8_e5m2"))
+            .put(new Info("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Float8_e4m3fn>::t)").pointerTypes("Float8_e4m3fn"))
             .put(new Info("c10::DataPtr", "at::DataPtr").valueTypes("@Cast({\"\", \"c10::DataPtr&&\"}) @StdMove DataPtr").pointerTypes("DataPtr"))
             .put(new Info("c10::Storage", "at::Storage").valueTypes("@Cast({\"\", \"c10::Storage&&\"}) @StdMove Storage").pointerTypes("Storage"))
             .put(new Info("c10::ClassType").purify().pointerTypes("ClassType")) // Issue #669
@@ -428,7 +432,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<torch::jit::ModuleInstanceInfo>").pointerTypes("ModuleInstanceInfoOptional").define())
             .put(new Info("c10::optional<torch::jit::SourceRange>").pointerTypes("SourceRangeOptional").define())
             .put(new Info("c10::optional<torch::jit::Method>").pointerTypes("MethodOptional").define())
-            .put(new Info("c10::optional<torch::jit::Operator>").pointerTypes("OperatorOptional").define())
             .put(new Info("c10::optional<torch::jit::NamedValue>", "c10::optional<NamedValue>").pointerTypes("NamedValueOptional").define())
             .put(new Info("c10::optional<torch::jit::Value*>").pointerTypes("ValueOptional").define())
             .put(new Info("c10::optional<torch::ExpandingArray<1> >",
@@ -445,6 +448,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<std::tuple<c10::TypePtr,int32_t> >", "c10::optional<std::pair<c10::TypePtr,int32_t> >").pointerTypes("T_TypePtrLong_TOptional").cast().define())
             .put(new Info("c10::optional<c10::string_view>").pointerTypes("StringViewOptional").define())
             .put(new Info("c10::optional<std::vector<c10::string_view> >").pointerTypes("StringViewVectorOptional").define())
+            .put(new Info("c10::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >")/*.cast?*/.pointerTypes("PointerPairOptional").define())
         ;
 
 
@@ -586,6 +590,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::array<const char*,2>").pointerTypes("PointerPointer<BytePointer>"))
             .put(new Info("std::array<c10::FunctionalityOffsetAndMask,c10::num_functionality_keys>").cast().pointerTypes("FunctionalityOffsetAndMask"))
             .put(new Info("std::array<uint32_t,at::MERSENNE_STATE_N>").pointerTypes("IntPointer").cast())
+            .put(new Info("std::array<c10::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >,at::COMPILE_TIME_MAX_DEVICE_TYPES>").pointerTypes("PointerPairOptional").cast())
         ;
 
 
@@ -622,7 +627,6 @@ public class torch implements LoadEnabled, InfoMapper {
                 .valueTypes("@Cast({\"\", \"std::vector<torch::Tensor>\"}) @StdMove TensorVector").pointerTypes("TensorVector").define())
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
             .put(new Info("std::vector<c10::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
-            .put(new Info("std::vector<c10::optional<torch::jit::Operator> >").pointerTypes("OperatorOptionalVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("SharedFunctionPreVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >",
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreHookVector").define())
@@ -631,14 +635,11 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("const std::vector<torch::autograd::SavedVariable>", "std::vector<torch::autograd::SavedVariable>").pointerTypes("SavedVariableVector").define())
             .put(new Info("const std::vector<torch::jit::Def>", "std::vector<torch::jit::Def>").pointerTypes("DefVector").define())
             .put(new Info("const std::vector<torch::jit::Property>", "std::vector<torch::jit::Property>").pointerTypes("PropertyVector").define())
-            .put(new Info("const std::vector<torch::jit::Instruction>", "std::vector<torch::jit::Instruction>").pointerTypes("InstructionVector").define())
-            .put(new Info("const std::vector<torch::jit::CompilationUnit>", "std::vector<torch::jit::CompilationUnit>").pointerTypes("CompilationUnitVector").define())
             .put(new Info("const std::vector<torch::optim::OptimizerParamGroup>", "std::vector<torch::optim::OptimizerParamGroup>").pointerTypes("OptimizerParamGroupVector").define())
             .put(new Info("std::vector<torch::jit::Function*>").pointerTypes("FunctionVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Graph> >").pointerTypes("GraphVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Operator> >").pointerTypes("OperatorVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Resolver> >", "std::vector<torch::jit::ResolverPtr>").pointerTypes("ResolverVector").define())
-            .put(new Info("std::vector<torch::jit::StackEntry>").pointerTypes("StackEntryVector").define())
             .put(new Info("std::vector<torch::jit::Value*>", "std::vector<Value*>").pointerTypes("ValueVector").define()) // Returned by inlineCallTo
             .put(new Info("std::vector<const torch::jit::Node*>").pointerTypes("JitNodeVector").define())
             .put(new Info("std::vector<torch::nn::Module>").pointerTypes("ModuleVector").define())
@@ -781,9 +782,7 @@ public class torch implements LoadEnabled, InfoMapper {
         for (String[] t : new String[][]{
             {"SymInt", "SymInt", "@ByVal SymInt", "c10::SymInt", "at::kDimVectorStaticSize", "at::SymDimVector", "SymDimVector"},
             {"Long", "LongPointer", "long", "int64_t", "at::kDimVectorStaticSize", "at::DimVector", "DimVector"},
-            {"Node", "Node", "@ByPtr Node", "torch::autograd::Node*", "4", null, "SmallNodeVector"},
-            {"TreeRef", "TreeRef", "@ByVal TreeRef", "c10::intrusive_ptr<torch::jit::Tree>", "4", null, "TreeList"}
-
+            {"Node", "Node", "@ByPtr Node", "torch::autograd::Node*", "4", null, "SmallNodeVector"}
         }) {
             // Assume all have SmallVectorSizeType == uint32_t
             infoMap
@@ -841,6 +840,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::unordered_set<torch::autograd::Node*>").pointerTypes("NodeSet").define())
             .put(new Info("std::unordered_set<c10::Stream>").pointerTypes("StreamSet").define())
             .put(new Info("std::unordered_set<at::RecordScope>").pointerTypes("RecordScopeSet").define())
+            .put(new Info("std::unordered_set<c10::DeviceType>").pointerTypes("DeviceTypeSet").define())
             .put(new Info("std::set<torch::profiler::impl::ActivityType>").pointerTypes("ActivityTypeSet").define())
         ;
 
@@ -946,22 +946,6 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("torch::jit::TreeList::const_iterator").cast().pointerTypes("TreeRef"));
 
 
-        /* Not parsed anymore
-        List<String> binaryOps = Arrays.asList("Add", "Sub", "Div", "Max", "Min", "Mul", "Mod", "Xor", "And", "Or", "Rshift", "Lshift");
-        List<String> exprOps = new ArrayList<>();
-        exprOps.addAll(Arrays.asList("CharImm", "FloatImm", "BitCast", "Intrinsics", "Broadcast", "Cast"));
-        exprOps.addAll(binaryOps);
-        List<String> bitwiseOps = Arrays.asList("Xor", "And", "Or", "Rshift", "Lshift");
-
-        for (String op : binaryOps)
-            infoMap.put(new Info("torch::jit::tensorexpr::BinaryOpNode<torch::jit::tensorexpr::" + op + ">").pointerTypes("BinaryOpNode" + op));
-        for (String op : exprOps)
-            infoMap.put(new Info("torch::jit::tensorexpr::ExprNode<torch::jit::tensorexpr::" + op + ">").pointerTypes("ExprNode" + op));
-        for (String op : bitwiseOps)
-            infoMap.put(new Info("torch::jit::tensorexpr::BitwiseOpNode<torch::jit::tensorexpr::" + op + ">").pointerTypes("BitwiseOpNode" + op));
-        */
-
-
         //// c10 Dict
         infoMap
             .put(new Info("c10::Dict<c10::IValue,c10::IValue>").purify().pointerTypes("GenericDict"))
@@ -1014,6 +998,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::pair<std::string,torch::nn::AnyModule>").pointerTypes("StringAnyModulePair").define())
             .put(new Info("std::pair<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModulePair").define())
             .put(new Info("std::pair<at::RecordFunctionHandle,int>").pointerTypes("RecordFunctionHandleIntPair").define())
+            .put(new Info("std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr>").pointerTypes("PointerPair").define())
             .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
@@ -1034,7 +1019,8 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("c10::TensorImpl,c10::UndefinedTensorImpl").javaBaseName("TensorImpl"),
             new PointerInfo("torch::jit::Tree").javaName("TreeRef"),
             new PointerInfo("c10::StorageImpl", "c10::StorageImpl,NullType"),
-            new PointerInfo("c10::SymNodeImpl").javaName("SymNode")
+            new PointerInfo("c10::SymNodeImpl").javaName("SymNode"),
+            new PointerInfo("c10::BackendMeta").javaName("BackendMetaRef") // Warning: BackendMetaPtr is sth different
         }) {
             String[] cppNames = new String[pi.argumentNames.length + pi.otherCppNames.length];
             int i = 0;
@@ -1169,10 +1155,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// Jit iterators
         for (String[] t : new String[][]{
-            {"Module", "JitModule", "torch::jit::Module"},
-            {"Parameter", "Tensor", "torch::Tensor"},
-            {"Attribute", "IValue", "c10::IValue"},
-            {"Buffer", "Tensor", "torch::Tensor"}
+            {"Module", "JitModule", "torch::jit::Module"}
         }) {
             infoMap.put(new Info(
                        "torch::jit::slot_list_impl<torch::jit::detail::" + t[0] + "Policy>",
@@ -1190,7 +1173,6 @@ public class torch implements LoadEnabled, InfoMapper {
         }
 
         infoMap
-            .put(new Info("torch::jit::tracer::warn_fn_type", "warn_fn_type").cast().pointerTypes("warn_fn_type"))
             .put(new Info("torch::jit::Maybe<torch::jit::Def>").pointerTypes("DefMaybe"))
             .put(new Info("torch::jit::Maybe<torch::jit::Expr>").pointerTypes("ExprMaybe"))
             .put(new Info("torch::jit::Maybe<torch::jit::Var>").pointerTypes("VarMaybe"))
@@ -1203,10 +1185,12 @@ public class torch implements LoadEnabled, InfoMapper {
                 "torch::jit::Maybe<torch::jit::Expr>::map",
                 "torch::jit::Maybe<torch::jit::Var>::map",
                 "torch::jit::Maybe<torch::jit::List<torch::jit::Assign> >::map",
-                "torch::jit::Maybe<torch::jit::List<torch::jit::Property> >::map").skip())
+                "torch::jit::Maybe<torch::jit::List<torch::jit::Property> >::map"
+            ).skip()) /* Could be mapped if needed */
             .put(new Info("torch::jit::Wrap<torch::jit::Block>").pointerTypes("BlockWrap"))
             .put(new Info("torch::jit::Wrap<torch::jit::Node>").pointerTypes("JitNodeWrap"))
-            .put(new Info("torch::jit::Wrap<torch::jit::Value>").pointerTypes("ValueWrap"));
+            .put(new Info("torch::jit::Wrap<torch::jit::Value>").pointerTypes("ValueWrap"))
+            ;
 
 
         //// Datasets
@@ -1373,6 +1357,9 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("torch::nn::ConstantPadOptions<1>").pointerTypes("ConstantPad1dOptions"))
             .put(new Info("torch::nn::ConstantPadOptions<2>").pointerTypes("ConstantPad2dOptions"))
             .put(new Info("torch::nn::ConstantPadOptions<3>").pointerTypes("ConstantPad3dOptions"))
+            .put(new Info("torch::nn::ZeroPadOptions<1>").pointerTypes("ZeroPad1dOptions"))
+            .put(new Info("torch::nn::ZeroPadOptions<2>").pointerTypes("ZeroPad2dOptions"))
+            .put(new Info("torch::nn::ZeroPadOptions<3>").pointerTypes("ZeroPad3dOptions"))
             .put(new Info("torch::nn::AvgPoolOptions<1>", "torch::nn::functional::AvgPool1dFuncOptions").pointerTypes("AvgPool1dOptions"))
             .put(new Info("torch::nn::AvgPoolOptions<2>", "torch::nn::functional::AvgPool2dFuncOptions").pointerTypes("AvgPool2dOptions"))
             .put(new Info("torch::nn::AvgPoolOptions<3>", "torch::nn::functional::AvgPool3dFuncOptions").pointerTypes("AvgPool3dOptions"))
@@ -1478,10 +1465,7 @@ public class torch implements LoadEnabled, InfoMapper {
             mapModule(infoMap, "ReflectionPad" + i + "d", "torch::nn::ReflectionPadImpl<" + i + ",torch::nn::ReflectionPad" + i + "dImpl>");
             mapModule(infoMap, "ReplicationPad" + i + "d", "torch::nn::ReplicationPadImpl<" + i + ",torch::nn::ReplicationPad" + i + "dImpl>");
             mapModule(infoMap, "ConstantPad" + i + "d", "torch::nn::ConstantPadImpl<" + i + ",torch::nn::ConstantPad" + i + "dImpl>");
-            if (i == 2) {
-                mapModule(infoMap, "ZeroPad" + i + "d");
-            }
-
+            mapModule(infoMap, "ZeroPad" + i + "d", "torch::nn::ZeroPadImpl<" + i + ",torch::nn::ZeroPad" + i + "dImpl>");
             mapModule(infoMap, "AvgPool" + i + "d", "torch::nn::AvgPoolImpl<" + i + ",torch::nn::AvgPool" + i + "dImpl>");
             mapModule(infoMap, "MaxPool" + i + "d", "torch::nn::MaxPoolImpl<" + i + ",torch::nn::MaxPool" + i + "dImpl>");
             mapModule(infoMap, "AdaptiveAvgPool" + i + "d", "torch::nn::AdaptiveAvgPoolImpl<" + i + ",torch::ExpandingArray" + (i > 1 ? "WithOptionalElem<" : "<") + i + ">,torch::nn::AdaptiveAvgPool" + i + "dImpl>");
@@ -1634,7 +1618,6 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("torch::jit::Graph"),
             new PointerInfo("torch::jit::Operator"),
             new PointerInfo("torch::jit::Resolver"),
-            new PointerInfo("torch::jit::tensorexpr::analysis::AccessInfo"),
             new PointerInfo("c10::ClassType"),
             new PointerInfo("c10::TensorType").otherCppNames("c10::TensorTypePtr", "at::TensorTypePtr", "torch::TensorTypePtr"),
             new PointerInfo("torch::autograd::FunctionPreHook"),
@@ -1669,8 +1652,8 @@ public class torch implements LoadEnabled, InfoMapper {
                                                                                .valueTypes("@Cast({\"\", \"std::unique_ptr<torch::autograd::FunctionPostHook>&&\"}) FunctionPostHook")
                                                                                .pointerTypes("FunctionPostHook"))
             .put(new Info("std::unique_ptr<torch::jit::AttributeValue>", "Ptr").annotations("@UniquePtr").pointerTypes("AttributeValue"))
-
         ;
+        infoMap.put(new Info("torch::autograd::AutogradMeta::post_acc_grad_hooks_").annotations("@UniquePtr", "@Cast({\"\", \"\", \"std::unique_ptr<torch::autograd::PostAccumulateGradHook>&&\"})")); // See JavaCPP Issue #717
 
         /* TODO: see how to map these, if needed and meant to be part of API */
         infoMap.put(new Info("c10::MaybeOwnedTraitsGenericImpl<std::shared_ptr<at::Tensor> >::assignBorrow",
@@ -1718,7 +1701,17 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::StackEntry::filename",
             "torch::jit::StackEntry::range",
             "torch::jit::Call::fn_name",
-            "torch::jit::Call::caller_range"
+            "torch::jit::Call::caller_range",
+            "c10::SymbolicShapeMeta::sizes_",
+            "c10::SymbolicShapeMeta::strides_",
+            "c10::SymbolicShapeMeta::numel_",
+            "c10::SymbolicShapeMeta::storage_offset_",
+            "c10::SymbolicShapeMeta::is_contiguous_",
+            "c10::SymbolicShapeMeta::is_channels_last_contiguous_",
+            "c10::SymbolicShapeMeta::is_channels_last_3d_contiguous_",
+            "c10::SymbolicShapeMeta::is_channels_last_",
+            "c10::SymbolicShapeMeta::is_channels_last_3d_",
+            "c10::SymbolicShapeMeta::is_non_overlapping_and_dense_"
         }) {
             Info i = infoMap.getFirst(n, false);
             if (i == null) {
@@ -1807,7 +1800,7 @@ public class torch implements LoadEnabled, InfoMapper {
         ).skip());
 
 
-        //// Avoiding name clashes or making them more explicit.
+        //// Avoiding name clashes by skipping or renaming
         infoMap.put(new Info("c10::ComplexType::get").javaNames("getComplexTypePtr"))
                .put(new Info("c10::FloatType::get").javaNames("getFloatTypePtr"))
                .put(new Info("c10::IntType::get").javaNames("getIntTypePtr"))
@@ -1824,6 +1817,7 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::jit::Node").pointerTypes("JitNode"))
                .put(new Info("torch::jit::Module").pointerTypes("JitModule"))
                .put(new Info("torch::jit::Object").pointerTypes("JitObject"))
+               .put(new Info("torch::jit::load").javaNames("jitLoad"))
                .put(new Info("torch::jit::String").pointerTypes("JitString"))
         ;
 
@@ -1886,7 +1880,9 @@ public class torch implements LoadEnabled, InfoMapper {
             {"c10::complex<float>", "ComplexFloat"},
             {"c10::complex<double>", "ComplexDouble"},
             {"bool", "boolean"},
-            {"at::BFloat16", "BFload16"}
+            {"at::BFloat16", "BFloat16"},
+            {"at::Float8_e4m3fn", "Float8_e4m3fn"},
+            {"at::Float8_e5m2", "Float8_e5m2"}
         }) {
             infoMap.put(new Info("c10::fetch_and_cast<" + t[0] + ">").javaNames("fetch_and_cast_to_" + t[1]))
                    .put(new Info("c10::cast_and_store<" + t[0] + ">").javaNames("cast_and_store_from_" + t[1]));
@@ -1940,6 +1936,10 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("c10::ThreadPoolRegistry()",
             "c10::CUDAHooksRegistry()").skip());
 
+        ///// Forward references and opaque classes
+        infoMap
+            .put(new Info("c10::Argument").pointerTypes("Argument")) // Ref in function_schema_inl.h, defined in function_schema.h
+        ;
 
         /* Classes that are not part of API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
          * Consider manual exclusion of all at::meta, at::native and caffe2 namespaces (but TypeMeta, that should
@@ -2057,11 +2057,13 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::static_cast_with_inter_type<c10::complex<c10::Half>,c10::BFloat16>",
             "c10::trivial_init_t",
             "caffe2::detail::_Uninitialized",
+            "caffe2::TypeMetaData",
             "ska::detailv3::sherwood_v3_entry::",
             "ska::detailv3::sherwood_v3_table::convertible_to_iterator",
             "ska::fibonacci_hash_policy",
             "ska::power_of_two_hash_policy",
             "ska::prime_number_hash_policy",
+            "ska_ordered::prime_number_hash_policy",
             "ska_ordered::detailv3::sherwood_v3_entry::",
             "ska_ordered::detailv3::sherwood_v3_table::convertible_to_iterator",
             "ska_ordered::order_preserving_flat_hash_map::convertible_to_value",
@@ -2085,6 +2087,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::autograd::InputMetadata",
             "torch::autograd::NodeGuard",
             "torch::autograd::TraceableFunction",
+            "torch::autograd::VariableHooks",
             "torch::data::DataLoaderBase::Job",
             "torch::data::DataLoaderBase::QuitWorker",
             "torch::data::DataLoaderBase::Result",
@@ -2159,10 +2162,14 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::Tensor", "at::Tensor"))
 
 
+               //// std::function passed as generic pointer because are returned by some methods. So no mapping possible.
+               .put(new Info("std::function<PyObject*(void*)>", "torch::jit::BackendMetaPtr", "std::function<void(const at::Tensor&, std::unordered_map<std::string, bool>&)>")
+                .pointerTypes("Pointer").cast())
+
                //// Classes kept but passed as generic pointer
                .put(new Info("c10::intrusive_ptr_target", "c10::nullopt", "c10::nullopt_t", "c10::impl::PyObjectSlot",
                    "_object",
-                   "PyObject", "std::function<PyObject*(void*)>", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
+                   "PyObject", "THPObjectPtr", "pyobj_list", "std::chrono::milliseconds", "std::exception_ptr", "std::type_info",
                    "std::pair<PyObject*,PyObject*>", "std::stack<std::pair<PyObject*,PyObject*> >", "torch::autograd::utils::DelayWarningHandler",
                    "std::is_same<torch::detail::pack<true>,torch::detail::pack<true> >", "at::cuda::NVRTC", "at::RecordFunctionCallback", "at::StepCallbacks", "THCState", "THHState",
                    "torch::autograd::ViewInfo", "torch::jit::InlinedCallStackPtr", "InlinedCallStackPtr", "torch::jit::ScopePtr", "torch::jit::BackendDebugInfoRecorder",
@@ -2200,7 +2207,6 @@ public class torch implements LoadEnabled, InfoMapper {
         ///// Special cases needing javaText
         infoMap
             .put(new Info("at::Tensor::toString", "at::TensorBase::toString", "torch::Tensor::toString", "torch::TensorBase::toString", "torch::jit::Graph::toString").javaText("public native @StdString String toString();"))
-            .put(new Info("torch::jit::tracer::pauseTracing()").javaText("@Namespace(\"torch::jit::tracer\") public static native @ByVal @Cast(\"std::function<void()>*\") Pointer pauseTracing();"))
             .put(new Info("torch::jit::ProfileOp::getCallback()", "torch::jit::ProfileIValueOp::getCallback()").javaText(
                 "public native @ByVal @Cast(\"std::function<void(std::vector<c10::IValue>&)>*\") Pointer getCallback();"))
             .put(new Info("torch::optim::AdamOptions::betas", "torch::optim::AdamWOptions::betas").javaText(
@@ -2228,15 +2234,21 @@ public class torch implements LoadEnabled, InfoMapper {
 
 
         //// Callback functions
+        // skip() is added when function pointer are parsed instead of std::function to use the class in package
+        // functions and prevent the creation of an automatic class in main package.
+        // If a native function returns a std::function, no way to map it.
         infoMap
-            .put(new Info("c10::DeleterFnPtr").cast().valueTypes("PointerConsumer", "Pointer", "long"))
-            .put(new Info("torch::Deleter", "std::function<void(void*)>").pointerTypes("PointerConsumer", "@Cast(\"void(*)(void*)\") Pointer", "@Cast(\"void(*)(void*)\") long"))
+            .put(new Info("void (*)(void*)", "c10::DeleterFnPtr", "torch::Deleter", "at::ContextDeleter",
+                "caffe2::TypeMeta::Delete", "std::function<void(void*)>").pointerTypes("PointerConsumer").valueTypes("PointerConsumer").skip())
+            .put(new Info("void* (*)()", "caffe2::TypeMeta::New").pointerTypes("PointerSupplier").valueTypes("PointerSupplier").skip())
             .put(new Info("std::function<void()>").pointerTypes("Func"))
             .put(new Info("std::function<std::string(void)>").pointerTypes("StringSupplier"))
             .put(new Info("std::function<void(const std::string&)>").pointerTypes("StringConsumer"))
             .put(new Info("std::function<void(const c10::DDPLoggingData&)>",
                 "std::function<void(const DDPLoggingData&)>").pointerTypes("DDPLogger"))
             .put(new Info("std::function<c10::TypePtr(c10::TypePtr)>").pointerTypes("TypeMapper"))
+            .put(new Info("c10::detail::infer_schema::ArgumentDef::GetTypeFn").pointerTypes("TypeSupplier").skip())
+            .put(new Info("c10::TypePtr (*)()", "c10::detail::infer_schema::ArgumentDef::GetTypeFn*").pointerTypes("TypeSupplier").valueTypes("TypeSupplier").skip())
             .put(new Info("std::function<torch::jit::Value*(torch::jit::Value*)>").pointerTypes("ValueMapper"))
             .put(new Info("std::function<void(torch::jit::GraphFunction&)>").pointerTypes("GraphFunctionCreator"))
             .put(new Info("torch::nn::Module::ModuleApplyFunction", "torch::nn::Module::ConstModuleApplyFunction", "std::function<void(const torch::nn::Module&)>", "std::function<void(torch::nn::Module&)>").pointerTypes("ModuleApplyFunction"))
@@ -2249,6 +2261,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::function<size_t(uint64_t,void*,size_t)>").pointerTypes("Reader"))
             .put(new Info("std::function<size_t(const void*,size_t)>").pointerTypes("ArchiveWriter"))
             .put(new Info("std::function<void(const char*,size_t)>").pointerTypes("PickleWriter"))
+            .put(new Info("std::function<size_t(char*,size_t)>").pointerTypes("PickleReader"))
             .put(new Info("std::function<c10::QualifiedName(const std::shared_ptr<c10::ClassType>&)>").pointerTypes("TypeRenamer"))
             .put(new Info("std::function<std::string(const at::Tensor&)>").pointerTypes("TensorIdGetter"))
             .put(new Info("std::function<size_t(void)>").pointerTypes("SizeTSupplier"))
@@ -2256,16 +2269,32 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::function<torch::Tensor(const torch::Tensor&,const torch::Tensor&)>",
                 "torch::nn::TripletMarginWithDistanceLossOptions::distance_function_t",
                 "torch::nn::functional::TripletMarginWithDistanceLossFuncOptions::distance_function_t").pointerTypes("DistanceFunction"))
+            .put(new Info("std::function<void(void*,const void*,size_t)>").pointerTypes("MemCopyFunction"))
             .put(new Info("std::function<void(std::function<void()>)>").pointerTypes("Pointer"))
 
             .put(new Info("at::TensorBase::register_hook<std::function<void(at::TensorBase)> >").javaNames("register_hook"))
             .put(new Info("at::TensorBase::register_hook<std::function<at::TensorBase(at::TensorBase)> >").javaNames("register_hook"))
             .put(new Info("std::function<void(at::TensorBase)>").pointerTypes("VoidTensorHook"))
             .put(new Info("std::function<at::TensorBase(at::TensorBase)>").pointerTypes("TensorTensorHook"))
+            .put(new Info("std::function<at::TensorBase(const at::TensorBase&)>").pointerTypes("TensorTensorRefHook"))
             .put(new Info("std::function<torch::Tensor(const torch::Tensor&)>").pointerTypes("TensorMapper"))
             .put(new Info("at::TensorBase::hook_return_void_t<std::function<void(at::TensorBase)> > ",
                 "at::TensorBase::hook_return_void_t<std::function<at::TensorBase(at::TensorBase)> >").valueTypes("int"))
+            .put(new Info("std::function<void(const std::string&,const std::map<std::string,std::string>&)>").pointerTypes("MetadataLogger"))
+            .put(new Info("std::function<c10::StrongTypePtr(const c10::QualifiedName&)>", "torch::jit::TypeResolver").pointerTypes("TypeResolver"))
+            .put(new Info("std::function<c10::TypePtr(const std::string&)>", "torch::jit::TypeParserT",
+                "c10::TypePtr (*)(const std::string&)",
+                "c10::Type::SingletonOrSharedTypePtr<c10::Type> (*)(const std::string&)"
+            ).pointerTypes("TypeParser").skip())
+            .put(new Info("c10::intrusive_ptr<c10::StorageImpl> (*)(c10::StorageImpl::use_byte_size_t, c10::SymInt, c10::Allocator*, bool)").pointerTypes("StorageImplCreateHelper").skip())
+            .put(new Info("std::function<c10::optional<std::string>(const c10::Type&)>").pointerTypes("TypePrinter"))
+            .put(new Info("void (*)(void*, size_t)", "c10::PlacementDtor", "caffe2::TypeMeta::PlacementNew", "caffe2::TypeMeta::PlacementDelete").pointerTypes("PlacementConsumer").valueTypes("PlacementConsumer").skip())
+            .put(new Info("void (*)(const void*, void*, size_t)", "caffe2::TypeMeta::Copy").pointerTypes("PlacementCopier").valueTypes("PlacementCopier").skip())
+            .put(new Info("torch::jit::Operation (*)(const torch::jit::Node*)", "torch::jit::OperationCreator").pointerTypes("OperationCreator").valueTypes("OperationCreator").skip())
         ;
+
+        infoMap.put(new Info("caffe2::TypeMeta::deleteFn").javaText("public native @NoException(true) PointerConsumer deleteFn();")); // Parser picks up the wrong Delete
+
     }
 
     private static String template(String t, String... args) {

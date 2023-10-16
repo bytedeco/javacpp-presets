@@ -52,7 +52,7 @@ public class Allocator extends Pointer {
   // is guaranteed to return a unique_ptr with this deleter attached;
   // it means the rawAllocate and rawDeallocate APIs are safe to use.
   // This function MUST always return the same BoundDeleter.
-  public native @Cast("c10::DeleterFnPtr") PointerConsumer raw_deleter();
+  public native PointerConsumer raw_deleter();
   public native Pointer raw_allocate(@Cast("size_t") long n);
   public native void raw_deallocate(Pointer ptr);
 }

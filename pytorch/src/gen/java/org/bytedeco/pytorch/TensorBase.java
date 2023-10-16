@@ -181,6 +181,23 @@ public class TensorBase extends AbstractTensor {
   public native @Cast({"", "c10::Storage&&"}) @StdMove Storage storage();
   public native @Cast("bool") boolean is_alias_of(@Const @ByRef TensorBase other);
 
+  // Move the storage backend to shm based
+  // to enable memory sharing across processes.
+  //
+  // NB1: the ideal behavior of this API still requires further discussion
+  // but for now we are inclined to keep it consistent with existing THP behavior
+  // https://github.com/pytorch/pytorch/blob/4dca9bde0552afc67b5b74f4a0696fe6055709c4/torch/storage.py#L196-L212
+  // so we don't assert on anything here and rely on caller knowing
+  // what it's doing.
+  //
+  // NB2: this currently provides Linux fd based shm support only
+  // to simplify the storage lifetime management logic in ATen
+  // and similarly for now we are not adding support for file system based
+  // shm support like in THP due to additional GC manager support needed
+  // to prevent leaks.
+  // As such, calling this from non supported systems (e.g. Windows) would fail.
+  public native void share_memory_();
+
   public native @Cast("bool") boolean _is_zerotensor();
 
   public native void _set_zero(@Cast("bool") boolean _zero);
@@ -227,6 +244,9 @@ public class TensorBase extends AbstractTensor {
 
   /** Returns if a {@code Tensor} has XLA backend. */
   public native @Cast("bool") boolean is_xla();
+
+  /** Returns if a {@code Tensor} has MTIA backend. */
+  public native @Cast("bool") boolean is_mtia();
 
   /** Returns if a {@code Tensor} has HPU backend. */
   public native @Cast("bool") boolean is_hpu();
@@ -289,18 +309,30 @@ public class TensorBase extends AbstractTensor {
    *  TensorOptions.h. */
   public native @ByVal TensorOptions options();
 
+  public native @Const Pointer const_data_ptr();
+
+  public native Pointer mutable_data_ptr();
+
+  // TODO(#97856) Make this return a const pointer. This currently
+  //              returns a non-const pointer because of the large
+  //              number of clients that we still want to audit before
+  //              migrating to mutable_data_ptr().
   public native Pointer data_ptr();
 
+  // Legacy interface during the migration to indicate that a callsite
+  // has not been audited for mutability.
+  //
+  // Do not add new uses of this, use const_data_ptr() if possible,
+  // mutable_data_ptr() otherwise.
+  //
+  // TODO(#97856) Make this return a const pointer. This is currently
+  //              const because of the vast number of clients that
+  //              rely on this.
   public native @Name("data_ptr<int8_t>") BytePointer data_ptr_char();
-
   public native @Name("data_ptr<int16_t>") ShortPointer data_ptr_short();
-
   public native @Name("data_ptr<int>") IntPointer data_ptr_int();
-
   public native @Cast("int64_t*") @Name("data_ptr<int64_t>") LongPointer data_ptr_long();
-
   public native @Name("data_ptr<float>") FloatPointer data_ptr_float();
-
   public native @Name("data_ptr<double>") DoublePointer data_ptr_double();
 
   // Purposely not defined here to avoid inlining

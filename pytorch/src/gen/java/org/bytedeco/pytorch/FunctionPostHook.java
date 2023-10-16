@@ -27,4 +27,6 @@ public class FunctionPostHook extends Pointer {
   public native @Name("operator ()") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply(
         @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector outputs,
         @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs);
+  // only implemented for python hooks, registers hook with compiled autograd
+  public native void compiled_args(@ByRef CompiledNodeArgs args);
 }
