@@ -26,9 +26,6 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Cast("int8_t&&") byte device_index);
 
 
-// Targeting ../cuda/CUDAStreamOptional.java
-
-
 // Targeting ../cuda/DeviceAssertionsDataVector.java
 
 
@@ -797,15 +794,15 @@ manage their own state. There is only a single CUDA context/state.
 // Targeting ../cuda/CUDAGuard.java
 
 
-// Targeting ../cuda/OptionalCUDAGuard.java
 
-
+/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
 // Targeting ../cuda/CUDAStreamGuard.java
 
 
-// Targeting ../cuda/OptionalCUDAStreamGuard.java
 
-
+/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
 // Targeting ../cuda/CUDAMultiStreamGuard.java
 
 

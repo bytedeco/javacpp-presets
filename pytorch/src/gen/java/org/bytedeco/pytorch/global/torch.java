@@ -158,9 +158,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorArrayRefOptional.java
 
 
-// Targeting ../ThreadLocalStateOptional.java
-
-
 // Targeting ../TypeMetaOptional.java
 
 
@@ -281,19 +278,10 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringStringMap.java
 
 
-// Targeting ../StringIntMap.java
-
-
 // Targeting ../StringLongMap.java
 
 
-// Targeting ../StringTensorMap.java
-
-
 // Targeting ../ActivityTypeSet.java
-
-
-// Targeting ../RecordFunctionCallbackHandleVector.java
 
 
 // Targeting ../DimnameVector.java
@@ -303,9 +291,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../FunctionPostHookVector.java
-
-
-// Targeting ../SavedVariableVector.java
 
 
 // Targeting ../DefVector.java
@@ -323,9 +308,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringTensorDictItemVector.java
 
 
-// Targeting ../StringModuleDictItemVector.java
-
-
 // Targeting ../StringAnyModuleDictItemVector.java
 
 
@@ -333,9 +315,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../WeakStorageVector.java
-
-
-// Targeting ../Bool2Vector.java
 
 
 // Targeting ../BoolVector.java
@@ -407,9 +386,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorOptionalVector.java
 
 
-// Targeting ../SharedFunctionPreVector.java
-
-
 // Targeting ../FunctionVector.java
 
 
@@ -428,9 +404,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../JitNodeVector.java
 
 
-// Targeting ../ModuleVector.java
-
-
 // Targeting ../AnyModuleVector.java
 
 
@@ -438,9 +411,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringTensorVector.java
-
-
-// Targeting ../StringModuleVector.java
 
 
 // Targeting ../StringAnyModuleVector.java
@@ -470,9 +440,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringTensorPair.java
 
 
-// Targeting ../StringModulePair.java
-
-
 // Targeting ../StringAnyModulePair.java
 
 
@@ -497,9 +464,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_LongLong_T.java
 
 
-// Targeting ../T_DoubleLong_T.java
-
-
 // Targeting ../T_TensorTensor_T.java
 
 
@@ -512,16 +476,10 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_TensorTensorTensorTensorTensor_T.java
 
 
-// Targeting ../T_TensorTensorTensorTensorTensorTensor_T.java
-
-
 // Targeting ../T_TensorTensorTensorTensorTensorTensorTensor_T.java
 
 
 // Targeting ../T_TensorTensorTensorTensorVector_T.java
-
-
-// Targeting ../T_TensorTensorTensorTensorLong_T.java
 
 
 // Targeting ../T_TensorTensorDoubleLong_T.java
@@ -545,37 +503,16 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../T_StringSizeTSizeT_T.java
 
 
-// Targeting ../T_StringLong_T.java
-
-
 // Targeting ../T_TensorTensorVector_T.java
-
-
-// Targeting ../T_TensorVectorTensor_T.java
-
-
-// Targeting ../T_TensorVectorTensorVectorTensorVectorTensorVectorTensorVector_T.java
 
 
 // Targeting ../T_TensorTensorVectorTensorVector_T.java
 
 
-// Targeting ../T_TensorTensorLongLongTensor_T.java
-
-
-// Targeting ../T_TensorTensorTensorTensorsLongLongLongLongTensor_T.java
-
-
 // Targeting ../T_TypePtrLong_T.java
 
 
-// Targeting ../NodeIntMap.java
-
-
 // Targeting ../HashAliasedIValueMap.java
-
-
-// Targeting ../LongStringMap.java
 
 
 // Targeting ../StringBoolMap.java
@@ -593,13 +530,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../StringIValueMap.java
 
 
-// Targeting ../StringFunctionMap.java
-
-
 // Targeting ../StringValueMap.java
-
-
-// Targeting ../StringLongStringMapMap.java
 
 
 // Targeting ../ValueValueMap.java
@@ -623,16 +554,7 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../TensorImplSet.java
 
 
-// Targeting ../RecordScopeSet.java
-
-
 // Targeting ../NodeSet.java
-
-
-// Targeting ../StreamSet.java
-
-
-// Targeting ../RecordScopeSet.java
 
 
 // Targeting ../DeviceTypeSet.java
@@ -3529,16 +3451,10 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // Targeting ../LongSmallVectorCommon.java
 
 
-// Targeting ../NodeSmallVectorCommon.java
-
-
 // Targeting ../SymIntSmallVectorBase.java
 
 
 // Targeting ../LongSmallVectorBase.java
-
-
-// Targeting ../NodeSmallVectorBase.java
 
 
 
@@ -3559,9 +3475,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 // Targeting ../LongSmallVectorImpl.java
-
-
-// Targeting ../NodeSmallVectorImpl.java
 
 
 
@@ -3591,9 +3504,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 // Targeting ../DimVector.java
-
-
-// Targeting ../SmallNodeVector.java
 
 
 
@@ -3695,13 +3605,7 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 // Targeting ../LongOptionalArrayRef.java
 
 
-// Targeting ../LongVectorArrayRef.java
-
-
 // Targeting ../NamedValueArrayRef.java
-
-
-// Targeting ../SavedVariableArrayRef.java
 
 
 // Targeting ../ScalarArrayRef.java
@@ -6113,9 +6017,10 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  // namespace caffe2
 
   
-// Targeting ../TypeMetaData.java
 
-
+// This struct holds the actual type information. There will be
+// one allocated per type. TypeMeta objects will then point to the struct
+// instance for the type they're configured for.
 
 // Mechanism for throwing errors which can't be prevented at compile time
 // due to type erasure. E.g. somebody calling TypeMeta::copy() for
@@ -8259,7 +8164,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 @Namespace("at") public static native DispatchKey legacyExtractDispatchKey(@Const @ByRef TensorBase t);
 
 
-// Targeting ../MaybeOwnedTraitsTensor.java
+// Targeting ../MaybeOwnedTraits.java
 
 
  // namespace c10
@@ -12075,12 +11980,6 @@ public static final byte min_lookups = min_lookups();
 // Implementation taken from http://en.cppreference.com/w/cpp/types/void_t
 // (it takes CWG1558 into account and also works for older compilers)
  // namespace detailv3
-// Targeting ../power_of_two_hash_policy.java
-
-
-// Targeting ../fibonacci_hash_policy.java
-
-
 
  // namespace ska_ordered
 
@@ -12264,9 +12163,6 @@ public static final byte min_lookups = min_lookups();
 
 
 // Targeting ../FutureSingleElementType.java
-
-
-// Targeting ../OptionalSingleElementType.java
 
 
 // Targeting ../UnionType.java
@@ -17800,9 +17696,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #include <torch/csrc/autograd/input_buffer.h>
 // #include <torch/csrc/autograd/utils/warnings.h>
 // #include <vector>
-// Targeting ../ReadyQueue.java
-
-
 
 @Namespace("torch::autograd") @MemberGetter public static native int NO_DEVICE();
 public static final int NO_DEVICE = NO_DEVICE();
@@ -58612,9 +58505,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <memory>
 
 @Namespace("torch::autograd") public static native @Cast("const char*") BytePointer ERR_BACKWARD_TWICE(); public static native void ERR_BACKWARD_TWICE(BytePointer setter);
-// Targeting ../SavedVariable.java
 
-
+/** A snapshot of a variable at a certain version. A {@code SavedVariable} stores
+ *  enough information to reconstruct a variable from a certain point in time. */
  // namespace autograd
  // namespace torch
 
@@ -58768,9 +58661,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 /** Return true if any of the variables in the list require a gradient. */
 @Namespace("torch::autograd") public static native @Cast("bool") boolean any_variable_requires_grad(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector variables);
-// Targeting ../TypeAndSize.java
 
-
+/** Return the next edges of all the given variables, or tuples of variables. */
 
  // namespace autograd
  // namespace torch
@@ -62508,12 +62400,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../OpRegistrationListener.java
 
 
-// Targeting ../RegistrationListenerList.java
-
-
-
-// Targeting ../SchemaRegistrationHandleRAII.java
-
 
 // Targeting ../Dispatcher.java
 
@@ -63807,9 +63693,6 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
 
 
-// Targeting ../InterpreterStateImpl.java
-
-
 // Targeting ../Instruction.java
 
 
@@ -64009,9 +63892,6 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // Targeting ../StringTensorDict.java
 
 
-// Targeting ../StringModuleDict.java
-
-
 // Targeting ../StringAnyModuleDict.java
 
 
@@ -64019,9 +63899,6 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 
 
 // Targeting ../StringTensorDictItem.java
-
-
-// Targeting ../StringModuleDictItem.java
 
 
 // Targeting ../StringAnyModuleDictItem.java
@@ -64293,9 +64170,10 @@ apis for specific fusers.
 // Targeting ../AttributePolicy.java
 
 
-// Targeting ../NamedJitModulePolicy.java
 
-
+// take a Policy object, and make a version of it that returns the slot.
+// along with the fully qualified name of that slot. This is used for the named_
+// variants like named_parameters().
 
  // namespace detail
 
@@ -66795,16 +66673,10 @@ body of your function, only data pointers.
 
 // #include <c10/util/strong_type.h>
 // #include <torch/csrc/Export.h>
-// Targeting ../CUevent_st.java
-
-
 
 // ----------------------------------------------------------------------------
 // -- Annotation --------------------------------------------------------------
 // ----------------------------------------------------------------------------
-// Targeting ../ProfilerVoidEventStub.java
-
-
 
  // namespace impl
  // namespace profiler
@@ -66969,9 +66841,6 @@ body of your function, only data pointers.
 // #include <torch/csrc/profiler/stubs/base.h>
 // #include <torch/csrc/profiler/util.h>
 // Targeting ../Result.java
-
-
-// Targeting ../ActivityTraceWrapper.java
 
 
  // namespace kineto
@@ -76715,9 +76584,6 @@ public static final String TORCH_VERSION =
 // #include "caffe2/serialize/istream_adapter.h"
 // #include "caffe2/serialize/read_adapter_interface.h"
 // #include "caffe2/serialize/versions.h"
-// Targeting ../mz_zip_archive.java
-
-
 
 // PyTorch containers are a special zip archive with the following layout
 // archive_name.zip contains:
@@ -77527,9 +77393,6 @@ public static final String TORCH_VERSION =
 
 @Namespace("torch::jit") public static native @ByRef SharedParserData sharedParserData();
 // Targeting ../Token.java
-
-
-// Targeting ../Lexer.java
 
 
  // namespace jit

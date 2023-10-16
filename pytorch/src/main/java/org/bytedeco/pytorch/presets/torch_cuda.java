@@ -23,13 +23,10 @@ package org.bytedeco.pytorch.presets;
 
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
-import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
-
-import java.util.List;
 
 /**
  * @author Hervé Guillemet
@@ -93,8 +90,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "at::CUDAGeneratorImpl"
             ).skip())
 
-            .put(new Info("c10::optional<c10::cuda::CUDAStream>").pointerTypes("CUDAStreamOptional").define())
-
             //// Already defined in main torch
             .put(new Info("c10::Stream").pointerTypes("Stream"))
             .put(new Info("c10::optional<c10::Stream>").pointerTypes("StreamOptional"))
@@ -149,5 +144,13 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
         ;
 
         new torch.ArrayInfo("CUDAStream").elementTypes("c10::cuda::CUDAStream").mapArrayRef(infoMap);
+
+        // Classes that are not part of the API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
+        infoMap.put(new Info(
+            "c10::cuda::OptionalCUDAGuard",
+            "c10::cuda::OptionalCUDAStreamGuard"
+        ).skip())
+        ;
+
     }
 }

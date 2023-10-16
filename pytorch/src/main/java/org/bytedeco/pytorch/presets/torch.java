@@ -345,7 +345,6 @@ public class torch implements LoadEnabled, InfoMapper {
                                                                  .pointerTypes("FunctionSchema"))
             .put(new Info("c10::MaybeOwned<at::Tensor>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::Tensor>&&\"}) @StdMove TensorMaybeOwned").pointerTypes("TensorMaybeOwned"))
             .put(new Info("c10::MaybeOwned<at::TensorBase>").valueTypes("@Cast({\"\", \"c10::MaybeOwned<at::TensorBase>&&\"}) @StdMove TensorBaseMaybeOwned").pointerTypes("TensorBaseMaybeOwned"))
-            .put(new Info("c10::MaybeOwnedTraits<at::Tensor>").pointerTypes("MaybeOwnedTraitsTensor"))
             .put(new Info("at::InferExpandGeometryResult<at::DimVector>").pointerTypes("DimVectorInferExpandGeometryResult"))
             .put(new Info("at::namedinference::TensorName").valueTypes("@Cast({\"\", \"at::namedinference::TensorName&&\"}) @StdMove TensorName").pointerTypes("TensorName"))
             .put(new Info("c10::remove_symint<c10::SymInt>::type").valueTypes("long"))
@@ -421,7 +420,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<at::Generator>").pointerTypes("GeneratorOptional").define())
             .put(new Info("c10::optional<at::Tensor>", "c10::optional<torch::Tensor>", "c10::optional<at::Tensor>", "c10::optional<torch::TensorBase>", "c10::optional<torch::autograd::Variable>").pointerTypes("TensorOptional").define())
             .put(new Info("c10::optional<torch::TensorList>", "c10::optional<at::TensorList>").pointerTypes("TensorArrayRefOptional").define())
-            .put(new Info("c10::optional<at::ThreadLocalState>").pointerTypes("ThreadLocalStateOptional").define())
             .put(new Info("c10::optional<caffe2::TypeMeta>").pointerTypes("TypeMetaOptional").define())
             .put(new Info("c10::optional<torch::jit::ExecutorExecutionMode>").pointerTypes("ExecutorExecutionModeOptional").define())
             .put(new Info("c10::optional<torch::jit::ExecutorExecutionMode>::operator ->").skip()) // Returns a pointer to ExecutorExecutionMode, which is an enum
@@ -596,7 +594,6 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// std::vector
         infoMap
-            .put(new Info("std::vector<std::array<bool,2> >").pointerTypes("Bool2Vector").define())
             .put(new Info("std::vector<bool>").pointerTypes("BoolVector").define())
             .put(new Info("std::vector<const char*>").pointerTypes("BytePointerVector").define())
             .put(new Info("std::vector<int64_t>", "std::tuple<std::vector<int64_t>,std::vector<int64_t> >").cast().pointerTypes("LongVector").define())
@@ -605,8 +602,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
             .put(new Info("std::vector<c10::string_view>").pointerTypes("StringViewVector").define())
             .put(new Info("std::vector<std::pair<std::string,int64_t> >").pointerTypes("StringLongVector").define())
-            .put(new Info("const std::vector<std::pair<at::RecordFunctionCallback,uint64_t> >",
-                "std::vector<std::pair<at::RecordFunctionCallback,at::CallbackHandle> >").pointerTypes("RecordFunctionCallbackHandleVector").define())
             .put(new Info("std::vector<c10::IValue>", "torch::jit::Stack").pointerTypes("IValueVector").define())
             .put(new Info("std::vector<c10::IValue>::const_iterator", "torch::jit::Stack::const_iterator").pointerTypes("IValueVector.Iterator"))
             .put(new Info("std::vector<c10::QEngine>", "std::vector<at::QEngine>").pointerTypes("QEngineVector").define())
@@ -627,12 +622,10 @@ public class torch implements LoadEnabled, InfoMapper {
                 .valueTypes("@Cast({\"\", \"std::vector<torch::Tensor>\"}) @StdMove TensorVector").pointerTypes("TensorVector").define())
             .put(new Info("std::vector<at::indexing::TensorIndex>", "std::vector<at::indexing::TensorIndex,A>").pointerTypes("TensorIndexVector").define())
             .put(new Info("std::vector<c10::optional<torch::autograd::Variable> >").pointerTypes("TensorOptionalVector").define())
-            .put(new Info("std::vector<std::shared_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("SharedFunctionPreVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >",
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPreHook> >").pointerTypes("FunctionPreHookVector").define())
             .put(new Info("const std::vector<std::unique_ptr<torch::autograd::FunctionPostHook> >",
                 "std::vector<std::unique_ptr<torch::autograd::FunctionPostHook> >").pointerTypes("FunctionPostHookVector").define())
-            .put(new Info("const std::vector<torch::autograd::SavedVariable>", "std::vector<torch::autograd::SavedVariable>").pointerTypes("SavedVariableVector").define())
             .put(new Info("const std::vector<torch::jit::Def>", "std::vector<torch::jit::Def>").pointerTypes("DefVector").define())
             .put(new Info("const std::vector<torch::jit::Property>", "std::vector<torch::jit::Property>").pointerTypes("PropertyVector").define())
             .put(new Info("const std::vector<torch::optim::OptimizerParamGroup>", "std::vector<torch::optim::OptimizerParamGroup>").pointerTypes("OptimizerParamGroupVector").define())
@@ -642,14 +635,12 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<std::shared_ptr<torch::jit::Resolver> >", "std::vector<torch::jit::ResolverPtr>").pointerTypes("ResolverVector").define())
             .put(new Info("std::vector<torch::jit::Value*>", "std::vector<Value*>").pointerTypes("ValueVector").define()) // Returned by inlineCallTo
             .put(new Info("std::vector<const torch::jit::Node*>").pointerTypes("JitNodeVector").define())
-            .put(new Info("std::vector<torch::nn::Module>").pointerTypes("ModuleVector").define())
             .put(new Info("std::vector<torch::nn::Module>::iterator").pointerTypes("ModuleVector.Iterator"))
             .put(new Info("std::vector<torch::nn::AnyModule>").pointerTypes("AnyModuleVector").define())
             .put(new Info("std::vector<torch::nn::AnyModule>::iterator").pointerTypes("AnyModuleVector.Iterator"))
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >").pointerTypes("SharedModuleVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::nn::Module> >::iterator").pointerTypes("SharedModuleVector.Iterator"))
             .put(new Info("std::vector<std::pair<std::string,torch::Tensor> >").pointerTypes("StringTensorVector").define())
-            .put(new Info("std::vector<std::pair<std::string,torch::nn::Module> >").pointerTypes("StringModuleVector").define())
             .put(new Info("std::vector<std::pair<std::string,torch::nn::AnyModule> >").pointerTypes("StringAnyModuleVector").define())
             .put(new Info("std::vector<std::pair<std::string,std::shared_ptr<torch::nn::Module> > >").pointerTypes("StringSharedModuleVector").define())
             .put(new Info("std::vector<std::pair<torch::jit::FusionBehavior,size_t> >", "torch::jit::FusionStrategy").pointerTypes("FusionStrategy").define())
@@ -688,9 +679,7 @@ public class torch implements LoadEnabled, InfoMapper {
                                   .elementTypes("int64_t", "jlong") // Order is important, since ArrayRef<long> and ArrayRef<long long> are incompatible, even though long == long long. And jlong is long long.
                                   .elementValueType("long"),
             new ArrayInfo("LongOptional").elementTypes("c10::optional<int64_t>"),
-            new ArrayInfo("LongVector").elementTypes("std::vector<int64_t>"),
             new ArrayInfo("NamedValue").elementTypes("torch::jit::NamedValue"),
-            new ArrayInfo("SavedVariable").elementTypes("torch::autograd::SavedVariable"),
             new ArrayInfo("Scalar").elementTypes("at::Scalar"),
             new ArrayInfo("ScalarType").itPointerType("@Cast(\"c10::ScalarType*\") BytePointer").elementTypes("c10::ScalarType", "at::ScalarType"),
             new ArrayInfo("Short").itPointerType("ShortPointer").elementTypes("jshort", "int16_t", "uint16_t").elementValueType("short"),
@@ -781,8 +770,7 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("c10::SymInt").pointerTypes("SymInt")); // Since SymInt is defined after SmallVector.h
         for (String[] t : new String[][]{
             {"SymInt", "SymInt", "@ByVal SymInt", "c10::SymInt", "at::kDimVectorStaticSize", "at::SymDimVector", "SymDimVector"},
-            {"Long", "LongPointer", "long", "int64_t", "at::kDimVectorStaticSize", "at::DimVector", "DimVector"},
-            {"Node", "Node", "@ByPtr Node", "torch::autograd::Node*", "4", null, "SmallNodeVector"}
+            {"Long", "LongPointer", "long", "int64_t", "at::kDimVectorStaticSize", "at::DimVector", "DimVector"}
         }) {
             // Assume all have SmallVectorSizeType == uint32_t
             infoMap
@@ -824,9 +812,7 @@ public class torch implements LoadEnabled, InfoMapper {
         //// std::map
         infoMap
             .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
-            .put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
             .put(new Info("std::map<std::string,int64_t>").pointerTypes("StringLongMap").define())
-            .put(new Info("std::map<std::string,torch::Tensor>").pointerTypes("StringTensorMap").define())
         ;
 
 
@@ -836,10 +822,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::unordered_set<c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>").pointerTypes("HashAliasedIValues").define())
             .put(new Info("std::unordered_set<c10::Symbol>").pointerTypes("SymbolSet").define())
             .put(new Info("std::unordered_set<torch::TensorImpl*>", "std::unordered_set<at::TensorImpl*>").pointerTypes("TensorImplSet").define())
-            .put(new Info("std::unordered_set<at::RecordScope,std::hash<at::RecordScope> >").pointerTypes("RecordScopeSet").define())
             .put(new Info("std::unordered_set<torch::autograd::Node*>").pointerTypes("NodeSet").define())
-            .put(new Info("std::unordered_set<c10::Stream>").pointerTypes("StreamSet").define())
-            .put(new Info("std::unordered_set<at::RecordScope>").pointerTypes("RecordScopeSet").define())
             .put(new Info("std::unordered_set<c10::DeviceType>").pointerTypes("DeviceTypeSet").define())
             .put(new Info("std::set<torch::profiler::impl::ActivityType>").pointerTypes("ActivityTypeSet").define())
         ;
@@ -847,17 +830,13 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// std::unordered_map
         infoMap
-            .put(new Info("std::unordered_map<torch::autograd::Node*,int>").pointerTypes("NodeIntMap").define())
             .put(new Info("std::unordered_map<c10::IValue,c10::IValue,c10::IValue::HashAliasedIValue,c10::IValue::CompAliasedIValues>").pointerTypes("HashAliasedIValueMap").define())
-            .put(new Info("std::unordered_map<int64_t,std::string>").pointerTypes("LongStringMap").define())
             .put(new Info("std::unordered_map<std::string,bool>").pointerTypes("StringBoolMap").define())
             .put(new Info("std::unordered_map<std::string,size_t>").pointerTypes("StringSizeTMap").define())
             .put(new Info("std::unordered_map<std::string,std::string>").pointerTypes("ExtraFilesMap").define())
             .put(new Info("std::unordered_map<std::string,c10::TypePtr>").pointerTypes("TypeEnv").define())
             .put(new Info("std::unordered_map<std::string,c10::IValue>", "std::unordered_map<std::string,at::IValue>").pointerTypes("StringIValueMap").define())
-            .put(new Info("std::unordered_map<std::string,std::function<PyObject*(void*)> >").pointerTypes("StringFunctionMap").define())
             .put(new Info("std::unordered_map<std::string,torch::jit::Value*>").pointerTypes("StringValueMap").define())
-            .put(new Info("std::unordered_map<std::string,std::unordered_map<int64_t,std::string> >").pointerTypes("StringLongStringMapMap").define())
             .put(new Info("std::unordered_map<torch::jit::Value*,torch::jit::Value*>").pointerTypes("ValueValueMap").define())
             .put(new Info("std::unordered_map<torch::jit::ArgumentSpec,torch::jit::ExecutionPlan>").pointerTypes("ArgumentSpecExecutionPlanMap").define())
             .put(new Info("std::unordered_map<torch::jit::TreeRef,std::string>").pointerTypes("TreeRefStringMap").define())
@@ -874,18 +853,14 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// std::tuple
         infoMap
-            .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T").define())
+            .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T").define()) // Needed for CUDAStream
             .put(new Info("std::tuple<int64_t,int64_t>").pointerTypes("T_LongLong_T").define())
-            .put(new Info("std::tuple<double,int64_t>").pointerTypes("T_DoubleLong_T").define())
-            //.put(new Info("std::tuple<torch::Tensor>").pointerTypes("TensorTuple").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor>", "std::tuple<torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensorTensorTensor_T").define())
-            .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensorTensorTensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor,at::Tensor>", "std::tuple<at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&,at::Tensor&>").pointerTypes("T_TensorTensorTensorTensorTensorTensorTensor_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,std::vector<torch::Tensor> >", "std::tuple<at::Tensor,at::Tensor,at::Tensor,std::vector<at::Tensor> >").pointerTypes("T_TensorTensorTensorTensorVector_T").define())
-            .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,int64_t>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,int64_t>").pointerTypes("T_TensorTensorTensorTensorLong_T").define())
             .put(new Info("std::tuple<torch::Tensor,torch::Tensor,double,int64_t>", "std::tuple<at::Tensor,at::Tensor,double,int64_t>").pointerTypes("T_TensorTensorDoubleLong_T").define())
             .put(new Info("std::tuple<torch::Tensor,std::tuple<torch::Tensor,torch::Tensor> >").pointerTypes("T_TensorT_TensorTensor_T_T").define())
             .put(new Info("std::tuple<c10::MaybeOwned<at::Tensor>,c10::MaybeOwned<at::Tensor> >")
@@ -902,16 +877,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 "std::tuple<torch::Tensor&,torch::Tensor&,torch::Tensor&,torch::Tensor&,torch::Tensor&,torch::Tensor&,torch::Tensor&>"
             ).cast().pointerTypes("PointerPointer<Tensor>"))
             .put(new Info("std::tuple<std::string,size_t,size_t>").pointerTypes("T_StringSizeTSizeT_T").define())
-            .put(new Info("std::tuple<std::string,uint64_t>").pointerTypes("T_StringLong_T").define())
             .put(new Info("std::tuple<torch::Tensor,std::vector<torch::Tensor> >", "std::tuple<at::Tensor,std::vector<at::Tensor> >").pointerTypes("T_TensorTensorVector_T").define())
-            .put(new Info("std::tuple<std::vector<torch::Tensor>,torch::Tensor>", "std::tuple<std::vector<at::Tensor>,at::Tensor>").pointerTypes("T_TensorVectorTensor_T").define())
-            .put(new Info(
-                "std::tuple<std::vector<torch::Tensor>,std::vector<torch::Tensor>,std::vector<torch::Tensor>,std::vector<torch::Tensor>,std::vector<torch::Tensor> >",
-                "std::tuple<std::vector<at::Tensor>,std::vector<at::Tensor>,std::vector<at::Tensor>,std::vector<at::Tensor>,std::vector<at::Tensor> >")
-                .pointerTypes("T_TensorVectorTensorVectorTensorVectorTensorVectorTensorVector_T").define())
             .put(new Info("std::tuple<torch::Tensor,std::vector<torch::Tensor>,std::vector<torch::Tensor> >", "std::tuple<at::Tensor,std::vector<at::Tensor>,std::vector<at::Tensor> >").pointerTypes("T_TensorTensorVectorTensorVector_T").define())
-            .put(new Info("std::tuple<torch::Tensor,torch::Tensor,int64_t,int64_t,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,int64_t,int64_t,at::Tensor>").pointerTypes("T_TensorTensorLongLongTensor_T").define())
-            .put(new Info("std::tuple<torch::Tensor,torch::Tensor,torch::Tensor,torch::Tensor,int64_t,int64_t,int64_t,int64_t,torch::Tensor>", "std::tuple<at::Tensor,at::Tensor,at::Tensor,at::Tensor,int64_t,int64_t,int64_t,int64_t,at::Tensor>").pointerTypes("T_TensorTensorTensorTensorsLongLongLongLongTensor_T").define())
             .put(new Info("const std::tuple<at::DataPtr,size_t>", "std::tuple<at::DataPtr,size_t>").pointerTypes("T_DataPtrSizeT_T").define())
             .put(new Info("std::tuple<c10::TypePtr,int32_t>", "std::pair<c10::TypePtr,int32_t>").pointerTypes("T_TypePtrLong_T").define()) // Parse this pair as tuple because Parser doesn't generate valid code for optional<pair>
         ;
@@ -973,7 +940,6 @@ public class torch implements LoadEnabled, InfoMapper {
         //// torch::OrderedDict
         for (String[] o: new String[][] {
             { "std::string", "torch::Tensor", "StringTensor" },
-            { "std::string", "torch::nn::Module", "StringModule" },
             { "std::string", "torch::nn::AnyModule", "StringAnyModule" },
             { "std::string", "std::shared_ptr<torch::nn::Module>", "StringSharedModule" }
         }) {
@@ -994,7 +960,6 @@ public class torch implements LoadEnabled, InfoMapper {
             // Parser doesn't generate iterators for vector of pairs, so function returning such iterators, like ParameterListImpl::begin()
             // must be mapped to returning item instead. Issue #673. Change when issue resolved.
             .put(new Info("std::pair<std::string,torch::Tensor>", "std::pair<std::string,torch::Tensor>").cast().pointerTypes("StringTensorPair").define())
-            .put(new Info("std::pair<std::string,torch::nn::Module>").pointerTypes("StringModulePair").define())
             .put(new Info("std::pair<std::string,torch::nn::AnyModule>").pointerTypes("StringAnyModulePair").define())
             .put(new Info("std::pair<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModulePair").define())
             .put(new Info("std::pair<at::RecordFunctionHandle,int>").pointerTypes("RecordFunctionHandleIntPair").define())
@@ -1131,7 +1096,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::SingleElementType<c10::TypeKind::ListType,c10::ListType>").pointerTypes("ListSingleElementType"))
             .put(new Info("c10::SingleElementType<c10::TypeKind::RRefType,c10::RRefType>").pointerTypes("RRefSingleElementType"))
             .put(new Info("c10::SingleElementType<c10::TypeKind::FutureType,c10::FutureType>").pointerTypes("FutureSingleElementType"))
-            .put(new Info("c10::SingleElementType<c10::TypeKind::OptionalType,c10::OptionalType>").pointerTypes("OptionalSingleElementType"))
             .put(new Info("c10::SingleElementType<c10::TypeKind::AwaitType,c10::AwaitType>").pointerTypes("AwaitSingleElementType"))
         ;
 
@@ -1163,7 +1127,6 @@ public class torch implements LoadEnabled, InfoMapper {
                    .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::" + t[0] + "Policy>").pointerTypes(t[0].toLowerCase() + "_iterator"))
                    .put(new Info("torch::jit::slot_iterator_impl<torch::jit::detail::" + t[0] + "Policy>::value_type").pointerTypes(t[1]))
                    .put(new Info("torch::jit::Named<" + t[2] + ">").pointerTypes("Named" + t[1]))
-                   .put(new Info("torch::jit::detail::NamedPolicy<torch::jit::detail::" + t[0] + "Policy>").pointerTypes("Named" + t[1] + "Policy"))
                    .put(new Info(
                        "torch::jit::slot_list_impl<torch::jit::detail::NamedPolicy<torch::jit::detail::" + t[0] + "Policy> >",
                        "torch::jit::named_" + t[0].toLowerCase() + "_list").pointerTypes("named_" + t[0].toLowerCase() + "_list"))
@@ -1790,8 +1753,6 @@ public class torch implements LoadEnabled, InfoMapper {
             //"std::vector<std::unique_ptr<at::TensorIterator> >::put(std::vector<std::unique_ptr<at::TensorIterator> >)",
             "c10::ArrayRef<c10::detail::infer_schema::ArgumentDef>::equals",
             "c10::ArrayRef<torch::jit::NamedValue>::equals",
-            "c10::ArrayRef<torch::autograd::SavedVariable>::equals",
-            "c10::ArrayRef<torch::autograd::SavedVariable>::vec",
             "c10::ArrayRef<at::Scalar>::equals",
             "c10::ArrayRef<torch::TensorArg>::equals",
             "c10::ArrayRef<torch::Tensor>::equals",
@@ -1941,10 +1902,12 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::Argument").pointerTypes("Argument")) // Ref in function_schema_inl.h, defined in function_schema.h
         ;
 
-        /* Classes that are not part of API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
+        /* Classes that are not part of the API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
          * Consider manual exclusion of all at::meta, at::native and caffe2 namespaces (but TypeMeta, that should
          * be moved to c10 one day). */
         infoMap.put(new Info(
+            "CUevent_st",
+            "mz_zip_archive",
             "ModuleHolderIndicator",
             "at::ObserverContext",
             "at::Range",
@@ -1987,6 +1950,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::Registry<std::string,std::unique_ptr<at::HIPHooksInterface>,at::HIPHooksArgs>",
             "c10::Registry<std::string,std::unique_ptr<at::MPSHooksInterface>,at::MPSHooksArgs>",
             "c10::Registry<std::string,std::unique_ptr<at::ORTHooksInterface>,at::ORTHooksArgs>",
+            "c10::SchemaRegistrationHandleRAII",
             "c10::Scalar::v_t",
             "c10::StreamGuard",
             "c10::Type::SingletonOrSharedTypePtr::Repr",
@@ -2023,6 +1987,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::detail::infer_schema::createReturns<void,void>",
             "c10::detail::infer_schema::createReturns<std::tuple<>,void><void>", // Parsing error ?
             "c10::detail::ivalue_to_const_ref_overload_return<at::Tensor>",
+            "c10::detail::RegistrationListenerList",
             "c10::either::",
             "c10::either<c10::OperatorName,c10::FunctionSchema>",
             "c10::either<c10::OperatorName,c10::FunctionSchema>::",
@@ -2057,16 +2022,18 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::static_cast_with_inter_type<c10::complex<c10::Half>,c10::BFloat16>",
             "c10::trivial_init_t",
             "caffe2::detail::_Uninitialized",
-            "caffe2::TypeMetaData",
+            "caffe2::detail::TypeMetaData",
             "ska::detailv3::sherwood_v3_entry::",
             "ska::detailv3::sherwood_v3_table::convertible_to_iterator",
             "ska::fibonacci_hash_policy",
             "ska::power_of_two_hash_policy",
             "ska::prime_number_hash_policy",
+            "ska_ordered::fibonacci_hash_policy",
             "ska_ordered::prime_number_hash_policy",
             "ska_ordered::detailv3::sherwood_v3_entry::",
             "ska_ordered::detailv3::sherwood_v3_table::convertible_to_iterator",
             "ska_ordered::order_preserving_flat_hash_map::convertible_to_value",
+            "ska_ordered::power_of_two_hash_policy",
             "std::hash<c10::Device>",
             "std::hash<c10::DeviceType>",
             "std::hash<c10::Stream>",
@@ -2086,7 +2053,10 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::autograd::InputBuffer",
             "torch::autograd::InputMetadata",
             "torch::autograd::NodeGuard",
+            "torch::autograd::ReadyQueue",
             "torch::autograd::TraceableFunction",
+            "torch::autograd::TypeAndSize",
+            "torch::autograd::SavedVariable",
             "torch::autograd::VariableHooks",
             "torch::data::DataLoaderBase::Job",
             "torch::data::DataLoaderBase::QuitWorker",
@@ -2107,6 +2077,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::IRAttributeError",
             "torch::jit::InterpreterContinuation",
             "torch::jit::InterpreterState",
+            "torch::jit::InterpreterStateImpl",
+            "torch::jit::Lexer",
             "torch::jit::Operator::C10Operator",
             "torch::jit::Operator::JitOnlyOperator",
             "torch::jit::Operator::UnparsedFunctionSchema",
@@ -2126,6 +2098,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::nn::NamedAnyModule",
             "torch::nn::functions::CrossMapLRN2d",
             "torch::profiler::impl::HashCombine",
+            "torch::profiler::impl::kineto::ActivityTraceWrapper",
+            "torch::profiler::impl::ProfilerVoidEventStub",
 
             "torch::autograd::_jvp_fn_t", "torch::autograd::profiler::post_process_t",
             "at::StringView" // Confusion with string_view and @StringView, and doesn't seem to be of any use in API
