@@ -446,7 +446,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::optional<std::tuple<c10::TypePtr,int32_t> >", "c10::optional<std::pair<c10::TypePtr,int32_t> >").pointerTypes("T_TypePtrLong_TOptional").cast().define())
             .put(new Info("c10::optional<c10::string_view>").pointerTypes("StringViewOptional").define())
             .put(new Info("c10::optional<std::vector<c10::string_view> >").pointerTypes("StringViewVectorOptional").define())
-            .put(new Info("c10::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >")/*.cast?*/.pointerTypes("PointerPairOptional").define())
+            .put(new Info("c10::optional<std::pair<void*,void*> >", "c10::optional<std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr> >")/*.cast?*/.pointerTypes("PointerPairOptional").define())
         ;
 
 
@@ -963,7 +963,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::pair<std::string,torch::nn::AnyModule>").pointerTypes("StringAnyModulePair").define())
             .put(new Info("std::pair<std::string,std::shared_ptr<torch::nn::Module> >").pointerTypes("StringSharedModulePair").define())
             .put(new Info("std::pair<at::RecordFunctionHandle,int>").pointerTypes("RecordFunctionHandleIntPair").define())
-            .put(new Info("std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr>").pointerTypes("PointerPair").define())
+            .put(new Info("std::pair<void*,void*>", "std::pair<torch::jit::BackendMetaPtr,torch::jit::BackendMetaPtr>").pointerTypes("PointerPair").define())
             .put(new Info("std::pair<size_t,torch::jit::MatchedSchema>").pointerTypes("SizeTMatchedSchemaPair").define())
         ;
 
@@ -1909,10 +1909,15 @@ public class torch implements LoadEnabled, InfoMapper {
             "CUevent_st",
             "mz_zip_archive",
             "ModuleHolderIndicator",
+            "at::MTIAHooksArgs",
             "at::ObserverContext",
             "at::Range",
             "at::StepCallbacks::StartEndPair",
             "at::TensorBase::unsafe_borrow_t",
+            "at::internal::OpaqueOptionalTensorRef",
+            "at::impl::VariableHooksRegisterer", // TORCH_API but unused ?
+            "at::TensorRef",
+            "at::OptionalTensorRef",
             //"at::mt19937_data_pod",
             //"at::mt19937_engine",
             "at::tracer::impl::NoTracerDispatchMode",
@@ -1939,6 +1944,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::IValue::Payload",
             "c10::IValue::Payload::TriviallyCopyablePayload",
             "c10::IValue::Payload::TriviallyCopyablePayload::",
+            "c10::MaybeOwnedTraits",
             "c10::MultiStreamGuard",
             "c10::OpTableOffsetAndMask",
             "c10::OperatorNameView",
@@ -2114,6 +2120,7 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::detail::makeBaseType",
             "torch::detail::constructSchemaOrName",
             "at::operator <<(std::ostream&, at::Range&)",
+            "at::impl::VariableHooksInterface::_register_hook",
             "caffe2::serialize::detail::getPadding",
             "at::assert_no_partial_overlap(c10::TensorImpl*, c10::TensorImpl*)",
             "at::TensorIteratorBase::apply_perm_and_mul",
@@ -2175,7 +2182,9 @@ public class torch implements LoadEnabled, InfoMapper {
                    "std::enable_shared_from_this<torch::jit::SugaredValue>", "std::enable_shared_from_this<SugaredValue>",
                    "std::enable_shared_from_this<torch::jit::tracer::TracingState>", "std::enable_shared_from_this<TracingState>",
                    "std::enable_shared_from_this<torch::nn::Module>", "std::enable_shared_from_this<Module>"
-               ).pointerTypes("Pointer").cast());
+               ).pointerTypes("Pointer").cast())
+            .put(new Info("MTLCommandBuffer_t", "DispatchQueue_t").valueTypes("Pointer").pointerTypes("PointerPointer").skip());
+
 
 
         ///// Special cases needing javaText
@@ -2207,7 +2216,7 @@ public class torch implements LoadEnabled, InfoMapper {
         infoMap.put(new Info("at::TensorIteratorBase").purify());
 
 
-        //// Callback functions
+        //// Function pointers
         // skip() is added when function pointer are parsed instead of std::function to use the class in package
         // functions and prevent the creation of an automatic class in main package.
         // If a native function returns a std::function, no way to map it.

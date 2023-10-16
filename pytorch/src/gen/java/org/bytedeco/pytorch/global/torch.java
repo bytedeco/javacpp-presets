@@ -8163,10 +8163,7 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 @Namespace("at") public static native DispatchKey legacyExtractDispatchKey(@Const @ByRef TensorBase t);
 
-
-// Targeting ../MaybeOwnedTraits.java
-
-
+ // namespace at
  // namespace c10
 
 
@@ -11166,12 +11163,9 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 
 // #include <ATen/core/TensorBody.h>
 // #include <c10/util/Exception.h>
-// Targeting ../OptionalTensorRef.java
 
-
-// Targeting ../TensorRef.java
-
-
+// Use to convert a TensorBase (that may be undefined) to an at::Tensor
+// without bumping refcount.
 
 
 
@@ -13300,6 +13294,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // Targeting ../BackendMetaRef.java
 
 
+
+// To allow intrusive_ptr inside std::map or std::set, we need operator<
 // Targeting ../WeakStorage.java
 
 
@@ -14821,9 +14817,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("at::impl") public static native void SetVariableHooks(VariableHooksInterface hooks);
 @Namespace("at::impl") public static native VariableHooksInterface GetVariableHooks();
 @Namespace("at::impl") public static native @Cast("bool") boolean HasVariableHooks();
-// Targeting ../VariableHooksRegisterer.java
-
-
 
  // namespace at::impl
 
@@ -17948,9 +17941,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 @Namespace("at") @MemberGetter public static native @Cast("const char*") BytePointer MTIA_HELP();
 // Targeting ../MTIAHooksInterface.java
-
-
-// Targeting ../MTIAHooksArgs.java
 
 
 // #define REGISTER_MTIA_HOOKS(clsname)
@@ -59888,9 +59878,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // no parallel algorithm (such as parallel_reduce) should split work into
 // smaller than GRAIN_SIZE chunks.
 @Namespace("at::internal") @MemberGetter public static native @Cast("const int64_t") long GRAIN_SIZE();
-// Targeting ../OpaqueOptionalTensorRef.java
 
-
+// Storage for a non-owning Tensor, without needing to include Tensor.h
 
 // Targeting ../OperandInfo.java
 
@@ -66064,12 +66053,9 @@ apis for specific fusers.
 
 // #include <cstddef>
 // #include <cstdint>
-// Targeting ../MTLCommandBuffer_t.java
 
-
-// Targeting ../DispatchQueue_t.java
-
-
+// #ifdef __OBJC__
+// #else
 // #endif
 
 /** Returns true if MPS device is available. */
@@ -66087,11 +66073,11 @@ apis for specific fusers.
 @Namespace("torch::mps") public static native void commit();
 
 /** Get the current command buffer to encode the Metal commands. */
-@Namespace("torch::mps") public static native MTLCommandBuffer_t get_command_buffer();
+@Namespace("torch::mps") public static native Pointer get_command_buffer();
 
 /** Get the dispatch_queue_t to synchronize encoding the custom kernels
  *  with the PyTorch MPS backend. */
-@Namespace("torch::mps") public static native DispatchQueue_t get_dispatch_queue();
+@Namespace("torch::mps") public static native Pointer get_dispatch_queue();
 
  // namespace mps
  // namespace torch
