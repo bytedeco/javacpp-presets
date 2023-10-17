@@ -90,7 +90,39 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "at::CUDAGeneratorImpl"
             ).skip())
 
-            //// Already defined in main torch
+
+            //// std::unordered_set
+            .put(new Info("std::unordered_set<void*>").pointerTypes("PointerSet").define())
+
+            //// std::atomic
+            .put(new Info("c10::cuda::CUDACachingAllocator::allocator").skip()) // Relies on CUDACachingAllocator.get()
+            .put(new Info("std::atomic<const c10::impl::PyInterpreter*>").cast().pointerTypes("PyInterpreter"))
+
+            //// std::vector
+            .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define())
+            .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
+            .put(new Info("const std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>", "std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
+
+            //// Function pointers
+            .put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
+            .put(new Info("c10::cuda::CUDACachingAllocator::CUDAAllocator::recordHistory", "c10::cuda::CUDACachingAllocator::recordHistory").skip()) // Until #720 solved
+        ;
+
+        //// Avoiding name clashes by skipping or renaming
+        // Keep the instance methods of CUDAAllocator only, to not pollute global class
+        infoMap.put(new Info("c10::cuda::CUDACachingAllocator::get").javaNames("getAllocator"));
+        for (String s : new String[]{"get", "raw_alloc", "raw_alloc_with_stream", "raw_delete", "init",
+            "setMemoryFraction", "emptyCache", "cacheInfo", "getBaseAllocation", "recordStream", "getDeviceStats",
+            "resetAccumulatedStats", "resetPeakStats", "snapshot", "getCheckpointState", "setCheckpointPoolState",
+            "beginAllocateStreamToPool", "endAllocateStreamToPool", "isHistoryEnabled", "recordHistory",
+            "checkPoolLiveAllocations", "attachOutOfMemoryObserver", "releasePool", "getIpcDevPtr", "name",
+            "memcpyAsync", "enablePeerAccess"}) {
+            infoMap.put(new Info("c10::cuda::CUDACachingAllocator::CUDAAllocator::" + s)); // Necessary or the ns qualifying algorithm of Parser will pick c10::cuda::CUDACachingAllocator instead
+            infoMap.put(new Info("c10::cuda::CUDACachingAllocator::" + s).skip());
+        }
+
+        //// Already defined in main torch
+        infoMap
             .put(new Info("c10::Stream").pointerTypes("Stream"))
             .put(new Info("c10::optional<c10::Stream>").pointerTypes("StreamOptional"))
             .put(new Info("c10::optional<c10::Device>").pointerTypes("DeviceOptional"))
@@ -99,14 +131,12 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("std::tuple<int,int>").pointerTypes("T_IntInt_T"))
             .put(new Info("c10::optional<c10::DeviceIndex>").pointerTypes("ByteOptional"))
             .put(new Info("c10::IntArrayRef", "at::IntArrayRef").pointerTypes("LongArrayRef"))
+            .put(new Info("std::vector<at::DataPtr>").pointerTypes("DataPtrVector"))
 
             .put(new Info("c10::DeviceIndex").valueTypes("byte"))
             .put(new Info("c10::StreamId").valueTypes("long"))
             .put(new Info("c10::cuda::CaptureStatus").valueTypes("int").cast().skip()) // Enum doesn't parse
             .put(new Info("std::pair<std::vector<c10::cuda::DeviceAssertionsData>,std::vector<c10::cuda::CUDAKernelLaunchInfo> >").pointerTypes("DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair").define())
-            .put(new Info("std::vector<c10::cuda::DeviceAssertionsData>").pointerTypes("DeviceAssertionsDataVector").define())
-            .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
-            .put(new Info("std::atomic<const c10::impl::PyInterpreter*>").cast().pointerTypes("PyInterpreter"))
             .put(new Info("c10::CuDNNError").purify())
             .put(new Info("c10::impl::GPUTrace::gpuTraceState").skip())
             .put(new Info("at::native::RNNDescriptor::dropout_desc_").skip())
@@ -114,6 +144,8 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "at::native::operator <<(std::ostream&, at::native::FilterDescriptor&)",
                 "at::native::cudnnTypeToString", "at::native::getCudnnDataType", "at::native::cudnn_version",
                 "c10::cuda::c10_retrieve_device_side_assertion_info").skip())
+
+            .put(new Info("c10::cuda::CUDACachingAllocator::CheckpointDelta").immutable()) // at::DataPtr is not constructible
 
             .put(new Info(
                 "at::native::Descriptor<cudnnActivationStruct,cudnnCreateActivationDescriptor&,cudnnDestroyActivationDescriptor&>",
@@ -139,16 +171,20 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info( // Enums
                 "cudnnActivationMode_t", "cudnnLossNormalizationMode_t", "cudnnRNNInputMode_t",
                 "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudaStreamCaptureMode", "cudnnDataType_t", "cudnnNanPropagation_t",
-                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t"
+                "cusparseStatus_t", "cusolverStatus_t", "cudnnRNNAlgo_t", "cudnnNanPropagation_t", "cublasStatus_t", "cudaError_t"
             ).valueTypes("int").cast())
         ;
 
         new torch.ArrayInfo("CUDAStream").elementTypes("c10::cuda::CUDAStream").mapArrayRef(infoMap);
 
+        new torch.PointerInfo("c10::cuda::CUDACachingAllocator::AllocatorState").makeShared(infoMap);
+
         // Classes that are not part of the API (no TORCH_API nor C10_API) and are not argument nor return type of API methods.
         infoMap.put(new Info(
             "c10::cuda::OptionalCUDAGuard",
-            "c10::cuda::OptionalCUDAStreamGuard"
+            "c10::cuda::OptionalCUDAStreamGuard",
+            "c10::cuda::impl::CUDAGuardImpl",
+            "c10::FreeMemoryCallback" // in API, but useless as long as we don't map FreeCudaMemoryCallbacksRegistry,
         ).skip())
         ;
 

@@ -647,6 +647,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<c10::SymInt>").pointerTypes("SymIntVector").define())
             .put(new Info("std::vector<std::shared_ptr<torch::jit::SugaredValue> >").pointerTypes("SharedSugaredValueVector").define())
             .put(new Info("const std::vector<const c10::FunctionSchema*>").pointerTypes("FunctionSchemaVector").define())
+            .put(new Info("const std::vector<at::DataPtr>", "std::vector<at::DataPtr>").pointerTypes("DataPtrVector").define()) // Used from cuda only
         ;
 
 
@@ -1589,20 +1590,7 @@ public class torch implements LoadEnabled, InfoMapper {
             new PointerInfo("const torch::jit::CompilationUnit"),
             new PointerInfo("torch::jit::SugaredValue")
         }) {
-            // See issue #670
-            String[] cppNames = new String[pi.argumentNames.length + pi.otherCppNames.length];
-            int i = 0;
-            for (String n : pi.argumentNames) cppNames[i++] = template("std::shared_ptr", n);
-            for (String n : pi.otherCppNames) cppNames[i++] = n;
-            // Specifying the parameter of the annotation allows to disambiguate cases where a class can store either a
-            // std::shared_ptr<const X> or std::shared_ptr<X> (like CompilationUnit)
-            // .valueTypes("@Cast(\"const torch::jit::CompilationUnit*\") CompilationUnit") seems to work too but for obscure reason
-            infoMap.put(new Info(cppNames).annotations("@SharedPtr(\"" + pi.argumentNames[0] + "\")").pointerTypes(pi.javaBaseName));
-
-            // Also annotate constructor of target class to ensure only one shared_ptr exists for each instance
-            String n = pi.argumentNames[0].substring(pi.argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
-            String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
-            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
+            pi.makeShared(infoMap);
         }
 
 
@@ -2425,7 +2413,7 @@ public class torch implements LoadEnabled, InfoMapper {
         }
     }
 
-    private static class PointerInfo {
+    static class PointerInfo {
         String javaBaseName;
         String javaName;
         final String[] argumentNames;
@@ -2449,6 +2437,23 @@ public class torch implements LoadEnabled, InfoMapper {
         PointerInfo javaName(String jn) {
             javaName = jn;
             return this;
+        }
+
+        void makeShared(InfoMap infoMap) {
+            // See issue #670
+            String[] cppNames = new String[argumentNames.length + otherCppNames.length];
+            int i = 0;
+            for (String n : argumentNames) cppNames[i++] = template("std::shared_ptr", n);
+            for (String n : otherCppNames) cppNames[i++] = n;
+            // Specifying the parameter of the annotation allows to disambiguate cases where a class can store either a
+            // std::shared_ptr<const X> or std::shared_ptr<X> (like CompilationUnit)
+            // .valueTypes("@Cast(\"const torch::jit::CompilationUnit*\") CompilationUnit") seems to work too but for obscure reason
+            infoMap.put(new Info(cppNames).annotations("@SharedPtr(\"" + argumentNames[0] + "\")").pointerTypes(javaBaseName));
+
+            // Also annotate constructor of target class to ensure only one shared_ptr exists for each instance
+            String n = argumentNames[0].substring(argumentNames[0].lastIndexOf(' ') + 1); // Remove possible const
+            String n2 = n.equals("torch::nn::Module") ? "JavaCPP_torch_0003a_0003ann_0003a_0003aModule" : n;
+            infoMap.put(new Info(n + n.substring(n.lastIndexOf("::"))).annotations("@SharedPtr", "@Name(\"std::make_shared<" + n2 + ">\")"));
         }
     }
 

@@ -26,6 +26,9 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Cast("int8_t&&") byte device_index);
 
 
+// Targeting ../cuda/TraceEntryVector.java
+
+
 // Targeting ../cuda/DeviceAssertionsDataVector.java
 
 
@@ -33,6 +36,9 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 
 
 // Targeting ../cuda/DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair.java
+
+
+// Targeting ../cuda/PointerSet.java
 
 
 // Parsed from c10/util/ArrayRef.h
@@ -667,6 +673,156 @@ manage their own state. There is only a single CUDA context/state.
  // namespace c10
 
 
+// Parsed from c10/cuda/CUDACachingAllocator.h
+
+// #pragma once
+
+// #include <c10/core/Allocator.h>
+// #include <c10/core/StorageImpl.h>
+// #include <c10/cuda/CUDAGraphsC10Utils.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/util/Registry.h>
+
+// #include <array>
+// #include <mutex>
+// #include <set>
+// #include <unordered_set>
+
+// Caching allocator will execute every registered callback if it unable to find
+// block inside of already allocated area.
+
+
+// #define REGISTER_FREE_MEMORY_CALLBACK(name, ...)
+//   C10_REGISTER_CLASS(FreeCudaMemoryCallbacksRegistry, name, __VA_ARGS__);
+// Targeting ../cuda/Stat.java
+
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public enum StatType {
+  AGGREGATE(0),
+  SMALL_POOL(1),
+  LARGE_POOL(2),
+  NUM_TYPES(3);// remember to update this whenever a new stat type is added
+
+    public final long value;
+    private StatType(long v) { this.value = v; }
+    private StatType(StatType e) { this.value = e.value; }
+    public StatType intern() { for (StatType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../cuda/DeviceStats.java
+
+
+// Targeting ../cuda/BlockInfo.java
+
+
+// Targeting ../cuda/SegmentInfo.java
+
+
+// Targeting ../cuda/AllocatorState.java
+
+
+// Targeting ../cuda/TraceEntry.java
+
+
+// Targeting ../cuda/SnapshotInfo.java
+
+
+// Targeting ../cuda/CheckpointDelta.java
+
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public enum RecordContext {
+  NEVER(0),
+  STATE(1), // only keep stacks for active allocations
+  ALLOC(2), // additionally keep stacks for allocations in the trace history
+  ALL(3);// additionally record stacks for when something is freed
+
+    public final int value;
+    private RecordContext(int v) { this.value = v; }
+    private RecordContext(RecordContext e) { this.value = e.value; }
+    public RecordContext intern() { for (RecordContext e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setAllocatorSettings(@StdString BytePointer env);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setAllocatorSettings(@StdString String env);
+
+// Size pretty-printer
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdString BytePointer format_size(@Cast("uint64_t") long size);
+// Targeting ../cuda/CUDAAllocator.java
+
+
+
+// Allocator object, statically initialized
+// See BackendInitializer in CUDACachingAllocator.cpp.
+// Atomic loads on x86 are just normal loads,
+// (atomic stores are different), so reading this value
+// is no different than loading a pointer.
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @Name("get") CUDAAllocator getAllocator();
+
+// Called directly by clients.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CUDAGraph interactions
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Not part of CUDA_ALLOCATOR_BACKEND_INTERFACE
+
+
+
+
+
+
+
+
+ // namespace CUDACachingAllocator
+ // namespace cuda
+ // namespace c10
+
+
 // Parsed from c10/cuda/impl/CUDAGuardImpl.h
 
 // #pragma once
@@ -683,9 +839,6 @@ manage their own state. There is only a single CUDA context/state.
 // #include <c10/cuda/CUDAStream.h>
 
 // #include <cuda_runtime_api.h>
-// Targeting ../cuda/CUDAGuardImpl.java
-
-
 
  // namespace impl
  // namespace cuda

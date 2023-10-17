@@ -305,6 +305,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../FunctionSchemaVector.java
 
 
+// Targeting ../DataPtrVector.java
+
+
 // Targeting ../StringTensorDictItemVector.java
 
 
