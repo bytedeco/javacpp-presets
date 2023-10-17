@@ -2123,7 +2123,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
             "torch::jit::ClassDef::create",
             "torch::profiler::impl::getNvtxStr",
-            "torch::autograd::add_node_to_current_graph_task_exec_info"
+            "torch::autograd::add_node_to_current_graph_task_exec_info",
+            "at::native::get_numel_from_nested_size_tensor"
         ).skip());
 
         //// Aliases necessary because of Parser limited namespace resolution
