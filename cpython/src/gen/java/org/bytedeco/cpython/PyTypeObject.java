@@ -103,9 +103,9 @@ public class PyTypeObject extends Pointer {
     public native inquiry tp_is_gc(); public native PyTypeObject tp_is_gc(inquiry setter); /* For PyObject_IS_GC */
     public native PyObject tp_bases(); public native PyTypeObject tp_bases(PyObject setter);
     public native PyObject tp_mro(); public native PyTypeObject tp_mro(PyObject setter); /* method resolution order */
-    public native PyObject tp_cache(); public native PyTypeObject tp_cache(PyObject setter);
-    public native PyObject tp_subclasses(); public native PyTypeObject tp_subclasses(PyObject setter);
-    public native PyObject tp_weaklist(); public native PyTypeObject tp_weaklist(PyObject setter);
+    public native PyObject tp_cache(); public native PyTypeObject tp_cache(PyObject setter); /* no longer used */
+    public native Pointer tp_subclasses(); public native PyTypeObject tp_subclasses(Pointer setter);  /* for static builtin types this is an index */
+    public native PyObject tp_weaklist(); public native PyTypeObject tp_weaklist(PyObject setter); /* not used for static builtin types */
     public native destructor tp_del(); public native PyTypeObject tp_del(destructor setter);
 
     /* Type attribute cache version tag. Added in version 2.6 */
@@ -113,4 +113,7 @@ public class PyTypeObject extends Pointer {
 
     public native destructor tp_finalize(); public native PyTypeObject tp_finalize(destructor setter);
     public native vectorcallfunc tp_vectorcall(); public native PyTypeObject tp_vectorcall(vectorcallfunc setter);
+
+    /* bitset of which type-watchers care about this type */
+    public native @Cast("unsigned char") byte tp_watched(); public native PyTypeObject tp_watched(byte setter);
 }

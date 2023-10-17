@@ -176,18 +176,18 @@ public class DeployBERT {
         System.out.println("Running BERT runtime...");
         // load in the library
         DLDevice ctx = new DLDevice().device_type(kDLCPU).device_id(0);
-        Module mod_factory = Module.LoadFromFile("lib/libbert.so");
+        Module mod_factory = Module.LoadFromFile(new TVMString("lib/libbert.so"));
         // create the BERT runtime module
         TVMValue values = new TVMValue(2);
         IntPointer codes = new IntPointer(2);
         TVMArgsSetter setter = new TVMArgsSetter(values, codes);
         setter.apply(0, ctx);
         TVMRetValue rv = new TVMRetValue();
-        mod_factory.GetFunction("default").CallPacked(new TVMArgs(values, codes, 1), rv);
+        mod_factory.GetFunction(new TVMString("default")).CallPacked(new TVMArgs(values, codes, 1), rv);
         Module gmod = rv.asModule();
-        PackedFunc set_input = gmod.GetFunction("set_input");
-        PackedFunc get_output = gmod.GetFunction("get_output");
-        PackedFunc run = gmod.GetFunction("run");
+        PackedFunc set_input = gmod.GetFunction(new TVMString("set_input"));
+        PackedFunc get_output = gmod.GetFunction(new TVMString("get_output"));
+        PackedFunc run = gmod.GetFunction(new TVMString("run"));
 
         // Use the C++ API to create some random sequence
         int batch = 1, seq_length = 128;

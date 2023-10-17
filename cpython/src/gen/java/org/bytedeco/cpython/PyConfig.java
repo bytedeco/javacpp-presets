@@ -43,6 +43,7 @@ public class PyConfig extends Pointer {
     public native @Cast("unsigned long") long hash_seed(); public native PyConfig hash_seed(long setter);
     public native int faulthandler(); public native PyConfig faulthandler(int setter);
     public native int tracemalloc(); public native PyConfig tracemalloc(int setter);
+    public native int perf_profiling(); public native PyConfig perf_profiling(int setter);
     public native int import_time(); public native PyConfig import_time(int setter);
     public native int code_debug_ranges(); public native PyConfig code_debug_ranges(int setter);
     public native int show_ref_count(); public native PyConfig show_ref_count(int setter);
@@ -77,6 +78,7 @@ public class PyConfig extends Pointer {
     public native @Cast("wchar_t*") Pointer check_hash_pycs_mode(); public native PyConfig check_hash_pycs_mode(Pointer setter);
     public native int use_frozen_modules(); public native PyConfig use_frozen_modules(int setter);
     public native int safe_path(); public native PyConfig safe_path(int setter);
+    public native int int_max_str_digits(); public native PyConfig int_max_str_digits(int setter);
 
     /* --- Path configuration inputs ------------ */
     public native int pathconfig_warnings(); public native PyConfig pathconfig_warnings(int setter);
@@ -110,10 +112,6 @@ public class PyConfig extends Pointer {
 
     // If equal to 0, stop Python initialization before the "main" phase.
     public native int _init_main(); public native PyConfig _init_main(int setter);
-
-    // If non-zero, disallow threads, subprocesses, and fork.
-    // Default: 0.
-    public native int _isolated_interpreter(); public native PyConfig _isolated_interpreter(int setter);
 
     // If non-zero, we believe we're running from a source tree.
     public native int _is_python_build(); public native PyConfig _is_python_build(int setter);

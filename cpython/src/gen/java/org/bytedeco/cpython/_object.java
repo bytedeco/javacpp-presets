@@ -34,6 +34,19 @@ public class _object extends Pointer {
         return new _object((Pointer)this).offsetAddress(i);
     }
 
-    public native @Cast("Py_ssize_t") long ob_refcnt(); public native _object ob_refcnt(long setter);
+//     #if (defined(__GNUC__) || defined(__clang__))
+//         && !(defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L)
+    // On C99 and older, anonymous union is a GCC and clang extension
+// #endif
+// #ifdef _MSC_VER
+    // Ignore MSC warning C4201: "nonstandard extension used:
+    // nameless struct/union"
+// #endif
+       public native @Cast("Py_ssize_t") long ob_refcnt(); public native _object ob_refcnt(long setter);
+// #if SIZEOF_VOID_P > 4
+       public native @Cast("uint32_t") int ob_refcnt_split(int i); public native _object ob_refcnt_split(int i, int setter);
+       @MemberGetter public native @Cast("uint32_t*") IntPointer ob_refcnt_split();
+// #endif
+// #ifdef _MSC_VER
     public native PyTypeObject ob_type(); public native _object ob_type(PyTypeObject setter);
 }

@@ -11,9 +11,7 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-/* Strings allocated through PyUnicode_FromUnicode(NULL, len) use the
-   PyUnicodeObject structure. The actual string data is initially in the wstr
-   block, and copied into the data block using _PyUnicode_Ready. */
+/* Object format for Unicode subclasses. */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyUnicodeObject extends Pointer {
     static { Loader.load(); }

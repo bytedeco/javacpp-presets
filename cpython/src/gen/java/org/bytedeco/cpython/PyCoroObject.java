@@ -33,8 +33,6 @@ public class PyCoroObject extends Pointer {
     }
 
     public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject setter);
-    /* The code object backing the generator */
-    public native PyCodeObject cr_code(); public native PyCoroObject cr_code(PyCodeObject setter);
     /* List of weak reference. */
     public native PyObject cr_weakreflist(); public native PyCoroObject cr_weakreflist(PyObject setter);
     /* Name of the generator. */
@@ -50,4 +48,5 @@ public class PyCoroObject extends Pointer {
     public native byte cr_frame_state(); public native PyCoroObject cr_frame_state(byte setter);
     public native PyObject cr_iframe(int i); public native PyCoroObject cr_iframe(int i, PyObject setter);
     @MemberGetter public native @Cast("PyObject**") PointerPointer cr_iframe();
+
 }

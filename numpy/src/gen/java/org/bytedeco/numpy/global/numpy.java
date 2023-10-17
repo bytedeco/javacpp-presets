@@ -20,6 +20,7 @@ public class numpy extends org.bytedeco.numpy.presets.numpy {
 // Parsed from _numpyconfig.h
 
 public static final int NPY_HAVE_ENDIAN_H = 1;
+
 public static native @MemberGetter int NPY_SIZEOF_SHORT();
 public static final int NPY_SIZEOF_SHORT = NPY_SIZEOF_SHORT();
 public static native @MemberGetter int NPY_SIZEOF_INT();
@@ -36,12 +37,16 @@ public static final int NPY_SIZEOF_PY_INTPTR_T = 8;
 public static final int NPY_SIZEOF_OFF_T = 8;
 public static final int NPY_SIZEOF_PY_LONG_LONG = 8;
 public static final int NPY_SIZEOF_LONGLONG = 8;
-public static final int NPY_NO_SMP = 0;
+
 public static final int NPY_USE_C99_COMPLEX = 1;
 public static final int NPY_HAVE_COMPLEX_DOUBLE = 1;
 public static final int NPY_HAVE_COMPLEX_FLOAT = 1;
 public static final int NPY_HAVE_COMPLEX_LONG_DOUBLE = 1;
 public static final int NPY_USE_C99_FORMATS = 1;
+
+/* #undef NPY_NO_SIGNAL */
+public static final int NPY_NO_SMP = 0;
+
 // #define NPY_VISIBILITY_HIDDEN __attribute__((visibility("hidden")))
 public static final int NPY_ABI_VERSION = 0x01000009;
 public static final int NPY_API_VERSION = 0x00000011;
@@ -940,12 +945,18 @@ public static final String NPY_TIMEDELTA_FMT = NPY_INT64_FMT;
 //     #define NPY_OS_SOLARIS
 // #elif defined(__CYGWIN__)
 //     #define NPY_OS_CYGWIN
-// #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
-//     #define NPY_OS_WIN32
-// #elif defined(_WIN64) || defined(__WIN64__) || defined(WIN64)
-//     #define NPY_OS_WIN64
-// #elif defined(__MINGW32__) || defined(__MINGW64__)
+/* We are on Windows.*/
+// #elif defined(_WIN32)
+  /* We are using MinGW (64-bit or 32-bit)*/
+//   #if defined(__MINGW32__) || defined(__MINGW64__)
 //     #define NPY_OS_MINGW
+  /* Otherwise, if _WIN64 is defined, we are targeting 64-bit Windows*/
+//   #elif defined(_WIN64)
+//     #define NPY_OS_WIN64
+  /* Otherwise assume we are targeting 32-bit Windows*/
+//   #else
+//     #define NPY_OS_WIN32
+//   #endif
 // #elif defined(__APPLE__)
 //     #define NPY_OS_DARWIN
 // #elif defined(__HAIKU__)

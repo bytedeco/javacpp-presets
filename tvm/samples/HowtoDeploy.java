@@ -97,7 +97,7 @@ public class HowtoDeploy {
 
     static void Verify(Module mod, String fname) {
         // Get the function from the module.
-        PackedFunc f = mod.GetFunction(fname);
+        PackedFunc f = mod.GetFunction(new TVMString(fname));
         assert f != null;
         // Allocate the DLPack data structures.
         //
@@ -149,14 +149,14 @@ public class HowtoDeploy {
 
     static void DeploySingleOp() {
         // Normally we can directly
-        Module mod_dylib = Module.LoadFromFile("lib/test_addone_dll.so");
+        Module mod_dylib = Module.LoadFromFile(new TVMString("lib/test_addone_dll.so"));
         System.out.println("Verify dynamic loading from test_addone_dll.so");
         Verify(mod_dylib, "addone");
         // For libraries that are directly packed as system lib and linked together with the app
         // We can directly use GetSystemLib to get the system wide library.
         System.out.println("Verify load function from system lib");
         TVMRetValue rv = new TVMRetValue();
-        Registry.Get("runtime.SystemLib").CallPacked(new TVMArgs((TVMValue)null, (IntPointer)null, 0), rv);
+        Registry.Get(new TVMString("runtime.SystemLib")).CallPacked(new TVMArgs((TVMValue)null, (IntPointer)null, 0), rv);
         Module mod_syslib = rv.asModule();
         // Verify(mod_syslib, "addonesys");
     }
@@ -165,18 +165,18 @@ public class HowtoDeploy {
         System.out.println("Running graph executor...");
         // load in the library
         DLDevice dev = new DLDevice().device_type(kDLCPU).device_id(0);
-        Module mod_factory = Module.LoadFromFile("lib/test_relay_add.so");
+        Module mod_factory = Module.LoadFromFile(new TVMString("lib/test_relay_add.so"));
         // create the graph executor module
         TVMValue values = new TVMValue(2);
         IntPointer codes = new IntPointer(2);
         TVMArgsSetter setter = new TVMArgsSetter(values, codes);
         setter.apply(0, dev);
         TVMRetValue rv = new TVMRetValue();
-        mod_factory.GetFunction("default").CallPacked(new TVMArgs(values, codes, 1), rv);
+        mod_factory.GetFunction(new TVMString("default")).CallPacked(new TVMArgs(values, codes, 1), rv);
         Module gmod = rv.asModule();
-        PackedFunc set_input = gmod.GetFunction("set_input");
-        PackedFunc get_output = gmod.GetFunction("get_output");
-        PackedFunc run = gmod.GetFunction("run");
+        PackedFunc set_input = gmod.GetFunction(new TVMString("set_input"));
+        PackedFunc get_output = gmod.GetFunction(new TVMString("get_output"));
+        PackedFunc run = gmod.GetFunction(new TVMString("run"));
 
         // Use the C++ API
         NDArray x = NDArray.Empty(new ShapeTuple(2, 2), new DLDataType().code((byte)kDLFloat).bits((byte)32).lanes((short)1), dev);

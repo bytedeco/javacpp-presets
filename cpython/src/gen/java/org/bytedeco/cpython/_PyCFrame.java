@@ -41,7 +41,6 @@ public class _PyCFrame extends Pointer {
      * discipline and make sure that instances of this struct cannot
      * accessed outside of their lifetime.
      */
-    public native @Cast("uint8_t") byte use_tracing(); public native _PyCFrame use_tracing(byte setter);  // 0 or 255 (or'ed into opcode, hence 8-bit type)
     /* Pointer to the currently executing frame (it can be NULL) */
     public native @Cast("_PyInterpreterFrame*") Pointer current_frame(); public native _PyCFrame current_frame(Pointer setter);
     public native _PyCFrame previous(); public native _PyCFrame previous(_PyCFrame setter);

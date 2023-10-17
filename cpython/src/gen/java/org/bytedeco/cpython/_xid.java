@@ -54,15 +54,7 @@ public class _xid extends Pointer {
     // interpreter given the data.  The resulting object (a new
     // reference) will be equivalent to the original object.  This field
     // is required.
-    public static class New_object__PyCrossInterpreterData extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    New_object__PyCrossInterpreterData(Pointer p) { super(p); }
-        protected New_object__PyCrossInterpreterData() { allocate(); }
-        private native void allocate();
-        public native PyObject call(_PyCrossInterpreterData arg0);
-    }
-    public native New_object__PyCrossInterpreterData new_object(); public native _xid new_object(New_object__PyCrossInterpreterData setter);
+    public native xid_newobjectfunc new_object(); public native _xid new_object(xid_newobjectfunc setter);
     // free is called when the data is released.  If it is NULL then
     // nothing will be done to free the data.  For some types this is
     // okay (e.g. bytes) and for those types this field should be set
@@ -72,13 +64,5 @@ public class _xid extends Pointer {
     // leak.  In that case, at the very least this field should be set
     // to PyMem_RawFree (the default if not explicitly set to NULL).
     // The call will happen with the original interpreter activated.
-    public static class Free_Pointer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Free_Pointer(Pointer p) { super(p); }
-        protected Free_Pointer() { allocate(); }
-        private native void allocate();
-        public native void call(Pointer arg0);
-    }
-    public native @Name("free") Free_Pointer _free(); public native _xid _free(Free_Pointer setter);
+    public native @Name("free") xid_freefunc _free(); public native _xid _free(xid_freefunc setter);
 }

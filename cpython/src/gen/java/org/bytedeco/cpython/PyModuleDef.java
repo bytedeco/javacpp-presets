@@ -10,7 +10,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #endif
 
 // #endif /* New in 3.5 */
 

@@ -9,14 +9,14 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
- /* For offsetof */
+
+
 
 /* An array of PyMemberDef structures defines the name, type and offset
    of selected members of a C structure.  These can be read by
    PyMember_GetOne() and set by PyMember_SetOne() (except if their READONLY
    flag is set).  The array must be terminated with an entry whose name
    pointer is NULL. */
-
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyMemberDef extends Pointer {
     static { Loader.load(); }

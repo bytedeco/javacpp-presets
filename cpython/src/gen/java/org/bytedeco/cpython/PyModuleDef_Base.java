@@ -31,6 +31,12 @@ public class PyModuleDef_Base extends Pointer {
     }
 
   public native @ByRef PyObject ob_base(); public native PyModuleDef_Base ob_base(PyObject setter);
+  /* The function used to re-initialize the module.
+     This is only set for legacy (single-phase init) extension modules
+     and only used for those that support multiple initializations
+     (m_size >= 0).
+     It is set by _PyImport_LoadDynamicModuleWithSpec()
+     and _imp.create_builtin(). */
   public static class PyObject_M_init extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -40,6 +46,14 @@ public class PyModuleDef_Base extends Pointer {
       public native PyObject call();
   }
   public native PyObject_M_init m_init(); public native PyModuleDef_Base m_init(PyObject_M_init setter);
+  /* The module's index into its interpreter's modules_by_index cache.
+     This is set for all extension modules but only used for legacy ones.
+     (See PyInterpreterState.modules_by_index for more info.)
+     It is set by PyModuleDef_Init(). */
   public native @Cast("Py_ssize_t") long m_index(); public native PyModuleDef_Base m_index(long setter);
+  /* A copy of the module's __dict__ after the first time it was loaded.
+     This is only set/used for legacy modules that do not support
+     multiple initializations.
+     It is set by _PyImport_FixupExtensionObject(). */
   public native PyObject m_copy(); public native PyModuleDef_Base m_copy(PyObject setter);
 }
