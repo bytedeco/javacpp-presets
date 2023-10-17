@@ -93,9 +93,9 @@ public class SimpleMNIST {
     static class Net extends Module {
         Net() {
             // Construct and register two Linear submodules.
-            fc1 = register_module("fc1", new LinearImpl(784, 64));
-            fc2 = register_module("fc2", new LinearImpl(64, 32));
-            fc3 = register_module("fc3", new LinearImpl(32, 10));
+            register_module("fc1", fc1 = new LinearImpl(784, 64));
+            register_module("fc2", fc2 = new LinearImpl(64, 32));
+            register_module("fc3", fc3 = new LinearImpl(32, 10));
         }
 
         // Implement the Net's algorithm.
@@ -109,7 +109,7 @@ public class SimpleMNIST {
         }
 
         // Use one of many "standard library" modules.
-        LinearImpl fc1 = null, fc2 = null, fc3 = null;
+        final LinearImpl fc1, fc2, fc3;
     }
 
     public static void main(String[] args) throws Exception {
