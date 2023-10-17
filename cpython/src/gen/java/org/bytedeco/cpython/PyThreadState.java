@@ -35,24 +35,40 @@ public class PyThreadState extends Pointer {
     public native PyThreadState next(); public native PyThreadState next(PyThreadState setter);
     public native PyInterpreterState interp(); public native PyThreadState interp(PyInterpreterState setter);
 
-    /* Has been initialized to a safe state.
+        /* Has been initialized to a safe state.
 
-       In order to be effective, this must be set to 0 during or right
-       after allocation. */
-    public native int _initialized(); public native PyThreadState _initialized(int setter);
+           In order to be effective, this must be set to 0 during or right
+           after allocation. */
+        @Name("_status.initialized") public native @Cast("unsigned int") @NoOffset int _status_initialized(); public native PyThreadState _status_initialized(int setter);
 
-    /* Was this thread state statically allocated? */
-    public native int _static(); public native PyThreadState _static(int setter);
+        /* Has been bound to an OS thread. */
+        @Name("_status.bound") public native @Cast("unsigned int") @NoOffset int _status_bound(); public native PyThreadState _status_bound(int setter);
+        /* Has been unbound from its OS thread. */
+        @Name("_status.unbound") public native @Cast("unsigned int") @NoOffset int _status_unbound(); public native PyThreadState _status_unbound(int setter);
+        /* Has been bound aa current for the GILState API. */
+        @Name("_status.bound_gilstate") public native @Cast("unsigned int") @NoOffset int _status_bound_gilstate(); public native PyThreadState _status_bound_gilstate(int setter);
+        /* Currently in use (maybe holds the GIL). */
+        @Name("_status.active") public native @Cast("unsigned int") @NoOffset int _status_active(); public native PyThreadState _status_active(int setter);
 
-    public native int recursion_remaining(); public native PyThreadState recursion_remaining(int setter);
-    public native int recursion_limit(); public native PyThreadState recursion_limit(int setter);
+        /* various stages of finalization */
+        @Name("_status.finalizing") public native @Cast("unsigned int") @NoOffset int _status_finalizing(); public native PyThreadState _status_finalizing(int setter);
+        @Name("_status.cleared") public native @Cast("unsigned int") @NoOffset int _status_cleared(); public native PyThreadState _status_cleared(int setter);
+        @Name("_status.finalized") public native @Cast("unsigned int") @NoOffset int _status_finalized(); public native PyThreadState _status_finalized(int setter);
+
+        /* padding to align to 4 bytes */
+        
+
+    public native int py_recursion_remaining(); public native PyThreadState py_recursion_remaining(int setter);
+    public native int py_recursion_limit(); public native PyThreadState py_recursion_limit(int setter);
+
+    public native int c_recursion_remaining(); public native PyThreadState c_recursion_remaining(int setter);
     public native int recursion_headroom(); public native PyThreadState recursion_headroom(int setter); /* Allow 50 more calls to handle any errors. */
 
     /* 'tracing' keeps track of the execution depth when tracing/profiling.
        This is to prevent the actual trace/profile code from being recorded in
        the trace/profile. */
     public native int tracing(); public native PyThreadState tracing(int setter);
-    public native int tracing_what(); public native PyThreadState tracing_what(int setter); /* The event currently being traced, if any. */
+    public native int what_event(); public native PyThreadState what_event(int setter); /* The event currently being monitored, if any. */
 
     /* Pointer to current _PyCFrame in the C stack frame of the currently,
      * or most recently, executing _PyEval_EvalFrameDefault. */
@@ -64,9 +80,7 @@ public class PyThreadState extends Pointer {
     public native PyObject c_traceobj(); public native PyThreadState c_traceobj(PyObject setter);
 
     /* The exception currently being raised */
-    public native PyObject curexc_type(); public native PyThreadState curexc_type(PyObject setter);
-    public native PyObject curexc_value(); public native PyThreadState curexc_value(PyObject setter);
-    public native PyObject curexc_traceback(); public native PyThreadState curexc_traceback(PyObject setter);
+    public native PyObject current_exception(); public native PyThreadState current_exception(PyObject setter);
 
     /* Pointer to the top of the exception stack for the exceptions
      * we may be currently handling.  (See _PyErr_StackItem above.)
@@ -86,8 +100,7 @@ public class PyThreadState extends Pointer {
      */
     public native @Cast("unsigned long") long native_thread_id(); public native PyThreadState native_thread_id(long setter);
 
-    public native int trash_delete_nesting(); public native PyThreadState trash_delete_nesting(int setter);
-    public native PyObject trash_delete_later(); public native PyThreadState trash_delete_later(PyObject setter);
+    public native @ByRef _py_trashcan trash(); public native PyThreadState trash(_py_trashcan setter);
 
     /* Called when a thread state is deleted normally, but not when it
      * is destroyed after fork().
@@ -133,8 +146,6 @@ public class PyThreadState extends Pointer {
 
     /* Unique thread state id. */
     public native @Cast("uint64_t") long id(); public native PyThreadState id(long setter);
-
-    public native @ByRef PyTraceInfo trace_info(); public native PyThreadState trace_info(PyTraceInfo setter);
 
     public native _PyStackChunk datastack_chunk(); public native PyThreadState datastack_chunk(_PyStackChunk setter);
     public native PyObject datastack_top(int i); public native PyThreadState datastack_top(int i, PyObject setter);

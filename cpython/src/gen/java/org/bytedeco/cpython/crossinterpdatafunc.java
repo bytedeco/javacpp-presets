@@ -20,5 +20,6 @@ public class crossinterpdatafunc extends FunctionPointer {
     public    crossinterpdatafunc(Pointer p) { super(p); }
     protected crossinterpdatafunc() { allocate(); }
     private native void allocate();
-    public native int call(PyObject arg0, _PyCrossInterpreterData arg1);
+    public native int call(PyThreadState tstate, PyObject arg1,
+                                   _PyCrossInterpreterData arg2);
 }

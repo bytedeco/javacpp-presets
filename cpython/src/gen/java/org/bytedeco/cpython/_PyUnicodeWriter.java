@@ -10,9 +10,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
-// #endif
-
 
 /* --- _PyUnicodeWriter API ----------------------------------------------- */
 
@@ -36,7 +33,7 @@ public class _PyUnicodeWriter extends Pointer {
 
     public native PyObject buffer(); public native _PyUnicodeWriter buffer(PyObject setter);
     public native Pointer data(); public native _PyUnicodeWriter data(Pointer setter);
-    public native @Cast("PyUnicode_Kind") int kind(); public native _PyUnicodeWriter kind(int setter);
+    public native int kind(); public native _PyUnicodeWriter kind(int setter);
     public native @Cast("Py_UCS4") int maxchar(); public native _PyUnicodeWriter maxchar(int setter);
     public native @Cast("Py_ssize_t") long size(); public native _PyUnicodeWriter size(long setter);
     public native @Cast("Py_ssize_t") long pos(); public native _PyUnicodeWriter pos(long setter);

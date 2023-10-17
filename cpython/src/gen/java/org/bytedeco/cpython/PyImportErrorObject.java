@@ -36,4 +36,5 @@ public class PyImportErrorObject extends Pointer {
     public native PyObject msg(); public native PyImportErrorObject msg(PyObject setter);
     public native PyObject name(); public native PyImportErrorObject name(PyObject setter);
     public native PyObject path(); public native PyImportErrorObject path(PyObject setter);
+    public native PyObject name_from(); public native PyImportErrorObject name_from(PyObject setter);
 }

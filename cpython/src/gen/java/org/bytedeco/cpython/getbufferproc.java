@@ -11,8 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-// #endif  /* NEEDS_PY_IDENTIFIER */
-
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class getbufferproc extends FunctionPointer {
     static { Loader.load(); }

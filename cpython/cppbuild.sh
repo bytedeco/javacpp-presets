@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 OPENSSL=openssl-3.1.3
-CPYTHON_VERSION=3.11.5
+CPYTHON_VERSION=3.12.0
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
@@ -148,7 +148,7 @@ case $PLATFORM in
         cp -r Lib/* ../lib/
         cp -r Include/* PC/pyconfig.h ../include/
         unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
-        unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
+        # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
         ;;
     windows-x86_64)
         mkdir -p ../include ../lib ../libs ../bin
@@ -161,7 +161,7 @@ case $PLATFORM in
         cp -r Lib/* ../lib/
         cp -r Include/* PC/pyconfig.h ../include/
         unzip -o ../lib/ensurepip/_bundled/pip* -d ../lib/
-        unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
+        # unzip -o ../lib/ensurepip/_bundled/setuptools* -d ../lib/
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

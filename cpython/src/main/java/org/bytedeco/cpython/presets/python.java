@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Samuel Audet
+ * Copyright (C) 2018-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/pylifecycle.h",
                 "cpython/fileutils.h",
             },
-            link = "python3.11@.1.0!",
+            link = "python3.12@.1.0!",
             preload = {"ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
@@ -203,8 +203,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "macosx",  link = "python3.11!"),
-        @Platform(value = "windows", link = "python311"),
+        @Platform(value = "macosx",  link = "python3.12!"),
+        @Platform(value = "windows", link = "python312"),
     },
     target = "org.bytedeco.cpython",
     global = "org.bytedeco.cpython.global.python",
@@ -222,7 +222,7 @@ public class python implements InfoMapper {
             return packageFile;
         }
         File pythonFile = Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform());
-        File configDir = new File(pythonFile, "lib/python3.11/");
+        File configDir = new File(pythonFile, "lib/python3.12/");
         if (configDir.exists()) {
             String pythonPath = pythonFile.getAbsolutePath();
             Pattern pattern = Pattern.compile("'prefix': '(.*)'");
@@ -261,10 +261,10 @@ public class python implements InfoMapper {
         return pythonFile;
     }
 
-    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.11"), new File(f, "python3.11/lib-dynload"), new File(f, "python3.11/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
+    /** Returns {@code {f, new File(f, "site-packages"), new File(f, "python3.12"), new File(f, "python3.12/lib-dynload"), new File(f, "python3.12/site-packages")}} where {@code File f = new File(cachePackage(), "lib")}. */
     public static File[] cachePackages() throws IOException {
         File f = new File(cachePackage(), "lib");
-        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.11"), new File(f, "python3.11/lib-dynload"), new File(f, "python3.11/site-packages")};
+        return new File[] {f, new File(f, "site-packages"), new File(f, "python3.12"), new File(f, "python3.12/lib-dynload"), new File(f, "python3.12/site-packages")};
     }
 
     public void map(InfoMap infoMap) {
@@ -272,7 +272,7 @@ public class python implements InfoMapper {
                                                           "int PyAST_Check.*").skip())
 
                .put(new Info("COMPILER", "TIMEMODULE_LIB", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
-                             "copysign", "hypot", "timezone", "daylight", "tzname",
+                             "copysign", "hypot", "timezone", "daylight", "tzname", "__extension__", "__pragma",
                              "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented", "_Py_NULL", "Py_NO_INLINE",
                              "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T", "PY_SIZE_MAX",
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "_Py_HOT_FUNCTION", "_Py_NO_INLINE", "PyMODINIT_FUNC", "Py_VA_COPY",
@@ -318,7 +318,9 @@ public class python implements InfoMapper {
                              "defined(MS_WIN32) && !defined(HAVE_SNPRINTF)",
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
                              "!defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000",
+                             "defined(Py_LIMITED_API) && (Py_LIMITED_API+0 >= 0x030c0000 || defined(Py_REF_DEBUG))",
                              "defined(Py_REF_DEBUG)",
+                             "defined(Py_REF_DEBUG) && !defined(Py_LIMITED_API)",
                              "defined(Py_REF_DEBUG) && defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000",
                              "defined(Py_REF_DEBUG) && !(defined(Py_LIMITED_API) && Py_LIMITED_API+0 >= 0x030A0000)",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
@@ -327,7 +329,14 @@ public class python implements InfoMapper {
 
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX", "PY_TIMEOUT_MAX",
                              "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
-                             "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE").cppTypes("long long").translate(false))
+                             "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE",
+                             "PY_VECTORCALL_ARGUMENTS_OFFSET", "_Py_IMMORTAL_REFCNT").cppTypes("long long").translate(false))
+
+               .put(new Info("Py_INFINITY").cppTypes("double").translate(false))
+
+               .put(new Info("Py_MOD_MULTIPLE_INTERPRETERS_NOT_SUPPORTED",
+                             "Py_MOD_MULTIPLE_INTERPRETERS_SUPPORTED",
+                             "Py_MOD_PER_INTERPRETER_GIL_SUPPORTED").cppTypes("void*").translate(false))
 
                .put(new Info("PyHash_FuncDef").purify())
 
@@ -351,7 +360,7 @@ public class python implements InfoMapper {
                .put(new Info("_Py_memory_order", "PyThreadState::_preserve_36_ABI_1", "PyThreadState::_preserve_36_ABI_2",
                              "_PyGC_generation0", "_PyBytes_InsertThousandsGroupingLocale",
                              "_PyBytes_InsertThousandsGrouping", "_PyUnicode_DecodeUnicodeInternal",
-                             "_PyFloat_Repr", "_PyFloat_Digits", "_PyFloat_DigitsInit",
+                             "_PyFloat_Repr", "_PyFloat_Digits", "_PyFloat_DigitsInit", "_PyErr_SetImportErrorWithNameFrom",
                              "PySortWrapper_Type", "PyCmpWrapper_Type", "_PyGen_yf", "_PyAIterWrapper_New",
                              "_PyTime_FromTimeval", "_PyAIterWrapper_Type", "_PyErr_WarnUnawaitedCoroutine", "_PyErr_GetTopmostException",
                              "PyInit__imp", "_PyCoro_GetAwaitableIter", "_PyAsyncGenValueWrapperNew", "PyAsyncGen_ClearFreeLists",
@@ -363,7 +372,8 @@ public class python implements InfoMapper {
                              "_Py_asdl_seq_new", "_Py_asdl_int_seq_new", "_Py_isabs", "_PyTime_MIN", "_PyTime_MAX",
                              "_Py_InitializeFromWideArgs", "_Py_InitializeFromArgs", "_PyNode_FinalizeEndPos",
                              "_PyCodec_Forget", "_PyCode_InitAddressRange", "_PyDict_GetItemHint", "PyLineTable_InitAddressRange",
-                             "PyLineTable_NextAddressRange", "PyLineTable_PreviousAddressRange").skip())
+                             "PyLineTable_NextAddressRange", "PyLineTable_PreviousAddressRange", "PyUnicode_READY", "PyUnicode_IS_READY",
+                             "PyUnstable_Long_IsCompact", "PyUnstable_Long_CompactValue", "_PyInterpreterConfig_INIT", "_PyInterpreterConfig_LEGACY_INIT").skip())
 
                .put(new Info("mod_ty").valueTypes("_mod").pointerTypes("@ByPtrPtr _mod"))
                .put(new Info("stmt_ty").valueTypes("_stmt").pointerTypes("@ByPtrPtr _stmt"))

@@ -31,6 +31,6 @@ public class PyFutureFeatures extends Pointer {
         return new PyFutureFeatures((Pointer)this).offsetAddress(i);
     }
 
-    public native int ff_features(); public native PyFutureFeatures ff_features(int setter);      /* flags set by future statements */
-    public native int ff_lineno(); public native PyFutureFeatures ff_lineno(int setter);        /* line number of last future statement */
+    public native int ff_features(); public native PyFutureFeatures ff_features(int setter);                    /* flags set by future statements */
+    public native @ByRef _PyCompilerSrcLocation ff_location(); public native PyFutureFeatures ff_location(_PyCompilerSrcLocation setter); /* location of last future statement */
 }

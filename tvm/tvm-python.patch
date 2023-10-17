@@ -1,0 +1,90 @@
+diff --git a/python/tvm/relay/frontend/pytorch_utils.py b/python/tvm/relay/frontend/pytorch_utils.py
+index 7de1248bd..b83e6c632 100644
+--- a/python/tvm/relay/frontend/pytorch_utils.py
++++ b/python/tvm/relay/frontend/pytorch_utils.py
+@@ -36,7 +36,6 @@ def is_version_greater_than(ver):
+     than the one given as an argument.
+     """
+     import torch
+-    from distutils.version import LooseVersion
+ 
+     torch_ver = torch.__version__
+     # PT version numbers can include +cu[cuda version code]
+@@ -44,7 +43,7 @@ def is_version_greater_than(ver):
+     if "+cu" in torch_ver:
+         torch_ver = torch_ver.split("+cu")[0]
+ 
+-    return LooseVersion(torch_ver) > ver
++    return True
+ 
+ 
+ def getattr_attr_name(node):
+diff --git a/python/tvm/relay/op/contrib/ethosn.py b/python/tvm/relay/op/contrib/ethosn.py
+index 81534d48a..c5a9b6d58 100644
+--- a/python/tvm/relay/op/contrib/ethosn.py
++++ b/python/tvm/relay/op/contrib/ethosn.py
+@@ -17,7 +17,6 @@
+ # pylint: disable=invalid-name, unused-argument
+ """Arm(R) Ethos(TM)-N NPU supported operators."""
+ from enum import Enum
+-from distutils.version import LooseVersion
+ 
+ import tvm.ir
+ from tvm.relay import transform
+@@ -118,11 +117,6 @@ def partition_for_ethosn(mod, params=None, **opts):
+     """
+     api_version = ethosn_api_version()
+     supported_api_versions = ["3.2.0"]
+-    if all(api_version != LooseVersion(exp_ver) for exp_ver in supported_api_versions):
+-        raise ValueError(
+-            f"Driver stack version {api_version} is unsupported. "
+-            f"Please use version in {supported_api_versions}."
+-        )
+ 
+     if params:
+         mod["main"] = bind_params_by_name(mod["main"], params)
+@@ -433,8 +427,6 @@ def split(expr):
+     """Check if a split is supported by Ethos-N."""
+     if not ethosn_available():
+         return False
+-    if ethosn_api_version() == LooseVersion("3.0.1"):
+-        return False
+     if not _ethosn.split(expr):
+         return False
+ 
+diff --git a/python/tvm/relay/testing/tflite.py b/python/tvm/relay/testing/tflite.py
+index df9c0bcad..f95fc3c37 100644
+--- a/python/tvm/relay/testing/tflite.py
++++ b/python/tvm/relay/testing/tflite.py
+@@ -15,7 +15,6 @@
+ # specific language governing permissions and limitations
+ # under the License.
+ """Common utilities for creating TFLite models"""
+-from distutils.version import LooseVersion
+ import numpy as np
+ import pytest
+ import tflite.Model  # pylint: disable=wrong-import-position
+@@ -133,17 +132,12 @@ class TFLiteModel:
+         """
+         assert self.serial_model is not None, "TFLite model was not created."
+ 
+-        output_tolerance = None
+-        if tf.__version__ < LooseVersion("2.5.0"):
+-            output_tolerance = 1
+-            interpreter = tf.lite.Interpreter(model_content=self.serial_model)
+-        else:
+-            output_tolerance = 0
+-            interpreter = tf.lite.Interpreter(
+-                model_content=self.serial_model,
+-                experimental_op_resolver_type=tf.lite.experimental.OpResolverType.BUILTIN_REF,
+-                experimental_preserve_all_tensors=False,
+-            )
++        output_tolerance = 0
++        interpreter = tf.lite.Interpreter(
++            model_content=self.serial_model,
++            experimental_op_resolver_type=tf.lite.experimental.OpResolverType.BUILTIN_REF,
++            experimental_preserve_all_tensors=False,
++        )
+ 
+         interpreter.allocate_tensors()
+         input_details = interpreter.get_input_details()

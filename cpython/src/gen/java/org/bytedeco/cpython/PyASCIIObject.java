@@ -15,7 +15,7 @@ import static org.bytedeco.cpython.global.python.*;
 
 /* ASCII-only strings created through PyUnicode_New use the PyASCIIObject
    structure. state.ascii and state.compact are set, and the data
-   immediately follow the structure. utf8_length and wstr_length can be found
+   immediately follow the structure. utf8_length can be found
    in the length field; the utf8 pointer is equal to the data pointer. */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyASCIIObject extends Pointer {
@@ -44,8 +44,7 @@ public class PyASCIIObject extends Pointer {
          * kind = PyUnicode_1BYTE_KIND
          * compact = 1
          * ascii = 1
-         * ready = 1
-         * (length is the length of the utf8 and wstr strings)
+         * (length is the length of the utf8)
          * (data starts just after the structure)
          * (since ASCII is decoded from UTF-8, the utf8 string are the data)
 
@@ -56,76 +55,44 @@ public class PyASCIIObject extends Pointer {
          * kind = PyUnicode_1BYTE_KIND, PyUnicode_2BYTE_KIND or
            PyUnicode_4BYTE_KIND
          * compact = 1
-         * ready = 1
          * ascii = 0
          * utf8 is not shared with data
          * utf8_length = 0 if utf8 is NULL
-         * wstr is shared with data and wstr_length=length
-           if kind=PyUnicode_2BYTE_KIND and sizeof(wchar_t)=2
-           or if kind=PyUnicode_4BYTE_KIND and sizeof(wchar_t)=4
-         * wstr_length = 0 if wstr is NULL
          * (data starts just after the structure)
 
-       - legacy string, not ready:
-
-         * structure = PyUnicodeObject
-         * test: kind == PyUnicode_WCHAR_KIND
-         * length = 0 (use wstr_length)
-         * hash = -1
-         * kind = PyUnicode_WCHAR_KIND
-         * compact = 0
-         * ascii = 0
-         * ready = 0
-         * interned = SSTATE_NOT_INTERNED
-         * wstr is not NULL
-         * data.any is NULL
-         * utf8 is NULL
-         * utf8_length = 0
-
-       - legacy string, ready:
+       - legacy string:
 
          * structure = PyUnicodeObject structure
-         * test: !PyUnicode_IS_COMPACT(op) && kind != PyUnicode_WCHAR_KIND
+         * test: !PyUnicode_IS_COMPACT(op)
          * kind = PyUnicode_1BYTE_KIND, PyUnicode_2BYTE_KIND or
            PyUnicode_4BYTE_KIND
          * compact = 0
-         * ready = 1
          * data.any is not NULL
          * utf8 is shared and utf8_length = length with data.any if ascii = 1
          * utf8_length = 0 if utf8 is NULL
-         * wstr is shared with data.any and wstr_length = length
-           if kind=PyUnicode_2BYTE_KIND and sizeof(wchar_t)=2
-           or if kind=PyUnicode_4BYTE_KIND and sizeof(wchar_4)=4
-         * wstr_length = 0 if wstr is NULL
 
        Compact strings use only one memory block (structure + characters),
        whereas legacy strings use one block for the structure and one block
        for characters.
 
-       Legacy strings are created by PyUnicode_FromUnicode() and
-       PyUnicode_FromStringAndSize(NULL, size) functions. They become ready
-       when PyUnicode_READY() is called.
+       Legacy strings are created by subclasses of Unicode.
 
        See also _PyUnicode_CheckConsistency().
     */
     public native @ByRef PyObject ob_base(); public native PyASCIIObject ob_base(PyObject setter);
     public native @Cast("Py_ssize_t") long length(); public native PyASCIIObject length(long setter);          /* Number of code points in the string */
     public native @Cast("Py_hash_t") long hash(); public native PyASCIIObject hash(long setter);             /* Hash value; -1 if not set */
-        /*
-           SSTATE_NOT_INTERNED (0)
-           SSTATE_INTERNED_MORTAL (1)
-           SSTATE_INTERNED_IMMORTAL (2)
-
-           If interned != SSTATE_NOT_INTERNED, the two references from the
+        /* If interned is non-zero, the two references from the
            dictionary to this object are *not* counted in ob_refcnt.
-         */
+           The possible values here are:
+               0: Not Interned
+               1: Interned
+               2: Interned and Immortal
+               3: Interned, Immortal, and Static
+           This categorization allows the runtime to determine the right
+           cleanup mechanism at runtime shutdown. */
         @Name("state.interned") public native @Cast("unsigned int") @NoOffset int state_interned(); public native PyASCIIObject state_interned(int setter);
         /* Character size:
-
-           - PyUnicode_WCHAR_KIND (0):
-
-             * character type = wchar_t (16 or 32 bits, depending on the
-               platform)
 
            - PyUnicode_1BYTE_KIND (1):
 
@@ -157,13 +124,7 @@ public class PyASCIIObject extends Pointer {
            and the kind is PyUnicode_1BYTE_KIND. If ascii is set and compact is
            set, use the PyASCIIObject structure. */
         @Name("state.ascii") public native @Cast("unsigned int") @NoOffset int state_ascii(); public native PyASCIIObject state_ascii(int setter);
-        /* The ready flag indicates whether the object layout is initialized
-           completely. This means that this is either a compact object, or
-           the data pointer is filled out. The bit is redundant, and helps
-           to minimize the test in PyUnicode_IS_READY(). */
-        @Name("state.ready") public native @Cast("unsigned int") @NoOffset int state_ready(); public native PyASCIIObject state_ready(int setter);
         /* Padding to ensure that PyUnicode_DATA() is always aligned to
            4 bytes (see issue #19537 on m68k). */
         
-    public native @Cast("wchar_t*") Pointer wstr(); public native PyASCIIObject wstr(Pointer setter);              /* wchar_t representation (null-terminated) */
 }

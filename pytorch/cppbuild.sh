@@ -76,14 +76,14 @@ CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
-if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -101,7 +101,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0 pyyaml==6.0 typing_extensions==4.0.0
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 pyyaml==6.0.1 typing_extensions==4.8.0
 
 case $PLATFORM in
     linux-x86)
@@ -178,7 +178,7 @@ TORCH_API std::ostream& operator<<(std::ostream& stream, const nn::Module& modul
 ' torch/csrc/api/include/torch/nn/module.h
 sedinplace 's/char(\(.*\))/\1/g' torch/csrc/jit/serialization/pickler.h
 
-#USE_GLOO=0 USE_MKLDNN=0 \
+#USE_FBGEMM=0 USE_KINETO=0 USE_GLOO=0 USE_MKLDNN=0 \
 "$PYTHON_BIN_PATH" setup.py build
 
 rm -Rf ../lib

@@ -36,6 +36,4 @@ public class PyCompactUnicodeObject extends Pointer {
     public native @Cast("Py_ssize_t") long utf8_length(); public native PyCompactUnicodeObject utf8_length(long setter);     /* Number of bytes in utf8, excluding the
                                  * terminating \0. */
     public native @Cast("char*") BytePointer utf8(); public native PyCompactUnicodeObject utf8(BytePointer setter);                 /* UTF-8 representation (null-terminated) */
-    public native @Cast("Py_ssize_t") long wstr_length(); public native PyCompactUnicodeObject wstr_length(long setter);     /* Number of code points in wstr, possible
-                                 * surrogates count as two code points. */
 }

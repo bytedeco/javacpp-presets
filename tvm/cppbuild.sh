@@ -104,6 +104,8 @@ sedinplace 's/find_opencl(${USE_OPENCL})/find_package(OpenCL REQUIRED)/g' cmake/
 # https://github.com/apache/tvm/pull/6752
 #patch -Np1 < ../../../tvm.patch
 
+patch -Np1 < ../../../tvm-python.patch
+
 # Work around issues with llvm-config
 f=($LLVM_PATH/llvm-config*)
 if [[ -f $f ]]; then
@@ -118,15 +120,15 @@ if [[ -f "$LLVM_PATH/lib/LTO.lib" ]]; then
     ln -sf LTO.lib $LLVM_PATH/lib/LLVM.lib
 fi
 
-if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
     # setup.py won't pick up the right libgfortran.so without this
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:$SCIPY_PATH/lib/"
-    export PATH="$CPYTHON_PATH/lib/python3.11/bin/:$PATH"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PATH="$CPYTHON_PATH/lib/python3.12/bin/:$PATH"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -145,7 +147,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==59.1.0
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1
 
 case $PLATFORM in
     linux-x86_64)

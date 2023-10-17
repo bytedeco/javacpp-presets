@@ -81,7 +81,8 @@ public class onnx implements InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
-               .put(new Info("alignas", "PROTOC_EXPORT", "LIBPROTOBUF_EXPORT", "PROTOBUF_EXPORT", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
+               .put(new Info("alignas", "PROTOC_EXPORT", "LIBPROTOBUF_EXPORT", "PROTOBUF_EXPORT", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "PROTOBUF_NODISCARD",
+                             "PROTOBUF_ATTRIBUTE_STANDALONE_DEBUG", "PROTOBUF_ATTRIBUTE_INIT_PRIORITY1", "PROTOBUF_ATTRIBUTE_INIT_PRIORITY2", "PROTOBUF_TC_PARAM_DECL",
                              "PROTOBUF_MUSTTAIL", "PROTOBUF_TAILCALL", "PROTOBUF_NO_THREAD_SAFETY_ANALYSIS", "PROTOBUF_COLD", "PROTOBUF_THREAD_LOCAL", "PROTOBUF_CONSTINIT",
                              "PROTOBUF_ATTRIBUTE_NO_DESTROY", "PROTOBUF_ATTRIBUTE_INIT_PRIORITY", "PROTOBUF_PRAGMA_INIT_SEG", "PROTOBUF_ATTRIBUTE_WEAK",
                              "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_ALWAYS_INLINE", "PROTOBUF_NOINLINE", "PROTOBUF_NDEBUG_INLINE", "PROTOBUF_RETURNS_NONNULL",
@@ -89,7 +90,7 @@ public class onnx implements InfoMapper {
                              "PROTOBUF_EXPORT_TEMPLATE_DEFINE", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_FUNC_ALIGN", "GOOGLE_ATTRIBUTE_NOINLINE",
                              "GOOGLE_PREDICT_TRUE", "GOOGLE_PREDICT_FALSE", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_ATTRIBUTE_RETURNS_NONNULL",
                              "ONNX_UNUSED", "ONNX_API", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC", "ONNX_IMPORT", "ONNX_EXPORT").cppTypes().annotations())
-               .put(new Info("GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER", "defined(_MSC_VER) && (_MSC_VER < 1600)").define(false))
+               .put(new Info("PROTOBUF_FORCE_COPY_IN_SWAP", "GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER", "defined(_MSC_VER) && (_MSC_VER < 1600)").define(false))
 
                .put(new Info("PROTOBUF_DEPRECATED").cppText("#define PROTOBUF_DEPRECATED DEPRECATED").cppTypes())
                .put(new Info("PROTOBUF_DEPRECATED_ENUM").cppText("#define PROTOBUF_DEPRECATED_ENUM DEPRECATED").cppTypes())
@@ -139,6 +140,7 @@ public class onnx implements InfoMapper {
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::FindAllExtensions", "google::protobuf::Map", "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField",
                              "google::protobuf::arena_metrics::EnableArenaMetrics", "google::protobuf::io::EpsCopyOutputStream", "google::protobuf::internal::DescriptorTable",
+                             "google::protobuf::internal::ExplicitlyConstructedArenaString",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",

@@ -13,8 +13,8 @@ export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export MAX_JOBS=$MAKEJ
 
 export ONNX=1.14.1
-export PROTO=3.17.3
-export PYBIND=2.10.1
+export PROTO=3.20.3
+export PYBIND=2.11.0
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
@@ -53,13 +53,13 @@ fi
 
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
 
-if [[ -f "$CPYTHON_PATH/include/python3.11/Python.h" ]]; then
+if [[ -f "$CPYTHON_PATH/include/python3.12/Python.h" ]]; then
     export LD_LIBRARY_PATH="$CPYTHON_PATH/lib/"
-    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.11"
-    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.11/"
-    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.11/"
-    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.11/site-packages/"
-    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.11/site-packages/pip/_vendor/certifi/cacert.pem"
+    export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.12"
+    export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.12/"
+    export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.12/"
+    export PYTHON_INSTALL_PATH="$INSTALL_PATH/lib/python3.12/site-packages/"
+    export SSL_CERT_FILE="$CPYTHON_PATH/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem"
     chmod +x "$PYTHON_BIN_PATH"
 elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
     CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -108,7 +108,8 @@ sedinplace 's/if WINDOWS:/if False:/g' setup.py
 sedinplace '/if platform.architecture/{N;N;N;d;}' setup.py
 sedinplace "/setup_requires.append('pytest-runner')/d" setup.py
 export CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF -DProtobuf_USE_STATIC_LIBS=ON -DONNX_USE_LITE_PROTO=ON"
-"$PYTHON_BIN_PATH" setup.py --quiet build
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 protobuf==$PROTO
+$PYTHON_BIN_PATH -m pip install -e . || true
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters ../include/onnx/shape_inference
 

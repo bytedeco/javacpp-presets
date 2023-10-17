@@ -33,8 +33,6 @@ public class PyAsyncGenObject extends Pointer {
     }
 
     public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject setter);
-    /* The code object backing the generator */
-    public native PyCodeObject ag_code(); public native PyAsyncGenObject ag_code(PyCodeObject setter);
     /* List of weak reference. */
     public native PyObject ag_weakreflist(); public native PyAsyncGenObject ag_weakreflist(PyObject setter);
     /* Name of the generator. */
@@ -50,4 +48,5 @@ public class PyAsyncGenObject extends Pointer {
     public native byte ag_frame_state(); public native PyAsyncGenObject ag_frame_state(byte setter);
     public native PyObject ag_iframe(int i); public native PyAsyncGenObject ag_iframe(int i, PyObject setter);
     @MemberGetter public native @Cast("PyObject**") PointerPointer ag_iframe();
+
 }

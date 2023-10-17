@@ -39,7 +39,10 @@ public class PyDictObject extends Pointer {
 
     /* Dictionary version: globally unique, value change each time
        the dictionary is modified */
-    public native @Cast("uint64_t") long ma_version_tag(); public native PyDictObject ma_version_tag(long setter);
+// #ifdef Py_BUILD_CORE
+// #else
+    public native @Cast("uint64_t") @Deprecated long ma_version_tag(); public native PyDictObject ma_version_tag(long setter);
+// #endif
 
     public native PyDictKeysObject ma_keys(); public native PyDictObject ma_keys(PyDictKeysObject setter);
 

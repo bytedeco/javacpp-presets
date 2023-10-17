@@ -11,24 +11,6 @@ import static org.bytedeco.javacpp.presets.javacpp.*;
 import static org.bytedeco.cpython.global.python.*;
 
 
-/* Long integer representation.
-   The absolute value of a number is equal to
-        SUM(for i=0 through abs(ob_size)-1) ob_digit[i] * 2**(SHIFT*i)
-   Negative numbers are represented with ob_size < 0;
-   zero is represented by ob_size == 0.
-   In a normalized number, ob_digit[abs(ob_size)-1] (the most significant
-   digit) is never zero.  Also, in all cases, for all valid i,
-        0 <= ob_digit[i] <= MASK.
-   The allocation function takes care of allocating extra memory
-   so that ob_digit[0] ... ob_digit[abs(ob_size)-1] are actually available.
-   We always allocate memory for at least one digit, so accessing ob_digit[0]
-   is always safe. However, in the case ob_size == 0, the contents of
-   ob_digit[0] may be undefined.
-
-   CAUTION:  Generic code manipulating subtypes of PyVarObject has to
-   aware that ints abuse  ob_size's sign bit.
-*/
-
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class _longobject extends Pointer {
     static { Loader.load(); }
@@ -47,7 +29,6 @@ public class _longobject extends Pointer {
         return new _longobject((Pointer)this).offsetAddress(i);
     }
 
-    public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject setter);
-    public native @Cast("digit") int ob_digit(int i); public native _longobject ob_digit(int i, int setter);
-    @MemberGetter public native @Cast("digit*") IntPointer ob_digit();
+    public native @ByRef PyObject ob_base(); public native _longobject ob_base(PyObject setter);
+    public native @ByRef _PyLongValue long_value(); public native _longobject long_value(_PyLongValue setter);
 }

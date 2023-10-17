@@ -54,6 +54,7 @@ public class PyFunctionObject extends Pointer {
     public native PyObject func_weakreflist(); public native PyFunctionObject func_weakreflist(PyObject setter); /* List of weak references */
     public native PyObject func_module(); public native PyFunctionObject func_module(PyObject setter);      /* The __module__ attribute, can be anything */
     public native PyObject func_annotations(); public native PyFunctionObject func_annotations(PyObject setter); /* Annotations, a dict or NULL */
+    public native PyObject func_typeparams(); public native PyFunctionObject func_typeparams(PyObject setter);  /* Tuple of active type variables or NULL */
     public native vectorcallfunc vectorcall(); public native PyFunctionObject vectorcall(vectorcallfunc setter);
     /* Version number for use by specializer.
      * Can set to non-zero when we want to specialize.
@@ -61,7 +62,8 @@ public class PyFunctionObject extends Pointer {
      *     defaults
      *     kwdefaults (only if the object changes, not the contents of the dict)
      *     code
-     *     annotations */
+     *     annotations
+     *     vectorcall function pointer */
     public native @Cast("uint32_t") int func_version(); public native PyFunctionObject func_version(int setter);
 
     /* Invariant:

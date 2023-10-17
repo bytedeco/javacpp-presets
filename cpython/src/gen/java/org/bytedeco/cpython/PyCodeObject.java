@@ -58,8 +58,6 @@ public class PyCodeObject extends Pointer {
     public native PyObject co_exceptiontable(); public native PyCodeObject co_exceptiontable(PyObject setter);   /* Byte string encoding exception handling  \
                                       table */
     public native int co_flags(); public native PyCodeObject co_flags(int setter);                  /* CO_..., see below */
-    public native short co_warmup(); public native PyCodeObject co_warmup(short setter);                 /* Warmup counter for quickening */
-    public native short _co_linearray_entry_size(); public native PyCodeObject _co_linearray_entry_size(short setter);  /* Size of each entry in _co_linearray */
 
     /* The rest are not so impactful on performance. */
     public native int co_argcount(); public native PyCodeObject co_argcount(int setter);              /* #arguments, except *args */
@@ -70,12 +68,12 @@ public class PyCodeObject extends Pointer {
 
     /* redundant values (derived from co_localsplusnames and                   \
        co_localspluskinds) */
-    public native int co_nlocalsplus(); public native PyCodeObject co_nlocalsplus(int setter);           /* number of local + cell + free variables   \
-                                  */
+    public native int co_nlocalsplus(); public native PyCodeObject co_nlocalsplus(int setter);           /* number of local + cell + free variables */
+    public native int co_framesize(); public native PyCodeObject co_framesize(int setter);             /* Size of frame in words */
     public native int co_nlocals(); public native PyCodeObject co_nlocals(int setter);               /* number of local variables */
-    public native int co_nplaincellvars(); public native PyCodeObject co_nplaincellvars(int setter);        /* number of non-arg cell variables */
     public native int co_ncellvars(); public native PyCodeObject co_ncellvars(int setter);             /* total number of cell variables */
     public native int co_nfreevars(); public native PyCodeObject co_nfreevars(int setter);             /* number of free variables */
+    public native @Cast("uint32_t") int co_version(); public native PyCodeObject co_version(int setter);          /* version number */
 
     public native PyObject co_localsplusnames(); public native PyCodeObject co_localsplusnames(PyObject setter); /* tuple mapping offsets to names */
     public native PyObject co_localspluskinds(); public native PyCodeObject co_localspluskinds(PyObject setter); /* Bytes mapping to local kinds (one byte    \
@@ -85,8 +83,9 @@ public class PyCodeObject extends Pointer {
     public native PyObject co_qualname(); public native PyCodeObject co_qualname(PyObject setter);        /* unicode (qualname, for reference) */
     public native PyObject co_linetable(); public native PyCodeObject co_linetable(PyObject setter);       /* bytes object that holds location info */
     public native PyObject co_weakreflist(); public native PyCodeObject co_weakreflist(PyObject setter);     /* to support weakrefs to code objects */
-    public native PyObject _co_code(); public native PyCodeObject _co_code(PyObject setter);           /* cached co_code object/attribute */
-    public native @Cast("char*") BytePointer _co_linearray(); public native PyCodeObject _co_linearray(BytePointer setter);          /* array of line offsets */
+    public native _PyCoCached _co_cached(); public native PyCodeObject _co_cached(_PyCoCached setter);      /* cached co_* attributes */
+    public native @Cast("uint64_t") long _co_instrumentation_version(); public native PyCodeObject _co_instrumentation_version(long setter); /* current instrumentation version */
+    public native _PyCoMonitoringData _co_monitoring(); public native PyCodeObject _co_monitoring(_PyCoMonitoringData setter); /* Monitoring data */
     public native int _co_firsttraceable(); public native PyCodeObject _co_firsttraceable(int setter);       /* index of first traceable instruction */
     /* Scratch space for extra data relating to the code object.               \
        Type is a void* to keep the format private in codeobject.c to force     \

@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.presets.javacpp.*;
 
 import static org.bytedeco.cpython.global.python.*;
-
+                                           
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyGenObject extends Pointer {
@@ -31,8 +31,6 @@ public class PyGenObject extends Pointer {
 
     /* The gi_ prefix is intended to remind of generator-iterator. */
     public native @ByRef PyObject ob_base(); public native PyGenObject ob_base(PyObject setter);
-    /* The code object backing the generator */
-    public native PyCodeObject gi_code(); public native PyGenObject gi_code(PyCodeObject setter);
     /* List of weak reference. */
     public native PyObject gi_weakreflist(); public native PyGenObject gi_weakreflist(PyObject setter);
     /* Name of the generator. */
@@ -48,4 +46,5 @@ public class PyGenObject extends Pointer {
     public native byte gi_frame_state(); public native PyGenObject gi_frame_state(byte setter);
     public native PyObject gi_iframe(int i); public native PyGenObject gi_iframe(int i, PyObject setter);
     @MemberGetter public native @Cast("PyObject**") PointerPointer gi_iframe();
+
 }
