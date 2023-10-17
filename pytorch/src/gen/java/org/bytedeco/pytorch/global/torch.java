@@ -58416,7 +58416,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <c10/util/Metaprogramming.h>
 // #include <c10/util/irange.h>
 @Namespace("at::native") public static native @Cast("bool") boolean nested_tensor_impl_is_contiguous(@Const NestedTensorImpl nt);
-@Namespace("at::native") public static native @Cast("int64_t") long get_numel_from_nested_size_tensor(@Const @ByRef Tensor tensor);
+
 // Targeting ../NestedTensorImpl.java
 
 
