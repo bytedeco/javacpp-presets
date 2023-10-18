@@ -329,6 +329,7 @@ public class TensorBase extends AbstractTensor {
   //              const because of the vast number of clients that
   //              rely on this.
   public native @Name("data_ptr<int8_t>") BytePointer data_ptr_char();
+  public native @Cast("uint8_t*") @Name("data_ptr<uint8_t>") BytePointer data_ptr_byte();
   public native @Name("data_ptr<int16_t>") ShortPointer data_ptr_short();
   public native @Name("data_ptr<int>") IntPointer data_ptr_int();
   public native @Cast("int64_t*") @Name("data_ptr<int64_t>") LongPointer data_ptr_long();

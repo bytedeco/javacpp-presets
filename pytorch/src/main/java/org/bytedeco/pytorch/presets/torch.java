@@ -1795,6 +1795,7 @@ public class torch implements LoadEnabled, InfoMapper {
                ))
                .put(new Info("c10::util::get_type_index<std::string>").javaNames("get_type_index_string"))
                .put(new Info("at::TensorBase::data_ptr<int8_t>").javaNames("data_ptr_char"))
+               .put(new Info("at::TensorBase::data_ptr<uint8_t>").javaNames("data_ptr_byte"))
                .put(new Info("at::TensorBase::data_ptr<int16_t>").javaNames("data_ptr_short"))
                .put(new Info("at::TensorBase::data_ptr<int>").javaNames("data_ptr_int"))
                .put(new Info("at::TensorBase::data_ptr<int64_t>").javaNames("data_ptr_long"))
