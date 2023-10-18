@@ -5,6 +5,7 @@ package org.bytedeco.pytorch.global;
 import org.bytedeco.pytorch.cuda.*;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Error;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;

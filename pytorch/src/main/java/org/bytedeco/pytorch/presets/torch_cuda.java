@@ -75,6 +75,7 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             .put(new Info().enumerate().friendly())
             .put(new Info().javaText("import org.bytedeco.pytorch.*;"))
+            .put(new Info().javaText("import org.bytedeco.pytorch.functions.*;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.Error;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.DeviceType;"))
             .put(new Info().javaText("import org.bytedeco.pytorch.global.torch.ScalarType;"))
@@ -105,7 +106,6 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
 
             //// Function pointers
             .put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
-            .put(new Info("c10::cuda::CUDACachingAllocator::CUDAAllocator::recordHistory", "c10::cuda::CUDACachingAllocator::recordHistory").skip()) // Until #720 solved
         ;
 
         //// Avoiding name clashes by skipping or renaming

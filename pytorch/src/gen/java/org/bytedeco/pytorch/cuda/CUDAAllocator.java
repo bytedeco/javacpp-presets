@@ -3,6 +3,7 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Error;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
@@ -55,7 +56,16 @@ public class CUDAAllocator extends Allocator {
   public native @SharedPtr Pointer getIpcDevPtr(@StdString BytePointer handle);
   public native @SharedPtr Pointer getIpcDevPtr(@StdString String handle);
   public native @Cast("bool") boolean isHistoryEnabled();
-  
+  public native void recordHistory(
+        @Cast("bool") boolean enabled,
+        GatheredContextSupplier context_recorder,
+        @Cast("size_t") long alloc_trace_max_entries,
+        RecordContext when);
+  public native void recordHistory(
+        @Cast("bool") boolean enabled,
+        GatheredContextSupplier context_recorder,
+        @Cast("size_t") long alloc_trace_max_entries,
+        @Cast("c10::cuda::CUDACachingAllocator::RecordContext") int when);
   public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") Pointer observer);
 
   public native void enablePeerAccess(int dev, int dev_to_access);
