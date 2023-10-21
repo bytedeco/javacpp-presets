@@ -267,7 +267,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ
         make install
         
@@ -417,7 +418,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-linux
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ
         make install
         
@@ -564,7 +566,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ
         make install
         
@@ -710,7 +713,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ
         make install
         
@@ -855,7 +859,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ
         make install
         
@@ -1000,7 +1005,8 @@ EOF
         make install
 		
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ
         make install
 		
@@ -1356,8 +1362,9 @@ EOF
         make -j $MAKEJ
         make install
         
-		cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=armv8-linux-gcc
+	cd ../../zimg-$ZIMG_VERSION
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=armv8-linux-gcc
         make -j $MAKEJ
         make install
 		
@@ -1711,8 +1718,9 @@ EOF
         make -j $MAKEJ
         make install
 		
-		cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=generic-gnu
+	cd ../../zimg-$ZIMG_VERSION
+ 	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --target=generic-gnu
         make -j $MAKEJ
         make install
 		
@@ -1840,8 +1848,9 @@ EOF
         make -j $MAKEJ
         make install
 		
-		cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic
+	cd ../../zimg-$ZIMG_VERSION
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic
         make -j $MAKEJ
         make install
 		
@@ -1978,7 +1987,8 @@ EOF
         make install
         
         cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-w64-mingw32
+	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
         
@@ -2114,8 +2124,9 @@ EOF
         make -j $MAKEJ
         make install
 		 
-		cd ../../zimg-$ZIMG_VERSION
-		./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-w64-mingw32
+	cd ../../zimg-$ZIMG_VERSION
+ 	bash autogen.sh
+	./configure --prefix=$INSTALL_PATH --enable-static --disable-shared --with-pic --host=x86_64-w64-mingw32
         make -j $MAKEJ
         make install
 		
