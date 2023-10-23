@@ -17,18 +17,18 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("torch::data::datasets::Dataset<torch::data::datasets::TensorDataset,torch::data::TensorExample>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorExampleDataset extends TensorExampleBatchDataset {
+@Name("torch::data::datasets::Dataset<javacpp::Dataset<torch::Tensor,torch::data::example::NoTarget>,torch::data::Example<torch::Tensor,torch::data::example::NoTarget> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class JavaTensorDatasetBase extends JavaTensorBatchDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TensorExampleDataset(Pointer p) { super(p); }
+    public JavaTensorDatasetBase(Pointer p) { super(p); }
 
 
   /** Returns the example at the given index. */
-  public native @ByVal @Cast("torch::data::datasets::Dataset<torch::data::datasets::TensorDataset,torch::data::TensorExample>::ExampleType*") Example get(@Cast("size_t") long index);
+  public native @ByVal @Cast("torch::data::datasets::Dataset<javacpp::Dataset<torch::Tensor,torch::data::example::NoTarget>,torch::data::Example<torch::Tensor,torch::data::example::NoTarget> >::ExampleType*") TensorExample get(@Cast("size_t") long index);
 
   /** Returns a batch of data.
    *  The default implementation calls {@code get()} for every requested index
    *  in the batch. */
-  public native @ByVal TensorExampleVector get_batch(@ByVal SizeTArrayRef request);
+  public native @ByVal TensorExampleVector get_batch(@ByVal SizeTArrayRef indices);
 }

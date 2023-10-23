@@ -16,8 +16,10 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
+ // namespace detail
 
-@Name("torch::data::datasets::BatchDataset<torch::data::datasets::MNIST,std::vector<torch::data::Example<> >,at::ArrayRef<size_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+/** A dataset that can yield data only in batches. */
+@Name("torch::data::datasets::BatchDataset<torch::data::datasets::MNIST,std::vector<torch::data::Example<torch::Tensor,torch::Tensor> >,at::ArrayRef<size_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTBatchDataset extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

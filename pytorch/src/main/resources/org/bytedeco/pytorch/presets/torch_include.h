@@ -1420,3 +1420,5 @@
 #include "torch/csrc/jit/frontend/script_type_parser.h"
 #include "torch/csrc/jit/serialization/unpickler.h"
 #include "torch/csrc/jit/serialization/pickle.h"
+
+#include "datasets.h"

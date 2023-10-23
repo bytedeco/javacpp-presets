@@ -18,16 +18,17 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 @Name("torch::data::datasets::BatchDataset<torch::data::datasets::TensorDataset,std::vector<torch::data::TensorExample> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class TensorExampleBatchDataset extends Pointer {
+public class TensorBatchDataset extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TensorExampleBatchDataset(Pointer p) { super(p); }
+    public TensorBatchDataset(Pointer p) { super(p); }
 
   @MemberGetter public static native @Cast("const bool") boolean is_stateful();
   public static final boolean is_stateful = is_stateful();
 
   /** Returns a batch of data given an index. */
   public native @ByVal TensorExampleVector get_batch(@ByVal SizeTArrayRef request);
+  public native @ByVal TensorExampleVector get_batch(@ByVal @Cast({"uint64_t*", "c10::ArrayRef<uint64_t>", "std::vector<uint64_t>&"}) @StdVector long... request);
 
   /** Returns the size of the dataset, or an empty optional if it is unsized. */
   public native @ByVal SizeTOptional size();

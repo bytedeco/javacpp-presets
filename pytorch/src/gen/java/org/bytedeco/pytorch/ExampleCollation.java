@@ -19,7 +19,7 @@ import static org.bytedeco.pytorch.global.torch.*;
 
 
 /** A transformation of a batch to a new batch. */
-@Name("torch::data::transforms::BatchTransform<std::vector<torch::data::Example<> >,torch::data::Example<> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::transforms::BatchTransform<std::vector<torch::data::Example<torch::Tensor,torch::Tensor> >,torch::data::Example<torch::Tensor,torch::Tensor> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleCollation extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

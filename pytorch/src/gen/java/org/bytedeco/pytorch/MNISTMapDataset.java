@@ -16,20 +16,23 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
+ // namespace detail
 
-@Name("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+/** A {@code MapDataset} is a dataset that applies a transform to a source dataset. */
+@Name("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTMapDataset extends MNISTMapBatchDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MNISTMapDataset(Pointer p) { super(p); }
 
 
-  public MNISTMapDataset(@ByVal MNIST dataset, @ByVal @Cast("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >::TransformType*") ExampleStack transform) { super((Pointer)null); allocate(dataset, transform); }
-  private native void allocate(@ByVal MNIST dataset, @ByVal @Cast("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >::TransformType*") ExampleStack transform);
+  public MNISTMapDataset(@ByVal MNIST dataset, @ByVal @Cast("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >::TransformType*") ExampleStack transform) { super((Pointer)null); allocate(dataset, transform); }
+  private native void allocate(@ByVal MNIST dataset, @ByVal @Cast("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >::TransformType*") ExampleStack transform);
 
   /** Gets a batch from the source dataset and applies the transform to it,
    *  returning the result. */
   public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal SizeTArrayRef indices);
+  public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal @Cast({"uint64_t*", "c10::ArrayRef<uint64_t>", "std::vector<uint64_t>&"}) @StdVector long... indices);
 
   /** Returns the size of the source dataset. */
   // NOLINTNEXTLINE(bugprone-exception-escape)

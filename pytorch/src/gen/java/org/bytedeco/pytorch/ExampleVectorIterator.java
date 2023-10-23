@@ -18,29 +18,29 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-@Name("torch::data::Iterator<c10::optional<std::vector<torch::data::Example<> > > >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
-public class ExampleVectorOptionalIterator extends Pointer {
+@Name("torch::data::Iterator<std::vector<torch::data::Example<torch::Tensor,torch::Tensor> > >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+public class ExampleVectorIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ExampleVectorOptionalIterator(Pointer p) { super(p); }
+    public ExampleVectorIterator(Pointer p) { super(p); }
 
   // Type aliases to make the class recognized as a proper iterator.
 
   /** Increments the iterator.
    *  Only permitted for valid iterators (not past the end). */
-  public native @ByRef @Name("operator ++") ExampleVectorOptionalIterator increment();
+  public native @ByRef @Name("operator ++") ExampleVectorIterator increment();
 
   /** Returns the current batch.
    *  Only permitted for valid iterators (not past the end). */
-  public native @ByRef @Name("operator *") ExampleVectorOptional multiply();
+  public native @ByRef @Name("operator *") ExampleVector multiply();
 
   /** Returns a pointer to the current batch.
    *  Only permitted for valid iterators (not past the end). */
-  public native @Name("operator ->") ExampleVectorOptional access();
+  public native @Name("operator ->") ExampleVector access();
 
   /** Compares two iterators for equality. */
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ExampleVectorOptionalIterator other);
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef ExampleVectorIterator other);
 
   /** Compares two iterators for inequality. */
-  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef ExampleVectorOptionalIterator other);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef ExampleVectorIterator other);
 }

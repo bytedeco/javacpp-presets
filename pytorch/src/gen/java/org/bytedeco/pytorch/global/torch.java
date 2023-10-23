@@ -206,16 +206,22 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../PointerPairOptional.java
 
 
-// Targeting ../ExampleVectorOptional.java
-
-
-// Targeting ../ExampleOptional.java
+// Targeting ../WeakStorageVectorOptional.java
 
 
 // Targeting ../BatchSizeOptional.java
 
 
-// Targeting ../WeakStorageVectorOptional.java
+// Targeting ../ExampleOptional.java
+
+
+// Targeting ../ExampleVectorOptional.java
+
+
+// Targeting ../TensorExampleOptional.java
+
+
+// Targeting ../TensorExampleVectorOptional.java
 
 
 // Targeting ../T_TensorTensor_TOptional.java
@@ -308,6 +314,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // Targeting ../DataPtrVector.java
 
 
+// Targeting ../WeakStorageVector.java
+
+
 // Targeting ../StringTensorDictItemVector.java
 
 
@@ -315,9 +324,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../StringSharedModuleDictItemVector.java
-
-
-// Targeting ../WeakStorageVector.java
 
 
 // Targeting ../BoolVector.java
@@ -435,6 +441,9 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 
 
 // Targeting ../TensorExampleVector.java
+
+
+// Targeting ../ExampleVector.java
 
 
 // Targeting ../EnumNameValue.java
@@ -62500,13 +62509,9 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../DataLoaderOptions.java
 
 
+// Targeting ../FullDataLoaderOptions.java
 
-/** Like {@code DataLoaderOptions}, but without any unconfigured state.
- *  {@code DataLoaderOptions} has some options that depend on other options
- *  ({@code max_jobs} => {@code 2 * workers}). In the spirit of properly using the C++ type
- *  system, {@code DataLoaderOptions} allows only setting values. To access values,
- *  you must create a {@code FullDataLoaderOptions} from a {@code DataLoaderOptions}
- *  instance, which will do any necessary coalescing. */
+
  // namespace data
  // namespace torch
 
@@ -62637,7 +62642,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../ExampleIterator.java
 
 
-// Targeting ../ExampleVectorOptionalIterator.java
+// Targeting ../ExampleVectorIterator.java
+
+
+// Targeting ../TensorExampleIterator.java
+
+
+// Targeting ../TensorExampleVectorIterator.java
 
 
  // namespace data
@@ -62742,10 +62753,49 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <type_traits>
 // #include <utility>
 // #include <vector>
+// Targeting ../MNISTRandomDataLoaderBase.java
+
+
 // Targeting ../ChunkRandomDataLoaderBase.java
 
 
-// Targeting ../MNISTRandomDataLoaderBase.java
+// Targeting ../JavaRandomDataLoaderBase.java
+
+
+// Targeting ../JavaDistributedRandomDataLoaderBase.java
+
+
+// Targeting ../JavaDistributedSequentialDataLoaderBase.java
+
+
+// Targeting ../JavaSequentialDataLoaderBase.java
+
+
+// Targeting ../JavaStreamDataLoaderBase.java
+
+
+// Targeting ../JavaStatefulDataLoaderBase.java
+
+
+// Targeting ../ChunkRandomTensorDataLoaderBase.java
+
+
+// Targeting ../JavaRandomTensorDataLoaderBase.java
+
+
+// Targeting ../JavaDistributedRandomTensorDataLoaderBase.java
+
+
+// Targeting ../JavaDistributedSequentialTensorDataLoaderBase.java
+
+
+// Targeting ../JavaSequentialTensorDataLoaderBase.java
+
+
+// Targeting ../JavaStreamTensorDataLoaderBase.java
+
+
+// Targeting ../JavaStatefulTensorDataLoaderBase.java
 
 
  // namespace data
@@ -62763,6 +62813,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <thread>
 // #include <utility>
 // Targeting ../ChunkRandomDataLoader.java
+
+
+// Targeting ../JavaStatefulDataLoader.java
+
+
+// Targeting ../ChunkRandomTensorDataLoader.java
+
+
+// Targeting ../JavaStatefulTensorDataLoader.java
 
 
  // namespace data
@@ -62785,6 +62844,36 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // #include <thread>
 // #include <utility>
 // Targeting ../MNISTRandomDataLoader.java
+
+
+// Targeting ../JavaRandomDataLoader.java
+
+
+// Targeting ../JavaDistributedRandomDataLoader.java
+
+
+// Targeting ../JavaDistributedSequentialDataLoader.java
+
+
+// Targeting ../JavaSequentialDataLoader.java
+
+
+// Targeting ../JavaStreamDataLoader.java
+
+
+// Targeting ../JavaRandomTensorDataLoader.java
+
+
+// Targeting ../JavaDistributedRandomTensorDataLoader.java
+
+
+// Targeting ../JavaDistributedSequentialTensorDataLoader.java
+
+
+// Targeting ../JavaSequentialTensorDataLoader.java
+
+
+// Targeting ../JavaStreamTensorDataLoader.java
 
 
  // namespace data
@@ -62862,6 +62951,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace data
  // namespace torch
 
+// Targeting ../MNISTBatchDataset.java
+
+
+// Targeting ../MNISTMapBatchDataset.java
+
+
+// Targeting ../TensorBatchDataset.java
+
+
 // Targeting ../ChunkBatchDataset.java
 
 
@@ -62871,19 +62969,43 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // Targeting ../ChunkMapBatchDataset.java
 
 
-// Targeting ../MNISTBatchDataset.java
+// Targeting ../JavaBatchDataset.java
 
 
-// Targeting ../MNISTMapBatchDataset.java
+// Targeting ../JavaStreamBatchDataset.java
 
 
-// Targeting ../TensorExampleBatchDataset.java
+// Targeting ../JavaStatefulBatchDataset.java
+
+
+// Targeting ../ChunkTensorBatchDataset.java
+
+
+// Targeting ../ChunkBatchSharedTensorBatchDataset.java
+
+
+// Targeting ../ChunkMapTensorBatchDataset.java
+
+
+// Targeting ../JavaTensorBatchDataset.java
+
+
+// Targeting ../JavaStreamTensorBatchDataset.java
+
+
+// Targeting ../JavaStatefulTensorBatchDataset.java
 
 
 // Targeting ../MNISTDataset.java
 
 
-// Targeting ../TensorExampleDataset.java
+// Targeting ../TensorDatasetBase.java
+
+
+// Targeting ../JavaDatasetBase.java
+
+
+// Targeting ../JavaTensorDatasetBase.java
 
 
 
@@ -62907,6 +63029,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  // namespace serialize
  // namespace torch
 // Targeting ../ChunkStatefulDataset.java
+
+
+// Targeting ../JavaStatefulDatasetBase.java
+
+
+// Targeting ../ChunkStatefulTensorDataset.java
+
+
+// Targeting ../JavaStatefulTensorDatasetBase.java
 
 
 
@@ -64431,6 +64562,9 @@ apis for specific fusers.
 // Targeting ../ChunkDataReader.java
 
 
+// Targeting ../ChunkTensorDataReader.java
+
+
 /** BatchDataBuffer manages a queue of UnwrappedBatchData. After a new chunk is
  *  loaded, BatchDataBuffer splits it into small batches and push them into the
  *  queue. When get_batch is called from data loader, it pops cached batches and
@@ -64441,6 +64575,9 @@ apis for specific fusers.
 
 
 // Targeting ../ChunkDataset.java
+
+
+// Targeting ../ChunkTensorDataset.java
 
 
  // namespace datasets
@@ -64461,10 +64598,13 @@ apis for specific fusers.
 // #include <type_traits>
 // #include <utility>
 
+// Targeting ../MNISTMapDataset.java
+
+
 // Targeting ../ChunkMapDataset.java
 
 
-// Targeting ../MNISTMapDataset.java
+// Targeting ../ChunkMapTensorDataset.java
 
 
 
@@ -64506,6 +64646,9 @@ apis for specific fusers.
 // Targeting ../ChunkSharedBatchDataset.java
 
 
+// Targeting ../ChunkSharedTensorBatchDataset.java
+
+
 
 /** Constructs a new {@code SharedBatchDataset} by creating a
  *  {@code shared_ptr<UnderlyingDatase>}. All arguments are forwarded to
@@ -64525,9 +64668,9 @@ apis for specific fusers.
 
 // #include <cstddef>
 // #include <vector>
+// Targeting ../TensorDataset.java
 
-/** A dataset of tensors.
- *  Stores a single tensor internally, which is then indexed inside {@code get()}. */
+
 
  // namespace datasets
  // namespace data
@@ -64556,6 +64699,9 @@ apis for specific fusers.
 // #include <utility>
 // #include <vector>
 // Targeting ../ExampleCollation.java
+
+
+// Targeting ../TensorExampleCollation.java
 
 
 
@@ -64636,9 +64782,9 @@ apis for specific fusers.
 // Targeting ../ExampleStack.java
 
 
+// Targeting ../TensorExampleStack.java
 
-/** A {@code Collation} for {@code Example<Tensor, NoTarget>} types that stacks all data
- *  tensors into one tensor. */
+
  // namespace transforms
  // namespace data
  // namespace torch
@@ -78058,6 +78204,36 @@ public static final String TORCH_VERSION =
 
  // namespace jit
  // namespace torch
+
+
+// Parsed from datasets.h
+
+/*
+  I don't think we can directly virtualize Dataset<...> because of CRTP in Dataset.
+
+  Because of issue #723, we cannot virtualize superclasses of javacpp::*Dataset, only javacpp::*Dataset.
+  So we redeclare/redefine virtual functions of parents in these classes, so that the JavaCPP peer classes implements
+  the logic to call the Java versions.
+*/
+// Targeting ../JavaDataset.java
+
+
+// Targeting ../JavaTensorDataset.java
+
+
+// Targeting ../JavaStreamDataset.java
+
+
+// Targeting ../JavaStreamTensorDataset.java
+
+
+// Targeting ../JavaStatefulDataset.java
+
+
+// Targeting ../JavaStatefulTensorDataset.java
+
+
+
 
 
 }
