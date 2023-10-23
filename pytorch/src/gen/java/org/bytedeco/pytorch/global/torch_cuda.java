@@ -751,7 +751,7 @@ manage their own state. There is only a single CUDA context/state.
 @Namespace("c10::cuda::CUDACachingAllocator") public static native void setAllocatorSettings(@StdString String env);
 
 // Size pretty-printer
-@Namespace("c10::cuda::CUDACachingAllocator") public static native @StdString BytePointer format_size(@Cast("uint64_t") long size);
+
 // Targeting ../cuda/CUDAAllocator.java
 
 
