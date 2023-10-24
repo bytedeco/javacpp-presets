@@ -109,6 +109,7 @@ if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH $TOOLS; then
     "$CPYTHON_HOST_PATH/bin/python3.12" -m crossenv "$PYTHON_BIN_PATH" crossenv
     source crossenv/bin/activate
     cross-expose cython
+    cross-pip install build pyproject_metadata
     chmod +x $CPYTHON_HOST_PATH/lib/python3.12/bin/*
     export PATH="$CPYTHON_HOST_PATH/lib/python3.12/bin/:$PATH"
     export PYTHON_BIN_PATH="python"
@@ -120,7 +121,18 @@ case $PLATFORM in
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        #ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" CFLAGS="-O2" "$PYTHON_BIN_PATH" -m pip install . --prefix $INSTALL_PATH
+        cp $INSTALL_PATH/../../meson_cross_file.txt.in ${INSTALL_PATH}/meson_cross_file.txt
+        echo "python = '${PYTHON_BIN_PATH}'" >> ${INSTALL_PATH}/meson_cross_file.txt
+        echo "c = 'aarch64-linux-gnu-gcc'" >> ${INSTALL_PATH}/meson_cross_file.txt
+        echo "cpp = 'aarch64-linux-gnu-g++'" >> ${INSTALL_PATH}/meson_cross_file.txt
+
+        MESON_ARGS="--cross-file ${INSTALL_PATH}/meson_cross_file.txt"
+        # -wnx flags mean: --wheel --no-isolation --skip-dependency-check
+        $PYTHON_BIN_PATH -m build -w -n -x \
+                -Cbuilddir=builddir \
+                -Csetup-args=${MESON_ARGS// / -Csetup-args=}
+
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
