@@ -392,7 +392,8 @@ public class torch implements LoadEnabled, InfoMapper {
                 .pointerTypes("LongArrayRefOptional", "@Cast({\"int64_t*\", \"c10::ArrayRef<int64_t>\", \"std::vector<int64_t>&\"}) @StdVector long...").define())
             .put(new Info("c10::optional<c10::ArrayRef<int64_t> >::swap").skip())
             .put(new Info("c10::optional<c10::ArrayRef<double> >", "c10::optional<at::ArrayRef<double> >",
-                "c10::OptionalArrayRef<double>").pointerTypes("DoubleArrayRefOptional").define())
+                "c10::OptionalArrayRef<double>")
+                .pointerTypes("DoubleArrayRefOptional", "@Cast({\"double*\", \"c10::ArrayRef<double>\", \"std::vector<double>&\"}) @StdVector double...").define())
             .put(new Info("c10::optional<c10::ArrayRef<c10::SymInt> >", "c10::optional<at::ArrayRef<c10::SymInt> >",
                 "c10::OptionalArrayRef<c10::SymInt>", "c10::OptionalSymIntArrayRef", "at::OptionalSymIntArrayRef", "c10::optional<c10::SymIntArrayRef>").pointerTypes("SymIntArrayRefOptional").define())
             .put(new Info("c10::optional<c10::Layout>", "c10::optional<at::Layout>").pointerTypes("LayoutOptional").define())
@@ -679,7 +680,6 @@ public class torch implements LoadEnabled, InfoMapper {
             new ArrayInfo("Long") // Warning : c10::IntArrayRef is a Java LongArrayRef and not a Java IntArrayRef
                                   .otherCppNames("c10::IntArrayRef", "torch::IntArrayRef", "at::IntArrayRef", "c10::OptionalArray<int64_t>", "c10::remove_symint<c10::SymIntArrayRef>::type")
                                   .itPointerType("LongPointer")
-                                  .otherPointerTypes("@Cast({\"int64_t*\", \"c10::ArrayRef<int64_t>\", \"std::vector<int64_t>&\"}) @StdVector long...")
                                   .elementTypes("int64_t", "jlong") // Order is important, since ArrayRef<long> and ArrayRef<long long> are incompatible, even though long == long long. And jlong is long long.
                                   .elementValueType("long"),
             new ArrayInfo("LongOptional").elementTypes("c10::optional<int64_t>"),
@@ -693,7 +693,7 @@ public class torch implements LoadEnabled, InfoMapper {
             new ArrayInfo("SymInt").otherCppNames("c10::SymIntArrayRef").elementTypes("c10::SymInt"),
             new ArrayInfo("SymNode").elementTypes("c10::SymNode", "c10::intrusive_ptr<c10::SymNodeImpl>"),
             new ArrayInfo("Symbol").elementTypes("c10::Symbol"),
-            new ArrayInfo("Tensor").otherCppNames("torch::TensorList", "at::ITensorListRef").elementTypes("torch::Tensor", "at::Tensor"),  // Warning: not a TensorList (List<Tensor>)
+            new ArrayInfo("Tensor").otherCppNames("torch::TensorList", "at::TensorList", "at::ITensorListRef").elementTypes("torch::Tensor", "at::Tensor"),  // Warning: not a TensorList (List<Tensor>)
             new ArrayInfo("TensorArg").elementTypes("torch::TensorArg", "at::TensorArg"),
             new ArrayInfo("TensorIndex").elementTypes("at::indexing::TensorIndex"),
             new ArrayInfo("TensorOptional").elementTypes("c10::optional<at::Tensor>", "c10::optional<torch::Tensor>", "c10::optional<torch::autograd::Variable>"),
@@ -2553,9 +2553,17 @@ public class torch implements LoadEnabled, InfoMapper {
                 cppNamesRIterator[n++] = cn + "::reverse_iterator";
                 cppNamesRIterator[n++] = cn + "::const_reverse_iterator";
             }
-            String[] pt = new String[otherPointerTypes.length + 1];
+
+            // Use converting constructor from std::vector when it works to allow passing java array literals
+            boolean noVariadicPointerType =
+                elementValueType.contains(" ") // No @ByVal
+             || elementValueType.equals("boolean"); // ArrayRef<bool> cannot be constructed from a std::vector<bool> bitfield.
+
+            String[] pt = new String[otherPointerTypes.length + (noVariadicPointerType ? 1 : 2)];
             pt[0] = baseJavaName + "ArrayRef";
             System.arraycopy(otherPointerTypes, 0, pt, 1, otherPointerTypes.length);
+            if (!noVariadicPointerType)
+                pt[otherPointerTypes.length + 1] = "@Cast({\"" + elementTypes[0] + "*\", \"" + cppNames[0] + "\", \"std::vector<" + elementTypes[0] + ">&\"}) @StdVector(\"" + elementTypes[0] + "\") " + elementValueType + "...";
             Info info = new Info(cppNames).pointerTypes(pt);
             if (baseJavaName.contains("@Cast")) info.cast();
             infoMap.put(info);

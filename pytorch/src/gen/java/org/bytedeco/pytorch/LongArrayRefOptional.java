@@ -23,7 +23,7 @@ public class LongArrayRefOptional extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongArrayRefOptional(Pointer p) { super(p); }
     public LongArrayRefOptional(LongArrayRef value) { this(); put(value); }
-    public LongArrayRefOptional(@Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... value) { this(); put(value); }
+    public LongArrayRefOptional(@Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... value) { this(); put(value); }
     public LongArrayRefOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef LongArrayRefOptional put(@ByRef LongArrayRefOptional x);
@@ -32,6 +32,6 @@ public class LongArrayRefOptional extends Pointer {
     public native void reset();
     public native @Name("value") @ByRef LongArrayRef get();
     @ValueSetter public native LongArrayRefOptional put(@ByRef LongArrayRef value);
-    @ValueSetter public native LongArrayRefOptional put(@ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... value);
+    @ValueSetter public native LongArrayRefOptional put(@ByRef @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... value);
 }
 

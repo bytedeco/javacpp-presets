@@ -31,4 +31,5 @@ public class JavaTensorDatasetBase extends JavaTensorBatchDataset {
    *  The default implementation calls {@code get()} for every requested index
    *  in the batch. */
   public native @ByVal TensorExampleVector get_batch(@ByVal SizeTArrayRef indices);
+  public native @ByVal TensorExampleVector get_batch(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector("size_t") long... indices);
 }

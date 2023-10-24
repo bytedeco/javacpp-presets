@@ -54,8 +54,8 @@ public class SymbolicShape extends Pointer {
 
   public SymbolicShape(@ByVal LongArrayRef dims) { super((Pointer)null); allocate(dims); }
   private native void allocate(@ByVal LongArrayRef dims);
-  public SymbolicShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims) { super((Pointer)null); allocate(dims); }
-  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... dims);
+  public SymbolicShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dims) { super((Pointer)null); allocate(dims); }
+  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dims);
 
   public native @ByVal @Name("operator []") ShapeSymbol get(@Cast("size_t") long i);
 

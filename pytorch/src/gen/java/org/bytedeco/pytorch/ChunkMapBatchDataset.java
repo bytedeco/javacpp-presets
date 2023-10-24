@@ -28,6 +28,7 @@ public class ChunkMapBatchDataset extends Pointer {
 
   /** Returns a batch of data given an index. */
   public native @ByVal ExampleVector get_batch(@ByVal SizeTArrayRef request);
+  public native @ByVal ExampleVector get_batch(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector("size_t") long... request);
 
   /** Returns the size of the dataset, or an empty optional if it is unsized. */
   public native @ByVal SizeTOptional size();

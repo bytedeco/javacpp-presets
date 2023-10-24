@@ -703,7 +703,7 @@ public class TensorImpl extends Pointer {
   // This is renamed to avoid breaking overload BC
   public native void generic_set_sizes_contiguous(@ByVal SymIntArrayRef sizes);
   public native void generic_set_sizes_contiguous(@ByVal LongArrayRef sizes);
-  public native void generic_set_sizes_contiguous(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
+  public native void generic_set_sizes_contiguous(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
 
   /**
    * Change the size at some dimension.  This DOES NOT update strides;
@@ -740,7 +740,7 @@ public class TensorImpl extends Pointer {
    * this is the responsibility of the caller
    */
   public native void set_sizes_contiguous(@ByVal LongArrayRef new_size);
-  public native void set_sizes_contiguous(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... new_size);
+  public native void set_sizes_contiguous(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... new_size);
 
   /**
    * Set the sizes and strides of a tensor.
@@ -757,12 +757,12 @@ public class TensorImpl extends Pointer {
         @ByVal LongArrayRef new_size,
         @ByVal LongArrayRef new_stride);
   public native void set_sizes_and_strides(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] new_size,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] new_stride,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_stride,
         @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional storage_offset);
   public native void set_sizes_and_strides(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] new_size,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... new_stride);
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] new_size,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... new_stride);
 
   /**
    * Set whether a tensor allows changes to its metadata (e.g. sizes / strides /
