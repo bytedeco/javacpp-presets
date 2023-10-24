@@ -34,9 +34,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class SampleJpeg {
-    static class dev_malloc extends tDevMalloc {
-        final static dev_malloc instance = new dev_malloc().retainReference();
+public class SampleJpegEncoder {
+    static class devMalloc extends tDevMalloc {
+        final static devMalloc instance = new devMalloc().retainReference();
 
         @Override
         public int call(PointerPointer pointerPointer, long l) {
@@ -44,8 +44,8 @@ public class SampleJpeg {
         }
     }
 
-    static class dev_free extends tDevFree {
-        final static dev_free instance = new dev_free().retainReference();
+    static class devFree extends tDevFree {
+        final static devFree instance = new devFree().retainReference();
 
         @Override
         public int call(Pointer pointer) {
@@ -53,8 +53,8 @@ public class SampleJpeg {
         }
     }
 
-    static class host_malloc extends tPinnedMalloc {
-        final static host_malloc instance = new host_malloc().retainReference();
+    static class hostMalloc extends tPinnedMalloc {
+        final static hostMalloc instance = new hostMalloc().retainReference();
 
         @Override
         public int call(PointerPointer pointerPointer, long l, int i) {
@@ -62,8 +62,8 @@ public class SampleJpeg {
         }
     }
 
-    static class host_free extends tPinnedFree {
-        final static host_free instance = new host_free().retainReference();
+    static class hostFree extends tPinnedFree {
+        final static hostFree instance = new hostFree().retainReference();
 
         @Override
         public int call(Pointer pointer) {
@@ -83,13 +83,13 @@ public class SampleJpeg {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int imageWidth = 1280;
         int imageHeight = 720;
 
         nvjpegDevAllocator_t devAllocator = new nvjpegDevAllocator_t();
         devAllocator.dev_malloc(devMalloc.instance);
-        devAllocator.dev_free(dev_free.instance);
+        devAllocator.dev_free(devFree.instance);
 
         nvjpegPinnedAllocator_t pinnedAllocator = new nvjpegPinnedAllocator_t();
         pinnedAllocator.pinned_malloc(hostMalloc.instance);
