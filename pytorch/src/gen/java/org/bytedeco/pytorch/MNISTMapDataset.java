@@ -32,7 +32,7 @@ public class MNISTMapDataset extends MNISTMapBatchDataset {
   /** Gets a batch from the source dataset and applies the transform to it,
    *  returning the result. */
   public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal SizeTArrayRef indices);
-  public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal @Cast({"uint64_t*", "c10::ArrayRef<uint64_t>", "std::vector<uint64_t>&"}) @StdVector long... indices);
+  public native @Name("get_batch") @ByVal Example get_batch_example(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector long... indices);
 
   /** Returns the size of the source dataset. */
   // NOLINTNEXTLINE(bugprone-exception-escape)

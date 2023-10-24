@@ -1210,7 +1210,7 @@ public class torch implements LoadEnabled, InfoMapper {
 //               .put(new Info("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >::OutputBatchType").pointerTypes("Example"))
             .put(new Info("torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >::get_batch")
                 .javaText("public native @Name(\"get_batch\") @ByVal Example get_batch_example(@ByVal SizeTArrayRef indices);\n" +
-                          "public native @Name(\"get_batch\") @ByVal Example get_batch_example(@ByVal @Cast({\"uint64_t*\", \"c10::ArrayRef<uint64_t>\", \"std::vector<uint64_t>&\"}) @StdVector long... indices);"))
+                          "public native @Name(\"get_batch\") @ByVal Example get_batch_example(@ByVal @Cast({\"size_t*\", \"c10::ArrayRef<size_t>\", \"std::vector<size_t>&\"}) @StdVector long... indices);"))
 
             // Simple implementation from tensor.h serving a dataset from a single tensor
             .put(new Info("torch::data::datasets::TensorDataset")) // Ensure proper ns resolution
@@ -1223,7 +1223,7 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("torch::data::datasets::Dataset<torch::data::datasets::TensorDataset,torch::data::TensorExample>::get_batch",
                 "torch::data::datasets::BatchDataset<torch::data::datasets::TensorDataset,std::vector<torch::data::TensorExample> >::get_batch")
                 .javaText("public native @ByVal TensorExampleVector get_batch(@ByVal SizeTArrayRef request);\n" +
-                          "public native @ByVal TensorExampleVector get_batch(@ByVal @Cast({\"uint64_t*\", \"c10::ArrayRef<uint64_t>\", \"std::vector<uint64_t>&\"}) @StdVector long... request);"))
+                          "public native @ByVal TensorExampleVector get_batch(@ByVal @Cast({\"size_t*\", \"c10::ArrayRef<size_t>\", \"std::vector<size_t>&\"}) @StdVector(\"size_t\") long... request);"))
         ;
 
         for (String[] ex : new String[][]{
@@ -1335,7 +1335,7 @@ public class torch implements LoadEnabled, InfoMapper {
                     template("torch::data::datasets::MapDataset", template("torch::data::datasets::SharedBatchDataset", template("torch::data::datasets::ChunkDataset", mangledChunkDataReader, "torch::data::samplers::RandomSampler", "torch::data::samplers::RandomSampler")), template("torch::data::transforms::Stack", example)) + "::BatchRequestType",
                     template("torch::data::datasets::BatchDataset", mangledJavaDataset, template("std::vector", example)) + "::BatchRequest",
                     template("torch::data::datasets::BatchDataset", template("javacpp::Dataset", ex[1], ex[2]), template("std::vector", example)) + "::BatchRequest"
-                ).pointerTypes("SizeTArrayRef", "@Cast({\"uint64_t*\", \"c10::ArrayRef<uint64_t>\", \"std::vector<uint64_t>&\"}) @StdVector long..."))
+                ).pointerTypes("SizeTArrayRef", "@Cast({\"size_t*\", \"c10::ArrayRef<size_t>\", \"std::vector<size_t>&\"}) @StdVector(\"size_t\") long..."))
                 .put(new Info(
                     template("torch::data::datasets::MapDataset", template("torch::data::datasets::SharedBatchDataset", template("torch::data::datasets::ChunkDataset", mangledChunkDataReader, "torch::data::samplers::RandomSampler", "torch::data::samplers::RandomSampler")), template("torch::data::transforms::Stack", example)) + "::get_batch"
                 ).javaText("public native @Name(\"get_batch\") @ByVal " + p + "ExampleOptional get_batch_example(@Cast(\"size_t\") long indices);"))
