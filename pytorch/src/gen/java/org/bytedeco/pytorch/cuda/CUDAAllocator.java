@@ -58,12 +58,12 @@ public class CUDAAllocator extends Allocator {
   public native @Cast("bool") boolean isHistoryEnabled();
   public native void recordHistory(
         @Cast("bool") boolean enabled,
-        GatheredContextSupplier context_recorder,
+        @ByVal @Cast("c10::cuda::CUDACachingAllocator::CreateContextFn*") Pointer context_recorder,
         @Cast("size_t") long alloc_trace_max_entries,
         RecordContext when);
   public native void recordHistory(
         @Cast("bool") boolean enabled,
-        GatheredContextSupplier context_recorder,
+        @ByVal @Cast("c10::cuda::CUDACachingAllocator::CreateContextFn*") Pointer context_recorder,
         @Cast("size_t") long alloc_trace_max_entries,
         @Cast("c10::cuda::CUDACachingAllocator::RecordContext") int when);
   public native void attachOutOfMemoryObserver(@ByVal @Cast("c10::cuda::CUDACachingAllocator::OutOfMemoryObserver*") Pointer observer);

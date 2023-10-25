@@ -105,7 +105,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("const std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>", "std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
 
             //// Function pointers
-            .put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
+            // Function pointer returning shared_ptr don't compile on windows
+            // "D:\a\javacpp-presets\javacpp-presets\pytorch\target\native\org\bytedeco\pytorch\windows-x86_64\jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
+            //.put(new Info("std::shared_ptr<c10::GatheredContext> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn").pointerTypes("GatheredContextSupplier").valueTypes("GatheredContextSupplier").skip())
         ;
 
         //// Avoiding name clashes by skipping or renaming
@@ -157,7 +159,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
                 "at::native::Descriptor<cudnnSpatialTransformerStruct,cudnnCreateSpatialTransformerDescriptor&,cudnnDestroySpatialTransformerDescriptor&>",
                 "at::native::Descriptor<cudnnTensorStruct,cudnnCreateTensorDescriptor&,cudnnDestroyTensorDescriptor&>",
 
-                "std::hash<c10::cuda::CUDAStream>"
+                "std::hash<c10::cuda::CUDAStream>",
+
+                "std::shared_ptr<c10::CreateContextFn> (*)()", "c10::cuda::CUDACachingAllocator::CreateContextFn"  // See comment for GatheredContextSupplier
 
             ).cast().pointerTypes("Pointer"))
 
