@@ -64220,6 +64220,12 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 // Targeting ../NamedJitModule.java
 
 
+// Targeting ../NamedTensor.java
+
+
+// Targeting ../NamedIValue.java
+
+
  // namespace detail
 // Targeting ../JitModule.java
 
@@ -64296,10 +64302,46 @@ apis for specific fusers.
 // Targeting ../named_module_iterator.java
 
 
+// Targeting ../parameter_iterator.java
+
+
+// Targeting ../named_parameter_iterator.java
+
+
+// Targeting ../attribute_iterator.java
+
+
+// Targeting ../named_attribute_iterator.java
+
+
+// Targeting ../buffer_iterator.java
+
+
+// Targeting ../named_buffer_iterator.java
+
+
 // Targeting ../module_list.java
 
 
 // Targeting ../named_module_list.java
+
+
+// Targeting ../parameter_list.java
+
+
+// Targeting ../named_parameter_list.java
+
+
+// Targeting ../attribute_list.java
+
+
+// Targeting ../named_attribute_list.java
+
+
+// Targeting ../buffer_list.java
+
+
+// Targeting ../named_buffer_list.java
 
 
 // Targeting ../ModulePolicy.java

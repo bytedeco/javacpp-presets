@@ -1123,7 +1123,10 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// Jit iterators
         for (String[] t : new String[][]{
-            {"Module", "JitModule", "torch::jit::Module"}
+            {"Module", "JitModule", "torch::jit::Module"},
+            {"Parameter", "Tensor", "torch::Tensor"},
+            {"Attribute", "IValue", "c10::IValue"},
+            {"Buffer", "Tensor", "torch::Tensor"}
         }) {
             infoMap.put(new Info(
                        "torch::jit::slot_list_impl<torch::jit::detail::" + t[0] + "Policy>",
