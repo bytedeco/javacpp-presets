@@ -46,8 +46,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             },
             link = { "cudart", "cusparse" },
             linkpath = {
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.1/lib/x64/",
-                "/usr/local/cuda-12.1/lib64/",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/lib/x64/",
+                "/usr/local/cuda-12.3/lib64/",
                 "/usr/local/cuda/lib64/",
                 "/usr/lib64/"
             }
