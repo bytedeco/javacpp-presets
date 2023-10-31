@@ -1581,6 +1581,7 @@
       </activation>
       <modules>
         <module>opencv</module>
+        <module>depthai</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
         <module>spinnaker</module>
