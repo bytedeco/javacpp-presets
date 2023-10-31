@@ -107,6 +107,28 @@ case $PLATFORM in
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdepthai-core.dylib
         ;;
+    windows-x86)
+        mkdir -p build
+        cd build
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        ninja -j $MAKEJ
+        cd ..
+        cp -a include/* ../include/
+        cp -a build/* ../lib/
+        ;;
+    windows-x86_64)
+        mkdir -p build
+        cd build
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_GRAPHICAL_EXAMPLES=OFF ..
+        ninja -j $MAKEJ
+        cd ..
+        cp -a include/* ../include/
+        cp -a build/* ../lib/
+        ;;	
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
