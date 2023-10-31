@@ -1645,6 +1645,7 @@
         </property>
       </activation>
       <modules>
+        <module>depthai</module>
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
