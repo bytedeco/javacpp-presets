@@ -108,10 +108,9 @@ case $PLATFORM in
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdepthai-core.dylib
         ;;
     windows-x86)
-        nmake -f win32/Makefile.msc zlib.lib
-        mkdir -p ../include ../lib
-        cp zconf.h zlib.h ../include/
-        cp zlib.lib ../lib/
+        CC="gcc -m32 -DWIN32" CXX="g++ -m64 -DWIN32" $CMAKE -DCMAKE_BUILD_TYPE=Release -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install
         ;;
     windows-x86_64)
         CC="gcc -m64 -DWIN32" CXX="g++ -m64 -DWIN32" $CMAKE -DCMAKE_BUILD_TYPE=Release -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
