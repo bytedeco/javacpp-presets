@@ -90,12 +90,13 @@ runs:
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
-          echo Installing CUDA, cuDNN, etc
+          echo Installing CUDA, cuDNN, nvCOMP, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
           curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.0/local_installers/cuda_12.3.0_545.84_windows.exe
           rem curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn_8.8.0.121_windows.exe
           python -m gdown.cli https://drive.google.com/uc?id=1-5QHvwDZC_1rhn5W6fRHNWicXRPtqt31
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
+          curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.4/local_installers/nvcomp_3.0.4_windows_12.x.zip
           cuda_11.8.0_522.06_windows.exe -s
           bash -c "rm -Rf 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8'"
           bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt' 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old'"
@@ -105,6 +106,7 @@ runs:
           rem cudnn_8.8.0.121_windows.exe -s
           unzip cudnn-windows-x86_64-8.9.5.29_cuda12-archive.zip
           unzip zlib123dllx64.zip
+          unzip nvcomp_3.0.4_windows_12.x.zip
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\bin\*.dll" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\include\*.h" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\lib\x64\*.lib" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
@@ -112,6 +114,9 @@ runs:
           move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
+          xcopy "include" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include" /e /s
+          move lib\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
+          move lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
 
           rem echo Applying hotfix to Visual Studio 2019 for CUDA
           rem curl -LO https://raw.githubusercontent.com/microsoft/STL/main/stl/inc/cmath

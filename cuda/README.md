@@ -18,6 +18,8 @@ To view the license for cuDNN included in these archives, click [here](https://d
 ### NVIDIA Collective Communications Library (NCCL)
 To view the license for NCCL included in these archives, click [here](https://github.com/NVIDIA/nccl/blob/master/LICENSE.txt)
 
+### NVIDIA nvCOMP
+To view the license for nvCOMP included in these archives, click [here](https://github.com/NVIDIA/nvcomp/blob/main/LICENSE)
 
 Introduction
 ------------
@@ -26,6 +28,7 @@ This directory contains the JavaCPP Presets module for:
  * CUDA 12.3.0  https://developer.nvidia.com/cuda-zone
  * cuDNN 8.9.5  https://developer.nvidia.com/cudnn
  * NCCL 2.18.5  https://developer.nvidia.com/nccl
+ * nvCOMP 3.0.3  https://developer.nvidia.com/nvcomp
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
