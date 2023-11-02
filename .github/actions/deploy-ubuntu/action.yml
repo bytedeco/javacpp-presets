@@ -145,7 +145,7 @@ runs:
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-devel-$NCCL.rpm
-        
+
           $SUDO rpm -i --force --ignorearch --nodeps $CUDA libcudnn*.rpm libnccl*.rpm
           rm -f *.rpm *.tgz *.txz *.tar.*
           pushd /var/cuda-repo-rhel8-12-3-local/; $SUDO rpm -i --force --ignorearch --nodeps cuda*.rpm libc*.rpm libn*.rpm; $SUDO rm *.rpm; popd
