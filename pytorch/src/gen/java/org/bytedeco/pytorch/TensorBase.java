@@ -328,6 +328,7 @@ public class TensorBase extends AbstractTensor {
   // TODO(#97856) Make this return a const pointer. This is currently
   //              const because of the vast number of clients that
   //              rely on this.
+  public native @Cast("bool*") @Name("data_ptr<bool>") BoolPointer data_ptr_bool();
   public native @Name("data_ptr<int8_t>") BytePointer data_ptr_char();
   public native @Cast("uint8_t*") @Name("data_ptr<uint8_t>") BytePointer data_ptr_byte();
   public native @Name("data_ptr<int16_t>") ShortPointer data_ptr_short();

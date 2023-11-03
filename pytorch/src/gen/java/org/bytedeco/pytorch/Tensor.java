@@ -155,6 +155,7 @@ public class Tensor extends TensorBase {
   public native @Name("item<int16_t>") short item_short();
 
   public native @Name("item<int>") int item_int();
+  public native @Name("item<int>") int item_byte();
 
   public native @Cast("int64_t") @Name("item<int64_t>") long item_long();
 

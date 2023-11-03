@@ -1958,6 +1958,7 @@ public class torch implements LoadEnabled, InfoMapper {
                    + "@Namespace(\"c10_complex_math\") public static native @ByVal @Name(\"pow<float,double>\") DoubleComplex pow(@Const @ByRef float x, @Const @ByRef DoubleComplex y);\n"
                ))
                .put(new Info("c10::util::get_type_index<std::string>").javaNames("get_type_index_string"))
+               .put(new Info("at::TensorBase::data_ptr<bool>").javaNames("data_ptr_bool"))
                .put(new Info("at::TensorBase::data_ptr<int8_t>").javaNames("data_ptr_char"))
                .put(new Info("at::TensorBase::data_ptr<uint8_t>").javaNames("data_ptr_byte"))
                .put(new Info("at::TensorBase::data_ptr<int16_t>").javaNames("data_ptr_short"))
@@ -1968,7 +1969,11 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("at::Tensor::item<bool>").javaNames("item_bool"))
                .put(new Info("at::Tensor::item<int8_t>").javaNames("item_char"))
                .put(new Info("at::Tensor::item<int16_t>").javaNames("item_short"))
-               .put(new Info("at::Tensor::item<int>").javaNames("item_int"))
+               // Since we don't have uint8 in Java, make item_byte an alias of item_int
+               .put(new Info("at::Tensor::item<int>").javaText(
+                   "public native @Name(\"item<int>\") int item_int();\n" +
+                   "public native @Name(\"item<int>\") int item_byte();"
+                   ))
                .put(new Info("at::Tensor::item<int64_t>").javaNames("item_long"))
                .put(new Info("at::Tensor::item<float>").javaNames("item_float"))
                .put(new Info("at::Tensor::item<double>").javaNames("item_double"))
