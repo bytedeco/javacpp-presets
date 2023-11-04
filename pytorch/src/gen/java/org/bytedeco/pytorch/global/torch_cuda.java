@@ -105,116 +105,6 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
  // namespace c10
 
 
-// Parsed from c10/core/impl/GPUTrace.h
-
-// #pragma once
-
-// #include <c10/core/impl/PyInterpreter.h>
-
- // namespace impl
- // namespace c10
-
-
-// Parsed from c10/cuda/impl/cuda_cmake_macros.h
-
-// #pragma once
-
-// Automatically generated header file for the C10 CUDA library.  Do not
-// include this file directly.  Instead, include c10/cuda/CUDAMacros.h
-
-// #define C10_CUDA_BUILD_SHARED_LIBS
-
-
-// Parsed from c10/cuda/CUDAMacros.h
-
-// #pragma once
-
-// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
-
-// We have not yet modified the AMD HIP build to generate this file so
-// we add an extra option to specifically ignore it.
-// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-// #include <c10/cuda/impl/cuda_cmake_macros.h>
-// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
-
-// #endif
-
-// See c10/macros/Export.h for a detailed explanation of what the function
-// of these macros are.  We need one set of macros for every separate library
-// we build.
-
-// #ifdef _WIN32
-// #else // _WIN32
-// #if defined(__GNUC__)
-// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
-// #else // defined(__GNUC__)
-// #define C10_CUDA_EXPORT
-// #endif // defined(__GNUC__)
-// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
-// #endif // _WIN32
-
-// This one is being used by libc10_cuda.so
-// #ifdef C10_CUDA_BUILD_MAIN_LIB
-// #define C10_CUDA_API C10_CUDA_EXPORT
-// #else
-// #define C10_CUDA_API C10_CUDA_IMPORT
-// #endif
-
-/**
- * The maximum number of GPUs that we recognizes.
- */
-public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
-
-
-// Parsed from c10/cuda/CUDADeviceAssertionHost.h
-
-// #pragma once
-
-// #include <c10/cuda/CUDAMacros.h>
-
-// #include <memory>
-// #include <mutex>
-// #include <string>
-// #include <vector>
-
-// #ifdef USE_CUDA
-// #define TORCH_USE_CUDA_DSA
-// #endif
-
-/** Number of assertion failure messages we can store. If this is too small
- *  threads will fail silently. */
-@MemberGetter public static native int C10_CUDA_DSA_ASSERTION_COUNT();
-@MemberGetter public static native int C10_CUDA_DSA_MAX_STR_LEN();
-// Targeting ../cuda/DeviceAssertionData.java
-
-
-// Targeting ../cuda/DeviceAssertionsData.java
-
-
-// Targeting ../cuda/CUDAKernelLaunchInfo.java
-
-
-// Targeting ../cuda/CUDAKernelLaunchRegistry.java
-
-
-
-
-
- // namespace cuda
- // namespace c10
-
-// Each kernel launched with TORCH_DSA_KERNEL_LAUNCH
-// requires the same input arguments. We introduce the following macro to
-// standardize these.
-// #define TORCH_DSA_KERNEL_ARGS
-//   [[maybe_unused]] c10::cuda::DeviceAssertionsData *const assertions_data,
-//       [[maybe_unused]] uint32_t assertion_caller_id
-
-// This macro can be used to pass the DSA arguments onward to another
-// function
-// #define TORCH_DSA_KERNEL_ARGS_PASS assertions_data, assertion_caller_id
-
-
 // Parsed from c10/cuda/CUDAStream.h
 
 // #pragma once
@@ -338,6 +228,199 @@ public static final int max_compile_time_stream_priorities = max_compile_time_st
  // namespace cuda
  // namespace c10
  // namespace std
+
+
+// Parsed from ATen/cuda/CUDAContext.h
+
+// #pragma once
+
+// #include <cstdint>
+
+// #include <cuda_runtime_api.h>
+// #include <cusparse.h>
+// #include <cublas_v2.h>
+
+// #ifdef CUDART_VERSION
+// #include <cusolverDn.h>
+// #endif
+
+// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
+// #include <hipsolver/hipsolver.h>
+// #endif
+
+// #include <ATen/core/ATenGeneral.h>
+// #include <ATen/Context.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/cuda/CUDAFunctions.h>
+// #include <c10/util/Logging.h>
+// #include <ATen/cuda/Exceptions.h>
+
+/*
+A common CUDA interface for ATen.
+
+This interface is distinct from CUDAHooks, which defines an interface that links
+to both CPU-only and CUDA builds. That interface is intended for runtime
+dispatch and should be used from files that are included in both CPU-only and
+CUDA builds.
+
+CUDAContext, on the other hand, should be preferred by files only included in
+CUDA builds. It is intended to expose CUDA functionality in a consistent
+manner.
+
+This means there is some overlap between the CUDAContext and CUDAHooks, but
+the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
+use CUDAHooks otherwise.
+
+Note that CUDAContext simply defines an interface with no associated class.
+It is expected that the modules whose functions compose this interface will
+manage their own state. There is only a single CUDA context/state.
+*/
+
+/**
+ * DEPRECATED: use device_count() instead
+ */
+@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
+
+/**
+ * CUDA is available if we compiled with CUDA, and there are one or more
+ * devices.  If we compiled with CUDA but there is a driver problem, etc.,
+ * this function will report CUDA is not available (rather than raise an error.)
+ */
+@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
+
+@Namespace("at::cuda") public static native Pointer getCurrentDeviceProperties();
+
+@Namespace("at::cuda") public static native int warp_size();
+
+@Namespace("at::cuda") public static native Pointer getDeviceProperties(@Cast("int64_t") long device);
+
+@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
+    @Cast("int64_t") long device,
+    @Cast("int64_t") long peer_device);
+
+@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
+
+/* Handles */
+@Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
+@Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
+
+@Namespace("at::cuda") public static native void clearCublasWorkspaces();
+
+// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
+@Namespace("at::cuda") public static native @Cast("cusolverDnHandle_t") Pointer getCurrentCUDASolverDnHandle();
+// #endif
+
+ // namespace at::cuda
+
+
+// Parsed from c10/core/impl/GPUTrace.h
+
+// #pragma once
+
+// #include <c10/core/impl/PyInterpreter.h>
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/cuda/CUDADeviceAssertionHost.h
+
+// #pragma once
+
+// #include <c10/cuda/CUDAMacros.h>
+
+// #include <memory>
+// #include <mutex>
+// #include <string>
+// #include <vector>
+
+// #ifdef USE_CUDA
+// #define TORCH_USE_CUDA_DSA
+// #endif
+
+/** Number of assertion failure messages we can store. If this is too small
+ *  threads will fail silently. */
+@MemberGetter public static native int C10_CUDA_DSA_ASSERTION_COUNT();
+@MemberGetter public static native int C10_CUDA_DSA_MAX_STR_LEN();
+// Targeting ../cuda/DeviceAssertionData.java
+
+
+// Targeting ../cuda/DeviceAssertionsData.java
+
+
+// Targeting ../cuda/CUDAKernelLaunchInfo.java
+
+
+// Targeting ../cuda/CUDAKernelLaunchRegistry.java
+
+
+
+
+
+ // namespace cuda
+ // namespace c10
+
+// Each kernel launched with TORCH_DSA_KERNEL_LAUNCH
+// requires the same input arguments. We introduce the following macro to
+// standardize these.
+// #define TORCH_DSA_KERNEL_ARGS
+//   [[maybe_unused]] c10::cuda::DeviceAssertionsData *const assertions_data,
+//       [[maybe_unused]] uint32_t assertion_caller_id
+
+// This macro can be used to pass the DSA arguments onward to another
+// function
+// #define TORCH_DSA_KERNEL_ARGS_PASS assertions_data, assertion_caller_id
+
+
+// Parsed from c10/cuda/CUDAMacros.h
+
+// #pragma once
+
+// #ifndef C10_USING_CUSTOM_GENERATED_MACROS
+
+// We have not yet modified the AMD HIP build to generate this file so
+// we add an extra option to specifically ignore it.
+// #ifndef C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+// #include <c10/cuda/impl/cuda_cmake_macros.h>
+// #endif // C10_CUDA_NO_CMAKE_CONFIGURE_FILE
+
+// #endif
+
+// See c10/macros/Export.h for a detailed explanation of what the function
+// of these macros are.  We need one set of macros for every separate library
+// we build.
+
+// #ifdef _WIN32
+// #else // _WIN32
+// #if defined(__GNUC__)
+// #define C10_CUDA_EXPORT __attribute__((__visibility__("default")))
+// #else // defined(__GNUC__)
+// #define C10_CUDA_EXPORT
+// #endif // defined(__GNUC__)
+// #define C10_CUDA_IMPORT C10_CUDA_EXPORT
+// #endif // _WIN32
+
+// This one is being used by libc10_cuda.so
+// #ifdef C10_CUDA_BUILD_MAIN_LIB
+// #define C10_CUDA_API C10_CUDA_EXPORT
+// #else
+// #define C10_CUDA_API C10_CUDA_IMPORT
+// #endif
+
+/**
+ * The maximum number of GPUs that we recognizes.
+ */
+public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
+
+
+// Parsed from c10/cuda/impl/cuda_cmake_macros.h
+
+// #pragma once
+
+// Automatically generated header file for the C10 CUDA library.  Do not
+// include this file directly.  Instead, include c10/cuda/CUDAMacros.h
+
+// #define C10_CUDA_BUILD_SHARED_LIBS
 
 
 // Parsed from ATen/cuda/Exceptions.h
@@ -497,89 +580,6 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //   } while (0)
 
 
-// Parsed from ATen/cuda/CUDAContext.h
-
-// #pragma once
-
-// #include <cstdint>
-
-// #include <cuda_runtime_api.h>
-// #include <cusparse.h>
-// #include <cublas_v2.h>
-
-// #ifdef CUDART_VERSION
-// #include <cusolverDn.h>
-// #endif
-
-// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
-// #include <hipsolver/hipsolver.h>
-// #endif
-
-// #include <ATen/core/ATenGeneral.h>
-// #include <ATen/Context.h>
-// #include <c10/cuda/CUDAStream.h>
-// #include <c10/cuda/CUDAFunctions.h>
-// #include <c10/util/Logging.h>
-// #include <ATen/cuda/Exceptions.h>
-
-/*
-A common CUDA interface for ATen.
-
-This interface is distinct from CUDAHooks, which defines an interface that links
-to both CPU-only and CUDA builds. That interface is intended for runtime
-dispatch and should be used from files that are included in both CPU-only and
-CUDA builds.
-
-CUDAContext, on the other hand, should be preferred by files only included in
-CUDA builds. It is intended to expose CUDA functionality in a consistent
-manner.
-
-This means there is some overlap between the CUDAContext and CUDAHooks, but
-the choice of which to use is simple: use CUDAContext when in a CUDA-only file,
-use CUDAHooks otherwise.
-
-Note that CUDAContext simply defines an interface with no associated class.
-It is expected that the modules whose functions compose this interface will
-manage their own state. There is only a single CUDA context/state.
-*/
-
-/**
- * DEPRECATED: use device_count() instead
- */
-@Namespace("at::cuda") public static native @Cast("int64_t") long getNumGPUs();
-
-/**
- * CUDA is available if we compiled with CUDA, and there are one or more
- * devices.  If we compiled with CUDA but there is a driver problem, etc.,
- * this function will report CUDA is not available (rather than raise an error.)
- */
-@Namespace("at::cuda") public static native @Cast("bool") boolean is_available();
-
-@Namespace("at::cuda") public static native Pointer getCurrentDeviceProperties();
-
-@Namespace("at::cuda") public static native int warp_size();
-
-@Namespace("at::cuda") public static native Pointer getDeviceProperties(@Cast("int64_t") long device);
-
-@Namespace("at::cuda") public static native @Cast("bool") boolean canDeviceAccessPeer(
-    @Cast("int64_t") long device,
-    @Cast("int64_t") long peer_device);
-
-@Namespace("at::cuda") public static native Allocator getCUDADeviceAllocator();
-
-/* Handles */
-@Namespace("at::cuda") public static native @Cast("cusparseHandle_t") Pointer getCurrentCUDASparseHandle();
-@Namespace("at::cuda") public static native @Cast("cublasHandle_t") Pointer getCurrentCUDABlasHandle();
-
-@Namespace("at::cuda") public static native void clearCublasWorkspaces();
-
-// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
-@Namespace("at::cuda") public static native @Cast("cusolverDnHandle_t") Pointer getCurrentCUDASolverDnHandle();
-// #endif
-
- // namespace at::cuda
-
-
 // Parsed from ATen/cudnn/cudnn-wrapper.h
 
 // #pragma once
@@ -612,17 +612,6 @@ manage their own state. There is only a single CUDA context/state.
 // Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
 
 
-// Parsed from ATen/cudnn/Handle.h
-
-// #pragma once
-
-// #include <ATen/cudnn/cudnn-wrapper.h>
-// #include <ATen/cuda/ATenCUDAGeneral.h>
-
-@Namespace("at::native") public static native @Cast("cudnnHandle_t") Pointer getCudnnHandle();
- // namespace at::native
-
-
 // Parsed from ATen/cudnn/Utils.h
 
 // #pragma once
@@ -639,6 +628,17 @@ manage their own state. There is only a single CUDA context/state.
 @Namespace("at::native") public static native @ByVal Tensor contiguousIfZeroInStrides(@Const @ByRef Tensor t);
 
 
+
+
+// Parsed from ATen/cudnn/Handle.h
+
+// #pragma once
+
+// #include <ATen/cudnn/cudnn-wrapper.h>
+// #include <ATen/cuda/ATenCUDAGeneral.h>
+
+@Namespace("at::native") public static native @Cast("cudnnHandle_t") Pointer getCudnnHandle();
+ // namespace at::native
 
 
 // Parsed from c10/cuda/CUDAGraphsC10Utils.h

@@ -16,7 +16,7 @@ import static org.bytedeco.openblas.global.openblas_nolapack.*;
 import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
- // namespace caffe2
+
 
 @Namespace("torch::jit") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class DeserializationStorageContext extends Pointer {

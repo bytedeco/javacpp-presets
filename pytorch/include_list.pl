@@ -29,7 +29,7 @@ sub flush($) {
 sub go {
     my $path = join ' ', @_;
 
-    my @inc = `g++ -I torch/csrc/api/include/ -I. -H $path -E 2>&1 > /dev/null`;
+    my @inc = `g++ -I. -I torch/csrc/api/include/ -H $path -E 2>&1 > /dev/null`;
     foreach my $i (@inc) {
         chomp $i;
         my ($depth, $f) = $i =~ /^(\.+)\s(.*\.h)$/;

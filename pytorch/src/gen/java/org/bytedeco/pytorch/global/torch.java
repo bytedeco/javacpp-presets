@@ -757,115 +757,6 @@ public class torch extends org.bytedeco.pytorch.presets.torch {
 // #endif
 
 
-// Parsed from c10/core/DeviceType.h
-
-// #pragma once
-
-// This is directly synchronized with caffe2/proto/caffe2.proto, but
-// doesn't require me to figure out how to get Protobuf headers into
-// ATen/core (which would require a lot more build system hacking.)
-// If you modify me, keep me synchronized with that file.
-
-// #include <c10/macros/Export.h>
-
-// #include <functional>
-// #include <ostream>
-
-// These contains all device types that also have a BackendComponent
-// and therefore participate in per-backend functionality dispatch keys.
-// This is most backends except PrivateUse2 and PrivateUse3
-// #define C10_FORALL_BACKEND_DEVICE_TYPES(_, extra)
-//   _(CPU, extra)
-//   _(CUDA, extra)
-//   _(HIP, extra)
-//   _(XLA, extra)
-//   _(MPS, extra)
-//   _(IPU, extra)
-//   _(XPU, extra)
-//   _(HPU, extra)
-//   _(VE, extra)
-//   _(Lazy, extra)
-//   _(Meta, extra)
-//   _(MTIA, extra)
-//   _(PrivateUse1, extra)
-
-@Namespace("c10") public enum DeviceType {
-  CPU((byte)(0)),
-  CUDA((byte)(1)), // CUDA.
-  MKLDNN((byte)(2)), // Reserved for explicit MKLDNN
-  OPENGL((byte)(3)), // OpenGL
-  OPENCL((byte)(4)), // OpenCL
-  IDEEP((byte)(5)), // IDEEP.
-  HIP((byte)(6)), // AMD HIP
-  FPGA((byte)(7)), // FPGA
-  ORT((byte)(8)), // ONNX Runtime / Microsoft
-  XLA((byte)(9)), // XLA / TPU
-  Vulkan((byte)(10)), // Vulkan
-  Metal((byte)(11)), // Metal
-  XPU((byte)(12)), // XPU
-  MPS((byte)(13)), // MPS
-  Meta((byte)(14)), // Meta (tensors with no data)
-  HPU((byte)(15)), // HPU / HABANA
-  VE((byte)(16)), // SX-Aurora / NEC
-  Lazy((byte)(17)), // Lazy Tensors
-  IPU((byte)(18)), // Graphcore IPU
-  MTIA((byte)(19)), // Meta training and inference devices
-  PrivateUse1((byte)(20)), // PrivateUse1 device
-  // NB: If you add more devices:
-  //  - Change the implementations of DeviceTypeName and isValidDeviceType
-  //    in DeviceType.cpp
-  //  - Change the number below
-  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(21));
-
-    public final byte value;
-    private DeviceType(byte v) { this.value = v; }
-    private DeviceType(DeviceType e) { this.value = e.value; }
-    public DeviceType intern() { for (DeviceType e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-@Namespace("c10") @MemberGetter public static native DeviceType kCPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kCUDA();
-@Namespace("c10") @MemberGetter public static native DeviceType kHIP();
-@Namespace("c10") @MemberGetter public static native DeviceType kFPGA();
-@Namespace("c10") @MemberGetter public static native DeviceType kORT();
-@Namespace("c10") @MemberGetter public static native DeviceType kXLA();
-@Namespace("c10") @MemberGetter public static native DeviceType kMPS();
-@Namespace("c10") @MemberGetter public static native DeviceType kMeta();
-@Namespace("c10") @MemberGetter public static native DeviceType kVulkan();
-@Namespace("c10") @MemberGetter public static native DeviceType kMetal();
-@Namespace("c10") @MemberGetter public static native DeviceType kXPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kHPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kVE();
-@Namespace("c10") @MemberGetter public static native DeviceType kLazy();
-@Namespace("c10") @MemberGetter public static native DeviceType kIPU();
-@Namespace("c10") @MemberGetter public static native DeviceType kMTIA();
-@Namespace("c10") @MemberGetter public static native DeviceType kPrivateUse1();
-
-// define explicit int constant
-@Namespace("c10") @MemberGetter public static native int COMPILE_TIME_MAX_DEVICE_TYPES();
-
-@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d, @Cast("bool") boolean lower_case/*=false*/);
-@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d);
-@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d, @Cast("bool") boolean lower_case/*=false*/);
-@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d);
-
-@Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(DeviceType d);
-@Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(@Cast("c10::DeviceType") byte d);
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, DeviceType type);
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Cast("c10::DeviceType") byte type);
-
-@Namespace("c10") public static native void register_privateuse1_backend(@StdString BytePointer backend_name);
-@Namespace("c10") public static native void register_privateuse1_backend(@StdString String backend_name);
-@Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend(@Cast("bool") boolean lower_case/*=true*/);
-@Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend();
-
- // namespace c10
- // namespace std
-
-
-
 // Parsed from c10/macros/Macros.h
 
 // #ifndef C10_MACROS_MACROS_H_
@@ -1290,6 +1181,193 @@ public static final int HAS_DEMANGLE = 0;
 // #endif
 
 // #endif // C10_MACROS_MACROS_H_
+
+
+// Parsed from c10/core/DeviceType.h
+
+// #pragma once
+
+// This is directly synchronized with caffe2/proto/caffe2.proto, but
+// doesn't require me to figure out how to get Protobuf headers into
+// ATen/core (which would require a lot more build system hacking.)
+// If you modify me, keep me synchronized with that file.
+
+// #include <c10/macros/Export.h>
+
+// #include <functional>
+// #include <ostream>
+
+// These contains all device types that also have a BackendComponent
+// and therefore participate in per-backend functionality dispatch keys.
+// This is most backends except PrivateUse2 and PrivateUse3
+// #define C10_FORALL_BACKEND_DEVICE_TYPES(_, extra)
+//   _(CPU, extra)
+//   _(CUDA, extra)
+//   _(HIP, extra)
+//   _(XLA, extra)
+//   _(MPS, extra)
+//   _(IPU, extra)
+//   _(XPU, extra)
+//   _(HPU, extra)
+//   _(VE, extra)
+//   _(Lazy, extra)
+//   _(Meta, extra)
+//   _(MTIA, extra)
+//   _(PrivateUse1, extra)
+
+@Namespace("c10") public enum DeviceType {
+  CPU((byte)(0)),
+  CUDA((byte)(1)), // CUDA.
+  MKLDNN((byte)(2)), // Reserved for explicit MKLDNN
+  OPENGL((byte)(3)), // OpenGL
+  OPENCL((byte)(4)), // OpenCL
+  IDEEP((byte)(5)), // IDEEP.
+  HIP((byte)(6)), // AMD HIP
+  FPGA((byte)(7)), // FPGA
+  ORT((byte)(8)), // ONNX Runtime / Microsoft
+  XLA((byte)(9)), // XLA / TPU
+  Vulkan((byte)(10)), // Vulkan
+  Metal((byte)(11)), // Metal
+  XPU((byte)(12)), // XPU
+  MPS((byte)(13)), // MPS
+  Meta((byte)(14)), // Meta (tensors with no data)
+  HPU((byte)(15)), // HPU / HABANA
+  VE((byte)(16)), // SX-Aurora / NEC
+  Lazy((byte)(17)), // Lazy Tensors
+  IPU((byte)(18)), // Graphcore IPU
+  MTIA((byte)(19)), // Meta training and inference devices
+  PrivateUse1((byte)(20)), // PrivateUse1 device
+  // NB: If you add more devices:
+  //  - Change the implementations of DeviceTypeName and isValidDeviceType
+  //    in DeviceType.cpp
+  //  - Change the number below
+  COMPILE_TIME_MAX_DEVICE_TYPES((byte)(21));
+
+    public final byte value;
+    private DeviceType(byte v) { this.value = v; }
+    private DeviceType(DeviceType e) { this.value = e.value; }
+    public DeviceType intern() { for (DeviceType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10") @MemberGetter public static native DeviceType kCPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kCUDA();
+@Namespace("c10") @MemberGetter public static native DeviceType kHIP();
+@Namespace("c10") @MemberGetter public static native DeviceType kFPGA();
+@Namespace("c10") @MemberGetter public static native DeviceType kORT();
+@Namespace("c10") @MemberGetter public static native DeviceType kXLA();
+@Namespace("c10") @MemberGetter public static native DeviceType kMPS();
+@Namespace("c10") @MemberGetter public static native DeviceType kMeta();
+@Namespace("c10") @MemberGetter public static native DeviceType kVulkan();
+@Namespace("c10") @MemberGetter public static native DeviceType kMetal();
+@Namespace("c10") @MemberGetter public static native DeviceType kXPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kHPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kVE();
+@Namespace("c10") @MemberGetter public static native DeviceType kLazy();
+@Namespace("c10") @MemberGetter public static native DeviceType kIPU();
+@Namespace("c10") @MemberGetter public static native DeviceType kMTIA();
+@Namespace("c10") @MemberGetter public static native DeviceType kPrivateUse1();
+
+// define explicit int constant
+@Namespace("c10") @MemberGetter public static native int COMPILE_TIME_MAX_DEVICE_TYPES();
+
+@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d, @Cast("bool") boolean lower_case/*=false*/);
+@Namespace("c10") public static native @StdString BytePointer DeviceTypeName(DeviceType d);
+@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d, @Cast("bool") boolean lower_case/*=false*/);
+@Namespace("c10") public static native @StdString String DeviceTypeName(@Cast("c10::DeviceType") byte d);
+
+@Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(DeviceType d);
+@Namespace("c10") public static native @Cast("bool") boolean isValidDeviceType(@Cast("c10::DeviceType") byte d);
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, DeviceType type);
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer stream, @Cast("c10::DeviceType") byte type);
+
+@Namespace("c10") public static native void register_privateuse1_backend(@StdString BytePointer backend_name);
+@Namespace("c10") public static native void register_privateuse1_backend(@StdString String backend_name);
+@Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend(@Cast("bool") boolean lower_case/*=true*/);
+@Namespace("c10") public static native @StdString BytePointer get_privateuse1_backend();
+
+ // namespace c10
+ // namespace std
+
+
+
+// Parsed from c10/util/Deprecated.h
+
+// #pragma once
+
+/**
+ * This file provides portable macros for marking declarations
+ * as deprecated.  You should generally use C10_DEPRECATED,
+ * except when marking 'using' declarations as deprecated,
+ * in which case you should use C10_DEFINE_DEPRECATED_USING
+ * (due to portability concerns).
+ */
+
+// Sample usage:
+//
+//    C10_DEPRECATED void bad_func();
+//    struct C10_DEPRECATED BadStruct {
+//      ...
+//    };
+
+// NB: __cplusplus doesn't work for MSVC, so for now MSVC always uses
+// the "__declspec(deprecated)" implementation and not the C++14
+// "[[deprecated]]" attribute. We tried enabling "[[deprecated]]" for C++14 on
+// MSVC, but ran into issues with some older MSVC versions.
+// #if (defined(__cplusplus) && __cplusplus >= 201402L)
+// #define C10_DEPRECATED [[deprecated]]
+// #define C10_DEPRECATED_MESSAGE(message) [[deprecated(message)]]
+// #elif defined(__GNUC__)
+// #define C10_DEPRECATED __attribute__((deprecated))
+// TODO Is there some way to implement this?
+// #define C10_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
+
+// #elif defined(_MSC_VER)
+// #else
+// #warning "You need to implement C10_DEPRECATED for this compiler"
+// #define C10_DEPRECATED
+// #endif
+
+// Sample usage:
+//
+//    C10_DEFINE_DEPRECATED_USING(BadType, int)
+//
+//   which is the portable version of
+//
+//    using BadType [[deprecated]] = int;
+
+// technically [[deprecated]] syntax is from c++14 standard, but it works in
+// many compilers.
+// #if defined(__has_cpp_attribute)
+// #if __has_cpp_attribute(deprecated) && !defined(__CUDACC__)
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName [[deprecated]] = TypeThingy;
+// #endif
+// #endif
+
+// #if defined(_MSC_VER)
+// #endif
+
+// #if !defined(C10_DEFINE_DEPRECATED_USING) && defined(__GNUC__)
+// nvcc has a bug where it doesn't understand __attribute__((deprecated))
+// declarations even when the host compiler supports it. We'll only use this gcc
+// attribute when not cuda, and when using a GCC compiler that doesn't support
+// the c++14 syntax we checked for above (available in __GNUC__ >= 5)
+// #if !defined(__CUDACC__)
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName __attribute__((deprecated)) = TypeThingy;
+// #else
+// using cuda + gcc < 5, neither deprecated syntax is available so turning off.
+// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
+//   using TypeName = TypeThingy;
+// #endif
+// #endif
+
+// #if !defined(C10_DEFINE_DEPRECATED_USING)
+// #warning "You need to implement C10_DEFINE_DEPRECATED_USING for this compiler"
+// #define C10_DEFINE_DEPRECATED_USING
+// #endif
 
 
 // Parsed from c10/util/reverse_iterator.h
@@ -3258,84 +3336,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace c10
 
 
-// Parsed from c10/util/Deprecated.h
-
-// #pragma once
-
-/**
- * This file provides portable macros for marking declarations
- * as deprecated.  You should generally use C10_DEPRECATED,
- * except when marking 'using' declarations as deprecated,
- * in which case you should use C10_DEFINE_DEPRECATED_USING
- * (due to portability concerns).
- */
-
-// Sample usage:
-//
-//    C10_DEPRECATED void bad_func();
-//    struct C10_DEPRECATED BadStruct {
-//      ...
-//    };
-
-// NB: __cplusplus doesn't work for MSVC, so for now MSVC always uses
-// the "__declspec(deprecated)" implementation and not the C++14
-// "[[deprecated]]" attribute. We tried enabling "[[deprecated]]" for C++14 on
-// MSVC, but ran into issues with some older MSVC versions.
-// #if (defined(__cplusplus) && __cplusplus >= 201402L)
-// #define C10_DEPRECATED [[deprecated]]
-// #define C10_DEPRECATED_MESSAGE(message) [[deprecated(message)]]
-// #elif defined(__GNUC__)
-// #define C10_DEPRECATED __attribute__((deprecated))
-// TODO Is there some way to implement this?
-// #define C10_DEPRECATED_MESSAGE(message) __attribute__((deprecated))
-
-// #elif defined(_MSC_VER)
-// #else
-// #warning "You need to implement C10_DEPRECATED for this compiler"
-// #define C10_DEPRECATED
-// #endif
-
-// Sample usage:
-//
-//    C10_DEFINE_DEPRECATED_USING(BadType, int)
-//
-//   which is the portable version of
-//
-//    using BadType [[deprecated]] = int;
-
-// technically [[deprecated]] syntax is from c++14 standard, but it works in
-// many compilers.
-// #if defined(__has_cpp_attribute)
-// #if __has_cpp_attribute(deprecated) && !defined(__CUDACC__)
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName [[deprecated]] = TypeThingy;
-// #endif
-// #endif
-
-// #if defined(_MSC_VER)
-// #endif
-
-// #if !defined(C10_DEFINE_DEPRECATED_USING) && defined(__GNUC__)
-// nvcc has a bug where it doesn't understand __attribute__((deprecated))
-// declarations even when the host compiler supports it. We'll only use this gcc
-// attribute when not cuda, and when using a GCC compiler that doesn't support
-// the c++14 syntax we checked for above (available in __GNUC__ >= 5)
-// #if !defined(__CUDACC__)
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName __attribute__((deprecated)) = TypeThingy;
-// #else
-// using cuda + gcc < 5, neither deprecated syntax is available so turning off.
-// #define C10_DEFINE_DEPRECATED_USING(TypeName, TypeThingy)
-//   using TypeName = TypeThingy;
-// #endif
-// #endif
-
-// #if !defined(C10_DEFINE_DEPRECATED_USING)
-// #warning "You need to implement C10_DEFINE_DEPRECATED_USING for this compiler"
-// #define C10_DEFINE_DEPRECATED_USING
-// #endif
-
-
 // Parsed from c10/util/AlignOf.h
 
 //===--- AlignOf.h - Portable calculation of type alignment -----*- C++ -*-===//
@@ -3906,6 +3906,37 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace c10
 
 
+// Parsed from c10/util/BFloat16.h
+
+// #pragma once
+
+// Defines the bloat16 type (brain floating-point). This representation uses
+// 1 bit for the sign, 8 bits for the exponent and 7 bits for the mantissa.
+
+// #include <c10/macros/Macros.h>
+// #include <cmath>
+// #include <cstring>
+
+// #if defined(__CUDACC__) && !defined(USE_ROCM)
+// #endif
+
+// #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
+// #endif
+@Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
+
+@Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
+
+@Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
+
+// Targeting ../BFloat16.java
+
+
+
+ // namespace c10
+
+// #include <c10/util/BFloat16-inl.h> // IWYU pragma: keep
+
+
 // Parsed from c10/util/BFloat16-inl.h
 
 // #pragma once
@@ -4035,37 +4066,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
  // namespace std
 
-
-
-// Parsed from c10/util/BFloat16.h
-
-// #pragma once
-
-// Defines the bloat16 type (brain floating-point). This representation uses
-// 1 bit for the sign, 8 bits for the exponent and 7 bits for the mantissa.
-
-// #include <c10/macros/Macros.h>
-// #include <cmath>
-// #include <cstring>
-
-// #if defined(__CUDACC__) && !defined(USE_ROCM)
-// #endif
-
-// #if defined(SYCL_EXT_ONEAPI_BFLOAT16_MATH_FUNCTIONS)
-// #endif
-@Namespace("c10::detail") public static native float f32_from_bits(@Cast("uint16_t") short src);
-
-@Namespace("c10::detail") public static native @Cast("uint16_t") short bits_from_f32(float src);
-
-@Namespace("c10::detail") public static native @Cast("uint16_t") short round_to_nearest_even(float src);
-
-// Targeting ../BFloat16.java
-
-
-
- // namespace c10
-
-// #include <c10/util/BFloat16-inl.h> // IWYU pragma: keep
 
 
 // Parsed from c10/util/TypeSafeSignMath.h
@@ -4484,23 +4484,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace std
 
 
-// Parsed from c10/util/complex_utils.h
-
-// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
-// #error
-//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
-// #endif
-
-// #include <limits>
-
-// Extract double from std::complex<double>; is identity otherwise
-// TODO: Write in more idiomatic C++17
-
- // namespace c10
-
- // namespace std
-
-
 // Parsed from c10/util/Half.h
 
 // #pragma once
@@ -4631,89 +4614,6 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace c10
 
 // #include <c10/util/Half-inl.h> // IWYU pragma: keep
-
-
-// Parsed from c10/util/complex.h
-
-// #pragma once
-
-// #include <complex>
-
-// #include <c10/macros/Macros.h>
-
-// #if defined(__CUDACC__) || defined(__HIPCC__)
-// #endif
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
-// #endif
-// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
-// #endif
-// Targeting ../DoubleComplex.java
-
-
-// Targeting ../FloatComplex.java
-
-
-
-
-
-
-
-
-
-
-
- // namespace complex_literals
-
-// Define operators between integral scalars and c10::complex. std::complex does
-// not support this when T is a floating-point number. This is useful because it
-// saves a lot of "static_cast" when operate a complex and an integer. This
-// makes the code both less verbose and potentially more efficient.
-// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-//   typename std::enable_if_t<
-//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
-//       int> = 0
-
-// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-
- // namespace c10
-
-// std functions
-//
-// The implementation of these functions also follow the design of C++20
-
-// #if defined(USE_ROCM)
-// #else
-// #define ROCm_Bug(x) x
-// #endif
-
-// #undef ROCm_Bug
-
-// For std::conj, there are other versions of it:
-//   constexpr std::complex<float> conj( float z );
-//   template< class DoubleOrInteger >
-//   constexpr std::complex<double> conj( DoubleOrInteger z );
-//   constexpr std::complex<long double> conj( long double z );
-// These are not implemented
-// TODO(@zasdfgbnm): implement them as c10::conj
-
-// Thrust does not have complex --> complex version of thrust::proj,
-// so this function is not implemented at c10 right now.
-// TODO(@zasdfgbnm): implement it by ourselves
-
-// There is no c10 version of std::polar, because std::polar always
-// returns std::complex. Use c10::polar instead;
-
- // namespace std
-
- // namespace c10
-
-// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
-// math functions are included in a separate file
-// #include <c10/util/complex_math.h> // IWYU pragma: keep
-// utilities for complex types
-// #include <c10/util/complex_utils.h> // IWYU pragma: keep
-// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 
 
 // Parsed from c10/util/Half-inl.h
@@ -4852,6 +4752,106 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
  // namespace std
 
+
+
+// Parsed from c10/util/complex_utils.h
+
+// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
+// #error
+//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
+// #endif
+
+// #include <limits>
+
+// Extract double from std::complex<double>; is identity otherwise
+// TODO: Write in more idiomatic C++17
+
+ // namespace c10
+
+ // namespace std
+
+
+// Parsed from c10/util/complex.h
+
+// #pragma once
+
+// #include <complex>
+
+// #include <c10/macros/Macros.h>
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
+// #endif
+// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
+// #endif
+// Targeting ../DoubleComplex.java
+
+
+// Targeting ../FloatComplex.java
+
+
+
+
+
+
+
+
+
+
+
+ // namespace complex_literals
+
+// Define operators between integral scalars and c10::complex. std::complex does
+// not support this when T is a floating-point number. This is useful because it
+// saves a lot of "static_cast" when operate a complex and an integer. This
+// makes the code both less verbose and potentially more efficient.
+// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+//   typename std::enable_if_t<
+//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
+//       int> = 0
+
+// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+
+ // namespace c10
+
+// std functions
+//
+// The implementation of these functions also follow the design of C++20
+
+// #if defined(USE_ROCM)
+// #else
+// #define ROCm_Bug(x) x
+// #endif
+
+// #undef ROCm_Bug
+
+// For std::conj, there are other versions of it:
+//   constexpr std::complex<float> conj( float z );
+//   template< class DoubleOrInteger >
+//   constexpr std::complex<double> conj( DoubleOrInteger z );
+//   constexpr std::complex<long double> conj( long double z );
+// These are not implemented
+// TODO(@zasdfgbnm): implement them as c10::conj
+
+// Thrust does not have complex --> complex version of thrust::proj,
+// so this function is not implemented at c10 right now.
+// TODO(@zasdfgbnm): implement it by ourselves
+
+// There is no c10 version of std::polar, because std::polar always
+// returns std::complex. Use c10::polar instead;
+
+ // namespace std
+
+ // namespace c10
+
+// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
+// math functions are included in a separate file
+// #include <c10/util/complex_math.h> // IWYU pragma: keep
+// utilities for complex types
+// #include <c10/util/complex_utils.h> // IWYU pragma: keep
+// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 
 
 // Parsed from c10/util/Float8_e5m2-inl.h
@@ -5477,6 +5477,62 @@ public static final int EXP_BIAS_FP8 = 15;
  // namespace c10
 
 
+// Parsed from c10/util/ExclusivelyOwned.h
+
+// #pragma once
+
+// #include <c10/util/in_place.h>
+
+// See example implementation in TensorBase.h and TensorBody.h.
+// Synopsis:
+//
+// repr_type -- type to use to store an owned T in ExclusivelyOwned.
+//
+// pointer_type -- pointer-esque type to return from
+// ExclusivelyOwned's get() and operator*() methods.
+//
+// const_pointer_type -- similar to pointer_type, used for the const methods.
+//
+// static repr_type nullRepr() -- return a null instance of repr_type.
+//
+// template <class... Args>
+// static repr_type createInPlace(Args&&... args) -- used by the in-place
+// ExclusivelyOwned constructor.
+//
+// static repr_type moveToRepr(T&& x) -- move the given x into an
+// instance of repr_type. used by the ExclusivelyOwned(T&&)
+// constructor.
+//
+// static void destroyOwned(repr_type x) -- free memory for a
+// known-exclusively-owned instance of x. Replaces calling repr_type's
+// destructor. Being able to implement this more efficiently than
+// repr_type's destructor is the main reason to use ExclusivelyOwned
+// for a type.
+//
+// static T take(repr_type&) -- move out of the given repr_type into an owned T.
+//
+// static pointer_type getImpl(const repr_type&) -- return a pointer
+// to the given repr_type. May take repr_type by value if that is more
+// efficient.
+
+/** ExclusivelyOwned is a smart-pointer-like wrapper around an
+ *  exclusively-owned instance of some type T that normally has
+ *  mandatory reference counting (currently just Tensor). If you have
+ *  an isolated piece of code that knows that it has sole ownership of
+ *  an object of one of these types (i.e., because you created it
+ *  directly or using a factory function) and that object will not
+ *  escape from that isolated piece of code, then moving the object
+ *  into an ExclusivelyOwned will avoid an atomic reference count
+ *  decrement at destruction time.
+ * 
+ *  If you directly create the Tensor in the first
+ *  place, you can use the in_place constructor of ExclusivelyOwned to
+ *  additionally avoid doing any stores to initialize the refcount &
+ *  weakcount. */
+
+ // namespace c10
+
+
 // Parsed from c10/util/MaybeOwned.h
 
 // #pragma once
@@ -5523,6 +5579,25 @@ public static final int EXP_BIAS_FP8 = 15;
  // namespace c10
 
 
+// Parsed from c10/core/SymFloat.h
+
+// #pragma once
+
+// #include <c10/core/SymBool.h>
+// #include <c10/core/SymNodeImpl.h>
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/intrusive_ptr.h>
+
+// #include <limits>
+// Targeting ../SymFloat.java
+
+
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef SymFloat s);
+ // namespace c10
+
+
 // Parsed from c10/core/SymBool.h
 
 // #pragma once
@@ -5542,25 +5617,6 @@ public static final int EXP_BIAS_FP8 = 15;
 // #define TORCH_SYM_INTERNAL_ASSERT(cond, ...)
 //   TORCH_INTERNAL_ASSERT((cond).expect_true(__FILE__, __LINE__), __VA_ARGS__)
 
- // namespace c10
-
-
-// Parsed from c10/core/SymFloat.h
-
-// #pragma once
-
-// #include <c10/core/SymBool.h>
-// #include <c10/core/SymNodeImpl.h>
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Exception.h>
-// #include <c10/util/intrusive_ptr.h>
-
-// #include <limits>
-// Targeting ../SymFloat.java
-
-
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef SymFloat s);
  // namespace c10
 
 
@@ -5836,6 +5892,30 @@ public static final int EXP_BIAS_FP8 = 15;
 //   }
 
 
+// Parsed from c10/util/Type.h
+
+// #ifndef C10_UTIL_TYPE_H_
+// #define C10_UTIL_TYPE_H_
+
+// #include <cstddef>
+// #include <string>
+// #ifdef __GXX_RTTI
+// #include <typeinfo>
+// #endif // __GXX_RTTI
+
+// #include <c10/macros/Macros.h>
+
+/** Utility to demangle a C++ symbol name. */
+@Namespace("c10") public static native @StdString BytePointer demangle(@Cast("const char*") BytePointer name);
+@Namespace("c10") public static native @StdString String demangle(String name);
+
+/** Returns the printable name of the type. */
+
+ // namespace c10
+
+// #endif // C10_UTIL_TYPE_H_
+
+
 // Parsed from c10/util/ConstexprCrc.h
 
 // #pragma once
@@ -5943,6 +6023,67 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  // namespace util
  // namespace c10
   
+
+
+// Parsed from c10/util/flat_hash_map.h
+
+// Taken from
+// https://github.com/skarupke/flat_hash_map/blob/2c4687431f978f02a3780e24b8b701d22aa32d9c/flat_hash_map.hpp
+// with fixes applied:
+// - https://github.com/skarupke/flat_hash_map/pull/25
+// - https://github.com/skarupke/flat_hash_map/pull/26
+// - replace size_t with uint64_t to fix it for 32bit
+// - add "GCC diagnostic" pragma to ignore -Wshadow
+// - make sherwood_v3_table::convertible_to_iterator public because GCC5 seems
+// to have issues with it otherwise
+// - fix compiler warnings in operator templated_iterator<const value_type>
+
+//          Copyright Malte Skarupke 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See http://www.boost.org/LICENSE_1_0.txt)
+
+// #pragma once
+
+// #include <c10/macros/Macros.h>
+// #include <algorithm>
+// #include <cmath>
+// #include <cstddef>
+// #include <cstdint>
+// #include <functional>
+// #include <iterator>
+// #include <stdexcept>
+// #include <type_traits>
+// #include <utility>
+
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
+// #endif
+
+// #if defined(_MSC_VER) && !defined(__clang__)
+// #pragma warning(push)
+// #pragma warning(disable : 4624) // destructor was implicitly defined as deleted
+// #endif
+
+// #ifdef _MSC_VER
+// #define SKA_NOINLINE(...) __declspec(noinline) __VA_ARGS__
+// #else
+// #define SKA_NOINLINE(...) __VA_ARGS__ __attribute__((noinline))
+// #endif
+@Namespace("ska::detailv3") @MemberGetter public static native byte min_lookups();
+public static final byte min_lookups = min_lookups();
+
+@Namespace("ska::detailv3") public static native byte log2(@Cast("uint64_t") long value);
+
+@Namespace("ska::detailv3") public static native @Cast("uint64_t") long next_power_of_two(@Cast("uint64_t") long i);
+
+// Implementation taken from http://en.cppreference.com/w/cpp/types/void_t
+// (it takes CWG1558 into account and also works for older compilers)
+ // namespace detailv3
+
+ // end namespace ska
+
+// #if defined(_MSC_VER) && !defined(__clang__)
+// #pragma warning(pop)
+// #endif
 
 
 // Parsed from c10/util/irange.h
@@ -6465,134 +6606,9 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  // namespace c10
 
 
-// Parsed from c10/core/impl/HermeticPyObjectTLS.h
-
-// #pragma once
-
-// #include <c10/macros/Export.h>
-// #include <atomic>
-// Targeting ../HermeticPyObjectTLS.java
-
-
-
- // namespace impl
- // namespace c10
-
-
-// Parsed from c10/core/SymIntArrayRef.h
-
-// #pragma once
-
-// #include <c10/core/SymInt.h>
-// #include <c10/util/ArrayRef.h>
-// #include <c10/util/Exception.h>
-// #include <c10/util/Optional.h>
-
-@Namespace("c10") public static native @ByVal LongArrayRef asIntArrayRefUnchecked(@ByVal SymIntArrayRef ar);
-
-// TODO: a SymIntArrayRef containing a heap allocated large negative integer
-// can actually technically be converted to an IntArrayRef... but not with
-// the non-owning API we have here.  We can't reinterpet cast; we have to
-// allocate another buffer and write the integers into it.  If you need it,
-// we can do it.  But I don't think you need it.
-
-@Namespace("c10") public static native @ByVal LongArrayRefOptional asIntArrayRefSlowOpt(
-    @ByVal SymIntArrayRef ar);
-
-
-
-// #define C10_AS_INTARRAYREF_SLOW(a) c10::asIntArrayRefSlow(a, __FILE__, __LINE__)
-
-// Prefer using a more semantic constructor, like
-// fromIntArrayRefKnownNonNegative
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefUnchecked(@ByVal LongArrayRef array_ref);
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefUnchecked(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
-
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefKnownNonNegative(@ByVal LongArrayRef array_ref);
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefKnownNonNegative(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
-
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal LongArrayRef array_ref);
-@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
-
- // namespace c10
-
-
 // Parsed from c10/util/python_stub.h
 
 // #pragma once
-
-
-// Parsed from c10/core/impl/PyInterpreter.h
-
-// #pragma once
-
-// #include <c10/core/Device.h>
-// #include <c10/core/Layout.h>
-// #include <c10/core/MemoryFormat.h>
-// #include <c10/core/SymIntArrayRef.h>
-// #include <c10/macros/Export.h>
-// #include <c10/util/ArrayRef.h>
-// #include <c10/util/intrusive_ptr.h>
-// #include <c10/util/python_stub.h>
-// #include <string>
-// #include <vector>
-
-// Forward declarations
- // namespace c10
-
- // namespace torch
-
-// Actual implementation
-// Targeting ../PyInterpreterVTable.java
-
-
-// Targeting ../PyInterpreter.java
-
-
-
-// PyInterpreterStatus describes what the state of its interpreter tag
-// is, relative to the thread currently holding the GIL.
-@Namespace("c10::impl") public enum PyInterpreterStatus {
-  // We just allocated the Tensor, it hasn't escaped to other threads,
-  // we know that it definitely hasn't been tagged to be associated
-  // with an interpreter.
-  DEFINITELY_UNINITIALIZED(0),
-  // We queried the interpreter field and it looked uninitialized.  But
-  // another thread may have raced with us to tag it with some other
-  // interpreter id.  So we will have to do a CEX to make sure we can
-  // actually nab it.
-  MAYBE_UNINITIALIZED(1),
-  // We queried the interpreter field and it was tagged to belong to us.
-  // This means we have sole write access (as we hold the GIL for this
-  // interpreter)
-  TAGGED_BY_US(2),
-  // Someone else tagged this.  We can't use this TensorImpl from Python.
-  TAGGED_BY_OTHER(3);
-
-    public final int value;
-    private PyInterpreterStatus(int v) { this.value = v; }
-    private PyInterpreterStatus(PyInterpreterStatus e) { this.value = e.value; }
-    public PyInterpreterStatus intern() { for (PyInterpreterStatus e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
- // namespace impl
- // namespace c10
-
-
-// Parsed from c10/core/impl/PyObjectSlot.h
-
-// #pragma once
-
-// #include <c10/core/impl/HermeticPyObjectTLS.h>
-// #include <c10/core/impl/PyInterpreter.h>
-// #include <c10/util/Optional.h>
-// #include <c10/util/python_stub.h>
-
-// #include <atomic>
-
- // namespace impl
- // namespace c10
 
 
 // Parsed from c10/core/StorageImpl.h
@@ -6643,181 +6659,26 @@ public static final int C10_TYPENAME_SUPPORTS_CONSTEXPR = 0;
  // namespace c10
 
 
-// Parsed from c10/core/impl/LocalDispatchKeySet.h
-
-// #pragma once
-
-// #include <c10/core/DispatchKeySet.h>
-// #include <c10/macros/Export.h>
-
-// TLS management for DispatchKeySet (the "local" DispatchKeySet(s))
-//
-// This manages two thread-local DispatchKeySets:
-//
-//  - The included type set, which adds a tensor type for consideration
-//    in dispatch.  (For example, you might add Profiling to
-//    the included type set to turn on profiling on all tensor operations.)
-//
-//  - The excluded type set, which disqualifies a tensor type from dispatch.
-//    (For example, after redispatching on variable, we disqualify
-//    Autograd so we don't attempt to handle variable again.)
-//    (Exclusion wins over inclusion.)
-//
-// NB: Originally, I implemented the excluded type set as storing the inverted
-// set, but TLS is defined to be zero-initialized, so this doesn't actually work
-// (if it's inverted, you want the set to be -1 initialized).
-// Targeting ../PODLocalDispatchKeySet.java
-
-
-// Targeting ../LocalDispatchKeySet.java
-
-
-
-// thread_local variables cannot be C10_API on Windows.
-// Inlining this seems to break AutoDispatchBelowAutograd on Android.
-// #if defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
-@Namespace("c10::impl") public static native @ByVal LocalDispatchKeySet tls_local_dispatch_key_set();
-// #else // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
-
-// #endif // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
-
-// Internal, use ThreadLocalStateGuard
-
-// Targeting ../IncludeDispatchKeyGuard.java
-
-
-// Targeting ../ForceDispatchKeyGuard.java
-
-
-
-// Non-RAII API for manipulating the thread-local dispatch state.
-// Please prefer the RAII API.  The non-RAII API may be useful when
-// the included/excluded state of a given DispatchKey must span
-// many calls from the Python to the C++, so you cannot conveniently
-// use an RAII guard.
-//
-// Example use case:  a Python context manager that includes a certain
-// DispatchKey, to ensure ops running under the context manager dispatch
-// through that DispatchKey's registered overrides.
-//
-// The non-RAII API is less efficient than the RAII guards because both the
-// getter and setter will do a tls_getaddr lookup (the RAII struct only needs
-// one!)
-
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_excluded(DispatchKey x);
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_excluded(@Cast("c10::DispatchKey") short x);
-@Namespace("c10::impl") public static native void tls_set_dispatch_key_excluded(DispatchKey x, @Cast("bool") boolean desired_state);
-@Namespace("c10::impl") public static native void tls_set_dispatch_key_excluded(@Cast("c10::DispatchKey") short x, @Cast("bool") boolean desired_state);
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_included(DispatchKey x);
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_included(@Cast("c10::DispatchKey") short x);
-@Namespace("c10::impl") public static native void tls_set_dispatch_key_included(DispatchKey x, @Cast("bool") boolean desired_state);
-@Namespace("c10::impl") public static native void tls_set_dispatch_key_included(@Cast("c10::DispatchKey") short x, @Cast("bool") boolean desired_state);
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_excluded(@ByVal DispatchKeySet ks);
-@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_included(@ByVal DispatchKeySet ks);
-
- // namespace impl
- // namespace c10
-
-
-// Parsed from c10/core/InferenceMode.h
+// Parsed from c10/core/GradMode.h
 
 // #pragma once
 
 // #include <c10/core/AutogradState.h>
-// #include <c10/core/impl/LocalDispatchKeySet.h>
 // #include <c10/macros/Export.h>
-// Targeting ../InferenceMode.java
+// Targeting ../GradMode.java
+
+
+// Targeting ../AutoGradMode.java
+
+
+// Targeting ../NoGradGuard.java
+
+
+// Targeting ../AutoFwGradMode.java
+
 
 
  // namespace c10
-
-
-// Parsed from c10/core/WrapDimMinimal.h
-
-// #pragma once
-
-// #include <c10/core/SymInt.h>
-// This template can only be specialized at int64_t and c10::SymInt;
-// you'll get linker errors otherwise
- // namespace detail
-
-@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
-    @Cast("int64_t") long dim,
-    @Cast("int64_t") long dim_post_expr,
-    @Cast("bool") boolean wrap_scalar/*=true*/);
-@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
-    @Cast("int64_t") long dim,
-    @Cast("int64_t") long dim_post_expr);
-
-@Namespace("c10") public static native @ByVal SymInt maybe_wrap_dim(
-    @ByVal SymInt dim,
-    @ByVal SymInt dim_post_expr,
-    @Cast("bool") boolean wrap_scalar/*=true*/);
-@Namespace("c10") public static native @ByVal SymInt maybe_wrap_dim(
-    @ByVal SymInt dim,
-    @ByVal SymInt dim_post_expr);
-
- // namespace c10
-
-
-// Parsed from c10/core/impl/SizesAndStrides.h
-
-// #pragma once
-
-// #include <algorithm>
-// #include <cstdint>
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/ArrayRef.h>
-// #include <c10/util/SmallVector.h>
-
-public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
-// Targeting ../SizesAndStrides.java
-
-
-
- // namespace impl
- // namespace c10
-
-
-// Parsed from c10/util/DimVector.h
-
-// #pragma once
-
-// #include <c10/core/SymInt.h>
-// #include <c10/core/impl/SizesAndStrides.h>
-// #include <c10/util/SmallVector.h>
-// #include <cstdint>
-
-@Namespace("c10") @MemberGetter public static native @Cast("const size_t") long kDimVectorStaticSize();
-
-/** A container for sizes or strides */
-
- // namespace c10
-
-
-// Parsed from c10/util/Type.h
-
-// #ifndef C10_UTIL_TYPE_H_
-// #define C10_UTIL_TYPE_H_
-
-// #include <cstddef>
-// #include <string>
-// #ifdef __GXX_RTTI
-// #include <typeinfo>
-// #endif // __GXX_RTTI
-
-// #include <c10/macros/Macros.h>
-
-/** Utility to demangle a C++ symbol name. */
-@Namespace("c10") public static native @StdString BytePointer demangle(@Cast("const char*") BytePointer name);
-@Namespace("c10") public static native @StdString String demangle(String name);
-
-/** Returns the printable name of the type. */
-
- // namespace c10
-
-// #endif // C10_UTIL_TYPE_H_
 
 
 // Parsed from c10/util/Registry.h
@@ -7217,6 +7078,771 @@ public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
 // #endif // C10_UTIL_FLAGS_H_
 
 
+// Parsed from c10/core/impl/LocalDispatchKeySet.h
+
+// #pragma once
+
+// #include <c10/core/DispatchKeySet.h>
+// #include <c10/macros/Export.h>
+
+// TLS management for DispatchKeySet (the "local" DispatchKeySet(s))
+//
+// This manages two thread-local DispatchKeySets:
+//
+//  - The included type set, which adds a tensor type for consideration
+//    in dispatch.  (For example, you might add Profiling to
+//    the included type set to turn on profiling on all tensor operations.)
+//
+//  - The excluded type set, which disqualifies a tensor type from dispatch.
+//    (For example, after redispatching on variable, we disqualify
+//    Autograd so we don't attempt to handle variable again.)
+//    (Exclusion wins over inclusion.)
+//
+// NB: Originally, I implemented the excluded type set as storing the inverted
+// set, but TLS is defined to be zero-initialized, so this doesn't actually work
+// (if it's inverted, you want the set to be -1 initialized).
+// Targeting ../PODLocalDispatchKeySet.java
+
+
+// Targeting ../LocalDispatchKeySet.java
+
+
+
+// thread_local variables cannot be C10_API on Windows.
+// Inlining this seems to break AutoDispatchBelowAutograd on Android.
+// #if defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
+@Namespace("c10::impl") public static native @ByVal LocalDispatchKeySet tls_local_dispatch_key_set();
+// #else // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
+
+// #endif // defined(_MSC_VER) || defined(C10_ANDROID) || defined(C10_IPHONE)
+
+// Internal, use ThreadLocalStateGuard
+
+// Targeting ../IncludeDispatchKeyGuard.java
+
+
+// Targeting ../ForceDispatchKeyGuard.java
+
+
+
+// Non-RAII API for manipulating the thread-local dispatch state.
+// Please prefer the RAII API.  The non-RAII API may be useful when
+// the included/excluded state of a given DispatchKey must span
+// many calls from the Python to the C++, so you cannot conveniently
+// use an RAII guard.
+//
+// Example use case:  a Python context manager that includes a certain
+// DispatchKey, to ensure ops running under the context manager dispatch
+// through that DispatchKey's registered overrides.
+//
+// The non-RAII API is less efficient than the RAII guards because both the
+// getter and setter will do a tls_getaddr lookup (the RAII struct only needs
+// one!)
+
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_excluded(DispatchKey x);
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_excluded(@Cast("c10::DispatchKey") short x);
+@Namespace("c10::impl") public static native void tls_set_dispatch_key_excluded(DispatchKey x, @Cast("bool") boolean desired_state);
+@Namespace("c10::impl") public static native void tls_set_dispatch_key_excluded(@Cast("c10::DispatchKey") short x, @Cast("bool") boolean desired_state);
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_included(DispatchKey x);
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_key_included(@Cast("c10::DispatchKey") short x);
+@Namespace("c10::impl") public static native void tls_set_dispatch_key_included(DispatchKey x, @Cast("bool") boolean desired_state);
+@Namespace("c10::impl") public static native void tls_set_dispatch_key_included(@Cast("c10::DispatchKey") short x, @Cast("bool") boolean desired_state);
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_excluded(@ByVal DispatchKeySet ks);
+@Namespace("c10::impl") public static native @Cast("bool") boolean tls_is_dispatch_keyset_included(@ByVal DispatchKeySet ks);
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/core/InferenceMode.h
+
+// #pragma once
+
+// #include <c10/core/AutogradState.h>
+// #include <c10/core/impl/LocalDispatchKeySet.h>
+// #include <c10/macros/Export.h>
+// Targeting ../InferenceMode.java
+
+
+ // namespace c10
+
+
+// Parsed from c10/core/SymIntArrayRef.h
+
+// #pragma once
+
+// #include <c10/core/SymInt.h>
+// #include <c10/util/ArrayRef.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/Optional.h>
+
+@Namespace("c10") public static native @ByVal LongArrayRef asIntArrayRefUnchecked(@ByVal SymIntArrayRef ar);
+
+// TODO: a SymIntArrayRef containing a heap allocated large negative integer
+// can actually technically be converted to an IntArrayRef... but not with
+// the non-owning API we have here.  We can't reinterpet cast; we have to
+// allocate another buffer and write the integers into it.  If you need it,
+// we can do it.  But I don't think you need it.
+
+@Namespace("c10") public static native @ByVal LongArrayRefOptional asIntArrayRefSlowOpt(
+    @ByVal SymIntArrayRef ar);
+
+
+
+// #define C10_AS_INTARRAYREF_SLOW(a) c10::asIntArrayRefSlow(a, __FILE__, __LINE__)
+
+// Prefer using a more semantic constructor, like
+// fromIntArrayRefKnownNonNegative
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefUnchecked(@ByVal LongArrayRef array_ref);
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefUnchecked(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
+
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefKnownNonNegative(@ByVal LongArrayRef array_ref);
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefKnownNonNegative(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
+
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal LongArrayRef array_ref);
+@Namespace("c10") public static native @ByVal SymIntArrayRef fromIntArrayRefSlow(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... array_ref);
+
+ // namespace c10
+
+
+// Parsed from c10/core/DefaultDtype.h
+
+// #pragma once
+
+// #include <c10/core/ScalarType.h>
+// #include <c10/macros/Export.h>
+ // namespace caffe2
+@Namespace("c10") public static native void set_default_dtype(@ByVal TypeMeta dtype);
+@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_dtype();
+@Namespace("c10") public static native ScalarType get_default_dtype_as_scalartype();
+@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_complex_dtype();
+ // namespace c10
+
+
+// Parsed from c10/core/TensorOptions.h
+
+// #pragma once
+
+// #include <c10/core/Backend.h>
+// #include <c10/core/DefaultDtype.h>
+// #include <c10/core/Device.h>
+// #include <c10/core/Layout.h>
+// #include <c10/core/MemoryFormat.h>
+// #include <c10/core/ScalarType.h>
+// #include <c10/core/ScalarTypeToTypeMeta.h>
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Optional.h>
+
+// #include <iosfwd>
+// #include <utility>
+
+@Namespace("c10") public static native DispatchKey computeDispatchKey(
+    @ByVal ScalarTypeOptional dtype,
+    @ByVal LayoutOptional layout,
+    @ByVal DeviceOptional device);
+
+@Namespace("c10") public static native ScalarType dtype_or_default(@ByVal ScalarTypeOptional dtype);
+
+@Namespace("c10") public static native @ByVal TypeMeta dtype_or_default(
+    @ByVal TypeMetaOptional dtype);
+
+@Namespace("c10") public static native Layout layout_or_default(@ByVal LayoutOptional layout);
+
+@Namespace("c10") public static native @ByVal Device device_or_default(@ByVal DeviceOptional device);
+
+
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+@Namespace("c10") public static native @Cast("bool") boolean pinned_memory_or_default(@ByVal BoolOptional pinned_memory);
+// Targeting ../TensorOptions.java
+
+
+
+// We should aspire to fit in one machine-size word; but a size greater than two
+// words is too much.  (We are doing terribly on 32-bit archs, where we require
+// three machine size words to store tensor options.  Eek!)
+
+/** Convenience function that returns a {@code TensorOptions} object with the {@code dtype}
+ *  set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions dtype(@ByVal TypeMeta dtype);
+
+// legacy function to support ScalarType
+@Namespace("c10") public static native @ByVal TensorOptions dtype(ScalarType dtype);
+
+/** Convenience function that returns a {@code TensorOptions} object with the {@code layout}
+ *  set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions layout(Layout layout);
+@Namespace("c10") public static native @ByVal TensorOptions layout(@Cast("c10::Layout") byte layout);
+
+/** Convenience function that returns a {@code TensorOptions} object with the {@code device}
+ *  set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions device(@ByVal Device device);
+
+/** Convenience function that returns a {@code TensorOptions} object with the
+ *  {@code device} set to CUDA and the {@code device_index} set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions device_index(short device_index);
+
+/** Convenience function that returns a {@code TensorOptions} object with the
+ *  {@code requires_grad} set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions requires_grad(@Cast("bool") boolean requires_grad/*=true*/);
+
+/** Convenience function that returns a {@code TensorOptions} object with the
+ *  {@code memory_format} set to the given one. */
+@Namespace("c10") public static native @ByVal TensorOptions memory_format(MemoryFormat memory_format);
+@Namespace("c10") public static native @ByVal TensorOptions memory_format(@Cast("c10::MemoryFormat") byte memory_format);
+
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
+    @Cast("std::ostream*") @ByRef Pointer stream,
+    @Const @ByRef TensorOptions options);
+
+@Namespace("c10") public static native @StdString BytePointer toString(@Const @ByRef TensorOptions options);
+
+// This is intended to be a centralized location by which we can determine
+// what an appropriate DispatchKey for a tensor is.
+
+@Namespace("c10") public static native Layout dispatchKeyToLayout(DispatchKey dispatch_key);
+@Namespace("c10") public static native @Cast("c10::Layout") byte dispatchKeyToLayout(@Cast("c10::DispatchKey") short dispatch_key);
+
+@Namespace("c10") public static native DeviceType dispatchKeyToDeviceType(DispatchKey dispatch_key);
+@Namespace("c10") public static native @Cast("c10::DeviceType") byte dispatchKeyToDeviceType(@Cast("c10::DispatchKey") short dispatch_key);
+
+@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(DispatchKey dispatch_key);
+@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(@Cast("c10::DispatchKey") short dispatch_key);
+@Namespace("c10::detail") public static native @Cast("bool") boolean backend_supports_empty_operator(@Const @ByRef TensorOptions options);
+
+ // namespace detail
+
+ // namespace c10
+
+
+// Parsed from c10/core/WrapDimMinimal.h
+
+// #pragma once
+
+// #include <c10/core/SymInt.h>
+// This template can only be specialized at int64_t and c10::SymInt;
+// you'll get linker errors otherwise
+ // namespace detail
+
+@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long dim_post_expr,
+    @Cast("bool") boolean wrap_scalar/*=true*/);
+@Namespace("c10") public static native @Cast("int64_t") long maybe_wrap_dim(
+    @Cast("int64_t") long dim,
+    @Cast("int64_t") long dim_post_expr);
+
+@Namespace("c10") public static native @ByVal SymInt maybe_wrap_dim(
+    @ByVal SymInt dim,
+    @ByVal SymInt dim_post_expr,
+    @Cast("bool") boolean wrap_scalar/*=true*/);
+@Namespace("c10") public static native @ByVal SymInt maybe_wrap_dim(
+    @ByVal SymInt dim,
+    @ByVal SymInt dim_post_expr);
+
+ // namespace c10
+
+
+// Parsed from c10/core/impl/HermeticPyObjectTLS.h
+
+// #pragma once
+
+// #include <c10/macros/Export.h>
+// #include <atomic>
+// Targeting ../HermeticPyObjectTLS.java
+
+
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/core/impl/PyInterpreter.h
+
+// #pragma once
+
+// #include <c10/core/Device.h>
+// #include <c10/core/Layout.h>
+// #include <c10/core/MemoryFormat.h>
+// #include <c10/core/SymIntArrayRef.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/ArrayRef.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <c10/util/python_stub.h>
+// #include <string>
+// #include <vector>
+
+// Forward declarations
+ // namespace c10
+
+ // namespace torch
+
+// Actual implementation
+// Targeting ../PyInterpreterVTable.java
+
+
+// Targeting ../PyInterpreter.java
+
+
+
+// PyInterpreterStatus describes what the state of its interpreter tag
+// is, relative to the thread currently holding the GIL.
+@Namespace("c10::impl") public enum PyInterpreterStatus {
+  // We just allocated the Tensor, it hasn't escaped to other threads,
+  // we know that it definitely hasn't been tagged to be associated
+  // with an interpreter.
+  DEFINITELY_UNINITIALIZED(0),
+  // We queried the interpreter field and it looked uninitialized.  But
+  // another thread may have raced with us to tag it with some other
+  // interpreter id.  So we will have to do a CEX to make sure we can
+  // actually nab it.
+  MAYBE_UNINITIALIZED(1),
+  // We queried the interpreter field and it was tagged to belong to us.
+  // This means we have sole write access (as we hold the GIL for this
+  // interpreter)
+  TAGGED_BY_US(2),
+  // Someone else tagged this.  We can't use this TensorImpl from Python.
+  TAGGED_BY_OTHER(3);
+
+    public final int value;
+    private PyInterpreterStatus(int v) { this.value = v; }
+    private PyInterpreterStatus(PyInterpreterStatus e) { this.value = e.value; }
+    public PyInterpreterStatus intern() { for (PyInterpreterStatus e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/core/impl/PyObjectSlot.h
+
+// #pragma once
+
+// #include <c10/core/impl/HermeticPyObjectTLS.h>
+// #include <c10/core/impl/PyInterpreter.h>
+// #include <c10/util/Optional.h>
+// #include <c10/util/python_stub.h>
+
+// #include <atomic>
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/core/impl/SizesAndStrides.h
+
+// #pragma once
+
+// #include <algorithm>
+// #include <cstdint>
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/ArrayRef.h>
+// #include <c10/util/SmallVector.h>
+
+public static final int C10_SIZES_AND_STRIDES_MAX_INLINE_SIZE = 5;
+// Targeting ../SizesAndStrides.java
+
+
+
+ // namespace impl
+ // namespace c10
+
+
+// Parsed from c10/util/DimVector.h
+
+// #pragma once
+
+// #include <c10/core/SymInt.h>
+// #include <c10/core/impl/SizesAndStrides.h>
+// #include <c10/util/SmallVector.h>
+// #include <cstdint>
+
+@Namespace("c10") @MemberGetter public static native @Cast("const size_t") long kDimVectorStaticSize();
+
+/** A container for sizes or strides */
+
+ // namespace c10
+
+
+// Parsed from c10/util/Logging.h
+
+// #ifndef C10_UTIL_LOGGING_H_
+// #define C10_UTIL_LOGGING_H_
+
+// #include <climits>
+// #include <exception>
+// #include <functional>
+// #include <limits>
+// #include <sstream>
+
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+// #include <c10/util/Flags.h>
+// #include <c10/util/StringUtil.h>
+
+// CAFFE2_LOG_THRESHOLD is a compile time flag that would allow us to turn off
+// logging at compile time so no logging message below that level is produced
+// at all. The value should be between INT_MIN and CAFFE_FATAL.
+// #ifndef CAFFE2_LOG_THRESHOLD
+// If we have not defined the compile time log threshold, we keep all the
+// log cases.
+public static native @MemberGetter int CAFFE2_LOG_THRESHOLD();
+public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
+// #endif // CAFFE2_LOG_THRESHOLD
+
+// Below are different implementations for glog and non-glog cases.
+// #ifdef C10_USE_GLOG
+// #include <c10/util/logging_is_google_glog.h>
+// #else // !C10_USE_GLOG
+// #include <c10/util/logging_is_not_google_glog.h>
+// #endif // C10_USE_GLOG
+
+
+
+
+// Some versions of GLOG support less-spammy version of LOG_EVERY_MS. If it's
+// not available - just short-circuit to the always working one one.
+// We define the C10_ name to avoid confusing other files
+// #ifdef LOG_EVERY_MS
+// #define C10_LOG_EVERY_MS(severity, ms) LOG_EVERY_MS(severity, ms)
+// #else
+// #define C10_LOG_EVERY_MS(severity, ms) LOG(severity)
+// #endif
+
+// Same for LOG_FIRST_N
+// #ifdef LOG_FIRST_N
+// #define C10_LOG_FIRST_N(severity, n) LOG_FIRST_N(severity, n)
+// #else
+// #define C10_LOG_FIRST_N(severity, n) LOG(severity)
+// #endif
+
+// Same for LOG_EVERY_N
+// #ifdef LOG_EVERY_N
+// #define C10_LOG_EVERY_N(severity, n) LOG_EVERY_N(severity, n)
+// #else
+// #define C10_LOG_EVERY_N(severity, n) LOG(severity)
+// #endif
+
+// Functions that we use for initialization.
+@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntPointer argc, @Cast("char**") PointerPointer argv);
+@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntPointer argc, @Cast("char**") @ByPtrPtr BytePointer argv);
+@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntBuffer argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
+@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(int[] argc, @Cast("char**") @ByPtrPtr byte[] argv);
+@Namespace("c10") public static native void UpdateLoggingLevelsFromFlags();
+
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @StdString BytePointer msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @StdString BytePointer msg);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @StdString String msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @StdString String msg);
+
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString arg3,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString arg3);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString arg3,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString arg3);
+
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @StdString BytePointer msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @StdString BytePointer msg);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @StdString String msg,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @StdString String msg);
+
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString arg3,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    @Cast("const char*") BytePointer file,
+    int line,
+    @Cast("const char*") BytePointer condition,
+    @ByVal CompileTimeEmptyString arg3);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString arg3,
+    @Const Pointer caller/*=nullptr*/);
+@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
+    String file,
+    int line,
+    String condition,
+    @ByVal CompileTimeEmptyString arg3);
+
+@Namespace("c10") public static native @Cast("const bool") boolean IsUsingGoogleLogging();
+
+/**
+ * A utility to allow one to show log info to stderr after the program starts.
+ *
+ * This is similar to calling GLOG's --logtostderr, or setting caffe2_log_level
+ * to smaller than INFO. You are recommended to only use this in a few sparse
+ * cases, such as when you want to write a tutorial or something. Normally, use
+ * the commandline flags to set the log level.
+ */
+@Namespace("c10") public static native void ShowLogInfoToStderr();
+
+@Namespace("c10") public static native void SetStackTraceFetcher(@ByVal StringSupplier fetcher);
+
+// #define CAFFE_ENFORCE(condition, ...)
+//   do {
+//     if (C10_UNLIKELY(!(condition))) {
+//       ::c10::ThrowEnforceNotMet(
+//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__));
+//     }
+//   } while (false)
+
+// #define CAFFE_ENFORCE_FINITE(condition, ...)
+//   do {
+//     if (C10_UNLIKELY(!(condition))) {
+//       ::c10::ThrowEnforceFiniteNotMet(
+//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__));
+//     }
+//   } while (false)
+
+// #define CAFFE_ENFORCE_WITH_CALLER(condition, ...)
+//   do {
+//     if (C10_UNLIKELY(!(condition))) {
+//       ::c10::ThrowEnforceNotMet(
+//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__), this);
+//     }
+//   } while (false)
+
+// #define CAFFE_THROW(...)
+//   ::c10::ThrowEnforceNotMet(__FILE__, __LINE__, "", ::c10::str(__VA_ARGS__))
+
+/**
+ * Rich logging messages
+ *
+ * CAFFE_ENFORCE_THAT can be used with one of the "checker functions" that
+ * capture input argument values and add it to the exception message. E.g.
+ * {@code CAFFE_ENFORCE_THAT(Equals(foo(x), bar(y)), "Optional additional message")}
+ * would evaluate both foo and bar only once and if the results are not equal -
+ * include them in the exception message.
+ *
+ * Some of the basic checker functions like Equals or Greater are already
+ * defined below. Other header might define customized checkers by adding
+ * functions to caffe2::enforce_detail namespace. For example:
+ *
+ *   namespace caffe2 { namespace enforce_detail {
+ *   inline EnforceFailMessage IsVector(const vector<int64_t>& shape) {
+ *     if (shape.size() == 1) { return EnforceOK(); }
+ *     return c10::str("Shape ", shape, " is not a vector");
+ *   }
+ *   }}
+ *
+ * With further usages like {@code CAFFE_ENFORCE_THAT(IsVector(Input(0).dims()))}
+ *
+ * Convenient wrappers for binary operations like CAFFE_ENFORCE_EQ are provided
+ * too. Please use them instead of TORCH_CHECK_EQ and friends for failures in
+ * user-provided input.
+ */
+
+// GCC7 is getting an internal compiler error on the new
+// implementation, so keep the old one (which evaluates the error
+// message eagerly and therefore is undesirable for general use
+// compared to the new one) around for it.
+// #if defined(__GNUG__) && __GNUC__ <= 7 && !defined(__clang__)
+
+// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op, lhs, rhs, __FILE__, __LINE__, expr, nullptr, ##__VA_ARGS__)
+
+// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op, (lhs), (rhs), __FILE__, __LINE__, expr, this, ##__VA_ARGS__)
+
+// #else
+
+// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op,
+//       (lhs),
+//       (rhs),
+//       __FILE__,
+//       __LINE__,
+//       expr,
+//       nullptr,
+//       [&](const auto& arg1, const auto& arg2) {
+//         return ::c10::enforce_detail::enforceFailMsgImpl(
+//             arg1, arg2, ##__VA_ARGS__);
+//       })
+
+// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
+//   ::c10::enforce_detail::enforceThatImpl(
+//       op,
+//       (lhs),
+//       (rhs),
+//       __FILE__,
+//       __LINE__,
+//       expr,
+//       this,
+//       [&](const auto& arg1, const auto& arg2) {
+//         return ::c10::enforce_detail::enforceFailMsgImpl(
+//             arg1, arg2, ##__VA_ARGS__);
+//       })
+// #endif
+
+ // namespace enforce_detail
+
+// #define CAFFE_ENFORCE_THAT(cmp, op, lhs, rhs, ...)
+//   CAFFE_ENFORCE_THAT_IMPL(cmp, lhs, rhs, #lhs " " #op " " #rhs, ##__VA_ARGS__)
+
+// #define CAFFE_ENFORCE_BINARY_OP(cmp, op, x, y, ...)
+//   CAFFE_ENFORCE_THAT_IMPL(cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_EQ(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_NE(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_LE(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_LT(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::less<void>(), <, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_GE(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_GT(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP(std::greater<void>(), >, x, y, ##__VA_ARGS__)
+
+// #define CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(cmp, op, x, y, ...)
+//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
+//       cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_EQ_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_NE_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_LE_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_LT_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(std::less<void>(), <, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_GE_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
+// #define CAFFE_ENFORCE_GT_WITH_CALLER(x, y, ...)
+//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
+//       std::greater<void>(), >, x, y, ##__VA_ARGS__)
+
+/**
+ * Very lightweight logging for the first time API usage. It's beneficial for
+ * tracking of individual functionality usage in larger applications.
+ *
+ * In order to ensure light-weightedness of logging, we utilize static variable
+ * trick - LogAPIUsage will be invoked only once and further invocations will
+ * just do an atomic check.
+ *
+ * Example:
+ *   // Logs caller info with an arbitrary text event, if there is a usage.
+ *   C10_LOG_API_USAGE_ONCE("my_api");
+ */
+// #define C10_LOG_API_USAGE_ONCE(...)
+//   C10_UNUSED static bool C10_ANONYMOUS_VARIABLE(logFlag) =
+//       ::c10::detail::LogAPIUsageFakeReturn(__VA_ARGS__);
+
+// API usage logging capabilities
+@Namespace("c10") public static native void SetAPIUsageLogger(@ByVal StringConsumer logger);
+@Namespace("c10") public static native void LogAPIUsage(@StdString BytePointer context);
+@Namespace("c10") public static native void LogAPIUsage(@StdString String context);
+
+@Namespace("c10") public static native void SetAPIUsageMetadataLogger(
+    @ByVal MetadataLogger logger);
+@Namespace("c10") public static native void LogAPIUsageMetadata(
+    @StdString BytePointer context,
+    @Const @ByRef StringStringMap metadata_map);
+@Namespace("c10") public static native void LogAPIUsageMetadata(
+    @StdString String context,
+    @Const @ByRef StringStringMap metadata_map);
+// Targeting ../DDPLoggingData.java
+
+
+
+@Namespace("c10") public static native void SetPyTorchDDPUsageLogger(
+    @ByVal DDPLogger logger);
+@Namespace("c10") public static native void LogPyTorchDDPUsage(@Const @ByRef DDPLoggingData ddpData);
+// Return value is needed to do the static variable initialization trick
+@Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString BytePointer context);
+@Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString String context);
+ // namespace detail
+
+// Initializes the c10 logger.
+@Namespace("c10") public static native void initLogging();
+
+ // namespace c10
+
+// #endif // C10_UTIL_LOGGING_H_
+
+
 // Parsed from c10/util/accumulate.h
 
 // Copyright 2004-present Facebook. All Rights Reserved.
@@ -7520,188 +8146,6 @@ public static final int C10_GCC_VERSION_MINOR = 0;
 // Targeting ../UndefinedTensorImpl.java
 
 
-
- // namespace c10
-
-
-// Parsed from c10/util/ExclusivelyOwned.h
-
-// #pragma once
-
-// #include <c10/util/in_place.h>
-
-// See example implementation in TensorBase.h and TensorBody.h.
-// Synopsis:
-//
-// repr_type -- type to use to store an owned T in ExclusivelyOwned.
-//
-// pointer_type -- pointer-esque type to return from
-// ExclusivelyOwned's get() and operator*() methods.
-//
-// const_pointer_type -- similar to pointer_type, used for the const methods.
-//
-// static repr_type nullRepr() -- return a null instance of repr_type.
-//
-// template <class... Args>
-// static repr_type createInPlace(Args&&... args) -- used by the in-place
-// ExclusivelyOwned constructor.
-//
-// static repr_type moveToRepr(T&& x) -- move the given x into an
-// instance of repr_type. used by the ExclusivelyOwned(T&&)
-// constructor.
-//
-// static void destroyOwned(repr_type x) -- free memory for a
-// known-exclusively-owned instance of x. Replaces calling repr_type's
-// destructor. Being able to implement this more efficiently than
-// repr_type's destructor is the main reason to use ExclusivelyOwned
-// for a type.
-//
-// static T take(repr_type&) -- move out of the given repr_type into an owned T.
-//
-// static pointer_type getImpl(const repr_type&) -- return a pointer
-// to the given repr_type. May take repr_type by value if that is more
-// efficient.
-
-/** ExclusivelyOwned is a smart-pointer-like wrapper around an
- *  exclusively-owned instance of some type T that normally has
- *  mandatory reference counting (currently just Tensor). If you have
- *  an isolated piece of code that knows that it has sole ownership of
- *  an object of one of these types (i.e., because you created it
- *  directly or using a factory function) and that object will not
- *  escape from that isolated piece of code, then moving the object
- *  into an ExclusivelyOwned will avoid an atomic reference count
- *  decrement at destruction time.
- * 
- *  If you directly create the Tensor in the first
- *  place, you can use the in_place constructor of ExclusivelyOwned to
- *  additionally avoid doing any stores to initialize the refcount &
- *  weakcount. */
-
- // namespace c10
-
-
-// Parsed from c10/core/DefaultDtype.h
-
-// #pragma once
-
-// #include <c10/core/ScalarType.h>
-// #include <c10/macros/Export.h>
- // namespace caffe2
-@Namespace("c10") public static native void set_default_dtype(@ByVal TypeMeta dtype);
-@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_dtype();
-@Namespace("c10") public static native ScalarType get_default_dtype_as_scalartype();
-@Namespace("c10") public static native @Const @ByVal TypeMeta get_default_complex_dtype();
- // namespace c10
-
-
-// Parsed from c10/core/TensorOptions.h
-
-// #pragma once
-
-// #include <c10/core/Backend.h>
-// #include <c10/core/DefaultDtype.h>
-// #include <c10/core/Device.h>
-// #include <c10/core/Layout.h>
-// #include <c10/core/MemoryFormat.h>
-// #include <c10/core/ScalarType.h>
-// #include <c10/core/ScalarTypeToTypeMeta.h>
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Optional.h>
-
-// #include <iosfwd>
-// #include <utility>
-
-@Namespace("c10") public static native DispatchKey computeDispatchKey(
-    @ByVal ScalarTypeOptional dtype,
-    @ByVal LayoutOptional layout,
-    @ByVal DeviceOptional device);
-
-@Namespace("c10") public static native ScalarType dtype_or_default(@ByVal ScalarTypeOptional dtype);
-
-@Namespace("c10") public static native @ByVal TypeMeta dtype_or_default(
-    @ByVal TypeMetaOptional dtype);
-
-@Namespace("c10") public static native Layout layout_or_default(@ByVal LayoutOptional layout);
-
-@Namespace("c10") public static native @ByVal Device device_or_default(@ByVal DeviceOptional device);
-
-
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-@Namespace("c10") public static native @Cast("bool") boolean pinned_memory_or_default(@ByVal BoolOptional pinned_memory);
-// Targeting ../TensorOptions.java
-
-
-
-// We should aspire to fit in one machine-size word; but a size greater than two
-// words is too much.  (We are doing terribly on 32-bit archs, where we require
-// three machine size words to store tensor options.  Eek!)
-
-/** Convenience function that returns a {@code TensorOptions} object with the {@code dtype}
- *  set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions dtype(@ByVal TypeMeta dtype);
-
-// legacy function to support ScalarType
-@Namespace("c10") public static native @ByVal TensorOptions dtype(ScalarType dtype);
-
-/** Convenience function that returns a {@code TensorOptions} object with the {@code layout}
- *  set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions layout(Layout layout);
-@Namespace("c10") public static native @ByVal TensorOptions layout(@Cast("c10::Layout") byte layout);
-
-/** Convenience function that returns a {@code TensorOptions} object with the {@code device}
- *  set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions device(@ByVal Device device);
-
-/** Convenience function that returns a {@code TensorOptions} object with the
- *  {@code device} set to CUDA and the {@code device_index} set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions device_index(short device_index);
-
-/** Convenience function that returns a {@code TensorOptions} object with the
- *  {@code requires_grad} set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions requires_grad(@Cast("bool") boolean requires_grad/*=true*/);
-
-/** Convenience function that returns a {@code TensorOptions} object with the
- *  {@code memory_format} set to the given one. */
-@Namespace("c10") public static native @ByVal TensorOptions memory_format(MemoryFormat memory_format);
-@Namespace("c10") public static native @ByVal TensorOptions memory_format(@Cast("c10::MemoryFormat") byte memory_format);
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(
-    @Cast("std::ostream*") @ByRef Pointer stream,
-    @Const @ByRef TensorOptions options);
-
-@Namespace("c10") public static native @StdString BytePointer toString(@Const @ByRef TensorOptions options);
-
-// This is intended to be a centralized location by which we can determine
-// what an appropriate DispatchKey for a tensor is.
-
-@Namespace("c10") public static native Layout dispatchKeyToLayout(DispatchKey dispatch_key);
-@Namespace("c10") public static native @Cast("c10::Layout") byte dispatchKeyToLayout(@Cast("c10::DispatchKey") short dispatch_key);
-
-@Namespace("c10") public static native DeviceType dispatchKeyToDeviceType(DispatchKey dispatch_key);
-@Namespace("c10") public static native @Cast("c10::DeviceType") byte dispatchKeyToDeviceType(@Cast("c10::DispatchKey") short dispatch_key);
-
-@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(DispatchKey dispatch_key);
-@Namespace("c10") public static native @ByVal TensorOptions dispatchKeyToTensorOptions(@Cast("c10::DispatchKey") short dispatch_key);
-@Namespace("c10::detail") public static native @Cast("bool") boolean backend_supports_empty_operator(@Const @ByRef TensorOptions options);
-
- // namespace detail
 
  // namespace c10
 
@@ -11977,12 +12421,8 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #else
 // #define SKA_NOINLINE(...) __VA_ARGS__ __attribute__((noinline))
 // #endif
-@Namespace("ska_ordered::detailv3") @MemberGetter public static native byte min_lookups();
-public static final byte min_lookups = min_lookups();
 
 
-
-@Namespace("ska_ordered::detailv3") public static native @Cast("uint64_t") long next_power_of_two(@Cast("uint64_t") long i);
 
 // Implementation taken from http://en.cppreference.com/w/cpp/types/void_t
 // (it takes CWG1558 into account and also works for older compilers)
@@ -12839,367 +13279,6 @@ public static final byte min_lookups = min_lookups();
  *  a function_ref. */
 
  // namespace c10
-
-
-// Parsed from c10/util/Logging.h
-
-// #ifndef C10_UTIL_LOGGING_H_
-// #define C10_UTIL_LOGGING_H_
-
-// #include <climits>
-// #include <exception>
-// #include <functional>
-// #include <limits>
-// #include <sstream>
-
-// #include <c10/macros/Macros.h>
-// #include <c10/util/Exception.h>
-// #include <c10/util/Flags.h>
-// #include <c10/util/StringUtil.h>
-
-// CAFFE2_LOG_THRESHOLD is a compile time flag that would allow us to turn off
-// logging at compile time so no logging message below that level is produced
-// at all. The value should be between INT_MIN and CAFFE_FATAL.
-// #ifndef CAFFE2_LOG_THRESHOLD
-// If we have not defined the compile time log threshold, we keep all the
-// log cases.
-public static native @MemberGetter int CAFFE2_LOG_THRESHOLD();
-public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
-// #endif // CAFFE2_LOG_THRESHOLD
-
-// Below are different implementations for glog and non-glog cases.
-// #ifdef C10_USE_GLOG
-// #include <c10/util/logging_is_google_glog.h>
-// #else // !C10_USE_GLOG
-// #include <c10/util/logging_is_not_google_glog.h>
-// #endif // C10_USE_GLOG
-
-
-
-
-// Some versions of GLOG support less-spammy version of LOG_EVERY_MS. If it's
-// not available - just short-circuit to the always working one one.
-// We define the C10_ name to avoid confusing other files
-// #ifdef LOG_EVERY_MS
-// #define C10_LOG_EVERY_MS(severity, ms) LOG_EVERY_MS(severity, ms)
-// #else
-// #define C10_LOG_EVERY_MS(severity, ms) LOG(severity)
-// #endif
-
-// Same for LOG_FIRST_N
-// #ifdef LOG_FIRST_N
-// #define C10_LOG_FIRST_N(severity, n) LOG_FIRST_N(severity, n)
-// #else
-// #define C10_LOG_FIRST_N(severity, n) LOG(severity)
-// #endif
-
-// Same for LOG_EVERY_N
-// #ifdef LOG_EVERY_N
-// #define C10_LOG_EVERY_N(severity, n) LOG_EVERY_N(severity, n)
-// #else
-// #define C10_LOG_EVERY_N(severity, n) LOG(severity)
-// #endif
-
-// Functions that we use for initialization.
-@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntPointer argc, @Cast("char**") PointerPointer argv);
-@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntPointer argc, @Cast("char**") @ByPtrPtr BytePointer argv);
-@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(IntBuffer argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
-@Namespace("c10") public static native @Cast("bool") boolean InitCaffeLogging(int[] argc, @Cast("char**") @ByPtrPtr byte[] argv);
-@Namespace("c10") public static native void UpdateLoggingLevelsFromFlags();
-
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg);
-
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3);
-
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @StdString BytePointer msg);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    String file,
-    int line,
-    String condition,
-    @StdString String msg);
-
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    @Cast("const char*") BytePointer file,
-    int line,
-    @Cast("const char*") BytePointer condition,
-    @ByVal CompileTimeEmptyString arg3);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3,
-    @Const Pointer caller/*=nullptr*/);
-@Namespace("c10") public static native void ThrowEnforceFiniteNotMet(
-    String file,
-    int line,
-    String condition,
-    @ByVal CompileTimeEmptyString arg3);
-
-@Namespace("c10") public static native @Cast("const bool") boolean IsUsingGoogleLogging();
-
-/**
- * A utility to allow one to show log info to stderr after the program starts.
- *
- * This is similar to calling GLOG's --logtostderr, or setting caffe2_log_level
- * to smaller than INFO. You are recommended to only use this in a few sparse
- * cases, such as when you want to write a tutorial or something. Normally, use
- * the commandline flags to set the log level.
- */
-@Namespace("c10") public static native void ShowLogInfoToStderr();
-
-@Namespace("c10") public static native void SetStackTraceFetcher(@ByVal StringSupplier fetcher);
-
-// #define CAFFE_ENFORCE(condition, ...)
-//   do {
-//     if (C10_UNLIKELY(!(condition))) {
-//       ::c10::ThrowEnforceNotMet(
-//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__));
-//     }
-//   } while (false)
-
-// #define CAFFE_ENFORCE_FINITE(condition, ...)
-//   do {
-//     if (C10_UNLIKELY(!(condition))) {
-//       ::c10::ThrowEnforceFiniteNotMet(
-//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__));
-//     }
-//   } while (false)
-
-// #define CAFFE_ENFORCE_WITH_CALLER(condition, ...)
-//   do {
-//     if (C10_UNLIKELY(!(condition))) {
-//       ::c10::ThrowEnforceNotMet(
-//           __FILE__, __LINE__, #condition, ::c10::str(__VA_ARGS__), this);
-//     }
-//   } while (false)
-
-// #define CAFFE_THROW(...)
-//   ::c10::ThrowEnforceNotMet(__FILE__, __LINE__, "", ::c10::str(__VA_ARGS__))
-
-/**
- * Rich logging messages
- *
- * CAFFE_ENFORCE_THAT can be used with one of the "checker functions" that
- * capture input argument values and add it to the exception message. E.g.
- * {@code CAFFE_ENFORCE_THAT(Equals(foo(x), bar(y)), "Optional additional message")}
- * would evaluate both foo and bar only once and if the results are not equal -
- * include them in the exception message.
- *
- * Some of the basic checker functions like Equals or Greater are already
- * defined below. Other header might define customized checkers by adding
- * functions to caffe2::enforce_detail namespace. For example:
- *
- *   namespace caffe2 { namespace enforce_detail {
- *   inline EnforceFailMessage IsVector(const vector<int64_t>& shape) {
- *     if (shape.size() == 1) { return EnforceOK(); }
- *     return c10::str("Shape ", shape, " is not a vector");
- *   }
- *   }}
- *
- * With further usages like {@code CAFFE_ENFORCE_THAT(IsVector(Input(0).dims()))}
- *
- * Convenient wrappers for binary operations like CAFFE_ENFORCE_EQ are provided
- * too. Please use them instead of TORCH_CHECK_EQ and friends for failures in
- * user-provided input.
- */
-
-// GCC7 is getting an internal compiler error on the new
-// implementation, so keep the old one (which evaluates the error
-// message eagerly and therefore is undesirable for general use
-// compared to the new one) around for it.
-// #if defined(__GNUG__) && __GNUC__ <= 7 && !defined(__clang__)
-
-// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op, lhs, rhs, __FILE__, __LINE__, expr, nullptr, ##__VA_ARGS__)
-
-// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op, (lhs), (rhs), __FILE__, __LINE__, expr, this, ##__VA_ARGS__)
-
-// #else
-
-// #define CAFFE_ENFORCE_THAT_IMPL(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op,
-//       (lhs),
-//       (rhs),
-//       __FILE__,
-//       __LINE__,
-//       expr,
-//       nullptr,
-//       [&](const auto& arg1, const auto& arg2) {
-//         return ::c10::enforce_detail::enforceFailMsgImpl(
-//             arg1, arg2, ##__VA_ARGS__);
-//       })
-
-// #define CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(op, lhs, rhs, expr, ...)
-//   ::c10::enforce_detail::enforceThatImpl(
-//       op,
-//       (lhs),
-//       (rhs),
-//       __FILE__,
-//       __LINE__,
-//       expr,
-//       this,
-//       [&](const auto& arg1, const auto& arg2) {
-//         return ::c10::enforce_detail::enforceFailMsgImpl(
-//             arg1, arg2, ##__VA_ARGS__);
-//       })
-// #endif
-
- // namespace enforce_detail
-
-// #define CAFFE_ENFORCE_THAT(cmp, op, lhs, rhs, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(cmp, lhs, rhs, #lhs " " #op " " #rhs, ##__VA_ARGS__)
-
-// #define CAFFE_ENFORCE_BINARY_OP(cmp, op, x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL(cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_EQ(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_NE(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_LE(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_LT(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::less<void>(), <, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_GE(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_GT(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP(std::greater<void>(), >, x, y, ##__VA_ARGS__)
-
-// #define CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(cmp, op, x, y, ...)
-//   CAFFE_ENFORCE_THAT_IMPL_WITH_CALLER(
-//       cmp, x, y, #x " " #op " " #y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_EQ_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
-//       std::equal_to<void>(), ==, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_NE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
-//       std::not_equal_to<void>(), !=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_LE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
-//       std::less_equal<void>(), <=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_LT_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(std::less<void>(), <, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_GE_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
-//       std::greater_equal<void>(), >=, x, y, ##__VA_ARGS__)
-// #define CAFFE_ENFORCE_GT_WITH_CALLER(x, y, ...)
-//   CAFFE_ENFORCE_BINARY_OP_WITH_CALLER(
-//       std::greater<void>(), >, x, y, ##__VA_ARGS__)
-
-/**
- * Very lightweight logging for the first time API usage. It's beneficial for
- * tracking of individual functionality usage in larger applications.
- *
- * In order to ensure light-weightedness of logging, we utilize static variable
- * trick - LogAPIUsage will be invoked only once and further invocations will
- * just do an atomic check.
- *
- * Example:
- *   // Logs caller info with an arbitrary text event, if there is a usage.
- *   C10_LOG_API_USAGE_ONCE("my_api");
- */
-// #define C10_LOG_API_USAGE_ONCE(...)
-//   C10_UNUSED static bool C10_ANONYMOUS_VARIABLE(logFlag) =
-//       ::c10::detail::LogAPIUsageFakeReturn(__VA_ARGS__);
-
-// API usage logging capabilities
-@Namespace("c10") public static native void SetAPIUsageLogger(@ByVal StringConsumer logger);
-@Namespace("c10") public static native void LogAPIUsage(@StdString BytePointer context);
-@Namespace("c10") public static native void LogAPIUsage(@StdString String context);
-
-@Namespace("c10") public static native void SetAPIUsageMetadataLogger(
-    @ByVal MetadataLogger logger);
-@Namespace("c10") public static native void LogAPIUsageMetadata(
-    @StdString BytePointer context,
-    @Const @ByRef StringStringMap metadata_map);
-@Namespace("c10") public static native void LogAPIUsageMetadata(
-    @StdString String context,
-    @Const @ByRef StringStringMap metadata_map);
-// Targeting ../DDPLoggingData.java
-
-
-
-@Namespace("c10") public static native void SetPyTorchDDPUsageLogger(
-    @ByVal DDPLogger logger);
-@Namespace("c10") public static native void LogPyTorchDDPUsage(@Const @ByRef DDPLoggingData ddpData);
-// Return value is needed to do the static variable initialization trick
-@Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString BytePointer context);
-@Namespace("c10::detail") public static native @Cast("bool") boolean LogAPIUsageFakeReturn(@StdString String context);
- // namespace detail
-
-// Initializes the c10 logger.
-@Namespace("c10") public static native void initLogging();
-
- // namespace c10
-
-// #endif // C10_UTIL_LOGGING_H_
 
 
 // Parsed from c10/util/intrusive_ptr.h
@@ -15532,48 +15611,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  // namespace c10
 
 
-// Parsed from ATen/core/function_schema_inl.h
-
-// #pragma once
-// #include <ostream>
-// #include <sstream>
-
-// note: windows build doesn't find symbols in operator files unless
-// this is a header file
-
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef FunctionSchema schema);
-
-@Namespace("c10") public static native @Cast("size_t") long findFirstOutArg(@StdVector Argument args);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// covariant subtyping of list of Arguments
-@Namespace("c10") public static native @Cast("bool") boolean isSubtypeOfList(
-    @ByVal ArgumentArrayRef child,
-    @ByVal ArgumentArrayRef parent,
-    @Cast("std::ostream*") Pointer why_not);
-
-
-
- // namespace c10
-
-
 // Parsed from ATen/core/function_schema.h
 
 // #pragma once
@@ -15623,6 +15660,8 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // full format: Type(alias)? name=default_value
 @Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Argument arg);
 
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef FunctionSchema schema);
+
 @Namespace("c10") public static native @StdString BytePointer toString(@Const @ByRef FunctionSchema schema);
 
  // namespace c10
@@ -15630,6 +15669,46 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 // #include <ATen/core/function_schema_inl.h>  // IWYU pragma: keep
+
+
+// Parsed from ATen/core/function_schema_inl.h
+
+// #pragma once
+// #include <ostream>
+// #include <sstream>
+
+// note: windows build doesn't find symbols in operator files unless
+// this is a header file
+
+@Namespace("c10") public static native @Cast("size_t") long findFirstOutArg(@StdVector Argument args);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// covariant subtyping of list of Arguments
+@Namespace("c10") public static native @Cast("bool") boolean isSubtypeOfList(
+    @ByVal ArgumentArrayRef child,
+    @ByVal ArgumentArrayRef parent,
+    @Cast("std::ostream*") Pointer why_not);
+
+
+
+ // namespace c10
 
 
 // Parsed from ATen/core/op_registration/infer_schema.h
@@ -15675,6 +15754,281 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 @Namespace("c10") public static native @ByVal StringOptional findSchemaDifferences(@Const @ByRef FunctionSchema inferred, @Const @ByRef FunctionSchema specified);
 
 
+
+
+// Parsed from ATen/record_function.h
+
+// #pragma once
+
+// #include <ATen/core/ivalue.h>
+// #include <ATen/core/operator_name.h>
+// #include <c10/macros/Export.h>
+// #include <c10/util/Optional.h>
+// #include <c10/util/SmallVector.h>
+// #include <c10/util/variant.h>
+
+// #include <array>
+// #include <atomic>
+// #include <functional>
+// #include <memory>
+
+
+// Kind of record function scope;
+@Namespace("at") public enum RecordScope {
+  // c10/ATen ops, autograd nodes
+  FUNCTION((byte)(0)),
+  // Functions/nodes called from the autograd
+  BACKWARD_FUNCTION((byte)(1)),
+  // TorchScript functions, methods
+  TORCHSCRIPT_FUNCTION((byte)(2)),
+  // Kernel Function dtype Tag
+  KERNEL_FUNCTION_DTYPE((byte)(3)),
+  // Torchbind custom class,
+  CUSTOM_CLASS((byte)(4)),
+  // Generic Build Feature
+  BUILD_FEATURE((byte)(5)),
+  // Kernel Function dtype Tag
+  LITE_INTERPRETER((byte)(6)),
+  // User defined scope (e.g. with record_function())
+  USER_SCOPE((byte)(7)),
+  // Scopes for static runtime, a specialized TorchScript interpreter
+  STATIC_RUNTIME_OP((byte)(8)),
+  STATIC_RUNTIME_MODEL((byte)(9)),
+  NUM_SCOPES((byte)(10));// must be the last in the list
+
+    public final byte value;
+    private RecordScope(byte v) { this.value = v; }
+    private RecordScope(RecordScope e) { this.value = e.value; }
+    public RecordScope intern() { for (RecordScope e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+ // namespace at
+ // namespace std
+
+// Soft limit on the number of callbacks to use;
+@Namespace("at") @MemberGetter public static native @Cast("const std::size_t") long kSoftLimitCallbacks();
+
+// An abstract base class for various observer contexts that can be attached to
+// the RecordFunction.
+
+//
+// PyTorch callbacks/observers API:
+//
+
+/**
+ * RecordFunctionCallback represents a pair of callbacks to be used with
+ * RecordFunction, members:
+ *   start, end - the callbacks to run when entering and exiting the scope;
+ *     optionally, the start callback may return an ObserverContext which will
+ *     be passed to the end callback, use appropriate constructor accordingly.
+ *   needs_inputs - whether the callbacks need the inputs passed from the
+ * observed function/range; NOTE: passing the inputs incurs an additional
+ * overhead; sampling_probability - if not 1.0, then the callback is
+ * probabilistically sampled to run; NOTE: start and end callbacks always run as
+ * a pair and are sampled together; scopes - types of scopes to execute the
+ * callbacks on (see RecordScope); passing empty set means the callbacks will be
+ * executed for all possible scope types should_run - optional function that
+ * returns whether this callback should run; overwrites the effect of setting
+ * sampling_probability
+ */
+
+// Notes:
+//  - two types of callbacks are provided: thread local and global
+//     - thread local callbacks are added/removed only for the given thread
+//       and are stored locally for each thread and separately from the list
+//       of the global callbacks
+//     - global callbacks are stored in a single per process list and are
+//       invoked by every RecordFunction, in addition to the thread local
+//       callbacks specific to the given thread
+//  - we allow the added callbacks to be sampled, by specifying a sampling
+//    probability for each callback pair, if the start callback is
+//    not picked to run, the corresponding end callback won't be called
+//  - a typical use case for the global callbacks is passive monitoring
+//    in the background (e.g. fleet-wide monitoring), without focusing on
+//    the specific piece of code
+//  - in contrast, thread local callbacks are enabled locally, on demand,
+//    for the specific piece of code (range) and are not sampled
+//  - a typical use case for thread local callbacks is profiler and code
+//    execution tracer
+//  - note, thread local callbacks are automatically propagated with
+//    ThreadLocalState across JIT continuations and async tasks (at::launch)
+
+@Namespace("at") @MemberGetter public static native @Cast("const at::CallbackHandle") long INVALID_CALLBACK_HANDLE();
+// Targeting ../RecordFunctionCallbacksEntry.java
+
+
+
+// Holds pairs (callbacks, unique_id)
+// Targeting ../RecordFunction.java
+
+
+
+@Namespace("at") public static native @ByVal @Cast("at::StepCallbacks*") Pointer getStepCallbacks(RecordScope scope);
+@Namespace("at") public static native @ByVal @Cast("at::StepCallbacks*") Pointer getStepCallbacks(@Cast("at::RecordScope") byte scope);
+
+@Namespace("at") public static native @ByVal @Cast("c10::optional<at::StepCallbacks>*") Pointer getStepCallbacksUnlessEmpty(
+    RecordScope scope);
+@Namespace("at") public static native @ByVal @Cast("c10::optional<at::StepCallbacks>*") Pointer getStepCallbacksUnlessEmpty(
+    @Cast("at::RecordScope") byte scope);
+
+ // namespace detail
+
+// optional argument - function's seq_no
+// #define RECORD_FUNCTION_WITH_SCOPE(scope, fn, inputs, ...)
+//   at::RecordFunction guard(scope);
+//   if (guard.isActive()) {
+//     ::at::detail::record_function_with_scope(
+//         guard, fn, inputs, ##__VA_ARGS__);
+//   }
+
+// #define RECORD_FUNCTION_WITH_SCOPE_INPUTS_OUTPUTS(
+//     scope, fn, inputs, outputs, ...)
+//   at::RecordFunction guard(scope);
+//   if (guard.isActive()) {
+//     if (guard.needsInputs()) {
+//       guard.before(fn, inputs, ##__VA_ARGS__);
+//     } else {
+//       guard.before(fn, ##__VA_ARGS__);
+//     }
+//     if (guard.needsOutputs()) {
+//       guard.setOutputs(outputs);
+//     }
+//   }
+
+// #define RECORD_FUNCTION(fn, inputs, ...)
+//   RECORD_FUNCTION_WITH_SCOPE(
+//       at::RecordScope::FUNCTION, fn, inputs, ##__VA_ARGS__)
+
+// #define RECORD_TORCHSCRIPT_FUNCTION(mn, inputs)
+//   RECORD_FUNCTION_WITH_SCOPE(at::RecordScope::TORCHSCRIPT_FUNCTION, mn, inputs)
+
+// #define RECORD_FUNCTION_WITH_INPUTS_OUTPUTS(fn, inputs, outputs, ...)
+//   RECORD_FUNCTION_WITH_SCOPE_INPUTS_OUTPUTS(
+//       at::RecordScope::FUNCTION, fn, inputs, outputs, ##__VA_ARGS__)
+
+// Custom user scopes in C++; similar to Python's 'with record_function("..."):'
+// #define RECORD_USER_SCOPE(fn)
+//   RECORD_FUNCTION_WITH_SCOPE(
+//       at::RecordScope::USER_SCOPE, fn, c10::ArrayRef<const c10::IValue>{})
+
+// RECORD_USER_SCOPE with inputs
+// #define RECORD_USER_SCOPE_WITH_INPUTS(fn, inputs)
+//   RECORD_FUNCTION_WITH_SCOPE(at::RecordScope::USER_SCOPE, fn, inputs)
+
+// Helper macro to pass in debug handle that is used to
+// post process events
+// #define RECORD_WITH_SCOPE_DEBUG_HANDLE_AND_INPUTS(
+//     scope, fn, debug_handle, inputs, ...)
+//   at::RecordFunction guard(scope);
+//   if (guard.isActive()) {
+//     ::at::detail::record_function_with_scope_and_debug_handle(
+//         guard, fn, debug_handle, inputs, ##__VA_ARGS__);
+//   }
+
+// Helper macros to record LITE INTERPETER scope events with debug handles
+// #define RECORD_EDGE_SCOPE_WITH_DEBUG_HANDLE_AND_INPUTS(
+//     fn, debug_handle, inputs)
+//   RECORD_WITH_SCOPE_DEBUG_HANDLE_AND_INPUTS(
+//       at::RecordScope::LITE_INTERPRETER, fn, debug_handle, inputs)
+
+// Bookend to the RECORD_FUNCTION macros.  Use this after the kernel
+// launch to let the profiler bind the outputs to the op that produced
+// them.  Note that guard is declared by RECORD_FUNCTION so this macro
+// needs to be called from the same scope as RECORD_FUNCTION
+// #define RECORD_OUTPUTS(outputs)
+//   if (guard.needsOutputs()) {
+//     guard.setOutputs(
+//         std::vector<c10::IValue>(outputs.begin(), outputs.end()));
+//   }
+
+/**
+ * addThreadLocalCallback adds a thread local callback to run with
+ * RecordFunction, returns handle to use with removeThreadLocalCallback
+ */
+@Namespace("at") public static native @Cast("at::CallbackHandle") long addThreadLocalCallback(@ByVal @Cast("at::RecordFunctionCallback*") Pointer cb);
+
+/**
+ * hasThreadLocalCallbacks returns whether there're callbacks registered
+ * with addThreadLocalCallback
+ */
+@Namespace("at") public static native @Cast("bool") boolean hasThreadLocalCallbacks();
+
+/**
+ * clearThreadLocalCallbacks removes all thread local callbacks
+ */
+@Namespace("at") public static native void clearThreadLocalCallbacks();
+
+/**
+ * addGlobalCallback adds a global callback to run with RecordFunction:
+ *
+ * only during the program initialization
+ */
+@Namespace("at") public static native @Cast("at::CallbackHandle") long addGlobalCallback(@ByVal @Cast("at::RecordFunctionCallback*") Pointer cb);
+
+/**
+ * removeCallback removes a callback given the handle returned by
+ * addThreadLocalCallback or addGlobalCallback;
+ *
+ * no other code can run simultaneously
+ */
+@Namespace("at") public static native void removeCallback(@Cast("at::CallbackHandle") long handle);
+
+/**
+ * Prevent the given callback from executing. If handle is invalid,
+ * does nothing.
+ */
+@Namespace("at") public static native void disableCallback(@Cast("at::CallbackHandle") long handle);
+
+/**
+ * Allow the given callback, previously disabled with disableCallback, to
+ * execute again. If handle is invalid, does nothing.
+ */
+@Namespace("at") public static native void reenableCallback(@Cast("at::CallbackHandle") long handle);
+
+/**
+ * hasGlobalCallbacks returns whether there're global callbacks
+ * registered with pushGlobalCallback
+ */
+@Namespace("at") public static native @Cast("bool") boolean hasGlobalCallbacks();
+
+/**
+ * clearGlobalCallbacks removes all global callbacks
+ */
+@Namespace("at") public static native void clearGlobalCallbacks();
+
+// for both thread local and global callbacks
+@Namespace("at") public static native @Cast("bool") boolean hasCallbacks();
+@Namespace("at") public static native void clearCallbacks();
+
+/**
+ * enableRecordFunction enables RecordFunction thread locally
+ */
+@Namespace("at") public static native void enableRecordFunction(@Cast("bool") boolean enable/*=true*/);
+@Namespace("at") public static native void enableRecordFunction();
+
+/**
+ * isRecordFunctionEnabled returns whether RecordFunction
+ * is enabled thread locally
+ */
+@Namespace("at") public static native @Cast("bool") boolean isRecordFunctionEnabled();
+// Targeting ../RecordFunctionGuard.java
+
+
+// Targeting ../DisableRecordFunctionGuard.java
+
+
+// Targeting ../RecordFunctionTLS.java
+
+
+
+@Namespace("at") public static native @Const @ByRef RecordFunctionTLS get_record_function_tls_();
+
+@Namespace("at") public static native void set_record_function_tls_(@Const @ByRef RecordFunctionTLS tls);
+
+@Namespace("at") public static native void set_record_function_seed_for_testing(@Cast("uint32_t") int seed);
+
+ // namespace at
 
 
 // Parsed from ATen/core/op_registration/op_allowlist.h
@@ -15834,32 +16188,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  // namespace torch
 
 
-// Parsed from ATen/core/enum_tag.h
-
-// #pragma once
-
-// @generated by torchgen/gen.py from enum_tag.h
-    // Enum of valid tags obtained from the entries in tags.yaml
-    @Namespace("at") public enum Tag {
-        core(0),
-        data_dependent_output(1),
-        dynamic_output_shape(2),
-        generated(3),
-        inplace_view(4),
-        nondeterministic_bitwise(5),
-        nondeterministic_seeded(6),
-        pointwise(7),
-        view_copy(8);
-
-        public final int value;
-        private Tag(int v) { this.value = v; }
-        private Tag(Tag e) { this.value = e.value; }
-        public Tag intern() { for (Tag e : values()) if (e.value == value) return e; return this; }
-        @Override public String toString() { return intern().name(); }
-    }
-
-
-
 // Parsed from c10/core/CompileTimeFunctionPointer.h
 
 // #pragma once
@@ -15906,42 +16234,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 // #pragma once
 // #include <c10/util/intrusive_ptr.h>
 // Targeting ../OperatorKernel.java
-
-
-
-  // namespace c10
-
-
-// Parsed from ATen/core/boxing/BoxedKernel_impl.h
-
-// #pragma once
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -16019,6 +16311,42 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
   // namespace c10
 
 // #include <ATen/core/boxing/BoxedKernel_impl.h>
+
+
+// Parsed from ATen/core/boxing/BoxedKernel_impl.h
+
+// #pragma once
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace c10
 
 
 // Parsed from ATen/core/stack.h
@@ -16362,6 +16690,25 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
+// Parsed from ATen/core/boxing/KernelFunction.h
+
+// #pragma once
+
+// #include <ATen/core/ATen_fwd.h>
+// #include <ATen/core/boxing/BoxedKernel.h>
+// #include <ATen/core/stack.h>
+// #include <c10/core/DispatchKeySet.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <c10/util/TypeList.h> // TODO Instead of this, move torch::jit::Stack to the c10 namespace.
+// Targeting ../KernelFunction.java
+
+
+
+
+
+// #include <ATen/core/boxing/KernelFunction_impl.h>
+
+
 // Parsed from ATen/core/boxing/KernelFunction_impl.h
 
 // #include <ATen/core/boxing/impl/boxing.h>
@@ -16424,25 +16771,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
 
-
-
-// Parsed from ATen/core/boxing/KernelFunction.h
-
-// #pragma once
-
-// #include <ATen/core/ATen_fwd.h>
-// #include <ATen/core/boxing/BoxedKernel.h>
-// #include <ATen/core/stack.h>
-// #include <c10/core/DispatchKeySet.h>
-// #include <c10/util/intrusive_ptr.h>
-// #include <c10/util/TypeList.h> // TODO Instead of this, move torch::jit::Stack to the c10 namespace.
-// Targeting ../KernelFunction.java
-
-
-
-
-
-// #include <ATen/core/boxing/KernelFunction_impl.h>
 
 
 // Parsed from ATen/core/dispatch/CppSignature.h
@@ -16519,6 +16847,32 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
  // namespace c10
   // Old-style API
+
+
+
+// Parsed from ATen/core/enum_tag.h
+
+// #pragma once
+
+// @generated by torchgen/gen.py from enum_tag.h
+    // Enum of valid tags obtained from the entries in tags.yaml
+    @Namespace("at") public enum Tag {
+        core(0),
+        data_dependent_output(1),
+        dynamic_output_shape(2),
+        generated(3),
+        inplace_view(4),
+        nondeterministic_bitwise(5),
+        nondeterministic_seeded(6),
+        pointwise(7),
+        view_copy(8);
+
+        public final int value;
+        private Tag(int v) { this.value = v; }
+        private Tag(Tag e) { this.value = e.value; }
+        public Tag intern() { for (Tag e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
 
 
@@ -17009,63 +17363,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
  // namespace torch
 
 
-// Parsed from c10/util/flat_hash_map.h
-
-// Taken from
-// https://github.com/skarupke/flat_hash_map/blob/2c4687431f978f02a3780e24b8b701d22aa32d9c/flat_hash_map.hpp
-// with fixes applied:
-// - https://github.com/skarupke/flat_hash_map/pull/25
-// - https://github.com/skarupke/flat_hash_map/pull/26
-// - replace size_t with uint64_t to fix it for 32bit
-// - add "GCC diagnostic" pragma to ignore -Wshadow
-// - make sherwood_v3_table::convertible_to_iterator public because GCC5 seems
-// to have issues with it otherwise
-// - fix compiler warnings in operator templated_iterator<const value_type>
-
-//          Copyright Malte Skarupke 2017.
-// Distributed under the Boost Software License, Version 1.0.
-//    (See http://www.boost.org/LICENSE_1_0.txt)
-
-// #pragma once
-
-// #include <c10/macros/Macros.h>
-// #include <algorithm>
-// #include <cmath>
-// #include <cstddef>
-// #include <cstdint>
-// #include <functional>
-// #include <iterator>
-// #include <stdexcept>
-// #include <type_traits>
-// #include <utility>
-
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-int-float-conversion")
-// #endif
-
-// #if defined(_MSC_VER) && !defined(__clang__)
-// #pragma warning(push)
-// #pragma warning(disable : 4624) // destructor was implicitly defined as deleted
-// #endif
-
-// #ifdef _MSC_VER
-// #define SKA_NOINLINE(...) __declspec(noinline) __VA_ARGS__
-// #else
-// #define SKA_NOINLINE(...) __VA_ARGS__ __attribute__((noinline))
-// #endif
-
-@Namespace("ska::detailv3") public static native byte log2(@Cast("uint64_t") long value);
-
-// Implementation taken from http://en.cppreference.com/w/cpp/types/void_t
-// (it takes CWG1558 into account and also works for older compilers)
- // namespace detailv3
-
- // end namespace ska
-
-// #if defined(_MSC_VER) && !defined(__clang__)
-// #pragma warning(pop)
-// #endif
-
-
 // Parsed from torch/csrc/autograd/anomaly_mode.h
 
 // #pragma once
@@ -17085,28 +17382,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
  // namespace autograd
  // namespace torch
-
-
-// Parsed from c10/core/GradMode.h
-
-// #pragma once
-
-// #include <c10/core/AutogradState.h>
-// #include <c10/macros/Export.h>
-// Targeting ../GradMode.java
-
-
-// Targeting ../AutoGradMode.java
-
-
-// Targeting ../NoGradGuard.java
-
-
-// Targeting ../AutoFwGradMode.java
-
-
-
- // namespace c10
 
 
 // Parsed from ATen/core/grad_mode.h
@@ -17230,281 +17505,6 @@ public static final int CAFFE2_LOG_THRESHOLD = CAFFE2_LOG_THRESHOLD();
 
 
  // namespace impl
- // namespace at
-
-
-// Parsed from ATen/record_function.h
-
-// #pragma once
-
-// #include <ATen/core/ivalue.h>
-// #include <ATen/core/operator_name.h>
-// #include <c10/macros/Export.h>
-// #include <c10/util/Optional.h>
-// #include <c10/util/SmallVector.h>
-// #include <c10/util/variant.h>
-
-// #include <array>
-// #include <atomic>
-// #include <functional>
-// #include <memory>
-
-
-// Kind of record function scope;
-@Namespace("at") public enum RecordScope {
-  // c10/ATen ops, autograd nodes
-  FUNCTION((byte)(0)),
-  // Functions/nodes called from the autograd
-  BACKWARD_FUNCTION((byte)(1)),
-  // TorchScript functions, methods
-  TORCHSCRIPT_FUNCTION((byte)(2)),
-  // Kernel Function dtype Tag
-  KERNEL_FUNCTION_DTYPE((byte)(3)),
-  // Torchbind custom class,
-  CUSTOM_CLASS((byte)(4)),
-  // Generic Build Feature
-  BUILD_FEATURE((byte)(5)),
-  // Kernel Function dtype Tag
-  LITE_INTERPRETER((byte)(6)),
-  // User defined scope (e.g. with record_function())
-  USER_SCOPE((byte)(7)),
-  // Scopes for static runtime, a specialized TorchScript interpreter
-  STATIC_RUNTIME_OP((byte)(8)),
-  STATIC_RUNTIME_MODEL((byte)(9)),
-  NUM_SCOPES((byte)(10));// must be the last in the list
-
-    public final byte value;
-    private RecordScope(byte v) { this.value = v; }
-    private RecordScope(RecordScope e) { this.value = e.value; }
-    public RecordScope intern() { for (RecordScope e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
- // namespace at
- // namespace std
-
-// Soft limit on the number of callbacks to use;
-@Namespace("at") @MemberGetter public static native @Cast("const std::size_t") long kSoftLimitCallbacks();
-
-// An abstract base class for various observer contexts that can be attached to
-// the RecordFunction.
-
-//
-// PyTorch callbacks/observers API:
-//
-
-/**
- * RecordFunctionCallback represents a pair of callbacks to be used with
- * RecordFunction, members:
- *   start, end - the callbacks to run when entering and exiting the scope;
- *     optionally, the start callback may return an ObserverContext which will
- *     be passed to the end callback, use appropriate constructor accordingly.
- *   needs_inputs - whether the callbacks need the inputs passed from the
- * observed function/range; NOTE: passing the inputs incurs an additional
- * overhead; sampling_probability - if not 1.0, then the callback is
- * probabilistically sampled to run; NOTE: start and end callbacks always run as
- * a pair and are sampled together; scopes - types of scopes to execute the
- * callbacks on (see RecordScope); passing empty set means the callbacks will be
- * executed for all possible scope types should_run - optional function that
- * returns whether this callback should run; overwrites the effect of setting
- * sampling_probability
- */
-
-// Notes:
-//  - two types of callbacks are provided: thread local and global
-//     - thread local callbacks are added/removed only for the given thread
-//       and are stored locally for each thread and separately from the list
-//       of the global callbacks
-//     - global callbacks are stored in a single per process list and are
-//       invoked by every RecordFunction, in addition to the thread local
-//       callbacks specific to the given thread
-//  - we allow the added callbacks to be sampled, by specifying a sampling
-//    probability for each callback pair, if the start callback is
-//    not picked to run, the corresponding end callback won't be called
-//  - a typical use case for the global callbacks is passive monitoring
-//    in the background (e.g. fleet-wide monitoring), without focusing on
-//    the specific piece of code
-//  - in contrast, thread local callbacks are enabled locally, on demand,
-//    for the specific piece of code (range) and are not sampled
-//  - a typical use case for thread local callbacks is profiler and code
-//    execution tracer
-//  - note, thread local callbacks are automatically propagated with
-//    ThreadLocalState across JIT continuations and async tasks (at::launch)
-
-@Namespace("at") @MemberGetter public static native @Cast("const at::CallbackHandle") long INVALID_CALLBACK_HANDLE();
-// Targeting ../RecordFunctionCallbacksEntry.java
-
-
-
-// Holds pairs (callbacks, unique_id)
-// Targeting ../RecordFunction.java
-
-
-
-@Namespace("at") public static native @ByVal @Cast("at::StepCallbacks*") Pointer getStepCallbacks(RecordScope scope);
-@Namespace("at") public static native @ByVal @Cast("at::StepCallbacks*") Pointer getStepCallbacks(@Cast("at::RecordScope") byte scope);
-
-@Namespace("at") public static native @ByVal @Cast("c10::optional<at::StepCallbacks>*") Pointer getStepCallbacksUnlessEmpty(
-    RecordScope scope);
-@Namespace("at") public static native @ByVal @Cast("c10::optional<at::StepCallbacks>*") Pointer getStepCallbacksUnlessEmpty(
-    @Cast("at::RecordScope") byte scope);
-
- // namespace detail
-
-// optional argument - function's seq_no
-// #define RECORD_FUNCTION_WITH_SCOPE(scope, fn, inputs, ...)
-//   at::RecordFunction guard(scope);
-//   if (guard.isActive()) {
-//     ::at::detail::record_function_with_scope(
-//         guard, fn, inputs, ##__VA_ARGS__);
-//   }
-
-// #define RECORD_FUNCTION_WITH_SCOPE_INPUTS_OUTPUTS(
-//     scope, fn, inputs, outputs, ...)
-//   at::RecordFunction guard(scope);
-//   if (guard.isActive()) {
-//     if (guard.needsInputs()) {
-//       guard.before(fn, inputs, ##__VA_ARGS__);
-//     } else {
-//       guard.before(fn, ##__VA_ARGS__);
-//     }
-//     if (guard.needsOutputs()) {
-//       guard.setOutputs(outputs);
-//     }
-//   }
-
-// #define RECORD_FUNCTION(fn, inputs, ...)
-//   RECORD_FUNCTION_WITH_SCOPE(
-//       at::RecordScope::FUNCTION, fn, inputs, ##__VA_ARGS__)
-
-// #define RECORD_TORCHSCRIPT_FUNCTION(mn, inputs)
-//   RECORD_FUNCTION_WITH_SCOPE(at::RecordScope::TORCHSCRIPT_FUNCTION, mn, inputs)
-
-// #define RECORD_FUNCTION_WITH_INPUTS_OUTPUTS(fn, inputs, outputs, ...)
-//   RECORD_FUNCTION_WITH_SCOPE_INPUTS_OUTPUTS(
-//       at::RecordScope::FUNCTION, fn, inputs, outputs, ##__VA_ARGS__)
-
-// Custom user scopes in C++; similar to Python's 'with record_function("..."):'
-// #define RECORD_USER_SCOPE(fn)
-//   RECORD_FUNCTION_WITH_SCOPE(
-//       at::RecordScope::USER_SCOPE, fn, c10::ArrayRef<const c10::IValue>{})
-
-// RECORD_USER_SCOPE with inputs
-// #define RECORD_USER_SCOPE_WITH_INPUTS(fn, inputs)
-//   RECORD_FUNCTION_WITH_SCOPE(at::RecordScope::USER_SCOPE, fn, inputs)
-
-// Helper macro to pass in debug handle that is used to
-// post process events
-// #define RECORD_WITH_SCOPE_DEBUG_HANDLE_AND_INPUTS(
-//     scope, fn, debug_handle, inputs, ...)
-//   at::RecordFunction guard(scope);
-//   if (guard.isActive()) {
-//     ::at::detail::record_function_with_scope_and_debug_handle(
-//         guard, fn, debug_handle, inputs, ##__VA_ARGS__);
-//   }
-
-// Helper macros to record LITE INTERPETER scope events with debug handles
-// #define RECORD_EDGE_SCOPE_WITH_DEBUG_HANDLE_AND_INPUTS(
-//     fn, debug_handle, inputs)
-//   RECORD_WITH_SCOPE_DEBUG_HANDLE_AND_INPUTS(
-//       at::RecordScope::LITE_INTERPRETER, fn, debug_handle, inputs)
-
-// Bookend to the RECORD_FUNCTION macros.  Use this after the kernel
-// launch to let the profiler bind the outputs to the op that produced
-// them.  Note that guard is declared by RECORD_FUNCTION so this macro
-// needs to be called from the same scope as RECORD_FUNCTION
-// #define RECORD_OUTPUTS(outputs)
-//   if (guard.needsOutputs()) {
-//     guard.setOutputs(
-//         std::vector<c10::IValue>(outputs.begin(), outputs.end()));
-//   }
-
-/**
- * addThreadLocalCallback adds a thread local callback to run with
- * RecordFunction, returns handle to use with removeThreadLocalCallback
- */
-@Namespace("at") public static native @Cast("at::CallbackHandle") long addThreadLocalCallback(@ByVal @Cast("at::RecordFunctionCallback*") Pointer cb);
-
-/**
- * hasThreadLocalCallbacks returns whether there're callbacks registered
- * with addThreadLocalCallback
- */
-@Namespace("at") public static native @Cast("bool") boolean hasThreadLocalCallbacks();
-
-/**
- * clearThreadLocalCallbacks removes all thread local callbacks
- */
-@Namespace("at") public static native void clearThreadLocalCallbacks();
-
-/**
- * addGlobalCallback adds a global callback to run with RecordFunction:
- *
- * only during the program initialization
- */
-@Namespace("at") public static native @Cast("at::CallbackHandle") long addGlobalCallback(@ByVal @Cast("at::RecordFunctionCallback*") Pointer cb);
-
-/**
- * removeCallback removes a callback given the handle returned by
- * addThreadLocalCallback or addGlobalCallback;
- *
- * no other code can run simultaneously
- */
-@Namespace("at") public static native void removeCallback(@Cast("at::CallbackHandle") long handle);
-
-/**
- * Prevent the given callback from executing. If handle is invalid,
- * does nothing.
- */
-@Namespace("at") public static native void disableCallback(@Cast("at::CallbackHandle") long handle);
-
-/**
- * Allow the given callback, previously disabled with disableCallback, to
- * execute again. If handle is invalid, does nothing.
- */
-@Namespace("at") public static native void reenableCallback(@Cast("at::CallbackHandle") long handle);
-
-/**
- * hasGlobalCallbacks returns whether there're global callbacks
- * registered with pushGlobalCallback
- */
-@Namespace("at") public static native @Cast("bool") boolean hasGlobalCallbacks();
-
-/**
- * clearGlobalCallbacks removes all global callbacks
- */
-@Namespace("at") public static native void clearGlobalCallbacks();
-
-// for both thread local and global callbacks
-@Namespace("at") public static native @Cast("bool") boolean hasCallbacks();
-@Namespace("at") public static native void clearCallbacks();
-
-/**
- * enableRecordFunction enables RecordFunction thread locally
- */
-@Namespace("at") public static native void enableRecordFunction(@Cast("bool") boolean enable/*=true*/);
-@Namespace("at") public static native void enableRecordFunction();
-
-/**
- * isRecordFunctionEnabled returns whether RecordFunction
- * is enabled thread locally
- */
-@Namespace("at") public static native @Cast("bool") boolean isRecordFunctionEnabled();
-// Targeting ../RecordFunctionGuard.java
-
-
-// Targeting ../DisableRecordFunctionGuard.java
-
-
-// Targeting ../RecordFunctionTLS.java
-
-
-
-@Namespace("at") public static native @Const @ByRef RecordFunctionTLS get_record_function_tls_();
-
-@Namespace("at") public static native void set_record_function_tls_(@Const @ByRef RecordFunctionTLS tls);
-
-@Namespace("at") public static native void set_record_function_seed_for_testing(@Cast("uint32_t") int seed);
-
  // namespace at
 
 
@@ -18968,217 +18968,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 }
  // namespace Reduction
  // namespace at
-
-
-// Parsed from ATen/ops/from_blob.h
-
-// #pragma once
-// #include <ATen/core/Tensor.h>
-
-@Namespace("at::detail") public static native void noopDelete(Pointer arg0);
-
-
-// Targeting ../TensorMaker.java
-
-
-
-@Namespace("at") public static native @ByVal @NoException(true) TensorMaker for_blob(Pointer data, @ByVal LongArrayRef sizes);
-@Namespace("at") public static native @ByVal @NoException(true) TensorMaker for_blob(Pointer data, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
-
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides,
-    PointerConsumer deleter);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-    PointerConsumer deleter);
-
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides,
-    @Cast("int64_t") long storage_offset,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides,
-    @Cast("int64_t") long storage_offset,
-    PointerConsumer deleter);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-    @Cast("int64_t") long storage_offset,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-    @Cast("int64_t") long storage_offset,
-    PointerConsumer deleter);
-
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    PointerConsumer deleter);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    PointerConsumer deleter,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
-    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    PointerConsumer deleter);
-
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @ByVal LongArrayRef strides);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
-
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal LongArrayRef sizes);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
-    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor from_blob(
-    Pointer data,
-    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
-
-  // namespace at
-
-
-// Parsed from ATen/ops/tensor.h
-
-// #pragma once
-// #include <ATen/core/Tensor.h>
-// #include <c10/core/ScalarType.h>
-
-// These functions are defined in ATen/Utils.cpp.
-// #define TENSOR(T, S)
-//   TORCH_API Tensor tensor(ArrayRef<T> values, const TensorOptions& options);
-//   inline Tensor tensor(
-//       std::initializer_list<T> values, const TensorOptions& options) {
-//     return at::tensor(ArrayRef<T>(values), options);
-//   }
-//   inline Tensor tensor(T value, const TensorOptions& options) {
-//     return at::tensor(ArrayRef<T>(value), options);
-//   }
-//   inline Tensor tensor(ArrayRef<T> values) {
-//     return at::tensor(std::move(values), at::dtype(k##S));
-//   }
-//   inline Tensor tensor(std::initializer_list<T> values) {
-//     return at::tensor(ArrayRef<T>(values));
-//   }
-//   inline Tensor tensor(T value) {
-//     return at::tensor(ArrayRef<T>(value));
-//   }
-@Namespace("at") public static native @ByVal Tensor tensor(@ByVal ByteArrayRef values, @Const @ByRef TensorOptions options);
-@Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jbyte*", "c10::ArrayRef<jbyte>", "std::vector<jbyte>&"}) @StdVector("jbyte") byte[] values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("uint8_t") byte value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ByteArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jbyte*", "c10::ArrayRef<jbyte>", "std::vector<jbyte>&"}) @StdVector("jbyte") byte... values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("uint8_t") byte value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ShortArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jshort*", "c10::ArrayRef<jshort>", "std::vector<jshort>&"}) @StdVector("jshort") short[] values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(short value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ShortArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jshort*", "c10::ArrayRef<jshort>", "std::vector<jshort>&"}) @StdVector("jshort") short... values);
-  @Namespace("at") public static native @ByVal Tensor tensor(short value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal IntArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jint*", "c10::ArrayRef<jint>", "std::vector<jint>&"}) @StdVector("jint") int[] values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(int value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal IntArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jint*", "c10::ArrayRef<jint>", "std::vector<jint>&"}) @StdVector("jint") int... values);
-  @Namespace("at") public static native @ByVal Tensor tensor(int value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal LongArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("int64_t") long value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal LongArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("int64_t") long value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"float*", "c10::ArrayRef<float>", "std::vector<float>&"}) @StdVector("float") float[] values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(float value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"float*", "c10::ArrayRef<float>", "std::vector<float>&"}) @StdVector("float") float... values);
-  @Namespace("at") public static native @ByVal Tensor tensor(float value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(double value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(double value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal Half value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal Half value); 
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16ArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16 value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16ArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16 value);
-@Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplexArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplex value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplexArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplex value);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplexArrayRef values, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplex value, @Const @ByRef TensorOptions options);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplexArrayRef values);
-  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplex value);
-// #undef TENSOR
-
-  // namespace at
 
 
 // Parsed from ATen/ops/abs.h
@@ -30478,6 +30267,133 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @ByRef Tensor frobenius_norm_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
+
+
+// Parsed from ATen/ops/from_blob.h
+
+// #pragma once
+// #include <ATen/core/Tensor.h>
+
+@Namespace("at::detail") public static native void noopDelete(Pointer arg0);
+
+
+// Targeting ../TensorMaker.java
+
+
+
+@Namespace("at") public static native @ByVal @NoException(true) TensorMaker for_blob(Pointer data, @ByVal LongArrayRef sizes);
+@Namespace("at") public static native @ByVal @NoException(true) TensorMaker for_blob(Pointer data, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
+
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides,
+    PointerConsumer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
+    PointerConsumer deleter);
+
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides,
+    @Cast("int64_t") long storage_offset,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides,
+    @Cast("int64_t") long storage_offset,
+    PointerConsumer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
+    @Cast("int64_t") long storage_offset,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
+    @Cast("int64_t") long storage_offset,
+    PointerConsumer deleter);
+
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    PointerConsumer deleter);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    PointerConsumer deleter,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options,
+    @Const @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional target_device);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    PointerConsumer deleter);
+
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @ByVal LongArrayRef strides);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
+
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal LongArrayRef sizes);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+    @Const @ByRef(nullValue = "c10::TensorOptions{}") TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor from_blob(
+    Pointer data,
+    @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
+
+  // namespace at
 
 
 // Parsed from ATen/ops/from_file.h
@@ -53215,6 +53131,90 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector tensor_split(@Const @ByRef Tensor self, @Const @ByRef Tensor tensor_indices_or_sections);
 
 
+
+
+// Parsed from ATen/ops/tensor.h
+
+// #pragma once
+// #include <ATen/core/Tensor.h>
+// #include <c10/core/ScalarType.h>
+
+// These functions are defined in ATen/Utils.cpp.
+// #define TENSOR(T, S)
+//   TORCH_API Tensor tensor(ArrayRef<T> values, const TensorOptions& options);
+//   inline Tensor tensor(
+//       std::initializer_list<T> values, const TensorOptions& options) {
+//     return at::tensor(ArrayRef<T>(values), options);
+//   }
+//   inline Tensor tensor(T value, const TensorOptions& options) {
+//     return at::tensor(ArrayRef<T>(value), options);
+//   }
+//   inline Tensor tensor(ArrayRef<T> values) {
+//     return at::tensor(std::move(values), at::dtype(k##S));
+//   }
+//   inline Tensor tensor(std::initializer_list<T> values) {
+//     return at::tensor(ArrayRef<T>(values));
+//   }
+//   inline Tensor tensor(T value) {
+//     return at::tensor(ArrayRef<T>(value));
+//   }
+@Namespace("at") public static native @ByVal Tensor tensor(@ByVal ByteArrayRef values, @Const @ByRef TensorOptions options);
+@Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jbyte*", "c10::ArrayRef<jbyte>", "std::vector<jbyte>&"}) @StdVector("jbyte") byte[] values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("uint8_t") byte value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ByteArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jbyte*", "c10::ArrayRef<jbyte>", "std::vector<jbyte>&"}) @StdVector("jbyte") byte... values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("uint8_t") byte value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ShortArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jshort*", "c10::ArrayRef<jshort>", "std::vector<jshort>&"}) @StdVector("jshort") short[] values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(short value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal ShortArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jshort*", "c10::ArrayRef<jshort>", "std::vector<jshort>&"}) @StdVector("jshort") short... values);
+  @Namespace("at") public static native @ByVal Tensor tensor(short value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal IntArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jint*", "c10::ArrayRef<jint>", "std::vector<jint>&"}) @StdVector("jint") int[] values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(int value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal IntArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"jint*", "c10::ArrayRef<jint>", "std::vector<jint>&"}) @StdVector("jint") int... values);
+  @Namespace("at") public static native @ByVal Tensor tensor(int value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal LongArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("int64_t") long value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal LongArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("int64_t") long value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"float*", "c10::ArrayRef<float>", "std::vector<float>&"}) @StdVector("float") float[] values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(float value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal @Cast({"float*", "c10::ArrayRef<float>", "std::vector<float>&"}) @StdVector("float") float... values);
+  @Namespace("at") public static native @ByVal Tensor tensor(float value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(double value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(double value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BoolArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@Cast("decltype(::c10::impl::ScalarTypeToCPPType<::c10::ScalarType::Bool>::t)") boolean value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal Half value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal HalfArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal Half value); 
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16ArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16 value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16ArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal BFloat16 value);
+@Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplexArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplex value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplexArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal FloatComplex value);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplexArrayRef values, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplex value, @Const @ByRef TensorOptions options);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplexArrayRef values);
+  @Namespace("at") public static native @ByVal Tensor tensor(@ByVal DoubleComplex value);
+// #undef TENSOR
+
+  // namespace at
 
 
 // Parsed from ATen/ops/tensordot.h
@@ -76763,6 +76763,482 @@ public static final String TORCH_VERSION =
  // namespace caffe2
 
 
+// Parsed from torch/csrc/jit/serialization/unpickler.h
+
+// #pragma once
+
+// #include <ATen/core/ivalue.h>
+// #include <c10/util/ArrayRef.h>
+// #include <caffe2/serialize/inline_container.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/jit/frontend/script_type_parser.h>
+// #include <torch/csrc/jit/serialization/pickler.h>
+// Targeting ../DeserializationStorageContext.java
+
+
+// Targeting ../Unpickler.java
+
+
+
+
+
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/script_type_parser.h
+
+// #pragma once
+// #include <ATen/core/jit_type.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/jit/frontend/resolver.h>
+// #include <torch/csrc/jit/frontend/tree_views.h>
+// Targeting ../ScriptTypeParser.java
+
+
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/resolver.h
+
+// #pragma once
+
+// #include <ATen/core/jit_type.h>
+// #include <ATen/core/qualified_name.h>
+// #include <torch/csrc/jit/frontend/sugared_value.h>
+// Targeting ../Resolver.java
+
+
+// Targeting ../NativeResolver.java
+
+
+
+@Namespace("torch::jit") public static native @SharedPtr NativeResolver nativeResolver();
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/sugared_value.h
+
+// #pragma once
+// #include <c10/util/Optional.h>
+// #include <functional>
+// #include <memory>
+// #include <string>
+// #include <utility>
+
+// #include <ATen/core/symbol.h>
+// #include <caffe2/serialize/versions.h>
+// #include <torch/csrc/jit/api/module.h>
+// #include <torch/csrc/jit/frontend/error_report.h>
+// #include <torch/csrc/jit/frontend/schema_matching.h>
+// #include <torch/csrc/jit/frontend/versioned_symbols.h>
+// #include <torch/csrc/jit/ir/ir.h>
+// Targeting ../SugaredValue.java
+
+
+// Targeting ../SimpleValue.java
+
+
+// Targeting ../BuiltinFunction.java
+
+
+// Targeting ../SugaredTupleValue.java
+
+
+// Targeting ../BuiltinModule.java
+
+
+// Targeting ../ClassValue.java
+
+
+// Targeting ../NamedTupleConstructor.java
+
+
+// Targeting ../FunctionValue.java
+
+
+// Targeting ../ClosureValue.java
+
+
+// Targeting ../MethodValue.java
+
+
+// Targeting ../PrintValue.java
+
+
+// Targeting ../CastValue.java
+
+
+// Targeting ../TensorCastValue.java
+
+
+// Targeting ../MagicMethod.java
+
+
+// Targeting ../SpecialFormValue.java
+
+
+// Targeting ../LegacyTensorConstructor.java
+
+
+// Targeting ../RangeValue.java
+
+
+
+// Specialized Tree structure to matched against for special handling
+// of builtin functions iterables expressions like zip(), enumerate(), etc.
+// zip and enumerate can be modeled as a tree of SimpleValue/RangeValue:
+//    zip(x, y) ->  (x, y) with tuple assignment to each loop target
+//    enumerate(x) -> (range(0, math.inf, 1), x)
+// So a complicated expression like zip(a, enumerate(b), range(0, 100)) will be:
+// (a, (range(0, math.inf, 1), b), range(0, 100))
+// We use those base iterables to fill in the loop information like
+// max_trip_count and set the value table for loop targets
+// Iterables can contain lists of SugaredValues like ModuleLists. If it
+// does, then we emit it unrolled and require that all values it contains
+// have a statically-determinable length.
+
+@Namespace("torch::jit") public static native @ByVal ValueVector toValues(
+    @ByRef Graph g,
+    @ByVal NamedValueArrayRef nvs);
+// Targeting ../SimpleSelf.java
+
+
+// Targeting ../ExceptionMessageValue.java
+
+
+// Targeting ../ExceptionValue.java
+
+
+// Targeting ../SugaredEnumClass.java
+
+
+// Targeting ../SliceValue.java
+
+
+
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/error_report.h
+
+// #pragma once
+
+// #include <c10/util/Optional.h>
+// #include <torch/csrc/jit/frontend/tree.h>
+// Targeting ../Call.java
+
+
+// Targeting ../ErrorReport.java
+
+
+
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/tree.h
+
+// #pragma once
+
+// #include <functional>
+// #include <memory>
+// #include <unordered_map>
+// #include <vector>
+
+// #include <c10/util/SmallVector.h>
+// #include <c10/util/intrusive_ptr.h>
+// #include <torch/csrc/jit/frontend/lexer.h>
+
+// Trees are used to represent all forms of TC IR, pre- and post-typechecking.
+// Rather than have a full class hierarchy for all TC statements, trees are a
+// slight variation of Lisp s-expressions. For instance, the expression a*b+1
+// is represented as:
+// (+ (* (ident a) (ident b)) (const 1))
+// Atoms like 'a', 'b', and '1' are represented by subclasses of Tree which
+// define stringValue(). Everything else is a Compound object, which has a
+// 'kind' that is a token from lexer.h's TokenKind enum. Single-character
+// operators like '+' are represented using the character itself (so, add.kind()
+// would be '+'). Each Compound object also contains a list of subtrees and is
+// associated with a SourceRange for error reporting.
+// Memory management of trees is done using intrusive_ptr.
+// Targeting ../Tree.java
+
+
+// Targeting ../JitString.java
+
+
+
+@Namespace("torch::jit") public static native @ByVal SourceRange mergeRanges(@ByVal SourceRange c, @Cast("const torch::jit::TreeList*") @ByRef SymDimVector others);
+// Targeting ../Compound.java
+
+
+// Targeting ../pretty_tree.java
+
+
+
+@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @ByVal pretty_tree t_);
+
+@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TreeRef t);
+
+ // namespace jit
+ // namespace torch
+
+
+// Parsed from torch/csrc/jit/frontend/lexer.h
+
+// #pragma once
+// #include <c10/macros/Macros.h>
+// #include <c10/util/C++17.h>
+// #include <c10/util/Exception.h>
+// #include <torch/csrc/Export.h>
+// #include <torch/csrc/jit/frontend/parser_constants.h>
+// #include <torch/csrc/jit/frontend/source_range.h>
+// #include <torch/csrc/jit/frontend/strtod.h>
+// #include <algorithm>
+// #include <clocale>
+// #include <cstdlib>
+// #include <memory>
+// #include <sstream>
+// #include <string>
+// #include <vector>
+
+// #if C10_CLANG_HAS_WARNING("-Wshorten-64-to-32")
+// #endif
+
+// single character tokens are just the character itself '+'
+// multi-character tokens need an entry here
+// if the third entry is not the empty string, it is used
+// in the lexer to match this token.
+
+// These kinds are also used in Tree.h as the kind of the AST node.
+// Some kinds TK_APPLY, TK_LIST are only used in the AST and are not seen in the
+// lexer.
+
+// #define TC_FORALL_TOKEN_KINDS(_)
+//   _(TK_EOF, "eof", "")
+//   _(TK_WHITESPACE, "whitespace", "")
+//   _(TK_WHITESPACE_EOF, "whitespace_eof", "")
+//   _(TK_NUMBER, "number", "")
+//   _(TK_NEWLINE, "newline", "")
+//   _(TK_INDENT, "indent", "")
+//   _(TK_DEDENT, "dedent", "")
+//   _(TK_DEF, "def", "def")
+//   _(TK_EQUIVALENT, "equivalent", "<=>")
+//   _(TK_IDENT, "ident", "")
+//   _(TK_STRING, "string", "")
+//   _(TK_STRINGLITERAL, "string_literal", "")
+//   _(TK_CONST, "const", "")
+//   _(TK_LIST, "list", "")
+//   _(TK_DICT, "dict", "")
+//   _(TK_OPTION, "option", "")
+//   _(TK_APPLY, "apply", "")
+//   _(TK_COMPREHENSION, "comprehension", "")
+//   _(TK_RANGE_CONSTRAINT, "range_constraint", "")
+//   _(TK_PARAM, "param", "")
+//   _(TK_INFERRED, "inferred", "")
+//   _(TK_ACCESS, "access", "")
+//   _(TK_ASSIGN, "assign", "")
+//   _(TK_AUG_ASSIGN, "aug_assign", "")
+//   _(TK_ATTRIBUTE, "attribute", "")
+//   _(TK_IF, "if", "if")
+//   _(TK_ELSE, "else", "else")
+//   _(TK_ELIF, "elif", "elif")
+//   _(TK_WHILE, "while", "while")
+//   _(TK_EXPR_STMT, "expression statement", "")
+//   _(TK_RETURN, "return", "return")
+//   _(TK_IS, "is", "is")
+//   _(TK_ISNOT, "is not", "is not")
+//   _(TK_NE, "ne", "!=")
+//   _(TK_EQ, "eq", "==")
+//   _(TK_LE, "le", "<=")
+//   _(TK_GE, "ge", ">=")
+//   _(TK_FLOOR_DIV, "floordiv", "//")
+//   _(TK_IF_EXPR, "if", "")
+//   _(TK_TRUE, "True", "True")
+//   _(TK_FALSE, "False", "False")
+//   _(TK_NONE, "None", "None")
+//   _(TK_AND, "and", "and")
+//   _(TK_OR, "or", "or")
+//   _(TK_NOT, "not", "not")
+//   _(TK_LSHIFT, "<<", "<<")
+//   _(TK_RSHIFT, ">>", ">>")
+//   _(TK_CAST, "cast", "")
+//   _(TK_PLUS_EQ, "+=", "+=")
+//   _(TK_MINUS_EQ, "-=", "-=")
+//   _(TK_TIMES_EQ, "*=", "*=")
+//   _(TK_DIV_EQ, "/=", "/=")
+//   _(TK_MOD_EQ, "%=", "%=")
+//   _(TK_BIT_OR_EQ, "|=", "|=")
+//   _(TK_BIT_AND_EQ, "&=", "&=")
+//   _(TK_BIT_XOR_EQ, "^=", "^=")
+//   _(TK_LSHIFT_EQ, "<<=", "<<=")
+//   _(TK_RSHIFT_EQ, ">>=", ">>=")
+//   _(TK_POW_EQ, "**=", "**=")
+//   _(TK_GLOBAL, "global", "global")
+//   _(TK_BUILT_IN, "built-in", "")
+//   _(TK_SUBSCRIPT, "subscript", "")
+//   _(TK_VAR, "variable", "")
+//   _(TK_NOTHING, "nothing", "")
+//   _(TK_DICT_LITERAL, "dict-literal", "")
+//   _(TK_LIST_LITERAL, "list-literal", "")
+//   _(TK_TUPLE_LITERAL, "tuple-literal", "")
+//   _(TK_FOR, "for", "for")
+//   _(TK_IN, "in", "in")
+//   _(TK_NOTIN, "not in", "not in")
+//   _(TK_STARRED, "starred", "")
+//   _(TK_UNARY_MINUS, "unary minus", "")
+//   _(TK_POW, "pow operator", "**")
+//   _(TK_ARROW, "arrow", "->")
+//   _(TK_DECL, "decl", "")
+//   _(TK_SLICE_EXPR, "slice expr", "")
+//   _(TK_TYPE_COMMENT, "type comment", "# type:")
+//   _(TK_RAISE, "raise", "raise")
+//   _(TK_ASSERT, "assert", "assert")
+//   _(TK_DOTS, "dots", "...")
+//   _(TK_LIST_COMP, "list comprehension", "")
+//   _(TK_DICT_COMP, "dict comprehension", "")
+//   _(TK_BREAK, "break", "break")
+//   _(TK_CONTINUE, "continue", "continue")
+//   _(TK_DELETE, "del", "del")
+//   _(TK_PASS, "pass", "pass")
+//   _(TK_CLASS_DEF, "class", "class")
+//   _(TK_IMPORT, "import", "import")
+//   _(TK_WITH, "with", "with")
+//   _(TK_WITH_ITEM, "withitem", "")
+//   _(TK_AS, "as", "as")
+//   _(TK_PROP, "property", "")
+//   _(TK_ELLIPSIS, "Ellipsis", "Ellipsis")
+//   _(TK_NONE_TYPE, "NoneType", "NoneType")
+
+@Namespace("torch::jit") public enum TokenKind {
+  // we use characters to represent themselves so skip all valid characters
+  // before
+  // assigning enum values to multi-char tokens.
+  TK_DUMMY_START(256),
+  TK_EOF(257),
+  TK_WHITESPACE(258),
+  TK_WHITESPACE_EOF(259),
+  TK_NUMBER(260),
+  TK_NEWLINE(261),
+  TK_INDENT(262),
+  TK_DEDENT(263),
+  TK_DEF(264),
+  TK_EQUIVALENT(265),
+  TK_IDENT(266),
+  TK_STRING(267),
+  TK_STRINGLITERAL(268),
+  TK_CONST(269),
+  TK_LIST(270),
+  TK_DICT(271),
+  TK_OPTION(272),
+  TK_APPLY(273),
+  TK_COMPREHENSION(274),
+  TK_RANGE_CONSTRAINT(275),
+  TK_PARAM(276),
+  TK_INFERRED(277),
+  TK_ACCESS(278),
+  TK_ASSIGN(279),
+  TK_AUG_ASSIGN(280),
+  TK_ATTRIBUTE(281),
+  TK_IF(282),
+  TK_ELSE(283),
+  TK_ELIF(284),
+  TK_WHILE(285),
+  TK_EXPR_STMT(286),
+  TK_RETURN(287),
+  TK_IS(288),
+  TK_ISNOT(289),
+  TK_NE(290),
+  TK_EQ(291),
+  TK_LE(292),
+  TK_GE(293),
+  TK_FLOOR_DIV(294),
+  TK_IF_EXPR(295),
+  TK_TRUE(296),
+  TK_FALSE(297),
+  TK_NONE(298),
+  TK_AND(299),
+  TK_OR(300),
+  TK_NOT(301),
+  TK_LSHIFT(302),
+  TK_RSHIFT(303),
+  TK_CAST(304),
+  TK_PLUS_EQ(305),
+  TK_MINUS_EQ(306),
+  TK_TIMES_EQ(307),
+  TK_DIV_EQ(308),
+  TK_MOD_EQ(309),
+  TK_BIT_OR_EQ(310),
+  TK_BIT_AND_EQ(311),
+  TK_BIT_XOR_EQ(312),
+  TK_LSHIFT_EQ(313),
+  TK_RSHIFT_EQ(314),
+  TK_POW_EQ(315),
+  TK_GLOBAL(316),
+  TK_BUILT_IN(317),
+  TK_SUBSCRIPT(318),
+  TK_VAR(319),
+  TK_NOTHING(320),
+  TK_DICT_LITERAL(321),
+  TK_LIST_LITERAL(322),
+  TK_TUPLE_LITERAL(323),
+  TK_FOR(324),
+  TK_IN(325),
+  TK_NOTIN(326),
+  TK_STARRED(327),
+  TK_UNARY_MINUS(328),
+  TK_POW(329),
+  TK_ARROW(330),
+  TK_DECL(331),
+  TK_SLICE_EXPR(332),
+  TK_TYPE_COMMENT(333),
+  TK_RAISE(334),
+  TK_ASSERT(335),
+  TK_DOTS(336),
+  TK_LIST_COMP(337),
+  TK_DICT_COMP(338),
+  TK_BREAK(339),
+  TK_CONTINUE(340),
+  TK_DELETE(341),
+  TK_PASS(342),
+  TK_CLASS_DEF(343),
+  TK_IMPORT(344),
+  TK_WITH(345),
+  TK_WITH_ITEM(346),
+  TK_AS(347),
+  TK_PROP(348),
+  TK_ELLIPSIS(349),
+  TK_NONE_TYPE(350);
+
+    public final int value;
+    private TokenKind(int v) { this.value = v; }
+    private TokenKind(TokenKind e) { this.value = e.value; }
+    public TokenKind intern() { for (TokenKind e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("torch::jit") public static native @StdString BytePointer kindToString(int kind);
+@Namespace("torch::jit") public static native int stringToKind(@StdString BytePointer str);
+@Namespace("torch::jit") public static native int stringToKind(@StdString String str);
+
+// nested hash tables that indicate char-by-char what is a valid token.
+// Targeting ../SharedParserData.java
+
+
+
+@Namespace("torch::jit") public static native @ByRef SharedParserData sharedParserData();
+// Targeting ../Token.java
+
+
+ // namespace jit
+ // namespace torch
+
+
+
 // Parsed from caffe2/serialize/inline_container.h
 
 // #pragma once
@@ -76880,10 +77356,7 @@ public static final String TORCH_VERSION =
 
 // #include <istream>
  // namespace serialize
-
-// Targeting ../DeserializationStorageContext.java
-
-
+ // namespace caffe2
 
 @Namespace("torch::jit") public static native @ByVal JitModule import_ir_module(
     @SharedPtr CompilationUnit cu,
@@ -77347,322 +77820,6 @@ public static final String TORCH_VERSION =
  // namespace torch
 
 
-// Parsed from torch/csrc/jit/frontend/lexer.h
-
-// #pragma once
-// #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/Exception.h>
-// #include <torch/csrc/Export.h>
-// #include <torch/csrc/jit/frontend/parser_constants.h>
-// #include <torch/csrc/jit/frontend/source_range.h>
-// #include <torch/csrc/jit/frontend/strtod.h>
-// #include <algorithm>
-// #include <clocale>
-// #include <cstdlib>
-// #include <memory>
-// #include <sstream>
-// #include <string>
-// #include <vector>
-
-// #if C10_CLANG_HAS_WARNING("-Wshorten-64-to-32")
-// #endif
-
-// single character tokens are just the character itself '+'
-// multi-character tokens need an entry here
-// if the third entry is not the empty string, it is used
-// in the lexer to match this token.
-
-// These kinds are also used in Tree.h as the kind of the AST node.
-// Some kinds TK_APPLY, TK_LIST are only used in the AST and are not seen in the
-// lexer.
-
-// #define TC_FORALL_TOKEN_KINDS(_)
-//   _(TK_EOF, "eof", "")
-//   _(TK_WHITESPACE, "whitespace", "")
-//   _(TK_WHITESPACE_EOF, "whitespace_eof", "")
-//   _(TK_NUMBER, "number", "")
-//   _(TK_NEWLINE, "newline", "")
-//   _(TK_INDENT, "indent", "")
-//   _(TK_DEDENT, "dedent", "")
-//   _(TK_DEF, "def", "def")
-//   _(TK_EQUIVALENT, "equivalent", "<=>")
-//   _(TK_IDENT, "ident", "")
-//   _(TK_STRING, "string", "")
-//   _(TK_STRINGLITERAL, "string_literal", "")
-//   _(TK_CONST, "const", "")
-//   _(TK_LIST, "list", "")
-//   _(TK_DICT, "dict", "")
-//   _(TK_OPTION, "option", "")
-//   _(TK_APPLY, "apply", "")
-//   _(TK_COMPREHENSION, "comprehension", "")
-//   _(TK_RANGE_CONSTRAINT, "range_constraint", "")
-//   _(TK_PARAM, "param", "")
-//   _(TK_INFERRED, "inferred", "")
-//   _(TK_ACCESS, "access", "")
-//   _(TK_ASSIGN, "assign", "")
-//   _(TK_AUG_ASSIGN, "aug_assign", "")
-//   _(TK_ATTRIBUTE, "attribute", "")
-//   _(TK_IF, "if", "if")
-//   _(TK_ELSE, "else", "else")
-//   _(TK_ELIF, "elif", "elif")
-//   _(TK_WHILE, "while", "while")
-//   _(TK_EXPR_STMT, "expression statement", "")
-//   _(TK_RETURN, "return", "return")
-//   _(TK_IS, "is", "is")
-//   _(TK_ISNOT, "is not", "is not")
-//   _(TK_NE, "ne", "!=")
-//   _(TK_EQ, "eq", "==")
-//   _(TK_LE, "le", "<=")
-//   _(TK_GE, "ge", ">=")
-//   _(TK_FLOOR_DIV, "floordiv", "//")
-//   _(TK_IF_EXPR, "if", "")
-//   _(TK_TRUE, "True", "True")
-//   _(TK_FALSE, "False", "False")
-//   _(TK_NONE, "None", "None")
-//   _(TK_AND, "and", "and")
-//   _(TK_OR, "or", "or")
-//   _(TK_NOT, "not", "not")
-//   _(TK_LSHIFT, "<<", "<<")
-//   _(TK_RSHIFT, ">>", ">>")
-//   _(TK_CAST, "cast", "")
-//   _(TK_PLUS_EQ, "+=", "+=")
-//   _(TK_MINUS_EQ, "-=", "-=")
-//   _(TK_TIMES_EQ, "*=", "*=")
-//   _(TK_DIV_EQ, "/=", "/=")
-//   _(TK_MOD_EQ, "%=", "%=")
-//   _(TK_BIT_OR_EQ, "|=", "|=")
-//   _(TK_BIT_AND_EQ, "&=", "&=")
-//   _(TK_BIT_XOR_EQ, "^=", "^=")
-//   _(TK_LSHIFT_EQ, "<<=", "<<=")
-//   _(TK_RSHIFT_EQ, ">>=", ">>=")
-//   _(TK_POW_EQ, "**=", "**=")
-//   _(TK_GLOBAL, "global", "global")
-//   _(TK_BUILT_IN, "built-in", "")
-//   _(TK_SUBSCRIPT, "subscript", "")
-//   _(TK_VAR, "variable", "")
-//   _(TK_NOTHING, "nothing", "")
-//   _(TK_DICT_LITERAL, "dict-literal", "")
-//   _(TK_LIST_LITERAL, "list-literal", "")
-//   _(TK_TUPLE_LITERAL, "tuple-literal", "")
-//   _(TK_FOR, "for", "for")
-//   _(TK_IN, "in", "in")
-//   _(TK_NOTIN, "not in", "not in")
-//   _(TK_STARRED, "starred", "")
-//   _(TK_UNARY_MINUS, "unary minus", "")
-//   _(TK_POW, "pow operator", "**")
-//   _(TK_ARROW, "arrow", "->")
-//   _(TK_DECL, "decl", "")
-//   _(TK_SLICE_EXPR, "slice expr", "")
-//   _(TK_TYPE_COMMENT, "type comment", "# type:")
-//   _(TK_RAISE, "raise", "raise")
-//   _(TK_ASSERT, "assert", "assert")
-//   _(TK_DOTS, "dots", "...")
-//   _(TK_LIST_COMP, "list comprehension", "")
-//   _(TK_DICT_COMP, "dict comprehension", "")
-//   _(TK_BREAK, "break", "break")
-//   _(TK_CONTINUE, "continue", "continue")
-//   _(TK_DELETE, "del", "del")
-//   _(TK_PASS, "pass", "pass")
-//   _(TK_CLASS_DEF, "class", "class")
-//   _(TK_IMPORT, "import", "import")
-//   _(TK_WITH, "with", "with")
-//   _(TK_WITH_ITEM, "withitem", "")
-//   _(TK_AS, "as", "as")
-//   _(TK_PROP, "property", "")
-//   _(TK_ELLIPSIS, "Ellipsis", "Ellipsis")
-//   _(TK_NONE_TYPE, "NoneType", "NoneType")
-
-@Namespace("torch::jit") public enum TokenKind {
-  // we use characters to represent themselves so skip all valid characters
-  // before
-  // assigning enum values to multi-char tokens.
-  TK_DUMMY_START(256),
-  TK_EOF(257),
-  TK_WHITESPACE(258),
-  TK_WHITESPACE_EOF(259),
-  TK_NUMBER(260),
-  TK_NEWLINE(261),
-  TK_INDENT(262),
-  TK_DEDENT(263),
-  TK_DEF(264),
-  TK_EQUIVALENT(265),
-  TK_IDENT(266),
-  TK_STRING(267),
-  TK_STRINGLITERAL(268),
-  TK_CONST(269),
-  TK_LIST(270),
-  TK_DICT(271),
-  TK_OPTION(272),
-  TK_APPLY(273),
-  TK_COMPREHENSION(274),
-  TK_RANGE_CONSTRAINT(275),
-  TK_PARAM(276),
-  TK_INFERRED(277),
-  TK_ACCESS(278),
-  TK_ASSIGN(279),
-  TK_AUG_ASSIGN(280),
-  TK_ATTRIBUTE(281),
-  TK_IF(282),
-  TK_ELSE(283),
-  TK_ELIF(284),
-  TK_WHILE(285),
-  TK_EXPR_STMT(286),
-  TK_RETURN(287),
-  TK_IS(288),
-  TK_ISNOT(289),
-  TK_NE(290),
-  TK_EQ(291),
-  TK_LE(292),
-  TK_GE(293),
-  TK_FLOOR_DIV(294),
-  TK_IF_EXPR(295),
-  TK_TRUE(296),
-  TK_FALSE(297),
-  TK_NONE(298),
-  TK_AND(299),
-  TK_OR(300),
-  TK_NOT(301),
-  TK_LSHIFT(302),
-  TK_RSHIFT(303),
-  TK_CAST(304),
-  TK_PLUS_EQ(305),
-  TK_MINUS_EQ(306),
-  TK_TIMES_EQ(307),
-  TK_DIV_EQ(308),
-  TK_MOD_EQ(309),
-  TK_BIT_OR_EQ(310),
-  TK_BIT_AND_EQ(311),
-  TK_BIT_XOR_EQ(312),
-  TK_LSHIFT_EQ(313),
-  TK_RSHIFT_EQ(314),
-  TK_POW_EQ(315),
-  TK_GLOBAL(316),
-  TK_BUILT_IN(317),
-  TK_SUBSCRIPT(318),
-  TK_VAR(319),
-  TK_NOTHING(320),
-  TK_DICT_LITERAL(321),
-  TK_LIST_LITERAL(322),
-  TK_TUPLE_LITERAL(323),
-  TK_FOR(324),
-  TK_IN(325),
-  TK_NOTIN(326),
-  TK_STARRED(327),
-  TK_UNARY_MINUS(328),
-  TK_POW(329),
-  TK_ARROW(330),
-  TK_DECL(331),
-  TK_SLICE_EXPR(332),
-  TK_TYPE_COMMENT(333),
-  TK_RAISE(334),
-  TK_ASSERT(335),
-  TK_DOTS(336),
-  TK_LIST_COMP(337),
-  TK_DICT_COMP(338),
-  TK_BREAK(339),
-  TK_CONTINUE(340),
-  TK_DELETE(341),
-  TK_PASS(342),
-  TK_CLASS_DEF(343),
-  TK_IMPORT(344),
-  TK_WITH(345),
-  TK_WITH_ITEM(346),
-  TK_AS(347),
-  TK_PROP(348),
-  TK_ELLIPSIS(349),
-  TK_NONE_TYPE(350);
-
-    public final int value;
-    private TokenKind(int v) { this.value = v; }
-    private TokenKind(TokenKind e) { this.value = e.value; }
-    public TokenKind intern() { for (TokenKind e : values()) if (e.value == value) return e; return this; }
-    @Override public String toString() { return intern().name(); }
-}
-
-@Namespace("torch::jit") public static native @StdString BytePointer kindToString(int kind);
-@Namespace("torch::jit") public static native int stringToKind(@StdString BytePointer str);
-@Namespace("torch::jit") public static native int stringToKind(@StdString String str);
-
-// nested hash tables that indicate char-by-char what is a valid token.
-// Targeting ../SharedParserData.java
-
-
-
-@Namespace("torch::jit") public static native @ByRef SharedParserData sharedParserData();
-// Targeting ../Token.java
-
-
- // namespace jit
- // namespace torch
-
-
-
-// Parsed from torch/csrc/jit/frontend/tree.h
-
-// #pragma once
-
-// #include <functional>
-// #include <memory>
-// #include <unordered_map>
-// #include <vector>
-
-// #include <c10/util/SmallVector.h>
-// #include <c10/util/intrusive_ptr.h>
-// #include <torch/csrc/jit/frontend/lexer.h>
-
-// Trees are used to represent all forms of TC IR, pre- and post-typechecking.
-// Rather than have a full class hierarchy for all TC statements, trees are a
-// slight variation of Lisp s-expressions. For instance, the expression a*b+1
-// is represented as:
-// (+ (* (ident a) (ident b)) (const 1))
-// Atoms like 'a', 'b', and '1' are represented by subclasses of Tree which
-// define stringValue(). Everything else is a Compound object, which has a
-// 'kind' that is a token from lexer.h's TokenKind enum. Single-character
-// operators like '+' are represented using the character itself (so, add.kind()
-// would be '+'). Each Compound object also contains a list of subtrees and is
-// associated with a SourceRange for error reporting.
-// Memory management of trees is done using intrusive_ptr.
-// Targeting ../Tree.java
-
-
-// Targeting ../JitString.java
-
-
-
-@Namespace("torch::jit") public static native @ByVal SourceRange mergeRanges(@ByVal SourceRange c, @Cast("const torch::jit::TreeList*") @ByRef SymDimVector others);
-// Targeting ../Compound.java
-
-
-// Targeting ../pretty_tree.java
-
-
-
-@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @ByVal pretty_tree t_);
-
-@Namespace("torch::jit") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef TreeRef t);
-
- // namespace jit
- // namespace torch
-
-
-// Parsed from torch/csrc/jit/frontend/error_report.h
-
-// #pragma once
-
-// #include <c10/util/Optional.h>
-// #include <torch/csrc/jit/frontend/tree.h>
-// Targeting ../Call.java
-
-
-// Targeting ../ErrorReport.java
-
-
-
- // namespace jit
- // namespace torch
-
-
 // Parsed from torch/csrc/jit/frontend/schema_matching.h
 
 // #pragma once
@@ -77770,129 +77927,6 @@ public static final String TORCH_VERSION =
 // Maps the given kind to the minimum version that supports it.
 // See note [Dynamic Versions and torch.jit.save vs. torch.save]
 @Namespace("torch::jit") public static native @Cast("uint64_t") long get_min_version_for_kind(@Cast("const torch::jit::NodeKind*") @ByRef Symbol kind);
- // namespace jit
- // namespace torch
-
-
-// Parsed from torch/csrc/jit/frontend/sugared_value.h
-
-// #pragma once
-// #include <c10/util/Optional.h>
-// #include <functional>
-// #include <memory>
-// #include <string>
-// #include <utility>
-
-// #include <ATen/core/symbol.h>
-// #include <caffe2/serialize/versions.h>
-// #include <torch/csrc/jit/api/module.h>
-// #include <torch/csrc/jit/frontend/error_report.h>
-// #include <torch/csrc/jit/frontend/schema_matching.h>
-// #include <torch/csrc/jit/frontend/versioned_symbols.h>
-// #include <torch/csrc/jit/ir/ir.h>
-// Targeting ../SugaredValue.java
-
-
-// Targeting ../SimpleValue.java
-
-
-// Targeting ../BuiltinFunction.java
-
-
-// Targeting ../SugaredTupleValue.java
-
-
-// Targeting ../BuiltinModule.java
-
-
-// Targeting ../ClassValue.java
-
-
-// Targeting ../NamedTupleConstructor.java
-
-
-// Targeting ../FunctionValue.java
-
-
-// Targeting ../ClosureValue.java
-
-
-// Targeting ../MethodValue.java
-
-
-// Targeting ../PrintValue.java
-
-
-// Targeting ../CastValue.java
-
-
-// Targeting ../TensorCastValue.java
-
-
-// Targeting ../MagicMethod.java
-
-
-// Targeting ../SpecialFormValue.java
-
-
-// Targeting ../LegacyTensorConstructor.java
-
-
-// Targeting ../RangeValue.java
-
-
-
-// Specialized Tree structure to matched against for special handling
-// of builtin functions iterables expressions like zip(), enumerate(), etc.
-// zip and enumerate can be modeled as a tree of SimpleValue/RangeValue:
-//    zip(x, y) ->  (x, y) with tuple assignment to each loop target
-//    enumerate(x) -> (range(0, math.inf, 1), x)
-// So a complicated expression like zip(a, enumerate(b), range(0, 100)) will be:
-// (a, (range(0, math.inf, 1), b), range(0, 100))
-// We use those base iterables to fill in the loop information like
-// max_trip_count and set the value table for loop targets
-// Iterables can contain lists of SugaredValues like ModuleLists. If it
-// does, then we emit it unrolled and require that all values it contains
-// have a statically-determinable length.
-
-@Namespace("torch::jit") public static native @ByVal ValueVector toValues(
-    @ByRef Graph g,
-    @ByVal NamedValueArrayRef nvs);
-// Targeting ../SimpleSelf.java
-
-
-// Targeting ../ExceptionMessageValue.java
-
-
-// Targeting ../ExceptionValue.java
-
-
-// Targeting ../SugaredEnumClass.java
-
-
-// Targeting ../SliceValue.java
-
-
-
- // namespace jit
- // namespace torch
-
-
-// Parsed from torch/csrc/jit/frontend/resolver.h
-
-// #pragma once
-
-// #include <ATen/core/jit_type.h>
-// #include <ATen/core/qualified_name.h>
-// #include <torch/csrc/jit/frontend/sugared_value.h>
-// Targeting ../Resolver.java
-
-
-// Targeting ../NativeResolver.java
-
-
-
-@Namespace("torch::jit") public static native @SharedPtr NativeResolver nativeResolver();
  // namespace jit
  // namespace torch
 
@@ -78112,40 +78146,6 @@ public static final String TORCH_VERSION =
  // namespace torch
 
  // namespace std
-
-
-// Parsed from torch/csrc/jit/frontend/script_type_parser.h
-
-// #pragma once
-// #include <ATen/core/jit_type.h>
-// #include <torch/csrc/Export.h>
-// #include <torch/csrc/jit/frontend/resolver.h>
-// #include <torch/csrc/jit/frontend/tree_views.h>
-// Targeting ../ScriptTypeParser.java
-
-
- // namespace jit
- // namespace torch
-
-
-// Parsed from torch/csrc/jit/serialization/unpickler.h
-
-// #pragma once
-
-// #include <ATen/core/ivalue.h>
-// #include <c10/util/ArrayRef.h>
-// #include <caffe2/serialize/inline_container.h>
-// #include <torch/csrc/Export.h>
-// #include <torch/csrc/jit/frontend/script_type_parser.h>
-// #include <torch/csrc/jit/serialization/pickler.h>
-// Targeting ../Unpickler.java
-
-
-
-
-
- // namespace jit
- // namespace torch
 
 
 // Parsed from torch/csrc/jit/serialization/pickle.h
