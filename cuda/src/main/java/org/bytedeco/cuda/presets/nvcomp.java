@@ -56,6 +56,7 @@ public class nvcomp implements InfoMapper {
                            "nvcompBitcompCompressConfigure",
                            "nvcompIsBitcompData",
                            "nvcompBitcompDestroyMetadata",
-                           "nvcompBitcompDecompressAsync").skip());
+                           "nvcompBitcompDecompressAsync",
+                           "nvcompBitcompFormatOpts").skip());
    }
 }
