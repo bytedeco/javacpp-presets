@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(inherit = {cudart.class}, value = {
-      @Platform(value = {"linux-x86_64", "windows-x86_64"},
+      @Platform(value = {"linux-x86_64", "linux-arm64", "windows-x86_64"},
             include = {"<nvcomp.h>", "<nvcomp/shared_types.h>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
                        "<nvcomp/ans.h>", "<nvcomp/ans.hpp>", "<nvcomp/bitcomp.h>", "<nvcomp/bitcomp.hpp>", "<nvcomp/cascaded.h>",
                        "<nvcomp/CRC32.h>", "<nvcomp/deflate.h>", "<nvcomp/deflate.hpp>", "<nvcomp/gdeflate.h>", "<nvcomp/gdeflate.hpp>",
