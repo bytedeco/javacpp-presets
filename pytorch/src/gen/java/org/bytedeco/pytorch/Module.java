@@ -558,14 +558,10 @@ public class Module extends Pointer {
   ///
   ///
   ///
-  public Module register_module(BytePointer name, Module module) { return asModule()._register_module(name, module.asModule()); }
-  private native @SharedPtr("torch::nn::Module") @ByVal @Name("register_module<torch::nn::Module>") Module _register_module(
-        @StdString BytePointer name,
-        @SharedPtr("torch::nn::Module") @ByVal Module module);
-  public Module register_module(String name, Module module) { return asModule()._register_module(name, module.asModule()); }
-  private native @SharedPtr("torch::nn::Module") @ByVal @Name("register_module<torch::nn::Module>") Module _register_module(
-        @StdString String name,
-        @SharedPtr("torch::nn::Module") @ByVal Module module);
+  private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);
+  public <M extends Module> M register_module(BytePointer name, M module) { asModule()._register_module(name, module.asModule()); return module; }
+  private native @Name("register_module<torch::nn::Module>") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);
+  public <M extends Module> M register_module(String name, M module) { asModule()._register_module(name, module.asModule()); return module; }
 
   /** Registers a submodule with this {@code Module}.
    * 

@@ -1516,7 +1516,15 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// Modules
         infoMap
-            .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaNames("register_module"))
+            // Mimic C++ register_module and return the subclass instance. Also keep API compatibility with
+            // presets before 2.0.1 where register_module template was instantiated for all known
+            // native subclasses.
+            .put(new Info("torch::nn::Module::register_module<torch::nn::Module>").javaText(
+                "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString BytePointer name, @SharedPtr @ByVal Module module);\n" +
+                "public <M extends Module> M register_module(BytePointer name, M module) { asModule()._register_module(name, module.asModule()); return module; }\n" +
+                "private native @Name(\"register_module<torch::nn::Module>\") void _register_module(@StdString String name, @SharedPtr @ByVal Module module);\n" +
+                "public <M extends Module> M register_module(String name, M module) { asModule()._register_module(name, module.asModule()); return module; }"
+            ))
             .put(new Info("torch::nn::Module").upcast())
         ;
         String[] virtuals = {"train", "is_training", "to", "zero_grad", "save", "load", "pretty_print", "is_serializable"};
