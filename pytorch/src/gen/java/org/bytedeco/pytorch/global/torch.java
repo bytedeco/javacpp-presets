@@ -77461,21 +77461,21 @@ public static final String TORCH_VERSION =
  * 
  *  The istream must contain a serialized {@code Module}, exported via
  *  {@code torch::jit::ExportModule} in C++. */
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in);
 
 
 ///
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @Cast("std::istream*") @ByRef Pointer in,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
@@ -77485,36 +77485,36 @@ public static final String TORCH_VERSION =
  *  The file stored at the location given in {@code filename} must contain a
  *  serialized {@code Module}, exported either via {@code ScriptModule.save()} in
  *  Python or {@code torch::jit::ExportModule} in C++. */
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename);
 
 
 ///
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString BytePointer filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @StdString String filename,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);
@@ -77524,19 +77524,19 @@ public static final String TORCH_VERSION =
  *  The reader adapter, which is for customized input stream, must contain a
  *  serialized {@code Module}, exported either via {@code ScriptModule.save()} in
  *  Python or {@code torch::jit::ExportModule} in C++. */
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr ReadAdapterInterface rai,
     @ByVal(nullValue = "c10::optional<c10::Device>(c10::nullopt)") DeviceOptional device,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr ReadAdapterInterface rai);
 
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files,
     @Cast("bool") boolean load_debug_files/*=true*/);
-@Namespace("torch::jit") public static native @ByVal @Name("load") JitModule jitLoad(
+@Namespace("torch::jit") public static native @ByVal JitModule load(
     @SharedPtr ReadAdapterInterface rai,
     @ByVal DeviceOptional device,
     @ByRef ExtraFilesMap extra_files);

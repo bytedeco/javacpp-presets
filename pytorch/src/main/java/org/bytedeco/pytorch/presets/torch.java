@@ -213,7 +213,8 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::nn::" + name + "Impl::" + name + "Impl").annotations("@SharedPtr", "@Name(\"std::make_shared<torch::nn::" + name + "Impl>\")"))
                .put(new Info("torch::nn::Cloneable<torch::nn::" + name + "Impl>").pointerTypes(name + "ImplCloneable").purify())
                .put(new Info("torch::nn::ModuleHolder<torch::nn::" + name + "Impl>").skip())
-               .put(new Info("torch::nn::" + name).skip());
+               .put(new Info("torch::nn::" + name).skip())
+        ;
 
         if (anyModuleCompatible) {
             anyModuleConstructors +=
@@ -1938,7 +1939,6 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("torch::jit::Node").pointerTypes("JitNode"))
                .put(new Info("torch::jit::Module").pointerTypes("JitModule"))
                .put(new Info("torch::jit::Object").pointerTypes("JitObject"))
-               .put(new Info("torch::jit::load").javaNames("jitLoad"))
                .put(new Info("torch::jit::String").pointerTypes("JitString"))
         ;
 
