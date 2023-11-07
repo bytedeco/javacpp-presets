@@ -738,11 +738,11 @@ public static native @Cast("nvcompStatus_t") int nvcompBatchedANSDecompressAsync
 // #include <stdint.h>
 
 // #ifdef __cplusplus
-// Targeting ../nvcomp/nvcompBitcompFormatOpts.java
+// #endif
 
-
-
-@MemberGetter public static native @Const @ByRef nvcompBitcompFormatOpts nvcompBitcompDefaultOpts();
+/**
+ * \brief Structure for configuring Bitcomp compression.
+ */
 
 @MemberGetter public static native @Cast("const size_t") long nvcompBitcompCompressionMaxAllowedChunkSize();
 
