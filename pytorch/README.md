@@ -93,9 +93,9 @@ public class SimpleMNIST {
     static class Net extends Module {
         Net() {
             // Construct and register two Linear submodules.
-            register_module("fc1", fc1 = new LinearImpl(784, 64));
-            register_module("fc2", fc2 = new LinearImpl(64, 32));
-            register_module("fc3", fc3 = new LinearImpl(32, 10));
+            fc1 = register_module("fc1", new LinearImpl(784, 64));
+            fc2 = register_module("fc2", new LinearImpl(64, 32));
+            fc3 = register_module("fc3", new LinearImpl(32, 10));
         }
 
         // Implement the Net's algorithm.
