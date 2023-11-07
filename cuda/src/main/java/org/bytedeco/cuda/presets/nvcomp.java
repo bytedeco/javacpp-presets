@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Samuel Audet
+ * Copyright (C) 2022-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {cudart.class}, value = {
       @Platform(value = {"linux-x86_64", "linux-arm64", "windows-x86_64"},
             include = {"<nvcomp.h>", "<nvcomp/shared_types.h>", "<nvcomp/nvcompManager.hpp>", "<nvcomp/nvcompManagerFactory.hpp>",
-                       "<nvcomp/ans.h>", "<nvcomp/ans.hpp>", /*"<nvcomp/bitcomp.h>", "<nvcomp/bitcomp.hpp>",*/ "<nvcomp/cascaded.h>", // TODO: Support bitcomp
+                       "<nvcomp/ans.h>", "<nvcomp/ans.hpp>", "<nvcomp/bitcomp.h>", "<nvcomp/bitcomp.hpp>", "<nvcomp/cascaded.h>",
                        "<nvcomp/CRC32.h>", "<nvcomp/deflate.h>", "<nvcomp/deflate.hpp>", "<nvcomp/gdeflate.h>", "<nvcomp/gdeflate.hpp>",
                        "<nvcomp/gzip.h>", "<nvcomp/lz4.h>", "<nvcomp/lz4.hpp>", "<nvcomp/snappy.h>", "<nvcomp/snappy.hpp>", "<nvcomp/zstd.h>",
                        "<nvcomp/zstd.hpp>"}, link = {"nvcomp", "nvcomp_device", "nvcomp_bitcomp", "nvcomp_gdeflate"}),
@@ -49,5 +49,14 @@ public class nvcomp implements InfoMapper {
                            "nvcompDecompressAsync",
                            "nvcomp::set_scratch_allocators",
                            "PinnedPtrPool").skip());
+
+      // TODO: Fix linking issue with these on Windows
+      infoMap.put(new Info("nvcompBitcompDecompressConfigure",
+                           "nvcompBitcompCompressAsync",
+                           "nvcompBitcompCompressConfigure",
+                           "nvcompIsBitcompData",
+                           "nvcompBitcompDestroyMetadata",
+                           "nvcompBitcompDecompressAsync",
+                           "nvcompBitcompFormatOpts").skip());
    }
 }
