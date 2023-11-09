@@ -1976,12 +1976,9 @@ public class torch implements LoadEnabled, InfoMapper {
                .put(new Info("at::TensorBase::data_ptr<double>").javaNames("data_ptr_double"))
                .put(new Info("at::Tensor::item<bool>").javaNames("item_bool"))
                .put(new Info("at::Tensor::item<int8_t>").javaNames("item_char"))
+               .put(new Info("at::Tensor::item<uint8_t>").javaNames("item_byte"))
                .put(new Info("at::Tensor::item<int16_t>").javaNames("item_short"))
-               // Since we don't have uint8 in Java, make item_byte an alias of item_int
-               .put(new Info("at::Tensor::item<int>").javaText(
-                   "public native @Name(\"item<int>\") int item_int();\n" +
-                   "public native @Name(\"item<int>\") int item_byte();"
-                   ))
+               .put(new Info("at::Tensor::item<int>").javaNames("item_int"))
                .put(new Info("at::Tensor::item<int64_t>").javaNames("item_long"))
                .put(new Info("at::Tensor::item<float>").javaNames("item_float"))
                .put(new Info("at::Tensor::item<double>").javaNames("item_double"))
