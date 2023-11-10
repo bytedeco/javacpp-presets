@@ -100,7 +100,7 @@ public class TensorIteratorBase extends MetaBase {
   public native void narrow(int dim, @Cast("int64_t") long start, @Cast("int64_t") long size);
   /** Narrows every dim after and including {@code start_dim} to size one. */
   public native void select_all_keeping_dim(int start_dim, @ByVal LongArrayRef starts);
-  public native void select_all_keeping_dim(int start_dim, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... starts);
+  public native void select_all_keeping_dim(int start_dim, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... starts);
   /** Replaces the data pointer for the operand at index {@code arg}.
    *  The new pointer should have the same sizes, strides and dtype as the
    *  original */
@@ -112,6 +112,11 @@ public class TensorIteratorBase extends MetaBase {
 
   /** Returns the dimension with the largest extent: (size[dim]-1) * stride[dim] */
   public native int get_dim_to_split();
+
+  /** Return scalar value from original_tensor_base if it is defined. When
+   *  common_dtype is Half, casting scalar input to common_dtype might overflow.
+   *  If the scalar is aleady given in the type of Half, then return scalar
+   *  value from tensor_base. */
   
 
   
@@ -130,7 +135,7 @@ public class TensorIteratorBase extends MetaBase {
   /** Inverts the re-ordering done by reorder_dimensions. This can only be
    *  called *before* coalesce_dimensions() is called. */
   public native @ByVal DimVector invert_perm(@ByVal LongArrayRef input);
-  public native @ByVal DimVector invert_perm(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... input);
+  public native @ByVal DimVector invert_perm(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... input);
 
   /** Reapply same re-ordering as it is done by reorder_dimensions. This can
    *  only be called *before* coalesce_dimensions() is called. */
@@ -144,7 +149,7 @@ public class TensorIteratorBase extends MetaBase {
 
   // Helper functions for advanced stride manipulations (e.g. torch.flip)
   public native void _unsafe_set_arg_strides(int arg, @ByVal LongArrayRef strides);
-  public native void _unsafe_set_arg_strides(int arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... strides);
+  public native void _unsafe_set_arg_strides(int arg, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
   public native void _unsafe_set_arg_data(int arg, Pointer data);
 
   /** true if the stride computation can use 32-bit arithmetic. Used by GPU
@@ -174,8 +179,8 @@ public class TensorIteratorBase extends MetaBase {
         @ByVal DimnameArrayRef names);
   public native void set_output_raw_strided(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
         @ByVal TensorOptions options,
         @ByVal DimnameArrayRef names);
 

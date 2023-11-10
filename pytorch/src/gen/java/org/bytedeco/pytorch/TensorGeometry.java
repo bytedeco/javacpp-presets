@@ -62,4 +62,9 @@ public class TensorGeometry extends Pointer {
   public native @ByVal SymInt sym_numel();
 
   public native @ByVal TensorGeometry transpose(@Cast("int64_t") long dim0, @Cast("int64_t") long dim1);
+
+  public native @ByRef SymIntVector mutable_sizes();
+  public native @ByRef SymIntVector mutable_strides();
+  public native @ByRef SymInt mutable_storage_offset();
+  public native void recompute();
 }

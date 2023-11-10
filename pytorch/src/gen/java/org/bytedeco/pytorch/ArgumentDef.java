@@ -38,18 +38,10 @@ public class ArgumentDef extends Pointer {
         return new ArgumentDef((Pointer)this).offsetAddress(i);
     }
 
-  public static class GetTypeFn extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    GetTypeFn(Pointer p) { super(p); }
-      protected GetTypeFn() { allocate(); }
-      private native void allocate();
-      public native @ByVal Type.TypePtr call();
-  }
-  public native GetTypeFn getTypeFn(); public native ArgumentDef getTypeFn(GetTypeFn setter);
-  public native GetTypeFn getFakeTypeFn(); public native ArgumentDef getFakeTypeFn(GetTypeFn setter);
+  public native TypeSupplier getTypeFn(); public native ArgumentDef getTypeFn(TypeSupplier setter);
+  public native TypeSupplier getFakeTypeFn(); public native ArgumentDef getFakeTypeFn(TypeSupplier setter);
   public ArgumentDef() { super((Pointer)null); allocate(); }
   private native void allocate();
-  public ArgumentDef(GetTypeFn getTypeFn, GetTypeFn getFakeTypeFn) { super((Pointer)null); allocate(getTypeFn, getFakeTypeFn); }
-  private native void allocate(GetTypeFn getTypeFn, GetTypeFn getFakeTypeFn);
+  public ArgumentDef(TypeSupplier getTypeFn, TypeSupplier getFakeTypeFn) { super((Pointer)null); allocate(getTypeFn, getFakeTypeFn); }
+  private native void allocate(TypeSupplier getTypeFn, TypeSupplier getFakeTypeFn);
 }

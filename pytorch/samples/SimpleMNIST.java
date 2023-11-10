@@ -20,14 +20,14 @@ public class SimpleMNIST {
         Tensor forward(Tensor x) {
             // Use one of many tensor manipulation functions.
             x = relu(fc1.forward(x.reshape(x.size(0), 784)));
-            x = dropout(x, /*p=*/0.5, /*train=*/is_training(), false);
+            x = dropout(x, /*p=*/0.5, /*train=*/is_training());
             x = relu(fc2.forward(x));
-            x = log_softmax(fc3.forward(x), new LogSoftmaxFuncOptions(/*dim=*/1));
+            x = log_softmax(fc3.forward(x), /*dim=*/1);
             return x;
         }
 
         // Use one of many "standard library" modules.
-        LinearImpl fc1 = null, fc2 = null, fc3 = null;
+        final LinearImpl fc1, fc2, fc3;
     }
 
     public static void main(String[] args) throws Exception {

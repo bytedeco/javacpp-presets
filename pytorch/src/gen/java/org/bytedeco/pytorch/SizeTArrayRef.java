@@ -97,6 +97,7 @@ private native void allocate();
 
   /** equals - Check for element-wise equality. */
   public native @Cast("const bool") boolean equals(@ByVal SizeTArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector("size_t") long... RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
   public native @Const @ByVal SizeTArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);

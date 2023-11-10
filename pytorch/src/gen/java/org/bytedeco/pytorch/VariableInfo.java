@@ -43,7 +43,7 @@ public class VariableInfo extends Pointer {
   public native @ByRef Layout layout(); public native VariableInfo layout(Layout setter);
   public native @ByRef Device device(); public native VariableInfo device(Device setter);
   public native ScalarType scalar_type(); public native VariableInfo scalar_type(ScalarType setter);
-  public native @ByRef @Cast("std::vector<int64_t>*") LongVector size(); public native VariableInfo size(LongVector setter);
+  public native @ByRef SymIntVector size(); public native VariableInfo size(SymIntVector setter);
   public native @Cast("bool") boolean requires_grad(); public native VariableInfo requires_grad(boolean setter);
   public native @Cast("bool") boolean is_empty(); public native VariableInfo is_empty(boolean setter);
 }

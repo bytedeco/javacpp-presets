@@ -39,13 +39,14 @@ public class Context extends Pointer {
   public native @Const @ByRef Generator defaultGenerator(@ByVal Device device);
   public native @ByVal Device getDeviceFromPtr(Pointer data, DeviceType device_type);
   public native @ByVal Device getDeviceFromPtr(Pointer data, @Cast("c10::DeviceType") byte device_type);
-  public static native @Cast("bool") boolean isPinnedPtr(Pointer data);
+  public static native @Cast("bool") boolean isPinnedPtr(@Const Pointer data);
   public static native @Cast("bool") boolean hasOpenMP();
   public static native @Cast("bool") boolean hasMKL();
   public static native @Cast("bool") boolean hasLAPACK();
   public static native @Cast("bool") boolean hasMKLDNN();
   public static native @Cast("bool") boolean hasMAGMA();
   public static native @Cast("bool") boolean hasCUDA();
+  public static native @Cast("bool") boolean hasMTIA();
   public static native @Cast("bool") boolean hasCUDART();
   public static native long versionCUDART();
   public static native @Cast("bool") boolean hasCuDNN();
@@ -55,6 +56,7 @@ public class Context extends Pointer {
   public static native @Cast("bool") boolean hasMPS();
   public static native @Cast("bool") boolean hasIPU();
   public static native @Cast("bool") boolean hasXLA();
+  public static native @Cast("bool") boolean hasXPU();
   public static native @Cast("bool") boolean hasLazy();
   public static native @Cast("bool") boolean hasORT();
   // defined in header so that getNonVariableType has ability to inline

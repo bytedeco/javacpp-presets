@@ -25,4 +25,6 @@ public class FunctionPreHook extends Pointer {
     public FunctionPreHook(Pointer p) { super(p); }
 
   public native @Name("operator ()") @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply(@Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector grads);
+  // only implemented for python hooks, registers hook with compiled autograd
+  public native void compiled_args(@ByRef CompiledNodeArgs args);
 }

@@ -72,7 +72,7 @@ public class TensorType extends SharedType {
   public static native @SharedPtr("c10::TensorType") @ByVal TensorType createContiguous(
         ScalarType scalar_type,
         @ByVal Device device,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
 
   public static native @ByVal Type.TypePtr fromNumberType(@Const @ByRef Type typ);
   public static native @ByVal Type.TypePtr fromBoolType();
@@ -111,13 +111,13 @@ public class TensorType extends SharedType {
         @ByVal LongArrayRef sizes,
         @ByVal LongArrayRef strides);
   public native @SharedPtr("c10::TensorType") @ByVal TensorType withSizesStrides(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... strides);
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
 
   public native @SharedPtr("c10::TensorType") @ByVal TensorType withSymbolicShapes(@ByVal SymbolicShape ssizes);
 
   public native @SharedPtr("c10::TensorType") @ByVal TensorType withSizes(@ByVal LongArrayRef sizes);
-  public native @SharedPtr("c10::TensorType") @ByVal TensorType withSizes(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... sizes);
+  public native @SharedPtr("c10::TensorType") @ByVal TensorType withSizes(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... sizes);
 
   public native @SharedPtr("c10::TensorType") @ByVal TensorType withDevice(@Const @ByVal DeviceOptional device);
 
@@ -162,8 +162,8 @@ public class TensorType extends SharedType {
   public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
         @ByVal LongArrayRef in_sizes);
   public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] in_sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] in_sizes,
         @ByVal(nullValue = "at::MemoryFormat(c10::MemoryFormat::Contiguous)") MemoryFormat memory_format);
   public static native @ByVal @Cast("std::vector<int64_t>*") LongVector contiguousStridesOf(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... in_sizes);
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... in_sizes);
 }

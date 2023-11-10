@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  therefore batched access is implemented (by default) by calling the random
  *  access indexing function for each index in the requested batch of indices.
  *  This can be customized. */
-@Name("torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<torch::Tensor,torch::Tensor> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTDataset extends MNISTBatchDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -32,10 +32,11 @@ public class MNISTDataset extends MNISTBatchDataset {
 
 
   /** Returns the example at the given index. */
-  public native @ByVal @Cast("torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<> >::ExampleType*") Example get(@Cast("size_t") long index);
+  public native @ByVal @Cast("torch::data::datasets::Dataset<torch::data::datasets::MNIST,torch::data::Example<torch::Tensor,torch::Tensor> >::ExampleType*") Example get(@Cast("size_t") long index);
 
   /** Returns a batch of data.
    *  The default implementation calls {@code get()} for every requested index
    *  in the batch. */
   public native @ByVal ExampleVector get_batch(@ByVal SizeTArrayRef indices);
+  public native @ByVal ExampleVector get_batch(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector("size_t") long... indices);
 }
