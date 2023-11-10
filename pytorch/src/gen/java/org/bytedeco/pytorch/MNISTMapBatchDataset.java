@@ -17,7 +17,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("torch::data::datasets::BatchDataset<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >,std::vector<torch::data::Example<> >,at::ArrayRef<size_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::datasets::BatchDataset<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >,std::vector<torch::data::Example<torch::Tensor,torch::Tensor> >,at::ArrayRef<size_t> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTMapBatchDataset extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -28,6 +28,7 @@ public class MNISTMapBatchDataset extends Pointer {
 
   /** Returns a batch of data given an index. */
   public native @ByVal ExampleVector get_batch(@ByVal SizeTArrayRef request);
+  public native @ByVal ExampleVector get_batch(@ByVal @Cast({"size_t*", "c10::ArrayRef<size_t>", "std::vector<size_t>&"}) @StdVector("size_t") long... request);
 
   /** Returns the size of the dataset, or an empty optional if it is unsized. */
   public native @ByVal SizeTOptional size();

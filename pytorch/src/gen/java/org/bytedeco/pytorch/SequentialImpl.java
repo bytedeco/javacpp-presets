@@ -231,6 +231,7 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::ReflectionPad1dImpl>") void push_back(@SharedPtr ReflectionPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::ReplicationPad1dImpl>") void push_back(@SharedPtr ReplicationPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad1dImpl>") void push_back(@SharedPtr ConstantPad1dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad1dImpl>") void push_back(@SharedPtr ZeroPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool1dImpl>") void push_back(@SharedPtr AvgPool1dImpl module_ptr);
   public native @Name("push_back<torch::nn::MaxPool1dImpl>") void push_back(@SharedPtr MaxPool1dImpl module_ptr);
   public native @Name("push_back<torch::nn::AdaptiveAvgPool1dImpl>") void push_back(@SharedPtr AdaptiveAvgPool1dImpl module_ptr);
@@ -251,6 +252,7 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::ReflectionPad3dImpl>") void push_back(@SharedPtr ReflectionPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::ReplicationPad3dImpl>") void push_back(@SharedPtr ReplicationPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad3dImpl>") void push_back(@SharedPtr ConstantPad3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad3dImpl>") void push_back(@SharedPtr ZeroPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool3dImpl>") void push_back(@SharedPtr AvgPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::MaxPool3dImpl>") void push_back(@SharedPtr MaxPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::AdaptiveAvgPool3dImpl>") void push_back(@SharedPtr AdaptiveAvgPool3dImpl module_ptr);
@@ -408,6 +410,8 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::ReplicationPad1dImpl>") void push_back(@StdString String name, @SharedPtr ReplicationPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad1dImpl>") void push_back(@StdString BytePointer name, @SharedPtr ConstantPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad1dImpl>") void push_back(@StdString String name, @SharedPtr ConstantPad1dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad1dImpl>") void push_back(@StdString BytePointer name, @SharedPtr ZeroPad1dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad1dImpl>") void push_back(@StdString String name, @SharedPtr ZeroPad1dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool1dImpl>") void push_back(@StdString BytePointer name, @SharedPtr AvgPool1dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool1dImpl>") void push_back(@StdString String name, @SharedPtr AvgPool1dImpl module_ptr);
   public native @Name("push_back<torch::nn::MaxPool1dImpl>") void push_back(@StdString BytePointer name, @SharedPtr MaxPool1dImpl module_ptr);
@@ -448,6 +452,8 @@ public class SequentialImpl extends SequentialImplCloneable {
   public native @Name("push_back<torch::nn::ReplicationPad3dImpl>") void push_back(@StdString String name, @SharedPtr ReplicationPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr ConstantPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::ConstantPad3dImpl>") void push_back(@StdString String name, @SharedPtr ConstantPad3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr ZeroPad3dImpl module_ptr);
+  public native @Name("push_back<torch::nn::ZeroPad3dImpl>") void push_back(@StdString String name, @SharedPtr ZeroPad3dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr AvgPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::AvgPool3dImpl>") void push_back(@StdString String name, @SharedPtr AvgPool3dImpl module_ptr);
   public native @Name("push_back<torch::nn::MaxPool3dImpl>") void push_back(@StdString BytePointer name, @SharedPtr MaxPool3dImpl module_ptr);

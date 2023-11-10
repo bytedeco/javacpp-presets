@@ -41,21 +41,34 @@ public class Scalar extends Pointer {
 //   Scalar(type vv) : Scalar(vv, true) {}
 
   public Scalar(@Cast("uint8_t") byte vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@Cast("uint8_t") byte vv); 
+  private native void allocate(@Cast("uint8_t") byte vv);
+      
   public Scalar(short vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(short vv); 
+  private native void allocate(short vv);
+      
   public Scalar(int vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(int vv); 
+  private native void allocate(int vv);
+      
   public Scalar(@Cast("int64_t") long vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@Cast("int64_t") long vv); 
+  private native void allocate(@Cast("int64_t") long vv);
+      
   public Scalar(float vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(float vv); 
+  private native void allocate(float vv);
+      
   public Scalar(double vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(double vv); 
+  private native void allocate(double vv);
+      
   public Scalar(@ByVal Half vv) { super((Pointer)null); allocate(vv); }
-  private native void allocate(@ByVal Half vv); 
+  private native void allocate(@ByVal Half vv);
+      
   public Scalar(@ByVal BFloat16 vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal BFloat16 vv);
+      
+  public Scalar(@ByVal Float8_e5m2 vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e5m2 vv);
+      
+  public Scalar(@ByVal Float8_e4m3fn vv) { super((Pointer)null); allocate(vv); }
+  private native void allocate(@ByVal Float8_e4m3fn vv);
   public Scalar(@ByVal FloatComplex vv) { super((Pointer)null); allocate(vv); }
   private native void allocate(@ByVal FloatComplex vv);
   public Scalar(@ByVal DoubleComplex vv) { super((Pointer)null); allocate(vv); }
@@ -82,6 +95,8 @@ public class Scalar extends Pointer {
 //       TORCH_CHECK(false, "tried to get " #name " out of SymInt")
 //     } else if (Tag::HAS_sd == tag) {
 //       TORCH_CHECK(false, "tried to get " #name " out of SymFloat")
+//     } else if (Tag::HAS_sb == tag) {
+//       TORCH_CHECK(false, "tried to get " #name " out of SymBool")
 //     }
 //     TORCH_CHECK(false)
 //   }
@@ -100,12 +115,16 @@ public class Scalar extends Pointer {
   public native @ByVal DoubleComplex toComplexDouble();
   public native @Cast("bool") boolean toBool();
   public native @ByVal BFloat16 toBFloat16();
+  public native @ByVal Float8_e5m2 toFloat8_e5m2();
+  public native @ByVal Float8_e4m3fn toFloat8_e4m3fn();
 
 // #undef DEFINE_ACCESSOR
 
   public native @ByVal SymInt toSymInt();
 
   public native @ByVal SymFloat toSymFloat();
+
+  public native @ByVal SymBool toSymBool();
 
   // also support scalar.to<int64_t>();
   // Deleted for unsupported types, but specialized below for supported types
@@ -125,6 +144,7 @@ public class Scalar extends Pointer {
   // you probably don't actually want these; they're mostly for testing
   public native @Cast("bool") boolean isSymInt();
   public native @Cast("bool") boolean isSymFloat();
+  public native @Cast("bool") boolean isSymBool();
 
   public native @Cast("bool") boolean isSymbolic();
 
@@ -146,4 +166,7 @@ public class Scalar extends Pointer {
 
   public Scalar(@ByVal SymFloat sd) { super((Pointer)null); allocate(sd); }
   private native void allocate(@ByVal SymFloat sd);
+
+  public Scalar(@ByVal SymBool sb) { super((Pointer)null); allocate(sb); }
+  private native void allocate(@ByVal SymBool sb);
 }

@@ -5,6 +5,7 @@ package org.bytedeco.pytorch.global;
 import org.bytedeco.pytorch.cuda.*;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Error;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
@@ -26,7 +27,7 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 @Namespace("at") public static native @ByVal @Name("make_generator<at::CUDAGeneratorImpl,int8_t>") Generator make_generator_cuda(@Cast("int8_t&&") byte device_index);
 
 
-// Targeting ../cuda/CUDAStreamOptional.java
+// Targeting ../cuda/TraceEntryVector.java
 
 
 // Targeting ../cuda/DeviceAssertionsDataVector.java
@@ -36,6 +37,9 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 
 
 // Targeting ../cuda/DeviceAssertionsDataVectorCUDAKernelLaunchInfoVectorPair.java
+
+
+// Targeting ../cuda/PointerSet.java
 
 
 // Parsed from c10/util/ArrayRef.h
@@ -156,6 +160,9 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
  * on the matter, streams are thread safe; e.g., it is safe to enqueue
  * a kernel on the same stream from two different threads.
  */
+
+@Namespace("c10::cuda") @MemberGetter public static native int max_compile_time_stream_priorities();
+public static final int max_compile_time_stream_priorities = max_compile_time_stream_priorities();
 // Targeting ../cuda/CUDAStream.java
 
 
@@ -172,6 +179,9 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
  */
 @Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(@Cast("const bool") boolean isHighPriority/*=false*/, byte device/*=-1*/);
 @Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool();
+// no default priority to disambiguate overloads
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority, byte device/*=-1*/);
+@Namespace("c10::cuda") public static native @ByVal CUDAStream getStreamFromPool(int priority);
 
 /**
  * Get a CUDAStream from a externally allocated one.
@@ -234,10 +244,15 @@ public class torch_cuda extends org.bytedeco.pytorch.presets.torch_cuda {
 // #include <cusolverDn.h>
 // #endif
 
+// #if defined(USE_ROCM) && ROCM_VERSION >= 50300
+// #include <hipsolver/hipsolver.h>
+// #endif
+
 // #include <ATen/core/ATenGeneral.h>
 // #include <ATen/Context.h>
 // #include <c10/cuda/CUDAStream.h>
 // #include <c10/cuda/CUDAFunctions.h>
+// #include <c10/util/Logging.h>
 // #include <ATen/cuda/Exceptions.h>
 
 /*
@@ -291,12 +306,11 @@ manage their own state. There is only a single CUDA context/state.
 
 @Namespace("at::cuda") public static native void clearCublasWorkspaces();
 
-// #ifdef CUDART_VERSION
+// #if defined(CUDART_VERSION) || defined(USE_ROCM) && ROCM_VERSION >= 50300
 @Namespace("at::cuda") public static native @Cast("cusolverDnHandle_t") Pointer getCurrentCUDASolverDnHandle();
 // #endif
 
- // namespace cuda
- // namespace at
+ // namespace at::cuda
 
 
 // Parsed from c10/core/impl/GPUTrace.h
@@ -409,39 +423,6 @@ public static final int C10_COMPILE_TIME_MAX_GPUS = 16;
 // #define C10_CUDA_BUILD_SHARED_LIBS
 
 
-// Parsed from c10/cuda/CUDAGraphsC10Utils.h
-
-// #pragma once
-
-// #include <c10/cuda/CUDAStream.h>
-// #include <utility>
-
-// CUDA Graphs utils used by c10 and aten.
-// aten/cuda/CUDAGraphsUtils.cuh adds utils used by aten only.
-
-// first is set if the instance is created by CUDAGraph::capture_begin.
-// second is set if the instance is created by at::cuda::graph_pool_handle.
-// Targeting ../cuda/CUDAStreamCaptureModeGuard.java
-
-
-// #endif
-
-// #if !defined(USE_ROCM) || ROCM_VERSION >= 50300
-// Protects against enum cudaStreamCaptureStatus implementation changes.
-// Some compilers seem not to like static_assert without the messages.
-// #endif
-
-
-
-@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Cast("c10::cuda::CaptureStatus") int status);
-
-// Use this version where you're sure a CUDA context exists already.
-@Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
-
- // namespace cuda
- // namespace c10
-
-
 // Parsed from ATen/cuda/Exceptions.h
 
 // #pragma once
@@ -507,6 +488,9 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // cusolver related headers are only supported on cuda now
 // #ifdef CUDART_VERSION
 @Namespace("at::cuda::solver") public static native @Cast("const char*") BytePointer cusolverGetErrorMessage(@Cast("cusolverStatus_t") int status);
+
+@Namespace("at::cuda::solver") @MemberGetter public static native @Cast("const char*") BytePointer _cusolver_backend_suggestion();
+
  // namespace at::cuda::solver
 
 // When cuda < 11.5, cusolver raises CUSOLVER_STATUS_EXECUTION_FAILED when input contains nan.
@@ -523,13 +507,15 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 //           "cusolver error: ",
 //           at::cuda::solver::cusolverGetErrorMessage(__err),
 //           ", when calling `" #EXPR "`",
-//           ". This error may appear if the input matrix contains NaN.");
+//           ". This error may appear if the input matrix contains NaN. ",
+//           at::cuda::solver::_cusolver_backend_suggestion);
 //     } else {
 //       TORCH_CHECK(
 //           __err == CUSOLVER_STATUS_SUCCESS,
 //           "cusolver error: ",
 //           at::cuda::solver::cusolverGetErrorMessage(__err),
-//           ", when calling `" #EXPR "`");
+//           ", when calling `" #EXPR "`. ",
+//           at::cuda::solver::_cusolver_backend_suggestion);
 //     }
 //   } while (0)
 
@@ -613,6 +599,19 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // #undef STRING
 
 
+// Parsed from ATen/cuda/ATenCUDAGeneral.h
+
+// #pragma once
+
+// #include <cuda.h>
+// #include <cuda_runtime.h>
+// #include <cuda_fp16.h>
+
+// #include <c10/macros/Export.h>
+
+// Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
+
+
 // Parsed from ATen/cudnn/Utils.h
 
 // #pragma once
@@ -642,17 +641,209 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
  // namespace at::native
 
 
-// Parsed from ATen/cuda/ATenCUDAGeneral.h
+// Parsed from c10/cuda/CUDAGraphsC10Utils.h
 
 // #pragma once
 
-// #include <cuda.h>
-// #include <cuda_runtime.h>
-// #include <cuda_fp16.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <utility>
 
-// #include <c10/macros/Export.h>
+// CUDA Graphs utils used by c10 and aten.
+// aten/cuda/CUDAGraphsUtils.cuh adds utils used by aten only.
 
-// Use TORCH_CUDA_CPP_API or TORCH_CUDA_CU_API for exports from this folder
+// first is set if the instance is created by CUDAGraph::capture_begin.
+// second is set if the instance is created by at::cuda::graph_pool_handle.
+// Targeting ../cuda/CUDAStreamCaptureModeGuard.java
+
+
+// #endif
+
+// #if !defined(USE_ROCM) || ROCM_VERSION >= 50300
+// Protects against enum cudaStreamCaptureStatus implementation changes.
+// Some compilers seem not to like static_assert without the messages.
+// #endif
+
+
+
+@Namespace("c10::cuda") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Cast("c10::cuda::CaptureStatus") int status);
+
+// Use this version where you're sure a CUDA context exists already.
+@Namespace("c10::cuda") public static native @Cast("c10::cuda::CaptureStatus") int currentStreamCaptureStatusMayInitCtx();
+
+ // namespace cuda
+ // namespace c10
+
+
+// Parsed from c10/cuda/CUDACachingAllocator.h
+
+// #pragma once
+
+// #include <c10/core/Allocator.h>
+// #include <c10/core/StorageImpl.h>
+// #include <c10/cuda/CUDAGraphsC10Utils.h>
+// #include <c10/cuda/CUDAMacros.h>
+// #include <c10/cuda/CUDAStream.h>
+// #include <c10/util/Registry.h>
+
+// #include <array>
+// #include <mutex>
+// #include <set>
+// #include <unordered_set>
+
+// Caching allocator will execute every registered callback if it unable to find
+// block inside of already allocated area.
+
+
+// #define REGISTER_FREE_MEMORY_CALLBACK(name, ...)
+//   C10_REGISTER_CLASS(FreeCudaMemoryCallbacksRegistry, name, __VA_ARGS__);
+// Targeting ../cuda/Stat.java
+
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public enum StatType {
+  AGGREGATE(0),
+  SMALL_POOL(1),
+  LARGE_POOL(2),
+  NUM_TYPES(3);// remember to update this whenever a new stat type is added
+
+    public final long value;
+    private StatType(long v) { this.value = v; }
+    private StatType(StatType e) { this.value = e.value; }
+    public StatType intern() { for (StatType e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+// Targeting ../cuda/DeviceStats.java
+
+
+// Targeting ../cuda/BlockInfo.java
+
+
+// Targeting ../cuda/SegmentInfo.java
+
+
+// Targeting ../cuda/AllocatorState.java
+
+
+// Targeting ../cuda/TraceEntry.java
+
+
+// Targeting ../cuda/SnapshotInfo.java
+
+
+// Targeting ../cuda/CheckpointDelta.java
+
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public enum RecordContext {
+  NEVER(0),
+  STATE(1), // only keep stacks for active allocations
+  ALLOC(2), // additionally keep stacks for allocations in the trace history
+  ALL(3);// additionally record stacks for when something is freed
+
+    public final int value;
+    private RecordContext(int v) { this.value = v; }
+    private RecordContext(RecordContext e) { this.value = e.value; }
+    public RecordContext intern() { for (RecordContext e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setAllocatorSettings(@StdString BytePointer env);
+@Namespace("c10::cuda::CUDACachingAllocator") public static native void setAllocatorSettings(@StdString String env);
+
+// Size pretty-printer
+
+// Targeting ../cuda/CUDAAllocator.java
+
+
+
+// Allocator object, statically initialized
+// See BackendInitializer in CUDACachingAllocator.cpp.
+// Atomic loads on x86 are just normal loads,
+// (atomic stores are different), so reading this value
+// is no different than loading a pointer.
+
+
+@Namespace("c10::cuda::CUDACachingAllocator") public static native @Name("get") CUDAAllocator getAllocator();
+
+// Called directly by clients.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CUDAGraph interactions
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Not part of CUDA_ALLOCATOR_BACKEND_INTERFACE
+
+
+
+
+
+
+
+
+ // namespace CUDACachingAllocator
+ // namespace cuda
+ // namespace c10
+
+
+// Parsed from c10/cuda/impl/CUDAGuardImpl.h
+
+// #pragma once
+
+// #include <c10/core/DeviceGuard.h>
+// #include <c10/core/impl/DeviceGuardImplInterface.h>
+// #include <c10/core/impl/GPUTrace.h>
+// #include <c10/macros/Macros.h>
+// #include <c10/util/Exception.h>
+
+// #include <c10/cuda/CUDACachingAllocator.h>
+// #include <c10/cuda/CUDAException.h>
+// #include <c10/cuda/CUDAFunctions.h>
+// #include <c10/cuda/CUDAStream.h>
+
+// #include <cuda_runtime_api.h>
+
+ // namespace impl
+ // namespace cuda
+ // namespace c10
 
 
 // Parsed from ATen/cudnn/Descriptors.h
@@ -757,15 +948,15 @@ public static native @Cast("const char*") BytePointer cusparseGetErrorString(@Ca
 // Targeting ../cuda/CUDAGuard.java
 
 
-// Targeting ../cuda/OptionalCUDAGuard.java
 
-
+/** A variant of OptionalDeviceGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
 // Targeting ../cuda/CUDAStreamGuard.java
 
 
-// Targeting ../cuda/OptionalCUDAStreamGuard.java
 
-
+/** A variant of OptionalStreamGuard that is specialized for CUDA.  See
+ *  CUDAGuard for when you can use this. */
 // Targeting ../cuda/CUDAMultiStreamGuard.java
 
 

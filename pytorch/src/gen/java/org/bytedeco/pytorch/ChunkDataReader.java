@@ -24,7 +24,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  A chunk could be an entire file, such as an audio data file or an image,
  *  or part of a file in the case of a large text-file split based on seek
  *  positions. */
-@Name("torch::data::datasets::ChunkDataReader<torch::data::Example<>,std::vector<torch::data::Example<> > >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::datasets::ChunkDataReader<torch::data::Example<torch::Tensor,torch::Tensor>,std::vector<torch::data::Example<torch::Tensor,torch::Tensor> > >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ChunkDataReader extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -45,7 +45,7 @@ public class ChunkDataReader extends Pointer {
 
 
   /** Read an entire chunk. */
-  @Virtual(true) public native @ByVal @Cast("torch::data::datasets::ChunkDataReader<torch::data::Example<>,std::vector<torch::data::Example<> > >::ChunkType*") ExampleVector read_chunk(@Cast("size_t") long chunk_index);
+  @Virtual(true) public native @ByVal @Cast("torch::data::datasets::ChunkDataReader<torch::data::Example<torch::Tensor,torch::Tensor>,std::vector<torch::data::Example<torch::Tensor,torch::Tensor> > >::ChunkType*") ExampleVector read_chunk(@Cast("size_t") long chunk_index);
 
   /** Returns the number of chunks available in this reader. */
   @Virtual(true) public native @Cast("size_t") long chunk_count();

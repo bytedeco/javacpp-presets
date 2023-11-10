@@ -71,6 +71,12 @@ public class AutogradMeta extends AutogradMetaInterface {
   
   
 
+  // The post_acc_grad_hooks_ field stores only Python hooks
+  // (PyFunctionTensorPostAccGradHooks) that are called after the
+  // .grad field has been accumulated into. This is less complicated
+  // than the hooks_ field, which encapsulates a lot more.
+  public native @UniquePtr @Cast({"", "", "std::unique_ptr<torch::autograd::PostAccumulateGradHook>&&"}) PostAccumulateGradHook post_acc_grad_hooks_(); public native AutogradMeta post_acc_grad_hooks_(PostAccumulateGradHook setter);
+
   // Only meaningful on leaf variables (must be false otherwise)
   public native @Cast("bool") boolean requires_grad_(); public native AutogradMeta requires_grad_(boolean setter);
 

@@ -152,13 +152,13 @@ public class TensorIteratorConfig extends Pointer {
   public native @ByRef TensorIteratorConfig declare_static_dtype(ScalarType dtype);
   public native @ByRef TensorIteratorConfig declare_static_device(@ByVal Device device);
   public native @ByRef TensorIteratorConfig declare_static_shape(@ByVal LongArrayRef shape);
-  public native @ByRef TensorIteratorConfig declare_static_shape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... shape);
+  public native @ByRef TensorIteratorConfig declare_static_shape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... shape);
   public native @ByRef TensorIteratorConfig declare_static_shape(
         @ByVal LongArrayRef shape,
         @ByVal LongArrayRef squash_dims);
   public native @ByRef TensorIteratorConfig declare_static_shape(
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] shape,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... squash_dims);
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] shape,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... squash_dims);
 
   // It would be better if this was && qualified, but this would be at the cost
   // of a lot of boilerplate above

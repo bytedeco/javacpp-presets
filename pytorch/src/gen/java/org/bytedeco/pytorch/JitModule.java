@@ -37,6 +37,9 @@ public class JitModule extends JitObject {
   private native void allocate(@SharedPtr CompilationUnit cu, @Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public JitModule() { super((Pointer)null); allocate(); }
   private native void allocate();
+  public JitModule(@Const @ByRef JitModule arg0) { super((Pointer)null); allocate(arg0); }
+  private native void allocate(@Const @ByRef JitModule arg0);
+  public native @ByRef @Name("operator =") JitModule put(@Const @ByRef JitModule arg0);
   public JitModule(
         @ByVal QualifiedName arg0,
         @SharedPtr CompilationUnit cu,
@@ -219,6 +222,7 @@ public class JitModule extends JitObject {
 
   public native @ByVal JitModule copy();
 
+  public native @ByVal JitModule deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal JitModule deepcopy();
 
   // Clones both the underlying `ClassType` and the module instance(data), this

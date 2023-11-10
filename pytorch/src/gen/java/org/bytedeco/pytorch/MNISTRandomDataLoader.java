@@ -25,7 +25,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  dataset, which acts as a simple batch request to batch mapping. The batch
  *  request will often be an array of indices, and if the dataset is a simple
  *  image dataset, the dataset would produce the images at those indices. */
-@Name("torch::data::StatelessDataLoader<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >,torch::data::samplers::RandomSampler>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::StatelessDataLoader<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >,torch::data::samplers::RandomSampler>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTRandomDataLoader extends MNISTRandomDataLoaderBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

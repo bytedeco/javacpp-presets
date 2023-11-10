@@ -45,6 +45,7 @@ public class ListType extends ListSingleElementType {
   public static native @SharedPtr ListType ofTensors();
   public static native @SharedPtr ListType ofOptionalTensors();
   public static native @SharedPtr ListType ofInts();
+  public static native @SharedPtr ListType ofSymInts();
   public static native @SharedPtr ListType ofFloats();
   public static native @SharedPtr ListType ofComplexDoubles();
   public static native @SharedPtr ListType ofBools();

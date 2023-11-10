@@ -26,7 +26,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  while the {@code ExampleSampler} determins the order of Examples that are returned
  *  in each {@code get_batch} call. The hierarchical sampling approach used here is
  *  inspired by this paper http://martin.zinkevich.org/publications/nips2010.pdf */
-@Name("torch::data::datasets::ChunkDataset<JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_00020_0003e_00020_0003e,torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::datasets::ChunkDataset<JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_00020_0003e_00020_0003e,torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ChunkDataset extends ChunkStatefulDataset {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -45,11 +45,11 @@ public class ChunkDataset extends ChunkStatefulDataset {
         ChunkDatasetOptions options,
         Pointer preprocessing_policy) { super((Pointer)null); allocate(chunk_reader, chunk_sampler, example_sampler, options, preprocessing_policy); }
   private native void allocate(
-        @ByVal @Cast("JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_00020_0003e_00020_0003e*") ChunkDataReader chunk_reader,
+        @ByVal @Cast("JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_00020_0003e_00020_0003e*") ChunkDataReader chunk_reader,
         @ByVal RandomSampler chunk_sampler,
         @ByVal RandomSampler example_sampler,
         @ByVal ChunkDatasetOptions options,
-        @ByVal(nullValue = "std::function<void(std::vector<torch::data::Example<>>&)>()") @Cast("std::function<void(std::vector<torch::data::Example<>>&)>*") Pointer preprocessing_policy);
+        @ByVal(nullValue = "std::function<void(std::vector<torch::data::Example<torch::Tensor,torch::Tensor>>&)>()") @Cast("std::function<void(std::vector<torch::data::Example<torch::Tensor,torch::Tensor>>&)>*") Pointer preprocessing_policy);
 
   /** Default get_batch method of BatchDataset. This method returns
    *  Example batches created from the preloaded chunks. The implemenation
@@ -69,7 +69,7 @@ public class ChunkDataset extends ChunkStatefulDataset {
 
   // provide a references to chunk sampler. Used mainly in distributed data
   // loading to set the epoch number for the sampler.
-  public native @Cast("torch::data::datasets::ChunkDataset<JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003c_0003e_00020_0003e_00020_0003e,torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>::ChunkSamplerType*") @ByRef RandomSampler chunk_sampler();
+  public native @Cast("torch::data::datasets::ChunkDataset<JavaCPP_torch_0003a_0003adata_0003a_0003adatasets_0003a_0003aChunkDataReader_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_0002cstd_0003a_0003avector_0003ctorch_0003a_0003adata_0003a_0003aExample_0003ctorch_0003a_0003aTensor_0002ctorch_0003a_0003aTensor_0003e_00020_0003e_00020_0003e,torch::data::samplers::RandomSampler,torch::data::samplers::RandomSampler>::ChunkSamplerType*") @ByRef RandomSampler chunk_sampler();
 
   public native void save(@ByRef OutputArchive archive);
 

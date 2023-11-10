@@ -227,6 +227,8 @@ public class AnyModule extends Pointer {
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad1dImpl>"}) ReplicationPad1dImpl module);
   public AnyModule(ConstantPad1dImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad1dImpl>"}) ConstantPad1dImpl module);
+  public AnyModule(ZeroPad1dImpl module) { super((Pointer)null); allocate(module); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ZeroPad1dImpl>"}) ZeroPad1dImpl module);
   public AnyModule(AvgPool1dImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool1dImpl>"}) AvgPool1dImpl module);
   public AnyModule(MaxPool1dImpl module) { super((Pointer)null); allocate(module); }
@@ -267,6 +269,8 @@ public class AnyModule extends Pointer {
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ReplicationPad3dImpl>"}) ReplicationPad3dImpl module);
   public AnyModule(ConstantPad3dImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ConstantPad3dImpl>"}) ConstantPad3dImpl module);
+  public AnyModule(ZeroPad3dImpl module) { super((Pointer)null); allocate(module); }
+  private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::ZeroPad3dImpl>"}) ZeroPad3dImpl module);
   public AnyModule(AvgPool3dImpl module) { super((Pointer)null); allocate(module); }
   private native void allocate(@SharedPtr @Cast({"", "std::shared_ptr<torch::nn::AvgPool3dImpl>"}) AvgPool3dImpl module);
   public AnyModule(MaxPool3dImpl module) { super((Pointer)null); allocate(module); }

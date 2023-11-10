@@ -27,13 +27,5 @@ public class JitNodeWrap extends Pointer {
   private native void allocate(JitNode p);
   public native void clear();
   public native JitNode elem(); public native JitNodeWrap elem(JitNode setter);
-  public static class Clear_cb_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Clear_cb_Pointer(Pointer p) { super(p); }
-      protected Clear_cb_Pointer() { allocate(); }
-      private native void allocate();
-      public native void call(Pointer arg0);
-  }
-  public native Clear_cb_Pointer clear_cb(); public native JitNodeWrap clear_cb(Clear_cb_Pointer setter);
+  public native PointerConsumer clear_cb(); public native JitNodeWrap clear_cb(PointerConsumer setter);
 }

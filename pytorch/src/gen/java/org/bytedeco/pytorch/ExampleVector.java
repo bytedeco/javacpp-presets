@@ -17,7 +17,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<torch::data::Example<> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::vector<torch::data::Example<torch::Tensor,torch::Tensor> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

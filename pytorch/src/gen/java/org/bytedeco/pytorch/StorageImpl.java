@@ -69,20 +69,19 @@ public class StorageImpl extends Pointer {
 
   public StorageImpl(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes,
+        @Const @ByRef SymInt size_bytes,
         Allocator allocator,
         @Cast("bool") boolean resizable) { super((Pointer)null); allocate(arg0, size_bytes, allocator, resizable); }
   private native void allocate(
         @ByVal use_byte_size_t arg0,
-        @ByVal SymInt size_bytes,
+        @Const @ByRef SymInt size_bytes,
         Allocator allocator,
         @Cast("bool") boolean resizable);
 
   
   
   
-  public StorageImpl(@ByRef(true) StorageImpl other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@ByRef(true) StorageImpl other);
+  
   
 
   public native void reset();
@@ -102,15 +101,18 @@ public class StorageImpl extends Pointer {
 
   public native @Cast("bool") boolean resizable();
 
-  public native @ByRef DataPtr data_ptr();
+  public native @ByRef DataPtr mutable_data_ptr();
+
+  public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr();
 
   // Returns the previous data_ptr
   public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr set_data_ptr(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
 
   public native void set_data_ptr_noswap(@Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr);
 
-  // TODO: Return const ptr eventually if possible
-  public native Pointer data();
+  public native @Const Pointer data();
+
+  public native Pointer mutable_data();
 
   public native @ByVal DeviceType device_type();
 
@@ -132,18 +134,10 @@ public class StorageImpl extends Pointer {
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long size_bytes,
-        @Cast("c10::DeleterFnPtr") PointerConsumer d/*=nullptr*/);
+        PointerConsumer d/*=nullptr*/);
   public native void UniqueStorageShareExternalPointer(
         Pointer src,
         @Cast("size_t") long size_bytes);
-  public native void UniqueStorageShareExternalPointer(
-        Pointer src,
-        @Cast("size_t") long size_bytes,
-        @Cast("c10::DeleterFnPtr") Pointer d/*=nullptr*/);
-  public native void UniqueStorageShareExternalPointer(
-        Pointer src,
-        @Cast("size_t") long size_bytes,
-        @Cast("c10::DeleterFnPtr") long d/*=nullptr*/);
 
   /**
    * Can only be called when use_count is 1

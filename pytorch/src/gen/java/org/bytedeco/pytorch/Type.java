@@ -106,7 +106,7 @@ private native void allocate(@ByVal SingletonTypePtr p);
   //
   // Takes a custom printer that users can pass in to customize the output of
   // this method.
-  public native @StdString BytePointer annotation_str(@ByVal @Cast("c10::TypePrinter*") Pointer printer);
+  public native @StdString BytePointer annotation_str(@ByVal TypePrinter printer);
   public native @StdString BytePointer annotation_str();
 
   // Returns a human readable string that includes additional information like

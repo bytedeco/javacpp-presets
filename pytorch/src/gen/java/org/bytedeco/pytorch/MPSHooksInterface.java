@@ -36,25 +36,36 @@ public class MPSHooksInterface extends Pointer {
         return new MPSHooksInterface((Pointer)this).offsetAddress(i);
     }
 
+  // this fails the implementation if MPSHooks functions are called, but
+  // MPS backend is not present.
+//   #define FAIL_MPSHOOKS_FUNC(func)
+//     TORCH_CHECK(false, "Cannot execute ", func, "() without MPS backend.");
 
   // Initialize the MPS library state
   public native void initMPS();
-
   public native @Cast("bool") boolean hasMPS();
-
+  public native @Cast("bool") boolean isOnMacOS13orNewer(@Cast("unsigned") int minor/*=0*/);
   public native @Cast("bool") boolean isOnMacOS13orNewer();
-
   public native @Const @ByRef Generator getDefaultMPSGenerator();
-
   public native Allocator getMPSDeviceAllocator();
-
   public native void deviceSynchronize();
-
+  public native void commitStream();
+  public native Pointer getCommandBuffer();
+  public native Pointer getDispatchQueue();
   public native void emptyCache();
-
   public native @Cast("size_t") long getCurrentAllocatedMemory();
-
   public native @Cast("size_t") long getDriverAllocatedMemory();
-
   public native void setMemoryFraction(double arg0);
+  public native void profilerStartTrace(@StdString BytePointer mode, @Cast("bool") boolean waitUntilCompleted);
+  public native void profilerStartTrace(@StdString String mode, @Cast("bool") boolean waitUntilCompleted);
+  public native void profilerStopTrace();
+  public native @Cast("uint32_t") int acquireEvent(@Cast("bool") boolean enable_timing);
+  public native void releaseEvent(@Cast("uint32_t") int event_id);
+  public native void recordEvent(@Cast("uint32_t") int event_id);
+  public native void waitForEvent(@Cast("uint32_t") int event_id);
+  public native void synchronizeEvent(@Cast("uint32_t") int event_id);
+  public native @Cast("bool") boolean queryEvent(@Cast("uint32_t") int event_id);
+  public native double elapsedTimeOfEvents(@Cast("uint32_t") int start_event_id, @Cast("uint32_t") int end_event_id);
+
+//   #undef FAIL_MPSHOOKS_FUNC
 }

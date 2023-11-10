@@ -68,10 +68,10 @@ public class SizesAndStrides extends Pointer {
   public native @ByVal @NoException(true) LongArrayRef sizes_arrayref();
 
   public native void set_sizes(@ByVal LongArrayRef newSizes);
-  public native void set_sizes(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... newSizes);
+  public native void set_sizes(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... newSizes);
 
   public native void set_strides(@ByVal LongArrayRef strides);
-  public native void set_strides(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... strides);
+  public native void set_strides(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... strides);
 
   public native @Cast("int64_t*") @NoException(true) LongPointer strides_data();
 

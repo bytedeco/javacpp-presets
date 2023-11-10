@@ -46,7 +46,7 @@ public class AutogradState extends Pointer {
 
   public native void set_inference_mode(@Cast("bool") boolean enabled);
 
-  public native void set_multithreading_enabled(@Cast("bool") boolean mulithreading_enabled);
+  public native void set_multithreading_enabled(@Cast("bool") boolean multithreading_enabled);
 
   public native void set_view_replay_enabled(@Cast("bool") boolean view_replay_enabled);
 

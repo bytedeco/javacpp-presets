@@ -32,6 +32,6 @@ public class DimVectorInferExpandGeometryResult extends Pointer {
   private native void allocate(@Cast("size_t") long ndim);
   public DimVectorInferExpandGeometryResult(@ByVal LongArrayRef sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
   private native void allocate(@ByVal LongArrayRef sizes_, @Cast("size_t") long ndim);
-  public DimVectorInferExpandGeometryResult(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
-  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes_, @Cast("size_t") long ndim);
+  public DimVectorInferExpandGeometryResult(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes_, @Cast("size_t") long ndim) { super((Pointer)null); allocate(sizes_, ndim); }
+  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes_, @Cast("size_t") long ndim);
 }

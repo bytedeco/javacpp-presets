@@ -252,6 +252,14 @@ public class IValue extends Pointer {
   
   public native @ByVal SymFloat toSymFloat();
 
+  public IValue(@ByVal SymBool i) { super((Pointer)null); allocate(i); }
+  private native void allocate(@ByVal SymBool i);
+
+  public native @Cast("bool") boolean isSymBool();
+
+  
+  public native @ByVal SymBool toSymBool();
+
   // allow you to pass literals (3, 4) without ambiguity
   public IValue(int i) { super((Pointer)null); allocate(i); }
   private native void allocate(int i);
@@ -268,9 +276,11 @@ public class IValue extends Pointer {
 
   // IntList
   public native @Cast("bool") boolean isIntList();
+  public native @Cast("bool") boolean isSymIntList();
   
   public native @ByVal LongList toIntList();
   public native @ByVal @Cast("std::vector<int64_t>*") LongVector toIntVector();
+  public native @ByVal SymIntVector toSymIntVector();
   public native @ByVal DimVector toDimVector();
 
   // ConstantString
@@ -497,6 +507,11 @@ public class IValue extends Pointer {
   // TODO: There are several places that recurse over IValue. This is fragile.
   // This visitor should be used to recurse over ivalues.
   
+  public native @ByVal IValue deepcopy(@ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
   public native @ByVal IValue deepcopy();
-  public native @ByVal IValue deepcopy(@ByRef HashAliasedIValueMap memo);
+  public native @ByVal IValue deepcopy(
+        @ByRef HashAliasedIValueMap memo,
+        @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+  public native @ByVal IValue deepcopy(
+        @ByRef HashAliasedIValueMap memo);
 }

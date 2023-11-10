@@ -38,6 +38,10 @@ public class OperandInfo extends Pointer {
   public OperandInfo(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned t) { super((Pointer)null); allocate(t); }
   private native void allocate(@Cast({"", "c10::MaybeOwned<at::TensorBase>&&"}) @StdMove TensorBaseMaybeOwned t);
 
+  /** The data pointer. This may be different from tensor->data_ptr() if the
+   *  iterator is split. */
+  public native Pointer data(); public native OperandInfo data(Pointer setter);
+
   /** Stride after broadcasting. The stride is in bytes, not number of elements. */
   public native @ByRef @Cast("at::OperandInfo::StrideVector*") SymDimVector stride_bytes(); public native OperandInfo stride_bytes(SymDimVector setter);
 
@@ -59,10 +63,6 @@ public class OperandInfo extends Pointer {
   public native @Cast("bool") boolean is_device_defined();
   public native @Cast("bool") boolean is_type_defined();
   public native @ByVal TensorOptions options();
-
-  /** The data pointer. This may be different from tensor->data_ptr() if the
-   *  iterator is split. */
-  public native Pointer data(); public native OperandInfo data(Pointer setter);
 
   public native @Cast("bool") boolean is_output(); public native OperandInfo is_output(boolean setter);
 

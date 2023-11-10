@@ -34,19 +34,19 @@ public class PlacementDeleteContext extends Pointer {
     public PlacementDeleteContext(Pointer p) { super(p); }
 
   public native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr_(); public native PlacementDeleteContext data_ptr_(DataPtr setter);
-  public native PlacementDtor placement_dtor_(); public native PlacementDeleteContext placement_dtor_(PlacementDtor setter);
+  public native PlacementConsumer placement_dtor_(); public native PlacementDeleteContext placement_dtor_(PlacementConsumer setter);
   public native @Cast("size_t") long size_(); public native PlacementDeleteContext size_(long setter);
   public PlacementDeleteContext(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        PlacementDtor placement_dtor,
+        PlacementConsumer placement_dtor,
         @Cast("size_t") long size) { super((Pointer)null); allocate(data_ptr, placement_dtor, size); }
   private native void allocate(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        PlacementDtor placement_dtor,
+        PlacementConsumer placement_dtor,
         @Cast("size_t") long size);
   public static native @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr makeDataPtr(
         @Cast({"", "c10::DataPtr&&"}) @StdMove DataPtr data_ptr,
-        PlacementDtor placement_dtor,
+        PlacementConsumer placement_dtor,
         @Cast("size_t") long size,
         @ByVal Device device);
 }

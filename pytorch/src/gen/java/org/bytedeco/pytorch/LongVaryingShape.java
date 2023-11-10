@@ -29,8 +29,8 @@ public class LongVaryingShape extends Pointer {
 
   public LongVaryingShape(@ByVal LongArrayRef vec) { super((Pointer)null); allocate(vec); }
   private native void allocate(@ByVal LongArrayRef vec);
-  public LongVaryingShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... vec) { super((Pointer)null); allocate(vec); }
-  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... vec);
+  public LongVaryingShape(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... vec) { super((Pointer)null); allocate(vec); }
+  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... vec);
 
   public LongVaryingShape(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size) { super((Pointer)null); allocate(size); }
   private native void allocate(@ByVal(nullValue = "c10::optional<size_t>(c10::nullopt)") SizeTOptional size);

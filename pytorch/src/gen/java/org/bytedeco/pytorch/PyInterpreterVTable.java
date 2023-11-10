@@ -129,6 +129,9 @@ public class PyInterpreterVTable extends Pointer {
   // Invoke the Python boxed fallback dispatch to go back into Python
   public native void dispatch(@Const @ByRef OperatorHandle op, IValueVector stack);
 
+  public native void reportErrorCallback(@Cast("PyObject*") Pointer callback, DispatchKey key);
+  public native void reportErrorCallback(@Cast("PyObject*") Pointer callback, @Cast("c10::DispatchKey") short key);
+
   // This is only invoked in the multipy/torchdeploy situation from
   // pythonOpRegistrationTrampoline; this lets us get to the Python
   // interpreter to actually find the appropriate Python op registration

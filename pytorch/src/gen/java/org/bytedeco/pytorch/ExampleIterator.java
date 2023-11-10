@@ -18,7 +18,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
  // namespace detail
 
-@Name("torch::data::Iterator<torch::data::Example<> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::Iterator<torch::data::Example<torch::Tensor,torch::Tensor> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -38,12 +38,14 @@ public class ExperimentalConfig extends Pointer {
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
-        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, adjust_timestamps); }
+        @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
+        @Cast("bool") boolean adjust_timestamps/*=false*/) { super((Pointer)null); allocate(profiler_metrics, profiler_measure_per_kernel, verbose, performance_events, enable_cuda_sync_events, adjust_timestamps); }
   private native void allocate(
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector profiler_metrics,
         @Cast("bool") boolean profiler_measure_per_kernel/*=false*/,
         @Cast("bool") boolean verbose/*=false*/,
         @ByVal(nullValue = "std::vector<std::string>{}") StringVector performance_events,
+        @Cast("bool") boolean enable_cuda_sync_events/*=false*/,
         @Cast("bool") boolean adjust_timestamps/*=false*/);
   public ExperimentalConfig() { super((Pointer)null); allocate(); }
   private native void allocate();
@@ -57,6 +59,12 @@ public class ExperimentalConfig extends Pointer {
    * An empty list will disable performance event based profiling altogether.
    */
   public native @ByRef StringVector performance_events(); public native ExperimentalConfig performance_events(StringVector setter);
+  /*
+   * For CUDA profiling mode, enable adding CUDA synchronization events
+   * that expose CUDA device, stream and event synchronization activities.
+   * This feature is new and currently disabled by default.
+   */
+  public native @Cast("bool") boolean enable_cuda_sync_events(); public native ExperimentalConfig enable_cuda_sync_events(boolean setter);
   /*
    * Controls whether or not timestamp adjustment occurs after profiling.
    * The purpose of this is to adjust Vulkan event timelines to align with those

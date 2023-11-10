@@ -58,12 +58,8 @@ public class UniqueVoidPtr extends Pointer {
   private native void allocate();
   public UniqueVoidPtr(Pointer data) { super((Pointer)null); allocate(data); }
   private native void allocate(Pointer data);
-  public UniqueVoidPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") PointerConsumer ctx_deleter) { super((Pointer)null); allocate(data, ctx, ctx_deleter); }
-  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") PointerConsumer ctx_deleter);
-  public UniqueVoidPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter) { super((Pointer)null); allocate(data, ctx, ctx_deleter); }
-  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") Pointer ctx_deleter);
-  public UniqueVoidPtr(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") long ctx_deleter) { super((Pointer)null); allocate(data, ctx, ctx_deleter); }
-  private native void allocate(Pointer data, Pointer ctx, @Cast("c10::DeleterFnPtr") long ctx_deleter);
+  public UniqueVoidPtr(Pointer data, Pointer ctx, PointerConsumer ctx_deleter) { super((Pointer)null); allocate(data, ctx, ctx_deleter); }
+  private native void allocate(Pointer data, Pointer ctx, PointerConsumer ctx_deleter);
   public native @Name("operator ->") Pointer access();
   public native void clear();
   public native Pointer get();
@@ -71,14 +67,8 @@ public class UniqueVoidPtr extends Pointer {
   public native Pointer release_context();
   
   public native @Cast("bool") boolean compare_exchange_deleter(
-        @Cast("c10::DeleterFnPtr") PointerConsumer expected_deleter,
-        @Cast("c10::DeleterFnPtr") PointerConsumer new_deleter);
-  public native @Cast("bool") boolean compare_exchange_deleter(
-        @Cast("c10::DeleterFnPtr") Pointer expected_deleter,
-        @Cast("c10::DeleterFnPtr") Pointer new_deleter);
-  public native @Cast("bool") boolean compare_exchange_deleter(
-        @Cast("c10::DeleterFnPtr") long expected_deleter,
-        @Cast("c10::DeleterFnPtr") long new_deleter);
+        PointerConsumer expected_deleter,
+        PointerConsumer new_deleter);
   public native @Cast("bool") @Name("operator bool") boolean asBoolean();
-  public native @Cast("c10::DeleterFnPtr") PointerConsumer get_deleter();
+  public native PointerConsumer get_deleter();
 }

@@ -38,5 +38,5 @@ public class ExampleStack extends ExampleCollation {
         return new ExampleStack((Pointer)this).offsetAddress(i);
     }
 
-  public native @ByVal Example apply_batch(@ByVal ExampleVector examples);
+  public native @ByVal Example apply_batch(@StdVector Example examples);
 }

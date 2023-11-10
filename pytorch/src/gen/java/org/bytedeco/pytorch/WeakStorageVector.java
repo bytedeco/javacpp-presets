@@ -17,7 +17,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("std::vector<c10::ivalue::Future::WeakStorage>") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("std::vector<c10::weak_intrusive_ptr<c10::StorageImpl> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class WeakStorageVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

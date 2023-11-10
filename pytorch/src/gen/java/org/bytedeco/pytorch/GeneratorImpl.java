@@ -35,6 +35,8 @@ public class GeneratorImpl extends Pointer {
 
   // Common methods for all generators
   public native void set_current_seed(@Cast("uint64_t") long seed);
+  public native void set_offset(@Cast("uint64_t") long offset);
+  public native @Cast("uint64_t") long get_offset();
   public native @Cast("uint64_t") long current_seed();
   public native @Cast("uint64_t") long seed();
   public native void set_state(@Const @ByRef TensorImpl new_state);

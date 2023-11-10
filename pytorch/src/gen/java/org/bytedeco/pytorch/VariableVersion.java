@@ -73,9 +73,9 @@ public class VariableVersion extends Pointer {
   // doesn't allocate the intrusive_ptr.
   // Example use cases are:
   //  - Inference tensors don't track version counter, so they'll just always
-  //    have disbaled VariableVersion.
+  //    have disabled VariableVersion.
   //  - In SavedVariable class we override version_counter_ inside its
-  //  construtor
+  //  constructor
   //    so that we can use the cheap constructor there.
   public enum Disabled { DISABLED(0);
 

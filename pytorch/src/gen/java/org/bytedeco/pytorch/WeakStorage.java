@@ -18,8 +18,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// To allow intrusive_ptr inside std::map or std::set, we need operator<
-
 @Name("c10::weak_intrusive_ptr<c10::StorageImpl>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class WeakStorage extends Pointer {
     static { Loader.load(); }

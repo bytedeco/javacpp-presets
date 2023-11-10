@@ -3,6 +3,7 @@
 package org.bytedeco.pytorch.cuda;
 
 import org.bytedeco.pytorch.*;
+import org.bytedeco.pytorch.functions.*;
 import org.bytedeco.pytorch.Error;
 import org.bytedeco.pytorch.global.torch.DeviceType;
 import org.bytedeco.pytorch.global.torch.ScalarType;
@@ -114,7 +115,7 @@ private native void allocate();
   public native @ByVal CUDAStreamArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);
 
   /** slice(n) - Chop off the first N elements of the array. */
-  public native @Const @ByVal CUDAStreamArrayRef slice(@Cast("size_t") long N);
+  public native @ByVal CUDAStreamArrayRef slice(@Cast("size_t") long N);
 
   /** \}
    *  \name Operator Overloads

@@ -27,13 +27,5 @@ public class ValueWrap extends Pointer {
   private native void allocate(Value p);
   public native void clear();
   public native Value elem(); public native ValueWrap elem(Value setter);
-  public static class Clear_cb_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Clear_cb_Pointer(Pointer p) { super(p); }
-      protected Clear_cb_Pointer() { allocate(); }
-      private native void allocate();
-      public native void call(Pointer arg0);
-  }
-  public native Clear_cb_Pointer clear_cb(); public native ValueWrap clear_cb(Clear_cb_Pointer setter);
+  public native PointerConsumer clear_cb(); public native ValueWrap clear_cb(PointerConsumer setter);
 }

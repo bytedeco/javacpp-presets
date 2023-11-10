@@ -46,8 +46,8 @@ public class LongList extends Pointer {
    */
   public LongList(@ByVal LongArrayRef initial_values) { super((Pointer)null); allocate(initial_values); }
   private native void allocate(@ByVal LongArrayRef initial_values);
-  public LongList(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... initial_values) { super((Pointer)null); allocate(initial_values); }
-  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... initial_values);
+  public LongList(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... initial_values) { super((Pointer)null); allocate(initial_values); }
+  private native void allocate(@ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... initial_values);
 
   /**
    * Create a generic list with runtime type information.

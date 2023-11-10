@@ -85,6 +85,13 @@ public class Generator extends Pointer {
   public native @Const @ByRef GeneratorImplPtr getIntrusivePtr();
 
   public native void set_current_seed(@Cast("uint64_t") long seed);
+  // Sets the offset of Generator state to the desired offset. This is currently
+  // supported for only Philox based Generators, i.e., CUDA and MPS.
+  public native void set_offset(@Cast("uint64_t") long offset);
+
+  // Returns the offset of Generator state. This is currently supported for only
+  // Philox based Generators, i.e., CUDA and MPS.
+  public native @Cast("uint64_t") long get_offset();
 
   public native @Cast("uint64_t") long current_seed();
 

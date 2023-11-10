@@ -69,7 +69,7 @@ public class Blob extends Pointer {
    * \brief Gets the const reference of the stored object. The code checks if
    * the stored object is of the desired type.
    */
-  // TODO(jerryzh): add a Get(DeviceType) function?
+  // TODO(jerryzh): add a Get(c10::DeviceType) function?
   public native @NoException(true) Pointer GetRaw();
 
   /**

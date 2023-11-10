@@ -58,6 +58,8 @@ public class OperatorHandle extends Pointer {
 
   public native @ByVal TagArrayRef getTags();
 
+  public native void setReportErrorCallback_(@UniquePtr SafePyObject callback);
+
   public native @Cast("bool") boolean hasTag(Tag tag);
   public native @Cast("bool") boolean hasTag(@Cast("at::Tag") int tag);
 

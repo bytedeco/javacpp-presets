@@ -28,65 +28,65 @@ public class NestedTensorImpl extends TensorImpl {
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @ByVal DispatchKeySet key_set,
         @Const @ByVal TypeMeta data_type,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets) { super((Pointer)null); allocate(storage, key_set, data_type, nested_size_tensor, nested_stride_tensor, offsets); }
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(storage, key_set, data_type, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
         @Cast({"", "c10::Storage&&"}) @StdMove Storage storage,
         @ByVal DispatchKeySet key_set,
         @Const @ByVal TypeMeta data_type,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets);
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets);
 
   public NestedTensorImpl(
         @ByVal Tensor buffer,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets) { super((Pointer)null); allocate(buffer, nested_size_tensor, nested_stride_tensor, offsets); }
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(buffer, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
         @ByVal Tensor buffer,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets);
-  // assume contiguous, `nested_stride_tensor` and `offsets`
-  // can be infered from `nested_size_tensor`
-  public NestedTensorImpl(@ByVal Tensor buffer, @ByVal Tensor nested_size_tensor) { super((Pointer)null); allocate(buffer, nested_size_tensor); }
-  private native void allocate(@ByVal Tensor buffer, @ByVal Tensor nested_size_tensor);
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets);
+  // assume contiguous, `nested_strides` and `offsets`
+  // can be infered from `nested_sizes`
+  public NestedTensorImpl(@ByVal Tensor buffer, @ByVal Tensor nested_sizes) { super((Pointer)null); allocate(buffer, nested_sizes); }
+  private native void allocate(@ByVal Tensor buffer, @ByVal Tensor nested_sizes);
 
   // This constructor is used creating view tensors from nested tensors
   public NestedTensorImpl(
         TensorImpl.ImplType impl_type,
         @Const @ByRef Tensor base_tensor,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets) { super((Pointer)null); allocate(impl_type, base_tensor, nested_size_tensor, nested_stride_tensor, offsets); }
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(impl_type, base_tensor, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
         TensorImpl.ImplType impl_type,
         @Const @ByRef Tensor base_tensor,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets);
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets);
   public NestedTensorImpl(
         @Cast("c10::TensorImpl::ImplType") int impl_type,
         @Const @ByRef Tensor base_tensor,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets) { super((Pointer)null); allocate(impl_type, base_tensor, nested_size_tensor, nested_stride_tensor, offsets); }
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets) { super((Pointer)null); allocate(impl_type, base_tensor, nested_sizes, nested_strides, storage_offsets); }
   private native void allocate(
         @Cast("c10::TensorImpl::ImplType") int impl_type,
         @Const @ByRef Tensor base_tensor,
-        @ByVal Tensor nested_size_tensor,
-        @ByVal Tensor nested_stride_tensor,
-        @Cast("std::vector<int64_t>*") @ByRef(true) LongVector offsets);
+        @ByVal Tensor nested_sizes,
+        @ByVal Tensor nested_strides,
+        @ByVal Tensor storage_offsets);
 
   // TODO: don't expose private implementation details like this; in
   // particular, resizing this tensor will mess up our dim() and
   // callers cannot fix it.
-  public native @Const @ByRef Tensor get_nested_size_tensor();
+  public native @Const @ByRef Tensor get_nested_sizes();
   // TODO: don't expose private implementation details like this
-  public native @Const @ByRef Tensor get_nested_stride_tensor();
-  public native @Cast("const std::vector<int64_t>*") @ByRef LongVector get_storage_offsets();
+  public native @Const @ByRef Tensor get_nested_strides();
+  public native @Const @ByRef Tensor get_storage_offsets();
   // Returns nullopt if the ith dimension is irregular. The ith dimension
   // of a NestedTensor is regular if the unbound tensors match in
   // size at the (i-1)th dimension.

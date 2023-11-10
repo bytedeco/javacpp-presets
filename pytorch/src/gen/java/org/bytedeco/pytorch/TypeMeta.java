@@ -77,26 +77,26 @@ public class TypeMeta extends Pointer {
   /**
    * Returns the new function pointer for individual items.
    */
-  public native @Cast("caffe2::TypeMeta::New*") @NoException(true) TypeMetaData.New newFn();
+  public native @NoException(true) PointerSupplier newFn();
   /**
    * Returns the placement new function pointer for individual items.
    */
-  public native @Cast("caffe2::TypeMeta::PlacementNew*") @NoException(true) TypeMetaData.PlacementNew placementNew();
+  public native @NoException(true) PlacementConsumer placementNew();
   /**
    * Returns the typed copy function pointer for individual iterms.
    */
-  public native @Cast("caffe2::TypeMeta::Copy*") @NoException(true) TypeMetaData.Copy copy();
+  public native @NoException(true) PlacementCopier copy();
   /**
    * Returns the destructor function pointer for individual items.
    */
-  public native @Cast("caffe2::TypeMeta::PlacementDelete*") @NoException(true) TypeMetaData.PlacementDelete placementDelete();
-  public native @Cast("caffe2::TypeMeta::Delete*") @NoException(true) TypeMetaData.Delete deleteFn();
+  public native @NoException(true) PlacementConsumer placementDelete();
+  public native @NoException(true) PointerConsumer deleteFn();
   /**
    * Returns a printable name for the type.
    */
   public native @StringView @NoException(true) BytePointer name();
 
-  private static native @Namespace @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByVal TypeMeta lhs, @Const @ByVal TypeMeta rhs);
+  private static native @Namespace @Cast("bool") @Name("operator ==") @NoException(true) boolean equals(@Const @ByRef TypeMeta lhs, @Const @ByRef TypeMeta rhs);
   public boolean equals(TypeMeta rhs) { return equals(this, rhs); }
 
   // Below are static functions that can be called by passing a specific type.
@@ -114,4 +114,15 @@ public class TypeMeta extends Pointer {
    * convert TypeMeta handles to ScalarType enum values
    */
   public native ScalarType toScalarType();
+// #ifdef __CUDACC__
+  // NOTE [ TypeIdentifier::Get nvcc/clang discrepancy]
+  // nvcc and clang do not produce identical results for
+  // TypeIdentifier::Get, because TypeIdentifier::Get relies on
+  // __PRETTY_FUNCTION__ and they don't agree on the canonical names
+  // of types (e.g., nvcc normalizes to `short unsigned int`, but clang
+  // calls it `unsigned short`). Hide the implementation of this function
+  // from nvcc so that we always use clang (or whatever host C++ compiler)
+  // for TypeIdentifier::Get.
+// #else
+  // specializations return indexes into typeMetaDataInstances()
 }

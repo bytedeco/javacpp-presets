@@ -41,18 +41,18 @@ public class TensorMaker extends Pointer {
 
   public native @ByRef @NoException(true) TensorMaker storage_offset(@ByVal LongOptional value);
 
-  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal PointerConsumer value);
-  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") Pointer value);
-  public native @ByRef @NoException(true) TensorMaker deleter(@ByVal @Cast("void(*)(void*)") long value);
+  public native @ByRef @NoException(true) TensorMaker deleter(PointerConsumer value);
 
-  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") PointerConsumer deleter/*=nullptr*/);
+  public native @ByRef @NoException(true) TensorMaker context(Pointer value, PointerConsumer deleter/*=nullptr*/);
   public native @ByRef @NoException(true) TensorMaker context(Pointer value);
-  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") Pointer deleter/*=nullptr*/);
-  public native @ByRef @NoException(true) TensorMaker context(Pointer value, @Cast("at::TensorMaker::ContextDeleter") long deleter/*=nullptr*/);
 
   public native @ByRef @NoException(true) TensorMaker target_device(@ByVal DeviceOptional value);
 
   public native @ByRef @NoException(true) TensorMaker options(@ByVal TensorOptions value);
+
+  public native @ByRef @NoException(true) TensorMaker resizeable_storage();
+
+  public native @ByRef @NoException(true) TensorMaker allocator(Allocator allocator);
 
   public native @ByVal Tensor make_tensor();
 }

@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * PyTorch 2.0.1  https://pytorch.org/
+ * PyTorch 2.1.0  https://pytorch.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -48,14 +48,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform</artifactId>
-            <version>2.0.1-1.5.10-SNAPSHOT</version>
+            <version>2.1.0-1.5.10-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>pytorch-platform-gpu</artifactId>
-            <version>2.0.1-1.5.10-SNAPSHOT</version>
+            <version>2.1.0-1.5.10-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
@@ -109,7 +109,7 @@ public class SimpleMNIST {
         }
 
         // Use one of many "standard library" modules.
-        LinearImpl fc1 = null, fc2 = null, fc3 = null;
+        final LinearImpl fc1, fc2, fc3;
     }
 
     public static void main(String[] args) throws Exception {

@@ -103,6 +103,7 @@ private native void allocate();
 
   /** equals - Check for element-wise equality. */
   public native @Cast("const bool") boolean equals(@ByVal FloatArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal @Cast({"float*", "c10::ArrayRef<float>", "std::vector<float>&"}) @StdVector("float") float... RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
   public native @Const @ByVal FloatArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);

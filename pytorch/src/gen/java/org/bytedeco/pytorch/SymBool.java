@@ -44,7 +44,11 @@ private native void allocate(@Cast("bool") boolean b);
 
   
 
+  // Only valid if is_heap_allocated()
   public native @ByVal SymNode toSymNodeImpl();
+
+  // Guaranteed to return a SymNode, wrapping using base if necessary
+  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
 
   public native @Cast("bool") boolean expect_bool();
 
@@ -61,8 +65,14 @@ private native void allocate(@Cast("bool") boolean b);
   // bool, so it's not so common to have to call this
   public native @Cast("bool") boolean guard_bool(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("bool") boolean guard_bool(String file, @Cast("int64_t") long line);
+  public native @Cast("bool") boolean expect_true(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
+  public native @Cast("bool") boolean expect_true(String file, @Cast("int64_t") long line);
 
-  public native @Cast("bool") boolean is_symbolic();
+  public native @Cast("bool") boolean has_hint();
 
   public native @Cast("bool") boolean as_bool_unchecked();
+
+  public native @ByVal BoolOptional maybe_as_bool();
+
+  public native @Cast("bool") boolean is_heap_allocated();
 }

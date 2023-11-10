@@ -64,7 +64,7 @@ public class CUDAHooksInterface extends Pointer {
 
   public native @ByVal Device getDeviceFromPtr(Pointer arg0);
 
-  public native @Cast("bool") boolean isPinnedPtr(Pointer arg0);
+  public native @Cast("bool") boolean isPinnedPtr(@Const Pointer arg0);
 
   public native @Cast("bool") boolean hasCUDA();
 
@@ -80,9 +80,9 @@ public class CUDAHooksInterface extends Pointer {
 
   public native @Cast("const at::cuda::NVRTC*") @ByRef Pointer nvrtc();
 
-  public native @Cast("bool") boolean hasPrimaryContext(@Cast("int64_t") long device_index);
+  public native @Cast("bool") boolean hasPrimaryContext(@Cast("c10::DeviceIndex") byte device_index);
 
-  public native @Cast("int64_t") long current_device();
+  public native @Cast("c10::DeviceIndex") byte current_device();
 
   public native Allocator getPinnedMemoryAllocator();
 
@@ -106,15 +106,15 @@ public class CUDAHooksInterface extends Pointer {
 
   public native double batchnormMinEpsilonCuDNN();
 
-  public native @Cast("int64_t") long cuFFTGetPlanCacheMaxSize(@Cast("int64_t") long arg0);
+  public native @Cast("int64_t") long cuFFTGetPlanCacheMaxSize(@Cast("c10::DeviceIndex") byte arg0);
 
-  public native void cuFFTSetPlanCacheMaxSize(@Cast("int64_t") long arg0, @Cast("int64_t") long arg1);
+  public native void cuFFTSetPlanCacheMaxSize(@Cast("c10::DeviceIndex") byte arg0, @Cast("int64_t") long arg1);
 
-  public native @Cast("int64_t") long cuFFTGetPlanCacheSize(@Cast("int64_t") long arg0);
+  public native @Cast("int64_t") long cuFFTGetPlanCacheSize(@Cast("c10::DeviceIndex") byte arg0);
 
-  public native void cuFFTClearPlanCache(@Cast("int64_t") long arg0);
+  public native void cuFFTClearPlanCache(@Cast("c10::DeviceIndex") byte arg0);
 
   public native int getNumGPUs();
 
-  public native void deviceSynchronize(@Cast("int64_t") long arg0);
+  public native void deviceSynchronize(@Cast("c10::DeviceIndex") byte arg0);
 }

@@ -78,7 +78,7 @@ public class Code extends Pointer {
   public native @Cast("size_t") long num_bailouts();
   public native @Const @ByRef IValueVector constant_table();
   public native @Const @ByRef TypeVector type_table();
-  public native @Const @ByRef InstructionVector instructions();
+  public native @StdVector Instruction instructions();
   public native @Const @ByRef StringSizeTMap op_to_num_specified_args();
   public native @Cast("torch::jit::Node**") @StdVector PointerPointer instructions_source();
   public native void request_bailout(@Cast("size_t") long index);

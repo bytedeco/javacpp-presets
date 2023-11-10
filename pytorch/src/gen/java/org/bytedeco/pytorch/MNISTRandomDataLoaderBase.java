@@ -17,7 +17,7 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.pytorch.global.torch.*;
 
-@Name("torch::data::DataLoaderBase<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<> > >,torch::data::Example<>,std::vector<size_t> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::DataLoaderBase<torch::data::datasets::MapDataset<torch::data::datasets::MNIST,torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> > >,torch::data::Example<torch::Tensor,torch::Tensor>,std::vector<size_t> >") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class MNISTRandomDataLoaderBase extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -53,4 +53,5 @@ public class MNISTRandomDataLoaderBase extends Pointer {
   public native void join();
 
   /** Returns the options with which the DataLoader was configured. */
+  public native @Const @ByRef @NoException(true) FullDataLoaderOptions options();
 }
