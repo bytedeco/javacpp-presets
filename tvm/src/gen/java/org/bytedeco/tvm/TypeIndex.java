@@ -62,10 +62,12 @@ public class TypeIndex extends Pointer {
     kRuntimeShapeTuple = 6,
     /** \brief runtime::PackedFunc. */
     kRuntimePackedFunc = 7,
+    /** \brief runtime::DRef */
+    kRuntimeDiscoDRef = 8,
     // static assignments that may subject to change.
-    kRuntimeClosure = 8,
-    kRuntimeADT = 9,
-    kStaticIndexEnd = 10,
+    kRuntimeClosure = 9,
+    kRuntimeADT = 10,
+    kStaticIndexEnd = 11,
     /** \brief Type index is allocated during runtime. */
     kDynamic = kStaticIndexEnd;
 }

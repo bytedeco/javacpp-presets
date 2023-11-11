@@ -7,11 +7,11 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ZLIB=zlib-1.2.13
-HDF5_VERSION=1.14.1-2
-AEC_VERSION=1.0.6
+ZLIB=zlib-1.3
+HDF5_VERSION=1.14.3
+AEC_VERSION=1.1.2
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
-download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.1/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
+download "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-$HDF5_VERSION/src/hdf5-$HDF5_VERSION.tar.bz2" hdf5-$HDF5_VERSION.tar.bz2
 # Use Github mirror repo rather than Gitlab repo for download speed
 #download "https://gitlab.dkrz.de/k202009/libaec/uploads/45b10e42123edd26ab7b3ad92bcf7be2/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
 download "https://github.com/MathisRosenhauer/libaec/releases/download/v$AEC_VERSION/libaec-$AEC_VERSION.tar.gz" libaec-$AEC_VERSION.tar.gz
@@ -22,6 +22,7 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
 tar --totals -xf ../libaec-$AEC_VERSION.tar.gz
+tar --totals -xf ../$ZLIB.tar.gz
 pushd hdf5-$HDF5_VERSION
 
 #sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
@@ -189,14 +190,17 @@ case $PLATFORM in
         ninja install
         popd
 
+        mkdir -p ../$ZLIB/build
+        pushd ../$ZLIB/build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        ninja -j $MAKEJ
+        ninja install
+        popd
+
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
-        sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
-        sedinplace 's/Release\\libaec.lib/aec_static.lib/g' build.ninja
-        sedinplace 's/Release\\libszaec.lib/szip_static.lib/g' build.ninja
-        ninja -j $MAKEJ HDF5_ZLIB
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/
@@ -213,15 +217,17 @@ case $PLATFORM in
         ninja install
         popd
 
+        mkdir -p ../$ZLIB/build
+        pushd ../$ZLIB/build
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+        ninja -j $MAKEJ
+        ninja install
+        popd
+
         mkdir -p build/bin
         cp ../lib/*.lib build/bin
         pushd build
-        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DSZAEC_TGZ_NAME:STRING="libaec-$AEC_VERSION.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DSZIP_LIBRARY:FILEPATH="$INSTALL_PATH/lib/szip_static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL:BOOL=OFF -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
-
-        sedinplace 's/Release\\libz.lib/zlibstatic.lib/g' build.ninja
-        sedinplace 's/Release\\libaec.lib/aec_static.lib/g' build.ninja
-        sedinplace 's/Release\\libszaec.lib/szip_static.lib/g' build.ninja
-        ninja -j $MAKEJ HDF5_ZLIB
+        "$CMAKE" -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DZLIB_LIBRARY="$INSTALL_PATH/lib/zlibstatic.lib" -DZLIB_INCLUDE_DIR="$INSTALL_PATH/include" -DZLIB_USE_EXTERNAL=OFF -DSZIP_LIBRARY="$INSTALL_PATH/lib/szip-static.lib" -DSZIP_INCLUDE_DIR="$INSTALL_PATH/include" -DSZIP_USE_EXTERNAL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON -DHDF5_ENABLE_SZIP_SUPPORT=ON -DHDF5_ENABLE_SZIP_ENCODING=ON -DUSE_LIBAEC=ON -DHDF5_BUILD_CPP_LIB=ON -DHDF5_BUILD_JAVA=ON ..
         ninja -j $MAKEJ
         ninja install
         cp bin/zlib* ../../lib/

@@ -62,7 +62,7 @@ import org.bytedeco.javacpp.Pointer;
         "onnx/common/array_ref.h",
         "onnx/common/status.h",
 //        "onnx/common/graph_node_list.h",
-        "onnx/common/stl_backports.h",
+//        "onnx/common/stl_backports.h",
         "onnx/common/ir.h",
         "onnx/common/ir_pb_converter.h",
         "onnx/version_converter/adapters/adapter.h",

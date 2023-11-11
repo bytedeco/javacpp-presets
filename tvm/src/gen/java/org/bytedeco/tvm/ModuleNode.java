@@ -137,6 +137,9 @@ public class ModuleNode extends TVMObject {
   /** \brief Returns true if this module is 'DSO exportable'. */
   public native @Cast("bool") boolean IsDSOExportable();
 
+  /** \brief Returns true if this module is 'Binary Serializable'. */
+  public native @Cast("bool") boolean IsBinarySerializable();
+
   /**
    * \brief Returns true if this module has a definition for a function of \p name. If
    * \p query_imports is true, also search in any imported modules.

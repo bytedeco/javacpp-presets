@@ -24,7 +24,7 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
  *  The arguments are passed by packed format.
  *
  *  This is an useful unified interface to call generated functions,
- *  It is the unified function function type of TVM.
+ *  It is the unified function type of TVM.
  *  It corresponds to TVMFunctionHandle in C runtime API.
  */
 @Namespace("tvm::runtime") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)

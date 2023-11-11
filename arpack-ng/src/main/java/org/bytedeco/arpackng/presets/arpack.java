@@ -39,7 +39,7 @@ import org.bytedeco.openblas.presets.openblas;
 @Properties(
     inherit = openblas.class,
     value = @Platform(
-        include = {"arpack-ng/arpackdef.h", "arpack-ng/arpack.h", "arpack-ng/arpack.hpp", "arpack-ng/debug_c.hpp", "arpack-ng/stat_c.hpp"},
+        include = {"arpack/arpackdef.h", "arpack/arpack.h", "arpack/arpack.hpp", "arpack/debug_c.hpp", "arpack/stat_c.hpp"},
         link = "arpack@.2",
         preload = "libarpack-2"),
     global = "org.bytedeco.arpackng.global.arpack")

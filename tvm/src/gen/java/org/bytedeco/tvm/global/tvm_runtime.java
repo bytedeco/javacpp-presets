@@ -907,7 +907,7 @@ public static final int DMLC_IO_NO_ENDIAN_SWAP = DMLC_IO_NO_ENDIAN_SWAP();
 // #endif
 
 // TVM version
-public static final String TVM_VERSION = "0.13.0";
+public static final String TVM_VERSION = "0.14.0";
 
 // TVM Runtime is DLPack compatible.
 // #include <dlpack/dlpack.h>
@@ -1040,6 +1040,13 @@ public static final int
  */
 public static native void TVMAPISetLastError(@Cast("const char*") BytePointer msg);
 public static native void TVMAPISetLastError(String msg);
+
+/**
+ * \brief Used for implementing C API function.
+ *  Set last exception before return.
+ * @param py_object The python exception to be set
+ */
+public static native void TVMAPISetLastPythonError(Pointer py_object);
 
 /**
  * \brief return str message of the last error
@@ -2915,6 +2922,7 @@ public static final int
 // #include <tvm/runtime/c_runtime_api.h>
 // #include <tvm/runtime/container/array.h>
 // #include <tvm/runtime/container/map.h>
+// #include <tvm/runtime/container/variant.h>
 // #include <tvm/runtime/data_type.h>
 // #include <tvm/runtime/logging.h>
 // #include <tvm/runtime/module.h>
@@ -2994,6 +3002,8 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
  * @return The corresponding string repr.
  */
 @Namespace("tvm::runtime") public static native @Cast("const char*") BytePointer ArgTypeCode2Str(int type_code);
+
+  // NOLINT(*)
 
 // macro to check type code.
 // #define TVM_CHECK_TYPE_CODE(CODE, T)
@@ -3138,6 +3148,13 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
 
 
 // internal namespace
+
+/**
+ * \brief The name of DLDeviceType.
+ * @param type The device type.
+ * @return the device name.
+ */
+@Namespace("tvm::runtime") public static native @Cast("const char*") BytePointer DLDeviceType2Str(int type);
 
   // namespace parameter_pack
 
@@ -3324,6 +3341,13 @@ public static final int TVM_RUNTIME_HEADER_ONLY = 0;
  *         indicate an error happens, otherwise it returns normally.
  */
 @Namespace("tvm::runtime") public static native void EnvCheckSignals();
+
+/** \brief A class that wraps a Python object and preserves its ownership.
+ <p>
+ * This class is used to wrap a PyObject* from the Python API and preserve its ownership.
+ * Allows for the creation of strong references to Python objects, which prevent them from being
+ * garbage-collected as long as the wrapper object exists.
+ */
 // Targeting ../Registry.java
 
 
