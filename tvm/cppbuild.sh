@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.13.0
+TVM_VERSION=0.14.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -86,8 +86,9 @@ sedinplace 's/llvm::None/std::nullopt/g' src/target/llvm/codegen_llvm.cc
 #sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
-sedinplace '/candidate_path/d' python/setup.py
-sedinplace '/dir == "3rdparty"/d' python/setup.py
+#sedinplace '/candidate_path/d' python/setup.py
+#sedinplace '/dir == "3rdparty"/d' python/setup.py
+sedinplace 's/# Add standalone_crt, if present/return libs, version/g' python/setup.py
 sedinplace '/find_library/a\
 include_directories(SYSTEM ${USE_DNNL}/include)\
 ' cmake/modules/contrib/DNNL.cmake
@@ -147,7 +148,7 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 cython==0.29.35
 
 case $PLATFORM in
     linux-x86_64)
@@ -195,7 +196,7 @@ cp -a 3rdparty/dlpack/include/dlpack 3rdparty/dmlc-core/include/dmlc ../include
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(attr cloudpickle decorator psutil synr typed_ast tornado typing_extensions tvm)
+export MODULES=(attr cloudpickle decorator ml_dtypes psutil synr typed_ast tornado typing_extensions tvm)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE*/$MODULE* ../python/ || true

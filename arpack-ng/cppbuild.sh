@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ARPACK_NG_VERSION=3.9.0
+ARPACK_NG_VERSION=3.9.1
 download https://github.com/opencollab/arpack-ng/archive/$ARPACK_NG_VERSION.tar.gz arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 mkdir -p $PLATFORM
