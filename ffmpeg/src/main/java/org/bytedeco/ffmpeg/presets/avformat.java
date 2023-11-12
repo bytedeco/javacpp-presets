@@ -48,7 +48,8 @@ public class avformat implements InfoMapper {
                .put(new Info("LIBAVFORMAT_VERSION_INT", "LIBAVFORMAT_IDENT", "AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
                .put(new Info("FF_API_LAVF_PRIV_OPT", "FF_API_COMPUTE_PKT_FIELDS2", "FF_API_AVIOCONTEXT_WRITTEN",
                              "FF_HLS_TS_OPTIONS", "FF_HTTP_CACHE_REDIRECT_DEFAULT", "FF_API_GET_END_PTS", "FF_API_AVIODIRCONTEXT",
-                             "FF_API_AVFORMAT_IO_CLOSE").define().translate().cppTypes("bool"))
+                             "FF_API_AVFORMAT_IO_CLOSE", "FF_API_AVIO_WRITE_NONCONST", "FF_API_LAVF_SHORTEST", "FF_API_ALLOW_FLUSH",
+                             "FF_API_AVSTREAM_SIDE_DATA").define().translate().cppTypes("bool"))
                .put(new Info("LIBAVFORMAT_VERSION_MAJOR <= 54", "FF_API_ALLOC_OUTPUT_CONTEXT", "FF_API_FORMAT_PARAMETERS",
                              "FF_API_READ_PACKET", "FF_API_CLOSE_INPUT_FILE", "FF_API_NEW_STREAM", "FF_API_SET_PTS_INFO",
                              "FF_API_AVSTREAM_CLASS").define(false).translate().cppTypes("bool"));
