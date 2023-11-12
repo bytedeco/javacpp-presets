@@ -34,7 +34,7 @@ runs:
           export CUDA=cuda-repo-rhel8-12-3-local-12.3.0_545.23.06-1.aarch64.rpm
           export CUDNN=8.9.5.29-1.cuda12.2.aarch64
           export NCCL=2.18.5-1+cuda12.2.aarch64
-          export NVCOMP=nvcomp_3.0.3_SBSA_12.x
+          export NVCOMP=nvcomp_3.0.4_SBSA_12.x
           export USERLAND_BUILDME="buildme --aarch64"
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-ppc64le" ]]; then
           export ARCH=ppc64el
@@ -53,7 +53,7 @@ runs:
           export CUDA=cuda-repo-rhel8-12-3-local-12.3.0_545.23.06-1.x86_64.rpm
           export CUDNN=8.9.5.29-1.cuda12.2.x86_64
           export NCCL=2.18.5-1+cuda12.2.x86_64
-          export NVCOMP=nvcomp_3.0.3_x86_64_12.x
+          export NVCOMP=nvcomp_3.0.4_x86_64_12.x
         fi
         echo "ARCH=$ARCH" >> $GITHUB_ENV
         echo "PREFIX=$PREFIX" >> $GITHUB_ENV
@@ -156,7 +156,7 @@ runs:
           $SUDO mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
 
           if [[ -n ${NVCOMP:-} ]]; then
-            curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.3/local_installers/$NVCOMP.tgz
+            curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.4/local_installers/$NVCOMP.tgz
             # Handle inconsistencies in nvCOMP packages
             if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]]; then
               $SUDO tar -xvf nvcomp_*.tgz -C /usr/local/cuda/lib64/ --strip-components=2 nvcomp-install-12.2/lib/

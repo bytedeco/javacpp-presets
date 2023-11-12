@@ -86,10 +86,10 @@ runs:
           mv /usr/include/cudnn* /usr/include/nccl* /usr/local/cuda/include/
           mv /usr/lib64/libcudnn* /usr/lib64/libnccl* /usr/local/cuda/lib64/
 
-          curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.3/local_installers/nvcomp_3.0.3_x86_64_12.x.tgz
-          tar -xvf nvcomp_3.0.3_x86_64_12.x.tgz -C /usr/local/cuda/lib64/ --strip-components=1 lib/
-          tar -xvf nvcomp_3.0.3_x86_64_12.x.tgz -C /usr/local/cuda/include/ --strip-components=1 include/
-          rm -f nvcomp_3.0.3_x86_64_12.x.tgz
+          curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.4/local_installers/nvcomp_3.0.4_x86_64_12.x.tgz
+          tar -xvf nvcomp_3.0.4_x86_64_12.x.tgz -C /usr/local/cuda/lib64/ --strip-components=1 lib/
+          tar -xvf nvcomp_3.0.4_x86_64_12.x.tgz -C /usr/local/cuda/include/ --strip-components=1 include/
+          rm -f nvcomp_3.0.4_x86_64_12.x.tgz
 
           # Work around issues with CUDA 10.2/11.x
           mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/ || true
