@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2022 Samuel Audet
+ * Copyright (C) 2013-2023 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -83,7 +83,8 @@ public class avutil implements InfoMapper {
                .put(new Info("LIBAVUTIL_VERSION_INT", "LIBAVUTIL_IDENT").translate(false))
                .put(new Info("FF_API_D2STR", "FF_API_DECLARE_ALIGNED", "FF_API_COLORSPACE_NAME", "FF_API_AV_MALLOCZ_ARRAY", "FF_API_FIFO_PEEK2",
                              "FF_API_FIFO_OLD_API", "FF_API_XVMC", "FF_API_OLD_CHANNEL_LAYOUT", "FF_API_AV_FOPEN_UTF8", "FF_API_PKT_DURATION",
-                             "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER").define().translate().cppTypes("bool"))
+                             "FF_API_REORDERED_OPAQUE", "FF_API_FRAME_PICTURE_NUMBER", "FF_API_HDR_VIVID_THREE_SPLINE", "FF_API_FRAME_PKT",
+                             "FF_API_INTERLACED_FRAME", "FF_API_FRAME_KEY", "FF_API_PALETTE_HAS_CHANGED", "FF_API_VULKAN_CONTIGUOUS_MEMORY").define().translate().cppTypes("bool"))
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
@@ -146,6 +147,7 @@ public class avutil implements InfoMapper {
                              "AV_CH_LAYOUT_6POINT0",
                              "AV_CH_LAYOUT_6POINT0_FRONT",
                              "AV_CH_LAYOUT_HEXAGONAL",
+                             "AV_CH_LAYOUT_3POINT1POINT2",
                              "AV_CH_LAYOUT_6POINT1",
                              "AV_CH_LAYOUT_6POINT1_BACK",
                              "AV_CH_LAYOUT_6POINT1_FRONT",
@@ -154,10 +156,16 @@ public class avutil implements InfoMapper {
                              "AV_CH_LAYOUT_7POINT1",
                              "AV_CH_LAYOUT_7POINT1_WIDE",
                              "AV_CH_LAYOUT_7POINT1_WIDE_BACK",
+                             "AV_CH_LAYOUT_5POINT1POINT2_BACK",
                              "AV_CH_LAYOUT_OCTAGONAL",
+                             "AV_CH_LAYOUT_CUBE",
+                             "AV_CH_LAYOUT_5POINT1POINT4_BACK",
+                             "AV_CH_LAYOUT_7POINT1POINT2",
+                             "AV_CH_LAYOUT_7POINT1POINT4_BACK",
                              "AV_CH_LAYOUT_HEXADECAGONAL",
                              "AV_CH_LAYOUT_STEREO_DOWNMIX",
-                             "AV_CH_LAYOUT_22POINT2").translate(true).cppTypes("long"))
+                             "AV_CH_LAYOUT_22POINT2",
+                             "AV_CH_LAYOUT_7POINT1_TOP_BACK").translate(true).cppTypes("long"))
                .put(new Info("AV_CHANNEL_LAYOUT_MONO",
                              "AV_CHANNEL_LAYOUT_STEREO",
                              "AV_CHANNEL_LAYOUT_2POINT1",
@@ -174,6 +182,7 @@ public class avutil implements InfoMapper {
                              "AV_CHANNEL_LAYOUT_5POINT1_BACK",
                              "AV_CHANNEL_LAYOUT_6POINT0",
                              "AV_CHANNEL_LAYOUT_6POINT0_FRONT",
+                             "AV_CHANNEL_LAYOUT_3POINT1POINT2",
                              "AV_CHANNEL_LAYOUT_HEXAGONAL",
                              "AV_CHANNEL_LAYOUT_6POINT1",
                              "AV_CHANNEL_LAYOUT_6POINT1_BACK",
@@ -184,8 +193,12 @@ public class avutil implements InfoMapper {
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE",
                              "AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK",
                              "AV_CHANNEL_LAYOUT_7POINT1_TOP_BACK",
+                             "AV_CHANNEL_LAYOUT_5POINT1POINT2_BACK",
                              "AV_CHANNEL_LAYOUT_OCTAGONAL",
                              "AV_CHANNEL_LAYOUT_CUBE",
+                             "AV_CHANNEL_LAYOUT_5POINT1POINT4_BACK",
+                             "AV_CHANNEL_LAYOUT_7POINT1POINT2",
+                             "AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK",
                              "AV_CHANNEL_LAYOUT_HEXADECAGONAL",
                              "AV_CHANNEL_LAYOUT_STEREO_DOWNMIX",
                              "AV_CHANNEL_LAYOUT_22POINT2",

@@ -26,27 +26,27 @@ LIBAOM_CONFIG="-DENABLE_TESTS:BOOL=OFF -DENABLE_TESTDATA:BOOL=OFF -DENABLE_TOOLS
 LIBSVTAV1_CONFIG="-DBUILD_APPS:BOOL=OFF -DBUILD_TESTING:BOOL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_BINDIR=bin"
 
 NASM_VERSION=2.14
-ZLIB=zlib-1.2.13
+ZLIB=zlib-1.3
 LAME=lame-3.100
 SPEEX=speex-1.2.1
 OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.6
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-3.1.0
+OPENSSL=openssl-3.1.4
 OPENH264_VERSION=2.3.1
 X264=x264-stable
 X265=3.4
-VPX_VERSION=1.13.0
-ALSA_VERSION=1.2.9
-FREETYPE_VERSION=2.13.0
+VPX_VERSION=1.13.1
+ALSA_VERSION=1.2.10
+FREETYPE_VERSION=2.13.2
 MFX_VERSION=1.35.1
-NVCODEC_VERSION=12.0.16.0
+NVCODEC_VERSION=12.1.14.0
 XML2=libxml2-2.9.12
-LIBSRT_VERSION=1.5.1
-WEBP_VERSION=1.3.0
-AOMAV1_VERSION=3.6.1
-SVTAV1_VERSION=1.5.0
-FFMPEG_VERSION=6.0
+LIBSRT_VERSION=1.5.3
+WEBP_VERSION=1.3.2
+AOMAV1_VERSION=3.7.0
+SVTAV1_VERSION=1.7.0
+FFMPEG_VERSION=6.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -114,7 +114,7 @@ export PKG_CONFIG_PATH=$INSTALL_PATH/lib/pkgconfig/
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
-patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
+# patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg-flv-support-hevc-opus.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 sedinplace 's/CMAKE_C_COMPILER_ID MATCHES "Clang"/FALSE/g' SVT-AV1-*/CMakeLists.txt
@@ -1647,7 +1647,7 @@ EOF
         cd ../libaom-$AOMAV1_VERSION
         mkdir -p build_release
         cd build_release
-        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER="clang" -DCMAKE_CXX_COMPILER="clang++" $LIBAOM_CONFIG ..
+        CFLAGS="-I$INSTALL_PATH/include/" CXXFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS -fPIC" -DCMAKE_C_FLAGS="$CFLAGS -fPIC" -DCMAKE_C_COMPILER="clang" -DCMAKE_CXX_COMPILER="clang++" $LIBAOM_CONFIG -DAOM_ARCH_AARCH64=1 ..
         make -j $MAKEJ
         make install
         cd ..
