@@ -114,7 +114,10 @@ runs:
           move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
-          xcopy "include" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include" /e /s
+          move include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
+          move include\gdeflate "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
+          move include\native "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
+          move include\nvcomp "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           move lib\nvcomp*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
           move lib\nvcomp*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
 
