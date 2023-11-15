@@ -219,6 +219,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 12.3.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.9.x  https://developer.nvidia.com/cudnn
    * NCCL 2.18.x  https://developer.nvidia.com/nccl
+   * nvCOMP 3.0.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 12.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
