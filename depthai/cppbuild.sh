@@ -41,35 +41,25 @@ fi
 export OpenCV_DIR="$OPENCV_PATH/lib/cmake/opencv4"
 
 case $PLATFORM in
-    linux-armhf)
-        cd ../libusb-$LIBUSB_VERSION
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'                 >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
-        make -j $MAKEJ
-        make install/strip
+    android-arm)
+        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/ -DANDROID_ABI=armeabi-v7a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
         ;;
-    linux-arm64)
-        cd ../libusb-$LIBUSB_VERSION
-        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                 >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'               >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
-        make -j $MAKEJ
-        make install/strip
+    android-arm64)
+        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-arm64-v8a/ -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
+        ;;
+    android-x86)
+        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/ -DANDROID_ABI=x86 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
+        ;;
+    android-x86_64)
+        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86_64/ -DANDROID_ABI=x86_64 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
         ;;
     linux-x86)
         cd ../libusb-$LIBUSB_VERSION
@@ -101,6 +91,36 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    linux-armhf)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../depthai-core-v$DEPTHAI_VERSION
+        echo 'set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")'   >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                   >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")' >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'                 >> cmake/toolchain/pic.cmake
+        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-arm64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../depthai-core-v$DEPTHAI_VERSION
+        echo 'set(CMAKE_C_COMPILER "aarch64-linux-gnu-gcc")'   >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_C_FLAGS "-std=gnu99")'                 >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_COMPILER "aarch64-linux-gnu-g++")' >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-std=c++14")'               >> cmake/toolchain/pic.cmake
+        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     macosx-x86_64)
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_MACOSX_RPATH=ON -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
@@ -113,26 +133,6 @@ case $PLATFORM in
         sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         "$CMAKE" --build . --config Release --target install -j $MAKEJ
-        ;;
-    android-arm)
-        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-armeabi-v7a/ -DANDROID_ABI=armeabi-v7a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
-        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
-        ;;
-    android-arm64)
-        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-arm64-v8a/ -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
-        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
-        ;;
-    android-x86)
-        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86/ -DANDROID_ABI=x86 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
-        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
-        ;;
-    android-x86_64)
-        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86_64/ -DANDROID_ABI=x86_64 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
-        "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
