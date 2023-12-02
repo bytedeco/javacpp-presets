@@ -23,17 +23,17 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>llvm</artifactId>
-      <version>17.0.4-${project.parent.version}</version>
+      <version>17.0.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>mkl</artifactId>
-      <version>2023.1-${project.parent.version}</version>
+      <artifactId>openblas</artifactId>
+      <version>0.3.25-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>scipy</artifactId>
-      <version>1.11.3-${project.parent.version}</version>
+      <version>1.11.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -61,22 +61,17 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>17.0.4-${project.parent.version}</version>
+            <version>17.0.6-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-platform</artifactId>
-            <version>2023.1-${project.parent.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-platform-redist</artifactId>
-            <version>2023.1-${project.parent.version}</version>
+            <artifactId>openblas-platform</artifactId>
+            <version>0.3.25-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>scipy-platform</artifactId>
-            <version>1.11.3-${project.parent.version}</version>
+            <version>1.11.4-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -84,7 +79,6 @@
             <classPath>${basedir}/../opencl/target/classes/</classPath>
             <classPath>${basedir}/../dnnl/target/classes/</classPath>
             <classPath>${basedir}/../llvm/target/classes/</classPath>
-            <classPath>${basedir}/../mkl/target/classes/</classPath>
             <classPath>${basedir}/../openblas/target/classes/</classPath>
             <classPath>${basedir}/../cpython/target/classes/</classPath>
             <classPath>${basedir}/../numpy/target/classes/</classPath>
@@ -101,9 +95,6 @@
             <includePath>${basedir}/../llvm/src/main/resources/org/bytedeco/llvm/include/</includePath>
             <includePath>${basedir}/../llvm/target/classes/org/bytedeco/llvm/include/</includePath>
             <includePath>${basedir}/../llvm/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../mkl/target/classes/org/bytedeco/mkl/include/</includePath>
-            <includePath>${basedir}/../mkl/src/main/resources/org/bytedeco/mkl/include/</includePath>
-            <includePath>${basedir}/../mkl/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/target/classes/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
@@ -121,7 +112,6 @@
             <linkPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../dnnl/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../llvm/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/../mkl/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/libs/</linkPath>
@@ -132,7 +122,6 @@
             <preloadPath>${basedir}/../opencl/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../dnnl/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../llvm/cppbuild/${javacpp.platform}/bin/</preloadPath>
-            <preloadPath>${basedir}/../mkl/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/bin/</preloadPath>
@@ -143,7 +132,6 @@
             <buildResource>/org/bytedeco/opencl/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/dnnl/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/llvm/${javacpp.platform}/</buildResource>
-            <buildResource>/org/bytedeco/mkl/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
@@ -157,8 +145,6 @@
             <includeResource>/org/bytedeco/dnnl/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/llvm/include/</includeResource>
             <includeResource>/org/bytedeco/llvm/${javacpp.platform}/include/</includeResource>
-            <includeResource>/org/bytedeco/mkl/include/</includeResource>
-            <includeResource>/org/bytedeco/mkl/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/openblas/include/</includeResource>
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/include/</includeResource>
@@ -177,8 +163,6 @@
             <linkResource>/org/bytedeco/dnnl/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/llvm/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/llvm/${javacpp.platform}/lib/</linkResource>
-            <linkResource>/org/bytedeco/mkl/${javacpp.platform}/</linkResource>
-            <linkResource>/org/bytedeco/mkl/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>

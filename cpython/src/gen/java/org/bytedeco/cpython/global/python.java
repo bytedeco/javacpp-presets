@@ -10913,11 +10913,7 @@ public static native PyObject PyExc_ResourceWarning(); public static native void
     String func,
     String format);
 
-@NoException public static native PyObject _PyErr_SetImportErrorWithNameFrom(
-        PyObject arg0,
-        PyObject arg1,
-        PyObject arg2,
-        PyObject arg3);
+
 
 
 // #define Py_FatalError(message) _Py_FatalErrorFunc(__func__, (message))
