@@ -42,25 +42,25 @@ public class DeviceStats extends Pointer {
     }
 
   // COUNT: allocations requested by client code
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer allocation(); public native DeviceStats allocation(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat allocation(); public native DeviceStats allocation(Stat setter);
   // COUNT: number of allocated segments from cudaMalloc().
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer segment(); public native DeviceStats segment(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat segment(); public native DeviceStats segment(Stat setter);
   // COUNT: number of active memory blocks (allocated or used by stream)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer active(); public native DeviceStats active(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat active(); public native DeviceStats active(Stat setter);
   // COUNT: number of inactive, split memory blocks (unallocated but can't be
   // released via cudaFree)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer inactive_split(); public native DeviceStats inactive_split(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat inactive_split(); public native DeviceStats inactive_split(Stat setter);
 
   // SUM: bytes allocated by this memory alocator
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer allocated_bytes(); public native DeviceStats allocated_bytes(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat allocated_bytes(); public native DeviceStats allocated_bytes(Stat setter);
   // SUM: bytes reserved by this memory allocator (both free and used)
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer reserved_bytes(); public native DeviceStats reserved_bytes(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat reserved_bytes(); public native DeviceStats reserved_bytes(Stat setter);
   // SUM: bytes within active memory blocks
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer active_bytes(); public native DeviceStats active_bytes(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat active_bytes(); public native DeviceStats active_bytes(Stat setter);
   // SUM: bytes within inactive, split memory blocks
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer inactive_split_bytes(); public native DeviceStats inactive_split_bytes(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat inactive_split_bytes(); public native DeviceStats inactive_split_bytes(Stat setter);
   // SUM: bytes requested by client code
-  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") BoolPointer requested_bytes(); public native DeviceStats requested_bytes(BoolPointer setter);
+  public native @ByRef @Cast("c10::cuda::CUDACachingAllocator::StatArray*") Stat requested_bytes(); public native DeviceStats requested_bytes(Stat setter);
 
   // COUNT: total number of failed calls to CUDA malloc necessitating cache
   // flushes.
