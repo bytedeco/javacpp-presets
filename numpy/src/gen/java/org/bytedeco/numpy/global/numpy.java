@@ -337,6 +337,9 @@ public static final int NPY_VERSION = NPY_ABI_VERSION;
 // #else
 // #endif
 //     #include <sys/types.h>
+//     #ifndef _WIN32
+//         #include <unistd.h>
+//     #endif
 //     #define npy_lseek lseek
 //     #define npy_off_t off_t
 

@@ -37,14 +37,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
 import org.bytedeco.llvm.presets.*;
-import org.bytedeco.mkl.presets.*;
+import org.bytedeco.openblas.presets.*;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {dnnl.class, LLVM.class, mkl_rt.class},
+    inherit = {dnnl.class, LLVM.class, openblas.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
