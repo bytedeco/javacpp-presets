@@ -1,4 +1,5 @@
 
+ * Add Android and Windows builds to presets for DepthAI ([pull #1441](https://github.com/bytedeco/javacpp-presets/pull/1441))
  * Add presets for SentencePiece 0.1.99 ([pull #1384](https://github.com/bytedeco/javacpp-presets/pull/1384))
  * Refactor and improve presets for PyTorch ([pull #1360](https://github.com/bytedeco/javacpp-presets/pull/1360))
  * Include `mkl_lapack.h` header file in presets for MKL ([issue #1388](https://github.com/bytedeco/javacpp-presets/issues/1388))

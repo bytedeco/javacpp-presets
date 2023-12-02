@@ -61,36 +61,6 @@ case $PLATFORM in
         "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/abi-x86_64/ -DANDROID_ABI=x86_64 -DANDROID_PLATFORM=24 -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DDEPTHAI_OPENCV_SUPPORT=ON .
         "$CMAKE" --build . --config Release --target install/strip -j $MAKEJ
         ;;
-    linux-x86)
-        cd ../libusb-$LIBUSB_VERSION
-        CC="gcc -m32" CXX="g++ -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-m32 -std=gnu99")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++14")' >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
-        make -j $MAKEJ
-        make install/strip
-        ;;
-    linux-x86_64)
-        cd ../libusb-$LIBUSB_VERSION
-        CC="gcc -m64" CXX="g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-udev
-        make -j $MAKEJ
-        make install
-        cd ../depthai-core-v$DEPTHAI_VERSION
-        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_C_FLAGS "-m64 -std=gnu99")'   >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
-        echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++14")' >> cmake/toolchain/pic.cmake
-        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
-        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
-        make -j $MAKEJ
-        make install/strip
-        ;;
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
@@ -121,11 +91,48 @@ case $PLATFORM in
         make -j $MAKEJ
         make install/strip
         ;;
+    linux-x86)
+        cd ../libusb-$LIBUSB_VERSION
+        CC="gcc -m32" CXX="g++ -m32" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../depthai-core-v$DEPTHAI_VERSION
+        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_C_FLAGS "-m32 -std=gnu99")'   >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-m32 -std=c++14")' >> cmake/toolchain/pic.cmake
+        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
+    linux-x86_64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC="gcc -m64" CXX="g++ -m64" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../depthai-core-v$DEPTHAI_VERSION
+        echo 'set(CMAKE_C_COMPILER "gcc")'            >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_C_FLAGS "-m64 -std=gnu99")'   >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_COMPILER "g++")'          >> cmake/toolchain/pic.cmake
+        echo 'set(CMAKE_CXX_FLAGS "-m64 -std=c++14")' >> cmake/toolchain/pic.cmake
+        sedinplace "/    XLink/a CMAKE_ARGS LIBUSB_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ LIBUSB_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a" cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=$PWD/cmake/toolchain/pic.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        make -j $MAKEJ
+        make install/strip
+        ;;
     macosx-x86_64)
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_MACOSX_RPATH=ON -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
         make -j $MAKEJ
         make install/strip
         install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ../lib/libdepthai-core.dylib
+        ;;
+    windows-x86)
+        export CC="cl.exe"
+        export CXX="cl.exe"
+        sedinplace 's:BUILD_SHARED_LIBS=ON:BUILD_SHARED_LIBS=OFF:g' cmake/Hunter/config.cmake
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DDEPTHAI_ENABLE_BACKWARD=OFF -DBUILD_SHARED_LIBS=ON -DDEPTHAI_OPENCV_SUPPORT=ON .
+        "$CMAKE" --build . --config Release --target install -j $MAKEJ
         ;;
     windows-x86_64)
         export CC="cl.exe"

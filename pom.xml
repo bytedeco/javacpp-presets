@@ -1614,6 +1614,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
+        <module>depthai</module>
         <module>bullet</module>
         <module>liquidfun</module>
         <module>cpu_features</module>
