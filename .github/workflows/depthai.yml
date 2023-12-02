@@ -20,19 +20,19 @@ jobs:
 #  android-arm:
 #    runs-on: ubuntu-20.04
 #    steps:
-#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   android-arm64:
     runs-on: ubuntu-20.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  android-x86:
 #    runs-on: ubuntu-20.04
 #    steps:
-#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   android-x86_64:
     runs-on: ubuntu-20.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
 #  linux-armhf:
 #    runs-on: ubuntu-20.04
 #    steps:
@@ -44,11 +44,11 @@ jobs:
 #  linux-x86:
 #    runs-on: ubuntu-20.04
 #    steps:
-#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+#      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   linux-x86_64:
     runs-on: ubuntu-20.04
     steps:
-      - uses: bytedeco/javacpp-presets/.github/actions/deploy-centos@actions
+      - uses: bytedeco/javacpp-presets/.github/actions/deploy-ubuntu@actions
   macosx-x86_64:
     runs-on: macos-11
     steps:
