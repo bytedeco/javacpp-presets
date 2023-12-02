@@ -44,7 +44,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(
-            value = {"linux-arm", "linux-x86", "macosx-x86"},
+            value = {"android", "linux-arm", "linux-x86", "macosx-x86", "Windows-x86"},
             compiler = "cpp14",
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
@@ -485,11 +485,11 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::DeviceBootloader::Version::toString", "dai::Version::toString",
                              "dai::DeviceInfo::toString", "dai::Node::toString").javaText("public native @StdString String toString();"))
 
-               .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(std::shared_ptr<RawBuffer>)>").valueTypes("RawBufferCallback"))
-               .put(new Info("std::function<void(LogMessage)>").valueTypes("LogCallback"))
+               .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(dai::RawBuffer*)>").valueTypes("RawBufferCallback"))
+               .put(new Info("std::function<void(dai::LogMessage)>").valueTypes("LogCallback"))
                .put(new Info("std::function<void(float)>").valueTypes("ProgressCallback"))
-               .put(new Info("std::function<void(std::string,std::shared_ptr<ADatatype>)>").valueTypes("NameMessageCallback"))
-               .put(new Info("std::function<void(std::shared_ptr<ADatatype>)>").valueTypes("MessageCallback"))
+               .put(new Info("std::function<void(std::string,std::shared_ptr<dai::ADatatype>)>").valueTypes("NameMessageCallback"))
+               .put(new Info("std::function<void(std::shared_ptr<dai::ADatatype>)>").valueTypes("MessageCallback"))
                .put(new Info("std::function<void()>").valueTypes("Callback"))
         ;
     }
