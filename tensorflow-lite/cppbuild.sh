@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export CMAKE_FLAGS="-DTFLITE_ENABLE_GPU=ON"
 fi
 
-TENSORFLOW_VERSION=2.14.0
+TENSORFLOW_VERSION=2.15.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -40,7 +40,7 @@ case $PLATFORM in
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
         ;;
     android-arm64)
-        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
+        export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_NATIVE_API_LEVEL=24 -DXNNPACK_ENABLE_ARM_I8MM=OFF $CMAKE_FLAGS"
         ;;
     android-x86)
         export CMAKE_FLAGS="-DCMAKE_TOOLCHAIN_FILE=${PLATFORM_ROOT}/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_NATIVE_API_LEVEL=24 $CMAKE_FLAGS"
@@ -73,8 +73,8 @@ case $PLATFORM in
     windows-x86_64)
         sedinplace 's/CMAKE_CXX_STANDARD 14/CMAKE_CXX_STANDARD 20/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/CMakeLists.txt
         sedinplace 's/__PRETTY_FUNCTION__/__func__/g' ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/depthwiseconv*.h ../tensorflow-$TENSORFLOW_VERSION/tensorflow/lite/kernels/internal/optimized/integer_ops/depthwise_conv.h
-        export CC="cl.exe -D_USE_MATH_DEFINES"
-        export CXX="cl.exe -D_USE_MATH_DEFINES"
+        export CC="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
+        export CXX="cl.exe -D_USE_MATH_DEFINES -DTFLITE_MMAP_DISABLED"
         export CMAKE_FLAGS="-G Ninja $CMAKE_FLAGS"
         # create a dummy m.lib to satisfy some dependencies somewhere
         touch m.c

@@ -526,14 +526,12 @@ public class Interpreter extends Pointer {
   /** Perform a checked cast to the appropriate tensor type (immutable pointer
    *  version). */
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns list of all keys of different method signatures defined
+  /** \brief Returns list of all keys of different method signatures defined
    *  in the model.
    *  Note, pointers returned have lifetime same as the Interpreter object. */
   public native @ByVal StringVector signature_keys();
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns a pointer to the SignatureRunner instance to run the part
+  /** \brief Returns a pointer to the SignatureRunner instance to run the part
    *  of the graph identified by a SignatureDef. The nullptr is returned if the
    *  given signature key is not valid.
    *  If you need to specify delegates, you have to do that before calling this
@@ -559,8 +557,7 @@ public class Interpreter extends Pointer {
   public native int GetSubgraphIndexFromSignature(@Cast("const char*") BytePointer signature_key);
   public native int GetSubgraphIndexFromSignature(String signature_key);
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns the mapping of inputs to tensor index in the signature
+  /** \brief Returns the mapping of inputs to tensor index in the signature
    *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_inputs(
@@ -568,8 +565,7 @@ public class Interpreter extends Pointer {
   public native @Const @ByRef StringIntMap signature_inputs(
         String signature_key);
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns the mapping of outputs to tensor index in the signature
+  /** \brief Returns the mapping of outputs to tensor index in the signature
    *  specified through 'signature_key'.
    *  If invalid name passed, an empty list will be returned. */
   public native @Const @ByRef StringIntMap signature_outputs(
@@ -577,8 +573,7 @@ public class Interpreter extends Pointer {
   public native @Const @ByRef StringIntMap signature_outputs(
         String signature_key);
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns the input tensor identified by 'signature_input_name' in
+  /** \brief Returns the input tensor identified by 'signature_input_name' in
    *  the signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
   public native TfLiteTensor input_tensor_by_signature(@Cast("const char*") BytePointer signature_input_name,
@@ -586,8 +581,7 @@ public class Interpreter extends Pointer {
   public native TfLiteTensor input_tensor_by_signature(String signature_input_name,
                                             String signature_key);
 
-  /** \warning Experimental interface, subject to change. \n
-   *  \brief Returns the output tensor identified by 'signature_output_name' in
+  /** \brief Returns the output tensor identified by 'signature_output_name' in
    *  the signature identified by 'signature_key'.
    *  Returns nullptr if not found. */
   public native @Const TfLiteTensor output_tensor_by_signature(

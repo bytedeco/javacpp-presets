@@ -236,7 +236,51 @@ public static final int
   kTfLiteBuiltinSign = 158,
   kTfLiteBuiltinBitcast = 159,
   kTfLiteBuiltinBitwiseXor = 160,
-  kTfLiteBuiltinRightShift = 161;
+  kTfLiteBuiltinRightShift = 161,
+  kTfLiteBuiltinStablehloLogistic = 162,
+  kTfLiteBuiltinStablehloAdd = 163,
+  kTfLiteBuiltinStablehloDivide = 164,
+  kTfLiteBuiltinStablehloMultiply = 165,
+  kTfLiteBuiltinStablehloMaximum = 166,
+  kTfLiteBuiltinStablehloReshape = 167,
+  kTfLiteBuiltinStablehloClamp = 168,
+  kTfLiteBuiltinStablehloConcatenate = 169,
+  kTfLiteBuiltinStablehloBroadcastInDim = 170,
+  kTfLiteBuiltinStablehloConvolution = 171,
+  kTfLiteBuiltinStablehloSlice = 172,
+  kTfLiteBuiltinStablehloCustomCall = 173,
+  kTfLiteBuiltinStablehloReduce = 174,
+  kTfLiteBuiltinStablehloAbs = 175,
+  kTfLiteBuiltinStablehloAnd = 176,
+  kTfLiteBuiltinStablehloCosine = 177,
+  kTfLiteBuiltinStablehloExponential = 178,
+  kTfLiteBuiltinStablehloFloor = 179,
+  kTfLiteBuiltinStablehloLog = 180,
+  kTfLiteBuiltinStablehloMinimum = 181,
+  kTfLiteBuiltinStablehloNegate = 182,
+  kTfLiteBuiltinStablehloOr = 183,
+  kTfLiteBuiltinStablehloPower = 184,
+  kTfLiteBuiltinStablehloRemainder = 185,
+  kTfLiteBuiltinStablehloRsqrt = 186,
+  kTfLiteBuiltinStablehloSelect = 187,
+  kTfLiteBuiltinStablehloSubtract = 188,
+  kTfLiteBuiltinStablehloTanh = 189,
+  kTfLiteBuiltinStablehloScatter = 190,
+  kTfLiteBuiltinStablehloCompare = 191,
+  kTfLiteBuiltinStablehloConvert = 192,
+  kTfLiteBuiltinStablehloDynamicSlice = 193,
+  kTfLiteBuiltinStablehloDynamicUpdateSlice = 194,
+  kTfLiteBuiltinStablehloPad = 195,
+  kTfLiteBuiltinStablehloIota = 196,
+  kTfLiteBuiltinStablehloDotGeneral = 197,
+  kTfLiteBuiltinStablehloReduceWindow = 198,
+  kTfLiteBuiltinStablehloSort = 199,
+  kTfLiteBuiltinStablehloWhile = 200,
+  kTfLiteBuiltinStablehloGather = 201,
+  kTfLiteBuiltinStablehloTranspose = 202,
+  kTfLiteBuiltinDilate = 203,
+  kTfLiteBuiltinStablehloRngBitGenerator = 204,
+  kTfLiteBuiltinReduceWindow = 205;
 
 // #ifdef __cplusplus  // extern "C"
 // #endif  // __cplusplus
@@ -260,7 +304,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 // #ifndef TENSORFLOW_LITE_C_C_API_TYPES_H_
+
+///
+///
 // #define TENSORFLOW_LITE_C_C_API_TYPES_H_
+
+/** \file
+ * 
+ *  C API types for TensorFlow Lite.
+ * 
+ *  For documentation, see tensorflow/lite/core/c/c_api_types.h */
 
 // #include "tensorflow/lite/core/c/c_api_types.h"
 
@@ -563,6 +616,9 @@ limitations under the License.
 
 /** A tensor in the interpreter system which is a wrapper around a buffer of
  *  data including a dimensionality (or NULL if not currently defined). */
+// Targeting ../TfLiteSignatureRunner.java
+
+
 
 // --------------------------------------------------------------------------
 /** The TensorFlow Lite Runtime version.
@@ -575,7 +631,31 @@ limitations under the License.
 
 ///
 ///
+///
 public static native @Cast("const char*") BytePointer TfLiteVersion();
+
+// --------------------------------------------------------------------------
+/** The TensorFlow Lite Extension APIs version.
+ * 
+ *  Returns a pointer to a statically allocated string that is the version
+ *  number of the TF Lite Extension APIs supported by the (potentially
+ *  dynamically loaded) TF Lite Runtime library.  The TF Lite "Extension APIs"
+ *  are the APIs for extending TF Lite with custom ops and delegates.
+ *  More specifically, this version number covers the (non-experimental)
+ *  functionality documented in the following header files:
+ * 
+ *    * lite/c/c_api_opaque.h
+ *    * lite/c/common.h
+ *    * lite/c/builtin_op_data.h
+ *    * lite/builtin_ops.h
+ * 
+ *  This version number uses semantic versioning, and the return value should
+ *  be in semver 2 format <http://semver.org>, starting with MAJOR.MINOR.PATCH,
+ *  e.g. "2.14.0" or "2.15.0-rc2". */
+
+///
+///
+public static native @Cast("const char*") BytePointer TfLiteExtensionApisVersion();
 
 /** The supported TensorFlow Lite model file Schema version.
  * 
@@ -939,8 +1019,184 @@ public static native TfLiteTensor TfLiteInterpreterGetTensor(@Const TfLiteInterp
  *  {@code TfLiteInterpreterOptionsEnableCancellation}.
  * 
  *  \warning This is an experimental API and subject to change. */
+
+///
+///
+///
+///
 public static native @Cast("TfLiteStatus") int TfLiteInterpreterCancel(
     @Const TfLiteInterpreter interpreter);
+
+/** --------------------------------------------------------------------------
+ *  SignatureRunner APIs
+ * 
+ *  You can run inference by either:
+ * 
+ *  (i) (recommended) using the Interpreter to initialize SignatureRunner(s) and
+ *      then only using SignatureRunner APIs.
+ * 
+ *  (ii) only using Interpreter APIs.
+ * 
+ *  NOTE:
+ *  * Only use one of the above options to run inference, i.e. avoid mixing both
+ *    SignatureRunner APIs and Interpreter APIs to run inference as they share
+ *    the same underlying data (e.g. updating an input tensor “A” retrieved
+ *    using the Interpreter APIs will update the state of the input tensor “B”
+ *    retrieved using SignatureRunner APIs, if they point to the same underlying
+ *    tensor in the model; as it is not possible for a user to debug this by
+ *    analyzing the code, it can lead to undesirable behavior).
+ *  * The TfLiteSignatureRunner type is conditionally thread-safe, provided that
+ *    no two threads attempt to simultaneously access two TfLiteSignatureRunner
+ *    instances that point to the same underlying signature, or access a
+ *    TfLiteSignatureRunner and its underlying TfLiteInterpreter, unless all
+ *    such simultaneous accesses are reads (rather than writes).
+ *  * The lifetime of a TfLiteSignatureRunner object ends when
+ *    TfLiteSignatureRunnerDelete() is called on it (or when the lifetime of the
+ *    underlying TfLiteInterpreter ends -- but you should call
+ *    TfLiteSignatureRunnerDelete() before that happens in order to avoid
+ *    resource leaks).
+ *  * You can only apply delegates to the interpreter (via
+ *    TfLiteInterpreterOptions) and not to a signature.
+ <p>
+ *  Returns the number of signatures defined in the model. */
+
+///
+public static native int TfLiteInterpreterGetSignatureCount(
+    @Const TfLiteInterpreter interpreter);
+
+/** Returns the key of the Nth signature in the model, where N is specified as
+ *  {@code signature_index}.
+ * 
+ *  NOTE: The lifetime of the returned key is the same as (and depends on) the
+ *  lifetime of {@code interpreter}. */
+
+///
+///
+public static native @Cast("const char*") BytePointer TfLiteInterpreterGetSignatureKey(
+    @Const TfLiteInterpreter interpreter, int signature_index);
+
+/** Returns a new signature runner using the provided interpreter and signature
+ *  key, or nullptr on failure.
+ * 
+ *  NOTE: {@code signature_key} is a null-terminated C string that must match the
+ *  key of a signature in the interpreter's model.
+ * 
+ *  NOTE: The returned signature runner should be destroyed, by calling
+ *  TfLiteSignatureRunnerDelete(), before the interpreter is destroyed. */
+public static native TfLiteSignatureRunner TfLiteInterpreterGetSignatureRunner(@Const TfLiteInterpreter interpreter,
+                                    @Cast("const char*") BytePointer signature_key);
+public static native TfLiteSignatureRunner TfLiteInterpreterGetSignatureRunner(@Const TfLiteInterpreter interpreter,
+                                    String signature_key);
+
+/** Returns the number of inputs associated with a signature. */
+
+///
+public static native @Cast("size_t") long TfLiteSignatureRunnerGetInputCount(
+    @Const TfLiteSignatureRunner signature_runner);
+
+/** Returns the (null-terminated) name of the Nth input in a signature, where N
+ *  is specified as {@code input_index}.
+ * 
+ *  NOTE: The lifetime of the returned name is the same as (and depends on) the
+ *  lifetime of {@code signature_runner}. */
+
+///
+///
+///
+///
+public static native @Cast("const char*") BytePointer TfLiteSignatureRunnerGetInputName(
+    @Const TfLiteSignatureRunner signature_runner, int input_index);
+
+/** Resizes the input tensor identified as {@code input_name} to be the dimensions
+ *  specified by {@code input_dims} and {@code input_dims_size}. Only unknown dimensions can
+ *  be resized with this function. Unknown dimensions are indicated as {@code -1} in
+ *  the {@code dims_signature} attribute of a TfLiteTensor.
+ * 
+ *  Returns status of failure or success. Note that this doesn't actually resize
+ *  any existing buffers. A call to TfLiteSignatureRunnerAllocateTensors() is
+ *  required to change the tensor input buffer.
+ * 
+ *  NOTE: This function is similar to TfLiteInterpreterResizeInputTensorStrict()
+ *  and not TfLiteInterpreterResizeInputTensor().
+ * 
+ *  NOTE: {@code input_name} must match the name of an input in the signature.
+ * 
+ *  NOTE: This function makes a copy of the input dimensions, so the caller can
+ *  safely deallocate {@code input_dims} immediately after this function returns. */
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
+    @Const IntPointer input_dims, int input_dims_size);
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, String input_name,
+    @Const IntBuffer input_dims, int input_dims_size);
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
+    @Const int[] input_dims, int input_dims_size);
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, String input_name,
+    @Const IntPointer input_dims, int input_dims_size);
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
+    @Const IntBuffer input_dims, int input_dims_size);
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
+    TfLiteSignatureRunner signature_runner, String input_name,
+    @Const int[] input_dims, int input_dims_size);
+
+/** Updates allocations for tensors associated with a signature and resizes
+ *  dependent tensors using the specified input tensor dimensionality.
+ *  This is a relatively expensive operation and hence should only be called
+ *  after initializing the signature runner object and/or resizing any inputs. */
+
+///
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerAllocateTensors(
+    TfLiteSignatureRunner signature_runner);
+
+/** Returns the input tensor identified by {@code input_name} in the given signature.
+ *  Returns nullptr if the given name is not valid.
+ * 
+ *  NOTE: The lifetime of the returned tensor is the same as (and depends on)
+ *  the lifetime of {@code signature_runner}. */
+
+///
+public static native TfLiteTensor TfLiteSignatureRunnerGetInputTensor(
+    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name);
+public static native TfLiteTensor TfLiteSignatureRunnerGetInputTensor(
+    TfLiteSignatureRunner signature_runner, String input_name);
+
+/** Runs inference on a given signature.
+ * 
+ *  Before calling this function, the caller should first invoke
+ *  TfLiteSignatureRunnerAllocateTensors() and should also set the values for
+ *  the input tensors. After successfully calling this function, the values for
+ *  the output tensors will be set. */
+public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerInvoke(
+    TfLiteSignatureRunner signature_runner);
+
+/** Returns the number of output tensors associated with the signature. */
+
+///
+public static native @Cast("size_t") long TfLiteSignatureRunnerGetOutputCount(
+    @Const TfLiteSignatureRunner signature_runner);
+
+/** Returns the (null-terminated) name of the Nth output in a signature, where
+ *  N is specified as {@code output_index}.
+ * 
+ *  NOTE: The lifetime of the returned name is the same as (and depends on) the
+ *  lifetime of {@code signature_runner}. */
+
+///
+public static native @Cast("const char*") BytePointer TfLiteSignatureRunnerGetOutputName(
+    @Const TfLiteSignatureRunner signature_runner, int output_index);
+
+/** Returns the output tensor identified by {@code output_name} in the given
+ *  signature. Returns nullptr if the given name is not valid.
+ * 
+ *  NOTE: The lifetime of the returned tensor is the same as (and depends on)
+ *  the lifetime of {@code signature_runner}. */
+public static native @Const TfLiteTensor TfLiteSignatureRunnerGetOutputTensor(
+    @Const TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer output_name);
+public static native @Const TfLiteTensor TfLiteSignatureRunnerGetOutputTensor(
+    @Const TfLiteSignatureRunner signature_runner, String output_name);
 
 // --------------------------------------------------------------------------
 // TfLiteTensor wraps data associated with a graph tensor.
@@ -995,6 +1251,10 @@ public static native @Cast("TfLiteStatus") int TfLiteTensorCopyFromBuffer(
 public static native @Cast("TfLiteStatus") int TfLiteTensorCopyToBuffer(
     @Const TfLiteTensor output_tensor, Pointer output_data,
     @Cast("size_t") long output_data_size);
+
+/** Destroys the signature runner. */
+public static native void TfLiteSignatureRunnerDelete(
+    TfLiteSignatureRunner signature_runner);
 
 // NOLINTEND(modernize-redundant-void-arg)
 
@@ -1191,9 +1451,7 @@ limitations under the License.
 // #include "tensorflow/lite/core/c/common.h"
 
 // #ifdef __cplusplus
-// Targeting ../TfLiteSignatureRunner.java
-
-
+// #endif  // __cplusplus
 
 // --------------------------------------------------------------------------
 /** Resets all variable tensors to zero.
@@ -1510,224 +1768,41 @@ public static native int TfLiteInterpreterGetInputTensorIndex(
 
 ///
 ///
-///
-///
-///
 public static native int TfLiteInterpreterGetOutputTensorIndex(
     @Const TfLiteInterpreter interpreter, int output_index);
 
+/** Assigns (or reassigns) a custom memory allocation for the given
+ *  tensor. {@code flags} is a bitmask, see TfLiteCustomAllocationFlags.
+ *  The runtime does NOT take ownership of the underlying memory.
+ * 
+ *  NOTE: User needs to call TfLiteInterpreterAllocateTensors() after this.
+ *  Invalid/insufficient buffers will cause an error during
+ *  TfLiteInterpreterAllocateTensors or TfLiteInterpreterInvoke (in case of
+ *  dynamic shapes in the graph).
+ * 
+ *  Parameters should satisfy the following conditions:
+ *  1. tensor->allocation_type == kTfLiteArenaRw or kTfLiteArenaRwPersistent
+ *     In general, this is true for I/O tensors & variable tensors.
+ *  2. allocation->data has the appropriate permissions for runtime access
+ *     (Read-only for inputs, Read-Write for others), and outlives
+ *     TfLiteInterpreter.
+ *  3. allocation->bytes >= tensor->bytes.
+ *     This condition is checked again if any tensors are resized.
+ *  4. allocation->data should be aligned to kDefaultTensorAlignment
+ *     defined in lite/util.h. (Currently 64 bytes)
+ *     This check is skipped if kTfLiteCustomAllocationFlagsSkipAlignCheck is
+ *     set through {@code flags}.
+ *  WARNING: This is an experimental API and subject to change. */
+
+///
+public static native @Cast("TfLiteStatus") int TfLiteInterpreterSetCustomAllocationForTensor(
+    TfLiteInterpreter interpreter, int tensor_index,
+    @Const TfLiteCustomAllocation allocation, @Cast("int64_t") long flags);
+
 /** --------------------------------------------------------------------------
  *  SignatureRunner APIs
- * 
- *  You can run inference by either:
- * 
- *  (i) (recommended) using the Interpreter to initialize SignatureRunner(s) and
- *      then only using SignatureRunner APIs.
- * 
- *  (ii) only using Interpreter APIs.
- * 
- *  NOTE:
- *  * Only use one of the above options to run inference, i.e. avoid mixing both
- *    SignatureRunner APIs and Interpreter APIs to run inference as they share
- *    the same underlying data (e.g. updating an input tensor “A” retrieved
- *    using the Interpreter APIs will update the state of the input tensor “B”
- *    retrieved using SignatureRunner APIs, if they point to the same underlying
- *    tensor in the model; as it is not possible for a user to debug this by
- *    analyzing the code, it can lead to undesirable behavior).
- *  * The TfLiteSignatureRunner type is conditionally thread-safe, provided that
- *    no two threads attempt to simultaneously access two TfLiteSignatureRunner
- *    instances that point to the same underlying signature, or access a
- *    TfLiteSignatureRunner and its underlying TfLiteInterpreter, unless all
- *    such simultaneous accesses are reads (rather than writes).
- *  * The lifetime of a TfLiteSignatureRunner object ends when
- *    TfLiteSignatureRunnerDelete() is called on it (or when the lifetime of the
- *    underlying TfLiteInterpreter ends -- but you should call
- *    TfLiteSignatureRunnerDelete() before that happens in order to avoid
- *    resource leaks).
- *  * You can only apply delegates to the interpreter (via
- *    TfLiteInterpreterOptions) and not to a signature.
  <p>
- *  Returns the number of signatures defined in the model.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native int TfLiteInterpreterGetSignatureCount(
-    @Const TfLiteInterpreter interpreter);
-
-/** Returns the key of the Nth signature in the model, where N is specified as
- *  {@code signature_index}.
- * 
- *  NOTE: The lifetime of the returned key is the same as (and depends on) the
- *  lifetime of {@code interpreter}.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-///
-public static native @Cast("const char*") BytePointer TfLiteInterpreterGetSignatureKey(
-    @Const TfLiteInterpreter interpreter, int signature_index);
-
-/** Returns a new signature runner using the provided interpreter and signature
- *  key, or nullptr on failure.
- * 
- *  NOTE: {@code signature_key} is a null-terminated C string that must match the
- *  key of a signature in the interpreter's model.
- * 
- *  NOTE: The returned signature runner should be destroyed, by calling
- *  TfLiteSignatureRunnerDelete(), before the interpreter is destroyed.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-public static native TfLiteSignatureRunner TfLiteInterpreterGetSignatureRunner(@Const TfLiteInterpreter interpreter,
-                                    @Cast("const char*") BytePointer signature_key);
-public static native TfLiteSignatureRunner TfLiteInterpreterGetSignatureRunner(@Const TfLiteInterpreter interpreter,
-                                    String signature_key);
-
-/** Returns the number of inputs associated with a signature.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native @Cast("size_t") long TfLiteSignatureRunnerGetInputCount(
-    @Const TfLiteSignatureRunner signature_runner);
-
-/** Returns the (null-terminated) name of the Nth input in a signature, where N
- *  is specified as {@code input_index}.
- * 
- *  NOTE: The lifetime of the returned name is the same as (and depends on) the
- *  lifetime of {@code signature_runner}.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-///
-///
-///
-public static native @Cast("const char*") BytePointer TfLiteSignatureRunnerGetInputName(
-    @Const TfLiteSignatureRunner signature_runner, int input_index);
-
-/** Resizes the input tensor identified as {@code input_name} to be the dimensions
- *  specified by {@code input_dims} and {@code input_dims_size}. Only unknown dimensions can
- *  be resized with this function. Unknown dimensions are indicated as {@code -1} in
- *  the {@code dims_signature} attribute of a TfLiteTensor.
- * 
- *  Returns status of failure or success. Note that this doesn't actually resize
- *  any existing buffers. A call to TfLiteSignatureRunnerAllocateTensors() is
- *  required to change the tensor input buffer.
- * 
- *  NOTE: This function is similar to TfLiteInterpreterResizeInputTensorStrict()
- *  and not TfLiteInterpreterResizeInputTensor().
- * 
- *  NOTE: {@code input_name} must match the name of an input in the signature.
- * 
- *  NOTE: This function makes a copy of the input dimensions, so the caller can
- *  safely deallocate {@code input_dims} immediately after this function returns.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
-    @Const IntPointer input_dims, int input_dims_size);
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, String input_name,
-    @Const IntBuffer input_dims, int input_dims_size);
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
-    @Const int[] input_dims, int input_dims_size);
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, String input_name,
-    @Const IntPointer input_dims, int input_dims_size);
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name,
-    @Const IntBuffer input_dims, int input_dims_size);
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerResizeInputTensor(
-    TfLiteSignatureRunner signature_runner, String input_name,
-    @Const int[] input_dims, int input_dims_size);
-
-/** Updates allocations for tensors associated with a signature and resizes
- *  dependent tensors using the specified input tensor dimensionality.
- *  This is a relatively expensive operation and hence should only be called
- *  after initializing the signature runner object and/or resizing any inputs.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerAllocateTensors(
-    TfLiteSignatureRunner signature_runner);
-
-/** Returns the input tensor identified by {@code input_name} in the given signature.
- *  Returns nullptr if the given name is not valid.
- * 
- *  NOTE: The lifetime of the returned tensor is the same as (and depends on)
- *  the lifetime of {@code signature_runner}.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native TfLiteTensor TfLiteSignatureRunnerGetInputTensor(
-    TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer input_name);
-public static native TfLiteTensor TfLiteSignatureRunnerGetInputTensor(
-    TfLiteSignatureRunner signature_runner, String input_name);
-
-/** Runs inference on a given signature.
- * 
- *  Before calling this function, the caller should first invoke
- *  TfLiteSignatureRunnerAllocateTensors() and should also set the values for
- *  the input tensors. After successfully calling this function, the values for
- *  the output tensors will be set.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerInvoke(
-    TfLiteSignatureRunner signature_runner);
-
-/** Returns the number of output tensors associated with the signature.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native @Cast("size_t") long TfLiteSignatureRunnerGetOutputCount(
-    @Const TfLiteSignatureRunner signature_runner);
-
-/** Returns the (null-terminated) name of the Nth output in a signature, where
- *  N is specified as {@code output_index}.
- * 
- *  NOTE: The lifetime of the returned name is the same as (and depends on) the
- *  lifetime of {@code signature_runner}.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-///
-public static native @Cast("const char*") BytePointer TfLiteSignatureRunnerGetOutputName(
-    @Const TfLiteSignatureRunner signature_runner, int output_index);
-
-/** Returns the output tensor identified by {@code output_name} in the given
- *  signature. Returns nullptr if the given name is not valid.
- * 
- *  NOTE: The lifetime of the returned tensor is the same as (and depends on)
- *  the lifetime of {@code signature_runner}.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-
-///
-public static native @Const TfLiteTensor TfLiteSignatureRunnerGetOutputTensor(
-    @Const TfLiteSignatureRunner signature_runner, @Cast("const char*") BytePointer output_name);
-public static native @Const TfLiteTensor TfLiteSignatureRunnerGetOutputTensor(
-    @Const TfLiteSignatureRunner signature_runner, String output_name);
-
-/** Attempts to cancel in flight invocation if any.
+ *  Attempts to cancel in flight invocation if any.
  *  This will not affect calls to {@code Invoke} that happend after this.
  *  Non blocking and thread safe.
  *  Returns kTfLiteError if cancellation is not enabled, otherwise returns
@@ -1736,15 +1811,7 @@ public static native @Const TfLiteTensor TfLiteSignatureRunnerGetOutputTensor(
  *  in all SignatureRunners built from the same interpreter.
  * 
  *  WARNING: This is an experimental API and subject to change. */
-
-///
 public static native @Cast("TfLiteStatus") int TfLiteSignatureRunnerCancel(
-    TfLiteSignatureRunner signature_runner);
-
-/** Destroys the signature runner.
- * 
- *  WARNING: This is an experimental API and subject to change. */
-public static native void TfLiteSignatureRunnerDelete(
     TfLiteSignatureRunner signature_runner);
 
 // Forward declaration, to avoid need for dependency on
@@ -1782,25 +1849,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// This file defines common C types and APIs for implementing operations,
-// delegates and other constructs in TensorFlow Lite. The actual operations and
-// delegates can be defined using C++, but the interface between the interpreter
-// and the operations are C.
-//
-// Summary of abstractions
-// TF_LITE_ENSURE - Self-sufficient error checking
-// TfLiteStatus - Status reporting
-// TfLiteIntArray - stores tensor shapes (dims),
-// TfLiteContext - allows an op to access the tensors
-// TfLiteTensor - tensor (a multidimensional array)
-// TfLiteNode - a single node or operation
-// TfLiteRegistration - the implementation of a conceptual operation.
-// TfLiteDelegate - allows delegation of nodes to alternative backends.
-//
-// Some abstractions in this file are created and managed by Interpreter.
-//
-// NOTE: The order of values in these structs are "semi-ABI stable". New values
-// should be added only to the end of structs and never reordered.
+/** \file
+/**
+/** This file defines common C types and APIs for implementing operations,
+/** delegates and other constructs in TensorFlow Lite. The actual operations and
+/** delegates can be defined using C++, but the interface between the
+/** interpreter and the operations are C.
+/**
+/** For documentation, see tensorflow/lite/core/c/common.h. */
 
 // #ifndef TENSORFLOW_LITE_C_COMMON_H_
 // #define TENSORFLOW_LITE_C_COMMON_H_
@@ -2090,6 +2146,37 @@ public static final int
   kTfLitePersistentRo = 5,
   kTfLiteCustom = 6,
   kTfLiteVariantObject = 7;
+
+// Memory allocation strategies.
+//
+// TfLiteAllocationType values have been overloaded to mean more than their
+// original intent. This enum should only be used to document the allocation
+// strategy used by a tensor for it data.
+/** enum TfLiteAllocationStrategy */
+public static final int
+  kTfLiteAllocationStrategyUnknown = 0,
+  kTfLiteAllocationStrategyNone = 1,    // No data is allocated.
+  kTfLiteAllocationStrategyMMap = 2,    // Data is mmaped.
+  kTfLiteAllocationStrategyArena = 3,   // Handled by the arena.
+  kTfLiteAllocationStrategyMalloc = 4,  // Uses `malloc`/`free`.
+  kTfLiteAllocationStrategyNew = 5;      // Uses `new[]`/`delete[]`.
+
+// Describes how stable a tensor attribute is with regards to an interpreter
+// runs.
+/** enum TfLiteRunStability */
+public static final int
+  kTfLiteRunStabilityUnknown = 0,
+  kTfLiteRunStabilityUnstable = 1,   // May change at any time.
+  kTfLiteRunStabilitySingleRun = 2,  // Will stay the same for one run.
+  kTfLiteRunStabilityAcrossRuns = 3;  // Will stay the same across all runs.
+
+// Describes the steps of a TFLite operation life cycle.
+/** enum TfLiteRunStep */
+public static final int
+  kTfLiteRunStepUnknown = 0,
+  kTfLiteRunStepInit = 1,
+  kTfLiteRunStepPrepare = 2,
+  kTfLiteRunStepEval = 3;
 
 // The delegates should use zero or positive integers to represent handles.
 // -1 is reserved from unallocated status.
@@ -2406,6 +2493,29 @@ public static native void TfLiteOpaqueDelegateDelete(@Cast("TfLiteOpaqueDelegate
 //  'opaque_delegate_builder' field is null.
 public static native Pointer TfLiteOpaqueDelegateGetData(@Cast("const TfLiteOpaqueDelegate*") TfLiteOpaqueDelegateStruct delegate);
 
+// Returns a tensor data allocation strategy.
+public static native @Cast("TfLiteAllocationStrategy") int TfLiteTensorGetAllocationStrategy(
+    @Const TfLiteTensor t);
+
+// Returns how stable a tensor data buffer address is across runs.
+public static native @Cast("TfLiteRunStability") int TfLiteTensorGetBufferAddressStability(@Const TfLiteTensor t);
+
+// Returns how stable a tensor data values are across runs.
+public static native @Cast("TfLiteRunStability") int TfLiteTensorGetDataStability(@Const TfLiteTensor t);
+
+// Returns the operation step when the data of a tensor is populated.
+//
+// Some operations can precompute their results before the evaluation step. This
+// makes the data available earlier for subsequent operations.
+public static native @Cast("TfLiteRunStep") int TfLiteTensorGetDataKnownStep(@Const TfLiteTensor t);
+
+// Returns the operation steop when the shape of a tensor is computed.
+//
+// Some operations can precompute the shape of their results before the
+// evaluation step. This makes the shape available earlier for subsequent
+// operations.
+public static native @Cast("TfLiteRunStep") int TfLiteTensorGetShapeKnownStep(@Const TfLiteTensor t);
+
 // #ifdef __cplusplus  // extern "C"
 
 // #include <utility>
@@ -2459,7 +2569,7 @@ limitations under the License.
 // #ifndef TF_LITE_STRIP_ERROR_STRINGS
 // #define TF_LITE_REPORT_ERROR(reporter, ...)
 //   do {
-//     static_cast<tflite::ErrorReporter*>(reporter)->Report(__VA_ARGS__);
+//     static_cast<::tflite::ErrorReporter*>(reporter)->Report(__VA_ARGS__);
 //   } while (false)
 // #else  // TF_LITE_STRIP_ERROR_STRINGS
 // #define TF_LITE_REPORT_ERROR(reporter, ...)
