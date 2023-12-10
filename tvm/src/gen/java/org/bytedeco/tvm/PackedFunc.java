@@ -14,7 +14,8 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
-import static org.bytedeco.mkl.global.mkl_rt.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
@@ -24,7 +25,7 @@ import static org.bytedeco.tvm.global.tvm_runtime.*;
  *  The arguments are passed by packed format.
  *
  *  This is an useful unified interface to call generated functions,
- *  It is the unified function function type of TVM.
+ *  It is the unified function type of TVM.
  *  It corresponds to TVMFunctionHandle in C runtime API.
  */
 @Namespace("tvm::runtime") @Properties(inherit = org.bytedeco.tvm.presets.tvm_runtime.class)

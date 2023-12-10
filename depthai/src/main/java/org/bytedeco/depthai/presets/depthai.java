@@ -44,18 +44,22 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
     inherit = opencv_imgproc.class,
     value = {
         @Platform(
-            value = {"linux-arm", "linux-x86", "macosx-x86"},
+            value = {"android", "linux-arm", "linux-x86", "macosx-x86", "Windows-x86"},
             compiler = "cpp14",
             define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std", "XLINK_USE_MX_ID_NAME ON"},
             include = {
                 "XLink/XLinkPublicDefines.h",
+                "XLink/XLinkTime.h",
                 "depthai/depthai.hpp",
                 "depthai/build/config.hpp",
+//                "depthai/utility/span.hpp",
                 "depthai/utility/Initialization.hpp",
                 "depthai/utility/LockingQueue.hpp",
                 "depthai/utility/Pimpl.hpp",
                 "depthai/utility/Path.hpp",
+                "depthai/utility/ProfilingData.hpp",
                 "depthai-shared/utility/Serialization.hpp",
+//                "depthai-shared/common/optional.hpp",
                 "depthai-shared/common/CameraBoardSocket.hpp",
                 "depthai-shared/common/CameraImageOrientation.hpp",
                 "depthai-shared/common/CameraSensorType.hpp",
@@ -75,6 +79,8 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/common/CameraInfo.hpp",
                 "depthai-shared/common/Colormap.hpp",
                 "depthai-shared/common/FrameEvent.hpp",
+                "depthai-shared/common/Interpolation.hpp",
+                "depthai-shared/common/MedianFilter.hpp",
                 "depthai-shared/common/ProcessorType.hpp",
                 "depthai-shared/common/StereoRectification.hpp",
                 "depthai-shared/common/EepromData.hpp",
@@ -97,6 +103,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/datatype/RawSpatialLocations.hpp",
                 "depthai-shared/datatype/RawStereoDepthConfig.hpp",
                 "depthai-shared/datatype/RawSystemInformation.hpp",
+                "depthai-shared/datatype/RawToFConfig.hpp",
                 "depthai-shared/datatype/RawTracklets.hpp",
                 "depthai-shared/device/BoardConfig.hpp",
                 "depthai-shared/device/CrashDump.hpp",
@@ -106,7 +113,9 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/properties/Properties.hpp",
                 "depthai-shared/properties/AprilTagProperties.hpp",
                 "depthai-shared/properties/IMUProperties.hpp",
+                "depthai-shared/properties/UVCProperties.hpp",
                 "depthai-shared/properties/GlobalProperties.hpp",
+                "depthai-shared/properties/CameraProperties.hpp",
                 "depthai-shared/properties/ColorCameraProperties.hpp",
                 "depthai-shared/properties/ImageManipProperties.hpp",
                 "depthai-shared/properties/MonoCameraProperties.hpp",
@@ -120,6 +129,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai-shared/properties/SpatialLocationCalculatorProperties.hpp",
                 "depthai-shared/properties/StereoDepthProperties.hpp",
                 "depthai-shared/properties/SystemLoggerProperties.hpp",
+                "depthai-shared/properties/ToFProperties.hpp",
                 "depthai-shared/properties/VideoEncoderProperties.hpp",
                 "depthai-shared/properties/WarpProperties.hpp",
                 "depthai-shared/properties/XLinkInProperties.hpp",
@@ -150,6 +160,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/datatype/SpatialLocationCalculatorConfig.hpp",
                 "depthai/pipeline/datatype/StereoDepthConfig.hpp",
                 "depthai/pipeline/datatype/SystemInformation.hpp",
+                "depthai/pipeline/datatype/ToFConfig.hpp",
                 "depthai/pipeline/datatype/Tracklets.hpp",
                 "depthai/pipeline/AssetManager.hpp",
                 "depthai/pipeline/Node.hpp",
@@ -157,7 +168,9 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/nodes.hpp",
                 "depthai/pipeline/datatypes.hpp",
                 "depthai/pipeline/node/IMU.hpp",
+                "depthai/pipeline/node/UVC.hpp",
                 "depthai/pipeline/node/AprilTag.hpp",
+                "depthai/pipeline/node/Camera.hpp",
                 "depthai/pipeline/node/ColorCamera.hpp",
                 "depthai/pipeline/node/ImageManip.hpp",
                 "depthai/pipeline/node/MonoCamera.hpp",
@@ -171,6 +184,7 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                 "depthai/pipeline/node/SpatialLocationCalculator.hpp",
                 "depthai/pipeline/node/StereoDepth.hpp",
                 "depthai/pipeline/node/SystemLogger.hpp",
+                "depthai/pipeline/node/ToF.hpp",
                 "depthai/pipeline/node/VideoEncoder.hpp",
                 "depthai/pipeline/node/Warp.hpp",
                 "depthai/pipeline/node/XLinkIn.hpp",
@@ -221,11 +235,13 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::BoardConfig::GPIO").pointerTypes("BoardConfig.GPIO"))
                .put(new Info("dai::BoardConfig::UART").pointerTypes("BoardConfig.UART"))
                .put(new Info("dai::BoardConfig::IMU").pointerTypes("BoardConfig.IMU"))
+               .put(new Info("dai::BoardConfig::UVC").pointerTypes("BoardConfig.UVC"))
                .put(new Info("dai::BoardConfig::Camera").pointerTypes("BoardConfig.Camera"))
                .put(new Info("dai::DeviceBase::Config", "dai::Device::Config").pointerTypes("DeviceBase.Config"))
-               .put(new Info("auto", "std::initializer_list", "std::weak_ptr", "dai::XLinkStream(dai::XLinkStream)",
+               .put(new Info("auto", "span", "std::initializer_list", "std::weak_ptr", "dai::XLinkStream(dai::XLinkStream)",
                              "dai::RawStereoDepthConfig::CostAggregation::defaultHorizontalPenaltyCosts",
-                             "dai::RawStereoDepthConfig::CostAggregation::defaultVerticalPenaltyCosts").skip())
+                             "dai::RawStereoDepthConfig::CostAggregation::defaultVerticalPenaltyCosts",
+                             "dai::node::Camera::getScaledSize").skip())
                .put(new Info("std::chrono::microseconds", "std::chrono::milliseconds", "std::chrono::seconds", "std::runtime_error",
                              "std::chrono::duration<Rep,Period>", "std::chrono::duration<dai::ImgFrame,Period>",
                              "std::chrono::time_point<std::chrono::steady_clock,std::chrono::steady_clock::duration>",
@@ -255,6 +271,7 @@ public class depthai implements InfoMapper {
                .put(new Info("std::unordered_map<dai::CameraBoardSocket,dai::BoardConfig::Camera>").pointerTypes("CameraBoardSocketBoardConfigCameraMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::unordered_set<dai::Node::Connection> >").pointerTypes("NodeIdConnectionSetMap").define())
                .put(new Info("std::unordered_map<dai::Node::Id,std::shared_ptr<dai::Node> >").pointerTypes("NodeIdNodeMap").define())
+               .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
                .put(new Info("std::unordered_map<int64_t,dai::NodeObjInfo>").pointerTypes("LongNodeObjInfoMap").define())
                .put(new Info("std::unordered_map<std::int8_t,dai::BoardConfig::GPIO>").pointerTypes("ByteGPIOMap").define())
                .put(new Info("std::unordered_map<std::int8_t,dai::BoardConfig::UART>").pointerTypes("ByteUARTMap").define())
@@ -276,6 +293,7 @@ public class depthai implements InfoMapper {
                .put(new Info("tl::optional<size_t>").pointerTypes("SizeTOptional").define())
                .put(new Info("tl::optional<std::string>").pointerTypes("StringOptional").define())
                .put(new Info("tl::optional<dai::BoardConfig::IMU>").pointerTypes("BoardConfigIMUOptional").define())
+               .put(new Info("tl::optional<dai::BoardConfig::UVC>").pointerTypes("BoardConfigUVCOptional").define())
                .put(new Info("tl::optional<dai::CameraSensorType>").pointerTypes("CameraSensorTypeOptional").define())
                .put(new Info("tl::optional<dai::CameraImageOrientation>").pointerTypes("CameraImageOrientationOptional").define())
                .put(new Info("tl::optional<dai::EepromData>").pointerTypes("EepromDataOptional").define())
@@ -296,12 +314,14 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::Properties").pointerTypes("DaiProperties"))
                .put(new Info("dai::AprilTagConfig::Family").pointerTypes("RawAprilTagConfig.Family"))
                .put(new Info("dai::node::AprilTag").immutable().pointerTypes("AprilTagNode"))
-               .put(new Info("dai::node::IMU", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
+               .put(new Info("dai::node::IMU", "dai::node::UVC", "dai::node::Camera", "dai::node::ColorCamera", "dai::node::ImageManip", "dai::node::MonoCamera",
                              "dai::node::NeuralNetwork", "dai::node::EdgeDetector", "dai::node::DetectionNetwork", "dai::node::DetectionParser", "dai::node::ObjectTracker",
                              "dai::node::SPIOut", "dai::node::SpatialDetectionNetwork", "dai::node::SpatialLocationCalculator", "dai::node::StereoDepth",
-                             "dai::node::SystemLogger", "dai::node::VideoEncoder", "dai::node::Warp", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
+                             "dai::node::SystemLogger", "dai::node::ToF", "dai::node::VideoEncoder", "dai::node::Warp", "dai::node::XLinkIn", "dai::node::XLinkOut").immutable())
                .put(new Info("dai::node::IMU::Properties").pointerTypes("IMUProperties"))
+               .put(new Info("dai::node::UVC::Properties").pointerTypes("UVCProperties"))
                .put(new Info("dai::node::AprilTag::Properties").pointerTypes("AprilTagProperties"))
+               .put(new Info("dai::node::Camera::Properties").pointerTypes("CameraProperties"))
                .put(new Info("dai::node::ColorCamera::Properties").pointerTypes("ColorCameraProperties"))
                .put(new Info("dai::node::MonoCamera::Properties").pointerTypes("MonoCameraProperties"))
                .put(new Info("dai::node::ImageManip::Properties").pointerTypes("ImageManipProperties"))
@@ -317,10 +337,12 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::node::SpatialLocationCalculator::Properties").pointerTypes("SpatialLocationCalculatorProperties"))
                .put(new Info("dai::node::StereoDepth::Properties").pointerTypes("StereoDepthProperties"))
                .put(new Info("dai::node::SystemLogger::Properties").pointerTypes("SystemLoggerProperties"))
+               .put(new Info("dai::node::ToF::Properties").pointerTypes("ToFProperties"))
                .put(new Info("dai::node::VideoEncoder::Properties").pointerTypes("VideoEncoderProperties"))
                .put(new Info("dai::node::Warp::Properties").pointerTypes("WarpProperties"))
                .put(new Info("dai::node::XLinkIn::Properties").pointerTypes("XLinkInProperties"))
                .put(new Info("dai::node::XLinkOut::Properties").pointerTypes("XLinkOutProperties"))
+               .put(new Info("dai::node::Camera::Properties::WarpMeshSource").pointerTypes("CameraProperties.WarpMeshSource"))
                .put(new Info("dai::node::ColorCamera::Properties::SensorResolution").pointerTypes("ColorCameraProperties.SensorResolution"))
                .put(new Info("dai::node::MonoCamera::Properties::SensorResolution").pointerTypes("MonoCameraProperties.SensorResolution"))
 //               .put(new Info("dai::node::StereoDepth::Properties::DepthAlign").pointerTypes("StereoDepthProperties.DepthAlign"))
@@ -332,10 +354,13 @@ public class depthai implements InfoMapper {
                              "Properties::DepthAlign", "AlgorithmControl::DepthAlign").enumerate().pointerTypes("RawStereoDepthConfig.AlgorithmControl.DepthAlign"))
                .put(new Info("dai::RawStereoDepthConfig::AlgorithmControl::DepthUnit",
                              "Properties::DepthUnit", "AlgorithmControl::DepthUnit").enumerate().pointerTypes("RawStereoDepthConfig.AlgorithmControl.DepthUnit"))
+               .put(new Info("dai::ToFConfig::DepthParams::TypeFMod").pointerTypes("RawToFConfig.DepthParams.TypeFMod"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::IMU,dai::IMUProperties>").pointerTypes("IMUPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::UVC,dai::UVCProperties>").pointerTypes("UVCPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::AprilTag,dai::AprilTagProperties>").pointerTypes("AprilTagPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::Camera,dai::CameraProperties>").pointerTypes("CameraPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ColorCamera,dai::ColorCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
-               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::MonoCamera,dai::MonoCameraProperties>").pointerTypes("ColorCameraPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::MonoCamera,dai::MonoCameraProperties>").pointerTypes("MonoCameraPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ImageManip,dai::ImageManipProperties>").pointerTypes("ImageManipPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::EdgeDetector,dai::EdgeDetectorProperties>").pointerTypes("EdgeDetectorPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::NeuralNetwork,dai::NeuralNetworkProperties>").pointerTypes("NeuralNetworkPropertiesNode"))
@@ -355,14 +380,19 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SpatialLocationCalculator,dai::SpatialLocationCalculatorProperties>").pointerTypes("SpatialLocationCalculatorPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::StereoDepth,dai::StereoDepthProperties>").pointerTypes("StereoDepthPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::SystemLogger,dai::SystemLoggerProperties>").pointerTypes("SystemLoggerPropertiesNode"))
+               .put(new Info("dai::NodeCRTP<dai::Node,dai::node::ToF,dai::ToFProperties>").pointerTypes("ToFPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::VideoEncoder,dai::VideoEncoderProperties>").pointerTypes("VideoEncoderPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::Warp,dai::WarpProperties>").pointerTypes("WarpPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::XLinkIn,dai::XLinkInProperties>").pointerTypes("XLinkInPropertiesNode"))
                .put(new Info("dai::NodeCRTP<dai::Node,dai::node::XLinkOut,dai::XLinkOutProperties>").pointerTypes("XLinkOutPropertiesNode"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::IMUProperties>",
                              "dai::PropertiesSerializable<dai::Properties,IMUProperties>").pointerTypes("IMUPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::UVCProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,UVCProperties>").pointerTypes("UVCPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::AprilTagProperties>",
                              "dai::PropertiesSerializable<dai::Properties,AprilTagProperties>").pointerTypes("AprilTagPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::CameraProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,CameraProperties>").pointerTypes("CameraPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ColorCameraProperties>",
                              "dai::PropertiesSerializable<dai::Properties,ColorCameraProperties>").pointerTypes("ColorCameraPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::MonoCameraProperties>",
@@ -391,6 +421,8 @@ public class depthai implements InfoMapper {
                              "dai::PropertiesSerializable<dai::Properties,StereoDepthProperties>").pointerTypes("StereoDepthPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::SystemLoggerProperties>",
                              "dai::PropertiesSerializable<dai::Properties,SystemLoggerProperties>").pointerTypes("SystemLoggerPropertiesSerializable"))
+               .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::ToFProperties>",
+                             "dai::PropertiesSerializable<dai::Properties,ToFProperties>").pointerTypes("ToFPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::VideoEncoderProperties>",
                              "dai::PropertiesSerializable<dai::Properties,VideoEncoderProperties>").pointerTypes("VideoEncoderPropertiesSerializable"))
                .put(new Info("dai::PropertiesSerializable<dai::Properties,dai::WarpProperties>",
@@ -406,7 +438,9 @@ public class depthai implements InfoMapper {
 
                .put(new Info("dai::Pipeline::create").javaText(
                        "public native @Name(\"create<dai::node::IMU>\") @SharedPtr IMU createIMU();\n"
+                     + "public native @Name(\"create<dai::node::UVC>\") @SharedPtr UVC createUVC();\n"
                      + "public native @Name(\"create<dai::node::AprilTag>\") @SharedPtr AprilTagNode createAprilTag();\n"
+                     + "public native @Name(\"create<dai::node::Camera>\") @SharedPtr Camera createCamera();\n"
                      + "public native @Name(\"create<dai::node::ColorCamera>\") @SharedPtr ColorCamera createColorCamera();\n"
                      + "public native @Name(\"create<dai::node::ImageManip>\") @SharedPtr ImageManip createImageManip();\n"
                      + "public native @Name(\"create<dai::node::MonoCamera>\") @SharedPtr MonoCamera createMonoCamera();\n"
@@ -423,6 +457,7 @@ public class depthai implements InfoMapper {
                      + "public native @Name(\"create<dai::node::SpatialLocationCalculator>\") @SharedPtr SpatialLocationCalculator createSpatialLocationCalculator();\n"
                      + "public native @Name(\"create<dai::node::StereoDepth>\") @SharedPtr StereoDepth createStereoDepth();\n"
                      + "public native @Name(\"create<dai::node::SystemLogger>\") @SharedPtr SystemLogger createSystemLogger();\n"
+                     + "public native @Name(\"create<dai::node::ToF>\") @SharedPtr ToF createToF();\n"
                      + "public native @Name(\"create<dai::node::VideoEncoder>\") @SharedPtr VideoEncoder createVideoEncoder();\n"
                      + "public native @Name(\"create<dai::node::Warp>\") @SharedPtr Warp createWarp();\n"
                      + "public native @Name(\"create<dai::node::XLinkIn>\") @SharedPtr XLinkIn createXLinkIn();\n"
@@ -485,11 +520,11 @@ public class depthai implements InfoMapper {
                .put(new Info("dai::DeviceBootloader::Version::toString", "dai::Version::toString",
                              "dai::DeviceInfo::toString", "dai::Node::toString").javaText("public native @StdString String toString();"))
 
-               .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(std::shared_ptr<RawBuffer>)>").valueTypes("RawBufferCallback"))
-               .put(new Info("std::function<void(LogMessage)>").valueTypes("LogCallback"))
+               .put(new Info("std::function<std::shared_ptr<dai::RawBuffer>(dai::RawBuffer*)>").valueTypes("RawBufferCallback"))
+               .put(new Info("std::function<void(dai::LogMessage)>").valueTypes("LogCallback"))
                .put(new Info("std::function<void(float)>").valueTypes("ProgressCallback"))
-               .put(new Info("std::function<void(std::string,std::shared_ptr<ADatatype>)>").valueTypes("NameMessageCallback"))
-               .put(new Info("std::function<void(std::shared_ptr<ADatatype>)>").valueTypes("MessageCallback"))
+               .put(new Info("std::function<void(std::string,std::shared_ptr<dai::ADatatype>)>").valueTypes("NameMessageCallback"))
+               .put(new Info("std::function<void(std::shared_ptr<dai::ADatatype>)>").valueTypes("MessageCallback"))
                .put(new Info("std::function<void()>").valueTypes("Callback"))
         ;
     }

@@ -66,14 +66,14 @@ public class MetaBase extends Pointer {
         @ByVal TensorOptions options);
   public native void set_output_strided(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
         @ByVal TensorOptions options,
         @ByVal(nullValue = "at::DimnameList{}") DimnameArrayRef names);
   public native void set_output_strided(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
         @ByVal TensorOptions options);
 
   // Use this function whenever the kernel knows how to handle arbitrary strided
@@ -92,14 +92,14 @@ public class MetaBase extends Pointer {
         @ByVal TensorOptions options);
   public native void set_output_raw_strided(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides_hint,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides_hint,
         @ByVal TensorOptions options,
         @ByVal(nullValue = "at::DimnameList{}") DimnameArrayRef names);
   public native void set_output_raw_strided(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] strides_hint,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides_hint,
         @ByVal TensorOptions options);
 
   // Use this function if the kernel requires contiguous strides.
@@ -115,12 +115,12 @@ public class MetaBase extends Pointer {
         @ByVal TensorOptions options);
   public native void set_output_contiguous(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
         @ByVal TensorOptions options,
         @ByVal(nullValue = "at::DimnameList{}") DimnameArrayRef names);
   public native void set_output_contiguous(
         @Cast("int64_t") long output_idx,
-        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long[] sizes,
+        @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
         @ByVal TensorOptions options);
 
   // Returns a reference to an undefined tensor if there is no presupplied

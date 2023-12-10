@@ -103,6 +103,8 @@ fi
 # fixes for CUDA
 sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
+sedinplace 's/(weight != 1.0)/((double)weight != 1.0)/g' modules/dnn/src/cuda4dnn/primitives/normalize_bbox.hpp
+sedinplace 's/(nms_iou_threshold > 0)/((double)nms_iou_threshold > 0.0)/g' modules/dnn/src/cuda4dnn/primitives/region.hpp
 sedinplace 's/ocv_add_app(model-diagnostics)/#ocv_add_app(model-diagnostics)/g' apps/CMakeLists.txt
 
 # avoid issues when checking version of cross-compiled Python
@@ -131,7 +133,7 @@ BUILD_CONTRIB_X="-DBUILD_opencv_stereo=OFF -DBUILD_opencv_plot=ON -DBUILD_opencv
 
 GPU_FLAGS="-DWITH_CUDA=OFF"
 if [[ "$EXTENSION" == *gpu ]]; then
-    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=12.1 -DCUDNN_VERSION=8.9 -DCUDA_ARCH_BIN='5.0;6.0;7.0' -DCUDA_ARCH_PTX='7.0' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
+    GPU_FLAGS="-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_VERSION=12.3 -DCUDNN_VERSION=8.9 -DCUDA_ARCH_BIN='5.0;6.0;7.0;8.0;9.0' -DCUDA_ARCH_PTX='' -DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr -DCUDA_nppicom_LIBRARY="
 fi
 
 # exclude openblas dependencies

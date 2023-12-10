@@ -18,21 +18,13 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// ============================================================================
-
-/** Options for the {@code ZeroPad2d} module.
- * 
- *  Example:
- *  <pre>{@code
- *  ZeroPad2d model(ZeroPad2dOptions({1, 1, 2, 0}));
- *  }</pre> */
-@Namespace("torch::nn") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::nn::ZeroPadOptions<2>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ZeroPad2dOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ZeroPad2dOptions(Pointer p) { super(p); }
 
-  public ZeroPad2dOptions(@ByVal @Cast("torch::ExpandingArray<4>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
-  private native void allocate(@ByVal @Cast("torch::ExpandingArray<4>*") LongPointer padding);
-  public native @Cast("torch::ExpandingArray<4>*") @ByRef @NoException(true) LongPointer padding();
+  public ZeroPad2dOptions(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding) { super((Pointer)null); allocate(padding); }
+  private native void allocate(@ByVal @Cast("torch::ExpandingArray<2*2>*") LongPointer padding);
+  public native @Cast("torch::ExpandingArray<2*2>*") @ByRef @NoException(true) LongPointer padding();
 }

@@ -36,7 +36,11 @@ private native void allocate(double d);
 
   
 
+  // Only valid if is_symbolic()
   public native @ByVal SymNode toSymNodeImpl();
+
+  // Guaranteed to return a SymNode, wrapping using base if necessary
+  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
 
   public native double expect_float();
 
@@ -44,6 +48,23 @@ private native void allocate(double d);
   public native @ByVal @Name("operator -") SymFloat subtract(@Const @ByRef SymFloat arg0);
   public native @ByVal @Name("operator *") SymFloat multiply(@Const @ByRef SymFloat arg0);
   public native @ByVal @Name("operator /") SymFloat divide(@Const @ByRef SymFloat arg0);
+
+  public native @ByVal SymBool sym_eq(@Const @ByRef SymFloat arg0);
+  public native @ByVal SymBool sym_ne(@Const @ByRef SymFloat arg0);
+  public native @ByVal SymBool sym_lt(@Const @ByRef SymFloat arg0);
+  public native @ByVal SymBool sym_le(@Const @ByRef SymFloat arg0);
+  public native @ByVal SymBool sym_gt(@Const @ByRef SymFloat arg0);
+  public native @ByVal SymBool sym_ge(@Const @ByRef SymFloat arg0);
+
+  public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef SymFloat o);
+  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef SymFloat o);
+  public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef SymFloat o);
+  public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Const @ByRef SymFloat o);
+  public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef SymFloat o);
+  public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Const @ByRef SymFloat o);
+
+  public native @ByVal SymFloat min(@Const @ByRef SymFloat sci);
+  public native @ByVal SymFloat max(@Const @ByRef SymFloat sci);
 
   // Need guidance on where to put this code
   public native @ByVal SymFloat sqrt();
@@ -58,6 +79,8 @@ private native void allocate(double d);
   // number can be used to diagnose overspecialization.
   public native double guard_float(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native double guard_float(String file, @Cast("int64_t") long line);
+
+  public native @Cast("bool") boolean has_hint();
 
   // N.B. It's important to keep this definition in the header
   // as we expect if checks to be folded for mobile builds

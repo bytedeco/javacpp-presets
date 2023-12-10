@@ -134,7 +134,7 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
 Manual Installation
 -------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux were built for CentOS 6 and 7, so they should work on most distributions currently in use. The ones for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). The binaries for Linux are built with Ubuntu, so they should work on most distributions currently in use. The ones for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 7 or newer):
 
@@ -180,7 +180,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
  * OpenCV 4.8.x  https://opencv.org/releases/
- * FFmpeg 6.0.x  http://ffmpeg.org/download.html
+ * FFmpeg 6.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 3.0.x https://www.flir.com/products/spinnaker-sdk
  * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
@@ -199,8 +199,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2023.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.3.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.24  http://www.openblas.net/
- * ARPACK-NG 3.9.0  https://github.com/opencollab/arpack-ng
+ * OpenBLAS 0.3.25  http://www.openblas.net/
+ * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
  * GSL 2.7  http://www.gnu.org/software/gsl/#downloading
@@ -216,24 +216,25 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 5.3.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
- * CUDA 12.1.x  https://developer.nvidia.com/cuda-downloads
+ * CUDA 12.3.x  https://developer.nvidia.com/cuda-downloads
    * cuDNN 8.9.x  https://developer.nvidia.com/cudnn
    * NCCL 2.18.x  https://developer.nvidia.com/nccl
+   * nvCOMP 3.0.x https://developer.nvidia.com/nvcomp
  * NVIDIA Video Codec SDK 12.1.x  https://developer.nvidia.com/nvidia-video-codec-sdk
  * OpenCL 3.0.x  https://github.com/KhronosGroup/OpenCL-ICD-Loader
  * MXNet 1.9.x  https://github.com/apache/incubator-mxnet
- * PyTorch 2.0.x  https://github.com/pytorch/pytorch
+ * PyTorch 2.1.x  https://github.com/pytorch/pytorch
  * SentencePiece 0.1.99  https://github.com/google/sentencepiece
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
- * TensorFlow Lite 2.14.x  https://github.com/tensorflow/tensorflow
+ * TensorFlow Lite 2.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
  * Triton Inference Server 2.38.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
- * DepthAI 2.21.x  https://github.com/luxonis/depthai-core
- * ONNX 1.14.x  https://github.com/onnx/onnx
+ * DepthAI 2.23.x  https://github.com/luxonis/depthai-core
+ * ONNX 1.15.x  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.16.x  https://github.com/microsoft/onnxruntime
- * TVM 0.13.x  https://github.com/apache/tvm
+ * TVM 0.14.x  https://github.com/apache/tvm
  * Bullet Physics SDK 3.25  https://pybullet.org
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.15.x  https://download.qt.io/archive/qt/

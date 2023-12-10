@@ -21,7 +21,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="--use_cuda"
 fi
 
-ONNXRUNTIME=1.16.1
+ONNXRUNTIME=1.16.3
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -87,7 +87,7 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.3)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.3.2)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
 sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
@@ -107,7 +107,7 @@ sedinplace '/omp_get_max_threads/d' onnxruntime/core/providers/dnnl/dnnl_executi
 sedinplace '/omp_set_num_threads/d' onnxruntime/core/providers/dnnl/dnnl_execution_provider.cc
 
 # use PTX instead of compiling for all CUDA archs to reduce library size
-sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_70,code=compute_70/g' cmake/CMakeLists.txt
+sedinplace 's/-gencode=arch=compute_52,code=sm_52/-gencode arch=compute_50,code=sm_50 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_70,code=sm_70 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_90,code=sm_90/g' cmake/CMakeLists.txt
 sedinplace '/-gencode=arch=compute_..,code=sm_../d' cmake/CMakeLists.txt
 
 # provide a default constructor to Ort::Value to make it more usable with std::vector

@@ -78,7 +78,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  *  {@code torch.device} object (e.g., "cuda:1" can be passed to everywhere a
  *  {@code torch.device("cuda:1")} is accepted). To support the syntax
  *  {@code at::empty({10}, {kCUDA, 1})} and {@code tensor.to(kCUDA)}, we need to make sure
- *  that {@code TensorOptions} is implicitly constructible with any argments that a
+ *  that {@code TensorOptions} is implicitly constructible with any arguments that a
  *  {@code Device} can constructed from. So we have,
  * 
  *     /* implicit * / TensorOptions(T&& device) : TensorOptions() {
@@ -93,7 +93,7 @@ import static org.bytedeco.pytorch.global.torch.*;
  * 
  * 
  *  But this will be problematic. Consider this: {@code TensorOptions({kCUDA, 1})}.
- *  Compiler will compain about ambiguity between the copy constructor and the
+ *  Compiler will complain about ambiguity between the copy constructor and the
  *  {@code Device} constructor because {@code {kCUDA, 1}} can be converted to both a
  *  {@code TensorOption} and a {@code Device}.
  * 

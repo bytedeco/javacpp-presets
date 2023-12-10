@@ -14,7 +14,8 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
-import static org.bytedeco.mkl.global.mkl_rt.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
@@ -62,10 +63,12 @@ public class TypeIndex extends Pointer {
     kRuntimeShapeTuple = 6,
     /** \brief runtime::PackedFunc. */
     kRuntimePackedFunc = 7,
+    /** \brief runtime::DRef */
+    kRuntimeDiscoDRef = 8,
     // static assignments that may subject to change.
-    kRuntimeClosure = 8,
-    kRuntimeADT = 9,
-    kStaticIndexEnd = 10,
+    kRuntimeClosure = 9,
+    kRuntimeADT = 10,
+    kStaticIndexEnd = 11,
     /** \brief Type index is allocated during runtime. */
     kDynamic = kStaticIndexEnd;
 }

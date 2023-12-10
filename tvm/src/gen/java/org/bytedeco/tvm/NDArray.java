@@ -14,7 +14,8 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
-import static org.bytedeco.mkl.global.mkl_rt.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
@@ -109,8 +110,10 @@ public class NDArray extends ObjectRef {
   /**
    * \brief Copy the data to another device.
    * @param dev The target device.
+   * @param mem_scope The memory scope of the target array.
    * @return The array under another device.
    */
+  public native @ByVal NDArray CopyTo(@Cast("const tvm::Device*") @ByRef DLDevice dev, @ByVal(nullValue = "tvm::runtime::Optional<tvm::runtime::String>(tvm::NullOpt)") TVMStringOptional mem_scope);
   public native @ByVal NDArray CopyTo(@Cast("const tvm::Device*") @ByRef DLDevice dev);
   /**
    * \brief Load NDArray from stream

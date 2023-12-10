@@ -103,6 +103,7 @@ private native void allocate();
 
   /** equals - Check for element-wise equality. */
   public native @Cast("const bool") boolean equals(@ByVal ShortArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal @Cast({"jshort*", "c10::ArrayRef<jshort>", "std::vector<jshort>&"}) @StdVector("jshort") short... RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
   public native @Const @ByVal ShortArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);

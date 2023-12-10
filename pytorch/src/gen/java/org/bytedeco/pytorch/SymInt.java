@@ -71,21 +71,28 @@ private native void allocate(@Cast("int64_t") long d);
 
   public native @ByRef @Name("operator =") SymInt put(@Const @ByRef SymInt s);
 
-  public native @ByVal SymInt clone();
-
   public native SymNodeImpl toSymNodeImplUnowned();
 
   public native void release_();
 
   
 
-  public native @ByVal SymNode toSymNodeImpl();
+  // Only valid if is_heap_allocated()
+  public native @ByVal SymNode toSymNode();
+
+  // Guaranteed to return a SymNode, wrapping using base if necessary
+  public native @ByVal SymNode wrap_node(@Const @ByRef SymNode base);
 
   // Require the int to be non-symbolic, and if it is symbolic raise an
   // error.  This is safe to use for C++ code that doesn't work for symbolic
   // shapes, and you don't have time to fix it immediately, as if we
   // try to trigger the path in C++ you'll appropriately get an error
   public native @Cast("int64_t") long expect_int();
+
+  // Test if we have a hint for this int (e.g., guard_int would work).
+  // Most of the time this is true; it is only false when you have
+  // an unbacked SymInt.
+  public native @Cast("bool") boolean has_hint();
 
   // Insert a guard for the int to be its concrete value, and then return
   // that value.  This operation always works, even if the int is symbolic,
@@ -99,10 +106,13 @@ private native void allocate(@Cast("int64_t") long d);
   public native @Cast("int64_t") long guard_int(@Cast("const char*") BytePointer file, @Cast("int64_t") long line);
   public native @Cast("int64_t") long guard_int(String file, @Cast("int64_t") long line);
 
+  // Distinguish actual symbolic values from constants stored on the heap
+  public native @Cast("bool") boolean is_symbolic();
+
   // N.B. It's important to keep this definition in the header
   // as we expect if checks to be folded for mobile builds
-  // where `is_symbolic` is always false and optimize dead code paths
-  public native @Cast("bool") boolean is_symbolic();
+  // where `is_heap_allocated` is always false and optimize dead code paths
+  public native @Cast("bool") boolean is_heap_allocated();
 
   public native @ByVal @Name("operator +") SymInt add(@Const @ByRef SymInt sci);
   public native @ByVal @Name("operator -") SymInt subtract(@Const @ByRef SymInt sci);
@@ -112,6 +122,8 @@ private native void allocate(@Cast("int64_t") long d);
   public native @Name("operator *=") void multiplyPut(@Const @ByRef SymInt sci);
   public native @Name("operator +=") void addPut(@Const @ByRef SymInt sci);
   public native @Name("operator /=") void dividePut(@Const @ByRef SymInt sci);
+
+  public native @ByVal SymInt clone();
 
   public native @ByVal SymBool sym_eq(@Const @ByRef SymInt arg0);
   public native @ByVal SymBool sym_ne(@Const @ByRef SymInt arg0);
@@ -130,21 +142,22 @@ private native void allocate(@Cast("int64_t") long d);
   public native @ByVal SymInt min(@Const @ByRef SymInt sci);
   public native @ByVal SymInt max(@Const @ByRef SymInt sci);
 
-  public native @ByVal @Name("operator *") SymInt multiply(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator <") boolean lessThan(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator ==") boolean equals(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator >") boolean greaterThan(@Cast("int64_t") long sci);
-  public native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Cast("int64_t") long sci);
-
   public native @ByVal @Name("operator c10::SymFloat") SymFloat asSymFloat();
 
+  // Don't use this.  Prefer maybe_as_int instead
   public native @Cast("int64_t") long as_int_unchecked();
 
-  // Return whether the integer is representable as a SymInt.
+  public native @ByVal LongOptional maybe_as_int();
+
+  // Return whether the integer is directly coercible to a SymInt
+  // without requiring heap allocation.  You don't need to use this
+  // to check if you can pass an integer to SymInt; this is guaranteed
+  // to work (it just might heap allocate!)
   public static native @Cast("bool") boolean check_range(@Cast("int64_t") long i);
 
-  // Return the min represetable integer as a SymInt
+  // Return the min representable integer as a SymInt without
+  // heap allocation.  For quantities that count bytes (or larger),
+  // this is still much larger than you need, so you may consider
+  // using this as a more efficient version of MIN_INT
   public static native @Cast("const int64_t") long min_representable_int();
 }

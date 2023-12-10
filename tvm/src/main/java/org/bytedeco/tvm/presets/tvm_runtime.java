@@ -37,14 +37,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.dnnl.presets.*;
 import org.bytedeco.llvm.presets.*;
-import org.bytedeco.mkl.presets.*;
+import org.bytedeco.openblas.presets.*;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = {dnnl.class, LLVM.class, mkl_rt.class},
+    inherit = {dnnl.class, LLVM.class, openblas.class},
     value = {
         @Platform(
             value = {"linux", "macosx", "windows"},
@@ -166,7 +166,9 @@ public class tvm_runtime implements LoadEnabled, InfoMapper {
                .put(new Info("tvm::runtime::ObjectPtr<tvm::runtime::Object>").pointerTypes("ObjectPtr"))
                .put(new Info("tvm::runtime::ObjAllocatorBase<tvm::runtime::SimpleObjAllocator>",
                              "tvm::runtime::ObjAllocatorBase<SimpleObjAllocator>").pointerTypes("SimpleObjAllocatorBase"))
-               .put(new Info("tvm::runtime::ObjAllocatorBase<tvm::runtime::SimpleObjAllocator>::make_object").skip())
+               .put(new Info("tvm::runtime::ObjAllocatorBase<tvm::runtime::SimpleObjAllocator>::make_object",
+                             "tvm::runtime::WrappedPythonObject",
+                             "tvm::runtime::operator <<(std::ostream&, DLDevice)").skip())
 
                .put(new Info("tvm::runtime::ADTObj").pointerTypes("ADTObj"))
                .put(new Info("tvm::runtime::InplaceArrayBase<tvm::runtime::ADTObj,tvm::runtime::ObjectRef>",

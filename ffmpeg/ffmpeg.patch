@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
---- ffmpeg-6.0/configure	2023-02-28 05:43:45.000000000 +0900
-+++ ffmpeg-6.0-patch/configure	2023-03-02 18:30:58.642611366 +0900
-@@ -6563,7 +6563,7 @@
+diff -ruN ffmpeg-6.1/configure ffmpeg-6.1-patch/configure
+--- ffmpeg-6.1/configure	2023-11-11 09:25:17.000000000 +0900
++++ ffmpeg-6.1-patch/configure	2023-11-11 19:18:26.388930944 +0900
+@@ -6673,7 +6673,7 @@
  enabled jni               && { [ $target_os = "android" ] && check_headers jni.h && enabled pthreads || die "ERROR: jni not found"; }
  enabled ladspa            && require_headers "ladspa.h dlfcn.h"
  enabled lcms2             && require_pkg_config lcms2 "lcms2 >= 2.13" lcms2.h cmsCreateContext
@@ -10,16 +10,16 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
  enabled libaribb24        && { check_pkg_config libaribb24 "aribb24 > 1.0.3" "aribb24/aribb24.h" arib_instance_new ||
                                 { enabled gpl && require_pkg_config libaribb24 aribb24 "aribb24/aribb24.h" arib_instance_new; } ||
                                 die "ERROR: libaribb24 requires version higher than 1.0.3 or --enable-gpl."; }
-@@ -6588,7 +6588,7 @@
+@@ -6699,7 +6699,7 @@
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
  enabled libfontconfig     && require_pkg_config libfontconfig fontconfig "fontconfig/fontconfig.h" FcInit
 -enabled libfreetype       && require_pkg_config libfreetype freetype2 "ft2build.h FT_FREETYPE_H" FT_Init_FreeType
 +enabled libfreetype       && add_cppflags -I ../include/freetype2/ && require libfreetype "ft2build.h FT_FREETYPE_H" FT_Init_FreeType -lfreetype
  enabled libfribidi        && require_pkg_config libfribidi fribidi fribidi.h fribidi_version_info
+ enabled libharfbuzz       && require_pkg_config libharfbuzz harfbuzz hb.h hb_buffer_create
  enabled libglslang && { check_lib spirv_compiler glslang/Include/glslang_c_interface.h glslang_initialize_process \
-                             -lglslang -lMachineIndependent -lOSDependent -lHLSL -lOGLCompiler -lGenericCodeGen \
-@@ -6617,15 +6617,7 @@
+@@ -6729,15 +6729,7 @@
  # pkg-config support.  Instead, users should make sure that the build
  # can find the libraries and headers through other means.
  elif enabled libmfx; then
@@ -33,10 +33,10 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
 -        { test_cpp_condition mfxdefs.h "MFX_VERSION >= 1028 && MFX_VERSION < 2000" || die "ERROR: libmfx version must be >= 1.28 and < 2.0"; }  &&
 -        warn "using libmfx without pkg-config"; } } &&
 +    require libmfx "mfx/mfxvideo.h" MFXInit -lmfx && warn "using libmfx without pkg-config" &&
-     warn "build FFmpeg against libmfx 1.x, obsolete features of libmfx such as OPAQUE memory,\n"\
-          "multi-frame encode, user plugins and LA_EXT rate control mode are enabled"
+     warn "libmfx is deprecated. Please run configure with --enable-libvpl to use libvpl instead."
  elif enabled libvpl; then
-@@ -6653,19 +6645,12 @@
+ # Consider pkg-config only. The name of libmfx is still passed to check_pkg_config function for --enable-libvpl option
+@@ -6764,21 +6756,14 @@
                                 { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
                                   require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
                                 require_pkg_config libopencv opencv opencv/cxcore.h cvCreateImageHeader; }
@@ -45,7 +45,9 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
  enabled libopenjpeg       && { check_pkg_config libopenjpeg "libopenjp2 >= 2.1.0" openjpeg.h opj_version ||
                                 { require_pkg_config libopenjpeg "libopenjp2 >= 2.1.0" openjpeg.h opj_version -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } }
  enabled libopenmpt        && require_pkg_config libopenmpt "libopenmpt >= 0.2.6557" libopenmpt/libopenmpt.h openmpt_module_create -lstdc++ && append libopenmpt_extralibs "-lstdc++"
- enabled libopenvino       && require libopenvino c_api/ie_c_api.h ie_c_api_version -linference_engine_c_api
+ enabled libopenvino       && { { check_pkg_config libopenvino openvino openvino/c/openvino.h ov_core_create && enable openvino2; } ||
+                                 { check_pkg_config libopenvino openvino c_api/ie_c_api.h ie_c_api_version ||
+                                   require libopenvino c_api/ie_c_api.h ie_c_api_version -linference_engine_c_api; } }
 -enabled libopus           && {
 -    enabled libopus_decoder && {
 -        require_pkg_config libopus opus opus_multistream.h opus_multistream_decoder_create
@@ -58,10 +60,10 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
  enabled libplacebo        && require_pkg_config libplacebo "libplacebo >= 4.192.0" libplacebo/vulkan.h pl_vulkan_create
  enabled libpulse          && require_pkg_config libpulse libpulse pulse/pulseaudio.h pa_context_new
  enabled librabbitmq       && require_pkg_config librabbitmq "librabbitmq >= 0.7.1" amqp.h amqp_new_connection
-@@ -6681,9 +6666,9 @@
+@@ -6794,9 +6779,9 @@
  enabled libsnappy         && require libsnappy snappy-c.h snappy_compress -lsnappy -lstdc++
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
- enabled libssh            && require_pkg_config libssh libssh libssh/sftp.h sftp_init
+ enabled libssh            && require_pkg_config libssh "libssh >= 0.6.0" libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config libspeex speex speex/speex.h speex_decoder_init
 -enabled libsrt            && require_pkg_config libsrt "srt >= 1.3.0" srt/srt.h srt_socket
 -enabled libsvtav1         && require_pkg_config libsvtav1 "SvtAv1Enc >= 0.9.0" EbSvtAv1Enc.h svt_av1_enc_init_handle
@@ -71,7 +73,7 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
  enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
-@@ -6701,19 +6686,15 @@
+@@ -6815,19 +6800,15 @@
  
  enabled libvpx            && {
      enabled libvpx_vp8_decoder && {
@@ -91,7 +93,7 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
              check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs $pthreads_extralibs"
      }
      if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
-@@ -6722,14 +6703,14 @@
+@@ -6836,14 +6817,14 @@
  }
  
  enabled libwebp           && {
@@ -110,7 +112,7 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
                               require_cpp_condition libx265 x265.h "X265_BUILD >= 89"
  enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxavs2          && require_pkg_config libxavs2 "xavs2 >= 1.3.0" "stdint.h xavs2.h" xavs2_api_get
-@@ -6739,7 +6720,7 @@
+@@ -6853,7 +6834,7 @@
  enabled libzvbi           && require_pkg_config libzvbi zvbi-0.2 libzvbi.h vbi_decoder_new &&
                               { test_cpp_condition libzvbi.h "VBI_VERSION_MAJOR > 0 || VBI_VERSION_MINOR > 2 || VBI_VERSION_MINOR == 2 && VBI_VERSION_MICRO >= 28" ||
                                 enabled gpl || die "ERROR: libzvbi requires version 0.2.28 or --enable-gpl."; }
@@ -119,7 +121,7 @@ diff -ruN ffmpeg-6.0/configure ffmpeg-6.0-patch/configure
  enabled mbedtls           && { check_pkg_config mbedtls mbedtls mbedtls/x509_crt.h mbedtls_x509_crt_init ||
                                 check_pkg_config mbedtls mbedtls mbedtls/ssl.h mbedtls_ssl_init ||
                                 check_lib mbedtls mbedtls/ssl.h mbedtls_ssl_init -lmbedtls -lmbedx509 -lmbedcrypto ||
-@@ -6778,15 +6759,13 @@
+@@ -6892,15 +6873,13 @@
                                 die "ERROR: OpenMAX IL headers from raspberrypi/firmware not found"; } &&
                               enable omx
  enabled omx               && require_headers OMX_Core.h

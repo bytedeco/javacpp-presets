@@ -8,9 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
-/** WARNING: Experimental interface, subject to change
- * 
- *  SignatureRunner class for running TFLite models using SignatureDef.
+/** SignatureRunner class for running TFLite models using SignatureDef.
  * 
  *  Usage:
  * 

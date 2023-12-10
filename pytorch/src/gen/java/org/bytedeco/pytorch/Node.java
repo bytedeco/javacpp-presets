@@ -115,6 +115,8 @@ public class Node extends Pointer {
 
   public native @Cast("uint32_t") @NoException(true) int num_inputs();
 
+  // Danger: not thread safe, caller must protect with lock
+
   /**
    * Note: Function Streams
    * A function's stream (for a given device type) is the stream of the first
@@ -277,6 +279,8 @@ public class Node extends Pointer {
 
   public native @ByRef @NoException(true) FunctionPreHookVector tensor_pre_hooks();
 
+  public native @UniquePtr @NoException(true) PostAccumulateGradHook tensor_post_acc_grad_hooks();
+
   
 
   // Customization Points for Subclasses
@@ -305,4 +309,19 @@ public class Node extends Pointer {
    *  will probably depend on saved_variable_list being mutable.
    *  NOTE: this value matters only if is_traceable() returns false. */
   public native @Cast("bool") boolean passes_state_transparently();
+
+  // see [Note: Compiled Autograd]
+  // Used by compiled autograd to
+  //   1) Extract tensors/symint args
+  //   2) Collect node information for specialization and caching
+  // Implementations in subclasses should call args.collect() with all node
+  // attrs. These functions are only called durring backward.
+  public native void compiled_args(@ByRef CompiledNodeArgs args);
+
+  // Used by compiled autograd to call apply() with different saved tensors
+  // Implementations should call saved.before() on all attrs, then apply(), then
+  // saved.after() on all attrs in the same order.
+  public native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector apply_with_saved(
+        @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector inputs,
+        @ByRef SwapSavedVariables saved);
 }

@@ -45,6 +45,7 @@ public class FuncTorchTLSBase extends Pointer {
   public native @UniquePtr FuncTorchTLSBase deepcopy();
 
   public native @Cast("int64_t") long checkSupportsSingleLevelAutogradFunction();
+  public native void checkSupportsCppAutogradFunction();
   public native void checkSupportsInplaceRequiresGrad();
   public native void checkSupportsRetainGrad();
 }

@@ -194,7 +194,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "cpython/fileutils.h",
             },
             link = "python3.12@.1.0!",
-            preload = {"ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
+            preload = {"ffi@.8", "ffi@.7", "ffi@.6", "ffi@.5", "libcrypto-1_1", "libssl-1_1"/*, "sqlite3", "tcl86t", "tk86t"*/},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),

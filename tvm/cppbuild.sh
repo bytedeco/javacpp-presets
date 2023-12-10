@@ -12,7 +12,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     GPU_FLAGS="-DUSE_CUDA=ON -DUSE_CUDNN=ON -DUSE_CUBLAS=ON"
 fi
 
-TVM_VERSION=0.13.0
+TVM_VERSION=0.14.0
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -23,7 +23,6 @@ OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
 SCIPY_PATH="$INSTALL_PATH/../../../scipy/cppbuild/$PLATFORM/"
 LLVM_PATH="$INSTALL_PATH/../../../llvm/cppbuild/$PLATFORM/"
-MKL_PATH="$INSTALL_PATH/../../../mkl/cppbuild/$PLATFORM/"
 MKLDNN_PATH="$INSTALL_PATH/../../../dnnl/cppbuild/$PLATFORM/"
 OPENCL_PATH="$INSTALL_PATH/../../../opencl/cppbuild/$PLATFORM/"
 
@@ -41,8 +40,6 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             SCIPY_PATH="$P"
         elif [[ -f "$P/include/llvm-c/Core.h" ]]; then
             LLVM_PATH="$P"
-        elif [[ -f "$P/include/mkl.h" ]]; then
-            MKL_PATH="$P"
         elif [[ -f "$P/include/dnnl.h" ]]; then
             MKLDNN_PATH="$P"
         elif [[ -f "$P/include/CL/cl.h" ]]; then
@@ -57,7 +54,6 @@ OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 SCIPY_PATH="${SCIPY_PATH//\\//}"
 LLVM_PATH="${LLVM_PATH//\\//}"
-MKL_PATH="${MKL_PATH//\\//}"
 MKLDNN_PATH="${MKLDNN_PATH//\\//}"
 OPENCL_PATH="${OPENCL_PATH//\\//}"
 
@@ -86,8 +82,9 @@ sedinplace 's/llvm::None/std::nullopt/g' src/target/llvm/codegen_llvm.cc
 #sedinplace 's/-Werror//g' src/runtime/crt/Makefile
 sedinplace '/numpy/d' python/setup.py
 sedinplace '/scipy/d' python/setup.py
-sedinplace '/candidate_path/d' python/setup.py
-sedinplace '/dir == "3rdparty"/d' python/setup.py
+#sedinplace '/candidate_path/d' python/setup.py
+#sedinplace '/dir == "3rdparty"/d' python/setup.py
+sedinplace 's/# Add standalone_crt, if present/return libs, version/g' python/setup.py
 sedinplace '/find_library/a\
 include_directories(SYSTEM ${USE_DNNL}/include)\
 ' cmake/modules/contrib/DNNL.cmake
@@ -147,11 +144,11 @@ mkdir -p "$PYTHON_INSTALL_PATH"
 
 export CFLAGS="-I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/"
 export PYTHONNOUSERSITE=1
-$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1
+$PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 cython==0.29.35
 
 case $PLATFORM in
     linux-x86_64)
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY=$MKL_PATH/lib/libiomp5.so -DCMAKE_C_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_BLAS=openblas -DCMAKE_PREFIX_PATH=$OPENBLAS_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DCMAKE_C_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/,-rpath,$ORIGIN/../../' .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -160,11 +157,7 @@ case $PLATFORM in
         cd ..
         ;;
     macosx-x86_64)
-        mkdir -p ../lib
-        cp /usr/local/lib/libomp.dylib ../lib/libiomp5.dylib
-        chmod +w ../lib/libiomp5.dylib
-        install_name_tool -id @rpath/libiomp5.dylib ../lib/libiomp5.dylib
-        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOpenMP_C_FLAGS="-Xclang -fopenmp" -DOpenMP_CXX_FLAGS="-Xclang -fopenmp" -DCMAKE_C_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" -DCMAKE_CXX_FLAGS="-I/usr/local/include -L$INSTALL_PATH/lib -liomp5" .
+        $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_BLAS=openblas -DCMAKE_PREFIX_PATH=$OPENBLAS_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH -DUSE_MICRO=ON $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH .
         make -j $MAKEJ
         make install/strip
         cd python
@@ -176,7 +169,7 @@ case $PLATFORM in
     windows-x86_64)
         export CC="cl.exe"
         export CXX="cl.exe"
-        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_MKL=$MKL_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH -DUSE_OPENMP=intel -DOMP_LIBRARY= .
+        $CMAKE -G "Ninja" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_BUILD_TYPE=Release -DUSE_LIBBACKTRACE=OFF -DUSE_BLAS=openblas -DCMAKE_PREFIX_PATH=$OPENBLAS_PATH -DUSE_LLVM=$LLVM_PATH/bin/llvm-config -DUSE_MKLDNN=$MKLDNN_PATH -DCMAKE_LIBRARY_PATH=$MKLDNN_PATH/lib -DUSE_DNNL_CODEGEN=ON -DUSE_DNNL=$MKLDNN_PATH $GPU_FLAGS -DUSE_OPENCL=$OPENCL_PATH .
         ninja -j $MAKEJ
         ninja install
         cd python
@@ -195,7 +188,7 @@ cp -a 3rdparty/dlpack/include/dlpack 3rdparty/dmlc-core/include/dmlc ../include
 
 # Adjust the directory structure a bit to facilitate packaging in JAR file
 mkdir -p ../python
-export MODULES=(attr cloudpickle decorator psutil synr typed_ast tornado typing_extensions tvm)
+export MODULES=(attr cloudpickle decorator ml_dtypes psutil synr typed_ast tornado typing_extensions tvm)
 for MODULE in ${MODULES[@]}; do
     mkdir -p ../python/$MODULE.egg-info
     cp -r $PYTHON_INSTALL_PATH/$MODULE*/$MODULE* ../python/ || true

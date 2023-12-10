@@ -12,7 +12,7 @@ export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export MAX_JOBS=$MAKEJ
 
-export ONNX=1.14.1
+export ONNX=1.15.0
 export PROTO=3.20.3
 export PYBIND=2.11.0
 
@@ -105,7 +105,7 @@ ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 # work around issue in Xcode's version of Clang, options unsupported by Ninja, and test requirements
 sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 sedinplace 's/if WINDOWS:/if False:/g' setup.py
-sedinplace '/if platform.architecture/{N;N;N;d;}' setup.py
+sedinplace '/if platform.architecture/{N;N;N;N;d;}' setup.py
 sedinplace "/setup_requires.append('pytest-runner')/d" setup.py
 export CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF -DProtobuf_USE_STATIC_LIBS=ON -DONNX_USE_LITE_PROTO=ON"
 $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH setuptools==67.6.1 protobuf==$PROTO

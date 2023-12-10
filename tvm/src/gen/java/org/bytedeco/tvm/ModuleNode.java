@@ -14,7 +14,8 @@ import org.bytedeco.dnnl.*;
 import static org.bytedeco.dnnl.global.dnnl.*;
 import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
-import static org.bytedeco.mkl.global.mkl_rt.*;
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.tvm.global.tvm_runtime.*;
 
@@ -136,6 +137,9 @@ public class ModuleNode extends TVMObject {
 
   /** \brief Returns true if this module is 'DSO exportable'. */
   public native @Cast("bool") boolean IsDSOExportable();
+
+  /** \brief Returns true if this module is 'Binary Serializable'. */
+  public native @Cast("bool") boolean IsBinarySerializable();
 
   /**
    * \brief Returns true if this module has a definition for a function of \p name. If

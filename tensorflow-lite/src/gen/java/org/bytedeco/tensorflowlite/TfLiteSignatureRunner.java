@@ -8,10 +8,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflowlite.global.tensorflowlite.*;
 
-// #endif  // __cplusplus
-
-// --------------------------------------------------------------------------
-// Opaque types used by the C API.
 
 /** TfLiteSignatureRunner is used to run inference on a signature.
  * 
