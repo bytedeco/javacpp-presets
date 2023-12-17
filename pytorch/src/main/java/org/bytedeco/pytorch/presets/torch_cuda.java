@@ -104,6 +104,9 @@ public class torch_cuda implements LoadEnabled, InfoMapper {
             .put(new Info("std::vector<c10::cuda::CUDAKernelLaunchInfo>").pointerTypes("CUDAKernelLaunchInfoVector").define())
             .put(new Info("const std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>", "std::vector<c10::cuda::CUDACachingAllocator::TraceEntry>").pointerTypes("TraceEntryVector").define())
 
+            //// std::array
+            .put(new Info("std::array<c10::cuda::CUDACachingAllocator::Stat,3>", "c10::cuda::CUDACachingAllocator::StatArray").cast().pointerTypes("Stat"))
+
             //// Function pointers
             // Function pointer returning shared_ptr don't compile on windows
             // "D:\a\javacpp-presets\javacpp-presets\pytorch\target\native\org\bytedeco\pytorch\windows-x86_64\jnitorch.cpp(98904): error C2526: 'JavaCPP_org_bytedeco_pytorch_functions_GatheredContextSupplier_allocate_callback': C linkage function cannot return C++ class 'std::shared_ptr<c10::GatheredContext>'"
