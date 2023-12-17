@@ -43,10 +43,10 @@ import org.bytedeco.javacpp.tools.Logger;
                "synchapi.h", "interlockedapi.h", "processthreadsapi.h", "sysinfoapi.h", "memoryapi.h", "threadpoollegacyapiset.h",
                "threadpoolapiset.h", /*"bemapiset.h",*/ "jobapi.h", "wow64apiset.h", "libloaderapi.h", "securitybaseapi.h",
                "namespaceapi.h", "systemtopologyapi.h", "processtopologyapi.h", "securityappcontainer.h", "realtimeapiset.h",
-               "WinBase.h", "timezoneapi.h", "Psapi.h", "TlHelp32.h"},
+               "WinBase.h", "timezoneapi.h", "Psapi.h", "TlHelp32.h", "mmsyscom.h", "timeapi.h"},
     includepath = {"C:/Program Files (x86)/Windows Kits/8.1/Include/shared/",
                    "C:/Program Files (x86)/Windows Kits/8.1/Include/um/"},
-    link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi"},
+    link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi", "winmm"},
     linkpath = "C:/Program Files (x86)/Windows Kits/8.1/Lib/winv6.3/um/x86/"),
 @Platform(value = "windows-x86_64",
     linkpath = "C:/Program Files (x86)/Windows Kits/8.1/Lib/winv6.3/um/x64/")},
@@ -235,6 +235,10 @@ public class windows implements BuildEnabled, InfoMapper {
                .put(new Info("_mm_prefetch", "GUID_AUDIO_PLAYBACK", "GUID_CS_BATTERY_SAVER_ACTION", "GUID_CS_BATTERY_SAVER_THRESHOLD",
                              "GUID_CS_BATTERY_SAVER_TIMEOUT", "GUID_IDLE_RESILIENCY_PLATFORM_STATE", "GUID_VIDEO_FULLSCREEN_PLAYBACK",
                              "LookupAccountSidLocalA", "LookupAccountSidLocalW", "LookupAccountNameLocalA", "LookupAccountNameLocalW",
-                             "WinMain", "wWinMain").skip());
+                             "WinMain", "wWinMain").skip())
+
+               .put(new Info("MMRESULT").cppTypes("UINT").translate(false))
+               .put(new Info("WINMMAPI").cppTypes().annotations())
+               .put(new Info("HDRVR").cast().valueTypes("Pointer"));
     }
 }
