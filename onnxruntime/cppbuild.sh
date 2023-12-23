@@ -87,10 +87,10 @@ sedinplace 's/-fvisibility=hidden//g' cmake/CMakeLists.txt cmake/adjust_global_c
 sedinplace 's:/Yucuda_pch.h /FIcuda_pch.h::g' cmake/onnxruntime_providers.cmake
 sedinplace 's/${PROJECT_SOURCE_DIR}\/external\/cub//g' cmake/onnxruntime_providers.cmake
 sedinplace 's/ONNXRUNTIME_PROVIDERS_SHARED)/ONNXRUNTIME_PROVIDERS_SHARED onnxruntime_providers_shared)/g' cmake/onnxruntime_providers.cmake
-sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.3.2)/g' cmake/external/dnnl.cmake
+sedinplace 's/DNNL_TAG v.*)/DNNL_TAG v3.3.3)/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.1.dylib/DNNL_SHARED_LIB libdnnl.2.dylib/g' cmake/external/dnnl.cmake
 sedinplace 's/DNNL_SHARED_LIB libdnnl.so.1/DNNL_SHARED_LIB libdnnl.so.2/g' cmake/external/dnnl.cmake
-sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF/g' cmake/external/dnnl.cmake
+sedinplace 's/ CMAKE_ARGS/CMAKE_ARGS -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF -DDNNL_CPU_RUNTIME=SEQ/g' cmake/external/dnnl.cmake
 sedinplace 's#GIT_REPOSITORY ${DNNL_URL}#URL https://github.com/oneapi-src/oneDNN/archive/refs/tags/${DNNL_TAG}.tar.gz#g' cmake/external/dnnl.cmake
 sedinplace 's/cudnnSetRNNDescriptor(/cudnnSetRNNDescriptor_v6(/g' onnxruntime/core/providers/cuda/rnn/cudnn_rnn_base.h
 sedinplace 's/HOST_NAME_MAX/sysconf(_SC_HOST_NAME_MAX)/g' onnxruntime/core/providers/cuda/cuda_call.cc

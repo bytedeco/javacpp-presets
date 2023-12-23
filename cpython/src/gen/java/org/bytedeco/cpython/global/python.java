@@ -144,12 +144,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        12;
-public static final int PY_MICRO_VERSION =        0;
+public static final int PY_MICRO_VERSION =        1;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.12.0";
+public static final String PY_VERSION =              "3.12.1";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -1155,6 +1155,9 @@ public static final int HAVE_RENAMEAT = 1;
 /* Define if you can turn off readline's signal handling. */
 /* #undef HAVE_RL_CATCH_SIGNAL */
 
+/* Define if readline supports rl_compdisp_func_t */
+/* #undef HAVE_RL_COMPDISP_FUNC_T */
+
 /* Define if you have readline 2.2 */
 /* #undef HAVE_RL_COMPLETION_APPEND_CHARACTER */
 
@@ -1783,6 +1786,9 @@ public static final int Py_ENABLE_SHARED = 1;
 
 /* Define if you want to enable internal statistics gathering. */
 /* #undef Py_STATS */
+
+/* The version of SunOS/Solaris as reported by `uname -r' without the dot. */
+/* #undef Py_SUNOS_VERSION */
 
 /* Define if you want to enable tracing references for debugging purpose */
 /* #undef Py_TRACE_REFS */
@@ -8012,6 +8018,8 @@ public static final int
 
 /* Long (arbitrary precision) integer object interface */
 
+// PyLong_Type is declared by object.h
+
 // #define PyLong_Check(op)
 //         PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LONG_SUBCLASS)
 // #define PyLong_CheckExact(op) Py_IS_TYPE((op), &PyLong_Type)
@@ -8210,6 +8218,9 @@ public static final int _PyLong_NON_SIZE_BITS = 3;
 // #define Py_BOOLOBJECT_H
 // #ifdef __cplusplus
 // #endif
+
+
+// PyBool_Type is declared by object.h
 
 // #define PyBool_Check(x) Py_IS_TYPE((x), &PyBool_Type)
 
@@ -9166,13 +9177,18 @@ public static native @ByRef PyTypeObject PyModuleDef_Type(); public static nativ
 
 public static final int Py_mod_create = 1;
 public static final int Py_mod_exec = 2;
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030c0000
 public static final int Py_mod_multiple_interpreters = 3;
+// #endif
 
 // #ifndef Py_LIMITED_API
 public static final int _Py_mod_LAST_SLOT = 3;
 // #endif
 
+// #endif /* New in 3.5 */
+
 /* for Py_mod_multiple_interpreters: */
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030c0000
 public static native @MemberGetter Pointer Py_MOD_MULTIPLE_INTERPRETERS_NOT_SUPPORTED();
 public static final Pointer Py_MOD_MULTIPLE_INTERPRETERS_NOT_SUPPORTED = Py_MOD_MULTIPLE_INTERPRETERS_NOT_SUPPORTED();
 public static native @MemberGetter Pointer Py_MOD_MULTIPLE_INTERPRETERS_SUPPORTED();
@@ -13830,9 +13846,6 @@ public static final int Py_single_input = 256;
 public static final int Py_file_input = 257;
 public static final int Py_eval_input = 258;
 public static final int Py_func_type_input = 345;
-
-/* This doesn't need to match anything */
-public static final int Py_fstring_input = 800;
 
 // #ifndef Py_LIMITED_API
 // #  define Py_CPYTHON_COMPILE_H

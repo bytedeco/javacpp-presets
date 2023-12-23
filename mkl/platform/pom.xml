@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl-platform</artifactId>
-  <version>2023.1-${project.parent.version}</version>
+  <version>2024.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MKL</name>
 
   <properties>
@@ -42,12 +42,12 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
-      <version>${project.version}</version>
-      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>${project.groupId}</groupId>-->
+<!--      <artifactId>${javacpp.moduleId}</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--      <classifier>${javacpp.platform.macosx-x86_64}</classifier>-->
+<!--    </dependency>-->
 <!--    <dependency>-->
 <!--      <groupId>${project.groupId}</groupId>-->
 <!--      <artifactId>${javacpp.moduleId}</artifactId>-->
@@ -119,7 +119,7 @@
                     module org.bytedeco.${javacpp.moduleId}.platform {
 //                      requires static org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.linux.x86_64;
-                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
+//                      requires static org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
 //                      requires static org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires static org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
