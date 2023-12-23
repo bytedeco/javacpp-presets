@@ -19,7 +19,7 @@ case $PLATFORM in
             exit 1
         fi
         cp -a /opt/intel/oneapi/mkl/latest/include/* include/
-        cp -a /opt/intel/oneapi/mkl/latest/lib/ia32/* /opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/lib32/* /opt/intel/oneapi/compiler/latest/lib32/* lib/
         ;;
     linux-x86_64)
         if [[ ! -d "/opt/intel/oneapi/mkl/" ]]; then
@@ -27,7 +27,7 @@ case $PLATFORM in
             exit 1
         fi
         cp -a /opt/intel/oneapi/mkl/latest/include/* include/
-        cp -a /opt/intel/oneapi/mkl/latest/lib/intel64/* /opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/lib/* /opt/intel/oneapi/compiler/latest/lib/* lib/
         ;;
     macosx-*)
         if [[ ! -d "/opt/intel/oneapi/mkl/" ]]; then
@@ -35,7 +35,7 @@ case $PLATFORM in
             exit 1
         fi
         cp -a /opt/intel/oneapi/mkl/latest/include/* include/
-        cp -a /opt/intel/oneapi/mkl/latest/lib/* /opt/intel/oneapi/compiler/latest/mac/compiler/lib/* lib/
+        cp -a /opt/intel/oneapi/mkl/latest/lib/* /opt/intel/oneapi/compiler/latest/lib/* lib/
         ;;
     windows-x86)
         if [[ ! -d "/C/Program Files (x86)/Intel/oneAPI/" ]]; then
@@ -43,9 +43,9 @@ case $PLATFORM in
             exit 1
         fi
         cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/include/* include/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib/ia32/* lib/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/redist/ia32/* bin/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/windows/redist/ia32_win/compiler/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib32/* lib/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/bin32/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/bin32/* bin/
         ;;
     windows-x86_64)
         if [[ ! -d "/C/Program Files (x86)/Intel/oneAPI/" ]]; then
@@ -53,11 +53,13 @@ case $PLATFORM in
             exit 1
         fi
         cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/include/* include/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib/intel64/* lib/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/redist/intel64/* bin/
-        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/windows/redist/intel64_win/compiler/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/lib/* lib/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/mkl/latest/bin/* bin/
+        cp -a /C/Program\ Files\ \(x86\)/Intel/oneAPI/compiler/latest/bin/* bin/
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+rm include/ia32 include/intel64 lib/ia32 lib/intel64 lib/locale bin/ia32 bin/intel64 bin/locale | true

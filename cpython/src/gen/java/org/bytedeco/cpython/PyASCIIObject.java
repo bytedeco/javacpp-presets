@@ -124,6 +124,8 @@ public class PyASCIIObject extends Pointer {
            and the kind is PyUnicode_1BYTE_KIND. If ascii is set and compact is
            set, use the PyASCIIObject structure. */
         @Name("state.ascii") public native @Cast("unsigned int") @NoOffset int state_ascii(); public native PyASCIIObject state_ascii(int setter);
+        /* The object is statically allocated. */
+        @Name("state.statically_allocated") public native @Cast("unsigned int") @NoOffset int state_statically_allocated(); public native PyASCIIObject state_statically_allocated(int setter);
         /* Padding to ensure that PyUnicode_DATA() is always aligned to
            4 bytes (see issue #19537 on m68k). */
         

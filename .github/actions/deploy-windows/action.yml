@@ -15,6 +15,8 @@ runs:
         C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-nasm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL2 mingw-w64-i686-SDL2 mingw-w64-x86_64-ragel"
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\usr\bin;%PATH%"
 
+        C:\msys64\usr\bin\bash -lc "pacman -Q"
+
         echo Installing Windows SDK 8.1
         curl -Lo sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
         sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
@@ -148,10 +150,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="mkl" (
           echo Installing MKL
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e0195cbc-2c9b-4489-9542-c1447e70df30/w_onemkl_p_2023.1.0.46356_offline.exe
-          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c961e083-5685-4f0b-ada5-c6cf16f561dd/w_BaseKit_32bit_p_2023.1.0.46402_offline.exe
-          w_onemkl_p_2023.1.0.46356_offline.exe -s -a -s --eula accept
-          w_BaseKit_32bit_p_2023.1.0.46402_offline.exe -s -a -s --eula accept
+          curl -LO https://registrationcenter-download.intel.com/akdlm/IRC_NAS/b5a4ff98-2c98-4b28-87f7-32082cac359e/w_onemkl_p_2024.0.0.49672_offline.exe
+          w_onemkl_p_2024.0.0.49672_offline.exe -s -a -s --eula accept
         )
 
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86" if "%CI_DEPLOY_MODULE%"=="flycapture" (
