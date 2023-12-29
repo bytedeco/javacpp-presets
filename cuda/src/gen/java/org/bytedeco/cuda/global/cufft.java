@@ -91,10 +91,10 @@ public class cufft extends org.bytedeco.cuda.presets.cufft {
 
 public static final int CUFFT_VER_MAJOR = 11;
 public static final int CUFFT_VER_MINOR = 0;
-public static final int CUFFT_VER_PATCH = 11;
-public static final int CUFFT_VER_BUILD = 19;
+public static final int CUFFT_VER_PATCH = 12;
+public static final int CUFFT_VER_BUILD = 1;
 
-public static final int CUFFT_VERSION = 11011;
+public static final int CUFFT_VERSION = 11012;
 
 // CUFFT API function return values
 /** enum cufftResult */
