@@ -177,6 +177,22 @@ public class CameraControl extends Buffer {
     public native @ByRef CameraControl setAutoExposureCompensation(int compensation);
 
     /**
+     * Set a command to specify the maximum exposure time limit for auto-exposure. By default
+     * the AE algorithm prioritizes increasing exposure over ISO, up to around frame-time
+     * (subject to further limits imposed by anti-banding)
+     * @param maxExposureTimeUs Maximum exposure time in microseconds
+     */
+    public native @ByRef CameraControl setAutoExposureLimit(@Cast("uint32_t") int maxExposureTimeUs);
+
+    /**
+     * Set a command to specify the maximum exposure time limit for auto-exposure. By default
+     * the AE algorithm prioritizes increasing exposure over ISO, up to around frame-time
+     * (subject to further limits imposed by anti-banding)
+     * @param maxExposureTime Maximum exposure time
+     */
+    public native @ByRef CameraControl setAutoExposureLimit(@ByVal @Cast("std::chrono::microseconds*") Pointer maxExposureTime);
+
+    /**
      * Set a command to specify anti-banding mode. Anti-banding / anti-flicker
      * works in auto-exposure mode, by controlling the exposure time to be applied
      * in multiples of half the mains period, for example in multiple of 10ms
@@ -202,7 +218,7 @@ public class CameraControl extends Buffer {
      * @param exposureTime Exposure time
      * @param sensitivityIso Sensitivity as ISO value, usual range 100..1600
      */
-    public native void setManualExposure(@ByVal @Cast("std::chrono::microseconds*") Pointer exposureTime, @Cast("uint32_t") int sensitivityIso);
+    public native @ByRef CameraControl setManualExposure(@ByVal @Cast("std::chrono::microseconds*") Pointer exposureTime, @Cast("uint32_t") int sensitivityIso);
 
     // White Balance
     /**
@@ -274,6 +290,20 @@ public class CameraControl extends Buffer {
      */
     public native @ByRef CameraControl setEffectMode(RawCameraControl.EffectMode mode);
     public native @ByRef CameraControl setEffectMode(@Cast("dai::RawCameraControl::EffectMode") byte mode);
+
+    /**
+     * Set a command to specify control mode
+     * @param mode Control mode
+     */
+    public native @ByRef CameraControl setControlMode(RawCameraControl.ControlMode mode);
+    public native @ByRef CameraControl setControlMode(@Cast("dai::RawCameraControl::ControlMode") byte mode);
+
+    /**
+     * Set a command to specify capture intent mode
+     * @param mode Capture intent mode
+     */
+    public native @ByRef CameraControl setCaptureIntent(RawCameraControl.CaptureIntent mode);
+    public native @ByRef CameraControl setCaptureIntent(@Cast("dai::RawCameraControl::CaptureIntent") byte mode);
 
     // Functions to retrieve properties
     /**

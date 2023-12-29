@@ -144,7 +144,7 @@ public class torch implements LoadEnabled, InfoMapper {
         if (platform.startsWith("windows")) {
             preloads.add(i++, "zlibwapi");
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "nvJitLink", "cusparse", "cudnn", "nccl", "nvrtc", "myelin", "nvinfer",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "nvJitLink", "cusparse", "cusolver", "cudnn", "nccl", "nvrtc", "myelin", "nvinfer",
             "cudnn_ops_infer", "cudnn_ops_train", "cudnn_adv_infer", "cudnn_adv_train", "cudnn_cnn_infer", "cudnn_cnn_train"};
         for (String lib : libs) {
             if (platform.startsWith("linux")) {
@@ -165,7 +165,7 @@ public class torch implements LoadEnabled, InfoMapper {
                     : lib.equals("curand") ? "64_10"
                     : lib.equals("cusolver") ? "64_11"
                     : lib.equals("nvrtc") ? "64_120_0"
-                    : lib.equals("nvJitLink") ? "64_120_0"
+                    : lib.equals("nvJitLink") ? "_120_0"
                     : "64_12";
             } else {
                 continue; // no CUDA

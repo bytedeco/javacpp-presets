@@ -554,10 +554,13 @@ public class RawCameraControl extends RawBuffer {
     public native AutoWhiteBalanceMode awbMode(); public native RawCameraControl awbMode(AutoWhiteBalanceMode setter);
     public native SceneMode sceneMode(); public native RawCameraControl sceneMode(SceneMode setter);
     public native AntiBandingMode antiBandingMode(); public native RawCameraControl antiBandingMode(AntiBandingMode setter);
+    public native CaptureIntent captureIntent(); public native RawCameraControl captureIntent(CaptureIntent setter);
+    public native ControlMode controlMode(); public native RawCameraControl controlMode(ControlMode setter);
     public native EffectMode effectMode(); public native RawCameraControl effectMode(EffectMode setter);
     public native FrameSyncMode frameSyncMode(); public native RawCameraControl frameSyncMode(FrameSyncMode setter);
     public native @ByRef StrobeConfig strobeConfig(); public native RawCameraControl strobeConfig(StrobeConfig setter);
     public native @ByRef StrobeTimings strobeTimings(); public native RawCameraControl strobeTimings(StrobeTimings setter);
+    public native @Cast("uint32_t") int aeMaxExposureTimeUs(); public native RawCameraControl aeMaxExposureTimeUs(int setter);
     public native @Cast("bool") boolean aeLockMode(); public native RawCameraControl aeLockMode(boolean setter);
     public native @Cast("bool") boolean awbLockMode(); public native RawCameraControl awbLockMode(boolean setter);
     public native byte expCompensation(); public native RawCameraControl expCompensation(byte setter);  //  -9 ..  9
@@ -583,4 +586,6 @@ public class RawCameraControl extends RawBuffer {
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector BytePointer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntPointer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector ByteBuffer metadata, @ByRef @Cast("dai::DatatypeEnum*") IntBuffer datatype);
     public native @Override void serialize(@Cast("std::uint8_t*") @StdVector byte[] metadata, @ByRef @Cast("dai::DatatypeEnum*") int[] datatype);
+
+    public native @Override DatatypeEnum getType();
 }

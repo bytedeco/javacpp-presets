@@ -1122,7 +1122,7 @@ public static final int NVML_SUPPORTED_VGPU_SCHEDULER_POLICY_COUNT = 3;
 
 public static final int NVML_SCHEDULER_SW_MAX_LOG_ENTRIES = 200;
 
-public static final int NVML_VGPU_SCHEDULER_ARR_UNDEFINED = 0;
+public static final int NVML_VGPU_SCHEDULER_ARR_DEFAULT =   0;
 public static final int NVML_VGPU_SCHEDULER_ARR_DISABLE =   1;
 public static final int NVML_VGPU_SCHEDULER_ARR_ENABLE =    2;
 // Targeting ../nvml/nvmlVgpuSchedulerParams_t.java

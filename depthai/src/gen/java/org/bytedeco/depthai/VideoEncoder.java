@@ -40,9 +40,14 @@ public class VideoEncoder extends VideoEncoderPropertiesNode {
     @MemberGetter public native @ByRef Input input();
 
     /**
-     * Outputs ImgFrame message that carries BITSTREAM encoded (MJPEG, H264 or H265) frame data.
+     * Outputs ImgFrame message that carries BITSTREAM encoded (MJPEG, H264 or H265) frame data. Mutually exclusive with out.
      */
     @MemberGetter public native @ByRef Output bitstream();
+
+    /**
+     * Outputs EncodedFrame message that carries encoded (MJPEG, H264 or H265) frame data. Mutually exclusive with bitstream.
+     */
+    @MemberGetter public native @ByRef Output out();
 
     // Sets default options for a specified size and profile
     /**

@@ -33,8 +33,6 @@ import static org.bytedeco.depthai.global.depthai.*;
 @Namespace("dai") @NoOffset @Properties(inherit = org.bytedeco.depthai.presets.depthai.class)
 public class Path extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Path(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
     public Path(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
@@ -62,12 +60,8 @@ public class Path extends Pointer {
      *
      * @param source native-encoding character sequence; no conversion
      */
-    public Path(@StdString BytePointer source) { super((Pointer)null); allocate(source); }
-    @NoException private native void allocate(@StdString BytePointer source);
-    public Path(@StdString ByteBuffer source) { super((Pointer)null); allocate(source); }
-    @NoException private native void allocate(@StdString ByteBuffer source);
-    public Path(@StdString String source) { super((Pointer)null); allocate(source); }
-    @NoException private native void allocate(@StdString String source);
+    public Path(@Cast("dai::Path::string_type*") @ByRef(true) Pointer source) { super((Pointer)null); allocate(source); }
+    @NoException private native void allocate(@Cast("dai::Path::string_type*") @ByRef(true) Pointer source);
 
     /**
      * \brief Construct Path object from source.
@@ -89,6 +83,12 @@ public class Path extends Pointer {
      *
      * @param source utf-8 character sequence; converts to Windows utf-16
      */
+    public Path(@StdString BytePointer source) { super((Pointer)null); allocate(source); }
+    private native void allocate(@StdString BytePointer source);
+    public Path(@StdString ByteBuffer source) { super((Pointer)null); allocate(source); }
+    private native void allocate(@StdString ByteBuffer source);
+    public Path(@StdString String source) { super((Pointer)null); allocate(source); }
+    private native void allocate(@StdString String source);
 
     /**
      * \brief Construct Path object from source.
@@ -139,14 +139,14 @@ public class Path extends Pointer {
      *
      * @return std::string of utf-8 on most OSs, std::wstring of utf-16 on Windows
      */
-    public native @Name("operator std::basic_string<dai::Path::value_type>") @StdString @NoException BytePointer asBytePointer();
+    public native @ByVal @Cast("dai::Path::string_type*") @Name("operator dai::Path::string_type") @NoException Pointer asPointer();
 
     /**
      * \brief Returns native-encoding string by const reference, suitable for use with OS APIs
      *
      * @return const std::string& of utf-8 on most OSs, const std::wstring& of utf-16 on Windows
      */
-    public native @StdString @Name("native") @NoException BytePointer _native();
+    public native @Cast("const dai::Path::string_type*") @ByRef @Name("native") @NoException Pointer _native();
 
     /**
      * \brief Observes if path is empty (contains no string/folders/filename)

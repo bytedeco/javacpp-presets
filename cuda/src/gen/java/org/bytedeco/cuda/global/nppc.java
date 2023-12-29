@@ -84,11 +84,11 @@ public static final int NPP_VER_MINOR = 2;
 /**
  * Patch version
  */
-public static final int NPP_VER_PATCH = 2;
+public static final int NPP_VER_PATCH = 3;
 /**
  * Build version
  */
-public static final int NPP_VER_BUILD = 32;
+public static final int NPP_VER_BUILD = 2;
 
 /**
  * Full version

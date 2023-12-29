@@ -77,6 +77,7 @@ public class Pipeline extends Pointer {
     public native @Name("create<dai::node::Camera>") @SharedPtr Camera createCamera();
     public native @Name("create<dai::node::ColorCamera>") @SharedPtr ColorCamera createColorCamera();
     public native @Name("create<dai::node::ImageManip>") @SharedPtr ImageManip createImageManip();
+    public native @Name("create<dai::node::MessageDemux>") @SharedPtr MessageDemux createMessageDemux();
     public native @Name("create<dai::node::MonoCamera>") @SharedPtr MonoCamera createMonoCamera();
     public native @Name("create<dai::node::NeuralNetwork>") @SharedPtr NeuralNetwork createNeuralNetwork();
     public native @Name("create<dai::node::DetectionParser>") @SharedPtr DetectionParser createDetectionParser();
@@ -88,6 +89,7 @@ public class Pipeline extends Pointer {
     public native @Name("create<dai::node::YoloSpatialDetectionNetwork>") @SharedPtr YoloSpatialDetectionNetwork createYoloSpatialDetectionNetwork();
     public native @Name("create<dai::node::SpatialLocationCalculator>") @SharedPtr SpatialLocationCalculator createSpatialLocationCalculator();
     public native @Name("create<dai::node::StereoDepth>") @SharedPtr StereoDepth createStereoDepth();
+    public native @Name("create<dai::node::Sync>") @SharedPtr Sync createSync();
     public native @Name("create<dai::node::SystemLogger>") @SharedPtr SystemLogger createSystemLogger();
     public native @Name("create<dai::node::ToF>") @SharedPtr ToF createToF();
     public native @Name("create<dai::node::VideoEncoder>") @SharedPtr VideoEncoder createVideoEncoder();

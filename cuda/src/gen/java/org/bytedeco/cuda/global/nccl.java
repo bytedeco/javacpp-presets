@@ -33,11 +33,11 @@ public class nccl extends org.bytedeco.cuda.presets.nccl {
 // #endif
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 18;
-public static final int NCCL_PATCH = 5;
+public static final int NCCL_MINOR = 19;
+public static final int NCCL_PATCH = 3;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 21805;
+public static final int NCCL_VERSION_CODE = 21903;
 // #define NCCL_VERSION(X,Y,Z) (((X) <= 2 && (Y) <= 8) ? (X) * 1000 + (Y) * 100 + (Z) : (X) * 10000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -86,6 +86,17 @@ public static final int NCCL_SPLIT_NOCOLOR = -1;
 //   NCCL_CONFIG_UNDEF_PTR,                    /* netName */
 //   NCCL_CONFIG_UNDEF_INT                     /* splitShare */
 // }
+
+/* NCCL malloc and free function for all types of NCCL optimizations
+ * (e.g. user buffer registration). The actual allocated size might
+ * be larger than requested due to granularity requirement. */
+public static native @Cast("ncclResult_t") int ncclMemAlloc(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size);
+public static native @Cast("ncclResult_t") int ncclMemAlloc(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size);
+public static native @Cast("ncclResult_t") int pncclMemAlloc(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size);
+public static native @Cast("ncclResult_t") int pncclMemAlloc(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size);
+
+public static native @Cast("ncclResult_t") int ncclMemFree(Pointer ptr);
+public static native @Cast("ncclResult_t") int pncclMemFree(Pointer ptr);
 
 /* Return the NCCL_VERSION_CODE of the NCCL library in the supplied integer.
  * This integer is coded with the MAJOR, MINOR and PATCH level of the
@@ -467,6 +478,16 @@ public static native @Cast("ncclResult_t") int pncclGroupStart();
  */
 public static native @Cast("ncclResult_t") int ncclGroupEnd();
 public static native @Cast("ncclResult_t") int pncclGroupEnd();
+
+/* Register CUDA buffer for zero-copy operation */
+public static native @Cast("ncclResult_t") int ncclCommRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("void**") PointerPointer handle);
+public static native @Cast("ncclResult_t") int ncclCommRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("void**") @ByPtrPtr Pointer handle);
+public static native @Cast("ncclResult_t") int pncclCommRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("void**") PointerPointer handle);
+public static native @Cast("ncclResult_t") int pncclCommRegister(ncclComm comm, Pointer buff, @Cast("size_t") long size, @Cast("void**") @ByPtrPtr Pointer handle);
+
+/* Deregister CUDA buffer */
+public static native @Cast("ncclResult_t") int ncclCommDeregister(ncclComm comm, Pointer handle);
+public static native @Cast("ncclResult_t") int pncclCommDeregister(ncclComm comm, Pointer handle);
 
 // #ifdef __cplusplus // end extern "C"
 // #endif

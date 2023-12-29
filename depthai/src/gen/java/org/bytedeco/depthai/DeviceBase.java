@@ -414,7 +414,10 @@ public class DeviceBase extends Pointer {
      * @param config Config with which the device will be booted with
      * @param devInfo DeviceInfo which specifies which device to connect to
      * @param pathToCmd Path to custom device firmware
+     * @param dumpOnly If true only the minimal connection is established to retrieve the crash dump
      */
+    public DeviceBase(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd, @Cast("bool") boolean dumpOnly/*=false*/) { super((Pointer)null); allocate(config, devInfo, pathToCmd, dumpOnly); }
+    private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd, @Cast("bool") boolean dumpOnly/*=false*/);
     public DeviceBase(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(config, devInfo, pathToCmd); }
     private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd);
 
@@ -534,8 +537,8 @@ public class DeviceBase extends Pointer {
      * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
      * @return True on success, false if not found or other failure
      */
-    public native @Cast("bool") boolean setIrLaserDotProjectorBrightness(float mA, int mask/*=-1*/);
-    public native @Cast("bool") boolean setIrLaserDotProjectorBrightness(float mA);
+    public native @Cast("bool") @Deprecated boolean setIrLaserDotProjectorBrightness(float mA, int mask/*=-1*/);
+    public native @Cast("bool") @Deprecated boolean setIrLaserDotProjectorBrightness(float mA);
 
     /**
      * Sets the brightness of the IR Flood Light. Limits: up to 1500mA at 30% duty cycle.
@@ -547,8 +550,34 @@ public class DeviceBase extends Pointer {
      * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
      * @return True on success, false if not found or other failure
      */
-    public native @Cast("bool") boolean setIrFloodLightBrightness(float mA, int mask/*=-1*/);
-    public native @Cast("bool") boolean setIrFloodLightBrightness(float mA);
+    public native @Cast("bool") @Deprecated boolean setIrFloodLightBrightness(float mA, int mask/*=-1*/);
+    public native @Cast("bool") @Deprecated boolean setIrFloodLightBrightness(float mA);
+
+    /**
+     * Sets the intensity of the IR Laser Dot Projector. Limits: up to 765mA at 30% frame time duty cycle when exposure time is longer than 30% frame time.
+     * Otherwise, duty cycle is 100% of exposure time, with current increased up to max 1200mA to make up for shorter duty cycle.
+     * The duty cycle is controlled by {@code left} camera STROBE, aligned to start of exposure.
+     * The emitter is turned off by default
+     *
+     * @param intensity Intensity on range 0 to 1, that will determine brightness. 0 or negative to turn off
+     * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
+     * @return True on success, false if not found or other failure
+     */
+    public native @Cast("bool") boolean setIrLaserDotProjectorIntensity(float intensity, int mask/*=-1*/);
+    public native @Cast("bool") boolean setIrLaserDotProjectorIntensity(float intensity);
+
+    /**
+     * Sets the intensity of the IR Flood Light. Limits: Intensity is directly normalized to 0 - 1500mA current.
+     * The duty cycle is 30% when exposure time is longer than 30% frame time. Otherwise, duty cycle is 100% of exposure time.
+     * The duty cycle is controlled by the {@code left} camera STROBE, aligned to start of exposure.
+     * The emitter is turned off by default
+     *
+     * @param intensity Intensity on range 0 to 1, that will determine brightness, 0 or negative to turn off
+     * @param mask Optional mask to modify only Left (0x1) or Right (0x2) sides on OAK-D-Pro-W-DEV
+     * @return True on success, false if not found or other failure
+     */
+    public native @Cast("bool") boolean setIrFloodLightIntensity(float intensity, int mask/*=-1*/);
+    public native @Cast("bool") boolean setIrFloodLightIntensity(float intensity);
 
     /**
      * Retrieves detected IR laser/LED drivers.
@@ -613,6 +642,13 @@ public class DeviceBase extends Pointer {
      * @return Vector of connected cameras
      */
     public native @StdVector @Cast("dai::CameraBoardSocket*") IntPointer getConnectedCameras();
+
+    /**
+     * Get connection interfaces for device
+     *
+     * @return Vector of connection type
+     */
+    public native @StdVector @Cast("dai::ConnectionInterface*") IntPointer getConnectionInterfaces();
 
     /**
      * Get cameras that are connected to the device with their features/properties

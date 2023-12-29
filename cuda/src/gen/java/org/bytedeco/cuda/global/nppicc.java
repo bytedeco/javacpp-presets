@@ -11108,6 +11108,8 @@ public static native @Cast("NppStatus") int nppiNV12ToYUV420_8u_P2P3R(@Cast("con
  *  Forward gamma correction.
  * \{
  */
+
+// #ifndef NPP_PLUS
 /**
  * 3 channel 8-bit unsigned packed color not in place forward gamma correction.
  *
@@ -11274,12 +11276,17 @@ public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R(@Cast("Npp8u*co
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R(@Cast("Npp8u*const*") @ByPtrPtr ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiGammaFwd_8u_IP3R(@Cast("Npp8u*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 
+// #endif
+
 /** \} */
 
 /** \name GammaInv 
  *  Inverse gamma correction.
  * \{
  */
+
+// #ifndef NPP_PLUS
+
 /**
  * 3 channel 8-bit unsigned packed color not in place inverse gamma correction.
  *
@@ -11445,6 +11452,8 @@ public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R(@Cast("Npp8u*co
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R(@Cast("Npp8u*const*") @ByPtrPtr BytePointer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R(@Cast("Npp8u*const*") @ByPtrPtr ByteBuffer pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiGammaInv_8u_IP3R(@Cast("Npp8u*const*") @ByPtrPtr byte[] pSrcDst, int nSrcDstStep, @ByVal NppiSize oSizeROI);
+
+// #endif
 
 /** \} */
 

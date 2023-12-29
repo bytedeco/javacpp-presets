@@ -17669,7 +17669,7 @@ public static native @Cast("NppStatus") int nppiFilterGaussAdvanced_32f_AC4R(@Ca
  *
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize Source image width and height in pixels relative to pSrc.
+ * @param oSrcSize Full source image width and height in pixels.
  * @param oSrcOffset The pixel offset that pSrc points to relative to the origin of the source image. 
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
@@ -18101,7 +18101,7 @@ public static native @Cast("NppStatus") int nppiFilterGaussBorder_32f_AC4R(@Cast
  *
  * @param pSrc \ref source_image_pointer.
  * @param nSrcStep \ref source_image_line_step.
- * @param oSrcSize Source image width and height in pixels relative to pSrc.
+ * @param oSrcSize Full source image width and height in pixels.
  * @param oSrcOffset The pixel offset that pSrc points to relative to the origin of the source image. 
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.

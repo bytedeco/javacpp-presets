@@ -37,8 +37,8 @@ public class XLinkProf_t extends Pointer {
 
     public native float totalReadTime(); public native XLinkProf_t totalReadTime(float setter);
     public native float totalWriteTime(); public native XLinkProf_t totalWriteTime(float setter);
-    public native @Cast("unsigned long") long totalReadBytes(); public native XLinkProf_t totalReadBytes(long setter);
-    public native @Cast("unsigned long") long totalWriteBytes(); public native XLinkProf_t totalWriteBytes(long setter);
+    public native @Cast("uint64_t") long totalReadBytes(); public native XLinkProf_t totalReadBytes(long setter);
+    public native @Cast("uint64_t") long totalWriteBytes(); public native XLinkProf_t totalWriteBytes(long setter);
     public native @Cast("unsigned long") long totalBootCount(); public native XLinkProf_t totalBootCount(long setter);
     public native float totalBootTime(); public native XLinkProf_t totalBootTime(float setter);
 }

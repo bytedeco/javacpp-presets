@@ -71,108 +71,108 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
  */
 
 // #if !defined(CUSOLVER_COMMON_H_)
-//   #define CUSOLVER_COMMON_H_
+// #define CUSOLVER_COMMON_H_
 
-//   #include "library_types.h"
+// #include "library_types.h"
 
-//   #ifndef CUSOLVERAPI
-//     #ifdef _WIN32
-//       #define CUSOLVERAPI __stdcall
-//     #else
-//       #define CUSOLVERAPI
-//     #endif
-//   #endif
+// #ifndef CUSOLVERAPI
+// #ifdef _WIN32
+// #define CUSOLVERAPI __stdcall
+// #else
+// #define CUSOLVERAPI
+// #endif
+// #endif
 
-//   #if defined(_MSC_VER)
-//   #else
-//     #include <inttypes.h>
-//   #endif
+// #if defined(_MSC_VER)
+// #else
+// #include <inttypes.h>
+// #endif
 
-  public static final int CUSOLVER_VER_MAJOR = 11;
-  public static final int CUSOLVER_VER_MINOR = 5;
-  public static final int CUSOLVER_VER_PATCH = 3;
-  public static final int CUSOLVER_VER_BUILD = 52;
-  public static final int CUSOLVER_VERSION =                                                     
-      (CUSOLVER_VER_MAJOR * 1000 + CUSOLVER_VER_MINOR * 100 + CUSOLVER_VER_PATCH);
+public static final int CUSOLVER_VER_MAJOR = 11;
+public static final int CUSOLVER_VER_MINOR = 5;
+public static final int CUSOLVER_VER_PATCH = 4;
+public static final int CUSOLVER_VER_BUILD = 101;
+public static final int CUSOLVER_VERSION = 
+    (CUSOLVER_VER_MAJOR * 1000 + CUSOLVER_VER_MINOR * 100 + CUSOLVER_VER_PATCH);
 
-  /*
-   * disable this macro to proceed old API
-   */
-//   #define DISABLE_CUSOLVER_DEPRECATED
-
-//------------------------------------------------------------------------------
-
-//   #if !defined(_MSC_VER)
-//     #define CUSOLVER_CPP_VERSION __cplusplus
-//   #elif _MSC_FULL_VER >= 190024210 // Visual Studio 2015 Update 3
-//     #define CUSOLVER_CPP_VERSION _MSVC_LANG
-//   #else
-//     #define CUSOLVER_CPP_VERSION 0
-//   #endif
+/*
+ * disable this macro to proceed old API
+ */
+// #define DISABLE_CUSOLVER_DEPRECATED
 
 //------------------------------------------------------------------------------
 
-//   #if !defined(DISABLE_CUSOLVER_DEPRECATED)
+// #if !defined(_MSC_VER)
+// #define CUSOLVER_CPP_VERSION __cplusplus
+// #elif _MSC_FULL_VER >= 190024210  // Visual Studio 2015 Update 3
+// #define CUSOLVER_CPP_VERSION _MSVC_LANG
+// #else
+// #define CUSOLVER_CPP_VERSION 0
+// #endif
 
-//     #if CUSOLVER_CPP_VERSION >= 201402L
+//------------------------------------------------------------------------------
 
-//       #define CUSOLVER_DEPRECATED(new_func)
-//         [[deprecated("please use " #new_func " instead")]]
+// #if !defined(DISABLE_CUSOLVER_DEPRECATED)
 
-//     #elif defined(_MSC_VER)
+// #if CUSOLVER_CPP_VERSION >= 201402L
 
-//       #define CUSOLVER_DEPRECATED(new_func)
-//         __declspec(deprecated("please use " #new_func " instead"))
+// #define CUSOLVER_DEPRECATED(new_func)
+//     [[deprecated("please use " #new_func " instead")]]
 
-//     #elif defined(__INTEL_COMPILER) || defined(__clang__) ||
-//       (defined(__GNUC__) &&
-//        (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)))
+// #elif defined(_MSC_VER)
 
-//       #define CUSOLVER_DEPRECATED(new_func)
-//         __attribute__((deprecated("please use " #new_func " instead")))
+// #define CUSOLVER_DEPRECATED(new_func)
+//     __declspec(deprecated("please use " #new_func " instead"))
 
-//     #elif defined(__GNUC__) || defined(__xlc__)
+// #elif defined(__INTEL_COMPILER) || defined(__clang__) ||
+//     (defined(__GNUC__) &&
+//      (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)))
 
-//       #define CUSOLVER_DEPRECATED(new_func) __attribute__((deprecated))
+// #define CUSOLVER_DEPRECATED(new_func)
+//     __attribute__((deprecated("please use " #new_func " instead")))
 
-//     #else
+// #elif defined(__GNUC__) || defined(__xlc__)
 
-//       #define CUSOLVER_DEPRECATED(new_func)
+// #define CUSOLVER_DEPRECATED(new_func) __attribute__((deprecated))
 
-//     #endif // defined(__cplusplus) && __cplusplus >= 201402L
-  //------------------------------------------------------------------------------
+// #else
 
-//     #if CUSOLVER_CPP_VERSION >= 201703L
+// #define CUSOLVER_DEPRECATED(new_func)
 
-//       #define CUSOLVER_DEPRECATED_ENUM(new_enum)
-//         [[deprecated("please use " #new_enum " instead")]]
+// #endif	// defined(__cplusplus) && __cplusplus >= 201402L
+//------------------------------------------------------------------------------
 
-//     #elif defined(__clang__) ||
-//       (defined(__GNUC__) && __GNUC__ >= 6 && !defined(__PGI))
+// #if CUSOLVER_CPP_VERSION >= 201703L
 
-//       #define CUSOLVER_DEPRECATED_ENUM(new_enum)
-//         __attribute__((deprecated("please use " #new_enum " instead")))
+// #define CUSOLVER_DEPRECATED_ENUM(new_enum)
+//     [[deprecated("please use " #new_enum " instead")]]
 
-//     #else
+// #elif defined(__clang__) ||
+//     (defined(__GNUC__) && __GNUC__ >= 6 && !defined(__PGI))
 
-//       #define CUSOLVER_DEPRECATED_ENUM(new_enum)
+// #define CUSOLVER_DEPRECATED_ENUM(new_enum)
+//     __attribute__((deprecated("please use " #new_enum " instead")))
 
-//     #endif // defined(__cplusplus) && __cplusplus >= 201402L
+// #else
 
-//   #else // defined(DISABLE_CUSOLVER_DEPRECATED)
+// #define CUSOLVER_DEPRECATED_ENUM(new_enum)
 
-//     #define CUSOLVER_DEPRECATED(new_func)
-//     #define CUSOLVER_DEPRECATED_ENUM(new_enum)
+// #endif	// defined(__cplusplus) && __cplusplus >= 201402L
 
-//   #endif // !defined(DISABLE_CUSOLVER_DEPRECATED)
+// #else  // defined(DISABLE_CUSOLVER_DEPRECATED)
 
-//   #undef CUSOLVER_CPP_VERSION
+// #define CUSOLVER_DEPRECATED(new_func)
+// #define CUSOLVER_DEPRECATED_ENUM(new_enum)
 
-//   #if defined(__cplusplus)
-//   #endif /* __cplusplus */
+// #endif	// !defined(DISABLE_CUSOLVER_DEPRECATED)
 
-  /** enum cusolverStatus_t */
-  public static final int
+// #undef CUSOLVER_CPP_VERSION
+
+// #if defined(__cplusplus)
+// #endif /* __cplusplus */
+
+/** enum cusolverStatus_t */
+public static final int
     CUSOLVER_STATUS_SUCCESS = 0,
     CUSOLVER_STATUS_NOT_INITIALIZED = 1,
     CUSOLVER_STATUS_ALLOC_FAILED = 2,
@@ -199,32 +199,32 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
     CUSOLVER_STATUS_IRS_MATRIX_SINGULAR = 30,
     CUSOLVER_STATUS_INVALID_WORKSPACE = 31;
 
-  /** enum cusolverEigType_t */
-  public static final int
+/** enum cusolverEigType_t */
+public static final int
     CUSOLVER_EIG_TYPE_1 = 1,
     CUSOLVER_EIG_TYPE_2 = 2,
     CUSOLVER_EIG_TYPE_3 = 3;
 
-  /** enum cusolverEigMode_t */
-  public static final int
+/** enum cusolverEigMode_t */
+public static final int
     CUSOLVER_EIG_MODE_NOVECTOR = 0,
     CUSOLVER_EIG_MODE_VECTOR = 1;
 
-  /** enum cusolverEigRange_t */
-  public static final int
+/** enum cusolverEigRange_t */
+public static final int
     CUSOLVER_EIG_RANGE_ALL = 1001,
     CUSOLVER_EIG_RANGE_I = 1002,
     CUSOLVER_EIG_RANGE_V = 1003;
 
-  /** enum cusolverNorm_t */
-  public static final int
+/** enum cusolverNorm_t */
+public static final int
     CUSOLVER_INF_NORM = 104,
     CUSOLVER_MAX_NORM = 105,
     CUSOLVER_ONE_NORM = 106,
     CUSOLVER_FRO_NORM = 107;
 
-  /** enum cusolverIRSRefinement_t */
-  public static final int
+/** enum cusolverIRSRefinement_t */
+public static final int
     CUSOLVER_IRS_REFINE_NOT_SET = 1100,
     CUSOLVER_IRS_REFINE_NONE = 1101,
     CUSOLVER_IRS_REFINE_CLASSICAL = 1102,
@@ -237,8 +237,8 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
     CUSOLVER_PREC_SS = 1151,
     CUSOLVER_PREC_SHT = 1152;
 
-  /** enum cusolverPrecType_t */
-  public static final int
+/** enum cusolverPrecType_t */
+public static final int
     CUSOLVER_R_8I = 1201,
     CUSOLVER_R_8U = 1202,
     CUSOLVER_R_64F = 1203,
@@ -256,34 +256,37 @@ public class cusolver extends org.bytedeco.cuda.presets.cusolver {
     CUSOLVER_C_TF32 = 1217,
     CUSOLVER_C_AP = 1218;
 
-  /** enum cusolverAlgMode_t */
-  public static final int
+/** enum cusolverAlgMode_t */
+public static final int
     CUSOLVER_ALG_0 = 0, /* default algorithm */
     CUSOLVER_ALG_1 = 1,
     CUSOLVER_ALG_2 = 2;
 
-  /** enum cusolverStorevMode_t */
-  public static final int
+/** enum cusolverStorevMode_t */
+public static final int
     CUBLAS_STOREV_COLUMNWISE = 0,
     CUBLAS_STOREV_ROWWISE = 1;
 
-  /** enum cusolverDirectMode_t */
-  public static final int
+/** enum cusolverDirectMode_t */
+public static final int
     CUBLAS_DIRECT_FORWARD = 0,
     CUBLAS_DIRECT_BACKWARD = 1;
 
-  public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
-  public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
-  public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type, int[] value);
+public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type,
+						 IntPointer value);
+public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type,
+						 IntBuffer value);
+public static native @Cast("cusolverStatus_t") int cusolverGetProperty(@Cast("libraryPropertyType") int type,
+						 int[] value);
 
-  public static native @Cast("cusolverStatus_t") int cusolverGetVersion(IntPointer version);
-  public static native @Cast("cusolverStatus_t") int cusolverGetVersion(IntBuffer version);
-  public static native @Cast("cusolverStatus_t") int cusolverGetVersion(int[] version);
+public static native @Cast("cusolverStatus_t") int cusolverGetVersion(IntPointer version);
+public static native @Cast("cusolverStatus_t") int cusolverGetVersion(IntBuffer version);
+public static native @Cast("cusolverStatus_t") int cusolverGetVersion(int[] version);
 
-//   #if defined(__cplusplus)
-//   #endif /* __cplusplus */
+// #if defined(__cplusplus)
+// #endif /* __cplusplus */
 
-// #endif // CUSOLVER_COMMON_H_
+// #endif	// CUSOLVER_COMMON_H_
 
 
 // Parsed from <cusolverDn.h>
@@ -375,7 +378,7 @@ public static final int
 //   #include <stdio.h>
 
 //   #include "cuComplex.h" /* import complex data type */
-//   #include "cublas_api.h"
+//   #include "cublas_v2.h"
 //   #include "cusolver_common.h"
 
   /*******************************************************************************/
@@ -14192,7 +14195,7 @@ public static final int
 //   #define CUSOLVERSP_H_
 
 //   #include "cusparse.h"
-//   #include "cublas_api.h"
+//   #include "cublas_v2.h"
 //   #include "cusolver_common.h"
 
 //   #if defined(__cplusplus)
