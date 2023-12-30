@@ -356,7 +356,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
             .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
             .put(new Info("c10::aten::clone").javaNames("_clone"))
-            .put(new Info("c10::TensorOptions<c10::Device>").javaNames("TensorOptions"))
             .put(new Info("c10::detail::_str<CompileTimeEmptyString>").javaNames("_strCompileTimeEmptyString"))
             .put(new Info("at::TensorBase").base("AbstractTensor").pointerTypes("TensorBase"))
         ;
@@ -1989,6 +1988,7 @@ public class torch implements LoadEnabled, InfoMapper {
                    "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CPUGeneratorImpl>\") Generator make_generator_cpu();\n" +
                    "@Namespace(\"at\") public static native @ByVal @Name(\"make_generator<at::CPUGeneratorImpl,uint64_t>\") Generator make_generator_cpu(@Cast(\"uint64_t&&\") long seed_in);"
                ))
+               .put(new Info("c10::TensorOptions::TensorOptions<c10::Device>").javaNames("XXX"))
         ;
 
         for (String[] t : new String[][]{
@@ -2593,7 +2593,7 @@ public class torch implements LoadEnabled, InfoMapper {
             // Relies on the fact that std::vector info are created before.
             Info vectorInfo = infoMap.getFirst(template("std::vector", elementTypes[0]), false);
             if (vectorInfo != null && !elementTypes[0].equals("bool"))
-                infoMap.put(new Info(template(cppNames[0], template("std::allocator", elementTypes[0])) + "(" + elementTypes[0] + "*)")
+                infoMap.put(new Info(template(cppNames[0] + "::ArrayRef", template("std::allocator", elementTypes[0])) + "(" + elementTypes[0] + "*)").javaNames("XXX")
                     .javaText(
                         "public " + baseJavaName + "ArrayRef(@ByRef " + baseJavaName + "Vector vec) { super((Pointer)null); allocate(vec); }\n"
                         + "private native void allocate(@ByRef " + baseJavaName + "Vector vec);"));
