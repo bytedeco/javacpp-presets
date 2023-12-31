@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>leptonica-platform</artifactId>
-            <version>1.83.1-1.5.10-SNAPSHOT</version>
+            <version>1.84.0-1.5.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

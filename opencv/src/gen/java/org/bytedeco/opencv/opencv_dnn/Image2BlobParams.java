@@ -47,10 +47,10 @@ public class Image2BlobParams extends Pointer {
         private native void allocate();
         public Image2BlobParams(@Const @ByRef Scalar scalefactor, @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
                                     @Cast("bool") boolean swapRB/*=false*/, int ddepth/*=CV_32F*/, @Cast("cv::dnn::DataLayout") int datalayout/*=cv::dnn::DNN_LAYOUT_NCHW*/,
-                                    @Cast("cv::dnn::ImagePaddingMode") int mode/*=cv::dnn::DNN_PMODE_NULL*/) { super((Pointer)null); allocate(scalefactor, size, mean, swapRB, ddepth, datalayout, mode); }
+                                    @Cast("cv::dnn::ImagePaddingMode") int mode/*=cv::dnn::DNN_PMODE_NULL*/, @ByVal(nullValue = "cv::Scalar(0.0)") Scalar borderValue) { super((Pointer)null); allocate(scalefactor, size, mean, swapRB, ddepth, datalayout, mode, borderValue); }
         private native void allocate(@Const @ByRef Scalar scalefactor, @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
                                     @Cast("bool") boolean swapRB/*=false*/, int ddepth/*=CV_32F*/, @Cast("cv::dnn::DataLayout") int datalayout/*=cv::dnn::DNN_LAYOUT_NCHW*/,
-                                    @Cast("cv::dnn::ImagePaddingMode") int mode/*=cv::dnn::DNN_PMODE_NULL*/);
+                                    @Cast("cv::dnn::ImagePaddingMode") int mode/*=cv::dnn::DNN_PMODE_NULL*/, @ByVal(nullValue = "cv::Scalar(0.0)") Scalar borderValue);
         public Image2BlobParams(@Const @ByRef Scalar scalefactor) { super((Pointer)null); allocate(scalefactor); }
         private native void allocate(@Const @ByRef Scalar scalefactor);
 
@@ -68,4 +68,20 @@ public class Image2BlobParams extends Pointer {
         public native @Cast("cv::dnn::DataLayout") int datalayout(); public native Image2BlobParams datalayout(int setter);
         /** Image padding mode. @see ImagePaddingMode. */
         public native @Cast("cv::dnn::ImagePaddingMode") int paddingmode(); public native Image2BlobParams paddingmode(int setter);
+        /** Value used in padding mode for padding. */
+        public native @ByRef Scalar borderValue(); public native Image2BlobParams borderValue(Scalar setter);
+
+        /** \brief Get rectangle coordinates in original image system from rectangle in blob coordinates.
+         *  @param rBlob rect in blob coordinates.
+         *  @param size original input image size.
+         *  @return rectangle in original image coordinates.
+         */
+        public native @ByVal Rect blobRectToImageRect(@Const @ByRef Rect rBlob, @Const @ByRef Size size);
+
+        /** \brief Get rectangle coordinates in original image system from rectangle in blob coordinates.
+         *  @param rBlob rect in blob coordinates.
+         *  @param rImg result rect in image coordinates.
+         *  @param size original input image size.
+         */
+        public native void blobRectsToImageRects(@Const @ByRef RectVector rBlob, @ByRef RectVector rImg, @Const @ByRef Size size);
     }

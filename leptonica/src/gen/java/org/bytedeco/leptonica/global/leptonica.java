@@ -300,7 +300,7 @@ public static final int HAVE_DIRFD =       0;
 /*--------------------------------------------------------------------*
  *                          Built-in types                            *
  *--------------------------------------------------------------------*/
-/** return type 0 if OK, 1 on error */
+/** return 0 if OK, 1 on error */
 /** signed 8-bit value */
 /** unsigned 8-bit value */
 /** signed 16-bit value */
@@ -555,19 +555,30 @@ public static native @Cast("l_int32") int LeptMsgSeverity(); public static nativ
  * <pre>
  *  Usage
  *  =====
- *  Messages are of two types.
+ *  Messages are of three types.
  *
  *  (1) The messages
  *      ERROR_INT(a,b,c)       : returns l_int32
  *      ERROR_FLOAT(a,b,c)     : returns l_float32
  *      ERROR_PTR(a,b,c)       : returns void*
- *  are used to return from functions and take a fixed set of parameters:
+ *  are used to return from functions and take three parameters:
  *      a : <message string>
- *      b : procName
+ *      b : __func__   (the procedure name)
  *      c : <return value from function>
- *  where procName is the name of the local variable naming the function.
+ *  A newline is added by the function after the message.
  *
- *  (2) The purely informational L_* messages
+ *  (2) The messages
+ *      ERROR_INT_1(a,f,b,c)     : returns l_int32
+ *      ERROR_FLOAT_1(a,f,b,c)   : returns l_float32
+ *      ERROR_PTR_1(a,f,b,c)     : returns void*
+ *  are used to return from functions and take four parameters:
+ *      a : <message string>
+ *      f : <second message string> (typically, a filename for an fopen()))
+ *      b : __func__   (the procedure name)
+ *      c : <return value from function>
+ *  A newline is added by the function after the message.
+ *
+ *  (3) The purely informational L_* messages
  *      L_ERROR(a,...)
  *      L_WARNING(a,...)
  *      L_INFO(a,...)
@@ -575,6 +586,8 @@ public static native @Cast("l_int32") int LeptMsgSeverity(); public static nativ
  *      a  :  <message string> with optional format conversions
  *      v1 : procName    (this must be included as the first vararg)
  *      v2, ... :  optional varargs to match format converters in the message
+ *  Unlike the messages that return a value in (2) and (3) above,
+ *  here a newline needs to be included at the end of the message string.
  *
  *  To return an error from a function that returns void, use:
  *      L_ERROR(<message string>, procName, [...])
@@ -609,6 +622,9 @@ public static native @Cast("l_int32") int LeptMsgSeverity(); public static nativ
 //   #define ERROR_INT(a, b, c)            ((l_int32)(c))
 //   #define ERROR_FLOAT(a, b, c)          ((l_float32)(c))
 //   #define ERROR_PTR(a, b, c)            ((void *)(c))
+//   #define ERROR_INT_1(a, f, b, c)       ((l_int32)(c))
+//   #define ERROR_FLOAT_1(a, f, b, c)     ((l_float32)(c))
+//   #define ERROR_PTR_1(a, f, b, c)       ((void *)(c))
 //   #define L_ERROR(a, ...)
 //   #define L_WARNING(a, ...)
 //   #define L_INFO(a, ...)
@@ -625,6 +641,16 @@ public static native @Cast("l_int32") int LeptMsgSeverity(); public static nativ
 //       IF_SEV(L_SEVERITY_ERROR, returnErrorFloat((a), (b), (c)), (l_float32)(c))
 //   #define ERROR_PTR(a, b, c)
 //       IF_SEV(L_SEVERITY_ERROR, returnErrorPtr((a), (b), (c)), (void *)(c))
+
+//   #define ERROR_INT_1(a, f, b, c)
+//       IF_SEV(L_SEVERITY_ERROR, returnErrorInt1((a), (f), (b), (c)),
+//              (l_int32)(c))
+//   #define ERROR_FLOAT_1(a, f, b, c)
+//       IF_SEV(L_SEVERITY_ERROR, returnErrorFloat1((a), (f), (b), (c)),
+//              (l_float32)(c))
+//   #define ERROR_PTR_1(a, f, b, c)
+//       IF_SEV(L_SEVERITY_ERROR, returnErrorPtr1((a), (f), (b), (c)),
+//              (void *)(c))
 
 //   #define L_ERROR(a, ...)
 //       IF_SEV(L_SEVERITY_ERROR,
@@ -3684,15 +3710,17 @@ public static final int
 /** Display Program */
 /** enum  */
 public static final int
+    /** Disable pixDisplay()                    */
+    L_DISPLAY_WITH_NONE = 0,
     /** Use xzgv with pixDisplay()              */
     L_DISPLAY_WITH_XZGV = 1,
     /** Use xli with pixDisplay()               */
     L_DISPLAY_WITH_XLI = 2,
     /** Use xv with pixDisplay()                */
     L_DISPLAY_WITH_XV = 3,
-    /** Use irfvanview (win) with pixDisplay()  */
+    /** Use irfanview (win) with pixDisplay()   */
     L_DISPLAY_WITH_IV = 4,
-    /** Use open (apple) with pixDisplay()      */
+    /** Use open (apple/win) with pixDisplay()  */
     L_DISPLAY_WITH_OPEN = 5;
 
 /*-------------------------------------------------------------------------*
@@ -4258,8 +4286,8 @@ public static final int
 
 
 public static final int LIBLEPT_MAJOR_VERSION =   1;
-public static final int LIBLEPT_MINOR_VERSION =   83;
-public static final int LIBLEPT_PATCH_VERSION =   1;
+public static final int LIBLEPT_MINOR_VERSION =   84;
+public static final int LIBLEPT_PATCH_VERSION =   0;
 
 // #include "alltypes.h"
 
@@ -4303,6 +4331,8 @@ public static native @Cast("l_ok") int pixThresholdSpreadNorm( PIX pixs, @Cast("
 public static native @Cast("l_ok") int pixThresholdSpreadNorm( PIX pixs, @Cast("l_int32") int filtertype, @Cast("l_int32") int edgethresh, @Cast("l_int32") int smoothx, @Cast("l_int32") int smoothy, @Cast("l_float32") float gamma, @Cast("l_int32") int minval, @Cast("l_int32") int maxval, @Cast("l_int32") int targetthresh, @ByPtrPtr PIX ppixth, @ByPtrPtr PIX ppixb, @ByPtrPtr PIX ppixd );
 public static native PIX pixBackgroundNormFlex( PIX pixs, @Cast("l_int32") int sx, @Cast("l_int32") int sy, @Cast("l_int32") int smoothx, @Cast("l_int32") int smoothy, @Cast("l_int32") int delta );
 public static native PIX pixContrastNorm( PIX pixd, PIX pixs, @Cast("l_int32") int sx, @Cast("l_int32") int sy, @Cast("l_int32") int mindiff, @Cast("l_int32") int smoothx, @Cast("l_int32") int smoothy );
+public static native PIX pixBackgroundNormTo1MinMax( PIX pixs, @Cast("l_int32") int contrast, @Cast("l_int32") int scalefactor );
+public static native PIX pixConvertTo8MinMax( PIX pixs );
 public static native PIX pixAffineSampledPta( PIX pixs, PTA ptad, PTA ptas, @Cast("l_int32") int incolor );
 public static native PIX pixAffineSampled( PIX pixs, @Cast("l_float32*") FloatPointer vc, @Cast("l_int32") int incolor );
 public static native PIX pixAffineSampled( PIX pixs, @Cast("l_float32*") FloatBuffer vc, @Cast("l_int32") int incolor );
@@ -5224,6 +5254,7 @@ public static native @Cast("l_ok") int pixUsesCmapColor( PIX pixs, @Cast("l_int3
 public static native @Cast("l_ok") int pixCorrelationBinary( PIX pix1, PIX pix2, @Cast("l_float32*") FloatPointer pval );
 public static native @Cast("l_ok") int pixCorrelationBinary( PIX pix1, PIX pix2, @Cast("l_float32*") FloatBuffer pval );
 public static native @Cast("l_ok") int pixCorrelationBinary( PIX pix1, PIX pix2, @Cast("l_float32*") float[] pval );
+public static native PIX pixDisplayDiff( PIX pix1, PIX pix2, @Cast("l_int32") int showall, @Cast("l_int32") int mindiff, @Cast("l_uint32") int diffcolor );
 public static native PIX pixDisplayDiffBinary( PIX pix1, PIX pix2 );
 public static native @Cast("l_ok") int pixCompareBinary( PIX pix1, PIX pix2, @Cast("l_int32") int comptype, @Cast("l_float32*") FloatPointer pfract, @Cast("PIX**") PointerPointer ppixdiff );
 public static native @Cast("l_ok") int pixCompareBinary( PIX pix1, PIX pix2, @Cast("l_int32") int comptype, @Cast("l_float32*") FloatPointer pfract, @ByPtrPtr PIX ppixdiff );
@@ -6539,6 +6570,10 @@ public static native PIX pixGenTextlineMask( PIX pixs, @ByPtrPtr PIX ppixvws, @C
 public static native PIX pixGenTextlineMask( PIX pixs, @ByPtrPtr PIX ppixvws, @Cast("l_int32*") IntBuffer ptlfound, PIXA pixadb );
 public static native PIX pixGenTextlineMask( PIX pixs, @ByPtrPtr PIX ppixvws, @Cast("l_int32*") int[] ptlfound, PIXA pixadb );
 public static native PIX pixGenTextblockMask( PIX pixs, PIX pixvws, PIXA pixadb );
+public static native PIX pixCropImage( PIX pixs, @Cast("l_int32") int lr_clear, @Cast("l_int32") int tb_clear, @Cast("l_int32") int edgeclean, @Cast("l_int32") int lr_add, @Cast("l_int32") int tb_add, @Cast("l_float32") float maxwiden, @Cast("const char*") BytePointer debugfile, @Cast("BOX**") PointerPointer pcropbox );
+public static native PIX pixCropImage( PIX pixs, @Cast("l_int32") int lr_clear, @Cast("l_int32") int tb_clear, @Cast("l_int32") int edgeclean, @Cast("l_int32") int lr_add, @Cast("l_int32") int tb_add, @Cast("l_float32") float maxwiden, @Cast("const char*") BytePointer debugfile, @ByPtrPtr BOX pcropbox );
+public static native PIX pixCropImage( PIX pixs, @Cast("l_int32") int lr_clear, @Cast("l_int32") int tb_clear, @Cast("l_int32") int edgeclean, @Cast("l_int32") int lr_add, @Cast("l_int32") int tb_add, @Cast("l_float32") float maxwiden, String debugfile, @ByPtrPtr BOX pcropbox );
+public static native PIX pixCleanImage( PIX pixs, @Cast("l_int32") int contrast, @Cast("l_int32") int rotation, @Cast("l_int32") int scale, @Cast("l_int32") int opensize );
 public static native BOX pixFindPageForeground( PIX pixs, @Cast("l_int32") int threshold, @Cast("l_int32") int mindist, @Cast("l_int32") int erasedist, @Cast("l_int32") int showmorph, PIXAC pixac );
 public static native @Cast("l_ok") int pixSplitIntoCharacters( PIX pixs, @Cast("l_int32") int minw, @Cast("l_int32") int minh, @Cast("BOXA**") PointerPointer pboxa, @Cast("PIXA**") PointerPointer ppixa, @Cast("PIX**") PointerPointer ppixdebug );
 public static native @Cast("l_ok") int pixSplitIntoCharacters( PIX pixs, @Cast("l_int32") int minw, @Cast("l_int32") int minh, @ByPtrPtr BOXA pboxa, @ByPtrPtr PIXA ppixa, @ByPtrPtr PIX ppixdebug );
@@ -6585,6 +6620,12 @@ public static native @Cast("l_ok") int partifyPixac( PIXAC pixac, @Cast("l_int32
 public static native @Cast("l_ok") int partifyPixac( PIXAC pixac, @Cast("l_int32") int nparts, String outroot, PIXA pixadb );
 public static native BOXA boxaGetWhiteblocks( BOXA boxas, BOX box, @Cast("l_int32") int sortflag, @Cast("l_int32") int maxboxes, @Cast("l_float32") float maxoverlap, @Cast("l_int32") int maxperim, @Cast("l_float32") float fract, @Cast("l_int32") int maxpops );
 public static native BOXA boxaPruneSortedOnOverlap( BOXA boxas, @Cast("l_float32") float maxoverlap );
+public static native @Cast("l_ok") int compressFilesToPdf( SARRAY sa, @Cast("l_int32") int onebit, @Cast("l_int32") int savecolor, @Cast("l_float32") float scalefactor, @Cast("l_int32") int quality, @Cast("const char*") BytePointer title, @Cast("const char*") BytePointer fileout );
+public static native @Cast("l_ok") int compressFilesToPdf( SARRAY sa, @Cast("l_int32") int onebit, @Cast("l_int32") int savecolor, @Cast("l_float32") float scalefactor, @Cast("l_int32") int quality, String title, String fileout );
+public static native @Cast("l_ok") int cropFilesToPdf( SARRAY sa, @Cast("l_int32") int lr_clear, @Cast("l_int32") int tb_clear, @Cast("l_int32") int edgeclean, @Cast("l_int32") int lr_add, @Cast("l_int32") int tb_add, @Cast("l_float32") float maxwiden, @Cast("const char*") BytePointer title, @Cast("const char*") BytePointer fileout );
+public static native @Cast("l_ok") int cropFilesToPdf( SARRAY sa, @Cast("l_int32") int lr_clear, @Cast("l_int32") int tb_clear, @Cast("l_int32") int edgeclean, @Cast("l_int32") int lr_add, @Cast("l_int32") int tb_add, @Cast("l_float32") float maxwiden, String title, String fileout );
+public static native @Cast("l_ok") int cleanTo1bppFilesToPdf( SARRAY sa, @Cast("l_int32") int res, @Cast("l_int32") int contrast, @Cast("l_int32") int rotation, @Cast("l_int32") int opensize, @Cast("const char*") BytePointer title, @Cast("const char*") BytePointer fileout );
+public static native @Cast("l_ok") int cleanTo1bppFilesToPdf( SARRAY sa, @Cast("l_int32") int res, @Cast("l_int32") int contrast, @Cast("l_int32") int rotation, @Cast("l_int32") int opensize, String title, String fileout );
 public static native @Cast("l_ok") int convertFilesToPdf( @Cast("const char*") BytePointer dirname, @Cast("const char*") BytePointer substr, @Cast("l_int32") int res, @Cast("l_float32") float scalefactor, @Cast("l_int32") int type, @Cast("l_int32") int quality, @Cast("const char*") BytePointer title, @Cast("const char*") BytePointer fileout );
 public static native @Cast("l_ok") int convertFilesToPdf( String dirname, String substr, @Cast("l_int32") int res, @Cast("l_float32") float scalefactor, @Cast("l_int32") int type, @Cast("l_int32") int quality, String title, String fileout );
 public static native @Cast("l_ok") int saConvertFilesToPdf( SARRAY sa, @Cast("l_int32") int res, @Cast("l_float32") float scalefactor, @Cast("l_int32") int type, @Cast("l_int32") int quality, @Cast("const char*") BytePointer title, @Cast("const char*") BytePointer fileout );
@@ -6742,6 +6783,32 @@ public static native @Cast("l_ok") int cidConvertToPdfData( L_COMP_DATA cid, @Ca
 public static native @Cast("l_ok") int cidConvertToPdfData( L_COMP_DATA cid, String title, @Cast("l_uint8**") @ByPtrPtr byte[] pdata, @Cast("size_t*") SizeTPointer pnbytes );
 public static native void l_CIDataDestroy( @Cast("L_COMP_DATA**") PointerPointer pcid );
 public static native void l_CIDataDestroy( @ByPtrPtr L_COMP_DATA pcid );
+public static native @Cast("l_ok") int getPdfPageCount( @Cast("const char*") BytePointer fname, @Cast("l_int32*") IntPointer pnpages );
+public static native @Cast("l_ok") int getPdfPageCount( String fname, @Cast("l_int32*") IntBuffer pnpages );
+public static native @Cast("l_ok") int getPdfPageCount( @Cast("const char*") BytePointer fname, @Cast("l_int32*") int[] pnpages );
+public static native @Cast("l_ok") int getPdfPageCount( String fname, @Cast("l_int32*") IntPointer pnpages );
+public static native @Cast("l_ok") int getPdfPageCount( @Cast("const char*") BytePointer fname, @Cast("l_int32*") IntBuffer pnpages );
+public static native @Cast("l_ok") int getPdfPageCount( String fname, @Cast("l_int32*") int[] pnpages );
+public static native @Cast("l_ok") int getPdfPageSizes( @Cast("const char*") BytePointer fname, @Cast("NUMA**") PointerPointer pnaw, @Cast("NUMA**") PointerPointer pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntBuffer pmedw, @Cast("l_int32*") IntBuffer pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") int[] pmedw, @Cast("l_int32*") int[] pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntBuffer pmedw, @Cast("l_int32*") IntBuffer pmedh );
+public static native @Cast("l_ok") int getPdfPageSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") int[] pmedw, @Cast("l_int32*") int[] pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( @Cast("const char*") BytePointer fname, @Cast("NUMA**") PointerPointer pnaw, @Cast("NUMA**") PointerPointer pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntBuffer pmedw, @Cast("l_int32*") IntBuffer pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") int[] pmedw, @Cast("l_int32*") int[] pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntPointer pmedw, @Cast("l_int32*") IntPointer pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( @Cast("const char*") BytePointer fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") IntBuffer pmedw, @Cast("l_int32*") IntBuffer pmedh );
+public static native @Cast("l_ok") int getPdfMediaBoxSizes( String fname, @ByPtrPtr NUMA pnaw, @ByPtrPtr NUMA pnah, @Cast("l_int32*") int[] pmedw, @Cast("l_int32*") int[] pmedh );
+public static native @Cast("l_ok") int getPdfRendererResolution( @Cast("const char*") BytePointer infile, @Cast("const char*") BytePointer outdir, @Cast("l_int32*") IntPointer pres );
+public static native @Cast("l_ok") int getPdfRendererResolution( String infile, String outdir, @Cast("l_int32*") IntBuffer pres );
+public static native @Cast("l_ok") int getPdfRendererResolution( @Cast("const char*") BytePointer infile, @Cast("const char*") BytePointer outdir, @Cast("l_int32*") int[] pres );
+public static native @Cast("l_ok") int getPdfRendererResolution( String infile, String outdir, @Cast("l_int32*") IntPointer pres );
+public static native @Cast("l_ok") int getPdfRendererResolution( @Cast("const char*") BytePointer infile, @Cast("const char*") BytePointer outdir, @Cast("l_int32*") IntBuffer pres );
+public static native @Cast("l_ok") int getPdfRendererResolution( String infile, String outdir, @Cast("l_int32*") int[] pres );
 public static native void l_pdfSetG4ImageMask( @Cast("l_int32") int flag );
 public static native void l_pdfSetDateAndVersion( @Cast("l_int32") int flag );
 public static native void setPixMemoryManager( alloc_fn allocator, dealloc_fn deallocator );
@@ -8406,6 +8473,7 @@ public static native PIX pixScaleGray2xLIDither( PIX pixs );
 public static native PIX pixScaleGray4xLIThresh( PIX pixs, @Cast("l_int32") int thresh );
 public static native PIX pixScaleGray4xLIDither( PIX pixs );
 public static native PIX pixScaleBySampling( PIX pixs, @Cast("l_float32") float scalex, @Cast("l_float32") float scaley );
+public static native PIX pixScaleBySamplingWithShift( PIX pixs, @Cast("l_float32") float scalex, @Cast("l_float32") float scaley, @Cast("l_float32") float shiftx, @Cast("l_float32") float shifty );
 public static native PIX pixScaleBySamplingToSize( PIX pixs, @Cast("l_int32") int wd, @Cast("l_int32") int hd );
 public static native PIX pixScaleByIntSampling( PIX pixs, @Cast("l_int32") int factor );
 public static native PIX pixScaleRGBToGrayFast( PIX pixs, @Cast("l_int32") int factor, @Cast("l_int32") int color );
@@ -8418,6 +8486,7 @@ public static native PIX pixScaleAreaMap( PIX pix, @Cast("l_float32") float scal
 public static native PIX pixScaleAreaMap2( PIX pix );
 public static native PIX pixScaleAreaMapToSize( PIX pixs, @Cast("l_int32") int wd, @Cast("l_int32") int hd );
 public static native PIX pixScaleBinary( PIX pixs, @Cast("l_float32") float scalex, @Cast("l_float32") float scaley );
+public static native PIX pixScaleBinaryWithShift( PIX pixs, @Cast("l_float32") float scalex, @Cast("l_float32") float scaley, @Cast("l_float32") float shiftx, @Cast("l_float32") float shifty );
 public static native PIX pixScaleToGray( PIX pixs, @Cast("l_float32") float scalefactor );
 public static native PIX pixScaleToGrayFast( PIX pixs, @Cast("l_float32") float scalefactor );
 public static native PIX pixScaleToGray2( PIX pixs );
@@ -8798,6 +8867,12 @@ public static native @Cast("l_float32") float returnErrorFloat( @Cast("const cha
 public static native @Cast("l_float32") float returnErrorFloat( String msg, String procname, @Cast("l_float32") float fval );
 public static native Pointer returnErrorPtr( @Cast("const char*") BytePointer msg, @Cast("const char*") BytePointer procname, Pointer pval );
 public static native Pointer returnErrorPtr( String msg, String procname, Pointer pval );
+public static native @Cast("l_int32") int returnErrorInt1( @Cast("const char*") BytePointer msg, @Cast("const char*") BytePointer arg, @Cast("const char*") BytePointer procname, @Cast("l_int32") int ival );
+public static native @Cast("l_int32") int returnErrorInt1( String msg, String arg, String procname, @Cast("l_int32") int ival );
+public static native @Cast("l_float32") float returnErrorFloat1( @Cast("const char*") BytePointer msg, @Cast("const char*") BytePointer arg, @Cast("const char*") BytePointer procname, @Cast("l_float32") float fval );
+public static native @Cast("l_float32") float returnErrorFloat1( String msg, String arg, String procname, @Cast("l_float32") float fval );
+public static native Pointer returnErrorPtr1( @Cast("const char*") BytePointer msg, @Cast("const char*") BytePointer arg, @Cast("const char*") BytePointer procname, Pointer pval );
+public static native Pointer returnErrorPtr1( String msg, String arg, String procname, Pointer pval );
 // Targeting ../Handler_BytePointer.java
 
 
@@ -8832,6 +8907,8 @@ public static native @Cast("l_ok") int genRandomIntOnInterval( @Cast("l_int32") 
 public static native @Cast("l_ok") int genRandomIntOnInterval( @Cast("l_int32") int start, @Cast("l_int32") int end, @Cast("l_int32") int seed, @Cast("l_int32*") IntBuffer pval );
 public static native @Cast("l_ok") int genRandomIntOnInterval( @Cast("l_int32") int start, @Cast("l_int32") int end, @Cast("l_int32") int seed, @Cast("l_int32*") int[] pval );
 public static native @Cast("l_int32") int lept_roundftoi( @Cast("l_float32") float fval );
+public static native @Cast("l_int32") int lept_floor( @Cast("l_float32") float fval );
+public static native @Cast("l_int32") int lept_ceiling( @Cast("l_float32") float fval );
 public static native @Cast("l_ok") int l_hashStringToUint64( @Cast("const char*") BytePointer str, @Cast("l_uint64*") LongPointer phash );
 public static native @Cast("l_ok") int l_hashStringToUint64( String str, @Cast("l_uint64*") LongBuffer phash );
 public static native @Cast("l_ok") int l_hashStringToUint64( @Cast("const char*") BytePointer str, @Cast("l_uint64*") long[] phash );
@@ -9127,6 +9204,8 @@ public static native @Cast("l_ok") int pixWriteImpliedFormat( String filename, P
 public static native @Cast("l_int32") int pixChooseOutputFormat( PIX pix );
 public static native @Cast("l_int32") int getImpliedFileFormat( @Cast("const char*") BytePointer filename );
 public static native @Cast("l_int32") int getImpliedFileFormat( String filename );
+public static native @Cast("l_int32") int getFormatFromExtension( @Cast("const char*") BytePointer extension );
+public static native @Cast("l_int32") int getFormatFromExtension( String extension );
 public static native @Cast("l_ok") int pixGetAutoFormat( PIX pix, @Cast("l_int32*") IntPointer pformat );
 public static native @Cast("l_ok") int pixGetAutoFormat( PIX pix, @Cast("l_int32*") IntBuffer pformat );
 public static native @Cast("l_ok") int pixGetAutoFormat( PIX pix, @Cast("l_int32*") int[] pformat );

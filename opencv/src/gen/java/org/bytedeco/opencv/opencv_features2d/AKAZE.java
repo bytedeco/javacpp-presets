@@ -67,11 +67,15 @@ public class AKAZE extends Feature2D {
     @param nOctaveLayers Default number of sublevels per scale level
     @param diffusivity Diffusivity type. DIFF_PM_G1, DIFF_PM_G2, DIFF_WEICKERT or
     DIFF_CHARBONNIER
+    @param max_points Maximum amount of returned points. In case if image contains
+    more features, then the features with highest response are returned.
+    Negative value means no limitation.
      */
     public static native @Ptr AKAZE create(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
                                          int descriptor_size/*=0*/, int descriptor_channels/*=3*/,
                                          float threshold/*=0.001f*/, int nOctaves/*=4*/,
-                                         int nOctaveLayers/*=4*/, @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
+                                         int nOctaveLayers/*=4*/, @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/,
+                                         int max_points/*=-1*/);
     public static native @Ptr AKAZE create();
 
     public native void setDescriptorType(@Cast("cv::AKAZE::DescriptorType") int dtype);
@@ -95,4 +99,7 @@ public class AKAZE extends Feature2D {
     public native void setDiffusivity(@Cast("cv::KAZE::DiffusivityType") int diff);
     public native @Cast("cv::KAZE::DiffusivityType") int getDiffusivity();
     public native @Str @Override BytePointer getDefaultName();
+
+    public native void setMaxPoints(int max_points);
+    public native int getMaxPoints();
 }
