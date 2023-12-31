@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = {
             "<opencv2/shape.hpp>", "<opencv2/shape/emdL1.hpp>", "<opencv2/shape/shape_transformer.hpp>",
-            "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.408"),
+            "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.409"),
         @Platform(value = "ios", preload = "libopencv_shape"),
-        @Platform(value = "windows", link = "opencv_shape481")},
+        @Platform(value = "windows", link = "opencv_shape490")},
     target = "org.bytedeco.opencv.opencv_shape",
     global = "org.bytedeco.opencv.global.opencv_shape"
 )

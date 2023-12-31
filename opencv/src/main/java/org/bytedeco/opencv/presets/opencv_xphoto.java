@@ -41,10 +41,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/xphoto/oilpainting.hpp>",
                 "<opencv2/xphoto/tonemap.hpp>",
             },
-            link = "opencv_xphoto@.408"
+            link = "opencv_xphoto@.409"
         ),
         @Platform(value = "ios", preload = "libopencv_xphoto"),
-        @Platform(value = "windows", link = "opencv_xphoto481")
+        @Platform(value = "windows", link = "opencv_xphoto490")
     },
     target = "org.bytedeco.opencv.opencv_xphoto",
     global = "org.bytedeco.opencv.global.opencv_xphoto"

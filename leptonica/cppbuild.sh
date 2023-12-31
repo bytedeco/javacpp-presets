@@ -10,16 +10,16 @@ fi
 NASM_VERSION=2.14
 ZLIB=zlib-1.3
 GIFLIB=giflib-5.2.1
-LIBJPEG=libjpeg-turbo-2.1.5.1
+LIBJPEG=libjpeg-turbo-3.0.1
 LIBPNG=libpng-1.6.40 # warning: libpng16 doesn't work on CentOS 6 for some reason
 LIBTIFF=tiff-4.6.0
 LIBWEBP=libwebp-1.3.2
 OPENJPEG_VERSION=2.5.0
-LEPTONICA_VERSION=1.83.1
+LEPTONICA_VERSION=1.84.0
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
-download http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.5.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download https://sourceforge.net/projects/libpng/files/libpng16/1.6.40/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
@@ -44,15 +44,21 @@ tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 # https://sourceforge.net/p/giflib/feature-requests/6/
 patch -Np1 -d $GIFLIB < ../../giflib.patch || true
 
+sedinplace '/cmake_policy(SET CMP0054 NEW)/a\
+cmake_policy(SET CMP0057 NEW)\
+' leptonica-$LEPTONICA_VERSION/CMakeLists.txt
+
 sedinplace 's/add_library(zlib SHARED/add_library(zlib STATIC/g' $ZLIB/CMakeLists.txt
 sedinplace 's/add_library(giflib SHARED/add_library(giflib STATIC/g' $GIFLIB/CMakeLists.txt
 sedinplace 's/if(WIN32)/if(FALSE)/g' $GIFLIB/CMakeLists.txt
 sedinplace 's/include(OpenGLChecks)/set(HAVE_OPENGL FALSE)/g' $LIBTIFF/CMakeLists.txt
+sedinplace 's/-${PROJECT_VERSION}/-6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
 sedinplace 's/SOVERSION 6..../SOVERSION 6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
 sedinplace 's/VERSION   ${VERSION_PLAIN}/VERSION   6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
 sedinplace 's/leptonica-${VERSION_PLAIN}/leptonica-6/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
 sedinplace 's/FATAL_ERROR/WARNING/g' leptonica-$LEPTONICA_VERSION/CMakeLists.txt
 sedinplace 's/${WEBP_LIBRARY}/${WEBP_LIBRARY} ${CMAKE_INSTALL_PREFIX}\/lib\/libsharpyuv.a/g' leptonica-$LEPTONICA_VERSION/CMakeLists.txt
+sedinplace 's/${TIFF_LIBRARIES}/${CMAKE_INSTALL_PREFIX}\/lib\/libtiff.a ${CMAKE_INSTALL_PREFIX}\/lib\/libsharpyuv.a ${CMAKE_INSTALL_PREFIX}\/lib\/libjpeg.a/g' leptonica-$LEPTONICA_VERSION/src/CMakeLists.txt
 
 cd nasm-$NASM_VERSION
 # fix for build with GCC 8.x

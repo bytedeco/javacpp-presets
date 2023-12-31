@@ -97,11 +97,11 @@ public class CharucoBoard extends Board {
      */
     public native @ByVal @Cast("std::vector<cv::Point3f>*") Point3fVector getChessboardCorners();
 
-    /** \brief get CharucoBoard::nearestMarkerIdx
+    /** \brief get CharucoBoard::nearestMarkerIdx, for each charuco corner, nearest marker index in ids array
      */
     public native @ByVal IntVectorVector getNearestMarkerIdx();
 
-    /** \brief get CharucoBoard::nearestMarkerCorners
+    /** \brief get CharucoBoard::nearestMarkerCorners, for each charuco corner, nearest marker corner id of each marker
      */
     public native @ByVal IntVectorVector getNearestMarkerCorners();
 

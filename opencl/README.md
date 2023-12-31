@@ -9,7 +9,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCL 3.0.14  https://www.khronos.org/registry/OpenCL/
+ * OpenCL 3.0.15  https://www.khronos.org/registry/OpenCL/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 

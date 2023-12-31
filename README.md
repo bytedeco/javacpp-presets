@@ -179,7 +179,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.8.x  https://opencv.org/releases/
+ * OpenCV 4.9.x  https://opencv.org/releases/
  * FFmpeg 6.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  https://www.flir.com/products/flycapture-sdk
  * Spinnaker 3.0.x https://www.flir.com/products/spinnaker-sdk
@@ -212,7 +212,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libffi 3.4.x  https://github.com/libffi/libffi
  * libpostal 1.1  https://github.com/openvenues/libpostal
  * LibRaw 0.21.x  https://www.libraw.org/download
- * Leptonica 1.83.x  http://www.leptonica.org/download.html
+ * Leptonica 1.84.x  http://www.leptonica.org/download.html
  * Tesseract 5.3.x  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * OpenPose 1.7.0  https://github.com/CMU-Perceptual-Computing-Lab/openpose
@@ -228,7 +228,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.x  https://github.com/tensorflow/tensorflow
  * TensorFlow Lite 2.15.x  https://github.com/tensorflow/tensorflow
  * TensorRT 8.6.x  https://developer.nvidia.com/tensorrt
- * Triton Inference Server 2.38.x  https://developer.nvidia.com/nvidia-triton-inference-server
+ * Triton Inference Server 2.41.x  https://developer.nvidia.com/nvidia-triton-inference-server
  * The Arcade Learning Environment 0.8.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * DepthAI 2.24.x  https://github.com/luxonis/depthai-core
  * ONNX 1.15.x  https://github.com/onnx/onnx

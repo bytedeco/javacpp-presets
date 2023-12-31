@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = {opencv_dnn.class, opencv_features2d.class, opencv_ml.class},
     value = {
         @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>", "opencv2/text/textDetector.hpp"},
-            link = "opencv_text@.408"),
+            link = "opencv_text@.409"),
         @Platform(value = "ios", preload = "libopencv_text"),
-        @Platform(value = "windows", link = "opencv_text481")},
+        @Platform(value = "windows", link = "opencv_text490")},
     target = "org.bytedeco.opencv.opencv_text",
     global = "org.bytedeco.opencv.global.opencv_text"
 )

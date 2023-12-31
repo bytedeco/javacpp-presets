@@ -34,14 +34,18 @@ import static org.bytedeco.opencv.global.opencv_objdetect.*;
  *  \{
 <p>
 <p>
-/** \brief Dictionary/Set of markers, it contains the inner codification
+/** \brief Dictionary is a set of unique ArUco markers of the same size
  *
- * BytesList contains the marker codewords where:
+ * {@code bytesList} storing as 2-dimensions Mat with 4-th channels (CV_8UC4 type was used) and contains the marker codewords where:
  * - bytesList.rows is the dictionary size
- * - each marker is encoded using {@code nbytes = ceil(markerSize*markerSize/8.)}
+ * - each marker is encoded using {@code nbytes = ceil(markerSize*markerSize/8.)} bytes
  * - each row contains all 4 rotations of the marker, so its length is {@code 4*nbytes}
- *
- * {@code bytesList.ptr(i)[k*nbytes + j]} is then the j-th byte of i-th marker, in its k-th rotation.
+ * - the byte order in the bytesList[i] row:
+ * {@code //bytes without rotation/bytes with rotation 1/bytes with rotation 2/bytes with rotation 3//}
+ * So {@code bytesList.ptr(i)[k*nbytes + j]} is the j-th byte of i-th marker, in its k-th rotation.
+ * \note Python bindings generate matrix with shape of bytesList {@code dictionary_size x nbytes x 4},
+ * but it should be indexed like C++ version. Python example for j-th byte of i-th marker, in its k-th rotation:
+ * {@code aruco_dict.bytesList[id].ravel()[k*nbytes + j]}
  */
 @Namespace("cv::aruco") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_objdetect.class)
 public class Dictionary extends Pointer {
@@ -58,24 +62,30 @@ public class Dictionary extends Pointer {
         return new Dictionary((Pointer)this).offsetAddress(i);
     }
 
-    public native @ByRef Mat bytesList(); public native Dictionary bytesList(Mat setter);         // marker code information
-    public native int markerSize(); public native Dictionary markerSize(int setter);        // number of bits per dimension
-    public native int maxCorrectionBits(); public native Dictionary maxCorrectionBits(int setter); // maximum number of bits that can be corrected
-
+    /** marker code information. See class description for more details */
+    public native @ByRef Mat bytesList(); public native Dictionary bytesList(Mat setter);
+    /** number of bits per dimension */
+    public native int markerSize(); public native Dictionary markerSize(int setter);
+    /** maximum number of bits that can be corrected */
+    public native int maxCorrectionBits(); public native Dictionary maxCorrectionBits(int setter);
 
     public Dictionary() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** \brief Basic ArUco dictionary constructor
+     *
+     * @param bytesList bits for all ArUco markers in dictionary see memory layout in the class description
+     * @param _markerSize ArUco marker size in units
+     * @param maxcorr maximum number of bits that can be corrected
+     */
     public Dictionary(@Const @ByRef Mat bytesList, int _markerSize, int maxcorr/*=0*/) { super((Pointer)null); allocate(bytesList, _markerSize, maxcorr); }
     private native void allocate(@Const @ByRef Mat bytesList, int _markerSize, int maxcorr/*=0*/);
     public Dictionary(@Const @ByRef Mat bytesList, int _markerSize) { super((Pointer)null); allocate(bytesList, _markerSize); }
     private native void allocate(@Const @ByRef Mat bytesList, int _markerSize);
 
-
-
     /** \brief Read a new dictionary from FileNode.
      *
-     * Dictionary format:\n
+     * Dictionary example in YAML format:\n
      * nmarkers: 35\n
      * markersize: 6\n
      * maxCorrectionBits: 5\n
@@ -93,15 +103,15 @@ public class Dictionary extends Pointer {
 
     /** \brief Given a matrix of bits. Returns whether if marker is identified or not.
      *
-     * It returns by reference the correct id (if any) and the correct rotation
+     * Returns reference to the marker id in the dictionary (if any) and its rotation.
      */
     public native @Cast("bool") boolean identify(@Const @ByRef Mat onlyBits, @ByRef IntPointer idx, @ByRef IntPointer rotation, double maxCorrectionRate);
     public native @Cast("bool") boolean identify(@Const @ByRef Mat onlyBits, @ByRef IntBuffer idx, @ByRef IntBuffer rotation, double maxCorrectionRate);
     public native @Cast("bool") boolean identify(@Const @ByRef Mat onlyBits, @ByRef int[] idx, @ByRef int[] rotation, double maxCorrectionRate);
 
-    /** \brief Returns the distance of the input bits to the specific id.
+    /** \brief Returns Hamming distance of the input bits to the specific id.
      *
-     * If allRotations is true, the four posible bits rotation are considered
+     * If {@code allRotations} flag is set, the four posible marker rotations are considered
      */
     public native int getDistanceToId(@ByVal Mat bits, int id, @Cast("bool") boolean allRotations/*=true*/);
     public native int getDistanceToId(@ByVal Mat bits, int id);
@@ -121,7 +131,7 @@ public class Dictionary extends Pointer {
     public native void generateImageMarker(int id, int sidePixels, @ByVal GpuMat _img);
 
 
-    /** \brief Transform matrix of bits to list of bytes in the 4 rotations
+    /** \brief Transform matrix of bits to list of bytes with 4 marker rotations
       */
     public static native @ByVal Mat getByteListFromBits(@Const @ByRef Mat bits);
 

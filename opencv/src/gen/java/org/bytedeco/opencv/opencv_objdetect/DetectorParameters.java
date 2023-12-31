@@ -93,17 +93,49 @@ public class DetectorParameters extends Pointer {
     /** minimum distance of any corner to the image border for detected markers (in pixels) (default 3) */
     public native int minDistanceToBorder(); public native DetectorParameters minDistanceToBorder(int setter);
 
-    /** \brief minimum mean distance beetween two marker corners to be considered imilar, so that the smaller one is removed.
+    /** \brief minimum average distance between the corners of the two markers to be grouped (default 0.125).
      *
-     * The rate is relative to the smaller perimeter of the two markers (default 0.05).
+     * The rate is relative to the smaller perimeter of the two markers.
+     * Two markers are grouped if average distance between the corners of the two markers is less than
+     * min(MarkerPerimeter1, MarkerPerimeter2)*minMarkerDistanceRate.
+     *
+     * default value is 0.125 because 0.125*MarkerPerimeter = (MarkerPerimeter / 4) * 0.5 = half the side of the marker.
+     *
+     * \note default value was changed from 0.05 after 4.8.1 release, because the filtering algorithm has been changed.
+     * Now a few candidates from the same group can be added to the list of candidates if they are far from each other.
+     * @see minGroupDistance.
      */
     public native double minMarkerDistanceRate(); public native DetectorParameters minMarkerDistanceRate(double setter);
+
+    /** \brief minimum average distance between the corners of the two markers in group to add them to the list of candidates
+     *
+     * The average distance between the corners of the two markers is calculated relative to its module size (default 0.21).
+     */
+    public native float minGroupDistance(); public native DetectorParameters minGroupDistance(float setter);
 
     /** \brief default value CORNER_REFINE_NONE */
     public native int cornerRefinementMethod(); public native DetectorParameters cornerRefinementMethod(int setter);
 
-    /** window size for the corner refinement process (in pixels) (default 5). */
+    /** \brief maximum window size for the corner refinement process (in pixels) (default 5).
+     *
+     * The window size may decrease if the ArUco marker is too small, check relativeCornerRefinmentWinSize.
+     * The final window size is calculated as:
+     * min(cornerRefinementWinSize, averageArucoModuleSize*relativeCornerRefinmentWinSize),
+     * where averageArucoModuleSize is average module size of ArUco marker in pixels.
+     * (ArUco marker is composed of black and white modules)
+     */
     public native int cornerRefinementWinSize(); public native DetectorParameters cornerRefinementWinSize(int setter);
+
+    /** \brief Dynamic window size for corner refinement relative to Aruco module size (default 0.3).
+     *
+     * The final window size is calculated as:
+     * min(cornerRefinementWinSize, averageArucoModuleSize*relativeCornerRefinmentWinSize),
+     * where averageArucoModuleSize is average module size of ArUco marker in pixels.
+     * (ArUco marker is composed of black and white modules)
+     * In the case of markers located far from each other, it may be useful to increase the value of the parameter to 0.4-0.5.
+     * In the case of markers located close to each other, it may be useful to decrease the parameter value to 0.1-0.2.
+     */
+    public native float relativeCornerRefinmentWinSize(); public native DetectorParameters relativeCornerRefinmentWinSize(float setter);
 
     /** maximum number of iterations for stop criteria of the corner refinement process (default 30). */
     public native int cornerRefinementMaxIterations(); public native DetectorParameters cornerRefinementMaxIterations(int setter);

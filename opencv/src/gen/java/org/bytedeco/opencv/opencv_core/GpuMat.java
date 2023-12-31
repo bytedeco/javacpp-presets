@@ -203,21 +203,25 @@ public class GpuMat extends Pointer {
     public native void copyTo(@ByVal Mat dst);
     public native void copyTo(@ByVal UMat dst);
     public native void copyTo(@ByVal GpuMat dst);
+    /** bindings overload which copies the GpuMat content to device memory (Blocking call) */
 
     /** copies the GpuMat content to device memory (Non-Blocking call) */
     public native void copyTo(@ByVal Mat dst, @ByRef Stream stream);
     public native void copyTo(@ByVal UMat dst, @ByRef Stream stream);
     public native void copyTo(@ByVal GpuMat dst, @ByRef Stream stream);
+    /** bindings overload which copies the GpuMat content to device memory (Non-Blocking call) */
 
     /** copies those GpuMat elements to "m" that are marked with non-zero mask elements (Blocking call) */
     public native void copyTo(@ByVal Mat dst, @ByVal Mat mask);
     public native void copyTo(@ByVal UMat dst, @ByVal UMat mask);
     public native void copyTo(@ByVal GpuMat dst, @ByVal GpuMat mask);
+    /** bindings overload which copies those GpuMat elements to "m" that are marked with non-zero mask elements (Blocking call) */
 
     /** copies those GpuMat elements to "m" that are marked with non-zero mask elements (Non-Blocking call) */
     public native void copyTo(@ByVal Mat dst, @ByVal Mat mask, @ByRef Stream stream);
     public native void copyTo(@ByVal UMat dst, @ByVal UMat mask, @ByRef Stream stream);
     public native void copyTo(@ByVal GpuMat dst, @ByVal GpuMat mask, @ByRef Stream stream);
+    /** bindings overload which copies those GpuMat elements to "m" that are marked with non-zero mask elements (Non-Blocking call) */
 
     /** sets some of the GpuMat elements to s (Blocking call) */
     public native @ByRef GpuMat setTo(@ByVal Scalar s);
@@ -244,6 +248,7 @@ public class GpuMat extends Pointer {
     public native void convertTo(@ByVal Mat dst, int rtype, @ByRef Stream stream);
     public native void convertTo(@ByVal UMat dst, int rtype, @ByRef Stream stream);
     public native void convertTo(@ByVal GpuMat dst, int rtype, @ByRef Stream stream);
+    /** bindings overload which converts GpuMat to another datatype (Non-Blocking call) */
 
     /** converts GpuMat to another datatype with scaling (Blocking call) */
     public native void convertTo(@ByVal Mat dst, int rtype, double alpha, double beta/*=0.0*/);
@@ -252,6 +257,7 @@ public class GpuMat extends Pointer {
     public native void convertTo(@ByVal UMat dst, int rtype, double alpha);
     public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha, double beta/*=0.0*/);
     public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha);
+    /** bindings overload which converts GpuMat to another datatype with scaling(Blocking call) */
 
     /** converts GpuMat to another datatype with scaling (Non-Blocking call) */
     public native void convertTo(@ByVal Mat dst, int rtype, double alpha, @ByRef Stream stream);
@@ -262,6 +268,7 @@ public class GpuMat extends Pointer {
     public native void convertTo(@ByVal Mat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
     public native void convertTo(@ByVal UMat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
     public native void convertTo(@ByVal GpuMat dst, int rtype, double alpha, double beta, @ByRef Stream stream);
+    /** bindings overload which converts GpuMat to another datatype with scaling (Non-Blocking call) */
 
     public native void assignTo(@ByRef GpuMat m, int type/*=-1*/);
     public native void assignTo(@ByRef GpuMat m);

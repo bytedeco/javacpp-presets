@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.8.1
+OPENCV_VERSION=4.9.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -79,8 +79,12 @@ patch -Np1 < ../../../opencv.patch
 patch -Np1 < ../../../opencv-linux-ppc64le.patch
 
 # work around the toolchain for Android not supporting Clang with libc++ properly
-sedinplace '/include_directories/d' platforms/android/android.toolchain.cmake
-sedinplace "s/<LINK_LIBRARIES>/<LINK_LIBRARIES> ${ANDROID_LIBS:-}/g" platforms/android/android.toolchain.cmake
+#sedinplace '/include_directories/d' platforms/android/android.toolchain.cmake
+#sedinplace "s/<LINK_LIBRARIES>/<LINK_LIBRARIES> ${ANDROID_LIBS:-}/g" platforms/android/android.toolchain.cmake
+
+# disable broken NEON code
+sedinplace 's/if(NOT MSVC)/if(FALSE)/g' cmake/OpenCVCompilerOptimizations.cmake
+sedinplace 's/define CV_NEON 1/define CV_NEON 0/g' modules/core/include/opencv2/core/cv_cpu_dispatch.h
 
 # https://github.com/opencv/opencv/issues/19846
 sedinplace 's/dgeev_/OCV_LAPACK_FUNC(dgeev)/g' modules/calib3d/src/usac/dls_solver.cpp modules/calib3d/src/usac/essential_solver.cpp
@@ -265,7 +269,7 @@ case $PLATFORM in
         sedinplace 's:/sdk/native/libs/x86_64/libopencv_:/lib/libopencv_:g' ../sdk/native/jni/abi-x86_64/OpenCVModules-release.cmake
         ;;
     ios-arm64)
-        $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=arm64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
+        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=arm64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -276,7 +280,7 @@ case $PLATFORM in
         cp ../share/java/opencv4/libopencv_java.a ../lib
         ;;
     ios-x86_64)
-        $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=x86_64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
+        IPHONEOS_DEPLOYMENT_TARGET=8.0 $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake -DIPHONEOS_DEPLOYMENT_TARGET=8.0 -DIOS_ARCH=x86_64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENCL=OFF $GPU_FLAGS $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/ -I$(/usr/libexec/java_home)/include -I$(/usr/libexec/java_home)/include/darwin" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -455,7 +459,7 @@ fi
 cp -r modules/java_bindings_generator/gen/java ..
 cp -r modules/java_bindings_generator/gen/android/java ..
 # remove files that require the Android SDK to compile
-rm ../java/org/opencv/android/AsyncServiceHelper.java
+rm ../java/org/opencv/android/AsyncServiceHelper.java || true
 rm ../java/org/opencv/android/CameraActivity.java
 rm ../java/org/opencv/android/CameraBridgeViewBase.java
 rm ../java/org/opencv/android/JavaCameraView.java

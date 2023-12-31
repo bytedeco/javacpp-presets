@@ -41,9 +41,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp", "opencv2/ximgproc/paillou_filter.hpp", "opencv2/ximgproc/fast_line_detector.hpp",
             "opencv2/ximgproc/deriche_filter.hpp", "opencv2/ximgproc/peilin.hpp", "opencv2/ximgproc/fourier_descriptors.hpp", "opencv2/ximgproc/ridgefilter.hpp",
             "opencv2/ximgproc/brightedges.hpp", "opencv2/ximgproc/run_length_morphology.hpp", "opencv2/ximgproc/edgepreserving_filter.hpp",
-            "opencv2/ximgproc/color_match.hpp", "opencv2/ximgproc/radon_transform.hpp", "opencv2/ximgproc/find_ellipses.hpp"}, link = "opencv_ximgproc@.408"),
+            "opencv2/ximgproc/color_match.hpp", "opencv2/ximgproc/radon_transform.hpp", "opencv2/ximgproc/find_ellipses.hpp"}, link = "opencv_ximgproc@.409"),
         @Platform(value = "ios", preload = "libopencv_ximgproc"),
-        @Platform(value = "windows", link = "opencv_ximgproc481")},
+        @Platform(value = "windows", link = "opencv_ximgproc490")},
     target = "org.bytedeco.opencv.opencv_ximgproc",
     global = "org.bytedeco.opencv.global.opencv_ximgproc"
 )

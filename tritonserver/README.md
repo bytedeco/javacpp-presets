@@ -23,7 +23,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Triton Inference Server 2.38.0  https://github.com/triton-inference-server/server
+ * Triton Inference Server 2.41.0  https://github.com/triton-inference-server/server
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -51,9 +51,9 @@ This sample intends to show how to call the Java-mapped C API of Triton to execu
 
  1. Get the source code of Triton Inference Server to prepare the model repository:
 ```bash
- $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.38.0.tar.gz
- $ tar zxvf v2.38.0.tar.gz
- $ cd server-2.38.0/docs/examples/model_repository
+ $ wget https://github.com/triton-inference-server/server/archive/refs/tags/v2.41.0.tar.gz
+ $ tar zxvf v2.41.0.tar.gz
+ $ cd server-2.41.0/docs/examples/model_repository
  $ mkdir models
  $ cd models; cp -a ../simple .
 ```
@@ -61,7 +61,7 @@ Now, this `models` directory will be our model repository.
 
  2. Start the Docker container to run the sample (assuming we are under the `models` directory created above):
 ```bash
- $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:23.09-py3 bash
+ $ docker run -it --gpus=all -v $(pwd):/workspace nvcr.io/nvidia/tritonserver:23.12-py3 bash
  $ apt update
  $ apt install -y openjdk-11-jdk
  $ wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz

@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tritonserver-platform</artifactId>
-            <version>2.38-1.5.10-SNAPSHOT</version>
+            <version>2.41-1.5.10-SNAPSHOT</version>
             <classifier>shaded</classifier>
         </dependency>
     </dependencies>

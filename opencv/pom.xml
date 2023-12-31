@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv</artifactId>
-  <version>4.8.1-${project.parent.version}</version>
+  <version>4.9.0-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
 
   <dependencies>

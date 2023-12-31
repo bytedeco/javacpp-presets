@@ -125,7 +125,7 @@ public class L_REGPARAMS extends Pointer {
     /** generate, compare or display                     */
     public native @Cast("l_int32") int mode(); public native L_REGPARAMS mode(int setter);
     /** index into saved files for this test; 0-based    */
-    public native @Cast("l_int32") int index(); public native L_REGPARAMS index(int setter);
+    public native @Cast("l_atomic") int index(); public native L_REGPARAMS index(int setter);
     /** overall result of the test                       */
     public native @Cast("l_int32") int success(); public native L_REGPARAMS success(int setter);
     /** 1 if in display mode; 0 otherwise                */

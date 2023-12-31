@@ -47,10 +47,10 @@ public class BOWImgDescriptorExtractor extends Pointer {
     @param dmatcher Descriptor matcher that is used to find the nearest word of the trained vocabulary
     for each keypoint descriptor of the image.
      */
-    public BOWImgDescriptorExtractor( @Cast("cv::DescriptorExtractor*") @Ptr Feature2D dextractor,
-                                   @Ptr DescriptorMatcher dmatcher ) { super((Pointer)null); allocate(dextractor, dmatcher); }
-    private native void allocate( @Cast("cv::DescriptorExtractor*") @Ptr Feature2D dextractor,
-                                   @Ptr DescriptorMatcher dmatcher );
+    public BOWImgDescriptorExtractor( @Ptr Feature2D dextractor,
+                                           @Ptr DescriptorMatcher dmatcher ) { super((Pointer)null); allocate(dextractor, dmatcher); }
+    private native void allocate( @Ptr Feature2D dextractor,
+                                           @Ptr DescriptorMatcher dmatcher );
     /** \overload */
     public BOWImgDescriptorExtractor( @Ptr DescriptorMatcher dmatcher ) { super((Pointer)null); allocate(dmatcher); }
     private native void allocate( @Ptr DescriptorMatcher dmatcher );

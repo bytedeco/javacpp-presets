@@ -43,6 +43,7 @@ public class Complexf extends FloatPointer {
     /** conjugation */
     public native @ByVal Complexf conj();
 
+    /** the real and the imaginary parts */
     public native float re(); public native Complexf re(float setter);
-    public native float im(); public native Complexf im(float setter); //< the real and the imaginary parts
+    public native float im(); public native Complexf im(float setter);
 }

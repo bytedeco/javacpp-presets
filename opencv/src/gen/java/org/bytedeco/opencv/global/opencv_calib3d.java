@@ -656,7 +656,8 @@ public static final int CALIB_CB_ADAPTIVE_THRESH = 1,
        CALIB_CB_EXHAUSTIVE      = 16,
        CALIB_CB_ACCURACY        = 32,
        CALIB_CB_LARGER          = 64,
-       CALIB_CB_MARKER          = 128;
+       CALIB_CB_MARKER          = 128,
+       CALIB_CB_PLAIN           = 256;
 
 /** enum cv:: */
 public static final int CALIB_CB_SYMMETRIC_GRID  = 1,
@@ -898,7 +899,7 @@ and a rotation matrix.
 It optionally returns three rotation matrices, one for each axis, and the three Euler angles in
 degrees (as the return value) that could be used in OpenGL. Note, there is always more than one
 sequence of rotations about the three principal axes that results in the same orientation of an
-object, e.g. see \cite Slabaugh . Returned tree rotation matrices and corresponding three Euler angles
+object, e.g. see \cite Slabaugh . Returned three rotation matrices and corresponding three Euler angles
 are only one of the possible solutions.
  */
 @Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ,
@@ -935,7 +936,7 @@ matrix and the position of a camera.
 It optionally returns three rotation matrices, one for each axis, and three Euler angles that could
 be used in OpenGL. Note, there is always more than one sequence of rotations about the three
 principal axes that results in the same orientation of an object, e.g. see \cite Slabaugh . Returned
-tree rotation matrices and corresponding three Euler angles are only one of the possible solutions.
+three rotation matrices and corresponding three Euler angles are only one of the possible solutions.
 <p>
 The function is based on #RQDecomp3x3 .
  */
@@ -1649,6 +1650,10 @@ square-like shape) to filter out false quads extracted at the contour retrieval 
 -   \ref CALIB_CB_FAST_CHECK Run a fast check on the image that looks for chessboard corners,
 and shortcut the call if none is found. This can drastically speed up the call in the
 degenerate condition when no chessboard is observed.
+-   \ref CALIB_CB_PLAIN All other flags are ignored. The input image is taken as is.
+No image processing is done to improve to find the checkerboard. This has the effect of speeding up the
+execution of the function but could lead to not recognizing the checkerboard if the image
+is not previously binarized in the appropriate manner.
 <p>
 The function attempts to determine whether the input image is a view of the chessboard pattern and
 locate the internal chessboard corners. The function returns a non-zero value if all of the corners
@@ -2043,6 +2048,10 @@ The algorithm performs the following steps:
     {@code c_y} very far from the image center, and/or large differences between {@code f_x} and
     {@code f_y} (ratios of 10:1 or more)), then you are probably using patternSize=cvSize(rows,cols)
     instead of using patternSize=cvSize(cols,rows) in \ref findChessboardCorners.
+<p>
+\note
+    The function may throw exceptions, if unsupported combination of parameters is provided or
+    the system is underconstrained.
 <p>
 @see
    calibrateCameraRO, findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate,

@@ -539,6 +539,8 @@ public static final int CV_CPU_AVX_5124FMAPS =    27;
 
 public static final int CV_CPU_NEON =             100;
 public static final int CV_CPU_NEON_DOTPROD =     101;
+public static final int CV_CPU_NEON_FP16 =        102;
+public static final int CV_CPU_NEON_BF16 =        103;
 
 public static final int CV_CPU_MSA =              150;
 
@@ -549,7 +551,8 @@ public static final int CV_CPU_VSX3 =             201;
 
 public static final int CV_CPU_RVV =              210;
 
-public static final int CV_CPU_LASX =             230;
+public static final int CV_CPU_LSX =              230;
+public static final int CV_CPU_LASX =             231;
 
 // CPU features groups
 public static final int CV_CPU_AVX512_SKX =       256;
@@ -599,6 +602,8 @@ public static final int
 
     CPU_NEON            = 100,
     CPU_NEON_DOTPROD    = 101,
+    CPU_NEON_FP16       = 102,
+    CPU_NEON_BF16       = 103,
 
     CPU_MSA             = 150,
 
@@ -609,7 +614,8 @@ public static final int
 
     CPU_RVV             = 210,
 
-    CPU_LASX             = 230,
+    CPU_LSX             = 230,
+    CPU_LASX            = 231,
 
     /** Skylake-X with AVX-512F/CD/BW/DQ/VL */
     CPU_AVX512_SKX      = 256,
@@ -1673,7 +1679,7 @@ public static final int CV_CXX_STD_ARRAY = 1;
   // nothing, intrinsics/asm code is not supported
 // #else
 //   #if ((defined _MSC_VER && defined _M_X64)
-//       || (defined __GNUC__ && defined __x86_64__ && defined __SSE2__))
+//       || (defined __GNUC__ && defined __SSE2__))
 //       && !defined(OPENCV_SKIP_INCLUDE_EMMINTRIN_H)
 //     #include <emmintrin.h>
 //   #endif
@@ -2007,8 +2013,8 @@ public static native int cvIsInf( float value );
 // #define OPENCV_VERSION_HPP
 
 public static final int CV_VERSION_MAJOR =    4;
-public static final int CV_VERSION_MINOR =    8;
-public static final int CV_VERSION_REVISION = 1;
+public static final int CV_VERSION_MINOR =    9;
+public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -7268,8 +7274,8 @@ public static final String cvFuncName = "";
 /** \brief Finds out if there is any intersection between two rectangles
  *
  * mainly useful for language bindings
- * @param rect1 First rectangle
- * @param rect2 Second rectangle
+ * @param a First rectangle
+ * @param b Second rectangle
  * @return the area of the intersection
  */
 @Namespace("cv") public static native double rectangleIntersectionArea(@Const @ByRef Rect2d a, @Const @ByRef Rect2d b);
@@ -7728,6 +7734,9 @@ be set to the default -1. In this case, the output array will have the same dept
 array, be it src1, src2 or both.
 \note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
+\note (Python) Be careful to difference behaviour between src1/src2 are single number and they are tuple/array.
+{@code add(src,X)} means {@code add(src,(X,X,X,X))}.
+{@code add(src,(X,))} means {@code add(src,(X,0,0,0))}.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
 @param dst output array that has the same size and number of channels as the input array(s); the
@@ -7776,6 +7785,9 @@ in the first case, when src1.depth() == src2.depth(), dtype can be set to the de
 case the output array will have the same depth as the input array, be it src1, src2 or both.
 \note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
+\note (Python) Be careful to difference behaviour between src1/src2 are single number and they are tuple/array.
+{@code subtract(src,X)} means {@code subtract(src,(X,X,X,X))}.
+{@code subtract(src,(X,))} means {@code subtract(src,(X,0,0,0))}.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
 @param dst output array of the same size and the same number of channels as the input array.
@@ -7808,6 +7820,9 @@ For a not-per-element matrix product, see gemm .
 \note Saturation is not applied when the output array has the depth
 CV_32S. You may even get result of an incorrect sign in the case of
 overflow.
+\note (Python) Be careful to difference behaviour between src1/src2 are single number and they are tuple/array.
+{@code multiply(src,X)} means {@code multiply(src,(X,X,X,X))}.
+{@code multiply(src,(X,))} means {@code multiply(src,(X,0,0,0))}.
 @param src1 first input array.
 @param src2 second input array of the same size and the same type as src1.
 @param dst output array of the same size and type as src1.
@@ -7846,6 +7861,9 @@ Expect correct IEEE-754 behaviour for floating-point data (with NaN, Inf result 
 <p>
 \note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
+\note (Python) Be careful to difference behaviour between src1/src2 are single number and they are tuple/array.
+{@code divide(src,X)} means {@code divide(src,(X,X,X,X))}.
+{@code divide(src,(X,))} means {@code divide(src,(X,0,0,0))}.
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1.
 @param scale scalar factor.
@@ -8742,6 +8760,15 @@ around both axes.
 @Namespace("cv") public static native void flipND(@ByVal UMat src, @ByVal UMat dst, int axis);
 @Namespace("cv") public static native void flipND(@ByVal GpuMat src, @ByVal GpuMat dst, int axis);
 
+/** \brief Broadcast the given Mat to the given shape.
+ * @param src input array
+ * @param shape target shape. Should be a list of CV_32S numbers. Note that negative values are not supported.
+ * @param dst output array that has the given shape
+ */
+@Namespace("cv") public static native void broadcast(@ByVal Mat src, @ByVal Mat shape, @ByVal Mat dst);
+@Namespace("cv") public static native void broadcast(@ByVal UMat src, @ByVal UMat shape, @ByVal UMat dst);
+@Namespace("cv") public static native void broadcast(@ByVal GpuMat src, @ByVal GpuMat shape, @ByVal GpuMat dst);
+
 /** enum cv::RotateFlags */
 public static final int
     /**Rotate 90 degrees clockwise */
@@ -9097,6 +9124,9 @@ The function cv::absdiff calculates:
     multi-channel arrays, each channel is processed independently.
 \note Saturation is not applied when the arrays have the depth CV_32S.
 You may even get a negative value in the case of overflow.
+\note (Python) Be careful to difference behaviour between src1/src2 are single number and they are tuple/array.
+{@code absdiff(src,X)} means {@code absdiff(src,(X,X,X,X))}.
+{@code absdiff(src,(X,))} means {@code absdiff(src,(X,0,0,0))}.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
 @param dst output array that has the same size and type as input arrays.
@@ -9423,7 +9453,7 @@ elements.
                             double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal GpuMat a);
 
-/** \brief converts NaNs to the given number
+/** \brief Replaces NaNs by given number
 @param a input/output matrix (CV_32F type).
 @param val value to convert the NaNs
 */

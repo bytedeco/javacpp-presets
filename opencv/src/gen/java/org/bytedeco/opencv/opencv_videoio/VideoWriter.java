@@ -61,7 +61,7 @@ public class VideoWriter extends Pointer {
     VideoWriter::fourcc('P','I','M','1') is a MPEG-1 codec, VideoWriter::fourcc('M','J','P','G')
     is a motion-jpeg codec etc. List of codes can be obtained at
     [MSDN](https://docs.microsoft.com/en-us/windows/win32/medfound/video-fourccs) page
-    or with this [archived page](https://web.archive.org/web/20220316062600/http://www.fourcc.org/codecs.php)
+    or with this [page](https://fourcc.org/codecs.php)
     of the fourcc site for a more complete list). FFMPEG backend with MP4 container natively uses
     other values as fourcc code: see [ObjectType](http://mp4ra.org/#/codecs),
     so you may receive a warning message from OpenCV about fourcc code conversion.
@@ -77,6 +77,9 @@ public class VideoWriter extends Pointer {
     - Most codecs are lossy. If you want lossless video file you need to use a lossless codecs
       (eg. FFMPEG FFV1, Huffman HFYU, Lagarith LAGS, etc...)
     - If FFMPEG is enabled, using {@code codec=0; fps=0;} you can create an uncompressed (raw) video file.
+    - If FFMPEG is used, we allow frames of odd width or height, but in this case we truncate
+      the rightmost column/the bottom row. Probably, this should be handled more elegantly,
+      but some internal functions inside FFMPEG swscale require even width/height.
     */
     public VideoWriter(@Str BytePointer filename, int fourcc, double fps,
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { super((Pointer)null); allocate(filename, fourcc, fps, frameSize, isColor); }

@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.8.1-1.5.10-SNAPSHOT</version>
+            <version>4.9.0-1.5.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

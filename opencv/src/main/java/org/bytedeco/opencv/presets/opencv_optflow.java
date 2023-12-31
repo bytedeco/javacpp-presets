@@ -34,9 +34,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = {opencv_ximgproc.class, opencv_video.class},
     value = {
-        @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.408"),
+        @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.409"),
         @Platform(value = "ios", preload = "libopencv_optflow"),
-        @Platform(value = "windows", link = "opencv_optflow481")},
+        @Platform(value = "windows", link = "opencv_optflow490")},
     target = "org.bytedeco.opencv.opencv_optflow",
     global = "org.bytedeco.opencv.global.opencv_optflow"
 )

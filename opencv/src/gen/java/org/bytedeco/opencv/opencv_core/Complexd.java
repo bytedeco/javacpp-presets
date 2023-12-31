@@ -31,6 +31,7 @@ public class Complexd extends DoublePointer {
     /** conjugation */
     public native @ByVal Complexd conj();
 
+    /** the real and the imaginary parts */
     public native double re(); public native Complexd re(double setter);
-    public native double im(); public native Complexd im(double setter); //< the real and the imaginary parts
+    public native double im(); public native Complexd im(double setter);
 }

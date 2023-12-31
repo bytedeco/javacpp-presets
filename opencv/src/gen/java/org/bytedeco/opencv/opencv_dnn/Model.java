@@ -138,6 +138,9 @@ public class Model extends Pointer {
          /** @see Net::setPreferableTarget */
          public native @ByRef Model setPreferableTarget(@Cast("cv::dnn::Target") int targetId);
 
+         /** @see Net::enableWinograd */
+         public native @ByRef Model enableWinograd(@Cast("bool") boolean useWinograd);
+
          public native @Deprecated @ByRef @Name("operator cv::dnn::Net&") Net asNet();
 
      //protected: - internal/tests usage only

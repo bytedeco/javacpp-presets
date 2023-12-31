@@ -35,12 +35,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = opencv_imgcodecs.class,
     value = {
-        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.408"),
+        @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.409"),
         @Platform(value = "android", preload = {
             "native_camera_r2.2.0", "native_camera_r2.3.4", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
             "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
         @Platform(value = "ios", preload = "libopencv_videoio"),
-        @Platform(value = "windows", link = "opencv_videoio481", preload = {"opencv_ffmpeg481", "opencv_ffmpeg481_64"})},
+        @Platform(value = "windows", link = "opencv_videoio490", preload = {"opencv_ffmpeg490", "opencv_ffmpeg490_64"})},
     target = "org.bytedeco.opencv.opencv_videoio",
     global = "org.bytedeco.opencv.global.opencv_videoio"
 )

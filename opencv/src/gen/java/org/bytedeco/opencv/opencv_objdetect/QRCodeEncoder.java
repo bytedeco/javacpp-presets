@@ -62,13 +62,7 @@ public class QRCodeEncoder extends Pointer {
     public static final int
         ECI_UTF8 = 26;
 
-    /** \brief QR code encoder parameters.
-     @param version The optional version of QR code (by default - maximum possible depending on
-                    the length of the string).
-     @param correction_level The optional level of error correction (by default - the lowest).
-     @param mode The optional encoding mode - Numeric, Alphanumeric, Byte, Kanji, ECI or Structured Append.
-     @param structure_number The optional number of QR codes to generate in Structured Append mode.
-    */
+    /** \brief QR code encoder parameters. */
     @NoOffset public static class Params extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -85,9 +79,17 @@ public class QRCodeEncoder extends Pointer {
     
         public Params() { super((Pointer)null); allocate(); }
         private native void allocate();
+
+        /** The optional version of QR code (by default - maximum possible depending on the length of the string). */
         public native int version(); public native Params version(int setter);
+
+        /** The optional level of error correction (by default - the lowest). */
         public native @Cast("cv::QRCodeEncoder::CorrectionLevel") int correction_level(); public native Params correction_level(int setter);
+
+        /** The optional encoding mode - Numeric, Alphanumeric, Byte, Kanji, ECI or Structured Append. */
         public native @Cast("cv::QRCodeEncoder::EncodeMode") int mode(); public native Params mode(int setter);
+
+        /** The optional number of QR codes to generate in Structured Append mode. */
         public native int structure_number(); public native Params structure_number(int setter);
     }
 

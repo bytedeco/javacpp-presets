@@ -35,7 +35,7 @@ public class LayerNormLayer extends Layer {
             return new LayerNormLayer((Pointer)this).offsetAddress(i);
         }
     
-        public native @Cast("bool") boolean hasBias(); public native LayerNormLayer hasBias(boolean setter);
+        public native @Cast("bool") @Deprecated boolean hasBias(); public native LayerNormLayer hasBias(boolean setter); // Deprecated, preserve for compatibility
         public native int axis(); public native LayerNormLayer axis(int setter);
         public native float epsilon(); public native LayerNormLayer epsilon(float setter);
 

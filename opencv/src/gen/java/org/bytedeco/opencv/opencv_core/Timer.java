@@ -24,5 +24,6 @@ public class Timer extends Pointer {
     public native void start();
     public native void stop();
 
+    /** duration in nanoseconds */
     public native @Cast("uint64") long durationNS();
 }
