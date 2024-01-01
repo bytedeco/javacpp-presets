@@ -127,7 +127,7 @@ public static final int
        CAP_OPENNI       = 900,
        /** OpenNI (for Asus Xtion) */
        CAP_OPENNI_ASUS  = 910,
-       /** Android - not used */
+       /** MediaNDK (API Level 21+) and NDK Camera (API level 24+) for Android */
        CAP_ANDROID      = 1000,
        /** XIMEA Camera API */
        CAP_XIAPI        = 1100,
@@ -167,7 +167,7 @@ public static final int
        CAP_XINE         = 2400,
        /** uEye Camera API */
        CAP_UEYE         = 2500,
-       /** For Orbbec 3D-Sensor device/module (Astra+, Femto) */
+       /** For Orbbec 3D-Sensor device/module (Astra+, Femto, Astra2, Gemini2, Gemini2L, Gemini2XL, Femto Mega) attention: Astra2, Gemini2, and Gemini2L cameras currently only support Windows and Linux kernel versions no higher than 4.15, and higher versions of Linux kernel may have exceptions. */
        CAP_OBSENSOR     = 2600;
 
 
@@ -181,7 +181,7 @@ public static final int
 public static final int
        /** Current position of the video file in milliseconds. */
        CAP_PROP_POS_MSEC       = 0,
-       /** 0-based index of the frame to be decoded/captured next. */
+       /** 0-based index of the frame to be decoded/captured next. When the index i is set in RAW mode (CAP_PROP_FORMAT == -1) this will seek to the key frame k, where k <= i. */
        CAP_PROP_POS_FRAMES     = 1,
        /** Relative position of the video file: 0=start of the film, 1=end of the film. */
        CAP_PROP_POS_AVI_RATIO  = 2,
@@ -271,7 +271,8 @@ public static final int
        CAP_PROP_OPEN_TIMEOUT_MSEC = 53,
        /** (**open-only**) timeout in milliseconds for reading from a video capture (applicable for FFmpeg and GStreamer back-ends only) */
        CAP_PROP_READ_TIMEOUT_MSEC = 54,
-       CAP_PROP_STREAM_OPEN_TIME_USEC = 55, //<! (read-only) time in microseconds since Jan 1 1970 when stream was opened. Applicable for FFmpeg backend only. Useful for RTSP and other live streams
+       /** (read-only) time in microseconds since Jan 1 1970 when stream was opened. Applicable for FFmpeg backend only. Useful for RTSP and other live streams */
+       CAP_PROP_STREAM_OPEN_TIME_USEC = 55,
        /** (read-only) Number of video channels */
        CAP_PROP_VIDEO_TOTAL_CHANNELS = 56,
        /** (**open-only**) Specify video stream, 0-based index. Use -1 to disable video stream from file or IP cameras. Default value is 0. */
@@ -320,7 +321,7 @@ public static final int
   /** If it is not zero, the encoder will expect and encode color frames, otherwise it
  *  will work with grayscale frames. */
   VIDEOWRITER_PROP_IS_COLOR = 4,
-  /** Defaults to CV_8U. */
+  /** Defaults to \ref CV_8U. */
   VIDEOWRITER_PROP_DEPTH = 5,
   /** (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via {@code params} parameter in VideoWriter constructor / .open() method. Default value is backend-specific. */
   VIDEOWRITER_PROP_HW_ACCELERATION = 6,
@@ -328,8 +329,14 @@ public static final int
   VIDEOWRITER_PROP_HW_DEVICE       = 7,
   /** (**open-only**) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between cv::UMat and HW accelerated encoder. */
   VIDEOWRITER_PROP_HW_ACCELERATION_USE_OPENCL = 8,
+  /** (**open-only**) Set to non-zero to enable encapsulation of an encoded raw video stream. Each raw encoded video frame should be passed to VideoWriter::write() as single row or column of a \ref CV_8UC1 Mat. \note If the key frame interval is not 1 then it must be manually specified by the user. This can either be performed during initialization passing \ref VIDEOWRITER_PROP_KEY_INTERVAL as one of the extra encoder params  to \ref VideoWriter::VideoWriter(const String &, int, double, const Size &, const std::vector< int > &params) or afterwards by setting the \ref VIDEOWRITER_PROP_KEY_FLAG with \ref VideoWriter::set() before writing each frame. FFMpeg backend only. */
+  VIDEOWRITER_PROP_RAW_VIDEO = 9,
+  /** (**open-only**) Set the key frame interval using raw video encapsulation (\ref VIDEOWRITER_PROP_RAW_VIDEO != 0). Defaults to 1 when not set. FFMpeg backend only. */
+  VIDEOWRITER_PROP_KEY_INTERVAL = 10,
+  /** Set to non-zero to signal that the following frames are key frames or zero if not, when encapsulating raw video (\ref VIDEOWRITER_PROP_RAW_VIDEO != 0). FFMpeg backend only. */
+  VIDEOWRITER_PROP_KEY_FLAG = 11,
 // #ifndef CV_DOXYGEN
-  CV__VIDEOWRITER_PROP_LATEST = 9;
+  CV__VIDEOWRITER_PROP_LATEST = 12;
 // #endif
 
 /** \} videoio_flags_base
@@ -419,6 +426,10 @@ public static final int CAP_PROP_OPENNI_OUTPUT_MODE       = 100,
        CAP_PROP_OPENNI2_SYNC             = 110,
        CAP_PROP_OPENNI2_MIRROR           = 111;
 
+// #ifdef _MSC_VER
+// #pragma warning( push )
+// #pragma warning( disable: 5054 )
+// #endif
 /** OpenNI shortcuts */
 /** enum cv:: */
 public static final int CAP_OPENNI_IMAGE_GENERATOR_PRESENT         = CAP_OPENNI_IMAGE_GENERATOR + CAP_PROP_OPENNI_GENERATOR_PRESENT,
@@ -429,6 +440,9 @@ public static final int CAP_OPENNI_IMAGE_GENERATOR_PRESENT         = CAP_OPENNI_
        CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION    = CAP_OPENNI_DEPTH_GENERATOR + CAP_PROP_OPENNI_REGISTRATION,
        CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON = CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION,
        CAP_OPENNI_IR_GENERATOR_PRESENT            = CAP_OPENNI_IR_GENERATOR + CAP_PROP_OPENNI_GENERATOR_PRESENT;
+// #ifdef _MSC_VER
+// #pragma warning( pop )
+// #endif
 
 /** OpenNI data given from depth generator */
 /** enum cv:: */

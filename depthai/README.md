@@ -51,7 +51,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.8.1-1.5.10-SNAPSHOT</version>
+            <version>4.9.0-1.5.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
