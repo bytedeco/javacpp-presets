@@ -657,7 +657,7 @@ public class torch implements LoadEnabled, InfoMapper {
 
         //// c10::ArrayRef
         /* Transparent cast from variadic java args to ArrayRef is only possible for non-boolean primitives (see mapArrayRef).
-         * For Pointer subclasses for which a std::vector has been instantiated, we rely on ArrayRef converting constructor from std::vector and add the vector as with otherPointerTypes()
+         * For Pointer subclasses for which a std::vector has been instantiated, we rely on ArrayRef converting constructor from std::vector and add the vector class as an otherPointerTypes()
          */
         for (ArrayInfo t : new ArrayInfo[]{
             new ArrayInfo("Argument").elementTypes("c10::Argument"),

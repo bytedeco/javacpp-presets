@@ -252,6 +252,7 @@ public class ClassType extends NamedType {
   // that would invalidate the refinement.
   // These variants are not registered in the global class table.
   public native @SharedPtr("c10::ClassType") @ByVal ClassType refine(@ByVal TypeArrayRef refined_slots);
+  public native @SharedPtr("c10::ClassType") @ByVal ClassType refine(@ByVal TypeVector refined_slots);
 
   public native @Cast("bool") boolean isSubtypeOfExt(@Const @ByRef Type rhs, @Cast("std::ostream*") Pointer why_not);
 

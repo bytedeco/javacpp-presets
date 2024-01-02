@@ -40,6 +40,7 @@ public class VariableHooksInterface extends Pointer {
   public native void retain_grad(@Const @ByRef TensorBase arg0);
   public native @Cast("bool") boolean retains_grad(@Const @ByRef TensorBase arg0);
   public native void _backward(@Const @ByRef Tensor arg0, @ByVal TensorArrayRef arg1, @Const @ByRef TensorOptional arg2, @ByVal BoolOptional arg3, @Cast("bool") boolean arg4);
+  public native void _backward(@Const @ByRef Tensor arg0, @ByVal TensorVector arg1, @Const @ByRef TensorOptional arg2, @ByVal BoolOptional arg3, @Cast("bool") boolean arg4);
   public native void requires_grad_(@Const @ByRef TensorBase arg0, @Cast("bool") boolean arg1);
   public native void basic_autograd_not_implemented_fallback(@Const @ByRef OperatorHandle op, @ByVal DispatchKeySet dispatch_keys, IValueVector stack);
 }
