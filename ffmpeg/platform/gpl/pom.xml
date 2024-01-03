@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ffmpeg-platform-gpl</artifactId>
-  <version>6.0-${project.parent.version}</version>
+  <version>6.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for FFmpeg (GPL enabled)</name>
 
   <properties>
