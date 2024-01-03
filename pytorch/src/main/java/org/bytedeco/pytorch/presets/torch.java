@@ -356,7 +356,6 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::requires_grad", "at::range", "at::bernoulli_out", "at::normal_out", "at::stft").skipDefaults())
             .put(new Info("c10::prim::requires_grad").javaNames("requires_grad"))
             .put(new Info("c10::aten::clone").javaNames("_clone"))
-            .put(new Info("c10::detail::_str<CompileTimeEmptyString>").javaNames("_strCompileTimeEmptyString"))
             .put(new Info("at::TensorBase").base("AbstractTensor").pointerTypes("TensorBase"))
         ;
 
@@ -1870,7 +1869,8 @@ public class torch implements LoadEnabled, InfoMapper {
             "c10::ThreadLocalDebugInfo::_forceCurrentDebugInfo",
             "c10::impl::_force_tls_local_dispatch_key_set",
             "torch::jit::CompilationUnit::_clear_python_cu",
-            "torch::jit::GraphFunction::_set_initial_executor_execution_mode", "torch::jit::GraphFunction::_set_ignore_amp"
+            "torch::jit::GraphFunction::_set_initial_executor_execution_mode", "torch::jit::GraphFunction::_set_ignore_amp",
+            "c10::detail::_str"
         ).skip());
 
 

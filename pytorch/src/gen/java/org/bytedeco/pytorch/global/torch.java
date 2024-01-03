@@ -1463,9 +1463,13 @@ public static final int HAS_DEMANGLE = 0;
 
 
 
-@Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef Pointer _str(@Cast("std::ostream*") @ByRef Pointer ss);
 
-@Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef @Name("_str") Pointer _strCompileTimeEmptyString(@Cast("std::ostream*") @ByRef Pointer ss, @Const @ByRef CompileTimeEmptyString t);
+
+
+
+
+
+
 
 // Specializations for already-a-string types.
 
