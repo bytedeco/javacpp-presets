@@ -761,8 +761,6 @@ public class torch implements LoadEnabled, InfoMapper {
         }) {
             ai.mapList(infoMap);
         }
-        // swap is a friend templated function. Parser fails to perform template substitution in this case.
-        infoMap.put(new Info("c10::impl::ListElementReference::swap<T,Iterator>").skip());
         // friendly global setting lost + full qualification not resolved by parser
         infoMap.put(new Info("impl::ptr_to_first_element(const c10::List<c10::IValue>&)").javaNames("ptr_to_first_element").annotations("@Name(\"c10::impl::ptr_to_first_element\")").friendly());
 
@@ -2614,11 +2612,9 @@ public class torch implements LoadEnabled, InfoMapper {
                    .put(new Info(template("operator std::conditional_t", template("std::is_reference", template("c10::detail::ivalue_to_const_ref_overload_return", t) + "::type") + "::value", "const " + t + "&", t) + "()")
                        .javaNames("get" + baseJavaName))
                    .put(new Info(template("c10::List", t) + "::size_type").valueTypes("long"))
-                   .put(new Info(
-                       template("c10::impl::ListElementReference", t, "typename c10::detail::ListImpl::list_type::iterator") + "::swap<T,Iterator>",
-                       template("c10::impl::ListElementReference", t, "c10::detail::ListImpl::list_type::iterator") + "::swap<T,Iterator>",
-                       template("c10::impl::ListElementReference", t, template("std::vector", t) + "::iterator") + "::swap<T,Iterator>")
-                       .skip());
+                   .put(new Info(template("c10::impl::ListElementReference", t, "c10::detail::ListImpl::list_type::iterator") + "::" + template("swap", t, "c10::detail::ListImpl::list_type::iterator"))
+                       .javaNames("swap").friendly())
+            ;
             infoMap.put(new Info(template("c10::List", t) + "::operator []").skip()) // Returns an internal_reference_type by value, which is a ListElementReference, whose copy constructor is disabled.
                    .put(new Info(
                        template("c10::impl::ListIterator", t, "c10::detail::ListImpl::list_type::iterator") + "::operator []",
@@ -2627,7 +2623,8 @@ public class torch implements LoadEnabled, InfoMapper {
                    .put(new Info(template("std::conditional_t", template("std::is_reference", template("c10::detail::ivalue_to_const_ref_overload_return", t) + "::type") + "::value", "const " + t + "&", t))
                        .pointerTypes(itPointerType).valueTypes(elementValueType))
 
-                   .put(new Info(template("c10::impl::swap", t, "typename c10::detail::ListImpl::list_type::iterator")).javaNames("swap").friendly());
+                   .put(new Info(template("c10::impl::swap", t, "typename c10::detail::ListImpl::list_type::iterator")).javaNames("swap"))
+            ;
 
             // Some List constructors are only for specific instances
             if (baseJavaName.equals("Generic"))

@@ -35,7 +35,8 @@ public class BooleanElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  
+  private static native @Namespace @Name("swap") void swap(@ByRef(true) BooleanElementReference lhs, @ByRef(true) BooleanElementReference rhs);
+  public void swap(BooleanElementReference rhs) { swap(this, rhs); }
 
   
   

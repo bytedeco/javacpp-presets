@@ -35,7 +35,8 @@ public class LongElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  
+  private static native @Namespace @Name("swap") void swap(@ByRef(true) LongElementReference lhs, @ByRef(true) LongElementReference rhs);
+  public void swap(LongElementReference rhs) { swap(this, rhs); }
 
   
   

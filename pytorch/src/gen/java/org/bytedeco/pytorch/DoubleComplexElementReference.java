@@ -35,7 +35,8 @@ public class DoubleComplexElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  
+  private static native @Namespace @Name("swap") void swap(@ByRef(true) DoubleComplexElementReference lhs, @ByRef(true) DoubleComplexElementReference rhs);
+  public void swap(DoubleComplexElementReference rhs) { swap(this, rhs); }
 
   
   

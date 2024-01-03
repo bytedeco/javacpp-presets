@@ -35,7 +35,8 @@ public class TensorElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  
+  private static native @Namespace @Name("swap") void swap(@ByRef(true) TensorElementReference lhs, @ByRef(true) TensorElementReference rhs);
+  public void swap(TensorElementReference rhs) { swap(this, rhs); }
 
   
   

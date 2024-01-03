@@ -35,7 +35,8 @@ public class GenericElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  
+  private static native @Namespace @Name("swap") void swap(@ByRef(true) GenericElementReference lhs, @ByRef(true) GenericElementReference rhs);
+  public void swap(GenericElementReference rhs) { swap(this, rhs); }
 
   
   
