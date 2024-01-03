@@ -59939,6 +59939,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     ScalarType src_type,
     @Const Pointer ptr);
 
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::complex<float> >") FloatComplex fetch_and_cast_to_ComplexFloat(
+    ScalarType src_type,
+    @Const Pointer ptr);
+
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::complex<double> >") DoubleComplex fetch_and_cast_to_ComplexDouble(
+    ScalarType src_type,
+    @Const Pointer ptr);
+
 @Namespace("c10") public static native @Cast("bool") @Name("fetch_and_cast<bool>") boolean fetch_and_cast_to_boolean(
     ScalarType src_type,
     @Const Pointer ptr);
@@ -60009,11 +60017,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     ScalarType dest_type,
     Pointer ptr,
     double value);
-@Namespace("c10") public static native @Name("cast_and_store") void cast_and_store_from_qint8(
+@Namespace("c10") public static native @Name("cast_and_store<c10::complex<float> >") void cast_and_store_from_ComplexFloat(
     ScalarType dest_type,
     Pointer ptr,
     @ByVal FloatComplex value);
-@Namespace("c10") public static native @Name("cast_and_store") void cast_and_store_from_qint8(
+@Namespace("c10") public static native @Name("cast_and_store<c10::complex<double> >") void cast_and_store_from_ComplexDouble(
     ScalarType dest_type,
     Pointer ptr,
     @ByVal DoubleComplex value);

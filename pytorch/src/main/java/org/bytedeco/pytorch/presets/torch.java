@@ -2011,8 +2011,8 @@ public class torch implements LoadEnabled, InfoMapper {
             {"at::Float8_e4m3fn", "Float8_e4m3fn"},
             {"at::Float8_e5m2", "Float8_e5m2"}
         }) {
-            infoMap.put(new Info("c10::fetch_and_cast<" + t[0] + ">").javaNames("fetch_and_cast_to_" + t[1]))
-                   .put(new Info("c10::cast_and_store<" + t[0] + ">").javaNames("cast_and_store_from_" + t[1]));
+            infoMap.put(new Info(template("c10::fetch_and_cast", t[0])).javaNames("fetch_and_cast_to_" + t[1]))
+                   .put(new Info(template("c10::cast_and_store", t[0])).javaNames("cast_and_store_from_" + t[1]));
         }
 
 
