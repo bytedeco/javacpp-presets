@@ -198,8 +198,6 @@ public class torch implements LoadEnabled, InfoMapper {
         mapModule(infoMap, name, base, baseBase, true);
     }
 
-    String anyModuleConstructors = "";
-
     public void mapModule(InfoMap infoMap, String name, String base, String baseBase, boolean anyModuleCompatible) {
         if (baseBase != null) {
             infoMap.put(new Info(baseBase).pointerTypes(name + "ImplBaseBase"));
@@ -217,11 +215,18 @@ public class torch implements LoadEnabled, InfoMapper {
         ;
 
         if (anyModuleCompatible) {
-            anyModuleConstructors +=
-                "public AnyModule(" + name + "Impl module) { super((Pointer)null); allocate(module); }\n" +
-                // We need a @Cast because AnyModule constructor is explicit
-                "private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n";
-            infoMap.put(new Info("torch::nn::SequentialImpl::push_back<torch::nn::" + name + "Impl>").javaNames("push_back"));
+            infoMap
+                // Parser queries parameter as ModuleType* instead of std::shared_ptr<ModuleType>
+                // First cppName is to answer template query, second one to generate instance
+                .put(new Info(
+                    "torch::nn::AnyModule::AnyModule<torch::nn::" + name + "Impl>(ModuleType*)",
+                    "torch::nn::AnyModule::AnyModule<torch::nn::" + name + "Impl>(torch::nn::" + name + "Impl*)"
+                ).define().javaText(
+                    "public AnyModule(" + name + "Impl module) { super((Pointer)null); allocate(module); }\n" +
+                    // We need a @Cast because AnyModule constructor is explicit
+                    "private native void allocate(@SharedPtr @Cast({\"\", \"std::shared_ptr<torch::nn::" + name + "Impl>\"}) " + name + "Impl module);\n"))
+                .put(new Info("torch::nn::SequentialImpl::push_back<torch::nn::" + name + "Impl>").javaNames("push_back"))
+            ;
         }
     }
 
@@ -1727,11 +1732,7 @@ public class torch implements LoadEnabled, InfoMapper {
                 "public native @ByVal @Name(\"forward<std::tuple<torch::Tensor,torch::Tensor>>\") T_TensorTensor_T forwardT_TensorTensor_T(@Const @ByRef Tensor query, @Const @ByRef Tensor key, @Const @ByRef Tensor value, @Const @ByRef(nullValue = \"torch::Tensor{}\") Tensor key_padding_mask, @Cast(\"bool\") boolean need_weights/*=true*/, @Const @ByRef(nullValue = \"torch::Tensor{}\") Tensor attn_mask, @Cast(\"bool\") boolean average_attn_weights/*=true*/);\n" +
                 "public native @ByVal @Name(\"forward<torch::nn::ASMoutput>\") ASMoutput forwardASMoutput(@Const @ByRef Tensor input, @Const @ByRef Tensor target);\n"
             ))
-            .put(new Info("torch::nn::AnyModule(ModuleType*)")
-                // We cannot use template instantiation mechanism in Parser with something like
-                // new Info("torch::nn::AnyModule<torch::nn::" + name + "Impl>(ModuleType*)")
-                // because it doesn't work with javaText. And we need javaText because of @Cast.
-                .javaText(anyModuleConstructors));
+        ;
 
         for (String[] outputType : new String[][]{
             {"at::Tensor", "Tensor"},
