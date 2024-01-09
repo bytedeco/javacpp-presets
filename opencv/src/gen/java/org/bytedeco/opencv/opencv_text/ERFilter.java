@@ -42,7 +42,9 @@ public class ERFilter extends Algorithm {
     public ERFilter(Pointer p) { super(p); }
     /** Downcast constructor. */
     public ERFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::text::ERFilter*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::text::ERFilter*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(ERFilter pointer);
 
 
     /** \brief Callback with the classifier is made a class.

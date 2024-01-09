@@ -52,6 +52,11 @@ public class Retina extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Retina(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Retina(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::bioinspired::Retina*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Retina pointer);
 
 
 

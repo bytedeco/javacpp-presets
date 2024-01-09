@@ -6849,9 +6849,10 @@ public static final String cvFuncName = "";
 @Namespace("cv") public static native void insertImageCOI(@ByVal UMat coiimg, CvArr arr);
 @Namespace("cv") public static native void insertImageCOI(@ByVal GpuMat coiimg, CvArr arr, int coi/*=-1*/);
 @Namespace("cv") public static native void insertImageCOI(@ByVal GpuMat coiimg, CvArr arr);
-// Targeting ../opencv_core/CvMatDefaultDeleter.java
 
 
+
+////// specialized implementations of DefaultDeleter::operator() for classic OpenCV types //////
 
 ////////////// convenient wrappers for operating old-style dynamic structures //////////////
 
@@ -12192,6 +12193,18 @@ A complete example using the FileStorage interface
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPoint value, @Const @ByRef KeyPoint default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatch value, @Const @ByRef DMatch default_value);
 
+@Namespace("cv") public static native @Name("read<int>") void read(@Const @ByRef FileNode node, @ByRef Point value, @Const @ByRef Point default_value);
+
+@Namespace("cv") public static native @Name("read<int>") void read(@Const @ByRef FileNode node, @ByRef Point3i value, @Const @ByRef Point3i default_value);
+
+@Namespace("cv") public static native @Name("read<int>") void read(@Const @ByRef FileNode node, @ByRef Size value, @Const @ByRef Size default_value);
+
+
+
+@Namespace("cv") public static native @Name("read<int>") void read(@Const @ByRef FileNode node, @ByRef Rect value, @Const @ByRef Rect default_value);
+
+@Namespace("cv") public static native @Name("read<int>") void read(@Const @ByRef FileNode node, @ByRef Scalar4i value, @Const @ByRef Scalar4i default_value);
+
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
 /** \}
@@ -12212,14 +12225,48 @@ A complete example using the FileStorage interface
  *  \relates cv::FileStorage
  *  \{ */
 
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, int value );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point value);
 
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, float value );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point2f value);
 
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, double value );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point2d value);
 
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer value );
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String value );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point3i value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point3f value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point3d value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Size value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Size2f value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Size2d value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Complexf value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Complexd value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Rect value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Rect2f value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Rect2d value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Scalar4i value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Scalar4f value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Scalar value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, int value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, float value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, double value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer value);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String value);
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Range r );
 
@@ -12231,6 +12278,57 @@ A complete example using the FileStorage interface
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatch m);
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef DMatch m);
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point2f val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point2f val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point2d val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point2d val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point3i val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point3i val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point3f val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point3f val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Point3d val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Point3d val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Size val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Size val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Size2f val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Size2f val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Size2d val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Size2d val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Complexf val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Complexf val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Complexd val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Complexd val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Rect val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Rect val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Rect2f val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Rect2f val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Rect2d val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Rect2d val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Scalar4i val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Scalar4i val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Scalar4f val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Scalar4f val );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Scalar val );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Scalar val );
 
 // #ifdef CV__LEGACY_PERSISTENCE
 // This code is not needed anymore, but it is preserved here to keep source compatibility
@@ -12256,6 +12354,22 @@ A complete example using the FileStorage interface
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortPointer value, @Cast("ushort") short default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortBuffer value, @Cast("ushort") short default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef short[] value, @Cast("ushort") short default_value);
+
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector IntPointer vec, @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector IntPointer vec );
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector IntBuffer vec, @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector IntBuffer vec );
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector int[] vec, @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @ByRef FileNodeIterator it, @StdVector int[] vec );
+
+
+
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector IntPointer vec, @StdVector IntPointer default_value/*=std::vector<int>()*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector IntPointer vec );
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector IntBuffer vec, @StdVector IntBuffer default_value/*=std::vector<int>()*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector IntBuffer vec );
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector int[] vec, @StdVector int[] default_value/*=std::vector<int>()*/ );
+@Namespace("cv") public static native @Name("read<int>") void read( @Const @ByRef FileNode node, @StdVector int[] vec );
 
 @Namespace("cv") public static native void read( @Const @ByRef FileNode node, @ByRef KeyPointVector vec, @Const @ByRef KeyPointVector default_value );
 

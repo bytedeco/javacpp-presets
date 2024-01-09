@@ -46,7 +46,7 @@ public class BackgroundSubtractorCNT extends BackgroundSubtractor {
     public BackgroundSubtractorCNT(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BackgroundSubtractorCNT(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::bgsegm::BackgroundSubtractorCNT*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::bgsegm::BackgroundSubtractorCNT*>") void allocate(Algorithm pointer);
 
     // BackgroundSubtractor interface
     public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);

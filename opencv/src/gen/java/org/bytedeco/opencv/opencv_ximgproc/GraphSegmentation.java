@@ -44,7 +44,9 @@ public class GraphSegmentation extends Algorithm {
                         public GraphSegmentation(Pointer p) { super(p); }
                         /** Downcast constructor. */
                         public GraphSegmentation(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-                        @Namespace private native @Name("dynamic_cast<cv::ximgproc::segmentation::GraphSegmentation*>") void allocate(Algorithm pointer);
+                        @Namespace private native @Name("static_cast<cv::ximgproc::segmentation::GraphSegmentation*>") void allocate(Algorithm pointer);
+                        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+                        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(GraphSegmentation pointer);
                     
                             /** \brief Segment an image and store output in dst
                                 @param src The input image. Any number of channel (1 (Eg: Gray), 3 (Eg: RGB), 4 (Eg: RGB-D)) can be provided

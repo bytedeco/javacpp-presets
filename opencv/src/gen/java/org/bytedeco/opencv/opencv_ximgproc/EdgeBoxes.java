@@ -41,7 +41,9 @@ public class EdgeBoxes extends Algorithm {
     public EdgeBoxes(Pointer p) { super(p); }
     /** Downcast constructor. */
     public EdgeBoxes(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::EdgeBoxes*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::EdgeBoxes*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(EdgeBoxes pointer);
 
 
     /** \brief Returns array containing proposal boxes.

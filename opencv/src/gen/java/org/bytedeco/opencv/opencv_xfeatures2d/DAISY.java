@@ -53,6 +53,9 @@ public class DAISY extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DAISY(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DAISY(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::DAISY*>") void allocate(Algorithm pointer);
 
     /** enum cv::xfeatures2d::DAISY::NormalizationType */
     public static final int

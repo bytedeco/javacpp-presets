@@ -27,6 +27,9 @@ public class MergeDebevec extends MergeExposures {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeDebevec(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MergeDebevec(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::MergeDebevec*>") void allocate(Algorithm pointer);
 
     public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);

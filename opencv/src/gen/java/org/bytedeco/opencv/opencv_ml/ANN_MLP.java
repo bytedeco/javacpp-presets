@@ -67,6 +67,9 @@ public class ANN_MLP extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ANN_MLP(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ANN_MLP(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::ANN_MLP*>") void allocate(Algorithm pointer);
 
     /** Available training methods */
     /** enum cv::ml::ANN_MLP::TrainingMethods */

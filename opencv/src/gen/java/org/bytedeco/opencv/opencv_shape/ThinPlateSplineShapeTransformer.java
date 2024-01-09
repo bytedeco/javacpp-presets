@@ -43,7 +43,7 @@ public class ThinPlateSplineShapeTransformer extends ShapeTransformer {
     public ThinPlateSplineShapeTransformer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public ThinPlateSplineShapeTransformer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ThinPlateSplineShapeTransformer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ThinPlateSplineShapeTransformer*>") void allocate(Algorithm pointer);
 
     /** \brief Set the regularization parameter for relaxing the exact interpolation requirements of the TPS
     algorithm.

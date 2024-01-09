@@ -43,7 +43,9 @@ public class ShapeDistanceExtractor extends Algorithm {
     public ShapeDistanceExtractor(Pointer p) { super(p); }
     /** Downcast constructor. */
     public ShapeDistanceExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ShapeDistanceExtractor*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ShapeDistanceExtractor*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(ShapeDistanceExtractor pointer);
 
     /** \brief Compute the shape distance between two shapes defined by its contours.
     <p>

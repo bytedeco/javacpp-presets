@@ -37,7 +37,7 @@ public class GOSTracker extends Tracker {
     public GOSTracker(Pointer p) { super(p); }
     /** Downcast constructor. */
     public GOSTracker(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::rapid::GOSTracker*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::rapid::GOSTracker*>") void allocate(Algorithm pointer);
 
     public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris, int histBins/*=4*/, @Cast("uchar") byte sobelThesh/*=10*/);
     public static native @Ptr OLSTracker create(@ByVal Mat pts3d, @ByVal Mat tris);

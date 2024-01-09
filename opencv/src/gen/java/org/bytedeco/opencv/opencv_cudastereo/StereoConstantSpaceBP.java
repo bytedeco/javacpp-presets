@@ -59,6 +59,9 @@ public class StereoConstantSpaceBP extends StereoBeliefPropagation {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoConstantSpaceBP(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StereoConstantSpaceBP(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::StereoConstantSpaceBP*>") void allocate(Algorithm pointer);
 
     /** number of active disparity on the first level */
     public native int getNrPlane();

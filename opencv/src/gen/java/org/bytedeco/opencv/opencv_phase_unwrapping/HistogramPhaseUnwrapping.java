@@ -35,6 +35,9 @@ public class HistogramPhaseUnwrapping extends PhaseUnwrapping {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HistogramPhaseUnwrapping(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HistogramPhaseUnwrapping(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::phase_unwrapping::HistogramPhaseUnwrapping*>") void allocate(Algorithm pointer);
 
     /**
      * \brief Parameters of phaseUnwrapping constructor.

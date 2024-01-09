@@ -20,14 +20,14 @@ import static org.bytedeco.opencv.global.opencv_videoio.*;
 import static org.bytedeco.opencv.global.opencv_cudacodec.*;
 
 
-/** \brief Video writer interface.
+/** \brief Video writer interface, see createVideoWriter().
 <p>
-Available when built with WITH_NVCUVENC=ON while Nvidia's Video Codec SDK is installed.
+Available if Nvidia's Video Codec SDK is installed.
 <p>
-Encoding support is dependent on the GPU, refer to the Nvidia Video Codec SDK Video Encode and Decode GPU Support Matrix for details.
+Only Codec::H264 and Codec::HEVC are supported with encoding support dependent on the GPU, refer to the Nvidia Video Codec SDK Video Encode and Decode GPU Support Matrix for details.
 <p>
 \note
-   -   An example on how to use the videoWriter class can be found at
+   -   An example on how to use the VideoWriter class can be found at
         opencv_source_code/samples/gpu/video_writer.cpp
 */
 @Name("cv::cudacodec::VideoWriter") @Properties(inherit = org.bytedeco.opencv.presets.opencv_cudacodec.class)

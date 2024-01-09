@@ -32,6 +32,11 @@ public class HoughSegmentDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HoughSegmentDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HoughSegmentDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::HoughSegmentDetector*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(HoughSegmentDetector pointer);
 
     /** \brief Finds line segments in a binary image using the probabilistic Hough transform.
     <p>
@@ -64,4 +69,7 @@ public class HoughSegmentDetector extends Algorithm {
 
     public native void setMaxLines(int maxLines);
     public native int getMaxLines();
+
+    public native void setThreshold(int threshold);
+    public native int getThreshold();
 }

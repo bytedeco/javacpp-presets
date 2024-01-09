@@ -56,6 +56,9 @@ public class BroxOpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BroxOpticalFlow(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BroxOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::BroxOpticalFlow*>") void allocate(Algorithm pointer);
 
     public native double getFlowSmoothness();
     public native void setFlowSmoothness(double alpha);

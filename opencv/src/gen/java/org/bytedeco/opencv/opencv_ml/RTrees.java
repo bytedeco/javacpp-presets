@@ -28,6 +28,9 @@ public class RTrees extends DTrees {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RTrees(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RTrees(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::RTrees*>") void allocate(Algorithm pointer);
 
 
     /** If true then variable importance will be calculated and then it can be retrieved by RTrees::getVarImportance.

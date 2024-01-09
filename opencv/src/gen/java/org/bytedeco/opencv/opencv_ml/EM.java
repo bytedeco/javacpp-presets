@@ -28,6 +28,9 @@ public class EM extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EM(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public EM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::EM*>") void allocate(Algorithm pointer);
 
     /** Type of covariation matrices */
     /** enum cv::ml::EM::Types */

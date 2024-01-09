@@ -52,6 +52,9 @@ public class FREAK extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FREAK(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FREAK(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::FREAK*>") void allocate(Algorithm pointer);
 
 
     @MemberGetter public static native int NB_SCALES();

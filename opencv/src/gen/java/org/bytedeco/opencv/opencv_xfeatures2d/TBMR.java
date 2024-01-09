@@ -54,6 +54,9 @@ public class TBMR extends AffineFeature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TBMR(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TBMR(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::TBMR*>") void allocate(Algorithm pointer);
 
     public static native @Ptr TBMR create(int min_area/*=60*/,
             float max_area_relative/*=0.01f*/,
