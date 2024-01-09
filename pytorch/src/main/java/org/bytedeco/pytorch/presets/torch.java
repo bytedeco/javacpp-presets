@@ -1093,6 +1093,32 @@ public class torch implements LoadEnabled, InfoMapper {
             .put(new Info("c10::complex<double>::real", "c10::complex<double>::imag",
                 "c10::complex<float>::real", "c10::complex<float>::imag",
                 "c10::complex<c10::Half>::real", "c10::complex<c10::Half>::imag").annotations("@org.bytedeco.javacpp.annotation.Function"))
+            .put(new Info( // Not implemented in c10::complex<c10::Half> template specialization:
+                "c10::complex<c10::Half>::operator =(c10::Half)",
+                "c10::complex<c10::Half>::real(c10::Half)",
+                "c10::complex<c10::Half>::imag(c10::Half)",
+                "c10::complex<c10::Half>::operator const bool()",
+                "c10::complex<c10::Half>::operator +=(c10::Half)",
+                "c10::complex<c10::Half>::operator -=(c10::Half)",
+                "c10::complex<c10::Half>::operator *=(c10::Half)",
+                "c10::complex<c10::Half>::operator /=(c10::Half)"
+                ).skip())
+            .put(new Info("c10::complex<c10::Half>::complex(const c10::Half&, const c10::Half&)").javaText( // Second argument not optional + add specific functions
+                "public HalfComplex(Half re, Half im) { super((Pointer)null); allocate(re, im); }\n" +
+                "private native void allocate(@Const @ByRef Half re, @Const @ByRef(nullValue = \"c10::Half()\") Half im);\n" +
+                "public HalfComplex(@Const @ByRef FloatComplex value) { super((Pointer)null); allocate(value); }\n" +
+                "private native void allocate(@Const @ByRef FloatComplex value);\n" +
+                "\n" +
+                "// Conversion operator\n" +
+                "public native @ByVal @Name(\"operator c10::complex<float>\") FloatComplex asFloatComplex();\n" +
+                "\n" +
+                "public native @ByRef @Name(\"operator +=\") HalfComplex addPut(@Const @ByRef HalfComplex other);\n" +
+                "\n" +
+                "public native @ByRef @Name(\"operator -=\") HalfComplex subtractPut(@Const @ByRef HalfComplex other);\n" +
+                "\n" +
+                "public native @ByRef @Name(\"operator *=\") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);"
+                )
+            )
         ;
 
 
@@ -1284,7 +1310,10 @@ public class torch implements LoadEnabled, InfoMapper {
                     template("torch::data::transforms::BatchTransform", template("std::vector", example), example),
                     template("torch::data::transforms::Collation", example)
                 ).pointerTypes(p + "ExampleCollation"))
-                .put(new Info(template("torch::data::transforms::Stack", example)).pointerTypes(p + "ExampleStack"))
+                // The Stack primary template is empty. Constructors are defined in template specializations.
+                // So the generated Java classes are @Opaque and have no constructors.
+                // We might need to force the generation of constructors somehow.
+                .put(new Info(template("torch::data::transforms::Stack", example)).pointerTypes(p + "ExampleStack").base(p + "ExampleCollation"))
                 .put(new Info(chunkDataReader).pointerTypes("Chunk" + p + "DataReader").virtualize())
                 .put(new Info(
                     template("torch::data::datasets::ChunkDataset", mangledChunkDataReader, "torch::data::samplers::RandomSampler", "torch::data::samplers::RandomSampler")
@@ -2298,7 +2327,9 @@ public class torch implements LoadEnabled, InfoMapper {
             "torch::detail::constructSchemaOrName",
             "torch::jit::ClassDef::create",
             "torch::jit::Code::operator <<(std::ostream&, const torch::jit::Code&)", // The friend operator is truly a member of torch::jit and not torch::jit::Code
-            "torch::profiler::impl::getNvtxStr"
+            "torch::profiler::impl::getNvtxStr",
+            "c10::merge_primitive" // templated function with some specializations. Will have to figure what
+            // instances to create if needed.
         ).skip());
 
         //// Aliases necessary because of Parser limited namespace resolution

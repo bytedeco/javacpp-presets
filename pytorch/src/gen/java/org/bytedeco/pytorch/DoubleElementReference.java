@@ -35,7 +35,7 @@ public class DoubleElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace @Name("swap") void swap(@ByRef(true) DoubleElementReference lhs, @ByRef(true) DoubleElementReference rhs);
+  private static native @Namespace void swap(@ByRef(true) DoubleElementReference lhs, @ByRef(true) DoubleElementReference rhs);
   public void swap(DoubleElementReference rhs) { swap(this, rhs); }
 
   

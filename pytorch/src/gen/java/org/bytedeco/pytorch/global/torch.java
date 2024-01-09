@@ -4488,136 +4488,107 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace std
 
 
-// Parsed from c10/util/Half.h
+// Parsed from c10/util/complex_utils.h
+
+// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
+// #error
+//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
+// #endif
+
+// #include <limits>
+
+// Extract double from std::complex<double>; is identity otherwise
+// TODO: Write in more idiomatic C++17
+
+ // namespace c10
+
+ // namespace std
+
+
+// Parsed from c10/util/complex.h
 
 // #pragma once
 
-/** Defines the Half type (half-precision floating-point) including conversions
- *  to standard C types and basic arithmetic operations. Note that arithmetic
- *  operations are implemented by converting to floating point and
- *  performing the operation in float32, instead of using CUDA half intrinsics.
- *  Most uses of this type within ATen are memory bound, including the
- *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
- *  If you are writing a compute bound kernel, you can use the CUDA half
- *  intrinsics directly on the Half type from device code. */
+// #include <complex>
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/TypeSafeSignMath.h>
-// #include <c10/util/complex.h>
-// #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
 
-// #if defined(__cplusplus) && (__cplusplus >= 201103L)
-// #include <cmath>
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
+// #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif
 
-// #ifdef _MSC_VER
-// #include <intrin.h>
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
 // #endif
-
-// #include <complex>
-// #include <cstdint>
-// #include <cstring>
-// #include <iosfwd>
-// #include <limits>
-// #include <sstream>
-// #include <stdexcept>
-// #include <string>
-// #include <utility>
-
-// #ifdef __CUDACC__
-// #include <cuda_fp16.h>
+// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
 // #endif
-
-// #ifdef __HIPCC__
-// #include <hip/hip_fp16.h>
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-
-// #include <typeinfo> // operator typeid
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 16-bit floating-point number in IEEE half-precision format, in bit
- * representation.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+// Targeting ../DoubleComplex.java
 
 
-// Targeting ../Half.java
+// Targeting ../FloatComplex.java
 
 
 // Targeting ../HalfComplex.java
 
 
 
-// In some versions of MSVC, there will be a compiler error when building.
-// C4146: unary minus operator applied to unsigned type, result still unsigned
-// C4804: unsafe use of type 'bool' in operation
-// It can be addressed by disabling the following warning.
-// #ifdef _MSC_VER
-// #pragma warning(push)
-// #pragma warning(disable : 4146)
-// #pragma warning(disable : 4804)
-// #pragma warning(disable : 4018)
-// #endif
 
-// The overflow checks may involve float to int conversion which may
-// trigger precision loss warning. Re-enable the warning once the code
-// is fixed. See T58053069.
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
-// #endif
 
-// bool can be converted to any type.
-// Without specializing on bool, in pytorch_linux_trusty_py2_7_9_build:
-// `error: comparison of constant '255' with boolean expression is always false`
-// for `f > limit::max()` below
 
-// skip isnan and isinf check for integral types
 
-// #ifdef _MSC_VER
-// #pragma warning(pop)
-// #endif
 
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
+
+
+
+ // namespace complex_literals
+
+// Define operators between integral scalars and c10::complex. std::complex does
+// not support this when T is a floating-point number. This is useful because it
+// saves a lot of "static_cast" when operate a complex and an integer. This
+// makes the code both less verbose and potentially more efficient.
+// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+//   typename std::enable_if_t<
+//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
+//       int> = 0
+
+// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
 
  // namespace c10
 
-// #include <c10/util/Half-inl.h> // IWYU pragma: keep
+// std functions
+//
+// The implementation of these functions also follow the design of C++20
+
+// #if defined(USE_ROCM)
+// #else
+// #define ROCm_Bug(x) x
+// #endif
+
+// #undef ROCm_Bug
+
+// For std::conj, there are other versions of it:
+//   constexpr std::complex<float> conj( float z );
+//   template< class DoubleOrInteger >
+//   constexpr std::complex<double> conj( DoubleOrInteger z );
+//   constexpr std::complex<long double> conj( long double z );
+// These are not implemented
+// TODO(@zasdfgbnm): implement them as c10::conj
+
+// Thrust does not have complex --> complex version of thrust::proj,
+// so this function is not implemented at c10 right now.
+// TODO(@zasdfgbnm): implement it by ourselves
+
+// There is no c10 version of std::polar, because std::polar always
+// returns std::complex. Use c10::polar instead;
+
+ // namespace std
+
+ // namespace c10
+
+// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
+// math functions are included in a separate file
+// #include <c10/util/complex_math.h> // IWYU pragma: keep
+// utilities for complex types
+// #include <c10/util/complex_utils.h> // IWYU pragma: keep
+// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 
 
 // Parsed from c10/util/Half-inl.h
@@ -4758,104 +4729,135 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 
-// Parsed from c10/util/complex_utils.h
-
-// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
-// #error
-//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
-// #endif
-
-// #include <limits>
-
-// Extract double from std::complex<double>; is identity otherwise
-// TODO: Write in more idiomatic C++17
-
- // namespace c10
-
- // namespace std
-
-
-// Parsed from c10/util/complex.h
+// Parsed from c10/util/Half.h
 
 // #pragma once
 
-// #include <complex>
+/** Defines the Half type (half-precision floating-point) including conversions
+ *  to standard C types and basic arithmetic operations. Note that arithmetic
+ *  operations are implemented by converting to floating point and
+ *  performing the operation in float32, instead of using CUDA half intrinsics.
+ *  Most uses of this type within ATen are memory bound, including the
+ *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
+ *  If you are writing a compute bound kernel, you can use the CUDA half
+ *  intrinsics directly on the Half type from device code. */
 
 // #include <c10/macros/Macros.h>
+// #include <c10/util/C++17.h>
+// #include <c10/util/TypeSafeSignMath.h>
+// #include <c10/util/complex.h>
+// #include <c10/util/floating_point_utils.h>
+// #include <type_traits>
 
-// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #if defined(__cplusplus) && (__cplusplus >= 201103L)
+// #include <cmath>
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
 // #endif
 
+// #ifdef _MSC_VER
+// #include <intrin.h>
+// #endif
+
+// #include <complex>
+// #include <cstdint>
+// #include <cstring>
+// #include <iosfwd>
+// #include <limits>
+// #include <sstream>
+// #include <stdexcept>
+// #include <string>
+// #include <utility>
+
+// #ifdef __CUDACC__
+// #include <cuda_fp16.h>
+// #endif
+
+// #ifdef __HIPCC__
+// #include <hip/hip_fp16.h>
+// #endif
+
+// #if defined(CL_SYCL_LANGUAGE_VERSION)
+// #include <CL/sycl.hpp> // for SYCL 1.2.1
+// #elif defined(SYCL_LANGUAGE_VERSION)
+// #include <sycl/sycl.hpp> // for SYCL 2020
+// #endif
+
+// #include <typeinfo> // operator typeid
+
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
+
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+
+
+// Targeting ../Half.java
+
+
+
+// TODO : move to complex.h
+
+// In some versions of MSVC, there will be a compiler error when building.
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+// C4804: unsafe use of type 'bool' in operation
+// It can be addressed by disabling the following warning.
+// #ifdef _MSC_VER
+// #pragma warning(push)
+// #pragma warning(disable : 4146)
+// #pragma warning(disable : 4804)
+// #pragma warning(disable : 4018)
+// #endif
+
+// The overflow checks may involve float to int conversion which may
+// trigger precision loss warning. Re-enable the warning once the code
+// is fixed. See T58053069.
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
 // #endif
-// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
+
+// bool can be converted to any type.
+// Without specializing on bool, in pytorch_linux_trusty_py2_7_9_build:
+// `error: comparison of constant '255' with boolean expression is always false`
+// for `f > limit::max()` below
+
+// skip isnan and isinf check for integral types
+
+// #ifdef _MSC_VER
+// #pragma warning(pop)
 // #endif
-// Targeting ../DoubleComplex.java
 
-
-// Targeting ../FloatComplex.java
-
-
-
-
-
-
-
-
-
-
-
- // namespace complex_literals
-
-// Define operators between integral scalars and c10::complex. std::complex does
-// not support this when T is a floating-point number. This is useful because it
-// saves a lot of "static_cast" when operate a complex and an integer. This
-// makes the code both less verbose and potentially more efficient.
-// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-//   typename std::enable_if_t<
-//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
-//       int> = 0
-
-// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
 
  // namespace c10
 
-// std functions
-//
-// The implementation of these functions also follow the design of C++20
-
-// #if defined(USE_ROCM)
-// #else
-// #define ROCm_Bug(x) x
-// #endif
-
-// #undef ROCm_Bug
-
-// For std::conj, there are other versions of it:
-//   constexpr std::complex<float> conj( float z );
-//   template< class DoubleOrInteger >
-//   constexpr std::complex<double> conj( DoubleOrInteger z );
-//   constexpr std::complex<long double> conj( long double z );
-// These are not implemented
-// TODO(@zasdfgbnm): implement them as c10::conj
-
-// Thrust does not have complex --> complex version of thrust::proj,
-// so this function is not implemented at c10 right now.
-// TODO(@zasdfgbnm): implement it by ourselves
-
-// There is no c10 version of std::polar, because std::polar always
-// returns std::complex. Use c10::polar instead;
-
- // namespace std
-
- // namespace c10
-
-// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
-// math functions are included in a separate file
-// #include <c10/util/complex_math.h> // IWYU pragma: keep
-// utilities for complex types
-// #include <c10/util/complex_utils.h> // IWYU pragma: keep
-// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
+// #include <c10/util/Half-inl.h> // IWYU pragma: keep
 
 
 // Parsed from c10/util/Float8_e5m2-inl.h
@@ -6711,9 +6713,6 @@ public static final byte min_lookups = min_lookups();
 
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Type.h>
-
-@Namespace("c10") public static native @StdString BytePointer KeyStrRepr(@StdString BytePointer key);
-@Namespace("c10") public static native @StdString String KeyStrRepr(@StdString String key);
 
 @Namespace("c10") public enum RegistryPriority {
   REGISTRY_FALLBACK(1),
@@ -12622,20 +12621,18 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../OptionalType.java
 
 
+
+
 // Targeting ../Stride.java
 
 
 
-@Namespace("c10") public static native @ByVal StrideOptional merge_primitive(
-    @Const @ByRef StrideOptional a,
-    @Const @ByRef StrideOptional b);
+
 // Targeting ../ShapeSymbol.java
 
 
 
-@Namespace("c10") public static native @ByVal ShapeSymbol merge_primitive(
-    @Const @ByRef ShapeSymbol a,
-    @Const @ByRef ShapeSymbol b);
+
 // Targeting ../SymbolicShape.java
 
 
@@ -13302,9 +13299,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <atomic>
 // #include <climits>
 // #include <memory>
-// Targeting ../class_.java
-
-
 
 @Namespace("c10::raw::weak_intrusive_ptr") public static native void incref(@Cast("c10::intrusive_ptr_target*") Pointer self);
 
@@ -16797,12 +16791,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // This template requires you to explicitly specify the argument you want to
 // forward; it doesn't work if you try to deduce it
 // NB: keep this in sync with cloneWithRealTypes in function_schema.cpp
-
-@Namespace("c10") public static native long unpackSymInt(@ByVal SymInt x);
-
-@Namespace("c10") public static native @ByVal LongArrayRef unpackSymInt(@ByVal SymIntArrayRef x);
-
-@Namespace("c10") public static native @ByVal LongOptional unpackSymInt(@ByVal SymIntOptional x);
 
 
 
@@ -58814,9 +58802,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //===----------------------------------------------------------------------===//
 //                                 Utilities
 //===----------------------------------------------------------------------===//
-// Targeting ../pack.java
-
-
  // namespace detail
 
  // namespace torch
@@ -65118,6 +65103,12 @@ apis for specific fusers.
 // Targeting ../TensorExampleStack.java
 
 
+
+/** A {@code Collation} for {@code Example<Tensor, Tensor>} types that stacks all data
+ *  tensors into one tensor, and all target (label) tensors into one tensor. */
+
+/** A {@code Collation} for {@code Example<Tensor, NoTarget>} types that stacks all data
+ *  tensors into one tensor. */
  // namespace transforms
  // namespace data
  // namespace torch

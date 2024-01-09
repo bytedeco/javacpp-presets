@@ -35,7 +35,7 @@ public class FuturePtrElementReference extends Pointer {
 
   public native @Const @ByRef IValue get();
 
-  private static native @Namespace @Name("swap") void swap(@ByRef(true) FuturePtrElementReference lhs, @ByRef(true) FuturePtrElementReference rhs);
+  private static native @Namespace void swap(@ByRef(true) FuturePtrElementReference lhs, @ByRef(true) FuturePtrElementReference rhs);
   public void swap(FuturePtrElementReference rhs) { swap(this, rhs); }
 
   
