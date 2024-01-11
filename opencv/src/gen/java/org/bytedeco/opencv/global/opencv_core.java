@@ -12225,6 +12225,15 @@ A complete example using the FileStorage interface
  *  \relates cv::FileStorage
  *  \{ */
 
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, int value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, float value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, double value);
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer value);
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String value);
+
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point value);
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Point2f value);
@@ -12258,15 +12267,6 @@ A complete example using the FileStorage interface
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Scalar4f value);
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Scalar value);
-
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, int value);
-
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, float value);
-
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, double value);
-
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer value);
-@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String value);
 
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Range r );
 

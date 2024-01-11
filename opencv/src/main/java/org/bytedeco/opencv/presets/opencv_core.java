@@ -425,48 +425,37 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::read<int>(const cv::FileNode&, cv::Complex<int>&, const cv::Complex<int>&)").skip())
                .put(new Info("cv::read<_Tp,std>(const cv::FileNode&, _Tp&, const _Tp&)").skip()) // Really template<typename _Tp, typename std::enable_if< std::is_enum<_Tp>::value >::type* = nullptr> read(...)
 
-               // Without this info, Algorithm.read will be mapped to cv::read
-               .put(new Info("cv::Algorithm::read")
-               );
+               // Without this info, Algorithm.read() gets mapped to cv::read
+               .put(new Info("cv::Algorithm::read"));
 
-            for (String c: new String[] { "cv::Point_", "cv::Point3_", "cv::Size_", "cv::Complex", "cv::Rect_", "cv::Scalar_" }) {
-                for (String t : new String[]{"int", "float", "double"}) {
-                    if (c.equals("cv::Complex") && t.equals("int")) continue;
-                    infoMap
-                        .put(new Info(
-                            "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const _Tp&)",
-                            "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const " + c + "<" + t + ">&)"
-                        ).define())
-                        .put(new Info(
-                            "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const _Tp&)",
-                            "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const " + c + "<" + t + ">&)"
-                        ).define())
-                        ;
+        for (String c : new String[] {"int", "float", "double", "cv::String"}) {
+            infoMap.put(new Info("cv::write<" + c + ">(cv::FileStorage&, const _Tp&)",
+                                 "cv::write<" + c + ">(cv::FileStorage&, const " + c + "&)").define());
+        }
 
+        for (String c : new String[] {"cv::Point_", "cv::Point3_", "cv::Size_", "cv::Complex", "cv::Rect_", "cv::Scalar_"}) {
+            for (String t : new String[] {"int", "float", "double"}) {
+                if (c.equals("cv::Complex") && t.equals("int")) {
+                    continue;
                 }
+                infoMap.put(new Info("cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const _Tp&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const cv::String&, const " + c + "<" + t + ">&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const _Tp&)",
+                                     "cv::write<" + c + "<" + t + "> >(cv::FileStorage&, const " + c + "<" + t + ">&)").define());
             }
-            for (String c: new String[] { "int", "float", "double", "cv::String" }) {
-                infoMap.put(new Info(
-                    "cv::write<" + c + ">(cv::FileStorage&, const _Tp&)",
-                    "cv::write<" + c + ">(cv::FileStorage&, const " + c + "&)"
-                ).define());
-            }
-            for (String c: infoMap.keySet().toArray(new String[0])) {
-                if (c.startsWith("std::vector<")) {
-                    String arg = c.substring(12, c.length() - 1);
-                    infoMap
-                        .put(new Info(
-                            "cv::write<" + arg + (arg.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const std::vector<_Tp>&)",
-                            "cv::write<" + arg + (arg.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const " + c + "&)",
+        }
 
-                            "cv::write<" + arg + (arg.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const std::vector<_Tp>&)",
-                            "cv::write<" + arg + (arg.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const " + c + "&)",
-
-                            "cv::read<" + arg + (arg.endsWith(">") ? " " : "") + ">(const cv::FileNode&, std::vector<_Tp>&, const std::vector<_Tp>&)",
-                            "cv::read<" + arg + (arg.endsWith(">") ? " " : "") + ">(const cv::FileNode&, " + c + "&, const " + c + "&)"
-                            ).define());
-                }
+        for (String c : infoMap.keySet().toArray(new String[0])) {
+            if (c.startsWith("std::vector<")) {
+                c = c.substring(12, c.length() - 1);
+                infoMap.put(new Info("cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const std::vector<_Tp>&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const " + c + "&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const std::vector<_Tp>&)",
+                                     "cv::write<" + c + (c.endsWith(">") ? " " : "") + ">(cv::FileStorage&, const cv::String&, const " + c + "&)",
+                                     "cv::read<" + c + (c.endsWith(">") ? " " : "") + ">(const cv::FileNode&, std::vector<_Tp>&, const std::vector<_Tp>&)",
+                                     "cv::read<" + c + (c.endsWith(">") ? " " : "") + ">(const cv::FileNode&, " + c + "&, const " + c + "&)").define());
             }
+        }
     }
 
     public static class Functor extends FunctionPointer {
