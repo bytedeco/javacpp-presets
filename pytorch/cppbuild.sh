@@ -115,9 +115,16 @@ case $PLATFORM in
         export CC="gcc -m64"
         export CXX="g++ -m64"
         ;;
-    macosx-*)
+    macosx-x86_64)
         export CC="clang"
         export CXX="clang++"
+        ;;
+    macosx-arm64)
+        export CC="clang"
+        export CXX="clang++"
+        export CMAKE_OSX_ARCHITECTURES=arm64 # enables cross-compilation
+        export USE_MKLDNN=OFF
+        export CMAKE_OSX_DEPLOYMENT_TARGET=11.00
         ;;
     windows-x86_64)
         if which ccache.exe; then
