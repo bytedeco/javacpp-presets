@@ -182,7 +182,7 @@ public class TensorIteratorBase extends MetaBase {
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes,
         @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] strides,
         @ByVal TensorOptions options,
-        @ByVal DimnameArrayRef names);
+        @ByVal DimnameVector names);
 
 // #define TORCH_DISALLOW_TEMPORARIES_IMPL(methodname, maybestatic)
 //   maybestatic void methodname(

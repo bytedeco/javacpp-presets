@@ -47,6 +47,8 @@ public class TensorName extends Pointer {
 
   public TensorName(@ByVal DimnameArrayRef origin, int origin_idx) { super((Pointer)null); allocate(origin, origin_idx); }
   private native void allocate(@ByVal DimnameArrayRef origin, int origin_idx);
+  public TensorName(@ByVal DimnameVector origin, int origin_idx) { super((Pointer)null); allocate(origin, origin_idx); }
+  private native void allocate(@ByVal DimnameVector origin, int origin_idx);
 
   // op_name is only used for error reporting.
   public native @Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName unify(@Cast({"", "at::namedinference::TensorName&&"}) @StdMove TensorName other, @Cast("const char*") BytePointer op_name);

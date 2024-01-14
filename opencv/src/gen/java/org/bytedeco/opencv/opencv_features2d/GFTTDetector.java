@@ -31,6 +31,9 @@ public class GFTTDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GFTTDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GFTTDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::GFTTDetector*>") void allocate(Algorithm pointer);
 
     public static native @Ptr GFTTDetector create( int maxCorners/*=1000*/, double qualityLevel/*=0.01*/, double minDistance/*=1*/,
                                                  int blockSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );

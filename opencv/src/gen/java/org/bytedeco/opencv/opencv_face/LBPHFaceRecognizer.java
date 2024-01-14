@@ -42,7 +42,7 @@ public class LBPHFaceRecognizer extends FaceRecognizer {
     public LBPHFaceRecognizer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public LBPHFaceRecognizer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::face::LBPHFaceRecognizer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::face::LBPHFaceRecognizer*>") void allocate(Algorithm pointer);
 
     /** @see setGridX */
     public native int getGridX();

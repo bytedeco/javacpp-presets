@@ -42,6 +42,9 @@ public class FastFeatureDetector extends Feature2DAsync {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastFeatureDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FastFeatureDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::cuda::FastFeatureDetector*>") void allocate(Algorithm pointer);
 
     @MemberGetter public static native int LOCATION_ROW();
     public static final int LOCATION_ROW = LOCATION_ROW();

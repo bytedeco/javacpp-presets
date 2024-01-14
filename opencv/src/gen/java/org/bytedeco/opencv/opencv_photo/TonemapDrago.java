@@ -32,6 +32,9 @@ public class TonemapDrago extends Tonemap {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapDrago(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TonemapDrago(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::TonemapDrago*>") void allocate(Algorithm pointer);
 
 
     public native float getSaturation();

@@ -55,6 +55,9 @@ public class BackgroundSubtractorMOG extends BackgroundSubtractor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorMOG(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::BackgroundSubtractorMOG*>") void allocate(Algorithm pointer);
 
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate, @ByRef Stream stream);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate, @ByRef Stream stream);

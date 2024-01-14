@@ -31,6 +31,9 @@ public class PHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public PHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::PHash*>") void allocate(Algorithm pointer);
 
     public static native @Ptr PHash create();
 }

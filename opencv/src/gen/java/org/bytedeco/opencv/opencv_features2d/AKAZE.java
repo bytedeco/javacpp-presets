@@ -45,6 +45,9 @@ public class AKAZE extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AKAZE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AKAZE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::AKAZE*>") void allocate(Algorithm pointer);
 
     // AKAZE descriptor type
     /** enum cv::AKAZE::DescriptorType */

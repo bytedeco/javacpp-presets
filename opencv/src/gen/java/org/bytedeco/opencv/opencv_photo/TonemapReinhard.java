@@ -30,6 +30,9 @@ public class TonemapReinhard extends Tonemap {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapReinhard(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TonemapReinhard(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::TonemapReinhard*>") void allocate(Algorithm pointer);
 
     public native float getIntensity();
     public native void setIntensity(float intensity);

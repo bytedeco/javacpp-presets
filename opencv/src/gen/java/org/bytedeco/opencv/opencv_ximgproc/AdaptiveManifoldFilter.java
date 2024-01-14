@@ -60,7 +60,9 @@ public class AdaptiveManifoldFilter extends Algorithm {
     public AdaptiveManifoldFilter(Pointer p) { super(p); }
     /** Downcast constructor. */
     public AdaptiveManifoldFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::AdaptiveManifoldFilter*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::AdaptiveManifoldFilter*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(AdaptiveManifoldFilter pointer);
 
     /** \brief Apply high-dimensional filtering using adaptive manifolds.
     <p>

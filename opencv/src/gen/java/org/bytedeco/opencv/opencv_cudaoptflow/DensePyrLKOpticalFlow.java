@@ -55,6 +55,9 @@ public class DensePyrLKOpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DensePyrLKOpticalFlow(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DensePyrLKOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::DensePyrLKOpticalFlow*>") void allocate(Algorithm pointer);
 
     public native @ByVal Size getWinSize();
     public native void setWinSize(@ByVal Size winSize);

@@ -30,6 +30,11 @@ public class TemplateMatching extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TemplateMatching(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TemplateMatching(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::TemplateMatching*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(TemplateMatching pointer);
 
     /** \brief Computes a proximity map for a raster template and an image where the template is searched for.
     <p>

@@ -46,6 +46,8 @@ public class TensorOptionalList extends Pointer {
    */
   public TensorOptionalList(@ByVal TensorOptionalArrayRef initial_values) { super((Pointer)null); allocate(initial_values); }
   private native void allocate(@ByVal TensorOptionalArrayRef initial_values);
+  public TensorOptionalList(@ByVal TensorOptionalVector initial_values) { super((Pointer)null); allocate(initial_values); }
+  private native void allocate(@ByVal TensorOptionalVector initial_values);
 
   /**
    * Create a generic list with runtime type information.

@@ -59,6 +59,9 @@ public class OpticalFlowDual_TVL1 extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpticalFlowDual_TVL1(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public OpticalFlowDual_TVL1(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::OpticalFlowDual_TVL1*>") void allocate(Algorithm pointer);
 
     /**
      * Time step of the numerical scheme.

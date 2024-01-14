@@ -43,7 +43,7 @@ public class BackgroundSubtractorMOG2 extends BackgroundSubtractor {
     public BackgroundSubtractorMOG2(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BackgroundSubtractorMOG2(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::BackgroundSubtractorMOG2*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::BackgroundSubtractorMOG2*>") void allocate(Algorithm pointer);
 
     /** \brief Returns the number of last frames that affect the background model
     */

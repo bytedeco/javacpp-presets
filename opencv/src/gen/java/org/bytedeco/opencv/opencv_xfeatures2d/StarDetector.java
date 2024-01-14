@@ -40,6 +40,9 @@ public class StarDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StarDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StarDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::StarDetector*>") void allocate(Algorithm pointer);
 
     /** the full constructor */
     public static native @Ptr StarDetector create(int maxSize/*=45*/, int responseThreshold/*=30*/,

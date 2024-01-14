@@ -28,6 +28,9 @@ public class TonemapMantiuk extends Tonemap {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapMantiuk(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TonemapMantiuk(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::TonemapMantiuk*>") void allocate(Algorithm pointer);
 
     public native float getScale();
     public native void setScale(float scale);

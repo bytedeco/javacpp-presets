@@ -41,7 +41,7 @@ public class BackgroundSubtractorLSBP extends BackgroundSubtractor {
     public BackgroundSubtractorLSBP(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BackgroundSubtractorLSBP(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::bgsegm::BackgroundSubtractorLSBP*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::bgsegm::BackgroundSubtractorLSBP*>") void allocate(Algorithm pointer);
 
     // BackgroundSubtractor interface
     public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
