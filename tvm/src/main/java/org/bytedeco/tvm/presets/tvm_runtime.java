@@ -50,7 +50,8 @@ import org.bytedeco.openblas.presets.*;
             value = {"linux", "macosx", "windows"},
             compiler = "cpp17",
             define = {"GENERIC_EXCEPTION_CLASS std::exception", "GENERIC_EXCEPTION_TOSTRING what()", "DMLC_USE_LOGGING_LIBRARY <tvm/runtime/logging.h>"},
-            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>"},
+            exclude = {"<polly/LinkAllPasses.h>", "<FullOptimization.h>", "<NamedMetadataOperations.h>",
+                       "openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapack.h", "lapacke.h", "lapacke_utils.h"},
             include = {
                 "dlpack/dlpack.h",
                 "dmlc/base.h",

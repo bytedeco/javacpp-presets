@@ -15,7 +15,7 @@ LIBPNG=libpng-1.6.40 # warning: libpng16 doesn't work on CentOS 6 for some reaso
 LIBTIFF=tiff-4.6.0
 LIBWEBP=libwebp-1.3.2
 OPENJPEG_VERSION=2.5.0
-LEPTONICA_VERSION=1.84.0
+LEPTONICA_VERSION=1.84.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
