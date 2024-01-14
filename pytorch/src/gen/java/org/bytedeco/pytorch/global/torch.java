@@ -1463,9 +1463,13 @@ public static final int HAS_DEMANGLE = 0;
 
 
 
-@Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef Pointer _str(@Cast("std::ostream*") @ByRef Pointer ss);
 
-@Namespace("c10::detail") public static native @Cast("std::ostream*") @ByRef @Name("_str") Pointer _strCompileTimeEmptyString(@Cast("std::ostream*") @ByRef Pointer ss, @Const @ByRef CompileTimeEmptyString t);
+
+
+
+
+
+
 
 // Specializations for already-a-string types.
 
@@ -4484,136 +4488,107 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
  // namespace std
 
 
-// Parsed from c10/util/Half.h
+// Parsed from c10/util/complex_utils.h
+
+// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
+// #error
+//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
+// #endif
+
+// #include <limits>
+
+// Extract double from std::complex<double>; is identity otherwise
+// TODO: Write in more idiomatic C++17
+
+ // namespace c10
+
+ // namespace std
+
+
+// Parsed from c10/util/complex.h
 
 // #pragma once
 
-/** Defines the Half type (half-precision floating-point) including conversions
- *  to standard C types and basic arithmetic operations. Note that arithmetic
- *  operations are implemented by converting to floating point and
- *  performing the operation in float32, instead of using CUDA half intrinsics.
- *  Most uses of this type within ATen are memory bound, including the
- *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
- *  If you are writing a compute bound kernel, you can use the CUDA half
- *  intrinsics directly on the Half type from device code. */
+// #include <complex>
 
 // #include <c10/macros/Macros.h>
-// #include <c10/util/C++17.h>
-// #include <c10/util/TypeSafeSignMath.h>
-// #include <c10/util/complex.h>
-// #include <c10/util/floating_point_utils.h>
-// #include <type_traits>
 
-// #if defined(__cplusplus) && (__cplusplus >= 201103L)
-// #include <cmath>
-// #include <cstdint>
-// #elif !defined(__OPENCL_VERSION__)
-// #include <math.h>
-// #include <stdint.h>
+// #if defined(__CUDACC__) || defined(__HIPCC__)
 // #endif
 
-// #ifdef _MSC_VER
-// #include <intrin.h>
+// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
 // #endif
-
-// #include <complex>
-// #include <cstdint>
-// #include <cstring>
-// #include <iosfwd>
-// #include <limits>
-// #include <sstream>
-// #include <stdexcept>
-// #include <string>
-// #include <utility>
-
-// #ifdef __CUDACC__
-// #include <cuda_fp16.h>
+// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
 // #endif
-
-// #ifdef __HIPCC__
-// #include <hip/hip_fp16.h>
-// #endif
-
-// #if defined(CL_SYCL_LANGUAGE_VERSION)
-// #include <CL/sycl.hpp> // for SYCL 1.2.1
-// #elif defined(SYCL_LANGUAGE_VERSION)
-// #include <sycl/sycl.hpp> // for SYCL 2020
-// #endif
-
-// #include <typeinfo> // operator typeid
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format, in bit representation.
- *
- * @note The implementation doesn't use any floating-point operations.
- */
-@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
-
-/*
- * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
- * representation, to a 32-bit floating-point number in IEEE single-precision
- * format.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
-
-/*
- * Convert a 32-bit floating-point number in IEEE single-precision format to a
- * 16-bit floating-point number in IEEE half-precision format, in bit
- * representation.
- *
- * @note The implementation relies on IEEE-like (no assumption about rounding
- * mode and no operations on denormals) floating-point operations and bitcasts
- * between integer and floating-point variables.
- */
-@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+// Targeting ../DoubleComplex.java
 
 
-// Targeting ../Half.java
+// Targeting ../FloatComplex.java
 
 
 // Targeting ../HalfComplex.java
 
 
 
-// In some versions of MSVC, there will be a compiler error when building.
-// C4146: unary minus operator applied to unsigned type, result still unsigned
-// C4804: unsafe use of type 'bool' in operation
-// It can be addressed by disabling the following warning.
-// #ifdef _MSC_VER
-// #pragma warning(push)
-// #pragma warning(disable : 4146)
-// #pragma warning(disable : 4804)
-// #pragma warning(disable : 4018)
-// #endif
 
-// The overflow checks may involve float to int conversion which may
-// trigger precision loss warning. Re-enable the warning once the code
-// is fixed. See T58053069.
-// #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
-// #endif
 
-// bool can be converted to any type.
-// Without specializing on bool, in pytorch_linux_trusty_py2_7_9_build:
-// `error: comparison of constant '255' with boolean expression is always false`
-// for `f > limit::max()` below
 
-// skip isnan and isinf check for integral types
 
-// #ifdef _MSC_VER
-// #pragma warning(pop)
-// #endif
 
-@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
+
+
+
+ // namespace complex_literals
+
+// Define operators between integral scalars and c10::complex. std::complex does
+// not support this when T is a floating-point number. This is useful because it
+// saves a lot of "static_cast" when operate a complex and an integer. This
+// makes the code both less verbose and potentially more efficient.
+// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+//   typename std::enable_if_t<
+//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
+//       int> = 0
+
+// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
 
  // namespace c10
 
-// #include <c10/util/Half-inl.h> // IWYU pragma: keep
+// std functions
+//
+// The implementation of these functions also follow the design of C++20
+
+// #if defined(USE_ROCM)
+// #else
+// #define ROCm_Bug(x) x
+// #endif
+
+// #undef ROCm_Bug
+
+// For std::conj, there are other versions of it:
+//   constexpr std::complex<float> conj( float z );
+//   template< class DoubleOrInteger >
+//   constexpr std::complex<double> conj( DoubleOrInteger z );
+//   constexpr std::complex<long double> conj( long double z );
+// These are not implemented
+// TODO(@zasdfgbnm): implement them as c10::conj
+
+// Thrust does not have complex --> complex version of thrust::proj,
+// so this function is not implemented at c10 right now.
+// TODO(@zasdfgbnm): implement it by ourselves
+
+// There is no c10 version of std::polar, because std::polar always
+// returns std::complex. Use c10::polar instead;
+
+ // namespace std
+
+ // namespace c10
+
+// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
+// math functions are included in a separate file
+// #include <c10/util/complex_math.h> // IWYU pragma: keep
+// utilities for complex types
+// #include <c10/util/complex_utils.h> // IWYU pragma: keep
+// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
 
 
 // Parsed from c10/util/Half-inl.h
@@ -4754,104 +4729,135 @@ https://github.com/pytorch/pytorch/issues/20287 for more details.")
 
 
 
-// Parsed from c10/util/complex_utils.h
-
-// #if !defined(C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H)
-// #error
-//     "c10/util/complex_utils.h is not meant to be individually included. Include c10/util/complex.h instead."
-// #endif
-
-// #include <limits>
-
-// Extract double from std::complex<double>; is identity otherwise
-// TODO: Write in more idiomatic C++17
-
- // namespace c10
-
- // namespace std
-
-
-// Parsed from c10/util/complex.h
+// Parsed from c10/util/Half.h
 
 // #pragma once
 
-// #include <complex>
+/** Defines the Half type (half-precision floating-point) including conversions
+ *  to standard C types and basic arithmetic operations. Note that arithmetic
+ *  operations are implemented by converting to floating point and
+ *  performing the operation in float32, instead of using CUDA half intrinsics.
+ *  Most uses of this type within ATen are memory bound, including the
+ *  element-wise kernels, and the half intrinsics aren't efficient on all GPUs.
+ *  If you are writing a compute bound kernel, you can use the CUDA half
+ *  intrinsics directly on the Half type from device code. */
 
 // #include <c10/macros/Macros.h>
+// #include <c10/util/C++17.h>
+// #include <c10/util/TypeSafeSignMath.h>
+// #include <c10/util/complex.h>
+// #include <c10/util/floating_point_utils.h>
+// #include <type_traits>
 
-// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #if defined(__cplusplus) && (__cplusplus >= 201103L)
+// #include <cmath>
+// #include <cstdint>
+// #elif !defined(__OPENCL_VERSION__)
+// #include <math.h>
+// #include <stdint.h>
 // #endif
 
+// #ifdef _MSC_VER
+// #include <intrin.h>
+// #endif
+
+// #include <complex>
+// #include <cstdint>
+// #include <cstring>
+// #include <iosfwd>
+// #include <limits>
+// #include <sstream>
+// #include <stdexcept>
+// #include <string>
+// #include <utility>
+
+// #ifdef __CUDACC__
+// #include <cuda_fp16.h>
+// #endif
+
+// #ifdef __HIPCC__
+// #include <hip/hip_fp16.h>
+// #endif
+
+// #if defined(CL_SYCL_LANGUAGE_VERSION)
+// #include <CL/sycl.hpp> // for SYCL 1.2.1
+// #elif defined(SYCL_LANGUAGE_VERSION)
+// #include <sycl/sycl.hpp> // for SYCL 2020
+// #endif
+
+// #include <typeinfo> // operator typeid
+
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format, in bit representation.
+ *
+ * @note The implementation doesn't use any floating-point operations.
+ */
+@Namespace("c10::detail") public static native @Cast("uint32_t") int fp16_ieee_to_fp32_bits(@Cast("uint16_t") short h);
+
+/*
+ * Convert a 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation, to a 32-bit floating-point number in IEEE single-precision
+ * format.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native float fp16_ieee_to_fp32_value(@Cast("uint16_t") short h);
+
+/*
+ * Convert a 32-bit floating-point number in IEEE single-precision format to a
+ * 16-bit floating-point number in IEEE half-precision format, in bit
+ * representation.
+ *
+ * @note The implementation relies on IEEE-like (no assumption about rounding
+ * mode and no operations on denormals) floating-point operations and bitcasts
+ * between integer and floating-point variables.
+ */
+@Namespace("c10::detail") public static native @Cast("uint16_t") short fp16_ieee_from_fp32_value(float f);
+
+
+// Targeting ../Half.java
+
+
+
+// TODO : move to complex.h
+
+// In some versions of MSVC, there will be a compiler error when building.
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+// C4804: unsafe use of type 'bool' in operation
+// It can be addressed by disabling the following warning.
+// #ifdef _MSC_VER
+// #pragma warning(push)
+// #pragma warning(disable : 4146)
+// #pragma warning(disable : 4804)
+// #pragma warning(disable : 4018)
+// #endif
+
+// The overflow checks may involve float to int conversion which may
+// trigger precision loss warning. Re-enable the warning once the code
+// is fixed. See T58053069.
 // #if C10_CLANG_HAS_WARNING("-Wimplicit-float-conversion")
 // #endif
-// #if C10_CLANG_HAS_WARNING("-Wfloat-conversion")
+
+// bool can be converted to any type.
+// Without specializing on bool, in pytorch_linux_trusty_py2_7_9_build:
+// `error: comparison of constant '255' with boolean expression is always false`
+// for `f > limit::max()` below
+
+// skip isnan and isinf check for integral types
+
+// #ifdef _MSC_VER
+// #pragma warning(pop)
 // #endif
-// Targeting ../DoubleComplex.java
 
-
-// Targeting ../FloatComplex.java
-
-
-
-
-
-
-
-
-
-
-
- // namespace complex_literals
-
-// Define operators between integral scalars and c10::complex. std::complex does
-// not support this when T is a floating-point number. This is useful because it
-// saves a lot of "static_cast" when operate a complex and an integer. This
-// makes the code both less verbose and potentially more efficient.
-// #define COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
-//   typename std::enable_if_t<
-//       std::is_floating_point<fT>::value && std::is_integral<iT>::value,
-//       int> = 0
-
-// #undef COMPLEX_INTEGER_OP_TEMPLATE_CONDITION
+@Namespace("c10") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Half value);
 
  // namespace c10
 
-// std functions
-//
-// The implementation of these functions also follow the design of C++20
-
-// #if defined(USE_ROCM)
-// #else
-// #define ROCm_Bug(x) x
-// #endif
-
-// #undef ROCm_Bug
-
-// For std::conj, there are other versions of it:
-//   constexpr std::complex<float> conj( float z );
-//   template< class DoubleOrInteger >
-//   constexpr std::complex<double> conj( DoubleOrInteger z );
-//   constexpr std::complex<long double> conj( long double z );
-// These are not implemented
-// TODO(@zasdfgbnm): implement them as c10::conj
-
-// Thrust does not have complex --> complex version of thrust::proj,
-// so this function is not implemented at c10 right now.
-// TODO(@zasdfgbnm): implement it by ourselves
-
-// There is no c10 version of std::polar, because std::polar always
-// returns std::complex. Use c10::polar instead;
-
- // namespace std
-
- // namespace c10
-
-// #define C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
-// math functions are included in a separate file
-// #include <c10/util/complex_math.h> // IWYU pragma: keep
-// utilities for complex types
-// #include <c10/util/complex_utils.h> // IWYU pragma: keep
-// #undef C10_INTERNAL_INCLUDE_COMPLEX_REMAINING_H
+// #include <c10/util/Half-inl.h> // IWYU pragma: keep
 
 
 // Parsed from c10/util/Float8_e5m2-inl.h
@@ -6707,9 +6713,6 @@ public static final byte min_lookups = min_lookups();
 
 // #include <c10/macros/Macros.h>
 // #include <c10/util/Type.h>
-
-@Namespace("c10") public static native @StdString BytePointer KeyStrRepr(@StdString BytePointer key);
-@Namespace("c10") public static native @StdString String KeyStrRepr(@StdString String key);
 
 @Namespace("c10") public enum RegistryPriority {
   REGISTRY_FALLBACK(1),
@@ -12618,20 +12621,18 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // Targeting ../OptionalType.java
 
 
+
+
 // Targeting ../Stride.java
 
 
 
-@Namespace("c10") public static native @ByVal StrideOptional merge_primitive(
-    @Const @ByRef StrideOptional a,
-    @Const @ByRef StrideOptional b);
+
 // Targeting ../ShapeSymbol.java
 
 
 
-@Namespace("c10") public static native @ByVal ShapeSymbol merge_primitive(
-    @Const @ByRef ShapeSymbol a,
-    @Const @ByRef ShapeSymbol b);
+
 // Targeting ../SymbolicShape.java
 
 
@@ -12826,6 +12827,14 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type_hint);
 @Namespace("c10") public static native @ByVal TypePtrOptional unifyTypeList(
     @ByVal TypeArrayRef elements,
+    @Cast("std::ostream*") @ByRef Pointer why_not);
+@Namespace("c10") public static native @ByVal TypePtrOptional unifyTypeList(
+    @ByVal TypeVector elements,
+    @Cast("std::ostream*") @ByRef Pointer why_not,
+    @Cast("bool") boolean default_to_union/*=false*/,
+    @ByVal(nullValue = "c10::TypePtr(nullptr)") Type.TypePtr type_hint);
+@Namespace("c10") public static native @ByVal TypePtrOptional unifyTypeList(
+    @ByVal TypeVector elements,
     @Cast("std::ostream*") @ByRef Pointer why_not);
  // namespace detail
 // Targeting ../MatchTypeReturn.java
@@ -13290,9 +13299,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <atomic>
 // #include <climits>
 // #include <memory>
-// Targeting ../class_.java
-
-
 
 @Namespace("c10::raw::weak_intrusive_ptr") public static native void incref(@Cast("c10::intrusive_ptr_target*") Pointer self);
 
@@ -14556,6 +14562,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, TensorImpl tensor);
 
 @Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(@Cast("int64_t") long dim, @ByVal TensorVector tensors);
 
 @Namespace("at") public static native @Cast("int64_t") long maybe_wrap_dim(
     @Cast("int64_t") long dim,
@@ -14655,6 +14662,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // #include <functional>
 
 @Namespace("at") public static native @Cast("bool") boolean has_names(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast("bool") boolean has_names(@ByVal TensorVector tensors);
 
 // Converts dim to an positional index. Errors if `dim` cannot be used to
 // refer to any dimension of tensor.
@@ -14662,6 +14670,9 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector dimnames_to_positions(
     @Const @ByRef Tensor tensor,
     @ByVal DimnameArrayRef dims);
+@Namespace("at") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector dimnames_to_positions(
+    @Const @ByRef Tensor tensor,
+    @ByVal DimnameVector dims);
 
 // Unifies two DimnameList to produce a third. This is useful for implementing
 // the named inference rule for binary broadcasting operations like add.
@@ -14680,9 +14691,12 @@ public static final int EXPECTED_MAX_LEVEL = 2;
     @ByVal DimnameArrayRef names,
     @ByVal DimnameArrayRef other);
 @Namespace("at") public static native @StdMove DimnameVector unify_from_right(
-    @ByVal DimnameArrayRef names,
-    @ByVal DimnameArrayRef other,
+    @ByVal DimnameVector names,
+    @ByVal DimnameVector other,
     String action/*="broadcast"*/);
+@Namespace("at") public static native @StdMove DimnameVector unify_from_right(
+    @ByVal DimnameVector names,
+    @ByVal DimnameVector other);
 
 @Namespace("at") public static native void reportNYIDimnameOverload(@Cast("const char*") BytePointer op_name);
 @Namespace("at") public static native void reportNYIDimnameOverload(String op_name);
@@ -14729,6 +14743,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
     @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef maybe_names);
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
+    @Const @ByRef Tensor result,
+    @ByVal DimnameVector maybe_names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names_if_nonempty(
+    @Const @ByRef Tensor result,
+    @ByVal DimnameVector maybe_names);
 
 // Propagates `names` to `result`. Only use this if we are certain that there
 // are names to propagate (that names is not empty).
@@ -14739,6 +14760,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
     @Const @ByRef Tensor result,
     @ByVal DimnameArrayRef names);
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
+    @Const @ByRef Tensor result,
+    @ByVal DimnameVector names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native @Const @ByRef Tensor propagate_names(
+    @Const @ByRef Tensor result,
+    @ByVal DimnameVector names);
 
 // Propagates all names from src to result.
 @Namespace("at::namedinference") public static native void propagate_names(@Const @ByRef Tensor result, @Const @ByRef Tensor src);
@@ -14811,6 +14839,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
     TensorImpl result,
     @ByVal DimnameArrayRef maybe_names);
+@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
+    TensorImpl result,
+    @ByVal DimnameVector maybe_names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native TensorImpl propagate_names_if_nonempty(
+    TensorImpl result,
+    @ByVal DimnameVector maybe_names);
 
 @Namespace("at::namedinference") public static native TensorImpl propagate_names(
     TensorImpl result,
@@ -14819,6 +14854,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native TensorImpl propagate_names(
     TensorImpl result,
     @ByVal DimnameArrayRef names);
+@Namespace("at::namedinference") public static native TensorImpl propagate_names(
+    TensorImpl result,
+    @ByVal DimnameVector names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native TensorImpl propagate_names(
+    TensorImpl result,
+    @ByVal DimnameVector names);
 
 @Namespace("at::namedinference") public static native void propagate_names(TensorImpl result, TensorImpl src);
 
@@ -14829,6 +14871,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native void propagate_names(
     @Const @ByRef TensorBase result,
     @ByVal DimnameArrayRef names);
+@Namespace("at::namedinference") public static native void propagate_names(
+    @Const @ByRef TensorBase result,
+    @ByVal DimnameVector names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native void propagate_names(
+    @Const @ByRef TensorBase result,
+    @ByVal DimnameVector names);
 
 @Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
     @Const @ByRef TensorBase result,
@@ -14837,6 +14886,13 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 @Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
     @Const @ByRef TensorBase result,
     @ByVal DimnameArrayRef names);
+@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
+    @Const @ByRef TensorBase result,
+    @ByVal DimnameVector names,
+    @Cast("bool") boolean validate_names/*=false*/);
+@Namespace("at::namedinference") public static native void propagate_names_if_nonempty(
+    @Const @ByRef TensorBase result,
+    @ByVal DimnameVector names);
 
 @Namespace("at::namedinference") public static native void propagate_names(
     @Const @ByRef TensorBase result,
@@ -16736,12 +16792,6 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 // forward; it doesn't work if you try to deduce it
 // NB: keep this in sync with cloneWithRealTypes in function_schema.cpp
 
-@Namespace("c10") public static native long unpackSymInt(@ByVal SymInt x);
-
-@Namespace("c10") public static native @ByVal LongArrayRef unpackSymInt(@ByVal SymIntArrayRef x);
-
-@Namespace("c10") public static native @ByVal LongOptional unpackSymInt(@ByVal SymIntOptional x);
-
 
 
 
@@ -18219,6 +18269,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
  *  the first Tensor is defined.  (This function implicitly assumes
  *  that all tensors in the list have the same device.) */
 @Namespace("at") public static native @ByVal DeviceOptional device_of(@ByVal TensorArrayRef t);
+@Namespace("at") public static native @ByVal DeviceOptional device_of(@ByVal TensorVector t);
 
  // namespace at
 
@@ -18577,7 +18628,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     DeviceType device_type,
     ScalarType scalar_type);
 @Namespace("at") public static native @ByVal TensorImplVector checked_dense_tensor_list_unwrap(
-    @ByVal TensorArrayRef tensors,
+    @ByVal TensorVector tensors,
     String name,
     int pos,
     @Cast("c10::DeviceType") byte device_type,
@@ -18718,7 +18769,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at") public static native void checkScalarTypes(
     @Cast("at::CheckedFrom") String c,
     @Const @ByRef TensorArg t,
-    @ByVal ScalarTypeArrayRef l);
+    @ByVal ScalarTypeVector l);
 @Namespace("at") public static native void checkSameGPU(
     @Cast("at::CheckedFrom") BytePointer c,
     @Const @ByRef TensorArg t1,
@@ -18761,7 +18812,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal Backend backend);
 @Namespace("at") public static native void checkBackend(
     @Cast("at::CheckedFrom") String c,
-    @ByVal TensorArrayRef t,
+    @ByVal TensorVector t,
     @ByVal Backend backend);
 
 @Namespace("at") public static native void checkDeviceType(
@@ -18770,7 +18821,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal DeviceType device_type);
 @Namespace("at") public static native void checkDeviceType(
     @Cast("at::CheckedFrom") String c,
-    @ByVal TensorArrayRef tensors,
+    @ByVal TensorVector tensors,
     @ByVal DeviceType device_type);
 
 @Namespace("at") public static native void checkLayout(@Cast("at::CheckedFrom") BytePointer c, @Const @ByRef Tensor t, Layout layout);
@@ -18782,7 +18833,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @ByVal Layout layout);
 @Namespace("at") public static native void checkLayout(
     @Cast("at::CheckedFrom") String c,
-    @ByVal TensorArrayRef tensors,
+    @ByVal TensorVector tensors,
     @ByVal Layout layout);
 
 // Methods for getting data_ptr if tensor is defined
@@ -19979,6 +20030,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::align_tensors(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector align_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector align_tensors(@ByVal TensorVector tensors);
 
 
 
@@ -21224,6 +21276,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::atleast_1d.Sequence(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_1d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_1d(@ByVal TensorVector tensors);
 
 
 
@@ -21257,6 +21310,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::atleast_2d.Sequence(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_2d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_2d(@ByVal TensorVector tensors);
 
 
 
@@ -21290,6 +21344,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::atleast_3d.Sequence(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_3d(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector atleast_3d(@ByVal TensorVector tensors);
 
 
 
@@ -22483,11 +22538,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::block_diag(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor block_diag(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor block_diag(@ByVal TensorVector tensors);
 
 // aten::block_diag.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor block_diag_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor block_diag_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::block_diag.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor block_diag_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor block_diag_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -22553,6 +22611,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::broadcast_tensors(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector broadcast_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector broadcast_tensors(@ByVal TensorVector tensors);
 
 
 
@@ -22696,6 +22755,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::cartesian_prod(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor cartesian_prod(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor cartesian_prod(@ByVal TensorVector tensors);
 
 
 
@@ -22727,20 +22787,28 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::cat(Tensor[] tensors, int dim=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal Tensor cat(@Const @ByRef TensorVector tensors);
 
 // aten::cat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @Const @ByRef TensorVector tensors);
 // aten::cat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cat_outf(@Const @ByRef TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor cat_outf(@Const @ByRef TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
 // aten::cat.names(Tensor[] tensors, Dimname dim) -> Tensor
 @Namespace("at") public static native @ByVal Tensor cat(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal Tensor cat(@ByVal TensorVector tensors, @ByVal Dimname dim);
 
 // aten::cat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByRef Tensor cat_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
 // aten::cat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor cat_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor cat_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
 
@@ -22981,11 +23049,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::chain_matmul(Tensor[] matrices) -> Tensor
 @Namespace("at") public static native @ByVal Tensor chain_matmul(@ByVal TensorArrayRef matrices);
+@Namespace("at") public static native @ByVal Tensor chain_matmul(@ByVal TensorVector matrices);
 
 // aten::chain_matmul.out(Tensor[] matrices, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor chain_matmul_out(@ByRef Tensor out, @ByVal TensorArrayRef matrices);
+@Namespace("at") public static native @ByRef Tensor chain_matmul_out(@ByRef Tensor out, @ByVal TensorVector matrices);
 // aten::chain_matmul.out(Tensor[] matrices, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor chain_matmul_outf(@ByVal TensorArrayRef matrices, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor chain_matmul_outf(@ByVal TensorVector matrices, @ByRef Tensor out);
 
 
 
@@ -23644,11 +23715,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::column_stack(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor column_stack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor column_stack(@ByVal TensorVector tensors);
 
 // aten::column_stack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor column_stack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor column_stack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::column_stack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor column_stack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor column_stack_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -23746,20 +23820,28 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::concat(Tensor[] tensors, int dim=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorVector tensors);
 
 // aten::concat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::concat.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
 // aten::concat.names(Tensor[] tensors, Dimname dim) -> Tensor
 @Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal Tensor concat(@ByVal TensorVector tensors, @ByVal Dimname dim);
 
 // aten::concat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByRef Tensor concat_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
 // aten::concat.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor concat_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
 
@@ -23791,20 +23873,28 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::concatenate(Tensor[] tensors, int dim=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorVector tensors);
 
 // aten::concatenate.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::concatenate.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
 // aten::concatenate.names(Tensor[] tensors, Dimname dim) -> Tensor
 @Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByVal Tensor concatenate(@ByVal TensorVector tensors, @ByVal Dimname dim);
 
 // aten::concatenate.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @ByVal Dimname dim);
+@Namespace("at") public static native @ByRef Tensor concatenate_out(@ByRef Tensor out, @ByVal TensorVector tensors, @ByVal Dimname dim);
 // aten::concatenate.names_out(Tensor[] tensors, Dimname dim, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorArrayRef tensors, @ByVal Dimname dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor concatenate_outf(@ByVal TensorVector tensors, @ByVal Dimname dim, @ByRef Tensor out);
 
 
 
@@ -25863,6 +25953,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::dequantize.tensors(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dequantize(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector dequantize(@ByVal TensorVector tensors);
 
 // aten::dequantize.self_out(Tensor self, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor dequantize_out(@ByRef Tensor out, @Const @ByRef Tensor self);
@@ -25871,8 +25962,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::dequantize.tensors_out(Tensor[] tensors, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void dequantize_out(@ByVal TensorArrayRef out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native void dequantize_out(@ByVal TensorVector out, @ByVal TensorVector tensors);
 // aten::dequantize.tensors_out(Tensor[] tensors, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void dequantize_outf(@ByVal TensorArrayRef tensors, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void dequantize_outf(@ByVal TensorVector tensors, @ByVal TensorVector out);
 
 
 
@@ -26588,11 +26681,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::dstack(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor dstack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor dstack(@ByVal TensorVector tensors);
 
 // aten::dstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor dstack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor dstack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::dstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor dstack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor dstack_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -26624,8 +26720,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::einsum(str equation, Tensor[] tensors, *, int[]? path=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor einsum(@StringView BytePointer equation, @ByVal TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional path);
 @Namespace("at") public static native @ByVal Tensor einsum(@StringView BytePointer equation, @ByVal TensorArrayRef tensors);
-@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal TensorArrayRef tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... path);
-@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal TensorVector tensors, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector long... path);
+@Namespace("at") public static native @ByVal Tensor einsum(@StringView String equation, @ByVal TensorVector tensors);
 
 
 
@@ -29630,6 +29726,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::flatten.DimnameList(Tensor(a) self, Dimname[] dims, Dimname out_dim) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dims, @ByVal Dimname out_dim);
+@Namespace("at") public static native @ByVal Tensor flatten(@Const @ByRef Tensor self, @ByVal DimnameVector dims, @ByVal Dimname out_dim);
 
 
 
@@ -29660,6 +29757,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::flatten_dense_tensors(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor flatten_dense_tensors(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor flatten_dense_tensors(@ByVal TensorVector tensors);
 
 
 
@@ -31138,12 +31236,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::gradient.tensorarrayint(Tensor self, *, Tensor[] spacing, int? dim=None, int edge_order=1) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal(nullValue = "c10::optional<int64_t>(c10::nullopt)") LongOptional dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing);
 
 // aten::gradient.tensorarray(Tensor self, *, Tensor[] spacing, int[] dim, int edge_order=1) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim, @Cast("int64_t") long edge_order/*=1*/);
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal LongArrayRef dim);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorArrayRef spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] dim, @Cast("int64_t") long edge_order/*=1*/);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector gradient(@Const @ByRef Tensor self, @ByVal TensorVector spacing, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... dim);
 
 
 
@@ -31461,9 +31561,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::gru.input(Tensor input, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T gru(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native @ByVal T_TensorTensor_T gru(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 
 // aten::gru.data(Tensor data, Tensor batch_sizes, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T gru(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
+@Namespace("at") public static native @ByVal T_TensorTensor_T gru(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
 
 
 
@@ -32147,7 +32249,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::histogramdd.TensorList_bins(Tensor self, Tensor[] bins, float[]? range=None, Tensor? weight=None, bool density=False) -> (Tensor hist, Tensor[] bin_edges)
 @Namespace("at") public static native @ByVal T_TensorTensorVector_T histogramdd(@Const @ByRef Tensor self, @ByVal TensorArrayRef bins, @ByVal(nullValue = "c10::optional<at::ArrayRef<double> >(c10::nullopt)") DoubleArrayRefOptional range, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("bool") boolean density/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensorVector_T histogramdd(@Const @ByRef Tensor self, @ByVal TensorArrayRef bins);
-@Namespace("at") public static native @ByVal T_TensorTensorVector_T histogramdd(@Const @ByRef Tensor self, @ByVal TensorArrayRef bins, @ByVal(nullValue = "c10::optional<at::ArrayRef<double> >(c10::nullopt)") @Cast({"double*", "c10::ArrayRef<double>", "std::vector<double>&"}) @StdVector double[] range, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("bool") boolean density/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensorVector_T histogramdd(@Const @ByRef Tensor self, @ByVal TensorVector bins, @ByVal(nullValue = "c10::optional<at::ArrayRef<double> >(c10::nullopt)") @Cast({"double*", "c10::ArrayRef<double>", "std::vector<double>&"}) @StdVector double[] range, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional weight, @Cast("bool") boolean density/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensorVector_T histogramdd(@Const @ByRef Tensor self, @ByVal TensorVector bins);
 
 
 
@@ -32247,11 +32350,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::hstack(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor hstack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor hstack(@ByVal TensorVector tensors);
 
 // aten::hstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor hstack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor hstack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::hstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor hstack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor hstack_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -35582,11 +35688,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::linalg_multi_dot(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor linalg_multi_dot(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor linalg_multi_dot(@ByVal TensorVector tensors);
 
 // aten::linalg_multi_dot.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_multi_dot_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor linalg_multi_dot_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::linalg_multi_dot.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor linalg_multi_dot_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor linalg_multi_dot_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -37051,12 +37160,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::logsumexp.names(Tensor self, Dimname[1] dim, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor logsumexp(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::logsumexp.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor logsumexp_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
 // aten::logsumexp.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor logsumexp_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
 
@@ -37130,9 +37244,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::lstm.input(Tensor input, Tensor[] hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first) -> (Tensor, Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensorTensor_T lstm(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native @ByVal T_TensorTensorTensor_T lstm(@Const @ByRef Tensor input, @ByVal TensorVector hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 
 // aten::lstm.data(Tensor data, Tensor batch_sizes, Tensor[] hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional) -> (Tensor, Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensorTensor_T lstm(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @ByVal TensorArrayRef hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
+@Namespace("at") public static native @ByVal T_TensorTensorTensor_T lstm(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @ByVal TensorVector hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
 
 
 
@@ -37164,6 +37280,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::lstm_cell(Tensor input, Tensor[] hx, Tensor w_ih, Tensor w_hh, Tensor? b_ih=None, Tensor? b_hh=None) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T lstm_cell(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_ih, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_hh);
 @Namespace("at") public static native @ByVal T_TensorTensor_T lstm_cell(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh);
+@Namespace("at") public static native @ByVal T_TensorTensor_T lstm_cell(@Const @ByRef Tensor input, @ByVal TensorVector hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_ih, @Const @ByRef(nullValue = "c10::optional<at::Tensor>{}") TensorOptional b_hh);
+@Namespace("at") public static native @ByVal T_TensorTensor_T lstm_cell(@Const @ByRef Tensor input, @ByVal TensorVector hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh);
 
 
 
@@ -37194,11 +37312,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::lstm_mps_backward(Tensor? grad_y, Tensor? grad_hy, Tensor? grad_cy, Tensor z_state, Tensor cell_state_fwd, Tensor input, Tensor layersOutputs, Tensor[] hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first) -> (Tensor, Tensor[], Tensor[])
 @Namespace("at") public static native @ByVal T_TensorTensorVectorTensorVector_T lstm_mps_backward(@Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorArrayRef hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native @ByVal T_TensorTensorVectorTensorVector_T lstm_mps_backward(@Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorVector hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 
 // aten::lstm_mps_backward.out(Tensor? grad_y, Tensor? grad_hy, Tensor? grad_cy, Tensor z_state, Tensor cell_state_fwd, Tensor input, Tensor layersOutputs, Tensor[] hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first, *, Tensor(a!) out0, Tensor(b!)[] out1, Tensor(c!)[] out2) -> ()
 @Namespace("at") public static native void lstm_mps_backward_out(@ByRef Tensor out0, @ByVal TensorArrayRef out1, @ByVal TensorArrayRef out2, @Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorArrayRef hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native void lstm_mps_backward_out(@ByRef Tensor out0, @ByVal TensorVector out1, @ByVal TensorVector out2, @Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorVector hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 // aten::lstm_mps_backward.out(Tensor? grad_y, Tensor? grad_hy, Tensor? grad_cy, Tensor z_state, Tensor cell_state_fwd, Tensor input, Tensor layersOutputs, Tensor[] hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first, *, Tensor(a!) out0, Tensor(b!)[] out1, Tensor(c!)[] out2) -> ()
 @Namespace("at") public static native void lstm_mps_backward_outf(@Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorArrayRef hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first, @ByRef Tensor out0, @ByVal TensorArrayRef out1, @ByVal TensorArrayRef out2);
+@Namespace("at") public static native void lstm_mps_backward_outf(@Const @ByRef TensorOptional grad_y, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Const @ByRef Tensor z_state, @Const @ByRef Tensor cell_state_fwd, @Const @ByRef Tensor input, @Const @ByRef Tensor layersOutputs, @ByVal TensorVector hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first, @ByRef Tensor out0, @ByVal TensorVector out1, @ByVal TensorVector out2);
 
 
 
@@ -38330,12 +38451,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::mean.names_dim(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::mean.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor mean_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
 // aten::mean.names_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor mean_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 
 
@@ -38421,10 +38547,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::meshgrid(Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorVector tensors);
 
 // aten::meshgrid.indexing(Tensor[] tensors, *, str indexing) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView BytePointer indexing);
-@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorArrayRef tensors, @StringView String indexing);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector meshgrid(@ByVal TensorVector tensors, @StringView String indexing);
 
 
 
@@ -38856,14 +38983,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::miopen_rnn(Tensor input, Tensor[] weight, int weight_stride0, Tensor hx, Tensor? cx, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state) -> (Tensor, Tensor, Tensor, Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state);
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn(@Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state);
 
 // aten::miopen_rnn.out(Tensor input, Tensor[] weight, int weight_stride0, Tensor hx, Tensor? cx, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2, Tensor(d!) out3, Tensor(e!) out4) -> (Tensor(a!), Tensor(b!), Tensor(c!), Tensor(d!), Tensor(e!))
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4, @Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state);
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4, @Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4, @Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state);
 // aten::miopen_rnn.out(Tensor input, Tensor[] weight, int weight_stride0, Tensor hx, Tensor? cx, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2, Tensor(d!) out3, Tensor(e!) out4) -> (Tensor(a!), Tensor(b!), Tensor(c!), Tensor(d!), Tensor(e!))
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_outf(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4);
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_outf(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorTensor_T miopen_rnn_outf(@Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByRef Tensor out3, @ByRef Tensor out4);
 
 
 
@@ -38894,14 +39021,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::miopen_rnn_backward(Tensor input, Tensor[] weight, int weight_stride0, Tensor weight_buf, Tensor hx, Tensor? cx, Tensor output, Tensor? grad_output, Tensor? grad_hy, Tensor? grad_cy, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state, Tensor reserve, bool[4] output_mask) -> (Tensor, Tensor, Tensor, Tensor[])
 @Namespace("at") public static native @ByVal T_TensorTensorTensorTensorVector_T miopen_rnn_backward(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
-@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorVector_T miopen_rnn_backward(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
+@Namespace("at") public static native @ByVal T_TensorTensorTensorTensorVector_T miopen_rnn_backward(@Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
 
 // aten::miopen_rnn_backward.out(Tensor input, Tensor[] weight, int weight_stride0, Tensor weight_buf, Tensor hx, Tensor? cx, Tensor output, Tensor? grad_output, Tensor? grad_hy, Tensor? grad_cy, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state, Tensor reserve, bool[4] output_mask, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2, Tensor(d!)[] out3) -> ()
 @Namespace("at") public static native void miopen_rnn_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorArrayRef out3, @Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
-@Namespace("at") public static native void miopen_rnn_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorArrayRef out3, @Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
+@Namespace("at") public static native void miopen_rnn_backward_out(@ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorVector out3, @Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask);
 // aten::miopen_rnn_backward.out(Tensor input, Tensor[] weight, int weight_stride0, Tensor weight_buf, Tensor hx, Tensor? cx, Tensor output, Tensor? grad_output, Tensor? grad_hy, Tensor? grad_cy, int mode, int hidden_size, int num_layers, bool batch_first, float dropout, bool train, bool bidirectional, int[] batch_sizes, Tensor? dropout_state, Tensor reserve, bool[4] output_mask, *, Tensor(a!) out0, Tensor(b!) out1, Tensor(c!) out2, Tensor(d!)[] out3) -> ()
 @Namespace("at") public static native void miopen_rnn_backward_outf(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal LongArrayRef batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorArrayRef out3);
-@Namespace("at") public static native void miopen_rnn_backward_outf(@Const @ByRef Tensor input, @ByVal TensorArrayRef weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorArrayRef out3);
+@Namespace("at") public static native void miopen_rnn_backward_outf(@Const @ByRef Tensor input, @ByVal TensorVector weight, @Cast("int64_t") long weight_stride0, @Const @ByRef Tensor weight_buf, @Const @ByRef Tensor hx, @Const @ByRef TensorOptional cx, @Const @ByRef Tensor output, @Const @ByRef TensorOptional grad_output, @Const @ByRef TensorOptional grad_hy, @Const @ByRef TensorOptional grad_cy, @Cast("int64_t") long mode, @Cast("int64_t") long hidden_size, @Cast("int64_t") long num_layers, @Cast("bool") boolean batch_first, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] batch_sizes, @Const @ByRef TensorOptional dropout_state, @Const @ByRef Tensor reserve, @ByVal @Cast("std::array<bool,4>*") BoolPointer output_mask, @ByRef Tensor out0, @ByRef Tensor out1, @ByRef Tensor out2, @ByVal TensorVector out3);
 
 
 
@@ -41964,21 +42091,29 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::norm.names_ScalarOpt_dim_dtype(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype) -> Tensor
 @Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype);
 
 // aten::norm.names_ScalarOpt_dim(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor norm(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim);
 
 // aten::norm.names_dtype_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype);
 // aten::norm.names_dtype_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, ScalarType dtype, @ByRef Tensor out);
 
 // aten::norm.names_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim);
 // aten::norm.names_out(Tensor self, Scalar? p, Dimname[1] dim, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor norm_outf(@Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::norm.ScalarOpt_dtype_out(Tensor self, Scalar? p, *, ScalarType dtype, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor norm_out(@ByRef Tensor out, @Const @ByRef Tensor self, @Const @ByRef ScalarOptional p, ScalarType dtype);
@@ -42640,6 +42775,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::pad_sequence(Tensor[] sequences, bool batch_first=False, float padding_value=0.0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/);
 @Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorArrayRef sequences);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences, @Cast("bool") boolean batch_first/*=false*/, double padding_value/*=0.0*/);
+@Namespace("at") public static native @ByVal Tensor pad_sequence(@ByVal TensorVector sequences);
 
 
 
@@ -43621,6 +43758,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::quantize_per_tensor.tensors(Tensor[] tensors, Tensor scales, Tensor zero_points, ScalarType dtype) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector quantize_per_tensor(@ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector quantize_per_tensor(@ByVal TensorVector tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
 
 // aten::quantize_per_tensor.out(Tensor self, float scale, int zero_point, ScalarType dtype, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor quantize_per_tensor_out(@ByRef Tensor out, @Const @ByRef Tensor self, double scale, @Cast("int64_t") long zero_point, ScalarType dtype);
@@ -43634,8 +43772,10 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::quantize_per_tensor.tensors_out(Tensor[] tensors, Tensor scales, Tensor zero_points, ScalarType dtype, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void quantize_per_tensor_out(@ByVal TensorArrayRef out, @ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
+@Namespace("at") public static native void quantize_per_tensor_out(@ByVal TensorVector out, @ByVal TensorVector tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype);
 // aten::quantize_per_tensor.tensors_out(Tensor[] tensors, Tensor scales, Tensor zero_points, ScalarType dtype, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void quantize_per_tensor_outf(@ByVal TensorArrayRef tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void quantize_per_tensor_outf(@ByVal TensorVector tensors, @Const @ByRef Tensor scales, @Const @ByRef Tensor zero_points, ScalarType dtype, @ByVal TensorVector out);
 
 
 
@@ -43766,6 +43906,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::quantized_lstm_cell(Tensor input, Tensor[] hx, Tensor w_ih, Tensor w_hh, Tensor b_ih, Tensor b_hh, Tensor packed_ih, Tensor packed_hh, Tensor col_offsets_ih, Tensor col_offsets_hh, Scalar scale_ih, Scalar scale_hh, Scalar zero_point_ih, Scalar zero_point_hh) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T quantized_lstm_cell(@Const @ByRef Tensor input, @ByVal TensorArrayRef hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
+@Namespace("at") public static native @ByVal T_TensorTensor_T quantized_lstm_cell(@Const @ByRef Tensor input, @ByVal TensorVector hx, @Const @ByRef Tensor w_ih, @Const @ByRef Tensor w_hh, @Const @ByRef Tensor b_ih, @Const @ByRef Tensor b_hh, @Const @ByRef Tensor packed_ih, @Const @ByRef Tensor packed_hh, @Const @ByRef Tensor col_offsets_ih, @Const @ByRef Tensor col_offsets_hh, @Const @ByRef Scalar scale_ih, @Const @ByRef Scalar scale_hh, @Const @ByRef Scalar zero_point_ih, @Const @ByRef Scalar zero_point_hh);
 
 
 
@@ -46416,9 +46557,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::rnn_relu.input(Tensor input, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T rnn_relu(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native @ByVal T_TensorTensor_T rnn_relu(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 
 // aten::rnn_relu.data(Tensor data, Tensor batch_sizes, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T rnn_relu(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
+@Namespace("at") public static native @ByVal T_TensorTensor_T rnn_relu(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
 
 
 
@@ -46480,9 +46623,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::rnn_tanh.input(Tensor input, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional, bool batch_first) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T rnn_tanh(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
+@Namespace("at") public static native @ByVal T_TensorTensor_T rnn_tanh(@Const @ByRef Tensor input, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional, @Cast("bool") boolean batch_first);
 
 // aten::rnn_tanh.data(Tensor data, Tensor batch_sizes, Tensor hx, Tensor[] params, bool has_biases, int num_layers, float dropout, bool train, bool bidirectional) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T rnn_tanh(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorArrayRef params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
+@Namespace("at") public static native @ByVal T_TensorTensor_T rnn_tanh(@Const @ByRef Tensor data, @Const @ByRef Tensor batch_sizes, @Const @ByRef Tensor hx, @ByVal TensorVector params, @Cast("bool") boolean has_biases, @Cast("int64_t") long num_layers, double dropout, @Cast("bool") boolean train, @Cast("bool") boolean bidirectional);
 
 
 
@@ -46759,11 +46904,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::row_stack(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor row_stack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor row_stack(@ByVal TensorVector tensors);
 
 // aten::row_stack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor row_stack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor row_stack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::row_stack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor row_stack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor row_stack_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -51813,19 +51961,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::split_copy.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void split_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size);
+@Namespace("at") public static native void split_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void split_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size);
 
 
 // aten::split_copy.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_copy_outf(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void split_copy_outf(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 // aten::split_copy.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_copy_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void split_copy_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymInt split_size);
+@Namespace("at") public static native void split_copy_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void split_copy_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymInt split_size);
 
 
 // aten::split_copy.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_copy_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void split_copy_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 
@@ -51909,22 +52063,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::split_with_sizes_copy.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
-@Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
+@Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void split_with_sizes_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
 
 
 // aten::split_with_sizes_copy.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_with_sizes_copy_outf(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
-@Namespace("at") public static native void split_with_sizes_copy_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void split_with_sizes_copy_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 // aten::split_with_sizes_copy.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_with_sizes_copy_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void split_with_sizes_copy_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
+@Namespace("at") public static native void split_with_sizes_copy_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void split_with_sizes_copy_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
 
 
 // aten::split_with_sizes_copy.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void split_with_sizes_copy_symint_outf(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void split_with_sizes_copy_symint_outf(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 
@@ -52164,12 +52321,17 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::stack(Tensor[] tensors, int dim=0) -> Tensor
 @Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByVal Tensor stack(@ByVal TensorVector tensors);
 
 // aten::stack.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor stack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native @ByRef Tensor stack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor stack_out(@ByRef Tensor out, @ByVal TensorVector tensors, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native @ByRef Tensor stack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::stack.out(Tensor[] tensors, int dim=0, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor stack_outf(@ByVal TensorArrayRef tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor stack_outf(@ByVal TensorVector tensors, @Cast("int64_t") long dim, @ByRef Tensor out);
 
 
 
@@ -52232,22 +52394,32 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::std.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 
 // aten::std.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 // aten::std.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::std.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor std(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::std.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor std_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
 // aten::std.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor std_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
 
@@ -52293,10 +52465,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::std_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 
 // aten::std_mean.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensor_T std_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::std_mean.correction_out(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal T_TensorTensor_T std_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
@@ -52501,6 +52677,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::sum.dim_DimnameList(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None) -> Tensor
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByVal Tensor sum(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::sum.IntList_out(Tensor self, int[1]? dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal LongArrayRefOptional dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -52514,8 +52692,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::sum.DimnameList_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim/*=false*/, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
+@Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
 // aten::sum.DimnameList_out(Tensor self, Dimname[1] dim, bool keepdim=False, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor sum_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean keepdim, @ByVal ScalarTypeOptional dtype, @ByRef Tensor out);
 
 // aten::sum.out(Tensor self, *, ScalarType? dtype=None, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor sum_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype);
@@ -54397,8 +54578,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::unbind_copy.int_out(Tensor self, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unbind_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void unbind_copy_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self);
+@Namespace("at") public static native void unbind_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void unbind_copy_out(@ByVal TensorVector out, @Const @ByRef Tensor self);
 // aten::unbind_copy.int_out(Tensor self, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unbind_copy_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void unbind_copy_outf(@Const @ByRef Tensor self, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 
@@ -54438,11 +54622,12 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor unflatten(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal LongArrayRef sizes, @ByVal DimnameArrayRef names);
-@Namespace("at") public static native @ByVal Tensor unflatten(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes, @ByVal DimnameArrayRef names);
+@Namespace("at") public static native @ByVal Tensor unflatten(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] sizes, @ByVal DimnameVector names);
 
 
 // aten::unflatten.Dimname(Tensor(a) self, Dimname dim, SymInt[] sizes, Dimname[] names) -> Tensor(a)
 @Namespace("at") public static native @ByVal Tensor unflatten_symint(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal SymIntArrayRef sizes, @ByVal DimnameArrayRef names);
+@Namespace("at") public static native @ByVal Tensor unflatten_symint(@Const @ByRef Tensor self, @ByVal Dimname dim, @ByVal SymIntArrayRef sizes, @ByVal DimnameVector names);
 
 
 
@@ -54474,6 +54659,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::unflatten_dense_tensors(Tensor flat, Tensor[] tensors) -> Tensor[]
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector unflatten_dense_tensors(@Const @ByRef Tensor flat, @ByVal TensorVector tensors);
 
 
 
@@ -54811,19 +54997,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::unsafe_split.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void unsafe_split_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size);
+@Namespace("at") public static native void unsafe_split_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void unsafe_split_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @Cast("int64_t") long split_size);
 
 
 // aten::unsafe_split.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_outf(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void unsafe_split_outf(@Const @ByRef Tensor self, @Cast("int64_t") long split_size, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 // aten::unsafe_split.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void unsafe_split_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymInt split_size);
+@Namespace("at") public static native void unsafe_split_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void unsafe_split_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymInt split_size);
 
 
 // aten::unsafe_split.Tensor_out(Tensor self, SymInt split_size, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void unsafe_split_symint_outf(@Const @ByRef Tensor self, @ByVal SymInt split_size, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 
@@ -54868,22 +55060,25 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::unsafe_split_with_sizes.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes);
-@Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
-@Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
+@Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void unsafe_split_with_sizes_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... split_sizes);
 
 
 // aten::unsafe_split_with_sizes.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_with_sizes_outf(@Const @ByRef Tensor self, @ByVal LongArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
-@Namespace("at") public static native void unsafe_split_with_sizes_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void unsafe_split_with_sizes_outf(@Const @ByRef Tensor self, @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long[] split_sizes, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 // aten::unsafe_split_with_sizes.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_with_sizes_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
 @Namespace("at") public static native void unsafe_split_with_sizes_symint_out(@ByVal TensorArrayRef out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
+@Namespace("at") public static native void unsafe_split_with_sizes_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim/*=0*/);
+@Namespace("at") public static native void unsafe_split_with_sizes_symint_out(@ByVal TensorVector out, @Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes);
 
 
 // aten::unsafe_split_with_sizes.out(Tensor self, SymInt[] split_sizes, int dim=0, *, Tensor(a!)[] out) -> ()
 @Namespace("at") public static native void unsafe_split_with_sizes_symint_outf(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorArrayRef out);
+@Namespace("at") public static native void unsafe_split_with_sizes_symint_outf(@Const @ByRef Tensor self, @ByVal SymIntArrayRef split_sizes, @Cast("int64_t") long dim, @ByVal TensorVector out);
 
 
 
@@ -56052,22 +56247,32 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::var.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 
 // aten::var.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 // aten::var.names_out(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 // aten::var.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> Tensor
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal Tensor var(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::var.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByRef Tensor var_out(@ByRef Tensor out, @Const @ByRef Tensor self, @ByVal DimnameVector dim);
 // aten::var.correction_names_out(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor var_outf(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef ScalarOptional correction, @Cast("bool") boolean keepdim, @ByRef Tensor out);
 
 
 
@@ -56113,10 +56318,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // aten::var_mean.names_dim(Tensor self, Dimname[1] dim, bool unbiased=True, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Cast("bool") boolean unbiased);
+@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Cast("bool") boolean unbiased);
 
 // aten::var_mean.correction_names(Tensor self, Dimname[1] dim, *, Scalar? correction=None, bool keepdim=False) -> (Tensor, Tensor)
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameArrayRef dim);
+@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
+@Namespace("at") public static native @ByVal T_TensorTensor_T var_mean(@Const @ByRef Tensor self, @ByVal DimnameVector dim);
 
 // aten::var_mean.correction_out(Tensor self, int[1]? dim=None, *, Scalar? correction=None, bool keepdim=False, Tensor(a!) out0, Tensor(b!) out1) -> (Tensor(a!), Tensor(b!))
 @Namespace("at") public static native @ByVal T_TensorTensor_T var_mean_out(@ByRef Tensor out0, @ByRef Tensor out1, @Const @ByRef Tensor self, @ByVal(nullValue = "at::OptionalIntArrayRef(c10::nullopt)") LongArrayRefOptional dim, @Const @ByRef(nullValue = "c10::optional<at::Scalar>(c10::nullopt)") ScalarOptional correction, @Cast("bool") boolean keepdim/*=false*/);
@@ -56472,11 +56681,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 // aten::vstack(Tensor[] tensors) -> Tensor
 @Namespace("at") public static native @ByVal Tensor vstack(@ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByVal Tensor vstack(@ByVal TensorVector tensors);
 
 // aten::vstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor vstack_out(@ByRef Tensor out, @ByVal TensorArrayRef tensors);
+@Namespace("at") public static native @ByRef Tensor vstack_out(@ByRef Tensor out, @ByVal TensorVector tensors);
 // aten::vstack.out(Tensor[] tensors, *, Tensor(a!) out) -> Tensor(a!)
 @Namespace("at") public static native @ByRef Tensor vstack_outf(@ByVal TensorArrayRef tensors, @ByRef Tensor out);
+@Namespace("at") public static native @ByRef Tensor vstack_outf(@ByVal TensorVector tensors, @ByRef Tensor out);
 
 
 
@@ -58344,6 +58556,7 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 
 
 @Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector expand_outplace(@ByVal TensorArrayRef to_expand);
+@Namespace("at") public static native @Cast({"", "std::vector<torch::Tensor>"}) @StdMove TensorVector expand_outplace(@ByVal TensorVector to_expand);
 
 @Namespace("at") public static native @ByVal Tensor sum_to(
     @ByVal Tensor tensor,
@@ -58589,9 +58802,6 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 //===----------------------------------------------------------------------===//
 //                                 Utilities
 //===----------------------------------------------------------------------===//
-// Targeting ../pack.java
-
-
  // namespace detail
 
  // namespace torch
@@ -59718,6 +59928,14 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     ScalarType src_type,
     @Const Pointer ptr);
 
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::complex<float> >") FloatComplex fetch_and_cast_to_ComplexFloat(
+    ScalarType src_type,
+    @Const Pointer ptr);
+
+@Namespace("c10") public static native @ByVal @Name("fetch_and_cast<c10::complex<double> >") DoubleComplex fetch_and_cast_to_ComplexDouble(
+    ScalarType src_type,
+    @Const Pointer ptr);
+
 @Namespace("c10") public static native @Cast("bool") @Name("fetch_and_cast<bool>") boolean fetch_and_cast_to_boolean(
     ScalarType src_type,
     @Const Pointer ptr);
@@ -59788,11 +60006,11 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     ScalarType dest_type,
     Pointer ptr,
     double value);
-@Namespace("c10") public static native @Name("cast_and_store") void cast_and_store_from_qint8(
+@Namespace("c10") public static native @Name("cast_and_store<c10::complex<float> >") void cast_and_store_from_ComplexFloat(
     ScalarType dest_type,
     Pointer ptr,
     @ByVal FloatComplex value);
-@Namespace("c10") public static native @Name("cast_and_store") void cast_and_store_from_qint8(
+@Namespace("c10") public static native @Name("cast_and_store<c10::complex<double> >") void cast_and_store_from_ComplexDouble(
     ScalarType dest_type,
     Pointer ptr,
     @ByVal DoubleComplex value);
@@ -61364,6 +61582,8 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 // overhead and is undesirable.
 @Namespace("at::indexing::impl") public static native @Cast("int64_t") long count_specified_dimensions(
     @Const @ByRef TensorIndexArrayRef indices);
+@Namespace("at::indexing::impl") public static native @Cast("int64_t") long count_specified_dimensions(
+    @Const @ByRef TensorIndexVector indices);
  // namespace impl
 
 // NOTE: Many functions below are only for consumption from Python indexing
@@ -61436,6 +61656,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
     @Cast("bool") boolean disable_slice_optimization,
     @Const @ByRef Device self_device,
     @Const @ByRef SymIntArrayRefOptional self_sizes);
+@Namespace("at::indexing::impl") public static native @ByVal Tensor applySlicing(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices,
+    @ByRef TensorVector outIndices,
+    @Cast("bool") boolean disable_slice_optimization,
+    @Const @ByRef Device self_device,
+    @Const @ByRef SymIntArrayRefOptional self_sizes);
  // namespace impl
 
 @Namespace("at::indexing") public static native @ByVal Tensor dispatch_index(
@@ -61488,6 +61715,13 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at::indexing") public static native @ByVal Tensor get_item(
     @Const @ByRef Tensor self,
     @Const @ByRef TensorIndexArrayRef indices);
+@Namespace("at::indexing") public static native @ByVal Tensor get_item(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices,
+    @Cast("bool") boolean disable_slice_optimization/*=false*/);
+@Namespace("at::indexing") public static native @ByVal Tensor get_item(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices);
 
 // This mirrors `THPVariable_setitem` in
 // torch/csrc/autograd/python_variable_indexing.cpp for "the assigned value is a
@@ -61501,6 +61735,15 @@ public static final int CPU_DEVICE = CPU_DEVICE();
 @Namespace("at::indexing") public static native void set_item(
     @Const @ByRef Tensor self,
     @Const @ByRef TensorIndexArrayRef indices,
+    @Const @ByRef Tensor value);
+@Namespace("at::indexing") public static native void set_item(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices,
+    @Const @ByRef Tensor value,
+    @Cast("bool") boolean disable_slice_optimization/*=false*/);
+@Namespace("at::indexing") public static native void set_item(
+    @Const @ByRef Tensor self,
+    @Const @ByRef TensorIndexVector indices,
     @Const @ByRef Tensor value);
 
  // namespace indexing
@@ -63709,7 +63952,16 @@ public static final int kPrevDirection = kPrevDirection();
 @Namespace("torch::jit") public static native @ByVal ValueVector insertGraph(
     @ByRef Graph g,
     @ByRef Graph callee,
+    @ByVal ValueVector inputs);
+@Namespace("torch::jit") public static native @ByVal ValueVector insertGraph(
+    @ByRef Graph g,
+    @ByRef Graph callee,
     @ByVal ValueArrayRef inputs,
+    @ByRef ValueValueMap value_map);
+@Namespace("torch::jit") public static native @ByVal ValueVector insertGraph(
+    @ByRef Graph g,
+    @ByRef Graph callee,
+    @ByVal ValueVector inputs,
     @ByRef ValueValueMap value_map);
 
 /** Insert function \p CALLEE after node \p TO_REPLACE, remove the node and
@@ -63924,6 +64176,9 @@ public static final long ARG_SPEC_DEPTH_LIMIT = ARG_SPEC_DEPTH_LIMIT();
 @Namespace("torch::jit") public static native JitNode replaceBlockWithFallbackGraph(
     Block b,
     @ByVal ValueArrayRef inputs);
+@Namespace("torch::jit") public static native JitNode replaceBlockWithFallbackGraph(
+    Block b,
+    @ByVal ValueVector inputs);
 
 // These passes need to run before it is valid to pass to the interpreter
 // regardless of whether sizes have been specialized or not.
@@ -64848,6 +65103,12 @@ apis for specific fusers.
 // Targeting ../TensorExampleStack.java
 
 
+
+/** A {@code Collation} for {@code Example<Tensor, Tensor>} types that stacks all data
+ *  tensors into one tensor, and all target (label) tensors into one tensor. */
+
+/** A {@code Collation} for {@code Example<Tensor, NoTarget>} types that stacks all data
+ *  tensors into one tensor. */
  // namespace transforms
  // namespace data
  // namespace torch
@@ -65941,8 +66202,10 @@ apis for specific fusers.
     @Cast("bool") boolean hermitian);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor multi_dot(@ByVal TensorArrayRef tensors);
+@Namespace("torch::linalg::detail") public static native @ByVal Tensor multi_dot(@ByVal TensorVector tensors);
 
 @Namespace("torch::linalg::detail") public static native @ByRef Tensor multi_dot_out(@ByVal TensorArrayRef tensors, @ByRef Tensor result);
+@Namespace("torch::linalg::detail") public static native @ByRef Tensor multi_dot_out(@ByVal TensorVector tensors, @ByRef Tensor result);
 
 @Namespace("torch::linalg::detail") public static native @ByVal Tensor pinv(@Const @ByRef Tensor input, double rcond, @Cast("bool") boolean hermitian);
 
@@ -66321,6 +66584,11 @@ apis for specific fusers.
     @Const @ByRef(nullValue = "at::TensorOptions{}") TensorOptions options);
 @Namespace("torch::nested") public static native @ByVal Tensor nested_tensor(
     @ByVal TensorArrayRef nested_tensor_data);
+@Namespace("torch::nested") public static native @ByVal Tensor nested_tensor(
+    @ByVal TensorVector nested_tensor_data,
+    @Const @ByRef(nullValue = "at::TensorOptions{}") TensorOptions options);
+@Namespace("torch::nested") public static native @ByVal Tensor nested_tensor(
+    @ByVal TensorVector nested_tensor_data);
 
 
 ///
@@ -66346,6 +66614,12 @@ apis for specific fusers.
     @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
 @Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
     @ByVal TensorArrayRef list);
+@Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
+    @ByVal TensorVector list,
+    @ByVal(nullValue = "c10::optional<at::ScalarType>(c10::nullopt)") ScalarTypeOptional dtype,
+    @ByVal(nullValue = "c10::optional<at::Device>(c10::nullopt)") DeviceOptional device);
+@Namespace("torch::nested") public static native @ByVal Tensor as_nested_tensor(
+    @ByVal TensorVector list);
 
 /** Nested to padded tensor
  * 
@@ -70804,7 +71078,7 @@ body of your function, only data pointers.
     @ByVal LongOptionalArrayRef out_size,
     @ByVal LongArrayRef defaults);
 @Namespace("torch::nn::modules::utils") public static native @ByVal @Cast("std::vector<int64_t>*") LongVector _list_with_default(
-    @ByVal LongOptionalArrayRef out_size,
+    @ByVal LongOptionalVector out_size,
     @ByVal @Cast({"int64_t*", "c10::ArrayRef<int64_t>", "std::vector<int64_t>&"}) @StdVector("int64_t") long... defaults);
 
  // namespace utils
@@ -74513,6 +74787,11 @@ body of your function, only data pointers.
     @Cast("bool") boolean enforce_sorted/*=true*/);
 @Namespace("torch::nn::utils::rnn") public static native @ByVal PackedSequence pack_sequence(
     @ByVal TensorArrayRef sequences);
+@Namespace("torch::nn::utils::rnn") public static native @ByVal PackedSequence pack_sequence(
+    @ByVal TensorVector sequences,
+    @Cast("bool") boolean enforce_sorted/*=true*/);
+@Namespace("torch::nn::utils::rnn") public static native @ByVal PackedSequence pack_sequence(
+    @ByVal TensorVector sequences);
 
  // namespace rnn
  // namespace utils
@@ -78239,6 +78518,15 @@ public static final String TORCH_VERSION =
     @ByVal PickleReader reader,
     @ByVal TypeResolver type_resolver,
     @ByVal TensorArrayRef tensor_table);
+@Namespace("torch::jit") public static native @ByVal IValue unpickle(
+    @ByVal PickleReader reader,
+    @ByVal TypeResolver type_resolver,
+    @ByVal TensorVector tensor_table,
+    TypeParser type_parser/*=torch::jit::Unpickler::defaultTypeParser*/);
+@Namespace("torch::jit") public static native @ByVal IValue unpickle(
+    @ByVal PickleReader reader,
+    @ByVal TypeResolver type_resolver,
+    @ByVal TensorVector tensor_table);
 
 /** Decode a chunk of memory containing pickled data into its {@code torch::IValue}s.
  * 
@@ -78259,7 +78547,7 @@ public static final String TORCH_VERSION =
     String data,
     @Cast("size_t") long size,
     @ByVal(nullValue = "torch::jit::TypeResolver(nullptr)") TypeResolver type_resolver,
-    @ByVal(nullValue = "c10::ArrayRef<at::Tensor>{}") TensorArrayRef tensor_table,
+    @ByVal(nullValue = "c10::ArrayRef<at::Tensor>{}") TensorVector tensor_table,
     TypeParser type_parser/*=torch::jit::Unpickler::defaultTypeParser*/);
 @Namespace("torch::jit") public static native @ByVal IValue unpickle(
     String data,

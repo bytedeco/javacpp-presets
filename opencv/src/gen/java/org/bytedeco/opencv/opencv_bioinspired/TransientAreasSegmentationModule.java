@@ -41,6 +41,11 @@ public class TransientAreasSegmentationModule extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransientAreasSegmentationModule(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public TransientAreasSegmentationModule(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::bioinspired::TransientAreasSegmentationModule*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(TransientAreasSegmentationModule pointer);
 
 
 

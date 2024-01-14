@@ -49,7 +49,7 @@ public class DISOpticalFlow extends DenseOpticalFlow {
     public DISOpticalFlow(Pointer p) { super(p); }
     /** Downcast constructor. */
     public DISOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::DISOpticalFlow*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::DISOpticalFlow*>") void allocate(Algorithm pointer);
 
     /** enum cv::DISOpticalFlow:: */
     public static final int

@@ -48,6 +48,9 @@ public class BackgroundSubtractorMOG2 extends org.bytedeco.opencv.opencv_video.B
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG2(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BackgroundSubtractorMOG2(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::BackgroundSubtractorMOG2*>") void allocate(Algorithm pointer);
 
 
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate, @ByRef Stream stream);

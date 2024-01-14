@@ -51,12 +51,10 @@ public class NamedTensorMeta extends NamedTensorMetaInterface {
 
   public NamedTensorMeta(HAS_NON_WILDCARD arg0, @ByVal DimnameArrayRef names) { super((Pointer)null); allocate(arg0, names); }
   private native void allocate(HAS_NON_WILDCARD arg0, @ByVal DimnameArrayRef names);
-  public NamedTensorMeta(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameArrayRef names) { super((Pointer)null); allocate(arg0, names); }
-  private native void allocate(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameArrayRef names);
+  public NamedTensorMeta(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameVector names) { super((Pointer)null); allocate(arg0, names); }
+  private native void allocate(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameVector names);
   public NamedTensorMeta(HAS_NON_WILDCARD arg0, @StdMove DimnameVector names) { super((Pointer)null); allocate(arg0, names); }
   private native void allocate(HAS_NON_WILDCARD arg0, @StdMove DimnameVector names);
-  public NamedTensorMeta(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdMove DimnameVector names) { super((Pointer)null); allocate(arg0, names); }
-  private native void allocate(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdMove DimnameVector names);
 
   public native @UniquePtr NamedTensorMetaInterface clone();
 
@@ -68,10 +66,9 @@ public class NamedTensorMeta extends NamedTensorMetaInterface {
   public native void check_invariants();
 
   public native void set_names(HAS_NON_WILDCARD arg0, @ByVal DimnameArrayRef new_names);
-  public native void set_names(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameArrayRef new_names);
+  public native void set_names(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @ByVal DimnameVector new_names);
 
   public native void set_names(HAS_NON_WILDCARD arg0, @StdMove DimnameVector new_names);
-  public native void set_names(@Cast("at::NamedTensorMeta::HAS_NON_WILDCARD") int arg0, @StdMove DimnameVector new_names);
 
   // INVARIANT: at least one Dimname is non-WILDCARD
   public native @StdMove DimnameVector names_(); public native NamedTensorMeta names_(DimnameVector setter);

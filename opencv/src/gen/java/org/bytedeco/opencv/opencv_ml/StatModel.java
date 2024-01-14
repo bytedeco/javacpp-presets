@@ -22,6 +22,11 @@ public class StatModel extends AbstractStatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StatModel(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StatModel(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::StatModel*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(StatModel pointer);
 
     /** Predict options */
     /** enum cv::ml::StatModel::Flags */

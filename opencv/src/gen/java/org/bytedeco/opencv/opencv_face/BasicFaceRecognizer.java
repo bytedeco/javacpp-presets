@@ -45,7 +45,7 @@ public class BasicFaceRecognizer extends FaceRecognizer {
     public BasicFaceRecognizer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BasicFaceRecognizer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::face::BasicFaceRecognizer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::face::BasicFaceRecognizer*>") void allocate(Algorithm pointer);
 
     /** @see setNumComponents */
     public native int getNumComponents();

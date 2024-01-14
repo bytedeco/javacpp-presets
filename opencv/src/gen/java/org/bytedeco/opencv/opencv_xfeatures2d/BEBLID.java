@@ -59,6 +59,9 @@ public class BEBLID extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BEBLID(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BEBLID(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::BEBLID*>") void allocate(Algorithm pointer);
 
     /**
      * \brief  Descriptor number of bits, each bit is a boosting weak-learner.

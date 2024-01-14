@@ -47,6 +47,9 @@ public class AffineFeature2D extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AffineFeature2D(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AffineFeature2D(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::AffineFeature2D*>") void allocate(Algorithm pointer);
 
     /**
      * \brief Creates an instance wrapping the given keypoint detector and

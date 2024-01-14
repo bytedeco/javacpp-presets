@@ -36,7 +36,7 @@ public class Rapid extends Tracker {
     public Rapid(Pointer p) { super(p); }
     /** Downcast constructor. */
     public Rapid(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::rapid::Rapid*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::rapid::Rapid*>") void allocate(Algorithm pointer);
 
     public static native @Ptr Rapid create(@ByVal Mat pts3d, @ByVal Mat tris);
     public static native @Ptr Rapid create(@ByVal UMat pts3d, @ByVal UMat tris);

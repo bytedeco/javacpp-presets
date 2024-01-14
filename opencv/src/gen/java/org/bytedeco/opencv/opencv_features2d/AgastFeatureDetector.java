@@ -36,6 +36,9 @@ public class AgastFeatureDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AgastFeatureDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AgastFeatureDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::AgastFeatureDetector*>") void allocate(Algorithm pointer);
 
     /** enum cv::AgastFeatureDetector::DetectorType */
     public static final int

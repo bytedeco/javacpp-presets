@@ -44,7 +44,9 @@ public class DTFilter extends Algorithm {
     public DTFilter(Pointer p) { super(p); }
     /** Downcast constructor. */
     public DTFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::DTFilter*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::DTFilter*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(DTFilter pointer);
 
 
     /** \brief Produce domain transform filtering operation on source image.

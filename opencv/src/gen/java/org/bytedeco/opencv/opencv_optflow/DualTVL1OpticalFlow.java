@@ -83,7 +83,7 @@ public class DualTVL1OpticalFlow extends DenseOpticalFlow {
     public DualTVL1OpticalFlow(Pointer p) { super(p); }
     /** Downcast constructor. */
     public DualTVL1OpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::optflow::DualTVL1OpticalFlow*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::optflow::DualTVL1OpticalFlow*>") void allocate(Algorithm pointer);
 
     /** \brief Time step of the numerical scheme
     /** @see setTau */

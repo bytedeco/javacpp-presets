@@ -98,6 +98,9 @@ public class SVMSGD extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SVMSGD(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SVMSGD(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::SVMSGD*>") void allocate(Algorithm pointer);
 
 
     /** SVMSGD type.

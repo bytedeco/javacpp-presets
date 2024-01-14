@@ -31,6 +31,11 @@ public class HoughCirclesDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HoughCirclesDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HoughCirclesDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::HoughCirclesDetector*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(HoughCirclesDetector pointer);
 
     /** \brief Finds circles in a grayscale image using the Hough transform.
     <p>

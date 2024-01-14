@@ -32,6 +32,9 @@ public class BRISK extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BRISK(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BRISK(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::BRISK*>") void allocate(Algorithm pointer);
 
     /** \brief The BRISK constructor
     <p>

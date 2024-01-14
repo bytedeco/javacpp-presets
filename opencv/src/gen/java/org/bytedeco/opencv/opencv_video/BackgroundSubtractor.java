@@ -45,7 +45,9 @@ public class BackgroundSubtractor extends Algorithm {
     public BackgroundSubtractor(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BackgroundSubtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::BackgroundSubtractor*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::BackgroundSubtractor*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(BackgroundSubtractor pointer);
 
     /** \brief Computes a foreground mask.
     <p>

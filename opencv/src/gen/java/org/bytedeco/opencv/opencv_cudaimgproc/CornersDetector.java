@@ -30,6 +30,11 @@ public class CornersDetector extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CornersDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CornersDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::CornersDetector*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(CornersDetector pointer);
 
     /** \brief Determines strong corners on an image.
     <p>

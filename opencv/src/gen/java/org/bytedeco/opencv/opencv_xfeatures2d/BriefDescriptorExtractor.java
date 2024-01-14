@@ -47,6 +47,9 @@ public class BriefDescriptorExtractor extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BriefDescriptorExtractor(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BriefDescriptorExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::BriefDescriptorExtractor*>") void allocate(Algorithm pointer);
 
     public static native @Ptr BriefDescriptorExtractor create( int bytes/*=32*/, @Cast("bool") boolean use_orientation/*=false*/ );
     public static native @Ptr BriefDescriptorExtractor create( );

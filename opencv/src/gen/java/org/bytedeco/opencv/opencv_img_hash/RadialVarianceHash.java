@@ -30,6 +30,9 @@ public class RadialVarianceHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RadialVarianceHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public RadialVarianceHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::RadialVarianceHash*>") void allocate(Algorithm pointer);
 
     public static native @Ptr RadialVarianceHash create(double sigma/*=1*/, int numOfAngleLine/*=180*/);
     public static native @Ptr RadialVarianceHash create();

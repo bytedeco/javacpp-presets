@@ -39,7 +39,9 @@ public class SparseOpticalFlow extends Algorithm {
     public SparseOpticalFlow(Pointer p) { super(p); }
     /** Downcast constructor. */
     public SparseOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::SparseOpticalFlow*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::SparseOpticalFlow*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(SparseOpticalFlow pointer);
 
     /** \brief Calculates a sparse optical flow.
     <p>

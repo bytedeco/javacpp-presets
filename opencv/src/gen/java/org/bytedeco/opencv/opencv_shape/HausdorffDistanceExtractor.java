@@ -43,7 +43,7 @@ public class HausdorffDistanceExtractor extends ShapeDistanceExtractor {
     public HausdorffDistanceExtractor(Pointer p) { super(p); }
     /** Downcast constructor. */
     public HausdorffDistanceExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::HausdorffDistanceExtractor*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::HausdorffDistanceExtractor*>") void allocate(Algorithm pointer);
 
     /** \brief Set the norm used to compute the Hausdorff value between two shapes. It can be L1 or L2 norm.
     <p>

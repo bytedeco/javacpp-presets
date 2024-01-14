@@ -24,6 +24,9 @@ public class GeneralizedHoughGuil extends GeneralizedHough {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHoughGuil(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GeneralizedHoughGuil(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::GeneralizedHoughGuil*>") void allocate(Algorithm pointer);
 
     /** Angle difference in degrees between two points in feature. */
     public native void setXi(double xi);

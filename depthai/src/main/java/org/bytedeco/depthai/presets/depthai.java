@@ -258,7 +258,6 @@ public class depthai implements InfoMapper {
                              "std::unordered_map<std::string,std::shared_ptr<dai::ADatatype> >::iterator",
                              "std::unordered_map<std::tuple<std::string,std::string>,dai::NodeIoInfo,dai::NodeObjInfo::IoInfoKey>",
                              "dai::copyable_unique_ptr<dai::Properties>", "nop::Status<void>").cast().pointerTypes("Pointer"))
-               .put(new Info("std::hash<dai::Node::Connection>").pointerTypes("ConnectionHash"))
                .put(new Info("std::shared_ptr<dai::Asset>").annotations("@SharedPtr").pointerTypes("Asset"))
                .put(new Info("std::shared_ptr<dai::ADatatype>").annotations("@SharedPtr").pointerTypes("ADatatype"))
                .put(new Info("std::shared_ptr<dai::Node>").annotations("@SharedPtr").pointerTypes("Node"))

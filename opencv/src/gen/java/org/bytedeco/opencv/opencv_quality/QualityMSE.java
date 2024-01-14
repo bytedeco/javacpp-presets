@@ -27,6 +27,9 @@ public class QualityMSE extends QualityBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QualityMSE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public QualityMSE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::quality::QualityMSE*>") void allocate(Algorithm pointer);
 
 
     /** \brief Computes MSE for reference images supplied in class constructor and provided comparison images

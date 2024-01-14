@@ -45,7 +45,7 @@ public class RICInterpolator extends SparseMatchInterpolator {
     public RICInterpolator(Pointer p) { super(p); }
     /** Downcast constructor. */
     public RICInterpolator(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::RICInterpolator*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::RICInterpolator*>") void allocate(Algorithm pointer);
 
     /** \brief K is a number of nearest-neighbor matches considered, when fitting a locally affine
      *model for a superpixel segment. However, lower values would make the interpolation

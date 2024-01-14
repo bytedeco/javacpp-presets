@@ -36,6 +36,9 @@ public class ORB extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ORB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ORB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::ORB*>") void allocate(Algorithm pointer);
 
     /** enum cv::ORB::ScoreType */
     public static final int HARRIS_SCORE = 0, FAST_SCORE = 1;

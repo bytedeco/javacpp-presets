@@ -42,6 +42,9 @@ public class Feature2DAsync extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Feature2DAsync(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public Feature2DAsync(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::cuda::Feature2DAsync*>") void allocate(Algorithm pointer);
 
 
     /** \brief Detects keypoints in an image.

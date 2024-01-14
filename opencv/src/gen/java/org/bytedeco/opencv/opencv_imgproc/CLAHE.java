@@ -27,6 +27,11 @@ public class CLAHE extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CLAHE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CLAHE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::CLAHE*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(CLAHE pointer);
 
     /** \brief Equalizes the histogram of a grayscale image using Contrast Limited Adaptive Histogram Equalization.
     <p>

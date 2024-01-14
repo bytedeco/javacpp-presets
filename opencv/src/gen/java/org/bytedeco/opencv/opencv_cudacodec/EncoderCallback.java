@@ -34,7 +34,7 @@ public class EncoderCallback extends Pointer {
     <p>
     @param vPacket The raw bitstream for one or more frames.
     */
-    public native void onEncoded(@ByVal @Cast("std::vector<std::vector<cv::uint8_t> >*") ByteVectorVector vPacket);
+    public native void onEncoded(@Cast("const std::vector<std::vector<cv::uint8_t> >*") @ByRef ByteVectorVector vPacket);
 
     /** \brief Callback function to that the encoding has finished.
     * */

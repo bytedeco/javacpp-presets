@@ -29,6 +29,11 @@ public class WhiteBalancer extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WhiteBalancer(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public WhiteBalancer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::xphoto::WhiteBalancer*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(WhiteBalancer pointer);
 
     /** \brief Applies white balancing to the input image
     <p>

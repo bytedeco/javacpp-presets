@@ -63,6 +63,11 @@ public class HOG extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HOG(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HOG(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::HOG*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(HOG pointer);
 
     /** \brief Creates the HOG descriptor and detector.
     <p>

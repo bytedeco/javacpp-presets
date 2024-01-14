@@ -44,7 +44,7 @@ public class ShapeContextDistanceExtractor extends ShapeDistanceExtractor {
     public ShapeContextDistanceExtractor(Pointer p) { super(p); }
     /** Downcast constructor. */
     public ShapeContextDistanceExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ShapeContextDistanceExtractor*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ShapeContextDistanceExtractor*>") void allocate(Algorithm pointer);
 
     /** \brief Establish the number of angular bins for the Shape Context Descriptor used in the shape matching
     pipeline.

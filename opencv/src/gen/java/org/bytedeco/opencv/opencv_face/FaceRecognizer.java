@@ -142,7 +142,9 @@ public class FaceRecognizer extends Algorithm {
     public FaceRecognizer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public FaceRecognizer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::face::FaceRecognizer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::face::FaceRecognizer*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(FaceRecognizer pointer);
 
     /** \brief Trains a FaceRecognizer with given data and associated labels.
     <p>

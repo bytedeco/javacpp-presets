@@ -33,6 +33,9 @@ public class MergeMertens extends MergeExposures {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeMertens(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MergeMertens(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::MergeMertens*>") void allocate(Algorithm pointer);
 
     public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);

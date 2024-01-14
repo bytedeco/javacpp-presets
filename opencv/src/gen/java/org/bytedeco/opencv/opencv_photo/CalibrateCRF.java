@@ -24,6 +24,11 @@ public class CalibrateCRF extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CalibrateCRF(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CalibrateCRF(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::CalibrateCRF*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(CalibrateCRF pointer);
 
     /** \brief Recovers inverse camera response.
     <p>

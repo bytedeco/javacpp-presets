@@ -48,6 +48,11 @@ public class DescriptorMatcher extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DescriptorMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::DescriptorMatcher*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(DescriptorMatcher pointer);
 
     //
     // Factories

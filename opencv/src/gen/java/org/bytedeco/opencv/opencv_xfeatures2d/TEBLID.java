@@ -69,6 +69,9 @@ public class TEBLID extends Feature2D {
     @Override public TEBLID getPointer(long i) {
         return new TEBLID((Pointer)this).offsetAddress(i);
     }
+    /** Downcast constructor. */
+    public TEBLID(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::TEBLID*>") void allocate(Algorithm pointer);
 
     /**
      * \brief  Descriptor number of bits, each bit is a box average difference.

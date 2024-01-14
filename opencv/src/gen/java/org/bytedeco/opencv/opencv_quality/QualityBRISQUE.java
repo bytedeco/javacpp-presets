@@ -34,6 +34,9 @@ public class QualityBRISQUE extends QualityBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QualityBRISQUE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public QualityBRISQUE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::quality::QualityBRISQUE*>") void allocate(Algorithm pointer);
 
 
     /** \brief Computes BRISQUE quality score for input image

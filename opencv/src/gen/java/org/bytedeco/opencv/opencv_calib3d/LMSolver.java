@@ -41,7 +41,9 @@ public class LMSolver extends Algorithm {
     public LMSolver(Pointer p) { super(p); }
     /** Downcast constructor. */
     public LMSolver(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::LMSolver*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::LMSolver*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(LMSolver pointer);
 
     public static class Callback extends Pointer {
         static { Loader.load(); }

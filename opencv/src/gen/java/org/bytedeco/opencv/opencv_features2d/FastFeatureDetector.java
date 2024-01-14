@@ -36,6 +36,9 @@ public class FastFeatureDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastFeatureDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public FastFeatureDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::FastFeatureDetector*>") void allocate(Algorithm pointer);
 
     /** enum cv::FastFeatureDetector::DetectorType */
     public static final int

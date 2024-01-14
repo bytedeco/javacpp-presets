@@ -28,6 +28,9 @@ public class CudaCLAHE extends CLAHE {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CudaCLAHE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CudaCLAHE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::CLAHE*>") void allocate(Algorithm pointer);
 
     /** \brief Equalizes the histogram of a grayscale image using Contrast Limited Adaptive Histogram Equalization.
     <p>

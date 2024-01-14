@@ -44,6 +44,9 @@ public class ORB extends Feature2DAsync {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ORB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ORB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::cuda::ORB*>") void allocate(Algorithm pointer);
 
     @MemberGetter public static native int X_ROW();
     public static final int X_ROW = X_ROW();

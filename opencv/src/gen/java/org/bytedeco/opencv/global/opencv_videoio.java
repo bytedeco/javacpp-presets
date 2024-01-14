@@ -1025,12 +1025,8 @@ public static final int
 // Targeting ../opencv_videoio/VideoWriter.java
 
 
-// Targeting ../opencv_videoio/CvCaptureDefaultDeleter.java
 
-
-// Targeting ../opencv_videoio/CvVideoWriterDefaultDeleter.java
-
-
+/** \cond IGNORED */
 /** \endcond IGNORED
  <p>
  *  \} videoio */

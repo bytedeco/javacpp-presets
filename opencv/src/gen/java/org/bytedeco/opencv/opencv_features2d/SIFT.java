@@ -33,6 +33,9 @@ public class SIFT extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SIFT(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SIFT(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::SIFT*>") void allocate(Algorithm pointer);
 
     /**
     @param nfeatures The number of best features to retain. The features are ranked by their scores

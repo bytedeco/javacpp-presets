@@ -83,6 +83,7 @@ public class opencv_cudaimgproc extends org.bytedeco.opencv.presets.opencv_cudai
     \{
       \defgroup cudaimgproc_color Color space processing
       \defgroup cudaimgproc_hist Histogram Calculation
+      \defgroup cudaimgproc_shape Structural Analysis and Shape Descriptors
       \defgroup cudaimgproc_hough Hough Transform
       \defgroup cudaimgproc_feature Feature Detection
     \}
@@ -420,8 +421,10 @@ votes ( {@code >\texttt{threshold}} ).
 @param minLineLength Minimum line length. Line segments shorter than that are rejected.
 @param maxLineGap Maximum allowed gap between points on the same line to link them.
 @param maxLines Maximum number of output lines.
+@param threshold %Accumulator threshold parameter. Only those lines are returned that get enough
+votes ( {@code >\texttt{threshold}} ).
  */
-@Namespace("cv::cuda") public static native @Ptr HoughSegmentDetector createHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap, int maxLines/*=4096*/);
+@Namespace("cv::cuda") public static native @Ptr HoughSegmentDetector createHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap, int maxLines/*=4096*/, int threshold/*=-1*/);
 @Namespace("cv::cuda") public static native @Ptr HoughSegmentDetector createHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap);
 // Targeting ../opencv_cudaimgproc/HoughCirclesDetector.java
 
@@ -735,8 +738,93 @@ opencv_contrib_source_code/modules/cudaimgproc/samples/connected_components.cpp
     int connectivity/*=8*/, int ltype/*=CV_32S*/);
 @Namespace("cv::cuda") public static native void connectedComponents(@ByVal GpuMat image, @ByVal GpuMat labels);
 
+/** \}
+ <p>
+ *  \addtogroup cudaimgproc_shape
+ *  \{
+ <p>
+ /** \brief Order of image moments.
+ * @param FIRST_ORDER_MOMENTS First order moments
+ * @param SECOND_ORDER_MOMENTS Second order moments.
+ * @param THIRD_ORDER_MOMENTS Third order moments.
+ * */
+/** enum cv::cuda::MomentsOrder */
+public static final int
+    FIRST_ORDER_MOMENTS = 1,
+    SECOND_ORDER_MOMENTS = 2,
+    THIRD_ORDER_MOMENTS = 3;
 
-/** \} */
+/** \brief Returns the number of image moments less than or equal to the largest image moments \a order.
+@param order Order of largest moments to calculate with lower order moments requiring less computation.
+@return number of image moments.
+<p>
+@see cuda::moments, cuda::spatialMoments, cuda::MomentsOrder
+ */
+@Namespace("cv::cuda") public static native int numMoments(@Cast("const cv::cuda::MomentsOrder") int order);
+
+/** \brief Calculates all of the spatial moments up to the 3rd order of a rasterized shape.
+<p>
+Asynchronous version of cuda::moments() which only calculates the spatial (not centralized or normalized) moments, up to the 3rd order, of a rasterized shape.
+Each moment is returned as a column entry in the 1D \a moments array.
+<p>
+@param src Raster image (single-channel 2D array).
+@param moments [out] 1D array with each column entry containing a spatial image moment.
+@param binaryImage If it is true, all non-zero image pixels are treated as 1's.
+@param order Order of largest moments to calculate with lower order moments requiring less computation.
+@param momentsType Precision to use when calculating moments. Available types are {@code CV_32F} and {@code CV_64F} with the performance of {@code CV_32F} an order of magnitude greater than {@code CV_64F}. If the image is small the accuracy from {@code CV_32F} can be equal or very close to {@code CV_64F}.
+@param stream Stream for the asynchronous version.
+<p>
+\note For maximum performance pre-allocate a 1D GpuMat for \a moments of the correct type and size large enough to store the all the image moments of up to the desired \a order. e.g. With \a order === MomentsOrder::SECOND_ORDER_MOMENTS and \a momentsType == {@code CV_32F} \a moments can be allocated as
+<pre>{@code
+GpuMat momentsDevice(1,numMoments(MomentsOrder::SECOND_ORDER_MOMENTS),CV_32F)
+}</pre>
+The central and normalized moments can easily be calculated on the host by downloading the \a moments array and using the cv::Moments constructor. e.g.
+<pre>{@code
+HostMem momentsHostMem(1, numMoments(MomentsOrder::SECOND_ORDER_MOMENTS), CV_32F);
+momentsDevice.download(momentsHostMem, stream);
+stream.waitForCompletion();
+Mat momentsMat = momentsHostMem.createMatHeader();
+cv::Moments cvMoments(momentsMat.at<float>(0), momentsMat.at<float>(1), momentsMat.at<float>(2), momentsMat.at<float>(3), momentsMat.at<float>(4), momentsMat.at<float>(5), momentsMat.at<float>(6), momentsMat.at<float>(7), momentsMat.at<float>(8), momentsMat.at<float>(9));
+}</pre>
+see the \a CUDA_TEST_P(Moments, Async) test inside opencv_contrib_source_code/modules/cudaimgproc/test/test_moments.cpp for an example.
+@return cv::Moments.
+@see cuda::moments
+*/
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal Mat src, @ByVal Mat moments, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal Mat src, @ByVal Mat moments);
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal UMat src, @ByVal UMat moments, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal UMat src, @ByVal UMat moments);
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal GpuMat src, @ByVal GpuMat moments, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void spatialMoments(@ByVal GpuMat src, @ByVal GpuMat moments);
+
+/** \brief Calculates all of the moments up to the 3rd order of a rasterized shape.
+<p>
+The function computes moments, up to the 3rd order, of a rasterized shape. The
+results are returned in the structure cv::Moments.
+<p>
+@param src Raster image (single-channel 2D array).
+@param binaryImage If it is true, all non-zero image pixels are treated as 1's.
+@param order Order of largest moments to calculate with lower order moments requiring less computation.
+ @param momentsType Precision to use when calculating moments. Available types are {@code CV_32F} and {@code CV_64F} with the performance of {@code CV_32F} an order of magnitude greater than {@code CV_64F}. If the image is small the accuracy from {@code CV_32F} can be equal or very close to {@code CV_64F}.
+<p>
+\note For maximum performance use the asynchronous version cuda::spatialMoments() as this version interally allocates and deallocates both GpuMat and HostMem to respectively perform the calculation on the device and download the result to the host.
+The costly HostMem allocation cannot be avoided however the GpuMat device allocation can be by using BufferPool, e.g.
+<pre>{@code
+    setBufferPoolUsage(true);
+    setBufferPoolConfig(getDevice(), numMoments(order) * ((momentsType == CV_64F) ? sizeof(double) : sizeof(float)), 1);
+}</pre>
+see the \a CUDA_TEST_P(Moments, Accuracy) test inside opencv_contrib_source_code/modules/cudaimgproc/test/test_moments.cpp for an example.
+@return cv::Moments.
+@see cuda::spatialMoments
+ */
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal Mat src, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/);
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal Mat src);
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal UMat src, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/);
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal UMat src);
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal GpuMat src, @Cast("const bool") boolean binaryImage/*=false*/, @Cast("const cv::cuda::MomentsOrder") int order/*=cv::cuda::MomentsOrder::THIRD_ORDER_MOMENTS*/, int momentsType/*=CV_64F*/);
+@Namespace("cv::cuda") public static native @ByVal Moments moments(@ByVal GpuMat src);
+
+/** \} cudaimgproc_shape */
 
  // namespace cv { namespace cuda {
 

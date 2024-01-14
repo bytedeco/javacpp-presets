@@ -50,6 +50,9 @@ public class MSDDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSDDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MSDDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::MSDDetector*>") void allocate(Algorithm pointer);
 
 
     public static native @Ptr MSDDetector create(int m_patch_radius/*=3*/, int m_search_area_radius/*=5*/,

@@ -40,7 +40,9 @@ public class HistogramCostExtractor extends Algorithm {
     public HistogramCostExtractor(Pointer p) { super(p); }
     /** Downcast constructor. */
     public HistogramCostExtractor(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::HistogramCostExtractor*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::HistogramCostExtractor*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(HistogramCostExtractor pointer);
 
     public native void buildCostMatrix(@ByVal Mat descriptors1, @ByVal Mat descriptors2, @ByVal Mat costMatrix);
     public native void buildCostMatrix(@ByVal UMat descriptors1, @ByVal UMat descriptors2, @ByVal UMat costMatrix);

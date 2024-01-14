@@ -51,7 +51,7 @@ public class StereoSGBM extends StereoMatcher {
     public StereoSGBM(Pointer p) { super(p); }
     /** Downcast constructor. */
     public StereoSGBM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::StereoSGBM*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::StereoSGBM*>") void allocate(Algorithm pointer);
 
     /** enum cv::StereoSGBM:: */
     public static final int

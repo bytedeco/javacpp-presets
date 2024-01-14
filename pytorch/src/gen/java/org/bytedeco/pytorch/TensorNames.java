@@ -26,12 +26,16 @@ public class TensorNames extends Pointer {
 
   public TensorNames(@ByVal DimnameArrayRef names) { super((Pointer)null); allocate(names); }
   private native void allocate(@ByVal DimnameArrayRef names);
+  public TensorNames(@ByVal DimnameVector names) { super((Pointer)null); allocate(names); }
+  private native void allocate(@ByVal DimnameVector names);
 
   // Create TensorNames from names[start:end]. Each individual TensorName stores
   // `names`, NOT names[start:end], because the original tensor's names are
   // `names`.
   public TensorNames(@ByVal DimnameArrayRef names, @Cast("int64_t") long start, @Cast("int64_t") long end) { super((Pointer)null); allocate(names, start, end); }
   private native void allocate(@ByVal DimnameArrayRef names, @Cast("int64_t") long start, @Cast("int64_t") long end);
+  public TensorNames(@ByVal DimnameVector names, @Cast("int64_t") long start, @Cast("int64_t") long end) { super((Pointer)null); allocate(names, start, end); }
+  private native void allocate(@ByVal DimnameVector names, @Cast("int64_t") long start, @Cast("int64_t") long end);
 
   // op_name is only used for error reporting.
   public native @ByRef TensorNames unifyFromRightInplace(

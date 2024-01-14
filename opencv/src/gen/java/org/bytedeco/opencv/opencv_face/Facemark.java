@@ -61,7 +61,7 @@ public class Facemark extends Algorithm {
     /** Downcast constructor. */
     public Facemark(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
     @Namespace private native @Name("dynamic_cast<cv::face::Facemark*>") void allocate(Algorithm pointer);
-    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
     @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Facemark pointer);
 
 

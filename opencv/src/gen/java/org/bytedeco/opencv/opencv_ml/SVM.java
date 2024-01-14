@@ -28,12 +28,20 @@ public class SVM extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SVM(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SVM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::SVM*>") void allocate(Algorithm pointer);
 
 
     public static class Kernel extends Algorithm {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Kernel(Pointer p) { super(p); }
+        /** Downcast constructor. */
+        public Kernel(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+        @Namespace private native @Name("static_cast<cv::ml::SVM::Kernel*>") void allocate(Algorithm pointer);
+        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(SVM.Kernel pointer);
     
         public native int getType();
         public native void calc( int vcount, int n, @Const FloatPointer vecs, @Const FloatPointer another, FloatPointer results );

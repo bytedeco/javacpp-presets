@@ -44,6 +44,9 @@ public class MSER extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSER(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MSER(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::MSER*>") void allocate(Algorithm pointer);
 
     /** \brief Full constructor for %MSER detector
     <p>

@@ -33,6 +33,9 @@ public class AffineFeature extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AffineFeature(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AffineFeature(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::AffineFeature*>") void allocate(Algorithm pointer);
 
     /**
     @param backend The detector/extractor you want to use as backend.

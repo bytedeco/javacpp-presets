@@ -41,7 +41,7 @@ public class EigenFaceRecognizer extends BasicFaceRecognizer {
     public EigenFaceRecognizer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public EigenFaceRecognizer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::face::EigenFaceRecognizer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::face::EigenFaceRecognizer*>") void allocate(Algorithm pointer);
 
     /**
     @param num_components The number of components (read: Eigenfaces) kept for this Principal

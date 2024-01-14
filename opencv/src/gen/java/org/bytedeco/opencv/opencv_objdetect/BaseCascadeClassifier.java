@@ -37,7 +37,9 @@ public class BaseCascadeClassifier extends Algorithm {
     public BaseCascadeClassifier(Pointer p) { super(p); }
     /** Downcast constructor. */
     public BaseCascadeClassifier(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::BaseCascadeClassifier*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::BaseCascadeClassifier*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(BaseCascadeClassifier pointer);
 
     public native @Cast("bool") @Override boolean empty();
     public native @Cast("bool") boolean load( @Str BytePointer filename );

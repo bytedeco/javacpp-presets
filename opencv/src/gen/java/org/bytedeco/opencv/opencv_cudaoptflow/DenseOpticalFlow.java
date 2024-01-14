@@ -59,6 +59,11 @@ public class DenseOpticalFlow extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DenseOpticalFlow(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DenseOpticalFlow(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::DenseOpticalFlow*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(DenseOpticalFlow pointer);
 
     /** \brief Calculates a dense optical flow.
     <p>

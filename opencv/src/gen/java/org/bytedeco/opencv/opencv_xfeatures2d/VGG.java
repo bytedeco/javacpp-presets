@@ -54,6 +54,9 @@ public class VGG extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VGG(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public VGG(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::VGG*>") void allocate(Algorithm pointer);
 
 
     /** enum cv::xfeatures2d::VGG:: */

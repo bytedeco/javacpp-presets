@@ -29,6 +29,9 @@ public class ColorMomentHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorMomentHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public ColorMomentHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::ColorMomentHash*>") void allocate(Algorithm pointer);
 
     public static native @Ptr ColorMomentHash create();
 }

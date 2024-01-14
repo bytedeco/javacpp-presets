@@ -34,6 +34,8 @@ but it cannot go below the number determined by NVDEC.
 @param srcRoi Region of interest (x/width should be multiples of 4 and y/height multiples of 2) decoded from video source, defaults to the full frame.
 @param targetRoi Region of interest (x/width should be multiples of 4 and y/height multiples of 2) within the output frame to copy and resize the decoded frame to,
 defaults to the full frame.
+@param enableHistogram Request output of decoded luma histogram \a hist from VideoReader::nextFrame(GpuMat& frame, GpuMat& hist, Stream& stream), if hardware supported.
+@param firstFrameIdx Index of the first frame to seek to on initialization of the VideoReader.
 */
 @Namespace("cv::cudacodec") @NoOffset @Properties(inherit = org.bytedeco.opencv.presets.opencv_cudacodec.class)
 public class VideoReaderInitParams extends Pointer {
@@ -59,4 +61,6 @@ public class VideoReaderInitParams extends Pointer {
     public native @ByRef Size targetSz(); public native VideoReaderInitParams targetSz(Size setter);
     public native @ByRef Rect srcRoi(); public native VideoReaderInitParams srcRoi(Rect setter);
     public native @ByRef Rect targetRoi(); public native VideoReaderInitParams targetRoi(Rect setter);
+    public native @Cast("bool") boolean enableHistogram(); public native VideoReaderInitParams enableHistogram(boolean setter);
+    public native int firstFrameIdx(); public native VideoReaderInitParams firstFrameIdx(int setter);
 }

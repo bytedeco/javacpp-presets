@@ -69,6 +69,9 @@ public class StereoBeliefPropagation extends StereoMatcher {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoBeliefPropagation(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StereoBeliefPropagation(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::StereoBeliefPropagation*>") void allocate(Algorithm pointer);
 
 
     /** \overload */

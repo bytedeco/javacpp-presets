@@ -39,34 +39,41 @@ public class Algorithm extends Pointer {
     @Override public Algorithm getPointer(long i) {
         return new Algorithm((Pointer)this).offsetAddress(i);
     }
+    public Algorithm asAlgorithm() { return this; }
 
     public Algorithm() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** \brief Clears the algorithm state
     */
-    public native void clear();
+    public void clear() { asAlgorithm()._clear(); }
+    private native @Name("clear") void _clear();
 
     /** \brief Stores algorithm parameters in a file storage
     */
-    public native void write(@ByRef FileStorage fs);
+    public void write(FileStorage fs) { asAlgorithm()._write(fs); }
+    private native @Name("write") void _write(@ByRef FileStorage fs);
 
     /**
     * \overload
     */
-    public native void write(@ByRef FileStorage fs, @Str BytePointer name);
-    public native void write(@ByRef FileStorage fs, @Str String name);
+    public void write(FileStorage fs, BytePointer name) { asAlgorithm()._write(fs, name); }
+    private native @Name("write") void _write(@ByRef FileStorage fs, @Str BytePointer name);
+    public void write(FileStorage fs, String name) { asAlgorithm()._write(fs, name); }
+    private native @Name("write") void _write(@ByRef FileStorage fs, @Str String name);
 // #if CV_VERSION_MAJOR < 5
     /** @deprecated */
 // #endif
 
     /** \brief Reads algorithm parameters from a file storage
     */
-    public native void read(@Const @ByRef FileNode fn);
+    public void read(FileNode fn) { asAlgorithm()._read(fn); }
+    private native @Name("read") void _read(@Const @ByRef FileNode fn);
 
     /** \brief Returns true if the Algorithm is empty (e.g. in the very beginning or after unsuccessful read
     */
-    public native @Cast("bool") boolean empty();
+    public boolean empty() { return asAlgorithm()._empty(); }
+    private native @Cast("bool") @Name("empty") boolean _empty();
 
     /** \brief Reads algorithm from the file node
     <p>
@@ -106,10 +113,13 @@ public class Algorithm extends Pointer {
 
     /** Saves the algorithm to a file.
     In order to make this method work, the derived class must implement Algorithm::write(FileStorage& fs). */
-    public native void save(@Str BytePointer filename);
-    public native void save(@Str String filename);
+    public void save(BytePointer filename) { asAlgorithm()._save(filename); }
+    private native @Name("save") void _save(@Str BytePointer filename);
+    public void save(String filename) { asAlgorithm()._save(filename); }
+    private native @Name("save") void _save(@Str String filename);
 
     /** Returns the algorithm string identifier.
     This string is used as top level xml/yml node tag when the object is saved to a file or string. */
-    public native @Str BytePointer getDefaultName();
+    public BytePointer getDefaultName() { return asAlgorithm()._getDefaultName(); }
+    private native @Str @Name("getDefaultName") BytePointer _getDefaultName();
 }

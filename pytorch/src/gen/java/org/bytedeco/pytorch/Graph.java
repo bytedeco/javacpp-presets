@@ -67,6 +67,13 @@ public class Graph extends Pointer {
   public native JitNode create(
         @ByVal @Cast("torch::jit::NodeKind*") Symbol kind,
         @ByVal ValueArrayRef inputs);
+  public native JitNode create(
+        @ByVal @Cast("torch::jit::NodeKind*") Symbol kind,
+        @ByVal ValueVector inputs,
+        @Cast("size_t") long num_outputs/*=1*/);
+  public native JitNode create(
+        @ByVal @Cast("torch::jit::NodeKind*") Symbol kind,
+        @ByVal ValueVector inputs);
 
   public native JitNode createNone();
   public native JitNode createAutogradZero();
@@ -78,6 +85,11 @@ public class Graph extends Pointer {
         @SharedPtr TupleType optional_named_tuple/*=nullptr*/);
   public native JitNode createTuple(
         @ByVal ValueArrayRef values);
+  public native JitNode createTuple(
+        @ByVal ValueVector values,
+        @SharedPtr TupleType optional_named_tuple/*=nullptr*/);
+  public native JitNode createTuple(
+        @ByVal ValueVector values);
   public native JitNode createTupleUnpack(Value v);
   public native JitNode createTupleIndex(
         Value tup,
@@ -93,12 +105,20 @@ public class Graph extends Pointer {
   public native JitNode createList(
         @Const @ByRef Type.TypePtr contained_type,
         @ByVal ValueArrayRef values);
+  public native JitNode createList(
+        @Const @ByRef Type.TypePtr contained_type,
+        @ByVal ValueVector values);
   public native JitNode createListUnpack(Value v, @Cast("size_t") long size);
   public native JitNode createDict(
         @Const @ByRef Type.TypePtr key_type,
         @Const @ByRef Type.TypePtr value_type,
         @ByVal ValueArrayRef keys,
         @ByVal ValueArrayRef values);
+  public native JitNode createDict(
+        @Const @ByRef Type.TypePtr key_type,
+        @Const @ByRef Type.TypePtr value_type,
+        @ByVal ValueVector keys,
+        @ByVal ValueVector values);
   public native JitNode createNumToTensor(Value value);
   public native JitNode createObject(@Const @SharedPtr("c10::ClassType") @ByRef ClassType type);
   public native JitNode createSetAttr(
@@ -118,6 +138,7 @@ public class Graph extends Pointer {
   public native JitNode createLoad(@StdString BytePointer name, @Const @ByRef Type.TypePtr type);
   public native JitNode createLoad(@StdString String name, @Const @ByRef Type.TypePtr type);
   public native JitNode createIsInstance(Value v, @ByVal TypeArrayRef types);
+  public native JitNode createIsInstance(Value v, @ByVal TypeVector types);
 
   public native Value insertUncheckedCast(Value v, @ByVal Type.TypePtr type);
 

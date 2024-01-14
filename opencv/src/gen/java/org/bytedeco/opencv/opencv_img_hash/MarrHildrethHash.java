@@ -29,6 +29,9 @@ public class MarrHildrethHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MarrHildrethHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public MarrHildrethHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::MarrHildrethHash*>") void allocate(Algorithm pointer);
 
     /**
      * \brief self explain

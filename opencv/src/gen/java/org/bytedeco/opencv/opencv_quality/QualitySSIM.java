@@ -27,6 +27,9 @@ public class QualitySSIM extends QualityBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QualitySSIM(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public QualitySSIM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::quality::QualitySSIM*>") void allocate(Algorithm pointer);
 
 
     /**

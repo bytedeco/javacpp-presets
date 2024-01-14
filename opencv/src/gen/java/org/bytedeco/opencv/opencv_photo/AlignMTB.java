@@ -31,6 +31,9 @@ public class AlignMTB extends AlignExposures {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlignMTB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public AlignMTB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::AlignMTB*>") void allocate(Algorithm pointer);
 
     public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);

@@ -40,6 +40,9 @@ public class KAZE extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KAZE(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public KAZE(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::KAZE*>") void allocate(Algorithm pointer);
 
     /** enum cv::KAZE::DiffusivityType */
     public static final int

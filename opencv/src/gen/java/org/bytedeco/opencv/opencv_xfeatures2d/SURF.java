@@ -66,6 +66,9 @@ public class SURF extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SURF(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public SURF(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::SURF*>") void allocate(Algorithm pointer);
 
     /**
     @param hessianThreshold Threshold for hessian keypoint detector used in SURF.

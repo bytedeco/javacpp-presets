@@ -18,7 +18,6 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-// TODO : move to complex.h
 @Name("c10::complex<c10::Half>") @NoOffset @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class HalfComplex extends Pointer {
     static { Loader.load(); }
@@ -34,28 +33,59 @@ public class HalfComplex extends Pointer {
         return new HalfComplex((Pointer)this).offsetAddress(i);
     }
 
+
   public native @ByRef Half real_(); public native HalfComplex real_(Half setter);
   public native @ByRef Half imag_(); public native HalfComplex imag_(Half setter);
 
-  // Constructors
   public HalfComplex() { super((Pointer)null); allocate(); }
   private native void allocate();
-  // Half constructor is not constexpr so the following constructor can't
-  // be constexpr
-  public HalfComplex(@Const @ByRef Half real, @Const @ByRef Half imag) { super((Pointer)null); allocate(real, imag); }
-  private native void allocate(@Const @ByRef Half real, @Const @ByRef Half imag);
+  public HalfComplex(Half re, Half im) { super((Pointer)null); allocate(re, im); }
+  private native void allocate(@Const @ByRef Half re, @Const @ByRef(nullValue = "c10::Half()") Half im);
   public HalfComplex(@Const @ByRef FloatComplex value) { super((Pointer)null); allocate(value); }
   private native void allocate(@Const @ByRef FloatComplex value);
-
+  
   // Conversion operator
   public native @ByVal @Name("operator c10::complex<float>") FloatComplex asFloatComplex();
+  
+  public native @ByRef @Name("operator +=") HalfComplex addPut(@Const @ByRef HalfComplex other);
+  
+  public native @ByRef @Name("operator -=") HalfComplex subtractPut(@Const @ByRef HalfComplex other);
+  
+  public native @ByRef @Name("operator *=") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+  // Use SFINAE to specialize casting constructor for c10::complex<float> and
+  // c10::complex<double>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+// #ifdef __APPLE__
+// #define FORCE_INLINE_APPLE __attribute__((always_inline))
+// #else
+// #define FORCE_INLINE_APPLE
+// #endif
+// #undef FORCE_INLINE_APPLE
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+// #if defined(__CUDACC__) || defined(__HIPCC__)
+// #endif
+
+  // consistent with NumPy behavior
+  
 
   public native @Const @ByVal @org.bytedeco.javacpp.annotation.Function Half real();
+  
   public native @Const @ByVal @org.bytedeco.javacpp.annotation.Function Half imag();
-
-  public native @ByRef @Name("operator +=") HalfComplex addPut(@Const @ByRef HalfComplex other);
-
-  public native @ByRef @Name("operator -=") HalfComplex subtractPut(@Const @ByRef HalfComplex other);
-
-  public native @ByRef @Name("operator *=") HalfComplex multiplyPut(@Const @ByRef HalfComplex other);
+  
 }

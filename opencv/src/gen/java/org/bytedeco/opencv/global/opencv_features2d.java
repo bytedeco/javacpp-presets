@@ -229,9 +229,12 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 // Targeting ../opencv_features2d/AKAZE.java
 
 
-// Targeting ../opencv_features2d/Accumulator.java
 
-
+/** \} features2d_main
+<p>
+/****************************************************************************************\
+*                                      Distance                                          *
+\****************************************************************************************/
 
 /*
  * Squared Euclidean distance functor

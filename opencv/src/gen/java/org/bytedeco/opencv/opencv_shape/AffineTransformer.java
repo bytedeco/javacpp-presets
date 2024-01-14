@@ -40,7 +40,7 @@ public class AffineTransformer extends ShapeTransformer {
     public AffineTransformer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public AffineTransformer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::AffineTransformer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::AffineTransformer*>") void allocate(Algorithm pointer);
 
     public native void setFullAffine(@Cast("bool") boolean fullAffine);
     public native @Cast("bool") boolean getFullAffine();

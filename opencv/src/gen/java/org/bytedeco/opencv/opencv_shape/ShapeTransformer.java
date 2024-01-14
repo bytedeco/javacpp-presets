@@ -40,7 +40,9 @@ public class ShapeTransformer extends Algorithm {
     public ShapeTransformer(Pointer p) { super(p); }
     /** Downcast constructor. */
     public ShapeTransformer(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ShapeTransformer*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ShapeTransformer*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(ShapeTransformer pointer);
 
     /** \brief Estimate the transformation parameters of the current transformer algorithm, based on point matches.
     <p>

@@ -28,6 +28,9 @@ public class KNearest extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KNearest(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public KNearest(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::KNearest*>") void allocate(Algorithm pointer);
 
 
     /** Default number of neighbors to use in predict method. */

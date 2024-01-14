@@ -80,7 +80,7 @@ public class opencv_cudacodec extends org.bytedeco.opencv.presets.opencv_cudacod
   \{
     \defgroup cudacodec Video Encoding/Decoding
   \}
- */  // Stream
+ */
 
 /** \addtogroup cudacodec
  *  \{
@@ -229,9 +229,9 @@ public static final int
 
 /** \brief Creates video writer.
 <p>
-@param fileName Name of the output video file. Only raw h264 or hevc files are supported.
+@param fileName Name of the output video file.
 @param frameSize Size of the input video frames.
-@param codec Codec.
+@param codec Supports Codec::H264 and Codec::HEVC.
 @param fps Framerate of the created video stream.
 @param colorFormat OpenCv color format of the frames to be encoded.
 @param encoderCallback Callbacks for video encoder. See cudacodec::EncoderCallback. Required for working with the encoded video stream.
@@ -246,9 +246,9 @@ public static final int
 
 /** \brief Creates video writer.
 <p>
-@param fileName Name of the output video file. Only raw h264 or hevc files are supported.
+@param fileName Name of the output video file.
 @param frameSize Size of the input video frames.
-@param codec Codec.
+@param codec Supports Codec::H264 and Codec::HEVC.
 @param fps Framerate of the created video stream.
 @param colorFormat OpenCv color format of the frames to be encoded.
 @param params Additional encoding parameters.
@@ -278,7 +278,7 @@ public static final int
 
 /** \brief Deinterlacing mode used by decoder.
 * @param Weave Weave both fields (no deinterlacing). For progressive content and for content that doesn't need deinterlacing.
-* Bob Drop one field.
+* @param Bob Drop one field.
 * @param Adaptive Adaptive deinterlacing needs more video memory than other deinterlacing modes.
 * */
 /** enum cv::cudacodec::DeinterlaceMode */
@@ -286,6 +286,16 @@ public static final int
     Weave = 0,
     Bob = 1,
     Adaptive = 2;
+
+/** \brief Utility function demonstrating how to map the luma histogram when FormatInfo::videoFullRangeFlag == false
+    @param hist Luma histogram \a hist returned from VideoReader::nextFrame(GpuMat& frame, GpuMat& hist, Stream& stream).
+    @param histFull Host histogram equivelent to downloading \a hist after calling cuda::calcHist(InputArray frame, OutputArray hist, Stream& stream).
+    <p>
+    \note
+    -   This function demonstrates how to map the luma histogram back so that it is equivalent to the result obtained from cuda::calcHist()
+    if the returned frame was colorFormat::GRAY.
+ */
+@Namespace("cv::cudacodec") public static native void MapHist(@Const @ByRef GpuMat hist, @ByRef Mat histFull);
 // Targeting ../opencv_cudacodec/FormatInfo.java
 
 

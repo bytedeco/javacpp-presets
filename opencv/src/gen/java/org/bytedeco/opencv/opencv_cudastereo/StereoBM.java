@@ -43,6 +43,9 @@ public class StereoBM extends org.bytedeco.opencv.opencv_calib3d.StereoBM {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoBM(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StereoBM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::StereoBM*>") void allocate(Algorithm pointer);
 
 
     public native void compute(@ByVal Mat left, @ByVal Mat right, @ByVal Mat disparity, @ByRef Stream stream);
