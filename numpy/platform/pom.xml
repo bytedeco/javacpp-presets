@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy-platform</artifactId>
-  <version>1.26.2-${project.parent.version}</version>
+  <version>1.26.3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NumPy</name>
 
   <properties>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.25-${project.parent.version}</version>
+      <version>0.3.26-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

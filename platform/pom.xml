@@ -92,7 +92,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>6.1-${project.version}</version>
+      <version>6.1.1-${project.version}</version>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.bytedeco</groupId>-->
@@ -182,12 +182,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>dnnl-platform</artifactId>
-      <version>3.3.3-${project.version}</version>
+      <version>3.3.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.25-${project.version}</version>
+      <version>0.3.26-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -217,7 +217,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.26.2-${project.version}</version>
+      <version>1.26.3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -252,7 +252,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>leptonica-platform</artifactId>
-      <version>1.84.0-${project.version}</version>
+      <version>1.84.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -188,6 +188,7 @@ public class onnx implements InfoMapper {
                              "onnx::shape_inference::checkShapesAndTypes(const onnx::TypeProto_Sequence&, const onnx::TypeProto_Sequence&)",
                              "onnx::shape_inference::mergeShapesAndTypes(const onnx::TypeProto_Sequence&, onnx::TypeProto_Tensor*)").skip())
 
+               .put(new Info("onnx::RetrieveValues<float>").javaNames("RetrieveValuesFloat"))
                .put(new Info("onnx::RetrieveValues<int64_t>").javaNames("RetrieveValuesLong"))
                .put(new Info("onnx::RetrieveValues<std::string>").javaNames("RetrieveValuesString"))
                .put(new Info("onnx::ParseProtoFromBytes<google::protobuf::MessageLite>").javaNames("ParseProtoFromBytes"))

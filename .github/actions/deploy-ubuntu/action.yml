@@ -31,7 +31,7 @@ runs:
           export ARCH=arm64
           export ARCH_CUDA=sbsa
           export PREFIX=aarch64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.aarch64.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.aarch64.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.aarch64
           export NCCL=2.19.3-1+cuda12.3.aarch64
           export NVCOMP=nvcomp_3.0.5_SBSA_12.x
@@ -40,7 +40,7 @@ runs:
           export ARCH=ppc64el
           export ARCH_CUDA=ppc64le
           export PREFIX=powerpc64le-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.ppc64le.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.ppc64le.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.ppc64le
           export NCCL=2.19.3-1+cuda12.3.ppc64le
         elif [[ "$CI_DEPLOY_PLATFORM" == "linux-x86" ]]; then
@@ -50,7 +50,7 @@ runs:
           export ARCH=amd64
           export ARCH_CUDA=x86_64
           export PREFIX=x86_64-linux-gnu
-          export CUDA=cuda-repo-rhel8-12-3-local-12.3.1_545.23.08-1.x86_64.rpm
+          export CUDA=cuda-repo-rhel8-12-3-local-12.3.2_545.23.08-1.x86_64.rpm
           export CUDNN=8.9.7.29-1.cuda12.2.x86_64
           export NCCL=2.19.3-1+cuda12.3.x86_64
           export NVCOMP=nvcomp_3.0.5_x86_64_12.x
@@ -140,7 +140,7 @@ runs:
 
         if [[ -n ${ARCH_CUDA:-} ]] && [[ -n ${CI_DEPLOY_NEED_CUDA:-} ]]; then
           echo Installing CUDA, cuDNN, nvCOMP, etc
-          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.1/local_installers/$CUDA
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.2/local_installers/$CUDA
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libcudnn8-devel-$CUDNN.rpm
           curl -LO https://developer.download.nvidia.com/compute/cuda/repos/rhel8/$ARCH_CUDA/libnccl-$NCCL.rpm
@@ -200,14 +200,16 @@ runs:
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-arm64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
+          # python3 -m gdown.cli https://drive.google.com/uc?id=1LZRCv4ZAGiDQAu4pvADJIGntq4cGl5tU
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Ubuntu-20.04.aarch64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi
 
         if [[ "$CI_DEPLOY_PLATFORM" == "linux-x86_64" ]] && [[ "$CI_DEPLOY_MODULE" == "tensorrt" ]]; then
           echo Installing TensorRT
-          python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          # python3 -m gdown.cli https://drive.google.com/uc?id=1dVhD-DEYY42QbZe1GXl-vxe3k6KqWGsL
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz
           $SUDO tar -hxvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz -C /usr/local/
           $SUDO ln -sf /usr/local/TensorRT* /usr/local/tensorrt
         fi

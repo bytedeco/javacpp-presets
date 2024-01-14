@@ -199,7 +199,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2024.x  https://software.intel.com/mkl
  * MKL-DNN 0.21.x  https://github.com/oneapi-src/oneDNN
  * DNNL 3.3.x  https://github.com/oneapi-src/oneDNN
- * OpenBLAS 0.3.25  http://www.openblas.net/
+ * OpenBLAS 0.3.26  http://www.openblas.net/
  * ARPACK-NG 3.9.x  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.8  https://github.com/devernay/cminpack
  * FFTW 3.3.10  http://www.fftw.org/download.html
