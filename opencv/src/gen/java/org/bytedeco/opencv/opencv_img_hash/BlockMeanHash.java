@@ -26,6 +26,9 @@ public class BlockMeanHash extends ImgHashBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlockMeanHash(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public BlockMeanHash(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::img_hash::BlockMeanHash*>") void allocate(Algorithm pointer);
 
     /** \brief Create BlockMeanHash object
         @param mode the mode

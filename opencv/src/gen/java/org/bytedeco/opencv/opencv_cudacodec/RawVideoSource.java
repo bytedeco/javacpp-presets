@@ -70,4 +70,12 @@ public class RawVideoSource extends Pointer {
     public native @Cast("bool") boolean get(int propertyId, @ByRef DoublePointer propertyVal);
     public native @Cast("bool") boolean get(int propertyId, @ByRef DoubleBuffer propertyVal);
     public native @Cast("bool") boolean get(int propertyId, @ByRef double[] propertyVal);
+
+    /** \brief Retrieve the index of the first frame that will returned after construction.
+    <p>
+    @return index of the index of the first frame that will returned after construction.
+    <p>
+    \note To reduce the decoding overhead when initializing VideoReader to start its decoding from frame N, RawVideoSource should seek to the first valid key frame less than or equal to N and return that index here.
+     */
+    public native int getFirstFrameIdx();
 }

@@ -1496,8 +1496,9 @@ public static final int
     /**
      * This option hints to the JIT compiler the minimum number of CTAs from the
      * kernel’s grid to be mapped to a SM. Optimizations based on this option
-     * need either ::CU_JIT_MAX_REGISTERS or ::CU_JIT_THREADS_PER_BLOCK to be
-     * specified as well.
+     * need the maximum number of threads per block to be specified as well. This
+     * option is ignored when used together with ::CU_JIT_MAX_REGISTERS or
+     * ::CU_JIT_THREADS_PER_BLOCK.
      * Option type: unsigned int\n
      * Applies to: compiler only
     */
@@ -1995,7 +1996,7 @@ public static final int
                                                           B has a launch completion dependency on a kernel A, B may wait
                                                           until A is complete. Alternatively, blocks of B may begin before
                                                           all blocks of A have begun, for example if B can claim execution
-                                                          resources unavaiable to A (e.g. they run on different GPUs) or
+                                                          resources unavailable to A (e.g. they run on different GPUs) or
                                                           if B is a higher priority than A.
                                                           Exercise caution if such an ordering inversion could lead
                                                           to deadlock.
@@ -25512,11 +25513,8 @@ public static final int
                                                 Only one instantiation of the graph may exist at any point in time.
                                                 The graph cannot be cloned.
                                               
-                                              To set the control value:
-                                              
-                                               In a kernel or kernels at appropriate locations in the graph, insert a call to
-                                                {@code void cudaGraphSetConditional(cudaGraphConditionalHandle handle, unsigned int value)}.
-                                               Supply a default value when creating the handle. */
+                                              To set the control value, supply a default value when creating the handle and/or
+                                              call ::cudaGraphSetConditional from device code.*/
     cudaGraphNodeTypeConditional = 0x0d,
     cudaGraphNodeTypeCount = 0x0d + 1;
 // Targeting ../cudart/cudaChildGraphNodeParams.java
@@ -25790,12 +25788,9 @@ public static final int
                                                        have begun execution. Currently this is a best effort. If a kernel
                                                        B has a launch completion dependency on a kernel A, B may wait
                                                        until A is complete. Alternatively, blocks of B may begin before
-                                                       all blocks of A have begun, for example:
-                                                       <ul>
-                                                         <li>If B can claim execution resources unavaiable to A, for
-                                                             example if they run on different GPUs.
-                                                         <li>If B is a higher priority than A.
-                                                       </ul>
+                                                       all blocks of A have begun, for example if B can claim execution
+                                                       resources unavailable to A (e.g. they run on different GPUs) or
+                                                       if B is a higher priority than A.
                                                        Exercise caution if such an ordering inversion could lead
                                                        to deadlock.
                                                        <br>

@@ -42,7 +42,9 @@ public class SelectiveSearchSegmentation extends Algorithm {
                         public SelectiveSearchSegmentation(Pointer p) { super(p); }
                         /** Downcast constructor. */
                         public SelectiveSearchSegmentation(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-                        @Namespace private native @Name("dynamic_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentation*>") void allocate(Algorithm pointer);
+                        @Namespace private native @Name("static_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentation*>") void allocate(Algorithm pointer);
+                        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+                        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(SelectiveSearchSegmentation pointer);
                     
 
                             /** \brief Set a image used by switch* functions to initialize the class

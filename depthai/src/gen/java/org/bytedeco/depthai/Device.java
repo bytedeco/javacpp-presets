@@ -97,6 +97,8 @@ public class Device extends DeviceBase {
         private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, UsbSpeed maxUsbSpeed);
         public Device(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed) { super((Pointer)null); allocate(config, devInfo, maxUsbSpeed); }
         private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Cast("dai::UsbSpeed") int maxUsbSpeed);
+        public Device(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd, @Cast("bool") boolean dumpOnly/*=false*/) { super((Pointer)null); allocate(config, devInfo, pathToCmd, dumpOnly); }
+        private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd, @Cast("bool") boolean dumpOnly/*=false*/);
         public Device(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd) { super((Pointer)null); allocate(config, devInfo, pathToCmd); }
         private native void allocate(@ByVal Config config, @Const @ByRef DeviceInfo devInfo, @Const @ByRef Path pathToCmd);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

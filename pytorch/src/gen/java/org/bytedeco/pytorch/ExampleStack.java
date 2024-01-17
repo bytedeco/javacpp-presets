@@ -18,25 +18,10 @@ import static org.bytedeco.openblas.global.openblas.*;
 import static org.bytedeco.pytorch.global.torch.*;
 
 
-/** A {@code Collation} for {@code Example<Tensor, Tensor>} types that stacks all data
- *  tensors into one tensor, and all target (label) tensors into one tensor. */
-@Name("torch::data::transforms::Stack<torch::data::Example<> >") @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
+@Name("torch::data::transforms::Stack<torch::data::Example<torch::Tensor,torch::Tensor> >") @Opaque @Properties(inherit = org.bytedeco.pytorch.presets.torch.class)
 public class ExampleStack extends ExampleCollation {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public ExampleStack() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ExampleStack(long size) { super((Pointer)null); allocateArray(size); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ExampleStack() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExampleStack(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public ExampleStack position(long position) {
-        return (ExampleStack)super.position(position);
-    }
-    @Override public ExampleStack getPointer(long i) {
-        return new ExampleStack((Pointer)this).offsetAddress(i);
-    }
-
-  public native @ByVal Example apply_batch(@StdVector Example examples);
 }

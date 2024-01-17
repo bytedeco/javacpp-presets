@@ -46,7 +46,7 @@ public class BFMatcher extends DescriptorMatcher {
     }
     /** Downcast constructor. */
     public BFMatcher(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::BFMatcher*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::BFMatcher*>") void allocate(Algorithm pointer);
 
     /** \brief Brute-force matcher constructor (obsolete). Please use BFMatcher.create()
      *

@@ -853,6 +853,10 @@ public static native void cvResize( @Const CvArr src, CvArr dst,
                        int interpolation/*=CV_INTER_LINEAR*/);
 public static native void cvResize( @Const CvArr src, CvArr dst);
 
+// #ifdef _MSC_VER
+// #pragma warning( push )
+// #pragma warning( disable: 5054 )
+// #endif
 /** \brief Warps image with affine transform
 \note ::cvGetQuadrangleSubPix is similar to ::cvWarpAffine, but the outliers are extrapolated using
 replication border mode.
@@ -960,6 +964,10 @@ public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double maxRadius);
+
+// #ifdef _MSC_VER
+// #pragma warning( pop )
+// #endif
 
 /** \brief Returns a structuring element of the specified size and shape for morphological operations.
 <p>
@@ -3201,7 +3209,41 @@ public static final int
     /** equivalent to GBRG Bayer pattern */
     COLOR_BayerGR2RGBA = COLOR_BayerGB2BGRA,
 
-    COLOR_COLORCVT_MAX  = 143;
+    /** RGB to YUV 4:2:2 family */
+
+    COLOR_RGB2YUV_UYVY = 143,
+    COLOR_BGR2YUV_UYVY = 144,
+    COLOR_RGB2YUV_Y422 = COLOR_RGB2YUV_UYVY,
+    COLOR_BGR2YUV_Y422 = COLOR_BGR2YUV_UYVY,
+    COLOR_RGB2YUV_UYNV = COLOR_RGB2YUV_UYVY,
+    COLOR_BGR2YUV_UYNV = COLOR_BGR2YUV_UYVY,
+
+    COLOR_RGBA2YUV_UYVY = 145,
+    COLOR_BGRA2YUV_UYVY = 146,
+    COLOR_RGBA2YUV_Y422 = COLOR_RGBA2YUV_UYVY,
+    COLOR_BGRA2YUV_Y422 = COLOR_BGRA2YUV_UYVY,
+    COLOR_RGBA2YUV_UYNV = COLOR_RGBA2YUV_UYVY,
+    COLOR_BGRA2YUV_UYNV = COLOR_BGRA2YUV_UYVY,
+
+    COLOR_RGB2YUV_YUY2 = 147,
+    COLOR_BGR2YUV_YUY2 = 148,
+    COLOR_RGB2YUV_YVYU = 149,
+    COLOR_BGR2YUV_YVYU = 150,
+    COLOR_RGB2YUV_YUYV = COLOR_RGB2YUV_YUY2,
+    COLOR_BGR2YUV_YUYV = COLOR_BGR2YUV_YUY2,
+    COLOR_RGB2YUV_YUNV = COLOR_RGB2YUV_YUY2,
+    COLOR_BGR2YUV_YUNV = COLOR_BGR2YUV_YUY2,
+
+    COLOR_RGBA2YUV_YUY2 = 151,
+    COLOR_BGRA2YUV_YUY2 = 152,
+    COLOR_RGBA2YUV_YVYU = 153,
+    COLOR_BGRA2YUV_YVYU = 154,
+    COLOR_RGBA2YUV_YUYV = COLOR_RGBA2YUV_YUY2,
+    COLOR_BGRA2YUV_YUYV = COLOR_BGRA2YUV_YUY2,
+    COLOR_RGBA2YUV_YUNV = COLOR_RGBA2YUV_YUY2,
+    COLOR_BGRA2YUV_YUNV = COLOR_BGRA2YUV_YUY2,
+
+    COLOR_COLORCVT_MAX  = 155;
 
 /** \addtogroup imgproc_shape
  *  \{
@@ -4454,7 +4496,7 @@ too large, some circles may be missed.
 @param param1 First method-specific parameter. In case of #HOUGH_GRADIENT and #HOUGH_GRADIENT_ALT,
 it is the higher threshold of the two passed to the Canny edge detector (the lower one is twice smaller).
 Note that #HOUGH_GRADIENT_ALT uses #Scharr algorithm to compute image derivatives, so the threshold value
-shough normally be higher, such as 300 or normally exposed and contrasty images.
+should normally be higher, such as 300 or normally exposed and contrasty images.
 @param param2 Second method-specific parameter. In case of #HOUGH_GRADIENT, it is the
 accumulator threshold for the circle centers at the detection stage. The smaller it is, the more
 false circles may be detected. Circles, corresponding to the larger accumulator values, will be
@@ -6741,10 +6783,10 @@ stored in two planes.
 <p>
 This function only supports YUV420 to RGB conversion as of now.
 <p>
-@param src1: 8-bit image (#CV_8U) of the Y plane.
-@param src2: image containing interleaved U/V plane.
-@param dst: output image.
-@param code: Specifies the type of conversion. It can take any of the following values:
+@param src1 8-bit image (#CV_8U) of the Y plane.
+@param src2 image containing interleaved U/V plane.
+@param dst output image.
+@param code Specifies the type of conversion. It can take any of the following values:
 - #COLOR_YUV2BGR_NV12
 - #COLOR_YUV2RGB_NV12
 - #COLOR_YUV2BGRA_NV12

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Samuel Audet
+ * Copyright (C) 2018-2024 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -50,11 +50,12 @@ import org.bytedeco.opencv.presets.*;
         opencv_xphoto.class,
         opencv_barcode.class,
         opencv_wechat_qrcode.class,
+        opencv_dnn_superres.class,
     },
     value = {
-        @Platform(preload = {"opencv_cuda@.408", "opencv_cudaarithm@.408", "opencv_cudafilters@.408", "opencv_cudaimgproc@.408", "opencv_java"}),
+        @Platform(preload = {"opencv_cuda@.409", "opencv_cudaarithm@.409", "opencv_cudafilters@.409", "opencv_cudaimgproc@.409", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda481", "opencv_cudaarithm481", "opencv_cudafilters481", "opencv_cudaimgproc481", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda490", "opencv_cudaarithm490", "opencv_cudafilters490", "opencv_cudaimgproc490", "opencv_java"}),
     }
 )
 public class opencv_java {

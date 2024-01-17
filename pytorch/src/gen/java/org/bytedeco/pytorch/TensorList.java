@@ -46,6 +46,8 @@ public class TensorList extends Pointer {
    */
   public TensorList(@ByVal TensorArrayRef initial_values) { super((Pointer)null); allocate(initial_values); }
   private native void allocate(@ByVal TensorArrayRef initial_values);
+  public TensorList(@ByVal TensorVector initial_values) { super((Pointer)null); allocate(initial_values); }
+  private native void allocate(@ByVal TensorVector initial_values);
 
   /**
    * Create a generic list with runtime type information.

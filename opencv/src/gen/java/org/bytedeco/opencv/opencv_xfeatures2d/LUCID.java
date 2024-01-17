@@ -44,6 +44,9 @@ public class LUCID extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LUCID(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LUCID(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::LUCID*>") void allocate(Algorithm pointer);
 
     /**
      * @param lucid_kernel kernel for descriptor construction, where 1=3x3, 2=5x5, 3=7x7 and so forth

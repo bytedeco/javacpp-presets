@@ -103,8 +103,8 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 
 public static final int CUBLAS_VER_MAJOR = 12;
 public static final int CUBLAS_VER_MINOR = 3;
-public static final int CUBLAS_VER_PATCH = 2;
-public static final int CUBLAS_VER_BUILD = 9;
+public static final int CUBLAS_VER_PATCH = 4;
+public static final int CUBLAS_VER_BUILD = 1;
 public static final int CUBLAS_VERSION = (CUBLAS_VER_MAJOR * 10000 + CUBLAS_VER_MINOR * 100 + CUBLAS_VER_PATCH);
 
 /* CUBLAS status type returns */
@@ -14009,7 +14009,7 @@ public static native @Cast("cublasStatus_t") int cublasLtLoggerForceDisable();
 // #include "driver_types.h"
 // #include "cuComplex.h" /* import complex data type */
 
-// #include "cublas_api.h"
+// #include "cublas_v2.h"
 
 // #if defined(__cplusplus)
 // Targeting ../cublas/cublasXtContext.java

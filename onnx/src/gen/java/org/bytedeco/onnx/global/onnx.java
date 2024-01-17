@@ -6564,9 +6564,12 @@ public static final int
 @Namespace("onnx") public static native @Cast("bool") @Name("ParseProtoFromBytes<google::protobuf::MessageLite>") boolean ParseProtoFromBytes(MessageLite proto, @Cast("const char*") BytePointer buffer, @Cast("size_t") long length);
 @Namespace("onnx") public static native @Cast("bool") @Name("ParseProtoFromBytes<google::protobuf::MessageLite>") boolean ParseProtoFromBytes(MessageLite proto, String buffer, @Cast("size_t") long length);
 
+@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<float>") FloatVector RetrieveValuesFloat(@Const @ByRef AttributeProto attr);
+
 @Namespace("onnx") public static native @ByVal @Name("RetrieveValues<int64_t>") LongVector RetrieveValuesLong(@Const @ByRef AttributeProto attr);
 
 @Namespace("onnx") public static native @ByVal @Name("RetrieveValues<std::string>") StringVector RetrieveValuesString(@Const @ByRef AttributeProto attr);
+@Namespace("onnx") public static native @ByVal LongVector RetrieveValues(@Const @ByRef AttributeProto attr);
 
  // namespace ONNX_NAMESPACE
 

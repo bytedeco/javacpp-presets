@@ -45,7 +45,9 @@ public class SparseMatchInterpolator extends Algorithm {
     public SparseMatchInterpolator(Pointer p) { super(p); }
     /** Downcast constructor. */
     public SparseMatchInterpolator(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-    @Namespace private native @Name("dynamic_cast<cv::ximgproc::SparseMatchInterpolator*>") void allocate(Algorithm pointer);
+    @Namespace private native @Name("static_cast<cv::ximgproc::SparseMatchInterpolator*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(SparseMatchInterpolator pointer);
 
     /** \brief Interpolate input sparse matches.
     <p>

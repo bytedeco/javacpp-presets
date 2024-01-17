@@ -83,9 +83,9 @@ public class cusparse extends org.bytedeco.cuda.presets.cusparse {
 //##############################################################################
 
 public static final int CUSPARSE_VER_MAJOR = 12;
-public static final int CUSPARSE_VER_MINOR = 1;
-public static final int CUSPARSE_VER_PATCH = 3;
-public static final int CUSPARSE_VER_BUILD = 153;
+public static final int CUSPARSE_VER_MINOR = 2;
+public static final int CUSPARSE_VER_PATCH = 0;
+public static final int CUSPARSE_VER_BUILD = 103;
 public static final int CUSPARSE_VERSION = (CUSPARSE_VER_MAJOR * 1000 + 
                           CUSPARSE_VER_MINOR *  100 + 
                           CUSPARSE_VER_PATCH);

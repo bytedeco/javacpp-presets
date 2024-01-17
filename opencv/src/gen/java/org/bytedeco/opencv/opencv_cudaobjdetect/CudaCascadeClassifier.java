@@ -58,6 +58,11 @@ public class CudaCascadeClassifier extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CudaCascadeClassifier(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public CudaCascadeClassifier(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::CascadeClassifier*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(CudaCascadeClassifier pointer);
 
     /** \brief Loads the classifier from a file. Cascade type is detected automatically by constructor parameter.
     <p>

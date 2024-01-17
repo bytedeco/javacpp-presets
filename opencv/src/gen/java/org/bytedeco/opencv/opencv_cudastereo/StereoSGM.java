@@ -47,6 +47,9 @@ public class StereoSGM extends StereoSGBM {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoSGM(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public StereoSGM(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::StereoSGM*>") void allocate(Algorithm pointer);
 
     /** \brief Computes disparity map for the specified stereo pair
     <p>

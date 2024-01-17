@@ -40,6 +40,11 @@ public class DisparityBilateralFilter extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DisparityBilateralFilter(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public DisparityBilateralFilter(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::cuda::DisparityBilateralFilter*>") void allocate(Algorithm pointer);
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(DisparityBilateralFilter pointer);
 
     /** \brief Refines a disparity map using joint bilateral filtering.
     <p>

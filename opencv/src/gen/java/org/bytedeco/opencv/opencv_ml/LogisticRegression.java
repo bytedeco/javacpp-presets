@@ -29,6 +29,9 @@ public class LogisticRegression extends StatModel {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogisticRegression(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LogisticRegression(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::ml::LogisticRegression*>") void allocate(Algorithm pointer);
 
 
     /** Learning rate. */

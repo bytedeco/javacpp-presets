@@ -51,7 +51,7 @@ public class Feature2D extends Algorithm {
     /** Downcast constructor. */
     public Feature2D(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
     @Namespace private native @Name("dynamic_cast<cv::Feature2D*>") void allocate(Algorithm pointer);
-    public Algorithm asAlgorithm() { return asAlgorithm(this); }
+    @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
     @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(Feature2D pointer);
 
 

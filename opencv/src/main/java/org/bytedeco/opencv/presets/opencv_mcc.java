@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/mcc.hpp>",
             "<opencv2/mcc/checker_model.hpp>",
             "<opencv2/mcc/checker_detector.hpp>",
-            "<opencv2/mcc/ccm.hpp>"}, link = "opencv_mcc@.408"),
+            "<opencv2/mcc/ccm.hpp>"}, link = "opencv_mcc@.409"),
         @Platform(value = "ios", preload = "libopencv_mcc"),
-        @Platform(value = "windows", link = "opencv_mcc481")
+        @Platform(value = "windows", link = "opencv_mcc490")
     },
     target = "org.bytedeco.opencv.opencv_mcc",
     global = "org.bytedeco.opencv.global.opencv_mcc"

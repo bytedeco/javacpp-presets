@@ -38,6 +38,9 @@ public class LearningBasedWB extends WhiteBalancer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LearningBasedWB(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LearningBasedWB(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::xphoto::LearningBasedWB*>") void allocate(Algorithm pointer);
 
     /** \brief Implements the feature extraction part of the algorithm.
     <p>

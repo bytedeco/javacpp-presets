@@ -39,19 +39,21 @@ public class EncoderParams extends Pointer {
 
     public EncoderParams() { super((Pointer)null); allocate(); }
     private native void allocate();
-
     public native @Cast("cv::cudacodec::EncodePreset") int nvPreset(); public native EncoderParams nvPreset(int setter);
     public native @Cast("cv::cudacodec::EncodeTuningInfo") int tuningInfo(); public native EncoderParams tuningInfo(int setter);
     public native @Cast("cv::cudacodec::EncodeProfile") int encodingProfile(); public native EncoderParams encodingProfile(int setter);
     public native @Cast("cv::cudacodec::EncodeParamsRcMode") int rateControlMode(); public native EncoderParams rateControlMode(int setter);
     public native @Cast("cv::cudacodec::EncodeMultiPass") int multiPassEncoding(); public native EncoderParams multiPassEncoding(int setter);
-    /** QP's for ENC_PARAMS_RC_CONSTQP. */
+    /** QP's for \ref ENC_PARAMS_RC_CONSTQP. */
     public native @ByRef EncodeQp constQp(); public native EncoderParams constQp(EncodeQp setter);
-    /** target bitrate for ENC_PARAMS_RC_VBR and ENC_PARAMS_RC_CBR. */
+    /** target bitrate for \ref ENC_PARAMS_RC_VBR and \ref ENC_PARAMS_RC_CBR. */
     public native int averageBitRate(); public native EncoderParams averageBitRate(int setter);
-    /** upper bound on bitrate for ENC_PARAMS_RC_VBR and ENC_PARAMS_RC_CONSTQP. */
+    /** upper bound on bitrate for \ref ENC_PARAMS_RC_VBR and \ref ENC_PARAMS_RC_CONSTQP. */
     public native int maxBitRate(); public native EncoderParams maxBitRate(int setter);
-    /** value 0 - 51 where video quality decreases as targetQuality increases, used with ENC_PARAMS_RC_VBR. */
+    /** value 0 - 51 where video quality decreases as targetQuality increases, used with \ref ENC_PARAMS_RC_VBR. */
     public native @Cast("cv::uint8_t") byte targetQuality(); public native EncoderParams targetQuality(byte setter);
+    /** the number of pictures in one GOP, ensuring \ref idrPeriod >= \ref gopLength. */
     public native int gopLength(); public native EncoderParams gopLength(int setter);
+    /** IDR interval, ensuring \ref idrPeriod >= \ref gopLength. */
+    public native int idrPeriod(); public native EncoderParams idrPeriod(int setter);
 }

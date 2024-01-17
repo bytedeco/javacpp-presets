@@ -40,6 +40,9 @@ public class HarrisLaplaceFeatureDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HarrisLaplaceFeatureDetector(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public HarrisLaplaceFeatureDetector(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::HarrisLaplaceFeatureDetector*>") void allocate(Algorithm pointer);
 
     /**
      * \brief Creates a new implementation instance.

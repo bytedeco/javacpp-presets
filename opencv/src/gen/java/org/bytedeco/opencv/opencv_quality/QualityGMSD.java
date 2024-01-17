@@ -28,6 +28,9 @@ public class QualityGMSD extends QualityBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QualityGMSD(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public QualityGMSD(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::quality::QualityGMSD*>") void allocate(Algorithm pointer);
 
 
     /**

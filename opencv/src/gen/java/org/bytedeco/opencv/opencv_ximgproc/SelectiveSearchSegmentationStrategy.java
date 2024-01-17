@@ -42,7 +42,9 @@ public class SelectiveSearchSegmentationStrategy extends Algorithm {
                         public SelectiveSearchSegmentationStrategy(Pointer p) { super(p); }
                         /** Downcast constructor. */
                         public SelectiveSearchSegmentationStrategy(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
-                        @Namespace private native @Name("dynamic_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategy*>") void allocate(Algorithm pointer);
+                        @Namespace private native @Name("static_cast<cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategy*>") void allocate(Algorithm pointer);
+                        @Override public Algorithm asAlgorithm() { return asAlgorithm(this); }
+                        @Namespace public static native @Name("static_cast<cv::Algorithm*>") Algorithm asAlgorithm(SelectiveSearchSegmentationStrategy pointer);
                     
                             /** \brief Set a initial image, with a segmentation.
                                 @param img The input image. Any number of channel can be provided

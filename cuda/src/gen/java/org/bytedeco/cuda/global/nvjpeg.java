@@ -86,9 +86,9 @@ public static final int NVJPEG_MAX_COMPONENT = 4;
 
 // nvjpeg version information
 public static final int NVJPEG_VER_MAJOR = 12;
-public static final int NVJPEG_VER_MINOR = 2;
-public static final int NVJPEG_VER_PATCH = 3;
-public static final int NVJPEG_VER_BUILD = 32;
+public static final int NVJPEG_VER_MINOR = 3;
+public static final int NVJPEG_VER_PATCH = 0;
+public static final int NVJPEG_VER_BUILD = 81;
 
 /* nvJPEG status enums, returned by nvJPEG API */
 /** enum nvjpegStatus_t */
@@ -635,6 +635,8 @@ public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedCreateV2(nvjp
     nvjpegPinnedAllocatorV2_t pinned_allocator,
     @ByPtrPtr nvjpegBufferPinned buffer);
 
+public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedResize(nvjpegBufferPinned buffer, @Cast("size_t") long size, CUstream_st stream);
+
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferPinnedDestroy(nvjpegBufferPinned buffer);
 // Targeting ../nvjpeg/nvjpegBufferDevice.java
 
@@ -647,6 +649,8 @@ public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceCreate(nvjpeg
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceCreateV2(nvjpegHandle handle,
     nvjpegDevAllocatorV2_t device_allocator,
     @ByPtrPtr nvjpegBufferDevice buffer);
+
+public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceResize(nvjpegBufferDevice buffer, @Cast("size_t") long size, CUstream_st stream);
 
 public static native @Cast("nvjpegStatus_t") int nvjpegBufferDeviceDestroy(nvjpegBufferDevice buffer);
 

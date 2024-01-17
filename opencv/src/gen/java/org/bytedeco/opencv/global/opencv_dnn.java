@@ -126,7 +126,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20230620;
+public static final int OPENCV_DNN_API_VERSION = 20231225;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -267,6 +267,9 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
 // Targeting ../opencv_dnn/RNNLayer.java
 
 
+// Targeting ../opencv_dnn/EinsumLayer.java
+
+
 // Targeting ../opencv_dnn/BaseConvolutionLayer.java
 
 
@@ -286,6 +289,9 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
 
 
 // Targeting ../opencv_dnn/GatherLayer.java
+
+
+// Targeting ../opencv_dnn/GatherElementsLayer.java
 
 
 // Targeting ../opencv_dnn/PoolingLayer.java
@@ -567,6 +573,21 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
 // Targeting ../opencv_dnn/LayerNormLayer.java
 
 
+// Targeting ../opencv_dnn/GemmLayer.java
+
+
+// Targeting ../opencv_dnn/MatMulLayer.java
+
+
+// Targeting ../opencv_dnn/ExpandLayer.java
+
+
+// Targeting ../opencv_dnn/InstanceNormLayer.java
+
+
+// Targeting ../opencv_dnn/AttentionLayer.java
+
+
 
 /** \}
  *  \} */
@@ -642,9 +663,7 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
      */
     /** enum cv::dnn::Backend */
     public static final int
-        /** DNN_BACKEND_DEFAULT equals to DNN_BACKEND_INFERENCE_ENGINE if
-         *  OpenCV is built with Intel OpenVINO or
-         *  DNN_BACKEND_OPENCV otherwise. */
+        /** DNN_BACKEND_DEFAULT equals to OPENCV_DNN_BACKEND_DEFAULT, which can be defined using CMake or a configuration parameter */
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE = 1,
         /** Intel OpenVINO computational backend
@@ -907,14 +926,14 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
       *                  * {@code *.pb} (TensorFlow, https://www.tensorflow.org/)
       *                  * {@code *.t7} | {@code *.net} (Torch, http://torch.ch/)
       *                  * {@code *.weights} (Darknet, https://pjreddie.com/darknet/)
-      *                  * {@code *.bin} (DLDT, https://software.intel.com/openvino-toolkit)
+      *                  * {@code *.bin} | {@code *.onnx} (OpenVINO, https://software.intel.com/openvino-toolkit)
       *                  * {@code *.onnx} (ONNX, https://onnx.ai/)
       * @param config [in] Text file contains network configuration. It could be a
       *                   file with the following extensions:
       *                  * {@code *.prototxt} (Caffe, http://caffe.berkeleyvision.org/)
       *                  * {@code *.pbtxt} (TensorFlow, https://www.tensorflow.org/)
       *                  * {@code *.cfg} (Darknet, https://pjreddie.com/darknet/)
-      *                  * {@code *.xml} (DLDT, https://software.intel.com/openvino-toolkit)
+      *                  * {@code *.xml} (OpenVINO, https://software.intel.com/openvino-toolkit)
       * @param framework [in] Explicit framework name tag to determine a format.
       * @return Net object.
       *
@@ -969,8 +988,10 @@ public static final int OPENCV_DNN_API_VERSION = 20230620;
      *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
      *  backend.
      */
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
-    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml, @Str String bin);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin/*=""*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml, @Str String bin/*=""*/);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml);
 
     /** \brief Load a network from Intel's Model Optimizer intermediate representation.
      *  @param bufferModelConfig [in] Buffer contains XML configuration with network's topology.

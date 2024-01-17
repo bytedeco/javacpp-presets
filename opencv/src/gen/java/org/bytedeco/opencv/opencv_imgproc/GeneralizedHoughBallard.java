@@ -24,6 +24,9 @@ public class GeneralizedHoughBallard extends GeneralizedHough {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHoughBallard(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public GeneralizedHoughBallard(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("static_cast<cv::GeneralizedHoughBallard*>") void allocate(Algorithm pointer);
 
     /** R-Table levels. */
     public native void setLevels(int levels);

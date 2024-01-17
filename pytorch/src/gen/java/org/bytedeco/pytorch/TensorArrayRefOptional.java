@@ -23,6 +23,7 @@ public class TensorArrayRefOptional extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorArrayRefOptional(Pointer p) { super(p); }
     public TensorArrayRefOptional(TensorArrayRef value) { this(); put(value); }
+    public TensorArrayRefOptional(TensorVector value) { this(); put(value); }
     public TensorArrayRefOptional()       { allocate();  }
     private native void allocate();
     public native @Name("operator =") @ByRef TensorArrayRefOptional put(@ByRef TensorArrayRefOptional x);
@@ -31,5 +32,6 @@ public class TensorArrayRefOptional extends Pointer {
     public native void reset();
     public native @Name("value") @ByRef TensorArrayRef get();
     @ValueSetter public native TensorArrayRefOptional put(@ByRef TensorArrayRef value);
+    @ValueSetter public native TensorArrayRefOptional put(@ByRef TensorVector value);
 }
 

@@ -94,27 +94,28 @@ runs:
         if "%CI_DEPLOY_PLATFORM%"=="windows-x86_64" if not "%CI_DEPLOY_NEED_CUDA%"=="" (
           echo Installing CUDA, cuDNN, nvCOMP, etc
           curl -LO https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_522.06_windows.exe
-          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.0/local_installers/cuda_12.3.0_545.84_windows.exe
+          curl -LO https://developer.download.nvidia.com/compute/cuda/12.3.2/local_installers/cuda_12.3.2_546.12_windows.exe
           rem curl -LO https://developer.download.nvidia.com/compute/redist/cudnn/v8.8.0/local_installers/12.0/cudnn_8.8.0.121_windows.exe
-          python -m gdown.cli https://drive.google.com/uc?id=1-5QHvwDZC_1rhn5W6fRHNWicXRPtqt31
+          rem python -m gdown.cli https://drive.google.com/uc?id=135Z7zfwguQe6vn7p013HtVkHFu9-_rru
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/cudnn-windows-x86_64-8.9.7.29_cuda12-archive.zip
           curl -LO http://www.winimage.com/zLibDll/zlib123dllx64.zip
-          curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.4/local_installers/nvcomp_3.0.4_windows_12.x.zip
+          curl -LO https://developer.download.nvidia.com/compute/nvcomp/3.0.5/local_installers/nvcomp_3.0.5_windows_12.x.zip
           cuda_11.8.0_522.06_windows.exe -s
           bash -c "rm -Rf 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8'"
           bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt' 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old'"
-          cuda_12.3.0_545.84_windows.exe -s
+          cuda_12.3.2_546.12_windows.exe -s
           bash -c "mv 'C:/Program Files/NVIDIA Corporation/NvToolsExt_old' 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
           bash -c "ls 'C:/Program Files/NVIDIA Corporation/NvToolsExt'"
           rem cudnn_8.8.0.121_windows.exe -s
-          unzip cudnn-windows-x86_64-8.9.5.29_cuda12-archive.zip
+          unzip cudnn-windows-x86_64-8.9.7.29_cuda12-archive.zip
           unzip zlib123dllx64.zip
-          unzip nvcomp_3.0.4_windows_12.x.zip
+          unzip nvcomp_3.0.5_windows_12.x.zip
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\bin\*.dll" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\include\*.h" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           rem move "%ProgramFiles%\NVIDIA\CUDNN\v8.8\lib\x64\*.lib" "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
-          move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
-          move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
-          move cudnn-windows-x86_64-8.9.5.29_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
+          move cudnn-windows-x86_64-8.9.7.29_cuda12-archive\bin\*.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
+          move cudnn-windows-x86_64-8.9.7.29_cuda12-archive\include\*.h "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
+          move cudnn-windows-x86_64-8.9.7.29_cuda12-archive\lib\x64\*.lib "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\lib\x64"
           move dll_x64\zlibwapi.dll "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin"
           move include\* "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
           move include\gdeflate "%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\include"
@@ -143,7 +144,8 @@ runs:
 
         if "%CI_DEPLOY_MODULE%"=="tensorrt" (
           echo Installing TensorRT
-          python -m gdown.cli https://drive.google.com/uc?id=1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
+          rem python -m gdown.cli https://drive.google.com/uc?id=1GfmJ1BKbacLpUU-0i_mGu0sjrAS0Xzzi
+          curl -LO https://github.com/bytedeco/binaries/releases/download/1.5.10/TensorRT-8.6.1.6.Windows10.x86_64.cuda-12.0.zip
           unzip TensorRT-8.6.1.6.Windows10.x86_64.cuda-12.0.zip
           move TensorRT-8.6.1.6 "%ProgramFiles%\NVIDIA GPU Computing Toolkit\TensorRT"
         )
@@ -229,7 +231,7 @@ runs:
           set "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3"
           set "CUDA_PATH_V12_3=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3"
           set "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\libnvvp;%PATH%"
-          echo CUDA Version 12.3.0>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\version.txt"
+          echo CUDA Version 12.3.2>"%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v12.3\version.txt"
         )
         set "CCACHE_DIR=%USERPROFILE%\ccache"
         set "PATH=C:\hostedtoolcache\windows\Python\3.9.13\x64;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%ProgramFiles%\apache-maven-3.6.3\bin;%PATH%"

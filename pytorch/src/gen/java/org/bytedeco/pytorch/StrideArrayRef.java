@@ -97,6 +97,7 @@ private native void allocate();
 
   /** equals - Check for element-wise equality. */
   public native @Cast("const bool") boolean equals(@ByVal StrideArrayRef RHS);
+  public native @Cast("const bool") boolean equals(@ByVal StrideVector RHS);
 
   /** slice(n, m) - Take M elements of the array starting at element N */
   public native @Const @ByVal StrideArrayRef slice(@Cast("size_t") long N, @Cast("size_t") long M);

@@ -60,6 +60,9 @@ public class LATCH extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LATCH(Pointer p) { super(p); }
+    /** Downcast constructor. */
+    public LATCH(Algorithm pointer) { super((Pointer)null); allocate(pointer); }
+    @Namespace private native @Name("dynamic_cast<cv::xfeatures2d::LATCH*>") void allocate(Algorithm pointer);
 
     public static native @Ptr LATCH create(int bytes/*=32*/, @Cast("bool") boolean rotationInvariance/*=true*/, int half_ssd_size/*=3*/, double sigma/*=2.0*/);
     public static native @Ptr LATCH create();
