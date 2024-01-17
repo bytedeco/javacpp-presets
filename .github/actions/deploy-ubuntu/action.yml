@@ -121,14 +121,14 @@ runs:
 
         # install vulkan sdk
         echo Installing Vulkan-SDK
-        curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
-        $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-focal.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-focal.list
+        if [ "$CODENAME" = "jammy" ]; then
+          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
+        else
+          curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO apt-key add -
+          $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-focal.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-focal.list
+        fi
         $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
-
-        # this is for ubuntu 22.04
-        # curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
-        # $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
-        # $SUDO apt-get update && $SUDO apt-get install -y libvulkan1 libvulkan-dev vulkan-sdk
 
         if [[ -n ${USERLAND_BUILDME:-} ]]; then
           curl -LOJ https://github.com/raspberrypi/userland/archive/master.tar.gz
