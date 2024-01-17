@@ -121,7 +121,7 @@ runs:
 
         # install vulkan sdk
         echo Installing Vulkan-SDK
-        if [ "$CODENAME" = "jammy" ]; then
+        if [[ "$CODENAME" == "jammy" ]]; then
           curl -s https://packages.lunarg.com/lunarg-signing-key-pub.asc | $SUDO tee /etc/apt/trusted.gpg.d/lunarg.asc >/dev/null
           $SUDO curl -s -o /etc/apt/sources.list.d/lunarg-vulkan-1.3.268-jammy.list https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list
         else
