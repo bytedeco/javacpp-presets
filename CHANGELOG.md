@@ -1,4 +1,5 @@
 
+ * Enable Vulkan GPU acceleration for FFmpeg ([pull #1460](https://github.com/bytedeco/javacpp-presets/pull/1460))
  * Include `timeapi.h` for system API of Windows ([pull #1447](https://github.com/bytedeco/javacpp-presets/pull/1447))
  * Add Android and Windows builds to presets for DepthAI ([pull #1441](https://github.com/bytedeco/javacpp-presets/pull/1441))
  * Add presets for nvCOMP 3.0.5 ([pull #1434](https://github.com/bytedeco/javacpp-presets/pull/1434)), SentencePiece 0.1.99 ([pull #1384](https://github.com/bytedeco/javacpp-presets/pull/1384))
