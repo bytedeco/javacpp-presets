@@ -25,7 +25,7 @@ public class SGDOptions extends OptimizerCloneableSGDOptions {
     public SGDOptions(Pointer p) { super(p); }
 
   public SGDOptions(double lr) { super((Pointer)null); allocate(lr); }
-  private native void allocate(double lr);
+  @UniquePtr @Name("std::make_unique<torch::optim::SGDOptions>") private native void allocate(double lr);
   public native @ByRef @NoException(true) DoublePointer lr();
   public native @ByRef @NoException(true) DoublePointer momentum();
   public native @ByRef @NoException(true) DoublePointer dampening();

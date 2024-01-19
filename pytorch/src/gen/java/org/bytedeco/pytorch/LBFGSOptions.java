@@ -25,9 +25,9 @@ public class LBFGSOptions extends OptimizerCloneableLBFGSOptions {
     public LBFGSOptions(Pointer p) { super(p); }
 
   public LBFGSOptions(double lr/*=1*/) { super((Pointer)null); allocate(lr); }
-  private native void allocate(double lr/*=1*/);
+  @UniquePtr @Name("std::make_unique<torch::optim::LBFGSOptions>") private native void allocate(double lr/*=1*/);
   public LBFGSOptions() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @UniquePtr @Name("std::make_unique<torch::optim::LBFGSOptions>") private native void allocate();
   public native @ByRef @NoException(true) DoublePointer lr();
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer max_iter();
   public native @ByRef @NoException(true) LongOptional max_eval();
