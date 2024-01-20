@@ -1461,12 +1461,14 @@
         <module>ffmpeg</module>
         <module>lz4</module>
         <module>openblas</module>
+        <module>cpython</module>
         <module>llvm</module>
         <module>libffi</module>
         <module>libpostal</module>
         <module>libraw</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>numpy</module>
         <module>sentencepiece</module>
       </modules>
       <properties>
