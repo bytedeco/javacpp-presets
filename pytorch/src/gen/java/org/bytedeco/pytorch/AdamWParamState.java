@@ -23,18 +23,9 @@ public class AdamWParamState extends OptimizerCloneableAdamWParamState {
     static { Loader.load(); }
     /** Default native constructor. */
     public AdamWParamState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AdamWParamState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdamWParamState(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public AdamWParamState position(long position) {
-        return (AdamWParamState)super.position(position);
-    }
-    @Override public AdamWParamState getPointer(long i) {
-        return new AdamWParamState((Pointer)this).offsetAddress(i);
-    }
+    @UniquePtr @Name("std::make_unique<torch::optim::AdamWParamState>") private native void allocate();
 
   public native @Cast("int64_t*") @ByRef @NoException(true) LongPointer step();
   public native @ByRef @NoException(true) Tensor exp_avg();

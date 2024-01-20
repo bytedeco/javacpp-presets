@@ -38,9 +38,9 @@ public class SafePyObject extends Pointer {
 
   // Steals a reference to data
   public SafePyObject(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter) { super((Pointer)null); allocate(data, pyinterpreter); }
-  private native void allocate(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter);
+  @UniquePtr @Name("std::make_unique<c10::SafePyObject>") private native void allocate(@Cast("PyObject*") Pointer data, PyInterpreter pyinterpreter);
   public SafePyObject(@ByRef(true) SafePyObject other) { super((Pointer)null); allocate(other); }
-  private native void allocate(@ByRef(true) SafePyObject other);
+  @UniquePtr @Name("std::make_unique<c10::SafePyObject>") private native void allocate(@ByRef(true) SafePyObject other);
 
   // In principle this could be copyable if we add an incref to PyInterpreter
   // but for now it's easier to just disallow it.

@@ -15140,7 +15140,7 @@ public static final int EXPECTED_MAX_LEVEL = 2;
 
 @Namespace("torch::autograd::impl") public static native void add_hook(
     @Const @ByRef TensorBase arg0,
-    @UniquePtr @Cast({"", "std::unique_ptr<torch::autograd::FunctionPreHook>&&"}) FunctionPreHook hook);
+    @UniquePtr @ByVal FunctionPreHook hook);
 @Namespace("torch::autograd::impl") public static native @ByRef FunctionPreHookVector hooks(@Cast("const torch::autograd::Variable*") @ByRef Tensor arg0);
 @Namespace("torch::autograd::impl") public static native void clear_hooks(@Const @ByRef TensorBase arg0);
 

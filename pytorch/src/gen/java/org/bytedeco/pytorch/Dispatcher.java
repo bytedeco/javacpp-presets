@@ -129,8 +129,8 @@ public class Dispatcher extends Pointer {
    */
   // NB: steals the inferred function schema, as we may need to hold on to
   // it for a bit until the real schema turns up
-  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @Cast({"", "std::unique_ptr<c10::FunctionSchema>&&"}) FunctionSchema inferred_function_schema, @StdString BytePointer debug);
-  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @Cast({"", "std::unique_ptr<c10::FunctionSchema>&&"}) FunctionSchema inferred_function_schema, @StdString String debug);
+  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString BytePointer debug);
+  public native @ByVal RegistrationHandleRAII registerImpl(@ByVal OperatorName op_name, @ByVal DispatchKeyOptional dispatch_key, @ByVal KernelFunction kernel, @ByVal CppSignatureOptional cpp_signature, @UniquePtr @ByVal FunctionSchema inferred_function_schema, @StdString String debug);
 
   /**
    * Register a new operator by name.

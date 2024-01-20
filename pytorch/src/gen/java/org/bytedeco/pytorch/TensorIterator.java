@@ -23,21 +23,12 @@ public class TensorIterator extends TensorIteratorBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorIterator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TensorIterator(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TensorIterator position(long position) {
-        return (TensorIterator)super.position(position);
-    }
-    @Override public TensorIterator getPointer(long i) {
-        return new TensorIterator((Pointer)this).offsetAddress(i);
-    }
 
   public TensorIterator() { super((Pointer)null); allocate(); }
-  private native void allocate();
+  @UniquePtr @Name("std::make_unique<at::TensorIterator>") private native void allocate();
   // Slicing is OK, TensorIterator guaranteed NOT to have any fields
   public TensorIterator(@Const @ByRef TensorIteratorBase iter) { super((Pointer)null); allocate(iter); }
-  private native void allocate(@Const @ByRef TensorIteratorBase iter);
+  @UniquePtr @Name("std::make_unique<at::TensorIterator>") private native void allocate(@Const @ByRef TensorIteratorBase iter);
 
 // #define TORCH_DISALLOW_TEMPORARIES(methodname)
 //   TORCH_DISALLOW_TEMPORARIES_IMPL(methodname, static)
